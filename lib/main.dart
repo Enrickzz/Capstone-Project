@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/registration.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -93,6 +95,42 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            InkWell(
+              onTap: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => registration()),
+                )
+              },
+              child: Container(
+                child: Text(
+                  "Sign Up",
+                  style: TextStyle(
+                    color: Color(0xFFAC252B),
+                    fontSize: 18,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => login()),
+                )
+              },
+              child: Container(
+                child: Text(
+                  "Login",
+                  style: TextStyle(
+                    color: Color(0xFFAC252B),
+                    fontSize: 18,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+              ),
+            ),
             Text(
               'You have pushed the button this many times:',
             ),
