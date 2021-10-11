@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "993827517549",
+    "project_id": "capstone-heart-disease",
+    "storage_bucket": "capstone-heart-disease.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993827517549:android:0c3c76e71036debe22bb64",
+        "android_client_info": {
+          "package_name": "com.example.my_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993827517549-sa9hlqvat1mnv4b5d5ulu9h2usqsbpc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFFsmBgpfkXobbxeoN_FGrAc9YT_d4O4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993827517549-sa9hlqvat1mnv4b5d5ulu9h2usqsbpc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
