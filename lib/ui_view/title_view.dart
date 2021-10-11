@@ -12,7 +12,7 @@ class TitleView extends StatelessWidget {
       this.titleTxt: "",
       this.subTxt: "",
       this.animationController,
-      this.animation})
+      this.animation, Map Function() onTap})
       : super(key: key);
 
   @override
