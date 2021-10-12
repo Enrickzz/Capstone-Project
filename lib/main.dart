@@ -5,6 +5,7 @@ import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
 import 'package:my_app/registration.dart';
+import 'package:my_app/mainScreen.dart';
 
 void  main(){
   runApp(MyApp());
@@ -20,126 +21,213 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FitnessAppHomeScreen(),
+      home: AppSignIn(),
     );
   }
 }
 
-class FitnessAppHomeScreen extends StatefulWidget {
+class AppSignIn extends StatefulWidget {
   @override
-  _FitnessAppHomeScreenState createState() => _FitnessAppHomeScreenState();
+  _AppSignInState createState() => _AppSignInState();
 }
 
-class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
-    with TickerProviderStateMixin {
-  AnimationController animationController;
-
-  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
-
-  Widget tabBody = Container(
-    color: FitnessAppTheme.background,
-  );
-
-  @override
-  void initState() {
-    tabIconsList.forEach((TabIconData tab) {
-      tab.isSelected = false;
-    });
-    tabIconsList[0].isSelected = true;
-
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = MyDiaryScreen(animationController: animationController);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    animationController?.dispose();
-    super.dispose();
-  }
-
+class _AppSignInState extends State<AppSignIn> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: FitnessAppTheme.background,
-      child: Scaffold(
+    String defaultFontFamily = 'Roboto-Light.ttf';
+    double defaultFontSize = 14;
+    double defaultIconSize = 17;
 
-        backgroundColor: Colors.transparent,
-        body: FutureBuilder<bool>(
-          future: getData(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) {
-              return const SizedBox();
-            } else {
-              return Stack(
-                children: <Widget>[
-                  InkWell(onTap: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => registration()),
-                  )
-                }, child: Container(
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      color: Color(0xFFAC252B),
-                      fontSize: 50,
-                      fontStyle: FontStyle.normal,
-                    ),
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.only(left: 20, right: 20, top: 35, bottom: 30),
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.white70,
+        child: Column(
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              child: InkWell(
+                child: Container(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Icon(Icons.close),
                   ),
                 ),
-                ),
-                  tabBody,
-                  bottomBar(),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            Flexible(
+              flex: 5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 130,
+                    height: 130,
+                    alignment: Alignment.center,
+                    child: Image.asset("assets/images/heart_icon.png"),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextField(
+                    showCursor: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      filled: true,
+                      prefixIcon: Icon(
+                        Icons.phone,
+                        color: Color(0xFF666666),
+                        size: defaultIconSize,
+                      ),
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "Phone Number",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextField(
+                    showCursor: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      filled: true,
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        color: Color(0xFF666666),
+                        size: defaultIconSize,
+                      ),
+                      suffixIcon: Icon(
+                        Icons.remove_red_eye,
+                        color: Color(0xFF666666),
+                        size: defaultIconSize,
+                      ),
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                        color: Color(0xFF666666),
+                        fontFamily: defaultFontFamily,
+                        fontSize: defaultFontSize,
+                      ),
+                      hintText: "Password",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: Text(
+                      "Forgot your password?",
+                      style: TextStyle(
+                        color: Color(0xFF666666),
+                        fontFamily: defaultFontFamily,
+                        fontSize: defaultFontSize,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: RaisedButton(
+                      padding: EdgeInsets.all(17.0),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => mainScreen()),
+                        );
+                      },
+                      child: Text(
+                        "Sign In",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Poppins-Medium.ttf',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      color: Color(0xFFBC1F26),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          side: BorderSide(color: Color(0xFFBC1F26))),
+                    ),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFFF2F3F7)),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                 ],
-              );
-            }
-          },
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        "Don't have an account? ",
+                        style: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => registration()),
+                        )
+                      },
+                      child: Container(
+                        child: Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: Color(0xFFAC252B),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
-    );
-  }
-
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
-    return true;
-  }
-
-  Widget bottomBar() {
-    return Column(
-      children: <Widget>[
-        const Expanded(
-          child: SizedBox(),
-        ),
-        BottomBarView(
-          tabIconsList: tabIconsList,
-          addClick: () {},
-          changeIndex: (int index) {
-            if (index == 0 || index == 2) {
-              animationController.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody =
-                      MyDiaryScreen(animationController: animationController);
-                });
-              });
-            } else if (index == 1 || index == 3) {
-              animationController.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody =
-                      TrainingScreen(animationController: animationController);
-                });
-              });
-            }
-          },
-        ),
-      ],
     );
   }
 }
