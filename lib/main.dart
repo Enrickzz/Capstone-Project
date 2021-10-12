@@ -47,20 +47,6 @@ class _AppSignInState extends State<AppSignIn> {
         child: Column(
           children: <Widget>[
             Flexible(
-              flex: 1,
-              child: InkWell(
-                child: Container(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Icon(Icons.close),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            Flexible(
               flex: 5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
