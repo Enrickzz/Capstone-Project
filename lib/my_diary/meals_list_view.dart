@@ -141,22 +141,6 @@ class MealsView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            InkWell(onTap: () => {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => registration()),
-                              )
-                            }, child: Container(
-                              child: Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                  color: Color(0xFFAC252B),
-                                  fontSize: 50,
-                                  fontStyle: FontStyle.normal,
-                                ),
-                              ),
-                            ),
-                            ),
                             Text(
                               mealsListData.titleTxt,
                               textAlign: TextAlign.center,
