@@ -1,4 +1,5 @@
 import 'package:my_app/models/tabIcon_data.dart';
+import 'package:my_app/services/auth.dart';
 import 'package:my_app/training/training_screen.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
@@ -6,18 +7,34 @@ import 'fitness_app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
 import 'package:my_app/registration.dart';
 
-class MyApp extends StatelessWidget {
+class Home extends StatelessWidget {
+  final AuthService _auth = AuthService();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('CardioVascular Disease'),
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          FlatButton.icon(
+            icon:Icon(Icons.person),
+            label: Text('Logout'),
+            onPressed: () async {
+              await _auth.signOut();
+            },
+          ),
+        ],
       ),
-      home: mainScreen(),
     );
+    // return MaterialApp(
+    //   debugShowCheckedModeBanner: false,
+    //   title: 'Flutter Demo',
+    //   theme: ThemeData(
+    //     primarySwatch: Colors.blue,
+    //   ),
+    //   home: mainScreen(),
+    // );
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
@@ -20,6 +21,9 @@ class _TrainingScreenState extends State<TrainingScreen>
 
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
+
+  final AuthService _auth = AuthService();
+
   double topBarOpacity = 0.0;
 
   @override
@@ -271,7 +275,10 @@ class _TrainingScreenState extends State<TrainingScreen>
                                 highlightColor: Colors.transparent,
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(32.0)),
-                                onTap: () {},
+                                onTap: () async {
+                                  await _auth.signOut();
+                                  print('signed out');
+                                },
                                 child: Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_right,
