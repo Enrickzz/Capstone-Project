@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
+import 'additional_data_collection.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class registration extends StatefulWidget {
   @override
@@ -220,7 +221,7 @@ class _AppSignUpState extends State<registration> {
                             print("user registered Sucessfully!");
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => mainScreen()),
+                              MaterialPageRoute(builder: (context) => additional_data_collection()),
                             );
                           } catch(e) {
                             print("you got an error! $e");

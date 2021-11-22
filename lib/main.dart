@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/training/training_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
@@ -184,6 +187,20 @@ class _AppSignInState extends State<AppSignIn> {
                             if(result == null){
                               setState(() => error = 'Invalid Credential');
                             } else{
+                              // SharedPreferences prefs = await SharedPreferences.getInstance();
+                              // Future<bool> isFirstTime() async {
+                              //   var isFirstTime = prefs.getBool('first_time');
+                              //   if (isFirstTime != null && !isFirstTime) {
+                              //     prefs.setBool('first_time', false);
+                              //     print("FALSE");
+                              //     return false;
+                              //   } else {
+                              //     prefs.setBool('first_time', false);
+                              //     print("TRUE");
+                              //     return true;
+                              //   }
+                              // }
+
                               setState(() => error = '');
                               Navigator.push(
                                 context,

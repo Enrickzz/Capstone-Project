@@ -3,6 +3,7 @@ import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
+import 'package:my_app/ui_view/bar_graph.dart';
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
@@ -73,13 +74,21 @@ class _TrainingScreenState extends State<TrainingScreen>
         animationController: widget.animationController,
       ),
     );
-
+    listViews.add(
+      barGraph(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
     listViews.add(
       WorkoutView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );
