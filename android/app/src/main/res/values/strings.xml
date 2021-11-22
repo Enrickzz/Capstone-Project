@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">CVD Flutter</string>
+    <string name="facebook_app_id">455659635983658</string>
+    <string name="fb_login_protocol_scheme">fb455659635983658</string>
+</resources>
+

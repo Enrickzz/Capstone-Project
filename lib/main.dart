@@ -8,6 +8,7 @@ import 'my_diary/my_diary_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 Future<void>  main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,7 @@ class LogIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'CVD Flutter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -62,6 +63,7 @@ class _AppSignInState extends State<AppSignIn> {
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
+
 
     return Scaffold(
       body: Container(
@@ -217,6 +219,18 @@ class _AppSignInState extends State<AppSignIn> {
                     SizedBox(
                       height: 10,
                     ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                child: Column(
+                  children: <Widget>[
+                    SignInButton(
+                      Buttons.Facebook,
+                      onPressed: () => _auth.loginFacebook(),
+
+                    )
                   ],
                 ),
               ),
