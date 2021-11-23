@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/training/training_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 Future<void>  main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(LogIn());
 }
 
@@ -36,6 +38,22 @@ class LogIn extends StatelessWidget {
             print('You have an Error! ${snapshot.error.toString()}');
             return Text('Something went wrong!');
           } else if(snapshot.hasData){
+
+            FirebaseAuth.instance
+                .authStateChanges()
+                .listen((User user) {
+              if (user == null) {
+                print('User is currently signed out!');
+                //return runApp(AppSignIn());
+              } else {
+                print('User is signed in!');
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => mainScreen()),
+                );
+              }
+            });
+
             return AppSignIn();
           } else {
             return Center(
@@ -187,20 +205,6 @@ class _AppSignInState extends State<AppSignIn> {
                             if(result == null){
                               setState(() => error = 'Invalid Credential');
                             } else{
-                              // SharedPreferences prefs = await SharedPreferences.getInstance();
-                              // Future<bool> isFirstTime() async {
-                              //   var isFirstTime = prefs.getBool('first_time');
-                              //   if (isFirstTime != null && !isFirstTime) {
-                              //     prefs.setBool('first_time', false);
-                              //     print("FALSE");
-                              //     return false;
-                              //   } else {
-                              //     prefs.setBool('first_time', false);
-                              //     print("TRUE");
-                              //     return true;
-                              //   }
-                              // }
-
                               setState(() => error = '');
                               Navigator.push(
                                 context,
@@ -236,63 +240,63 @@ class _AppSignInState extends State<AppSignIn> {
                     SizedBox(
                       height: 10,
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                child: Column(
-                  children: <Widget>[
-                    SignInButton(
-                      Buttons.Facebook,
-                      onPressed: () => _auth.loginFacebook(),
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        children: <Widget>[
+                          SignInButton(
+                            Buttons.Facebook,
+                            onPressed: () => _auth.loginFacebook(),
+                          )
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Text(
+                                "Don't have an account? ",
+                                style: TextStyle(
+                                  color: Color(0xFF666666),
+                                  fontFamily: defaultFontFamily,
+                                  fontSize: defaultFontSize,
+                                  fontStyle: FontStyle.normal,
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => registration()),
+                                )
+                              },
+                              child: Container(
+                                child: Text(
+                                  "Sign Up",
+                                  style: TextStyle(
+                                    color: Color(0xFFAC252B),
+                                    fontFamily: defaultFontFamily,
+                                    fontSize: defaultFontSize,
+                                    fontStyle: FontStyle.normal,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
                     )
                   ],
                 ),
               ),
-              Flexible(
-                flex: 1,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          "Don't have an account? ",
-                          style: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize,
-                            fontStyle: FontStyle.normal,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => registration()),
-                          )
-                        },
-                        child: Container(
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              color: Color(0xFFAC252B),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize,
-                              fontStyle: FontStyle.normal,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  ),
-                ),
-              )
             ],
           ),
         ),
@@ -300,6 +304,8 @@ class _AppSignInState extends State<AppSignIn> {
     );
   }
 }
+
+
 class HexColor extends Color {
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 

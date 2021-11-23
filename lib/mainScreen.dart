@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/main.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/training/training_screen.dart';
@@ -21,7 +23,13 @@ class Home extends StatelessWidget {
             icon:Icon(Icons.person),
             label: Text('Logout'),
             onPressed: () async {
-              // await _auth.signOut();
+              print("Sign out user");
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LogIn()),
+              );
+               await FirebaseAuth.instance.signOut();
+
             },
           ),
         ],

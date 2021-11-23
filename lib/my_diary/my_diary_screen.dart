@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/glass_view.dart';
 import 'package:my_app/ui_view/mediterranean_diet_view.dart';
@@ -6,6 +7,8 @@ import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/my_diary/meals_list_view.dart';
 import 'package:my_app/my_diary/water_view.dart';
 import 'package:flutter/material.dart';
+
+import '../main.dart';
 
 class MyDiaryScreen extends StatefulWidget {
   const MyDiaryScreen({Key key, this.animationController}) : super(key: key);
@@ -314,7 +317,14 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                 highlightColor: Colors.transparent,
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(32.0)),
-                                onTap: () {},
+                                onTap: () async{
+                                  print("Sign out user");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => LogIn()),
+                                  );
+                                  await FirebaseAuth.instance.signOut();
+                                },
                                 child: Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_right,
