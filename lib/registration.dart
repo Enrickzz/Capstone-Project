@@ -216,7 +216,7 @@ class _AppSignUpState extends State<registration> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final usersRef = databaseReference.child('users/' + uid);
+                            final usersRef = databaseReference.child('users/' + uid + '/personal_info');
                             await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString()});
                             print("user registered Sucessfully!");
                             Navigator.push(

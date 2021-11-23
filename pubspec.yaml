@@ -44,7 +44,7 @@ dependencies:
   flutter_facebook_auth: ^3.5.6
 
   syncfusion_flutter_charts: ^19.1.54
-  shared_preferences: ^0.5.4+6
+  shared_preferences: ^2.0.9
   gender_picker: ^1.1.0
 
 dev_dependencies:

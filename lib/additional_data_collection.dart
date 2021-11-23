@@ -29,7 +29,7 @@ class _AppSignUpState extends State<additional_data_collection> {
   bool isDateSelected= false;
   DateTime birthDate; // instance of DateTime
   String birthDateInString = "MM/DD/YYYY";
-
+  String weight = "";
   String genderIn="mygender";
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -153,13 +153,17 @@ class _AppSignUpState extends State<additional_data_collection> {
                             fontSize: defaultFontSize),
                         hintText: "Weight in KG",
                       ),
+                      validator: (val) => val.isEmpty ? 'Enter Weight in KG' : null,
+                      onChanged: (val){
+                        setState(() => weight = val);
+                      },
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly],
-                      validator: (val) => val.isEmpty ? 'Enter Email' : null,
-                      onChanged: (val){
-                        setState(() => genderIn = val);
-                      },
+                      // validator: (val) => val.isEmpty ? 'Enter Email' : null,
+                      // onChanged: (val){
+                      //   setState(() => genderIn = val);
+                      // },
                     ),SizedBox(
                       height: 8,
                     ),
@@ -191,15 +195,22 @@ class _AppSignUpState extends State<additional_data_collection> {
                       width: double.infinity,
                       child: RaisedButton(
                         padding: EdgeInsets.all(17.0),
-                        onPressed: () => {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: Text("Contents"),
-                                  content: Text("Birthdate: "+birthDateInString +"\nGender: "+genderIn));
-                              },
-                          )
+                        onPressed: () async {
+
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            final usersRef = databaseReference.child('users/' + uid + '/vitals');
+                            await usersRef.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString()});
+                            print("Additional information collected!");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => mainScreen()),
+                            );
+                          } catch(e) {
+                            print("you got an error! $e");
+                          }
+                          print("birthday: " + birthDateInString.toString() + "gender: " + genderIn.toString() + "weight " + weight.toString());
 
                         },
                         child: Text(

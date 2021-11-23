@@ -246,7 +246,6 @@ class _AppSignInState extends State<AppSignIn> {
                     SignInButton(
                       Buttons.Facebook,
                       onPressed: () => _auth.loginFacebook(),
-
                     )
                   ],
                 ),
