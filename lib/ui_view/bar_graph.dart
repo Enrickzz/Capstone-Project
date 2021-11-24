@@ -30,14 +30,17 @@ class barGraph extends StatelessWidget{
       return SfCartesianChart(
         plotAreaBorderWidth: 0,
         legend: Legend(
-            isVisible: false,
-            overflowMode: LegendItemOverflowMode.wrap),
+            isVisible: true,
+            overflowMode: LegendItemOverflowMode.wrap,
+        position: LegendPosition.top),
         primaryXAxis: NumericAxis(
             edgeLabelPlacement: EdgeLabelPlacement.shift,
-            interval: 2,
+            interval: 1,
             majorGridLines: const MajorGridLines(width: 0)),
+        title: ChartTitle(text: 'Blood Pressure'),
         primaryYAxis: NumericAxis(
-            labelFormat: '{value}%',
+            labelFormat: '{value}',
+            interval: 20,
             axisLine: const AxisLine(width: 0),
             majorTickLines: const MajorTickLines(color: Colors.transparent)),
         series: _getDefaultLineSeries(),
@@ -70,31 +73,37 @@ class barGraph extends StatelessWidget{
 
   List<LineSeries<_ChartData, num>> _getDefaultLineSeries() {
     final List<_ChartData> chartData = <_ChartData>[
-      _ChartData(2005, 21, 28),
-      _ChartData(2006, 24, 44),
-      _ChartData(2007, 36, 48),
-      _ChartData(2008, 38, 50),
-      _ChartData(2009, 54, 66),
-      _ChartData(2010, 57, 78),
-      _ChartData(2011, 70, 84)
+      _ChartData(1, 120, 70),
+      _ChartData(2, 120, 70),
+      _ChartData(3, 130, 90),
+      _ChartData(4, 120, 70),
+      _ChartData(5, 115, 85),
+      _ChartData(6, 122, 78),
+      _ChartData(7, 132, 80),
+      _ChartData(8, 120, 85),
+      _ChartData(9, 140, 90),
+      _ChartData(10, 120, 78),
+      _ChartData(11, 120, 84)
     ];
     return <LineSeries<_ChartData, num>>[
       LineSeries<_ChartData, num>(
           animationDuration: 2500,
           dataSource: chartData,
-          xValueMapper: (_ChartData sales, _) => sales.x,
-          yValueMapper: (_ChartData sales, _) => sales.y,
-          width: 2,
-          name: 'Germany',
-          markerSettings: const MarkerSettings(isVisible: true)),
+          xValueMapper: (_ChartData bp, _) => bp.x,
+          yValueMapper: (_ChartData bp, _) => bp.y,
+          width: 1,
+          name: 'Systolic',
+          markerSettings: const MarkerSettings(isVisible: true),
+          ),
       LineSeries<_ChartData, num>(
           animationDuration: 2500,
           dataSource: chartData,
-          width: 2,
-          name: 'England',
+          width: 1,
+          name: 'Diastolic',
           xValueMapper: (_ChartData sales, _) => sales.x,
           yValueMapper: (_ChartData sales, _) => sales.y2,
-          markerSettings: const MarkerSettings(isVisible: true))
+          markerSettings: const MarkerSettings(isVisible: true),
+          )
     ];
   }
 
