@@ -51,8 +51,7 @@ class mainScreen extends StatefulWidget {
   _mainScreenState createState() => _mainScreenState();
 }
 
-class _mainScreenState extends State<mainScreen>
-    with TickerProviderStateMixin {
+class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
   AnimationController animationController;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
@@ -85,7 +84,6 @@ class _mainScreenState extends State<mainScreen>
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
-
         backgroundColor: Colors.transparent,
         body: FutureBuilder<bool>(
           future: getData(),

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+// import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/services/auth.dart';
@@ -78,9 +80,12 @@ class _AppSignInState extends State<AppSignIn> {
   String email = '';
   String password = '';
   String error = '';
+  // File file;
 
   @override
   Widget build(BuildContext context) {
+    // final fileName = file != null ? basename(file!.path) :'No File Selected';
+
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -225,12 +230,9 @@ class _AppSignInState extends State<AppSignIn> {
                           textAlign: TextAlign.center,
                         ),
                         color: Color(0xFFBC1F26),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(15.0),
-                            side: BorderSide(color: Color(0xFFBC1F26))),
+                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0), side: BorderSide(color: Color(0xFFBC1F26))),
                       ),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Color(0xFFF2F3F7)),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFFF2F3F7)),
                     ),
                     SizedBox(height: 12.0),
                     Text(
@@ -251,22 +253,54 @@ class _AppSignInState extends State<AppSignIn> {
                         ],
                       ),
                     ),
-                    Flexible(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
+                    SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      // children:[
+                      //   RaisedButton(
+                      //     child: new Text ("Select File"),
+                      //     // icon: Icons.attach_file,
+                      //     onPressed: () async{
+                      //       final result = await FilePicker.platform.pickFiles(
+                      //         allowMultiple: false,
+                      //         // type: FileType.custom,
+                      //         // allowedExtensions: ['jpg', 'png'],
+                      //       );
+                      //       if(result == null) return;
+                      //       final path = result.files.single.path;
+                      //       final fileName = result.files.single.name;
+                      //       print("path" + path);
+                      //       print("fileName " + fileName);
+                      //     }
+                      //       ),
+                      //       SizedBox(height: 16),
+                      //       // RaisedButton(
+                      //       // child: new Text ("Upload File"),
+                      //       // prefixIcon: Icon(
+                      //       // Icons.cloud_upload_outlined,
+                      //       // onClicked: uploadFile,
+                      //       // ),
+                      //       ],
+                            ),
+                            ),
+                            Flexible(
+                            flex: 1,
+                            child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
                             Container(
-                              child: Text(
-                                "Don't have an account? ",
-                                style: TextStyle(
-                                  color: Color(0xFF666666),
-                                  fontFamily: defaultFontFamily,
-                                  fontSize: defaultFontSize,
-                                  fontStyle: FontStyle.normal,
+                            child: Text(
+                            "Don't have an account? ",
+                            style: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize,
+                            fontStyle: FontStyle.normal,
                                 ),
                               ),
                             ),
@@ -317,3 +351,4 @@ class HexColor extends Color {
     return int.parse(hexColor, radix: 16);
   }
 }
+
