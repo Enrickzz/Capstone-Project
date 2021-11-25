@@ -30,6 +30,7 @@ class _AppSignUpState extends State<additional_data_collection> {
   DateTime birthDate; // instance of DateTime
   String birthDateInString = "MM/DD/YYYY";
   String weight = "";
+  String height = "";
   String genderIn="mygender";
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -167,6 +168,43 @@ class _AppSignUpState extends State<additional_data_collection> {
                     ),SizedBox(
                       height: 8,
                     ),
+                    TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        prefixIcon: Icon(
+                          Icons.accessibility_rounded,
+                          color: Color(0xFF666666),
+                          size: defaultIconSize,
+                        ),
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "Height in Meters",
+                      ),
+                      validator: (val) => val.isEmpty ? 'Enter Height in Meters' : null,
+                      onChanged: (val){
+                        setState(() => height = val);
+                      },
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly],
+                      // validator: (val) => val.isEmpty ? 'Enter Email' : null,
+                      // onChanged: (val){
+                      //   setState(() => genderIn = val);
+                      // },
+                    ),SizedBox(
+                      height: 8,
+                    ),
                         GenderPickerWithImage(
                           showOtherGender: true,
                           verticalAlignedText: true,
@@ -200,8 +238,8 @@ class _AppSignUpState extends State<additional_data_collection> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final usersRef = databaseReference.child('users/' + uid + '/vitals');
-                            await usersRef.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString()});
+                            final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
+                            await usersRef.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString(), "height":height.toString()});
                             print("Additional information collected!");
                             Navigator.push(
                               context,
@@ -210,7 +248,7 @@ class _AppSignUpState extends State<additional_data_collection> {
                           } catch(e) {
                             print("you got an error! $e");
                           }
-                          print("birthday: " + birthDateInString.toString() + "gender: " + genderIn.toString() + "weight " + weight.toString());
+                          print("birthday: " + birthDateInString.toString() + "gender: " + genderIn.toString() + "weight " + weight.toString() + "height " + height.toString());
 
                         },
                         child: Text(
