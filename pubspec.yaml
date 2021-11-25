@@ -47,7 +47,7 @@ dependencies:
 #  shared_preferences: ^2.0.9
   gender_picker: ^1.1.0
   firebase_storage: ^10.1.0
-#  file_picker: ^4.2.4
+  file_picker: ^4.2.4
 
 
 

@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/models/tabIcon_data.dart';
@@ -8,6 +9,7 @@ import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
 import 'package:my_app/registration.dart';
+import 'package:my_app/storage_service.dart';
 
 class Home extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -81,10 +83,12 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final Storage storage = Storage();
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
+
         body: FutureBuilder<bool>(
           future: getData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {

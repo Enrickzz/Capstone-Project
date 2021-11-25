@@ -45,6 +45,7 @@ class barGraph extends StatelessWidget{
             majorTickLines: const MajorTickLines(color: Colors.transparent)),
         series: _getDefaultLineSeries(),
         tooltipBehavior: TooltipBehavior(enable: true),
+        
       );
     }
     // return Container(

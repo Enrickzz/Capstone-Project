@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-// import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/storage_service.dart';
 import 'package:my_app/training/training_screen.dart';
 import 'package:flutter/material.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,7 @@ class LogIn extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CVD Flutter',
@@ -89,7 +91,7 @@ class _AppSignInState extends State<AppSignIn> {
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
-
+    final Storage storage = Storage();
 
     return Scaffold(
       body: Container(
@@ -256,35 +258,24 @@ class _AppSignInState extends State<AppSignIn> {
                     SizedBox(height: 10),
                   Container(
                     width: double.infinity,
-                    child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                      // children:[
-                      //   RaisedButton(
-                      //     child: new Text ("Select File"),
-                      //     // icon: Icons.attach_file,
-                      //     onPressed: () async{
-                      //       final result = await FilePicker.platform.pickFiles(
-                      //         allowMultiple: false,
-                      //         // type: FileType.custom,
-                      //         // allowedExtensions: ['jpg', 'png'],
-                      //       );
-                      //       if(result == null) return;
-                      //       final path = result.files.single.path;
-                      //       final fileName = result.files.single.name;
-                      //       print("path" + path);
-                      //       print("fileName " + fileName);
-                      //     }
-                      //       ),
-                      //       SizedBox(height: 16),
-                      //       // RaisedButton(
-                      //       // child: new Text ("Upload File"),
-                      //       // prefixIcon: Icon(
-                      //       // Icons.cloud_upload_outlined,
-                      //       // onClicked: uploadFile,
-                      //       // ),
-                      //       ],
-                            ),
-                            ),
+                      child: RaisedButton(
+                        child: new Text ("Select File"),
+                        // icon: Icons.attach_file,
+                        onPressed: () async{
+                          final result = await FilePicker.platform.pickFiles(
+                            allowMultiple: false,
+                            // type: FileType.custom,
+                            // allowedExtensions: ['jpg', 'png'],
+                          );
+                          if(result == null) return;
+                          final path = result.files.single.path;
+                          final fileName = result.files.single.name;
+                          print("path" + path);
+                          print("fileName " + fileName);
+                          storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
+                        },
+                      ),
+                  ),
                             Flexible(
                             flex: 1,
                             child: Align(
