@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -11,8 +12,11 @@ class BMI_Chart extends StatelessWidget {
   const BMI_Chart({Key key, this.animationController, this.animation})
       : super(key: key);
 
+
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
+    final Future<String> bmi = getBMIdata();
     return AnimatedBuilder(
       animation: animationController,
       builder: (BuildContext context, Widget child) {
@@ -58,6 +62,7 @@ class BMI_Chart extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
+
                         child: SfRadialGauge(
                             enableLoadingAnimation: true, animationDuration: 5500,
                             axes: <RadialAxis>[
@@ -68,15 +73,17 @@ class BMI_Chart extends StatelessWidget {
                                     GaugeRange(startValue: 24,endValue: 34,color: Colors.orangeAccent,startWidth: 10,endWidth: 10),
                                     GaugeRange(startValue: 34,endValue: 50,color: Colors.redAccent,startWidth: 10,endWidth: 10)],
                                   pointers: <GaugePointer>[
-                                    RangePointer(value: 24, pointerOffset: 10,
+                                    RangePointer(value: double.parse(bmi), pointerOffset: 10,
                                     color: FitnessAppTheme.nearlyBlack, sizeUnit: GaugeSizeUnit.logicalPixel, width: 20,)
                                   ],
                                   annotations: <GaugeAnnotation>[
                                     GaugeAnnotation(widget: Container(child:
                                     Text('25',style: TextStyle(color: Colors.black, fontSize: 50,fontWeight: FontWeight.bold))),
-                                        angle: 90,positionFactor: .01)]
+                                        angle: 90,positionFactor: .01)],
                               )]
                         ),
+
+
                         // child: SfCircularChart(
                         //     legend: Legend(isVisible: false, position: LegendPosition.bottom),
                         //     series: <CircularSeries>[
@@ -108,6 +115,7 @@ class BMI_Chart extends StatelessWidget {
                       SizedBox(
                         height: 32,
                       ),
+
                       Padding(
                         padding: const EdgeInsets.only(right: 4),
                         child: Row(
@@ -173,12 +181,38 @@ class BMI_Chart extends StatelessWidget {
       },
     );
   }
-  List<BMIData> getBMIdata(){
+  Future<String> getBMIdata() async {
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    //<---------- insert data to db  ----------->
+    // try{
+    //   final bmiRef = databaseReference.child('users/1vl6taoaSbNJN7Aeq1JR2id4l7y2/vitals/additional_info');
+    //   await bmiRef.set({"BMI": "24"});
+    //   print("HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!");
+    // }catch(e) {
+    //   print("you got an error! $e");
+    // }
+    // <----------- read data from db ----------->
+    try{
+      final bmiRef = databaseReference.child('users/1vl6taoaSbNJN7Aeq1JR2id4l7y2/vitals/additional_info/BMI');
+      bmiRef.once().then((DataSnapshot snapshot) {
+        print('Data : ${snapshot.value}');
+        return snapshot.value;
+      });
+
+    }catch(e) {
+      print("you got an error! $e");
+    }
+
+
+
+
+
+
     final List<BMIData> data = [
       BMIData("BMI", 24, const Color.fromRGBO(235, 97, 143, 1), "aa"),
 
     ];
-    return data;
+
   }
 }
 

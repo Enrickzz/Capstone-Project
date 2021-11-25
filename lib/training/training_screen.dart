@@ -8,7 +8,7 @@ import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bar_graph.dart';
+import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
