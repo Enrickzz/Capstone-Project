@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,8 @@ class BMI_Chart extends StatefulWidget {
   State<BMI_Chart> createState() => _BMI_ChartState();
 }
 String bmi = "0";
+String bmi_status = "error";
 class _BMI_ChartState extends State<BMI_Chart> {
-
   @override
   void initState(){
     super.initState();
@@ -30,7 +32,10 @@ class _BMI_ChartState extends State<BMI_Chart> {
 
   @override
   Widget build(BuildContext context)  {
-
+    getBMIdata();
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    final uid = user.uid;
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
@@ -92,9 +97,25 @@ class _BMI_ChartState extends State<BMI_Chart> {
                                     color: FitnessAppTheme.nearlyBlack, sizeUnit: GaugeSizeUnit.logicalPixel, width: 20,)
                                   ],
                                   annotations: <GaugeAnnotation>[
-                                    GaugeAnnotation(widget: Container(child:
-                                    Text(bmi,style: TextStyle(color: Colors.black, fontSize: 50,fontWeight: FontWeight.bold))),
-                                        angle: 90,positionFactor: .01)],
+                                    GaugeAnnotation(widget: Container(
+                                        child: Column(
+                                          children: [
+                                            Text(bmi,
+                                                style: TextStyle(color: Colors.black,
+                                                    fontSize: 50,
+                                                    fontWeight:
+                                                    FontWeight.bold)
+                                            ),
+                                            Text(bmi_status,
+                                                style: TextStyle(color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                    FontWeight.bold)
+                                            )
+                                          ],
+                                        )
+                                    ),
+                                        angle: 90,positionFactor: .8)],
                               )]
                         ),
 
@@ -198,6 +219,9 @@ class _BMI_ChartState extends State<BMI_Chart> {
   }
 
   void getBMIdata() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    final uid = user.uid;
     final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
     //<---------- insert data to db  ----------->
@@ -210,13 +234,48 @@ class _BMI_ChartState extends State<BMI_Chart> {
     // }
     // <----------- read data from db ----------->
     try{
-      final bmiRef = databaseReference.child('users/1vl6taoaSbNJN7Aeq1JR2id4l7y2/vitals/additional_info/BMI');
-      bmiRef.once().then((DataSnapshot snapshot) {
-        print('Data : ${snapshot.value}');
-        setState(() {
-          bmi = snapshot.value;
-        });
+      final bmiRef = databaseReference.child('users/' +"ywY58GIE8RQ6tphPnvL0Q5Qr7O22"+'/vitals/additional_info/').orderByKey();
+
+      List<additional_info> list = new List();
+      //DataSnapshot snap = await bmiRef.once();
+
+      bmiRef.once().then((DataSnapshot datasnapshot) {
+        print(datasnapshot.value);
+        print(datasnapshot.key);
+        String temp1 = datasnapshot.value.toString();
+        List<String> temp = temp1.split(',');
+        for(var i = 0; i < temp.length; i++){
+          //print(temp[i].replaceAll("{", "").replaceAll("}", ""));
+          String full = temp[i].replaceAll("{", "").replaceAll("}", "");
+
+
+          List<String> splitFull = full.split(" ");
+          print(splitFull.last + " <<< end result");
+
+        }
       });
+      // bmiRef.once().then((DataSnapshot snapshot) {
+      //   print('Data : ${snapshot.value}');
+      //   setState(() {
+      //     bmi = snapshot.value;
+      //
+      //     double tempBMI = double.parse(bmi);
+      //
+      //     if (tempBMI < 18.5){
+      //       bmi_status = "You are underweight!";
+      //     }else if(tempBMI >= 18.5 && tempBMI <= 24.9){
+      //       bmi_status = "Your weight is normal!";
+      //     }else if(tempBMI >= 25 && tempBMI <= 29.9){
+      //       bmi_status = "You are overweight!";
+      //     }else if(tempBMI >= 30 && tempBMI <= 34.9){
+      //       bmi_status = "You are obese!";
+      //     }else if(tempBMI > 35){
+      //       bmi_status = "You are extremely obese!";
+      //     }
+      //
+      //
+      //   });
+      // });
     }catch(e) {
       print("you got an error! $e");
     }
@@ -226,6 +285,16 @@ class _BMI_ChartState extends State<BMI_Chart> {
 
     ];
   }
+}
+
+class additional_info {
+  additional_info(this.weight,this.height,this.birthday, this.gender);
+  final String weight;
+  final String height;
+  final String BMI ="0";
+  final String gender;
+  final String birthday;
+
 }
 
 
