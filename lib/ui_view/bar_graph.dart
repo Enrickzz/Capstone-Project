@@ -12,63 +12,115 @@ class barGraph extends StatelessWidget{
   barGraph({Key key, this.animationController, this.animation})
       : super(key: key);
 
-  
-
-  List<GDPData> getChartData(){
-    final List<GDPData> chartData =[
-      GDPData('ASD', 1),
-      GDPData('d', 2),
-      GDPData('b', 3),
-      GDPData('r', 4),
-      GDPData('t', 5),
-    ];
-    return chartData;
-  }
 
   @override
   Widget build(BuildContext context) {
-      return SfCartesianChart(
-        plotAreaBorderWidth: 0,
-        legend: Legend(
-            isVisible: true,
-            overflowMode: LegendItemOverflowMode.wrap,
-        position: LegendPosition.top),
-        primaryXAxis: NumericAxis(
-            edgeLabelPlacement: EdgeLabelPlacement.shift,
-            interval: 1,
-            majorGridLines: const MajorGridLines(width: 0)),
-        title: ChartTitle(text: 'Blood Pressure'),
-        primaryYAxis: NumericAxis(
-            labelFormat: '{value}',
-            interval: 20,
-            axisLine: const AxisLine(width: 0),
-            majorTickLines: const MajorTickLines(color: Colors.transparent)),
-        series: _getDefaultLineSeries(),
-        tooltipBehavior: TooltipBehavior(enable: true),
-        
-      );
-    }
-    // return Container(
-    //   height: 400,
-    //   child: SfCartesianChart(
-    //     title: ChartTitle(text: 'Continent wise GDP - 2021'),
-    //     legend: Legend(isVisible: true),
-    //     series: <ChartSeries>[
-    //       BarSeries<GDPData, String>(
-    //           name: 'GDP',
-    //           dataSource: getChartData(),
-    //           xValueMapper: (GDPData gdp, _) => gdp.continent,
-    //           yValueMapper: (GDPData gdp, _) => gdp.gdp,
-    //           dataLabelSettings: DataLabelSettings(isVisible: true),
-    //           enableTooltip: true)
-    //     ],
-    //     primaryXAxis: CategoryAxis(),
-    //     primaryYAxis: NumericAxis(
-    //         edgeLabelPlacement: EdgeLabelPlacement.shift,
-    //         numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
-    //         title: AxisTitle(text: 'GDP in billions of U.S. Dollars')),
-    //   ),
-    // );
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (BuildContext context, Widget child) {
+        return FadeTransition(
+          opacity: animation,
+          child: new Transform(
+            transform: new Matrix4.translationValues(
+                0.0, 30 * (1.0 - animation.value), 0.0),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 24, right: 24, top: 16, bottom: 18),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: FitnessAppTheme.nearlyWhite,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(68.0),
+                      bottomRight: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: FitnessAppTheme.grey.withOpacity(0.6),
+                        offset: Offset(1.1, 1.1),
+                        blurRadius: 10.0),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Body Mass Index',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontFamily: FitnessAppTheme.fontName,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          letterSpacing: 0.0,
+                          color: FitnessAppTheme.nearlyBlack,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 1.0),
+                        child: SfCartesianChart(
+                                plotAreaBorderWidth: 0,
+                                legend: Legend(
+                                    isVisible: true,
+                                    overflowMode: LegendItemOverflowMode.wrap,
+                                    position: LegendPosition.top),
+                                primaryXAxis: NumericAxis(
+                                    edgeLabelPlacement: EdgeLabelPlacement.shift,
+                                    interval: 1,
+                                    majorGridLines: const MajorGridLines(width: 0)),
+                                title: ChartTitle(text: 'Blood Pressure'),
+                                primaryYAxis: NumericAxis(
+                                    labelFormat: '{value}',
+                                    interval: 20,
+                                    axisLine: const AxisLine(width: 0),
+                                    majorTickLines: const MajorTickLines(color: Colors.transparent)),
+                                series: _getDefaultLineSeries(),
+                                tooltipBehavior: TooltipBehavior(enable: true),
+
+                              ),
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        // return FadeTransition(
+        //   opacity: animation,
+        //   child: new Transform(
+        //     transform: new Matrix4.translationValues(
+        //         0.0, 30 * (1.0 - animation.value), 0.0),
+        //     child: SfCartesianChart(
+        //       plotAreaBorderWidth: 0,
+        //       legend: Legend(
+        //           isVisible: true,
+        //           overflowMode: LegendItemOverflowMode.wrap,
+        //           position: LegendPosition.top),
+        //       primaryXAxis: NumericAxis(
+        //           edgeLabelPlacement: EdgeLabelPlacement.shift,
+        //           interval: 1,
+        //           majorGridLines: const MajorGridLines(width: 0)),
+        //       title: ChartTitle(text: 'Blood Pressure'),
+        //       primaryYAxis: NumericAxis(
+        //           labelFormat: '{value}',
+        //           interval: 20,
+        //           axisLine: const AxisLine(width: 0),
+        //           majorTickLines: const MajorTickLines(color: Colors.transparent)),
+        //       series: _getDefaultLineSeries(),
+        //       tooltipBehavior: TooltipBehavior(enable: true),
+        //
+        //     )
+        // ));
+      },
+    );
+  }
+
 
   }
 
