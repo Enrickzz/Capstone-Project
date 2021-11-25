@@ -12,7 +12,6 @@ class glucose_levels extends StatelessWidget{
   glucose_levels({Key key, this.animationController, this.animation})
       : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(

@@ -1,6 +1,7 @@
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../fitness_app_theme.dart';
 
 class BMI_Chart extends StatelessWidget {
@@ -57,33 +58,52 @@ class BMI_Chart extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
-                        child: SfCircularChart(
-                            legend: Legend(isVisible: false, position: LegendPosition.bottom),
-                            series: <CircularSeries>[
-                              RadialBarSeries<BMIData, String>(
-                                dataSource: getBMIdata(),
-                                xValueMapper: (BMIData data, _) => data.xData,
-                                yValueMapper: (BMIData data, _) => data.yData,
-                                pointColorMapper: (BMIData data, _) => data.color,
-                                radius: '100%',
-                                dataLabelSettings: DataLabelSettings(
-                                  // Renders the data label
-                                    isVisible: true,
-                                    textStyle: TextStyle(
-                                        fontFamily: 'Arial',
-                                        fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: FitnessAppTheme.nearlyDarkBlue
-                                    )
-                                ),
-                                cornerStyle: CornerStyle.bothCurve,
-
-                                maximumValue: 40,
-
-                              )
-                            ]
+                        child: SfRadialGauge(
+                            enableLoadingAnimation: true, animationDuration: 5500,
+                            axes: <RadialAxis>[
+                              RadialAxis(minimum: 10, maximum: 50,
+                                  axisLineStyle: AxisLineStyle(thickness: 30), showTicks: false,
+                                  ranges: <GaugeRange>[
+                                    GaugeRange(startValue: 10,endValue: 24,color: Colors.greenAccent,startWidth: 10,endWidth:10),
+                                    GaugeRange(startValue: 24,endValue: 34,color: Colors.orangeAccent,startWidth: 10,endWidth: 10),
+                                    GaugeRange(startValue: 34,endValue: 50,color: Colors.redAccent,startWidth: 10,endWidth: 10)],
+                                  pointers: <GaugePointer>[
+                                    RangePointer(value: 24, pointerOffset: 10,
+                                    color: FitnessAppTheme.nearlyBlack, sizeUnit: GaugeSizeUnit.logicalPixel, width: 20,)
+                                  ],
+                                  annotations: <GaugeAnnotation>[
+                                    GaugeAnnotation(widget: Container(child:
+                                    Text('25',style: TextStyle(color: Colors.black, fontSize: 50,fontWeight: FontWeight.bold))),
+                                        angle: 90,positionFactor: .01)]
+                              )]
                         ),
+                        // child: SfCircularChart(
+                        //     legend: Legend(isVisible: false, position: LegendPosition.bottom),
+                        //     series: <CircularSeries>[
+                        //       RadialBarSeries<BMIData, String>(
+                        //         dataSource: getBMIdata(),
+                        //         xValueMapper: (BMIData data, _) => data.xData,
+                        //         yValueMapper: (BMIData data, _) => data.yData,
+                        //         pointColorMapper: (BMIData data, _) => data.color,
+                        //         radius: '100%',
+                        //         dataLabelSettings: DataLabelSettings(
+                        //           // Renders the data label
+                        //             isVisible: true,
+                        //             textStyle: TextStyle(
+                        //                 fontFamily: 'Arial',
+                        //                 fontStyle: FontStyle.italic,
+                        //                 fontWeight: FontWeight.bold,
+                        //                 fontSize: 20,
+                        //                 color: FitnessAppTheme.nearlyDarkBlue
+                        //             )
+                        //         ),
+                        //         cornerStyle: CornerStyle.bothCurve,
+                        //
+                        //         maximumValue: 40,
+                        //
+                        //       )
+                        //     ]
+                        // ),
                       ),
                       SizedBox(
                         height: 32,

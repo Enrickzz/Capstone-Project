@@ -59,7 +59,7 @@ class calorie_intake extends StatelessWidget{
                                 xValueMapper: (calorie_intake_data sales, _) => sales.date,
                                 yValueMapper: (calorie_intake_data sales, _) => sales.calories,
                                 color: Colors.red,
-                                animationDuration: 1000
+                                animationDuration: 8000,
                             ),
                           ],
                           primaryXAxis: CategoryAxis(
@@ -69,7 +69,8 @@ class calorie_intake extends StatelessWidget{
                           tooltipPosition: TooltipPosition.pointer),
                           primaryYAxis: NumericAxis(
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
-                              title: AxisTitle(text: 'Calories')),
+                              title: AxisTitle(text: 'Calories'),
+                          minimum: 300),
                         ),
                       ),
                       SizedBox(
