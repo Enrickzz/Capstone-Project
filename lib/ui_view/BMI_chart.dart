@@ -69,22 +69,11 @@ class _BMI_ChartState extends State<BMI_Chart> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        'Body Mass Index',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: FitnessAppTheme.fontName,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          letterSpacing: 0.0,
-                          color: FitnessAppTheme.nearlyBlack,
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
 
                         child: SfRadialGauge(
-                            enableLoadingAnimation: true, animationDuration: 5500,
+                            enableLoadingAnimation: true, animationDuration: 3000,
                             axes: <RadialAxis>[
                               RadialAxis(minimum: 10, maximum: 50,
                                   axisLineStyle: AxisLineStyle(thickness: 30), showTicks: false,

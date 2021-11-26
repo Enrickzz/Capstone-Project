@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,23 +8,35 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../fitness_app_theme.dart';
 import '../main.dart';
 
-class calorie_intake extends StatelessWidget{
+class calorie_intake extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
   calorie_intake({Key key, this.animationController, this.animation})
       : super(key: key);
 
+  @override
+  _calorie_intakeState createState() => _calorie_intakeState();
+}
+List<calorie_intake_data> finaList = new List();
 
+class _calorie_intakeState extends State<calorie_intake> {
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      getChartData();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -55,7 +69,7 @@ class calorie_intake extends StatelessWidget{
                           series: <ColumnSeries<calorie_intake_data, String>>[
                             ColumnSeries<calorie_intake_data, String>(
                               // Binding the chartData to the dataSource of the column series.
-                                dataSource: getChartData(),
+                                dataSource: finaList,
                                 xValueMapper: (calorie_intake_data sales, _) => sales.date,
                                 yValueMapper: (calorie_intake_data sales, _) => sales.calories,
                                 color: Colors.red,
@@ -86,44 +100,106 @@ class calorie_intake extends StatelessWidget{
       },
     );
   }
+  List<calorie_intake_data> getChartData(){
+    // final List<calorie_intake_data> chartData =[
+    //   calorie_intake_data('1/1/21', 1204),
+    //   calorie_intake_data('1/2/21', 1032),
+    //   calorie_intake_data('1/3/21', 2000),
+    //   calorie_intake_data('1/4/21', 1500),
+    //   calorie_intake_data('1/5/21', 1235),
+    //   calorie_intake_data('1/6/21', 1204),
+    //   calorie_intake_data('1/7/21', 1032),
+    //   calorie_intake_data('1/8/21', 1204),
+    //   calorie_intake_data('1/9/21', 1032),
+    //   calorie_intake_data('1/10/21', 2000),
+    //   calorie_intake_data('1/11/21', 1500),
+    //   calorie_intake_data('1/12/21', 1235),
+    //   calorie_intake_data('1/13/21', 1204),
+    //   calorie_intake_data('1/14/21', 1032),
+    //   calorie_intake_data('1/15/21', 1204),
+    //   calorie_intake_data('1/16/21', 1032),
+    //   calorie_intake_data('1/17/21', 2000),
+    //   calorie_intake_data('1/18/21', 1500),
+    //   calorie_intake_data('1/19/21', 1235),
+    //   calorie_intake_data('1/20/21', 1204),
+    //   calorie_intake_data('1/21/21', 1032),
+    //   calorie_intake_data('1/22/21', 1204),
+    //   calorie_intake_data('1/23/21', 1032),
+    //   calorie_intake_data('1/24/21', 2000),
+    //   calorie_intake_data('1/25/21', 1500),
+    //   calorie_intake_data('1/26/21', 1235),
+    //   calorie_intake_data('1/27/21', 1204),
+    //   calorie_intake_data('1/28/21', 1032),
+    //   calorie_intake_data('1/29/21', 1204),
+    //   calorie_intake_data('1/30/21', 1032),
+    //
+    // ];
+    // final FirebaseAuth auth = FirebaseAuth.instance;
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    // final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    // try{
+    //     for(var i = 1; i <= chartData.length && i <= 30; i++){
+    //       print(chartData.length.toString()+"<<<<<<<<<<<<<< LENGTH");
+    //       final bmiRef = databaseReference.child('users/'+uid+'/vitals/health_records/calorie_intake/'+"record_"+ i.toString());
+    //       bmiRef.set({"date": chartData[i-1].date, "calories": chartData[i-1].calories});
+    //       print("CHECK DB PASOK!");
+    //     }
+    //   }catch(e) {
+    //     print("you got an error! $e");
+    //   }
 
-}
-List<calorie_intake_data> getChartData(){
-  final List<calorie_intake_data> chartData =[
-    calorie_intake_data('1/1/21', 1204),
-    calorie_intake_data('1/2/21', 1032),
-    calorie_intake_data('1/3/21', 2000),
-    calorie_intake_data('1/4/21', 1500),
-    calorie_intake_data('1/5/21', 1235),
-    calorie_intake_data('1/6/21', 1204),
-    calorie_intake_data('1/7/21', 1032),
-    calorie_intake_data('1/8/21', 1204),
-    calorie_intake_data('1/9/21', 1032),
-    calorie_intake_data('1/10/21', 2000),
-    calorie_intake_data('1/11/21', 1500),
-    calorie_intake_data('1/12/21', 1235),
-    calorie_intake_data('1/13/21', 1204),
-    calorie_intake_data('1/14/21', 1032),
-    calorie_intake_data('1/15/21', 1204),
-    calorie_intake_data('1/16/21', 1032),
-    calorie_intake_data('1/17/21', 2000),
-    calorie_intake_data('1/18/21', 1500),
-    calorie_intake_data('1/19/21', 1235),
-    calorie_intake_data('1/20/21', 1204),
-    calorie_intake_data('1/21/21', 1032),
-    calorie_intake_data('1/22/21', 1204),
-    calorie_intake_data('1/23/21', 1032),
-    calorie_intake_data('1/24/21', 2000),
-    calorie_intake_data('1/25/21', 1500),
-    calorie_intake_data('1/26/21', 1235),
-    calorie_intake_data('1/27/21', 1204),
-    calorie_intake_data('1/28/21', 1032),
-    calorie_intake_data('1/29/21', 1204),
-    calorie_intake_data('1/30/21', 1032),
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final bmiRef = databaseReference.child('users/' +uid+'/vitals/health_records/calorie_intake/');
+    List<calorie_intake_data> tempList= new List();
+    Future<void> getData() async{
+      await bmiRef.once().then((DataSnapshot snapshot){
+        //print(snapshot.value);
+        String temp1 = snapshot.value.toString();
+        List<String> temp = temp1.split('},');
+        List<String> tempFull = new List();
+        for(var i = 0 ; i < temp.length; i++){
+          String full = temp[i].replaceAll("{", "").replaceAll("}", "");
+          tempFull.add(full);
+          //print(full+"<<<< 1 iteration");
+        }
+        for(var i= 0 ; i < tempFull.length; i++){
+          List<String> _1item = tempFull[i].split(",");
+          //print(_1item.length.toString() + "<<<<<<< 1item");
+          List<String> a = _1item[0].split(" ");
+          if(i==0){
 
-  ];
-  return chartData;
+            _1item[0] = _1item[0].replaceAll(_1item[0],a[2]);
+            _1item[1] = _1item[1].replaceAll("calories: ", "");
+            //print(_1item[0] +"  "+_1item[1]+"\n\n");
+            tempList.add(new calorie_intake_data(_1item[0],double.parse(_1item[1])));
+
+          }else{
+            //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
+            _1item[0] = _1item[0].replaceAll(_1item[0],a[3]);
+            _1item[1] = _1item[1].replaceAll("calories: ", "");
+            //print(_1item[0] +"  "+_1item[1]+"\n");
+            tempList.add(new calorie_intake_data(_1item[0],double.parse(_1item[1])));
+          }
+          //print(_1item[0] + "\n" + _1item[1] + "\n====================================");
+        }
+        finaList = tempList;
+        finaList.sort((a,b) => a.date.compareTo(b.date));
+      });
+    }
+    getData();
+    Future.delayed(const Duration(seconds: 2), (){
+      setState(() {
+        print("SET STATE CALORIES");
+        finaList = finaList;
+      });
+    });
+  }
 }
+
 
 class calorie_intake_data{
   calorie_intake_data(this.date, this.calories);
