@@ -70,7 +70,8 @@ class _glucose_levelsState extends State<glucose_levels> {
                                 dataSource: finaList,
                                 xValueMapper: (glucose_levels_data data, _) => data.date,
                                 yValueMapper: (glucose_levels_data data, _) => data.glucoseLevel,
-                                color: Colors.pinkAccent
+                                color: Colors.pinkAccent,
+                              animationDuration: 5000,animationDelay: 500
                             ),
                           ],
                           primaryXAxis: CategoryAxis(

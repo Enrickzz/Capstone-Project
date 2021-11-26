@@ -73,7 +73,7 @@ class _calorie_intakeState extends State<calorie_intake> {
                                 xValueMapper: (calorie_intake_data sales, _) => sales.date,
                                 yValueMapper: (calorie_intake_data sales, _) => sales.calories,
                                 color: Colors.red,
-                                animationDuration: 8000,
+                                animationDuration: 5000, animationDelay: 500
                             ),
                           ],
                           primaryXAxis: CategoryAxis(
