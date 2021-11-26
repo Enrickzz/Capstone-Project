@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
@@ -19,7 +20,6 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 Future<void>  main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   runApp(LogIn());
 }
 
@@ -51,10 +51,14 @@ class LogIn extends StatelessWidget {
                 //return runApp(AppSignIn());
               } else {
                 print('User is signed in!');
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => mainScreen()),
-                );
+                bool test = isFirstTime();
+                print("TESTING " + test.toString());
+                if(isFirstTime() == false){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => mainScreen()),
+                  );
+                }
               }
             });
 
@@ -330,7 +334,27 @@ class _AppSignInState extends State<AppSignIn> {
   }
 }
 
+bool isFirstTime () {
+  bool isFTime = true;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final userRef = databaseReference.child('users/' + uid +'/personal_info/isFirstTime/');
+  userRef.once().then((DataSnapshot datasnapshot) {
+    print("value " + datasnapshot.value);
+    print("key " + datasnapshot.key);
+    String temp1 = datasnapshot.value.toString();
+    if(temp1 == "false"){
+      print("isFTime" + isFTime.toString());
+      return isFTime = false;
+    }
+    else{
+      return isFTime;
+    }
+  });
 
+}
 class HexColor extends Color {
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 

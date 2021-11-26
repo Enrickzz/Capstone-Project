@@ -31,7 +31,7 @@ class _AppSignUpState extends State<additional_data_collection> {
   String birthDateInString = "MM/DD/YYYY";
   String weight = "";
   String height = "";
-  String genderIn="mygender";
+  String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -239,7 +239,7 @@ class _AppSignUpState extends State<additional_data_collection> {
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
-                            await usersRef.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString(), "height":height.toString()});
+                            await usersRef.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString(), "height":height.toString(),"BMI": "0"});
                             print("Additional information collected!");
                             Navigator.push(
                               context,
@@ -248,7 +248,7 @@ class _AppSignUpState extends State<additional_data_collection> {
                           } catch(e) {
                             print("you got an error! $e");
                           }
-                          print("birthday: " + birthDateInString.toString() + "gender: " + genderIn.toString() + "weight " + weight.toString() + "height " + height.toString());
+                          print("birthday: " + birthDateInString.toString() + "gender: " + genderIn.toString() + "weight " + weight.toString() + "height " + height.toString() + "BMI 0");
 
                         },
                         child: Text(

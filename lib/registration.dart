@@ -22,6 +22,7 @@ class _AppSignUpState extends State<registration> {
   String email = '';
   String password = '';
   String error = '';
+  bool isFirstTime = true;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -217,12 +218,17 @@ class _AppSignUpState extends State<registration> {
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             final usersRef = databaseReference.child('users/' + uid + '/personal_info');
-                            await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString()});
+
                             print("user registered Sucessfully!");
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => additional_data_collection()),
-                            );
+                            if(isFirstTime){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => additional_data_collection()),
+                              );
+                              isFirstTime = false;
+                              await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime});
+                            }
+
                           } catch(e) {
                             print("you got an error! $e");
                           }
