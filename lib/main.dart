@@ -23,13 +23,24 @@ Future<void>  main() async {
   runApp(LogIn());
 }
 
-class LogIn extends StatelessWidget {
+class LogIn extends StatefulWidget {
+  @override
+  State<LogIn> createState() => _LogInState();
+}
+bool isFTime = true;
+class _LogInState extends State<LogIn> {
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
-  // This widget is the root of your application.
+
+
+  @override
+  void initState(){
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
-
+    isFirstTime();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CVD Flutter',
@@ -52,14 +63,23 @@ class LogIn extends StatelessWidget {
                 //return runApp(AppSignIn());
               } else {
                 print('User is signed in!');
-                bool test = isFirstTime();
-                print("TESTING " + test.toString());
-                if(isFirstTime() == false){
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => mainScreen()),
-                  );
-                }
+                Future.delayed(const Duration(milliseconds: 1500), (){
+                  setState(() {
+                    print("SETSTATE INSIDE WIDGET ");
+                    if(isFTime == false){
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => mainScreen()),
+                      );
+                    }
+                    else if(isFTime == null){
+                      print("null si is first time");
+                    }
+                  });
+                });
+                print(isFTime);
+
+
               }
             });
 
@@ -72,6 +92,24 @@ class LogIn extends StatelessWidget {
         },
       )
     );
+  }
+  void isFirstTime () async {
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final userRef = databaseReference.child('users/' + uid +'/personal_info/isFirstTime/');
+    await userRef.once().then((DataSnapshot datasnapshot) {
+      String temp1 = datasnapshot.value.toString();
+      if(temp1 == "false"){
+        isFTime = false;
+        print("false statement " + isFTime.toString());
+      }
+      else{
+        print("true statement " + isFTime.toString());
+      }
+    });
   }
 }
 
@@ -333,29 +371,10 @@ class _AppSignInState extends State<AppSignIn> {
       ),
     );
   }
-}
-
-bool isFirstTime () {
-  bool isFTime = true;
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final User user = auth.currentUser;
-  final uid = user.uid;
-  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  final userRef = databaseReference.child('users/' + uid +'/personal_info/isFirstTime/');
-  userRef.once().then((DataSnapshot datasnapshot) {
-    print("value " + datasnapshot.value);
-    print("key " + datasnapshot.key);
-    String temp1 = datasnapshot.value.toString();
-    if(temp1 == "false"){
-      print("isFTime" + isFTime.toString());
-      return isFTime = false;
-    }
-    else{
-      return isFTime;
-    }
-  });
 
 }
+
+
 class HexColor extends Color {
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 

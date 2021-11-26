@@ -119,35 +119,6 @@ class _BMI_ChartState extends State<BMI_Chart> {
                                         angle: 90,positionFactor: .8)],
                               )]
                         ),
-
-
-                        // child: SfCircularChart(
-                        //     legend: Legend(isVisible: false, position: LegendPosition.bottom),
-                        //     series: <CircularSeries>[
-                        //       RadialBarSeries<BMIData, String>(
-                        //         dataSource: getBMIdata(),
-                        //         xValueMapper: (BMIData data, _) => data.xData,
-                        //         yValueMapper: (BMIData data, _) => data.yData,
-                        //         pointColorMapper: (BMIData data, _) => data.color,
-                        //         radius: '100%',
-                        //         dataLabelSettings: DataLabelSettings(
-                        //           // Renders the data label
-                        //             isVisible: true,
-                        //             textStyle: TextStyle(
-                        //                 fontFamily: 'Arial',
-                        //                 fontStyle: FontStyle.italic,
-                        //                 fontWeight: FontWeight.bold,
-                        //                 fontSize: 20,
-                        //                 color: FitnessAppTheme.nearlyDarkBlue
-                        //             )
-                        //         ),
-                        //         cornerStyle: CornerStyle.bothCurve,
-                        //
-                        //         maximumValue: 40,
-                        //
-                        //       )
-                        //     ]
-                        // ),
                       ),
                       SizedBox(
                         height: 32,

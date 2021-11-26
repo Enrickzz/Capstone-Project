@@ -189,9 +189,9 @@ class _AppSignUpState extends State<additional_data_collection> {
                             color: Color(0xFF666666),
                             fontFamily: defaultFontFamily,
                             fontSize: defaultFontSize),
-                        hintText: "Height in Meters",
+                        hintText: "Height in cm",
                       ),
-                      validator: (val) => val.isEmpty ? 'Enter Height in Meters' : null,
+                      validator: (val) => val.isEmpty ? 'Enter Height in cm' : null,
                       onChanged: (val){
                         setState(() => height = val);
                       },
