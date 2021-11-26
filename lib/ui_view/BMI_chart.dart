@@ -23,7 +23,7 @@ class _BMI_ChartState extends State<BMI_Chart> {
   void initState(){
     super.initState();
     BMIdata();
-    print("outside bmi is " + bmi);
+    //print("outside bmi is " + bmi);
     // getBMIdata().then((value) => {
     //   bmi = value,
     //   print("bmi is " + value)
@@ -279,49 +279,49 @@ class _BMI_ChartState extends State<BMI_Chart> {
       //DataSnapshot snap = await bmiRef.once();
 
       bmiRef.once().then((DataSnapshot datasnapshot) {
-        print(datasnapshot.value);
-        print(datasnapshot.key);
+        // print(datasnapshot.value);
+        // print(datasnapshot.key);
         String temp1 = datasnapshot.value.toString();
         List<String> temp = temp1.split(',');
         for(var i = 0; i < temp.length; i++){
           //print(temp[i].replaceAll("{", "").replaceAll("}", ""));
           String full = temp[i].replaceAll("{", "").replaceAll("}", "");
           List<String> splitFull = full.split(" ");
-          print("i is " + i.toString());
+          //print("i is " + i.toString());
           switch (i){
             case 0: {
               bmi = splitFull.last;
-              print("bmi inside switch " + bmi);
+              //print("bmi inside switch " + bmi);
             }
             break;
             case 1: {
               birthDateInString = splitFull.last;
-              print("birthdate " + birthDateInString);
+              //print("birthdate " + birthDateInString);
             }
             break;
             case 2: {
               genderIn = splitFull.last;
-              print("genderIn " + genderIn);
+              //print("genderIn " + genderIn);
             }
             break;
             case 3: {
               height = double.parse(splitFull.last);
-              print("height " + height.toString());
+              //print("height " + height.toString());
             }
             break;
             case 4: {
               weight = double.parse(splitFull.last);
-              print("weight " + weight.toString());
+              // print("weight " + weight.toString());
             }
             break;
           }
-          print(splitFull.last + " <<< end result");
+          // print(splitFull.last + " <<< end result");
         }
         double bmi_double = (weight / (height * height) * 10000);
         bmi = bmi_double.toStringAsFixed(2);
         //insert bmi to db
         bmiInsert.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString(), "height":height.toString(),"BMI": bmi});
-        print("bmi is " + bmi);
+        // print("bmi is " + bmi);
 
         if (bmi_double < 18.5){
           bmi_status = "You are underweight!";

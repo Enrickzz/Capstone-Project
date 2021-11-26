@@ -26,6 +26,7 @@ Future<void>  main() async {
 class LogIn extends StatelessWidget {
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
 

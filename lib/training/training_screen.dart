@@ -34,6 +34,7 @@ class _TrainingScreenState extends State<TrainingScreen>
 
   @override
   void initState() {
+
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -98,7 +99,7 @@ class _TrainingScreenState extends State<TrainingScreen>
       ),
     );
     listViews.add(
-      barGraph(
+      bp_chart(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -184,6 +185,11 @@ class _TrainingScreenState extends State<TrainingScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Future.delayed(const Duration(milliseconds: 5000), () {
+    //   setState(() {
+    //     print("FULL SET STATE");
+    //   });
+    // });
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
