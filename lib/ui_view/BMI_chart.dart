@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/storage_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../fitness_app_theme.dart';
@@ -37,6 +39,7 @@ class _BMI_ChartState extends State<BMI_Chart> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
+    final Storage storage = Storage();
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
@@ -112,6 +115,7 @@ class _BMI_ChartState extends State<BMI_Chart> {
                       SizedBox(
                         height: 32,
                       ),
+
 
                       Padding(
                         padding: const EdgeInsets.only(right: 4),

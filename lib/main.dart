@@ -134,7 +134,7 @@ class _AppSignInState extends State<AppSignIn> {
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
-    final Storage storage = Storage();
+
 
     return Scaffold(
       body: Container(
@@ -299,26 +299,7 @@ class _AppSignInState extends State<AppSignIn> {
                       ),
                     ),
                     SizedBox(height: 10),
-                  Container(
-                    width: double.infinity,
-                      child: RaisedButton(
-                        child: new Text ("Select File"),
-                        // icon: Icons.attach_file,
-                        onPressed: () async{
-                          final result = await FilePicker.platform.pickFiles(
-                            allowMultiple: false,
-                            // type: FileType.custom,
-                            // allowedExtensions: ['jpg', 'png'],
-                          );
-                          if(result == null) return;
-                          final path = result.files.single.path;
-                          final fileName = result.files.single.name;
-                          print("path" + path);
-                          print("fileName " + fileName);
-                          storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-                        },
-                      ),
-                  ),
+
                             Flexible(
                             flex: 1,
                             child: Align(
