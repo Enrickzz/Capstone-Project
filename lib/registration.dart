@@ -6,7 +6,9 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'additional_data_collection.dart';
+import 'package:flutter/gestures.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
+
 class registration extends StatefulWidget {
   @override
   _AppSignUpState createState() => _AppSignUpState();
@@ -22,7 +24,9 @@ class _AppSignUpState extends State<registration> {
   String email = '';
   String password = '';
   String error = '';
+  String confirmpassword = '';
   bool isFirstTime = true;
+  bool checkboxValue = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -34,238 +38,323 @@ class _AppSignUpState extends State<registration> {
     double defaultIconSize = 17;
 
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white70,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Flexible(
-                flex: 1,
-                child: InkWell(
-                  child: Container(
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Icon(Icons.close),
-
-                    ),
-
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
+        child: Column(
+          children: [
+            InkWell(
+              child: Container(
+                margin: EdgeInsets.only(top: 70.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(),
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back),
                   ),
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
                 ),
               ),
-              Flexible(
-                flex: 5,
+
+            ),
+            SizedBox(height: 40.0),
+            Container(
+
+              alignment: Alignment.topLeft,
+              child:  Text( "Create Account,", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+
+              alignment: Alignment.topLeft,
+              child:  Text( "Sign up to get started!", style: TextStyle( color: Colors.grey, ),
+              ),
+            ),
+            Container(
+
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 90,
-                      height: 90,
-                      alignment: Alignment.center,
-                      child: Image.asset("assets/images/heart_icon.png"),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Flexible(
-                          flex: 1,
-                          child: TextFormField(
-                            showCursor: true,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
+                  children: [
+                    SizedBox(height: 15.0),
+                    Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            Container(
+                              child: TextFormField(
+                                showCursor: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      width:0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: Color(0xFFF2F3F5),
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF666666),
+                                      fontFamily: defaultFontFamily,
+                                      fontSize: defaultFontSize),
+                                  hintText: "First Name",
                                 ),
+                                validator: (val) => val.isEmpty ? 'Enter First Name' : null,
+                                onChanged: (val){
+                                  setState(() => firstname = val);
+                                },
                               ),
-                              filled: true,
-                              fillColor: Color(0xFFF2F3F5),
-                              hintStyle: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                              ),
-                              hintText: "First Name",
                             ),
-                            validator: (val) => val.isEmpty ? 'Enter First Name' : null,
-                            onChanged: (val){
-                              setState(() => firstname = val);
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: TextFormField(
-                            showCursor: true,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
+                            SizedBox(height: 8.0),
+                            Container(
+                              child: TextFormField(
+                                showCursor: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      width:0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: Color(0xFFF2F3F5),
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF666666),
+                                      fontFamily: defaultFontFamily,
+                                      fontSize: defaultFontSize),
+                                  hintText: "Last Name",
                                 ),
+                                validator: (val) => val.isEmpty ? 'Enter Last Name' : null,
+                                onChanged: (val){
+                                  setState(() => lastname = val);
+                                },
                               ),
-                              filled: true,
-                              fillColor: Color(0xFFF2F3F5),
-                              hintStyle: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                              ),
-                              hintText: "Last Name",
                             ),
-                            validator: (val) => val.isEmpty ? 'Enter Last Name' : null,
-                            onChanged: (val){
-                              setState(() => lastname = val);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    TextFormField(
-                      showCursor: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: Color(0xFF666666),
-                          size: defaultIconSize,
-                        ),
-                        fillColor: Color(0xFFF2F3F5),
-                        hintStyle: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize),
-                        hintText: "Email",
-                      ),
-                      validator: (val) => val.isEmpty ? 'Enter Email' : null,
-                      onChanged: (val){
-                        setState(() => email = val);
-                      },
-                    ),SizedBox(
-                      height: 8,
-                    ),
-                    TextFormField(
-                      showCursor: true,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Color(0xFF666666),
-                          size: defaultIconSize,
-                        ),
-                        fillColor: Color(0xFFF2F3F5),
-                        hintStyle: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize),
-                        hintText: "Password",
-                      ),
-                      validator: (val) => val.length < 6 ? 'Password should be more than 6 characters' : null,
-                      onChanged: (val){
-                        setState(() => password = val);
-                      },
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      child: RaisedButton(
-                        padding: EdgeInsets.all(17.0),
-                        onPressed: () async {
-                          if(_formKey.currentState.validate()){
-                            dynamic result = await _auth.registerUser(lastname, firstname, email,password);
-                            if(result == null){
-                              setState(() => error = 'Register Failed');
-                            }else{
-                              setState(() => error = '');
-                            }
-                          }
-                          try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
-                            final usersRef = databaseReference.child('users/' + uid + '/personal_info');
+                            SizedBox(height: 8.0),
+                            Container(
+                              child: TextFormField(
+                                showCursor: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      width:0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  prefixIcon: Icon(
+                                    Icons.mail,
+                                    color: Color(0xFF666666),
+                                    size: defaultIconSize,
+                                  ),
+                                  fillColor: Color(0xFFF2F3F5),
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF666666),
+                                      fontFamily: defaultFontFamily,
+                                      fontSize: defaultFontSize),
+                                  hintText: "Email Address",
+                                ),
+                                validator: (val) => val.isEmpty ? 'Enter Email Address' : null,
+                                onChanged: (val){
+                                  setState(() => email = val);
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            Container(
+                              child: TextFormField(
+                                obscureText: true,
+                                showCursor: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  prefixIcon: Icon(
+                                    Icons.lock,
+                                    color: Color(0xFF666666),
+                                    size: defaultIconSize,
+                                  ),
+                                  suffixIcon: Icon(
+                                    Icons.remove_red_eye,
+                                    color: Color(0xFF666666),
+                                    size: defaultIconSize,
+                                  ),
+                                  fillColor: Color(0xFFF2F3F5),
+                                  hintStyle: TextStyle(
+                                    color: Color(0xFF666666),
+                                    fontFamily: defaultFontFamily,
+                                    fontSize: defaultFontSize,
+                                  ),
+                                  hintText: "Password",
+                                ),
+                                validator: (val) => val.length < 6 ? 'Minimum password length should be 6 characters' : null,
+                                onChanged: (val){
+                                  setState(() => password = val);
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            Container(
+                              child: TextFormField(
+                                obscureText: true,
+                                showCursor: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  prefixIcon: Icon(
+                                    Icons.lock,
+                                    color: Color(0xFF666666),
+                                    size: defaultIconSize,
+                                  ),
+                                  suffixIcon: Icon(
+                                    Icons.remove_red_eye,
+                                    color: Color(0xFF666666),
+                                    size: defaultIconSize,
+                                  ),
+                                  fillColor: Color(0xFFF2F3F5),
+                                  hintStyle: TextStyle(
+                                    color: Color(0xFF666666),
+                                    fontFamily: defaultFontFamily,
+                                    fontSize: defaultFontSize,
+                                  ),
+                                  hintText: "Confirm Password",
+                                ),
+                                validator: (val) {
+                                  if(val.isEmpty)
+                                    return 'Enter Confirm Password';
+                                  if(val != password)
+                                    return 'Passwords Do Not Match';
+                                  return null;
+                                },
+                                onChanged: (val){
+                                  setState(() => confirmpassword = val);
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 5.0),
+                            FormField<bool>(
+                              builder: (state) {
+                                return Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Checkbox(
+                                            value: checkboxValue,
+                                            onChanged: (bool b) {
+                                              setState(() {
+                                                checkboxValue = b;
+                                              });
+                                            }),
+                                        Text("I accept all the terms and conditions.", style: TextStyle(color: Colors.grey),),
+                                      ],
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        state.errorText ?? '',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(color: Theme.of(context).errorColor,fontSize: 12,),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
+                              validator: (value) {
+                                if (!checkboxValue) {
+                                  return 'You need to accept the terms and conditions.';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            SizedBox(height: 18.0),
+                            Container(
+                              child: ElevatedButton(
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+                                  child: Text('Sign Up', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                                  ),
+                                ),
+                                onPressed: () async{
+                                  if(_formKey.currentState.validate()){
+                                    dynamic result = await _auth.registerUser(lastname, firstname, email,password);
+                                    if(result == null){
+                                      setState(() => error = 'Sign Up Failed');
+                                    }else{
+                                      setState(() => error = '');
+                                    }
+                                  }
+                                  try{
+                                    final User user = auth.currentUser;
+                                    final uid = user.uid;
+                                    final usersRef = databaseReference.child('users/' + uid + '/personal_info');
 
-                            print("user registered Sucessfully!");
-                            if(isFirstTime){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => additional_data_collection()),
-                              );
-                              isFirstTime = false;
-                              await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime});
-                            }
+                                    print("user registered Sucessfully!");
+                                    if(isFirstTime){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => additional_data_collection()),
+                                      );
+                                      isFirstTime = false;
+                                      await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime});
+                                    }
 
-                          } catch(e) {
-                            print("you got an error! $e");
-                          }
+                                  } catch(e) {
+                                    print("you got an error! $e");
+                                  }
 
-                        },
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Poppins-Medium.ttf',
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        color: Color(0xFF2196F3),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(15.0),
-                            side: BorderSide(color: Color(0xFF2196F3))),
-                      ),
-
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Color(0xFF2196F3)),
-
-                    ),
-                    SizedBox(height: 12.0),
-                    Text(
-                      error,
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    SizedBox(
-                      height: 8,
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 12.0),
+                            Text(
+                              error,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                          ],
+                        )
                     ),
                   ],
-                ),
+                )
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10,20,10,20),
+              child: Text.rich(
+                  TextSpan(
+                      children: [
+                        TextSpan(text: "Already have an account? "),
+                        TextSpan(
+                          text: 'Sign In',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = (){
+                              Navigator.pop(context);
+                            },
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                        ),
+                      ]
+                  )
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
