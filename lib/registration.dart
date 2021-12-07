@@ -7,6 +7,8 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
+
+import 'dialogs/policy_dialog.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class registration extends StatefulWidget {
@@ -260,9 +262,45 @@ class _AppSignUpState extends State<registration> {
                                                 checkboxValue = b;
                                               });
                                             }),
-                                        Text("I accept all the terms and conditions.", style: TextStyle(color: Colors.grey),),
+                                        Text.rich(
+                                          TextSpan(
+                                              children: [
+                                                TextSpan(text: "I have read and accept the "),
+                                                TextSpan(
+                                                  text: 'Terms of Service \n',
+                                                  recognizer: TapGestureRecognizer()
+                                                    ..onTap = (){
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return PolicyDialog(
+                                                              mdFileName: 'terms_and_conditions.md',
+                                                            );
+                                                          });
+                                                    },
+                                                  style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                                                ),
+                                                TextSpan(text: "and "),
+                                                TextSpan(
+                                                  text: 'Privacy Policy',
+                                                  recognizer: TapGestureRecognizer()
+                                                    ..onTap = (){
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return PolicyDialog(
+                                                              mdFileName: 'privacy_policy.md',
+                                                        );
+                                                      });
+                                                    },
+                                                  style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                                                ),
+                                              ]
+                                          )
+                                        )
                                       ],
                                     ),
+
                                     Container(
                                       padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                                       alignment: Alignment.centerLeft,
@@ -277,7 +315,7 @@ class _AppSignUpState extends State<registration> {
                               },
                               validator: (value) {
                                 if (!checkboxValue) {
-                                  return 'You need to accept the terms and conditions.';
+                                  return 'You need to accept the Terms of Service and Privacy Policy.';
                                 } else {
                                   return null;
                                 }
