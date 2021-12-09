@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/additional_data_collection.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
@@ -29,7 +30,7 @@ class LogIn extends StatefulWidget {
   @override
   State<LogIn> createState() => _LogInState();
 }
-bool isFTime = true;
+String isFTime;
 class _LogInState extends State<LogIn> {
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
@@ -65,28 +66,32 @@ class _LogInState extends State<LogIn> {
                 //return runApp(AppSignIn());
               } else {
                 print('User is signed in!');
-                Future.delayed(const Duration(milliseconds: 1500), (){
+                Future.delayed(const Duration(milliseconds: 3000), (){
                   setState(() {
                     print("SETSTATE INSIDE WIDGET ");
-                    if(isFTime == false){
-                      Navigator.pushReplacement(
+                    if(isFTime == "false"){
+
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => mainScreen()),
+                          (route) => false,
                       );
+                      print("isFTime == false");
                     }
-                    else if(isFTime == null){
-                      print("null si is first time");
+                    else if(isFTime == "true"){
+                      print("True isFTime first time");
                     }
                   });
                 });
                 print(isFTime);
 
-
               }
             });
 
             return AppSignIn();
-          } else {
+            return Text('This Instance');
+          }
+          else {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -105,10 +110,12 @@ class _LogInState extends State<LogIn> {
     await userRef.once().then((DataSnapshot datasnapshot) {
       String temp1 = datasnapshot.value.toString();
       if(temp1 == "false"){
-        isFTime = false;
+        isFTime = "false";
         print("false statement " + isFTime.toString());
+        print("TEMP = " +temp1);
       }
       else{
+        isFTime= "true";
         print("true statement " + isFTime.toString());
       }
     });

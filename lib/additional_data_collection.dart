@@ -239,12 +239,16 @@ class _AppSignUpState extends State<additional_data_collection> {
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
+                            final loginRef = databaseReference.child('users/' + uid + '/personal_info');
                             await usersRef.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString(), "height":height.toString(),"BMI": "0"});
                             print("Additional information collected!");
-                            Navigator.push(
+                            await loginRef.update({"isFirstTime": "false"});
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => mainScreen()),
                             );
+
+
                           } catch(e) {
                             print("you got an error! $e");
                           }

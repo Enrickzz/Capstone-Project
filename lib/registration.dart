@@ -345,12 +345,12 @@ class _AppSignUpState extends State<registration> {
 
                                     print("user registered Sucessfully!");
                                     if(isFirstTime){
-                                      Navigator.push(
+                                      Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (context) => additional_data_collection()),
                                       );
-                                      isFirstTime = false;
-                                      await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime});
+                                      isFirstTime = true;
+                                      await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString()});
                                     }
 
                                   } catch(e) {
