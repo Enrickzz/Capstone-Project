@@ -203,90 +203,113 @@ class _addSymptomsState extends State<add_symptoms> {
                         Symptom symptom;
 
 
-                        for(var i = 0; i < temp.length; i++){
-                          String full = temp[i].replaceAll("{", "").replaceAll("}", "");
-                          List<String> splitFull = full.split(" ");
-                          if(i < 4){
-                            print("i value" + i.toString());
-                            switch(i){
-                              case 0: {
-                                print("1st switch intensity lvl " + splitFull.last);
-                                intesity_lvl = int.parse(splitFull.last);
-                              }
-                              break;
-                              case 1: {
-                                print("1st switch symptom name " + splitFull.last);
-                                symptom_name = splitFull.last;
-                              }
-                              break;
-                              case 2: {
-                                print("1st switch symptom date " + splitFull.last);
-                                symptom_date = splitFull.last;
-                              }
-                              break;
-                              case 3: {
-                                print("1st switch symptom felt " + splitFull.last);
-                                symptom_felt = splitFull.last;
-                                symptom = new Symptom(symptom_name: symptom_name, intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: symptom_date);
-                                symptoms_list.add(symptom);
-                                print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt + symptom.symptom_date);
+                        if(datasnapshot.value == null){
+                          final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/' + 0.toString());
+                          symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString()});
+                          print("Added Symptom Successfully! " + uid);
 
+                        }
+                        else{
+                          int temp_intesity_lvl = 0;
+                          String temp_symptom_name = "";
+                          String temp_symptom_date = "";
+                          String temp_symptom_felt = "";
+                          for(var i = 0; i < temp.length; i++){
+                            String full = temp[i].replaceAll("{", "").replaceAll("}", "");
+                            List<String> splitFull = full.split(" ");
+                            if(i < 4){
+                              print("i value" + i.toString());
+                              switch(i){
+                                case 0: {
+                                  print("1st switch intensity lvl " + splitFull.last);
+                                  temp_intesity_lvl = int.parse(splitFull.last);
+                                }
+                                break;
+                                case 1: {
+                                  print("1st switch symptom name " + splitFull.last);
+                                  temp_symptom_name = splitFull.last;
+                                }
+                                break;
+                                case 2: {
+                                  print("1st switch symptom date " + splitFull.last);
+                                  temp_symptom_date = splitFull.last;
+                                }
+                                break;
+                                case 3: {
+                                  print("1st switch symptom felt " + splitFull.last);
+                                  temp_symptom_felt = splitFull.last;
+                                  symptom = new Symptom(symptom_name: temp_symptom_name, intesity_lvl: temp_intesity_lvl, symptom_felt: temp_symptom_felt,symptom_date: temp_symptom_date);
+                                  symptoms_list.add(symptom);
+                                  print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt + symptom.symptom_date);
+
+                                }
+                                break;
                               }
-                              break;
                             }
-                          }
-                          else{
-                            print("i value" + i.toString());
-                            print("i value modulu " + (i%4).toString());
-                            switch(i%4){
-                              case 0: {
-                                print("2nd switch intensity lvl " + splitFull.last);
-                                intesity_lvl = int.parse(splitFull.last);
+                            else{
+                              print("i value" + i.toString());
+                              print("i value modulu " + (i%4).toString());
+                              switch(i%4){
+                                case 0: {
+                                  print("2nd switch intensity lvl " + splitFull.last);
+                                  temp_intesity_lvl = int.parse(splitFull.last);
 
-                              }
-                              break;
-                              case 1: {
-                                print("2nd switch symptom name " + splitFull.last);
-                                symptom_name = splitFull.last;
-                              }
-                              break;
-                              case 2: {
-                                print("2nd switch symptom date " + splitFull.last);
-                                symptom_date = splitFull.last;
+                                }
+                                break;
+                                case 1: {
+                                  print("2nd switch symptom name " + splitFull.last);
+                                  temp_symptom_name = splitFull.last;
+                                }
+                                break;
+                                case 2: {
+                                  print("2nd switch symptom date " + splitFull.last);
+                                  temp_symptom_date = splitFull.last;
 
+                                }
+                                break;
+                                case 3: {
+                                  print("2nd switch symptom felt " + splitFull.last);
+                                  temp_symptom_felt = splitFull.last;
+                                  symptom = new Symptom(symptom_name: temp_symptom_name, intesity_lvl: temp_intesity_lvl, symptom_felt: temp_symptom_felt,symptom_date: temp_symptom_date);
+                                  symptoms_list.add(symptom);
+                                  print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt + symptom.symptom_date);
+                                }
+                                break;
                               }
-                              break;
-                              case 3: {
-                                print("2nd switch symptom felt " + splitFull.last);
-                                symptom_felt = splitFull.last;
-                                symptom = new Symptom(symptom_name: symptom_name, intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: symptom_date);
-                                symptoms_list.add(symptom);
-                                print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt + symptom.symptom_date);
-                              }
-                              break;
                             }
+                            print("symptom list length " + symptoms_list.length.toString());
+
                           }
-                          print("symptom list length " + symptoms_list.length.toString());
                           count = symptoms_list.length;
                           print("count " + count.toString());
+                          //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
+
+                          // symptoms_list.add(symptom);
+
+                          // print("symptom list  " + symptoms_list.toString());
+                          final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/' + count.toString());
+                          symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString()});
+                          print("Added Symptom Successfully! " + uid);
                         }
-                        //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-
-                        // symptoms_list.add(symptom);
-
-                        // print("symptom list  " + symptoms_list.toString());
 
                       });
     
-                      final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/' + count.toString());
+                      // final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/');
+                      // symptomRef.once().then((DataSnapshot datasnapshot) {
+                      //   if(datasnapshot == null){
+                      //     count = 0;
+                      //   }
+                      //   else{
+                      //     print("datasnapshot " + datasnapshot.toString());
+                      //   }
+                      // });
 
 
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => symptoms()),
                       );
-                      await symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString()});
-                      print("Added Symptom Successfully! " + uid);
+
 
                     } catch(e) {
                       print("you got an error! $e");
