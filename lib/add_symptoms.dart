@@ -14,9 +14,17 @@ class add_symptoms extends StatefulWidget {
   @override
   _addSymptomsState createState() => _addSymptomsState();
 }
-
+final _formKey = GlobalKey<FormState>();
 class _addSymptomsState extends State<add_symptoms> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
+  String symptom_name = '';
+  int intesity_lvl = 0;
+  String symptom_felt = '';
+  String symptom_date = "MM/DD/YYYY";
+  DateTime symptomDate;
+  bool isDateSelected= false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +34,7 @@ class _addSymptomsState extends State<add_symptoms> {
     double defaultIconSize = 17;
 
     return Container(
+      key: _formKey,
       color:Color(0xff757575),
       child: Container(
         padding: EdgeInsets.all(20),
@@ -62,6 +71,10 @@ class _addSymptomsState extends State<add_symptoms> {
                     fontSize: defaultFontSize),
                 hintText: "Symptom Name",
               ),
+              validator: (val) => val.isEmpty ? 'Enter Symptom Name' : null,
+              onChanged: (val){
+                setState(() => symptom_name = val);
+              },
             ),
             SizedBox(height: 8.0),
             TextFormField(
@@ -80,8 +93,12 @@ class _addSymptomsState extends State<add_symptoms> {
                     color: Color(0xFF666666),
                     fontFamily: defaultFontFamily,
                     fontSize: defaultFontSize),
-                hintText: "Intensity Level",
+                hintText: "Intensity Level (1-10)",
               ),
+              validator: (val) => val.isEmpty ? 'Enter Symptom Intensity Level' : null,
+              onChanged: (val){
+                setState(() => intesity_lvl = int.parse(val));
+              },
             ),
             SizedBox(height: 8.0),
             TextFormField(
@@ -102,6 +119,10 @@ class _addSymptomsState extends State<add_symptoms> {
                     fontSize: defaultFontSize),
                 hintText: "General Area where symptoms is felt",
               ),
+              validator: (val) => val.isEmpty ? 'Enter General are where Symptom is felt' : null,
+              onChanged: (val){
+                setState(() => symptom_felt = val);
+              },
             ),
             SizedBox(height: 8.0),
             Row(
@@ -115,23 +136,23 @@ class _addSymptomsState extends State<add_symptoms> {
                           firstDate: new DateTime(1900),
                           lastDate: new DateTime(2100)
                       );
-                      // if(datePick!=null && datePick!=birthDate){
-                      //   setState(() {
-                      //     // birthDate=datePick;
-                      //     // isDateSelected=true;
-                      //     //
-                      //     // // put it here
-                      //     // birthDateInString = "${birthDate.month}/${birthDate.day}/${birthDate.year}"; // 08/14/2019
-                      //     // AlertDialog alert = AlertDialog(
-                      //     //   title: Text("My title"),
-                      //     //   content: Text("This is my message."),
-                      //     //   actions: [
-                      //     //
-                      //     //   ],
-                      //     // );
-                      //
-                      //   });
-                      // }
+                      if(datePick!=null && datePick!=symptomDate){
+                        setState(() {
+                          symptomDate=datePick;
+                          isDateSelected=true;
+
+                          // put it here
+                          symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}"; // 08/14/2019
+                          AlertDialog alert = AlertDialog(
+                            title: Text("My title"),
+                            content: Text("This is my message."),
+                            actions: [
+
+                            ],
+                          );
+
+                        });
+                      }
                     }
                 ), Container(
                     child: Text(
@@ -166,8 +187,24 @@ class _addSymptomsState extends State<add_symptoms> {
                     style: TextStyle(color: Colors.white),
                   ),
                   color: Colors.blue,
-                  onPressed:() {
-                    Navigator.pop(context);
+                  onPressed:() async {
+                    try{
+                      final User user = auth.currentUser;
+                      final uid = user.uid;
+                      final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list');
+
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => symptoms()),
+                      );
+                      await symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString()});
+                      print("Added Symptom Successfully! " + uid);
+
+                    } catch(e) {
+                      print("you got an error! $e");
+                    }
+                    // Navigator.pop(context);
                   },
                 )
               ],

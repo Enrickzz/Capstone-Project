@@ -20,7 +20,7 @@ class _symptomsState extends State<symptoms> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String firstname = '';
   String lastname = '';
   String email = '';
@@ -45,6 +45,7 @@ class _symptomsState extends State<symptoms> {
     double defaultIconSize = 17;
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color(0xFFF2F3F8),
       appBar: AppBar(
         iconTheme: IconThemeData(
