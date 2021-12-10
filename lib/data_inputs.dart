@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
@@ -22,13 +23,11 @@ class _AppSignUpState extends State<data_inputs> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
-  final _formKey = GlobalKey<FormState>();
   String firstname = '';
   String lastname = '';
   String email = '';
   String password = '';
   String error = '';
-
   String initValue="Select your Birth Date";
   bool isDateSelected= false;
   DateTime birthDate; // instance of DateTime
@@ -37,6 +36,19 @@ class _AppSignUpState extends State<data_inputs> {
   String height = "";
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
+  List<Symptom> thislist = new List<Symptom>();
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+
+  @override
+  void initState(){
+    super.initState();
+    setState(() {
+      print("SET STATE data input");
+
+      thislist = getSymptoms();
+      //finalLine = getLine(finaList);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +83,11 @@ class _AppSignUpState extends State<data_inputs> {
               children: <Widget>[
                 GestureDetector(
                   onTap:(){
-                    List<Symptom> thislist = new List<Symptom>();
-                    thislist.add(new Symptom(symptom_name: "1", intesity_lvl: 1, symptom_felt: "1",symptom_date: "1") );
-                    thislist.add(new Symptom(symptom_name: "2", intesity_lvl: 2, symptom_felt: "2",symptom_date: "2") );
-                    thislist.add(new Symptom(symptom_name: "3", intesity_lvl: 3, symptom_felt: "3",symptom_date: "3") );
-                    thislist.add(new Symptom(symptom_name: "4", intesity_lvl: 4, symptom_felt: "4",symptom_date: "4") );
+                    // thislist.add(new Symptom(symptom_name: "1", intesity_lvl: 1, symptom_felt: "1",symptom_date: "1") );
+                    // thislist.add(new Symptom(symptom_name: "2", intesity_lvl: 2, symptom_felt: "2",symptom_date: "2") );
+                    // thislist.add(new Symptom(symptom_name: "3", intesity_lvl: 3, symptom_felt: "3",symptom_date: "3") );
+                    // thislist.add(new Symptom(symptom_name: "4", intesity_lvl: 4, symptom_felt: "4",symptom_date: "4") );
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => symptoms(symptomlist1: thislist)),
@@ -402,4 +414,82 @@ class _AppSignUpState extends State<data_inputs> {
       ),
     );
   }
+
+  List<Symptom> getSymptoms () {
+    List<Symptom> symptomsList = new List<Symptom>();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final symptomsRef = databaseReference.child('users/' + uid +'/symptoms_list/');
+    int tempIntesityLvl = 0;
+    String tempSymptomName = "";
+    String tempSymptomDate = "";
+    String tempSymptomFelt = "";
+    symptomsRef.once().then((DataSnapshot datasnapshot){
+      String temp1 = datasnapshot.value.toString();
+      List<String> temp = temp1.split(',');
+      Symptom symptom;
+
+      for(var i = 0; i < temp.length; i++){
+        String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+        List<String> splitFull = full.split(" ");
+        if(i < 4){
+          switch(i){
+            case 0: {
+              tempIntesityLvl = int.parse(splitFull.last);
+            }
+            break;
+            case 1: {
+              tempSymptomName = splitFull.last;
+            }
+            break;
+            case 2: {
+              tempSymptomDate = splitFull.last;
+            }
+            break;
+            case 3: {
+              tempSymptomFelt = splitFull.last;
+              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date:format.parse(tempSymptomDate));
+              symptomsList.add(symptom);
+
+            }
+            break;
+          }
+        }
+        else{
+          switch(i%4){
+            case 0: {
+              tempIntesityLvl = int.parse(splitFull.last);
+            }
+            break;
+            case 1: {
+              tempSymptomName = splitFull.last;
+            }
+            break;
+            case 2: {
+              tempSymptomDate = splitFull.last;
+
+            }
+            break;
+            case 3: {
+              tempSymptomFelt = splitFull.last;
+              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
+              symptomsList.add(symptom);
+              print("symptom list " + symptomsList.toString());
+            }
+            break;
+          }
+        }
+      }
+      for(var i=0;i<symptomsList.length/2;i++){
+        var temp = symptomsList[i];
+        symptomsList[i] = symptomsList[symptomsList.length-1-i];
+        symptomsList[symptomsList.length-1-i] = temp;
+      }
+    });
+
+    return symptomsList;
+
+  }
+
 }

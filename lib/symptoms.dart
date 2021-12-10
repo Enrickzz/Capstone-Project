@@ -135,7 +135,7 @@ class _symptomsState extends State<symptoms> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + widget.symptomlist1[index].getDate+" " + widget.symptomlist1[index].getFelt + " " + widget.symptomlist1[index].getIntensity_lvl.toString()+ " " + widget.symptomlist1[index].getName,
+                                  '' + widget.symptomlist1[index].getDate.toString()+" " + widget.symptomlist1[index].getFelt + " " + widget.symptomlist1[index].getIntensity_lvl.toString()+ " " + widget.symptomlist1[index].getName,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18

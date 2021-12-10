@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
@@ -29,6 +30,8 @@ class _addSymptomsState extends State<add_symptoms> {
   bool isDateSelected= false;
   int count = 0;
   List<Symptom> symptoms_list = new List<Symptom>();
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+
   @override
   Widget build(BuildContext context) {
 
@@ -210,37 +213,37 @@ class _addSymptomsState extends State<add_symptoms> {
                           print("Added Symptom Successfully! " + uid);
                         }
                         else{
-                          int temp_intesity_lvl = 0;
-                          String temp_symptom_name = "";
-                          String temp_symptom_date = "";
-                          String temp_symptom_felt = "";
+                          int tempIntesityLvl = 0;
+                          String tempSymptomName = "";
+                          DateTime tempSymptomDate;
+                          String tempSymptomFelt = "";
                           for(var i = 0; i < temp.length; i++){
-                            String full = temp[i].replaceAll("{", "").replaceAll("}", "");
+                            String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                             List<String> splitFull = full.split(" ");
                             if(i < 4){
                               print("i value" + i.toString());
                               switch(i){
                                 case 0: {
                                   print("1st switch intensity lvl " + splitFull.last);
-                                  temp_intesity_lvl = int.parse(splitFull.last);
+                                  tempIntesityLvl = int.parse(splitFull.last);
                                 }
                                 break;
                                 case 1: {
                                   print("1st switch symptom name " + splitFull.last);
-                                  temp_symptom_name = splitFull.last;
+                                  tempSymptomName = splitFull.last;
                                 }
                                 break;
                                 case 2: {
                                   print("1st switch symptom date " + splitFull.last);
-                                  temp_symptom_date = splitFull.last;
+                                  tempSymptomDate = format.parse(splitFull.last);
                                 }
                                 break;
                                 case 3: {
                                   print("1st switch symptom felt " + splitFull.last);
-                                  temp_symptom_felt = splitFull.last;
-                                  symptom = new Symptom(symptom_name: temp_symptom_name, intesity_lvl: temp_intesity_lvl, symptom_felt: temp_symptom_felt,symptom_date: temp_symptom_date);
+                                  tempSymptomFelt = splitFull.last;
+                                  symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate);
                                   symptoms_list.add(symptom);
-                                  print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt + symptom.symptom_date);
+                                  print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt);
 
                                 }
                                 break;
@@ -252,27 +255,27 @@ class _addSymptomsState extends State<add_symptoms> {
                               switch(i%4){
                                 case 0: {
                                   print("2nd switch intensity lvl " + splitFull.last);
-                                  temp_intesity_lvl = int.parse(splitFull.last);
+                                  tempIntesityLvl = int.parse(splitFull.last);
 
                                 }
                                 break;
                                 case 1: {
                                   print("2nd switch symptom name " + splitFull.last);
-                                  temp_symptom_name = splitFull.last;
+                                  tempSymptomName = splitFull.last;
                                 }
                                 break;
                                 case 2: {
                                   print("2nd switch symptom date " + splitFull.last);
-                                  temp_symptom_date = splitFull.last;
+                                  tempSymptomDate = format.parse(splitFull.last);
 
                                 }
                                 break;
                                 case 3: {
                                   print("2nd switch symptom felt " + splitFull.last);
-                                  temp_symptom_felt = splitFull.last;
-                                  symptom = new Symptom(symptom_name: temp_symptom_name, intesity_lvl: temp_intesity_lvl, symptom_felt: temp_symptom_felt,symptom_date: temp_symptom_date);
+                                  tempSymptomFelt = splitFull.last;
+                                  symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate);
                                   symptoms_list.add(symptom);
-                                  print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt + symptom.symptom_date);
+                                  print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt);
                                 }
                                 break;
                               }
@@ -297,7 +300,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
                       Future.delayed(const Duration(milliseconds: 1000), (){
                         print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
-                        symptoms_list.add(new Symptom(symptom_name: symptom_name.toString(), intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: symptom_date));
+                        symptoms_list.add(new Symptom(symptom_name: symptom_name.toString(), intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: format.parse(symptom_date)));
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => symptoms(symptomlist1: symptoms_list)),
