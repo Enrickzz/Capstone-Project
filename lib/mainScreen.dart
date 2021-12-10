@@ -140,7 +140,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
           tabIconsList: tabIconsList,
           addClick: () {},
           changeIndex: (int index) {
-            if (index == 0 || index == 2) {
+            if (index == 0) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
@@ -158,6 +158,16 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
                 setState(() {
                   tabBody =
                       TrainingScreen(animationController: animationController);
+                });
+              });
+            }else if(index ==2){
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      index3(animationController: animationController);
                 });
               });
             }else if(index ==3){

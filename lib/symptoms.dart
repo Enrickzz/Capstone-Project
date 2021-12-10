@@ -26,7 +26,7 @@ class _symptomsState extends State<symptoms> {
   String email = '';
   String password = '';
   String error = '';
-
+  List<String> items = List<String>.generate(10000, (i) => 'Item $i');
   String initValue="Select your Birth Date";
   bool isDateSelected= false;
   DateTime birthDate; // instance of DateTime
@@ -77,6 +77,71 @@ class _symptomsState extends State<symptoms> {
               )
           ),
         ],
+      ),
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                height: 140,
+                child: Stack(
+                    children: [
+                      Positioned (
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                            height: 120,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20)
+                                ),
+                                gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      Colors.black.withOpacity(0.7),
+                                      Colors.transparent
+                                    ]
+                                )
+                            )
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                  '' + items[index]+"\n\n\n",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18
+                                  )
+                              ),
+                              Text(
+                                  'date ' + items[index],
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18
+                                  )
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]
+                )
+            ),
+          );
+        },
       ),
 
     );
