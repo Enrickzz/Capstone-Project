@@ -9,6 +9,8 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/symptoms.dart';
+
+import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_symptoms extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _addSymptomsState extends State<add_symptoms> {
   String symptom_date = "MM/DD/YYYY";
   DateTime symptomDate;
   bool isDateSelected= false;
+  int count = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +194,91 @@ class _addSymptomsState extends State<add_symptoms> {
                     try{
                       final User user = auth.currentUser;
                       final uid = user.uid;
-                      final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list');
+                      final readsymptom = databaseReference.child('users/' + uid + '/symptoms_list/');
+                      readsymptom.once().then((DataSnapshot datasnapshot) {
+                        String temp1 = datasnapshot.value.toString();
+                        print("temp1 " + temp1);
+                        List<String> temp = temp1.split(',');
+                        List<Symptom> symptoms_list = new List<Symptom>();
+                        Symptom symptom;
+
+
+                        for(var i = 0; i < temp.length; i++){
+                          String full = temp[i].replaceAll("{", "").replaceAll("}", "");
+                          List<String> splitFull = full.split(" ");
+                          if(i < 4){
+                            print("i value" + i.toString());
+                            switch(i){
+                              case 0: {
+                                print("1st switch intensity lvl " + splitFull.last);
+                                intesity_lvl = int.parse(splitFull.last);
+                              }
+                              break;
+                              case 1: {
+                                print("1st switch symptom name " + splitFull.last);
+                                symptom_name = splitFull.last;
+                              }
+                              break;
+                              case 2: {
+                                print("1st switch symptom date " + splitFull.last);
+                                symptom_date = splitFull.last;
+                              }
+                              break;
+                              case 3: {
+                                print("1st switch symptom felt " + splitFull.last);
+                                symptom_felt = splitFull.last;
+                                symptom = new Symptom(symptom_name: symptom_name, intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: symptom_date);
+                                symptoms_list.add(symptom);
+                                print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt + symptom.symptom_date);
+
+                              }
+                              break;
+                            }
+                          }
+                          else{
+                            print("i value" + i.toString());
+                            print("i value modulu " + (i%4).toString());
+                            switch(i%4){
+                              case 0: {
+                                print("2nd switch intensity lvl " + splitFull.last);
+                                intesity_lvl = int.parse(splitFull.last);
+
+                              }
+                              break;
+                              case 1: {
+                                print("2nd switch symptom name " + splitFull.last);
+                                symptom_name = splitFull.last;
+                              }
+                              break;
+                              case 2: {
+                                print("2nd switch symptom date " + splitFull.last);
+                                symptom_date = splitFull.last;
+
+                              }
+                              break;
+                              case 3: {
+                                print("2nd switch symptom felt " + splitFull.last);
+                                symptom_felt = splitFull.last;
+                                symptom = new Symptom(symptom_name: symptom_name, intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: symptom_date);
+                                symptoms_list.add(symptom);
+                                print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt + symptom.symptom_date);
+                              }
+                              break;
+                            }
+                          }
+                          print("symptom list length " + symptoms_list.length.toString());
+                          count = symptoms_list.length;
+                          print("count " + count.toString());
+                        }
+                        //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
+
+                        // symptoms_list.add(symptom);
+
+                        // print("symptom list  " + symptoms_list.toString());
+
+                      });
+    
+                      final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/' + count.toString());
 
 
                       Navigator.pushReplacement(
