@@ -4,6 +4,8 @@ import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 
+import '../additional_data_collection.dart';
+import '../data_inputs.dart';
 import '../main.dart';
 import '../models/tabIcon_data.dart';
 
@@ -165,9 +167,14 @@ class _BottomBarViewState extends State<BottomBarView>
                           splashColor: Colors.white.withOpacity(0.1),
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
-                          onTap: widget.addClick,
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => data_inputs()),
+                              );
+                            },
                           child: Icon(
-                            Icons.add,
+                            Icons.person,
                             color: FitnessAppTheme.white,
                             size: 32,
                           ),
