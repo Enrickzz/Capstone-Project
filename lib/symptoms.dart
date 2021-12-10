@@ -10,6 +10,8 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/symptoms.dart';
+
+import 'fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class symptoms extends StatefulWidget {
   @override
@@ -83,7 +85,7 @@ class _symptomsState extends State<symptoms> {
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 height: 140,
                 child: Stack(
                     children: [
@@ -96,16 +98,24 @@ class _symptomsState extends State<symptoms> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(20),
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
                                     bottomRight: Radius.circular(20)
                                 ),
                                 gradient: LinearGradient(
                                     begin: Alignment.bottomCenter,
                                     end: Alignment.topCenter,
                                     colors: [
-                                      Colors.black.withOpacity(0.7),
-                                      Colors.transparent
+                                      Colors.white.withOpacity(0.7),
+                                      Colors.white
                                     ]
-                                )
+                                ),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: FitnessAppTheme.grey.withOpacity(0.6),
+                                      offset: Offset(1.1, 1.1),
+                                      blurRadius: 10.0),
+                                ]
                             )
                         ),
                       ),
@@ -122,14 +132,14 @@ class _symptomsState extends State<symptoms> {
                               Text(
                                   '' + items[index]+"\n\n\n",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontSize: 18
                                   )
                               ),
                               Text(
                                   'date ' + items[index],
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontSize: 18
                                   )
                               )
