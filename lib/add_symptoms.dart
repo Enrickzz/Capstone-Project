@@ -285,11 +285,6 @@ class _addSymptomsState extends State<add_symptoms> {
                           }
                           count = symptoms_list.length;
                           print("count " + count.toString());
-                          //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-
-                          // symptoms_list.add(symptom);
-
-                          // print("symptom list  " + symptoms_list.toString());
                           final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/' + count.toString());
                           symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString()});
                           print("Added Symptom Successfully! " + uid);
@@ -301,6 +296,11 @@ class _addSymptomsState extends State<add_symptoms> {
                       Future.delayed(const Duration(milliseconds: 1000), (){
                         print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
                         symptoms_list.add(new Symptom(symptom_name: symptom_name.toString(), intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: format.parse(symptom_date)));
+                        for(var i=0;i<symptoms_list.length/2;i++){
+                          var temp = symptoms_list[i];
+                          symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
+                          symptoms_list[symptoms_list.length-1-i] = temp;
+                        }
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => symptoms(symptomlist1: symptoms_list)),

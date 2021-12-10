@@ -42,3 +42,37 @@ class Symptom {
   }
 
 }
+
+class Medication {
+  String medicine_name;
+  double medicine_dosage;
+  DateTime medicine_date;
+  String medicine_type;
+
+  Medication({this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date});
+
+  String get getName{
+    return medicine_name;
+  }
+  double get getDosage{
+    return medicine_dosage;
+  }
+  String get getType{
+    return medicine_type;
+  }
+  DateTime get getDate{
+    return medicine_date;
+  }
+  set setName (String name){
+    medicine_name = name;
+  }
+  set setDosage (double level){
+    medicine_dosage = level;
+  }
+  set setType (String felt){
+    medicine_type = felt;
+  }
+  set setDate (DateTime date){
+    medicine_date = date;
+  }
+}
