@@ -9,6 +9,8 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/symptoms.dart';
+
+import 'medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class data_inputs extends StatefulWidget {
   @override
@@ -150,7 +152,7 @@ class _AppSignUpState extends State<data_inputs> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => symptoms()),
+                      MaterialPageRoute(builder: (context) => medication()),
                     );
                   },
                   child: Container(
@@ -230,7 +232,7 @@ class _AppSignUpState extends State<data_inputs> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => mainScreen()),
+                      MaterialPageRoute(builder: (context) => medication()),
                     );
                   },
                   child: Container(

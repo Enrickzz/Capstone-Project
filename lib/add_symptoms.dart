@@ -82,6 +82,7 @@ class _addSymptomsState extends State<add_symptoms> {
             SizedBox(height: 8.0),
             TextFormField(
               showCursor: true,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
