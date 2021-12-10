@@ -15,6 +15,8 @@ import 'medication.dart';
 import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_medication extends StatefulWidget {
+  final List<Medication> thislist;
+  add_medication({this.thislist});
   @override
   _addMedicationState createState() => _addMedicationState();
 }
@@ -332,12 +334,18 @@ class _addMedicationState extends State<add_medication> {
                               }
 
                             });
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              print("MEDICATION LENGTH: " + medication_list.length.toString());
 
-
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => medication()),
-                            );
+                              print("POP HERE ==========");
+                              Navigator.pop(context, medication_list);
+                            });
+                            // print("POP HERE ========== MEDICATION");
+                            // Navigator.pop(context,medication_list);
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => medication()),
+                            // );
 
 
                           } catch(e) {

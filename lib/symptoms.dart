@@ -42,11 +42,16 @@ class _symptomsState extends State<symptoms> {
   String height = "";
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
+  List<Symptom> listtemp;
+
+  @override
+  void initState() {
+    super.initState();
+    listtemp = widget.symptomlist1;
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -73,10 +78,13 @@ class _symptomsState extends State<symptoms> {
                     builder: (context) => SingleChildScrollView(child: Container(
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: add_symptoms(),
+                    child: add_symptoms(thislist: listtemp),
                     ),
                     ),
-                  );
+                  ).then((value) => setState((){
+                    print("setstate symptoms");
+                    listtemp = value;
+                  }));
                 },
                 child: Icon(
                   Icons.add,
@@ -86,7 +94,7 @@ class _symptomsState extends State<symptoms> {
         ],
       ),
       body: ListView.builder(
-        itemCount: widget.symptomlist1.length,
+        itemCount: listtemp.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
@@ -135,7 +143,7 @@ class _symptomsState extends State<symptoms> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + widget.symptomlist1[index].getDate.toString()+" " + widget.symptomlist1[index].getFelt + " " + widget.symptomlist1[index].getIntensity_lvl.toString()+ " " + widget.symptomlist1[index].getName,
+                                  '' + listtemp[index].getDate.toString()+" " + listtemp[index].getFelt + " " + listtemp[index].getIntensity_lvl.toString()+ " " + listtemp[index].getName,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18

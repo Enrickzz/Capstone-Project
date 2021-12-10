@@ -14,6 +14,8 @@ import 'package:my_app/symptoms.dart';
 import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_symptoms extends StatefulWidget {
+  final List<Symptom> thislist;
+  add_symptoms({this.thislist});
   @override
   _addSymptomsState createState() => _addSymptomsState();
 }
@@ -185,7 +187,7 @@ class _addSymptomsState extends State<add_symptoms> {
                   ),
                   color: Colors.blue,
                   onPressed:() {
-                    Navigator.pop(context);
+                    Navigator.pop(context, widget.thislist);
                   },
                 ),
                 FlatButton(
@@ -301,10 +303,8 @@ class _addSymptomsState extends State<add_symptoms> {
                           symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
                           symptoms_list[symptoms_list.length-1-i] = temp;
                         }
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => symptoms(symptomlist1: symptoms_list)),
-                        );
+                        print("POP HERE ==========");
+                        Navigator.pop(context, symptoms_list);
                       });
                     } catch(e) {
                       print("you got an error! $e");

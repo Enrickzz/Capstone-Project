@@ -37,6 +37,7 @@ class _AppSignUpState extends State<data_inputs> {
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Symptom> thislist = new List<Symptom>();
+  List<Medication> thismedlist = new List<Medication>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
 
   @override
@@ -44,9 +45,7 @@ class _AppSignUpState extends State<data_inputs> {
     super.initState();
     setState(() {
       print("SET STATE data input");
-
-      thislist = getSymptoms();
-      //finalLine = getLine(finaList);
+      convertFutureListToList();
     });
   }
 
@@ -83,11 +82,7 @@ class _AppSignUpState extends State<data_inputs> {
               children: <Widget>[
                 GestureDetector(
                   onTap:(){
-                    // thislist.add(new Symptom(symptom_name: "1", intesity_lvl: 1, symptom_felt: "1",symptom_date: "1") );
-                    // thislist.add(new Symptom(symptom_name: "2", intesity_lvl: 2, symptom_felt: "2",symptom_date: "2") );
-                    // thislist.add(new Symptom(symptom_name: "3", intesity_lvl: 3, symptom_felt: "3",symptom_date: "3") );
-                    // thislist.add(new Symptom(symptom_name: "4", intesity_lvl: 4, symptom_felt: "4",symptom_date: "4") );
-
+                    getSymptoms;
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => symptoms(symptomlist1: thislist)),
@@ -168,9 +163,12 @@ class _AppSignUpState extends State<data_inputs> {
                 ),
                 GestureDetector(
                   onTap:(){
+                    thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                    thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                    thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => medication()),
+                      MaterialPageRoute(builder: (context) => medication(medlist: thismedlist)),
                     );
                   },
                   child: Container(
@@ -415,7 +413,7 @@ class _AppSignUpState extends State<data_inputs> {
     );
   }
 
-  List<Symptom> getSymptoms () {
+  Future<List<Symptom>> getSymptoms () async {
     List<Symptom> symptomsList = new List<Symptom>();
     final User user = auth.currentUser;
     final uid = user.uid;
@@ -425,7 +423,7 @@ class _AppSignUpState extends State<data_inputs> {
     String tempSymptomName = "";
     String tempSymptomDate = "";
     String tempSymptomFelt = "";
-    symptomsRef.once().then((DataSnapshot datasnapshot){
+    await symptomsRef.once().then((DataSnapshot datasnapshot){
       String temp1 = datasnapshot.value.toString();
       List<String> temp = temp1.split(',');
       Symptom symptom;
@@ -451,7 +449,6 @@ class _AppSignUpState extends State<data_inputs> {
               tempSymptomFelt = splitFull.last;
               symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date:format.parse(tempSymptomDate));
               symptomsList.add(symptom);
-
             }
             break;
           }
@@ -487,9 +484,11 @@ class _AppSignUpState extends State<data_inputs> {
         symptomsList[symptomsList.length-1-i] = temp;
       }
     });
-
     return symptomsList;
-
   }
-
+  void convertFutureListToList() async {
+    Future<List> _futureOfList = getSymptoms();
+    List list = await _futureOfList ;
+    thislist = list;
+  }
 }
