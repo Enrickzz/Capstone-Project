@@ -11,6 +11,7 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/symptoms.dart';
 
 import 'medication.dart';
+import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class data_inputs extends StatefulWidget {
   @override
@@ -70,9 +71,14 @@ class _AppSignUpState extends State<data_inputs> {
               children: <Widget>[
                 GestureDetector(
                   onTap:(){
+                    List<Symptom> thislist = new List<Symptom>();
+                    thislist.add(new Symptom(symptom_name: "1", intesity_lvl: 1, symptom_felt: "1",symptom_date: "1") );
+                    thislist.add(new Symptom(symptom_name: "2", intesity_lvl: 2, symptom_felt: "2",symptom_date: "2") );
+                    thislist.add(new Symptom(symptom_name: "3", intesity_lvl: 3, symptom_felt: "3",symptom_date: "3") );
+                    thislist.add(new Symptom(symptom_name: "4", intesity_lvl: 4, symptom_felt: "4",symptom_date: "4") );
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => symptoms()),
+                      MaterialPageRoute(builder: (context) => symptoms(symptomlist1: thislist)),
                     );
                   },
                   child: Container(

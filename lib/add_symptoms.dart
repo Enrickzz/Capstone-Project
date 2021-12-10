@@ -28,7 +28,7 @@ class _addSymptomsState extends State<add_symptoms> {
   DateTime symptomDate;
   bool isDateSelected= false;
   int count = 0;
-
+  List<Symptom> symptoms_list = new List<Symptom>();
   @override
   Widget build(BuildContext context) {
 
@@ -200,7 +200,7 @@ class _addSymptomsState extends State<add_symptoms> {
                         String temp1 = datasnapshot.value.toString();
                         print("temp1 " + temp1);
                         List<String> temp = temp1.split(',');
-                        List<Symptom> symptoms_list = new List<Symptom>();
+
                         Symptom symptom;
 
 
@@ -208,7 +208,6 @@ class _addSymptomsState extends State<add_symptoms> {
                           final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/' + 0.toString());
                           symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString()});
                           print("Added Symptom Successfully! " + uid);
-
                         }
                         else{
                           int temp_intesity_lvl = 0;
@@ -294,24 +293,16 @@ class _addSymptomsState extends State<add_symptoms> {
                         }
 
                       });
-    
-                      // final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/');
-                      // symptomRef.once().then((DataSnapshot datasnapshot) {
-                      //   if(datasnapshot == null){
-                      //     count = 0;
-                      //   }
-                      //   else{
-                      //     print("datasnapshot " + datasnapshot.toString());
-                      //   }
-                      // });
 
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => symptoms()),
-                      );
-
-
+                      Future.delayed(const Duration(milliseconds: 1000), (){
+                        print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
+                        symptoms_list.add(new Symptom(symptom_name: symptom_name.toString(), intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: symptom_date));
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => symptoms(symptomlist1: symptoms_list)),
+                        );
+                      });
                     } catch(e) {
                       print("you got an error! $e");
                     }

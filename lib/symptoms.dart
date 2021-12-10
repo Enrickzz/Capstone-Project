@@ -8,12 +8,17 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:my_app/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/symptoms.dart';
 
 import 'fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class symptoms extends StatefulWidget {
+  final List<Symptom> symptomlist1;
+  symptoms(
+      {Key key, this.symptomlist1})
+      : super(key: key);
   @override
   _symptomsState createState() => _symptomsState();
 }
@@ -81,7 +86,7 @@ class _symptomsState extends State<symptoms> {
         ],
       ),
       body: ListView.builder(
-        itemCount: items.length,
+        itemCount: widget.symptomlist1.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
@@ -130,19 +135,13 @@ class _symptomsState extends State<symptoms> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + items[index]+"\n\n\n",
+                                  '' + widget.symptomlist1[index].getDate+" " + widget.symptomlist1[index].getFelt + " " + widget.symptomlist1[index].getIntensity_lvl.toString()+ " " + widget.symptomlist1[index].getName,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
                                   )
                               ),
-                              Text(
-                                  'date ' + items[index],
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18
-                                  )
-                              )
+
                             ],
                           ),
                         ),
