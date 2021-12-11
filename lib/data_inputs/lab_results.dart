@@ -11,6 +11,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 import 'add_lab_results.dart';
+
 import 'add_medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -93,7 +94,11 @@ class _lab_resultsState extends State<lab_results> {
         itemBuilder: (context, index){
           return Center(
             child: Container(
-              child: Image.asset('assets/images/labresults2.jpg'),
+              //load image from link
+              child: GestureDetector(
+                child: Image.network('https://picsum.photos/250?image=$index'),
+                //onTap: ,
+              ),
               height:190,
               width: 190,
               decoration: BoxDecoration(
@@ -103,7 +108,7 @@ class _lab_resultsState extends State<lab_results> {
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10),
                   ),
-                  color: Colors.black
+                  color: Colors.black,
               ),
             ),
           );
