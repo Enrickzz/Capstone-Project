@@ -77,29 +77,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/
-    - assets/fitness_app/bottle.png
-    - assets/fitness_app/area1.png
-    - assets/fitness_app/area2.png
-    - assets/fitness_app/area3.png
-    - assets/fitness_app/back.png
-    - assets/fitness_app/bell.png
-    - assets/fitness_app/breakfast.png
-    - assets/fitness_app/burned.png
-    - assets/fitness_app/dinner.png
-    - assets/fitness_app/eaten.png
-    - assets/fitness_app/fitness_app.png
-    - assets/fitness_app/glass.png
-    - assets/fitness_app/lunch.png
-    - assets/fitness_app/runner.png
-    - assets/fitness_app/snack.png
-    - assets/fitness_app/tab_1.png
-    - assets/fitness_app/tab_1s.png
-    - assets/fitness_app/tab_2.png
-    - assets/fitness_app/tab_2s.png
-    - assets/fitness_app/tab_3.png
-    - assets/fitness_app/tab_3s.png
-    - assets/fitness_app/tab_4.png
-    - assets/fitness_app/tab_4s.png
+    - assets/fitness_app/
     - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see

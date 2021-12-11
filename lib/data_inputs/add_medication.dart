@@ -9,10 +9,10 @@ import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/symptoms.dart';
+import 'package:my_app/data_inputs/symptoms.dart';
 
 import 'medication.dart';
-import 'models/users.dart';
+import '../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_medication extends StatefulWidget {
   final List<Medication> thislist;

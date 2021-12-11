@@ -5,24 +5,25 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
-import 'package:my_app/add_symptoms.dart';
+import 'package:my_app/data_inputs/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/symptoms.dart';
+import 'package:my_app/data_inputs/symptoms.dart';
 
-import 'add_medication.dart';
-import 'fitness_app_theme.dart';
-import 'models/users.dart';
+import '../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class medication extends StatefulWidget {
-  final List<Medication> medlist;
-  medication({Key key, this.medlist}): super(key: key);
+class symptoms extends StatefulWidget {
+  final List<Symptom> symptomlist1;
+  symptoms(
+      {Key key, this.symptomlist1})
+      : super(key: key);
   @override
-  _medicationState createState() => _medicationState();
+  _symptomsState createState() => _symptomsState();
 }
 
-class _medicationState extends State<medication> {
+class _symptomsState extends State<symptoms> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -32,7 +33,7 @@ class _medicationState extends State<medication> {
   String email = '';
   String password = '';
   String error = '';
-
+  List<String> items = List<String>.generate(10000, (i) => 'Item $i');
   String initValue="Select your Birth Date";
   bool isDateSelected= false;
   DateTime birthDate; // instance of DateTime
@@ -41,17 +42,16 @@ class _medicationState extends State<medication> {
   String height = "";
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Medication> medtemp;
+  List<Symptom> listtemp;
+
   @override
   void initState() {
     super.initState();
-    medtemp = widget.medlist;
+    listtemp = widget.symptomlist1;
   }
 
   @override
   Widget build(BuildContext context) {
-
-
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -63,7 +63,7 @@ class _medicationState extends State<medication> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Medication Intake', style: TextStyle(
+        title: const Text('Symptoms', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -76,25 +76,25 @@ class _medicationState extends State<medication> {
                   showModalBottomSheet(context: context,
                     isScrollControlled: true,
                     builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_medication(thislist: medtemp),
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: add_symptoms(thislist: listtemp),
                     ),
                     ),
                   ).then((value) => setState((){
-                    print("setstate medicines");
-                    medtemp = value;
+                    print("setstate symptoms");
+                    listtemp = value;
                   }));
                 },
                 child: Icon(
                   Icons.add,
-                )
+                ),
               )
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: medtemp.length,
+        itemCount: listtemp.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
@@ -143,7 +143,7 @@ class _medicationState extends State<medication> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + medtemp[index].getDate.toString()+" " + medtemp[index].getName + " " + medtemp[index].getDosage.toString()+ " " + medtemp[index].getType,
+                                  '' + listtemp[index].getDate.toString()+" " + listtemp[index].getFelt + " " + listtemp[index].getIntensity_lvl.toString()+ " " + listtemp[index].getName,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
@@ -160,7 +160,6 @@ class _medicationState extends State<medication> {
           );
         },
       ),
-
 
     );
   }

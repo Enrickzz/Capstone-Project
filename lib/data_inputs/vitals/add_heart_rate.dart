@@ -5,24 +5,26 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:my_app/data_inputs/vitals/blood_pressure.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/symptoms.dart';
-import 'lab_results.dart';
-import 'medication.dart';
+import 'package:my_app/data_inputs/symptoms.dart';
+import '../lab_results.dart';
+import '../medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class add_lab_results extends StatefulWidget {
+class add_heart_rate extends StatefulWidget {
   @override
-  _addLabResultState createState() => _addLabResultState();
+  _add_heart_rateState createState() => _add_heart_rateState();
 }
 final _formKey = GlobalKey<FormState>();
-class _addLabResultState extends State<add_lab_results> {
+class _add_heart_rateState extends State<add_heart_rate> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  String lab_result_name = '';
+  int beats = 0;
+  String exercise = 'Yes';
 
 
   @override
@@ -48,12 +50,13 @@ class _addLabResultState extends State<add_lab_results> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Add Laboratory Result',
+                    'Add Heart Rate',
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -68,12 +71,52 @@ class _addLabResultState extends State<add_lab_results> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Name of Lab Result",
+                      hintText: "Number of Beats (15 seconds x 4)",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Name of Lab Result' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Number of Beats' : null,
                     onChanged: (val){
-                      setState(() => lab_result_name = val);
+                      setState(() => beats = int.parse(val));
                     },
+                  ),
+                  SizedBox(height: 8.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget> [
+                      Text(
+                        "Did you just finish exercising?",
+                        textAlign: TextAlign.left,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              Radio(
+                                value: "Yes",
+                                groupValue: exercise,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.exercise = value;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          Text("Yes"),
+                          SizedBox(width: 3),
+                          Radio(
+                            value: "No",
+                            groupValue: exercise,
+                            onChanged: (value){
+                              setState(() {
+                                this.exercise = value;
+                              });
+                            },
+                          ),
+                          Text("No"),
+                          SizedBox(width: 3)
+                        ],
+                      )
+                    ],
                   ),
                   SizedBox(height: 8.0),
                   Row(
@@ -126,11 +169,10 @@ class _addLabResultState extends State<add_lab_results> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list');
 
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => lab_results()),
+                              MaterialPageRoute(builder: (context) => blood_pressure()),
                             );
 
                           } catch(e) {

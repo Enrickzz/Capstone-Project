@@ -7,12 +7,13 @@ import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
-import 'package:my_app/lab_results.dart';
+import 'package:my_app/data_inputs/lab_results.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/symptoms.dart';
-import 'package:my_app/medication.dart';
-import 'medication.dart';
+import 'package:my_app/data_inputs/symptoms.dart';
+import 'package:my_app/data_inputs/medication.dart';
+import 'package:my_app/data_inputs/vitals/vitals.dart';
+import 'data_inputs/medication.dart';
 import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class data_inputs extends StatefulWidget {
@@ -329,7 +330,7 @@ class _AppSignUpState extends State<data_inputs> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => lab_results()),
+                      MaterialPageRoute(builder: (context) => vitals()),
                     );
                   },
                   child: Container(
@@ -391,7 +392,7 @@ class _AppSignUpState extends State<data_inputs> {
                                       width: 10,
                                     ),
                                     Text(
-                                        'Vitals',
+                                        'Recorded Vitals',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18
