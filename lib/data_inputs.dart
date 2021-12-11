@@ -7,6 +7,7 @@ import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
+import 'package:my_app/lab_results.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/symptoms.dart';
@@ -248,7 +249,7 @@ class _AppSignUpState extends State<data_inputs> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => medication()),
+                      MaterialPageRoute(builder: (context) => lab_results()),
                     );
                   },
                   child: Container(
@@ -328,7 +329,7 @@ class _AppSignUpState extends State<data_inputs> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => mainScreen()),
+                      MaterialPageRoute(builder: (context) => lab_results()),
                     );
                   },
                   child: Container(

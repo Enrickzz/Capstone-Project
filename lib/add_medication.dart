@@ -228,7 +228,7 @@ class _addMedicationState extends State<add_medication> {
                         ),
                         color: Colors.blue,
                         onPressed:() {
-                          Navigator.pop(context);
+                          Navigator.pop(context, widget.thislist);
                         },
                       ),
                       FlatButton(
