@@ -80,6 +80,55 @@ class _lab_resultsState extends State<lab_results> {
           ),
         ],
       ),
+      body: GridView.builder(
+        // Create a grid with 2 columns. If you change the scrollDirection to
+        // horizontal, this produces 2 rows.
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 190,
+              childAspectRatio: 1,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10),
+        itemCount: 5,
+        // Generate 100 widgets that display their index in the List.
+        itemBuilder: (context, index){
+          return Center(
+            child: Container(
+              child: Image.asset('assets/images/labresults2.jpg'),
+              height:190,
+              width: 190,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                  color: Colors.black
+              ),
+            ),
+          );
+        }
+
+        // List.generate(100, (index) {
+        //   return Center(
+        //     child: Container(
+        //       child: Image.asset('assets/images/labresults2.jpg'),
+        //       height:190,
+        //       width: 190,
+        //
+        //       decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.only(
+        //           topLeft: Radius.circular(10),
+        //           topRight: Radius.circular(10),
+        //           bottomLeft: Radius.circular(10),
+        //           bottomRight: Radius.circular(10),
+        //         ),
+        //         color: Colors.black
+        //       ),
+        //     ),
+        //   );
+        // }),
+      ),
 
     );
   }
