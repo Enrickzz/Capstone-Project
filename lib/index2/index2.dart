@@ -21,7 +21,7 @@ class index2 extends StatefulWidget {
   @override
   _index2State createState() => _index2State();
 }
-
+final _formKey = GlobalKey<FormState>();
 class _index2State extends State<index2>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
@@ -99,46 +99,253 @@ class _index2State extends State<index2>
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: <Widget>[
-            getMainListViewUI(),
-            getAppBarUI(),
-            SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
-            )
-          ],
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.black
+          ),
+          title: const Text('Nutritionix Meals', style: TextStyle(
+              color: Colors.black
+          )),
+          centerTitle: true,
+          backgroundColor: Colors.white,
         ),
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Form(
+                  key: _formKey,
+                    autovalidate: true,
+                    child: Row (
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.search),
+                              hintText: 'Search here',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                )
+                              ),
+                              filled: true,
+                              errorStyle: TextStyle(fontSize: 15),
+                              contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        ElevatedButton(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                              child: Text('Search', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                              ),
+                            ),
+                            onPressed: () async{
+                            },
+                          ),
+                      ]
+                    )),
+              ),
+              SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 24),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 230,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                              top: 35,
+                              left: 5,
+                              child: Material(
+
+                                child: Container(
+                                  height: 180.0,
+                                  width: 340,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          blurRadius: 20.0)],
+                                  )
+                                ),
+
+                              )),
+                          Positioned(
+                            top: 0,
+                            left: 13,
+                            child: Card(
+                              elevation: 10.0,
+                              shadowColor: Colors.grey.withOpacity(0.5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Container(
+                                height: 200,
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  image: DecorationImage(
+                                    fit:BoxFit.cover,
+                                    image: AssetImage("assets/images/bloodpressure.jpg")
+                                  )
+                                ),
+                              )
+                            )
+                          ),
+                          Positioned(
+                              top:45,
+                              left: 175,
+                              child: Container(
+                                height: 150,
+                                width: 160,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Sinigang na Baboy",
+                                    style: TextStyle(
+                                      fontSize:18,
+                                      color:Color(0xFF363f93),
+                                      fontWeight: FontWeight.bold
+                                    ),),
+                                    Text("Lunch",
+                                      style: TextStyle(
+                                          fontSize:16,
+                                          color:Colors.grey,
+                                          fontWeight: FontWeight.bold
+                                      ),),
+                                    Divider(color: Colors.blue),
+                                    Text("420kcal",
+                                      style: TextStyle(
+                                          fontSize:16,
+                                          color:Colors.grey,
+                                      ),),
+                                    Text("69g",
+                                      style: TextStyle(
+                                          fontSize:16,
+                                          color:Colors.grey,
+                                      ),),
+                                    Text("Other info",
+                                      style: TextStyle(
+                                        fontSize:16,
+                                        color:Colors.grey,
+                                      ),),
+                                  ]
+                                ),
+                              ))
+                        ]
+                      )
+                    ),
+                    Container(
+                        height: 230,
+                        child: Stack(
+                            children: [
+                              Positioned(
+                                  top: 35,
+                                  left: 5,
+                                  child: Material(
+
+                                    child: Container(
+                                        height: 180.0,
+                                        width: 340,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                blurRadius: 20.0)],
+                                        )
+                                    ),
+
+                                  )),
+                              Positioned(
+                                  top: 0,
+                                  left: 13,
+                                  child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: Colors.grey.withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                                      child: Container(
+                                        height: 200,
+                                        width: 150,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                                fit:BoxFit.cover,
+                                                image: AssetImage("assets/images/bloodcholesterol.jpg")
+                                            )
+                                        ),
+                                      )
+                                  )
+                              ),
+                              Positioned(
+                                  top:45,
+                                  left: 175,
+                                  child: Container(
+                                    height: 150,
+                                    width: 160,
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Dinuguan",
+                                            style: TextStyle(
+                                                fontSize:18,
+                                                color:Color(0xFF363f93),
+                                                fontWeight: FontWeight.bold
+                                            ),),
+                                          Text("Lunch",
+                                            style: TextStyle(
+                                                fontSize:16,
+                                                color:Colors.grey,
+                                                fontWeight: FontWeight.bold
+                                            ),),
+                                          Divider(color: Colors.blue),
+                                          Text("420kcal",
+                                            style: TextStyle(
+                                              fontSize:16,
+                                              color:Colors.grey,
+                                            ),),
+                                          Text("69g",
+                                            style: TextStyle(
+                                              fontSize:16,
+                                              color:Colors.grey,
+                                            ),),
+                                          Text("Other info",
+                                            style: TextStyle(
+                                              fontSize:16,
+                                              color:Colors.grey,
+                                            ),),
+                                        ]
+                                    ),
+                                  ))
+                            ]
+                        )
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+        ),
+        backgroundColor: Colors.transparent,
       ),
+
     );
   }
 
-  Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
-          return ListView.builder(
-            controller: scrollController,
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
-            ),
-            itemCount: listViews.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              widget.animationController?.forward();
-              return listViews[index];
-            },
-          );
-        }
-      },
-    );
-  }
+
 
   Widget getAppBarUI() {
     return Column(
@@ -165,105 +372,7 @@ class _index2State extends State<index2>
                           blurRadius: 10.0),
                     ],
                   ),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: MediaQuery.of(context).padding.top,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 16,
-                            right: 16,
-                            top: 16 - 8.0 * topBarOpacity,
-                            bottom: 12 - 8.0 * topBarOpacity),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'My Health',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 22 + 6 - 6 * topBarOpacity,
-                                    letterSpacing: 1.2,
-                                    color: FitnessAppTheme.darkerText,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () {},
-                                child: Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_left,
-                                    color: FitnessAppTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 8,
-                                right: 8,
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: Icon(
-                                      Icons.calendar_today,
-                                      color: FitnessAppTheme.grey,
-                                      size: 18,
-                                    ),
-                                  ),
-                                  Text(
-                                    '15 May',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontFamily: FitnessAppTheme.fontName,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 18,
-                                      letterSpacing: -0.2,
-                                      color: FitnessAppTheme.darkerText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () async {
-                                  await _auth.signOut();
-                                  print('signed out');
-                                },
-                                child: Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: FitnessAppTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+
                 ),
               ),
             );

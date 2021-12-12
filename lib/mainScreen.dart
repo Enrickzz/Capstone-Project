@@ -7,6 +7,7 @@ import 'package:my_app/training/training_screen.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
+import 'index2/index2.dart';
 import 'index3/index3.dart';
 import 'my_diary/my_diary_screen.dart';
 import 'package:my_app/registration.dart';
@@ -167,7 +168,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
                 }
                 setState(() {
                   tabBody =
-                      index3(animationController: animationController);
+                      index2(animationController: animationController);
                 });
               });
             }else if(index ==3){
