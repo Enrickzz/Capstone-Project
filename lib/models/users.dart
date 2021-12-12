@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+
 class Users{
   final String uid;
   String firstname;
@@ -49,7 +51,9 @@ class Medication {
   DateTime medicine_date;
   String medicine_type;
 
+
   Medication({this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date});
+  // Medication(this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date);
 
   String get getName{
     return medicine_name;
@@ -74,5 +78,34 @@ class Medication {
   }
   set setDate (DateTime date){
     medicine_date = date;
+  }
+
+  Medication.fromSnapshot(DataSnapshot snapshot) {
+    medicine_name = snapshot.value["medicine_name"];
+    medicine_dosage = snapshot.value["medicine_dosage"];
+    medicine_date = snapshot.value["medicine_date"];
+    medicine_type = snapshot.value["medicine_type"];
+  }
+
+
+}
+
+class Lab_Result {
+  String labResult_name;
+  DateTime labResult_date;
+
+  Lab_Result({this.labResult_name, this.labResult_date});
+
+  String get getName{
+    return labResult_name;
+  }
+  DateTime get getDate{
+    return labResult_date;
+  }
+  set setName (String name){
+    labResult_name = name;
+  }
+  set setDate (DateTime date){
+    labResult_date = date;
   }
 }

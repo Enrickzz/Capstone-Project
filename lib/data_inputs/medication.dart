@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -41,11 +42,90 @@ class _medicationState extends State<medication> {
   String height = "";
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Medication> medtemp;
+  List<Medication> medtemp = [];
   @override
   void initState() {
     super.initState();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readMedication = databaseReference.child('users/' + uid + '/medications_list');
+    String tempMedicineName = "";
+    String tempMedicineType = "";
+    String tempMedicineDate = "";
+    double tempMedicineDosage = 0;
+    DateFormat format = new DateFormat("MM/dd/yyyy");
+    readMedication.once().then((DataSnapshot datasnapshot) {
+      medtemp.clear();
+      String temp1 = datasnapshot.value.toString();
+      List<String> temp = temp1.split(',');
+      Medication medicine;
+      for(var i = 0; i < temp.length; i++) {
+        String full = temp[i].replaceAll("{", "")
+            .replaceAll("}", "")
+            .replaceAll("[", "")
+            .replaceAll("]", "");
+        List<String> splitFull = full.split(" ");
+        if(i < 4){
+          switch(i){
+            case 0: {
+              tempMedicineType = splitFull.last;
+
+            }
+            break;
+            case 1: {
+              tempMedicineDosage = double.parse(splitFull.last);
+
+            }
+            break;
+            case 2: {
+              tempMedicineDate = splitFull.last;
+            }
+            break;
+            case 3: {
+              tempMedicineName = splitFull.last;
+              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
+              medtemp.add(medicine);
+            }
+            break;
+          }
+        }
+        else{
+          switch(i%4){
+            case 0: {
+
+              tempMedicineType = splitFull.last;
+              // tempMedicineDosage = 0;
+            }
+            break;
+            case 1: {
+              tempMedicineDosage = double.parse(splitFull.last);
+
+            }
+            break;
+            case 2: {
+              tempMedicineDate = splitFull.last;
+
+            }
+            break;
+            case 3: {
+              tempMedicineName = splitFull.last;
+              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
+              medtemp.add(medicine);
+            }
+            break;
+          }
+        }
+      }
+      for(var i=0;i<medtemp.length/2;i++){
+        var temp = medtemp[i];
+        medtemp[i] = medtemp[medtemp.length-1-i];
+        medtemp[medtemp.length-1-i] = temp;
+      }
+    });
     medtemp = widget.medlist;
+    setState(() {
+      print("setstate");
+    });
   }
 
   @override

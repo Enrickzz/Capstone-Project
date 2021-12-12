@@ -47,7 +47,8 @@ class _AppSignUpState extends State<data_inputs> {
     super.initState();
     setState(() {
       print("SET STATE data input");
-      convertFutureListToList();
+      convertFutureListToListSymptom();
+      // convertFutureListToListMedication();
     });
   }
 
@@ -165,9 +166,9 @@ class _AppSignUpState extends State<data_inputs> {
                 ),
                 GestureDetector(
                   onTap:(){
-                    thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => medication(medlist: thismedlist)),
@@ -419,7 +420,6 @@ class _AppSignUpState extends State<data_inputs> {
     List<Symptom> symptomsList = new List<Symptom>();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
     final symptomsRef = databaseReference.child('users/' + uid +'/symptoms_list/');
     int tempIntesityLvl = 0;
     String tempSymptomName = "";
@@ -474,7 +474,7 @@ class _AppSignUpState extends State<data_inputs> {
               tempSymptomFelt = splitFull.last;
               symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
               symptomsList.add(symptom);
-              print("symptom list " + symptomsList.toString());
+
             }
             break;
           }
@@ -488,9 +488,106 @@ class _AppSignUpState extends State<data_inputs> {
     });
     return symptomsList;
   }
-  void convertFutureListToList() async {
+
+  Future<List<Medication>> getMedication() async {
+    List<Medication> medication_list = new List<Medication>();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readMedication = databaseReference.child('users/' + uid + '/medications_list');
+    String tempMedicineName = "";
+    String tempMedicineType = "";
+    String tempMedicineDate = "";
+    double tempMedicineDosage = 0;
+    await readMedication.once().then((DataSnapshot datasnapshot) {
+      String temp1 = datasnapshot.value.toString();
+      List<String> temp = temp1.split(',');
+      Medication medicine;
+      for(var i = 0; i < temp.length; i++) {
+        String full = temp[i].replaceAll("{", "")
+            .replaceAll("}", "")
+            .replaceAll("[", "")
+            .replaceAll("]", "");
+        List<String> splitFull = full.split(" ");
+        if(i < 4){
+          print("i value" + i.toString());
+          switch(i){
+            case 0: {
+              print("1st switch i = 0 " + splitFull.last);
+              // tempMedicineDosage = double.parse(splitFull.last);
+              tempMedicineType = splitFull.last;
+
+            }
+            break;
+            case 1: {
+              print("1st switch i = 1 " + splitFull.last);
+              tempMedicineDosage = double.parse(splitFull.last);
+
+            }
+            break;
+            case 2: {
+              print("1st switch i = 2 " + splitFull.last);
+              tempMedicineDate = splitFull.last;
+            }
+            break;
+            case 3: {
+              print("1st switch i = 3 " + splitFull.last);
+              tempMedicineName = splitFull.last;
+              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
+              medication_list.add(medicine);
+            }
+            break;
+          }
+        }
+        else{
+          print("i value" + i.toString());
+          print("i value modulu " + (i%4).toString());
+          switch(i%4){
+            case 0: {
+              print("2nd switch intensity lvl " + splitFull.last);
+
+              tempMedicineType = splitFull.last;
+              // tempMedicineDosage = 0;
+            }
+            break;
+            case 1: {
+              print("2nd switch symptom name " + splitFull.last);
+              tempMedicineDosage = double.parse(splitFull.last);
+
+            }
+            break;
+            case 2: {
+              print("2nd switch symptom date " + splitFull.last);
+              tempMedicineDate = splitFull.last;
+
+            }
+            break;
+            case 3: {
+              print("2nd switch symptom felt " + splitFull.last);
+              tempMedicineName = splitFull.last;
+              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
+              medication_list.add(medicine);
+            }
+            break;
+          }
+        }
+      }
+      for(var i=0;i<medication_list.length/2;i++){
+        var temp = medication_list[i];
+        medication_list[i] = medication_list[medication_list.length-1-i];
+        medication_list[medication_list.length-1-i] = temp;
+      }
+
+    });
+    return medication_list;
+  }
+  void convertFutureListToListSymptom() async {
     Future<List> _futureOfList = getSymptoms();
     List list = await _futureOfList ;
     thislist = list;
+  }
+  void convertFutureListToListMedication() async {
+    Future<List> _futureOfList = getMedication();
+    List list = await _futureOfList ;
+    thismedlist = list;
   }
 }

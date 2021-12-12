@@ -152,13 +152,13 @@ class _addSymptomsState extends State<add_symptoms> {
 
                           // put it here
                           symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}"; // 08/14/2019
-                          AlertDialog alert = AlertDialog(
-                            title: Text("My title"),
-                            content: Text("This is my message."),
-                            actions: [
-
-                            ],
-                          );
+                          // AlertDialog alert = AlertDialog(
+                          //   title: Text("My title"),
+                          //   content: Text("This is my message."),
+                          //   actions: [
+                          //
+                          //   ],
+                          // );
 
                         });
                       }
