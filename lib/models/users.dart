@@ -185,18 +185,18 @@ class Body_Temperature {
 }
 
 class Oxygen_Saturation {
-  double oxygen_saturation;
+  int oxygen_saturation;
   DateTime os_date;
 
   Oxygen_Saturation({this.oxygen_saturation, this.os_date});
 
-  double get getOxygenSaturation{
+  int get getOxygenSaturation{
     return oxygen_saturation;
   }
   DateTime get getDate{
     return os_date;
   }
-  set setTemperature (double oxygen_saturation){
+  set setTemperature (int oxygen_saturation){
     this.oxygen_saturation = oxygen_saturation;
   }
   set setDate (DateTime date){
