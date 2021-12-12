@@ -26,8 +26,8 @@ class _add_body_temperatureState extends State<add_body_temperature> {
 
   double temperature = 0;
   String unit = 'Celsius (°C)';
-  List degrees = ['Celsius (°C)', 'Fahrenheit (°F)', 'Kelvin'];
   String valueChoose;
+  List degrees = ["Celsius (°C)", "Fahrenheit (°F)", "Kelvin"];
 
 
   @override
@@ -69,7 +69,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                           Row(
                             children: [
                               Radio(
-                                value: "°C",
+                                value: "Celsius (°C)",
                                 groupValue: unit,
                                 onChanged: (value){
                                   setState(() {
@@ -79,10 +79,10 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                               ),
                             ],
                           ),
-                          Text("°C"),
-                          SizedBox(width: 15),
+                          Text("Celsius (°C)"),
+                          SizedBox(width: 3),
                           Radio(
-                            value: "°F",
+                            value: "Fahrenheit (°F)",
                             groupValue: unit,
                             onChanged: (value){
                               setState(() {
@@ -90,10 +90,10 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                               });
                             },
                           ),
-                          Text("°F"),
-                          SizedBox(width: 15),
+                          Text("Fahrenheit (°F)"),
+                          SizedBox(width: 3),
                           Radio(
-                            value: "K",
+                            value: "Kelvin (K)",
                             groupValue: unit,
                             onChanged: (value){
                               setState(() {
@@ -101,8 +101,8 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                               });
                             },
                           ),
-                          Text("K"),
-                          SizedBox(width: 15)
+                          Text("Kelvin (K)"),
+                          SizedBox(width: 3)
                         ],
                       )
                     ],
@@ -160,6 +160,27 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                     ],
                   ),
                   SizedBox(height: 18.0),
+                  // DropdownButton(
+                  //   hint: Text("Select items:"),
+                  //   dropdownColor: Colors.grey,
+                  //   icon: Icon(Icons.arrow_drop_down),
+                  //   iconSize: 36,
+                  //   style: TextStyle(
+                  //     color: Colors.black,
+                  //   ),
+                  //   value: valueChoose,
+                  //   onChanged:(value) {
+                  //     setState(() {
+                  //       valueChoose = value;
+                  //     });
+                  //   },
+                  //   items: degrees.map((valueItem) {
+                  //     return DropdownMenuItem(
+                  //         value: valueItem,
+                  //         child: Text(valueItem),
+                  //     );
+                  //   })
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

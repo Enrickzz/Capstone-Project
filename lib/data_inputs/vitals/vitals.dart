@@ -5,15 +5,14 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
-import 'package:my_app/data_inputs/vitals/blood_glucose.dart';
 import 'package:my_app/data_inputs/vitals/body_temperature.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 
-import 'vitals/blood_pressure.dart';
-import 'vitals/heart_rate.dart';
+import 'blood_pressure.dart';
+import 'heart_rate.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class vitals extends StatefulWidget {
   @override
@@ -339,7 +338,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => blood_glucose()),
+                      MaterialPageRoute(builder: (context) => mainScreen()),
                     );
                   },
                   child: Container(

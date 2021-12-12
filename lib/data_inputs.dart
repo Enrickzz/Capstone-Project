@@ -12,7 +12,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 import 'package:my_app/data_inputs/medication.dart';
-import 'package:my_app/data_inputs/vitals.dart';
+import 'package:my_app/data_inputs/vitals/vitals.dart';
 import 'data_inputs/medication.dart';
 import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
