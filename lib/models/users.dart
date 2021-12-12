@@ -248,7 +248,7 @@ class Blood_Cholesterol {
 
 class Blood_Glucose {
   double glucose = 0;
-  String status = '';
+  String status = "";
   DateTime bloodGlucose_date;
   Blood_Glucose({this.glucose, this.status, this.bloodGlucose_date});
 
