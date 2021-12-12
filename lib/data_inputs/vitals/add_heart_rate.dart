@@ -7,6 +7,7 @@ import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure.dart';
+import 'package:my_app/data_inputs/vitals/heart_rate.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
@@ -282,7 +283,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
 
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => blood_pressure()),
+                              MaterialPageRoute(builder: (context) => heart_rate()),
                             );
 
                           } catch(e) {

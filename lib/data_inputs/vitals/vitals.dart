@@ -14,6 +14,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 
+import 'blood_glucose.dart';
 import 'blood_pressure.dart';
 import 'heart_rate.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
@@ -342,7 +343,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => mainScreen()),
+                      MaterialPageRoute(builder: (context) => blood_glucose()),
                     );
                   },
                   child: Container(
@@ -404,72 +405,72 @@ class _AppSignUpState extends State<vitals> {
                       )
                   ),
                 ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => respiratory_rate()),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 100,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/respiratoryrate.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Respiratory Rate',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap:(){
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => respiratory_rate()),
+                //     );
+                //   },
+                //   child: Container(
+                //       margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                //       height: 100,
+                //       child: Stack(
+                //           children: [
+                //             Positioned.fill(
+                //               child: ClipRRect(
+                //                 borderRadius: BorderRadius.circular(20),
+                //                 child: Image.asset('assets/images/respiratoryrate.jpg',
+                //                     fit: BoxFit.cover
+                //                 ),
+                //               ),
+                //             ),
+                //             Positioned (
+                //               bottom: 0,
+                //               left: 0,
+                //               right: 0,
+                //               child: Container(
+                //                   height: 80,
+                //                   decoration: BoxDecoration(
+                //                       borderRadius: BorderRadius.only(
+                //                           bottomLeft: Radius.circular(20),
+                //                           bottomRight: Radius.circular(20)
+                //                       ),
+                //                       gradient: LinearGradient(
+                //                           begin: Alignment.bottomCenter,
+                //                           end: Alignment.topCenter,
+                //                           colors: [
+                //                             Colors.black.withOpacity(0.7),
+                //                             Colors.transparent
+                //                           ]
+                //                       )
+                //                   )
+                //               ),
+                //             ),
+                //             Positioned(
+                //               bottom: 0,
+                //               child: Padding(
+                //                 padding: const EdgeInsets.all(10),
+                //                 child: Row(
+                //                   children: [
+                //                     SizedBox(
+                //                       width: 10,
+                //                     ),
+                //                     Text(
+                //                         'Respiratory Rate',
+                //                         style: TextStyle(
+                //                             color: Colors.white,
+                //                             fontSize: 18
+                //                         )
+                //                     )
+                //                   ],
+                //                 ),
+                //               ),
+                //             ),
+                //           ]
+                //       )
+                //   ),
+                // ),
                 GestureDetector(
                   onTap:(){
                     Navigator.push(
