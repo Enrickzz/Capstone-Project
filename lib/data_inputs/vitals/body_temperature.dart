@@ -12,6 +12,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
+import '../../fitness_app_theme.dart';
 import 'add_blood_pressure.dart';
 import '../add_lab_results.dart';
 import '../add_medication.dart';
@@ -139,10 +140,16 @@ class _body_temperatureState extends State<body_temperature> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_body_temperature(),
+                      child: add_body_temperature(btlist: bttemp),
                     ),
                     ),
-                  );
+                  ).then((value) => setState((){
+                    print("setstate symptoms");
+                    if(value != null){
+                      bttemp = value;
+                    }
+                    print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
+                  }));;
                 },
                 child: Icon(
                   Icons.add,
@@ -151,6 +158,73 @@ class _body_temperatureState extends State<body_temperature> {
           ),
         ],
       ),
+      body: ListView.builder(
+    itemCount: bttemp.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          child: Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              height: 140,
+              child: Stack(
+                  children: [
+                    Positioned (
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                          height: 120,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                  bottomRight: Radius.circular(20)
+                              ),
+                              gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.white.withOpacity(0.7),
+                                    Colors.white
+                                  ]
+                              ),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: FitnessAppTheme.grey.withOpacity(0.6),
+                                    offset: Offset(1.1, 1.1),
+                                    blurRadius: 10.0),
+                              ]
+                          )
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                                '' + bttemp[index].getDate.toString()+" " + bttemp[index].getTemperature.toString() + " " + bttemp[index].getUnit+ " ",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18
+                                )
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]
+              )
+          ),
+        );
+      },
+    ),
 
     );
   }

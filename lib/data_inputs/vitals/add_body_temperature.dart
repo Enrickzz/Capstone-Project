@@ -18,6 +18,8 @@ import 'body_temperature.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_body_temperature extends StatefulWidget {
+  final List<Body_Temperature> btlist;
+  add_body_temperature({this.btlist});
   @override
   _add_body_temperatureState createState() => _add_body_temperatureState();
 }
@@ -293,10 +295,17 @@ class _add_body_temperatureState extends State<add_body_temperature> {
 
                             });
 
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => body_temperature()),
-                            );
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              print("SYMPTOMS LENGTH: " + body_temp_list.length.toString());
+                              body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date)));
+                              for(var i=0;i<body_temp_list.length/2;i++){
+                                var temp = body_temp_list[i];
+                                body_temp_list[i] = body_temp_list[body_temp_list.length-1-i];
+                                body_temp_list[body_temp_list.length-1-i] = temp;
+                              }
+                              print("POP HERE ==========");
+                              Navigator.pop(context, body_temp_list);
+                            });
 
                           } catch(e) {
                             print("you got an error! $e");

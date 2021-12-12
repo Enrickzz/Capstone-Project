@@ -45,6 +45,7 @@ class _AppSignUpState extends State<vitals> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Blood_Pressure> thisbplist = new List<Blood_Pressure>();
   List<Heart_Rate> thisHRlist = new List<Heart_Rate>();
+  List<Body_Temperature> thisBTlist = new List<Body_Temperature>();
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +214,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => body_temperature()),
+                      MaterialPageRoute(builder: (context) => body_temperature(btlist: thisBTlist)),
                     );
                   },
                   child: Container(

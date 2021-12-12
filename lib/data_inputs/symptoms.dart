@@ -17,8 +17,7 @@ import '../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class symptoms extends StatefulWidget {
   final List<Symptom> symptomlist1;
-  symptoms(
-      {Key key, this.symptomlist1})
+  symptoms({Key key, this.symptomlist1})
       : super(key: key);
   @override
   _symptomsState createState() => _symptomsState();
