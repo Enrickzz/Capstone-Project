@@ -1,6 +1,9 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/storage_service.dart';
 
 class GridImages extends StatefulWidget {
@@ -53,10 +56,14 @@ class _GridImagesState extends State<GridImages> {
                   // allowedExtensions: ['jpg', 'png'],
                 );
                 if(result == null) return;
+                final FirebaseAuth auth = FirebaseAuth.instance;
                 final path = result.files.single.path;
-                final fileName = result.files.single.name;
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                var fileName = result.files.single.name;
                 print("path" + path);
                 print("fileName " + fileName);
+                fileName = uid + "lab_result" + "counter";
                 storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
               },
             ),
@@ -71,4 +78,24 @@ class PhotoItem {
   final String image;
   final String name;
   PhotoItem(this.image, this.name);
+}
+Future<List<FirebaseFile>> listAll (String path) async {
+  final ref = FirebaseStorage.instance.ref(path);
+  final result = await ref.listAll();
+  final urls = await _getDownloadLinks(result.items);
+
+  return urls
+      .asMap()
+      .map((index, url){
+        final ref = result.items[index];
+        final name = ref.name;
+        final file = FirebaseFile(ref: ref, name:name, url: url);
+        return MapEntry(index, file);
+      })
+      .values
+      .toList();
+}
+
+Future <List<String>>_getDownloadLinks(List<Reference> refs) {
+  Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
 }
