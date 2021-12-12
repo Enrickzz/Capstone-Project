@@ -212,7 +212,7 @@ class _symptomsState extends State<symptoms> {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
+                        top: 25,
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Row(
@@ -222,7 +222,10 @@ class _symptomsState extends State<symptoms> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + listtemp[index].getDate.toString()+" " + listtemp[index].getFelt + " " + listtemp[index].getIntensity_lvl.toString()+ " " + listtemp[index].getName,
+                                  '' + listtemp[index].getDate.toString()+" \n" + "Name: " +listtemp[index].getName+
+                                      "\nI felt " + listtemp[index].getFelt + " \n"
+                                      "The intensity was "+ listtemp[index].getIntensity_lvl.toString()+ " \n" +
+                                      "",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18

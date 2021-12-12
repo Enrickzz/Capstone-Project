@@ -12,6 +12,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
+import '../../fitness_app_theme.dart';
 import 'add_blood_pressure.dart';
 import 'add_o2_saturation.dart';
 import '../add_lab_results.dart';
@@ -125,10 +126,16 @@ class _o2_saturationState extends State<o2_saturation> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_o2_saturation(),
+                      child: add_o2_saturation(o2list: oxygentemp),
                     ),
                     ),
-                  );
+                  ).then((value) => setState((){
+                    print("setstate symptoms");
+                    if(value != null){
+                      oxygentemp = value;
+                    }
+                    print("OXY LENGTH AFTER SETSTATE  =="  + oxygentemp.length.toString() );
+                  }));
                 },
                 child: Icon(
                   Icons.add,
@@ -137,6 +144,73 @@ class _o2_saturationState extends State<o2_saturation> {
           ),
         ],
       ),
+        body: ListView.builder(
+          itemCount: oxygentemp.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  height: 140,
+                  child: Stack(
+                      children: [
+                        Positioned (
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                              height: 120,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                      bottomRight: Radius.circular(20)
+                                  ),
+                                  gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.white.withOpacity(0.7),
+                                        Colors.white
+                                      ]
+                                  ),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: FitnessAppTheme.grey.withOpacity(0.6),
+                                        offset: Offset(1.1, 1.1),
+                                        blurRadius: 10.0),
+                                  ]
+                              )
+                          ),
+                        ),
+                        Positioned(
+                          top: 25,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    '' + oxygentemp[index].getDate.toString()+" \n" + "My O2 level: " +oxygentemp[index].getOxygenSaturation.toString() +" %SpO2",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18
+                                    )
+                                ),
+
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]
+                  )
+              ),
+            );
+          },
+        )
 
     );
   }

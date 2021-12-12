@@ -20,6 +20,7 @@ import 'blood_pressure.dart';
 import 'heart_rate.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class vitals extends StatefulWidget {
+
   @override
   _AppSignUpState createState() => _AppSignUpState();
 }
@@ -46,6 +47,7 @@ class _AppSignUpState extends State<vitals> {
   List<Blood_Pressure> thisbplist = new List<Blood_Pressure>();
   List<Heart_Rate> thisHRlist = new List<Heart_Rate>();
   List<Body_Temperature> thisBTlist = new List<Body_Temperature>();
+  List<Oxygen_Saturation> o2List = new List<Oxygen_Saturation>();
 
   @override
   Widget build(BuildContext context) {
@@ -478,7 +480,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => o2_saturation()),
+                      MaterialPageRoute(builder: (context) => o2_saturation(oxygenlist: o2List)),
                     );
                   },
                   child: Container(

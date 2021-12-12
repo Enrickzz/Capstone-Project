@@ -18,6 +18,8 @@ import 'o2_saturation.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_o2_saturation extends StatefulWidget {
+  final List<Oxygen_Saturation> o2list;
+  add_o2_saturation({this.o2list});
   @override
   _add_o2_saturationState createState() => _add_o2_saturationState();
 }
