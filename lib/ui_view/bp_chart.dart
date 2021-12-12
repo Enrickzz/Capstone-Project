@@ -84,11 +84,12 @@ class _blood_pressureState extends State<bp_chart> {
                                     isVisible: true,
                                     overflowMode: LegendItemOverflowMode.wrap,
                                     position: LegendPosition.top),
-                                primaryXAxis: NumericAxis(
+                                primaryXAxis: CategoryAxis(
+                                  isVisible: false,
                                     edgeLabelPlacement: EdgeLabelPlacement.shift,
-                                    interval: 10,
+                                    interval: 30,
                                     //maximum: 30,
-                                    minimum: 1,
+                                    minimum: 0,
                                     majorGridLines: const MajorGridLines(width: 0)),
                                 title: ChartTitle(text: 'Blood Pressure'),
                                 primaryYAxis: NumericAxis(
@@ -179,12 +180,13 @@ class _blood_pressureState extends State<bp_chart> {
       final User user = auth.currentUser;
       final uid = user.uid;
       final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-      final bmiRef = databaseReference.child('users/' +uid+'/vitals/health_records/blood_pressure/');
+      final bmiRef = databaseReference.child('users/' +uid+'/vitals/health_records/bp_list/');
       await bmiRef.once().then((DataSnapshot snapshot){
         //print(snapshot.value);
         String temp1 = snapshot.value.toString();
         List<String> temp = temp1.split('},');
         List<String> tempFull = new List();
+        double counter = 0;
         for(var i = 0 ; i < temp.length; i++){
           String full = temp[i].replaceAll("{", "").replaceAll("}", "");
           tempFull.add(full);
@@ -196,18 +198,26 @@ class _blood_pressureState extends State<bp_chart> {
           List<String> a = _1item[0].split(" ");
           if(i==0){
             //print(_1item[0].replaceAll(_1item[0],a[2]) +"\n\n");
-            _1item[0] = _1item[0].replaceAll(_1item[0],a[2]);
-            _1item[1] = _1item[1].replaceAll("diastolic: ", "");
-            _1item[2] = _1item[2].replaceAll("systolic: ", "");
-
-            finaList.add(new _ChartData(double.parse(_1item[0]),double.parse(_1item[2]),double.parse(_1item[1])));
+            // _1item[0] = _1item[0].replaceAll(_1item[0],a[2]);
+            _1item[1] = _1item[1].replaceAll("diastolic_pressure: ", "");
+            _1item[2] = _1item[2].replaceAll("systolic_pressure: ", "");
+            _1item[2] = _1item[2].replaceAll("]", "");
+            print("\n y" + _1item[2] + "\ny2 =" + _1item[1]);
+            finaList.add(new _ChartData(counter,double.parse(_1item[2]),double.parse(_1item[1])));
+            counter++;
+            print("counter == " +counter.toString());
 
           }else{
             //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
-            _1item[0] = _1item[0].replaceAll(_1item[0],a[3]);
-            _1item[1] = _1item[1].replaceAll("diastolic: ", "");
-            _1item[2] = _1item[2].replaceAll("systolic: ", "");
-            finaList.add(new _ChartData(double.parse(_1item[0]),double.parse(_1item[2]),double.parse(_1item[1])));
+            // _1item[0] = _1item[0].replaceAll(_1item[0],a[3]);
+            _1item[1] = _1item[1].replaceAll("diastolic_pressure: ", "");
+            _1item[2] = _1item[2].replaceAll("systolic_pressure: ", "");
+            _1item[2] = _1item[2].replaceAll("]", "");
+            print("\n y" + _1item[2] + "\ny2 =" + _1item[1]);
+            finaList.add(new _ChartData(counter,double.parse(_1item[2]),double.parse(_1item[1])));
+            counter++;
+            print("counter == " +counter.toString());
+
           }
           //print(_1item[0] + "\n" + _1item[1] +"\n"+_1item[2] + "\n====================================");
         }
