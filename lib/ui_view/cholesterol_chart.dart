@@ -83,7 +83,7 @@ class _blood_pressureState extends State<cholesterol_chart> {
                           title: ChartTitle(text: 'Cholesterol Levels'),
                           primaryYAxis: NumericAxis(
                               labelFormat: '{value}',
-                              interval: 30,
+                              interval: 5,
                               axisLine: const AxisLine(width: 0),
                               majorTickLines: const MajorTickLines(color: Colors.transparent)),
                           series: finalLine,

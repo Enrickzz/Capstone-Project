@@ -83,7 +83,8 @@ class _blood_pressureState extends State<bp_chart> {
                                 title: ChartTitle(text: 'Blood Pressure'),
                                 primaryYAxis: NumericAxis(
                                     labelFormat: '{value}',
-                                    interval: 30,
+                                    interval: 15,
+                                    minimum: 50,
                                     axisLine: const AxisLine(width: 0),
                                     majorTickLines: const MajorTickLines(color: Colors.transparent)),
                                 series: finalLine,
