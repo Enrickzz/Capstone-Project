@@ -198,7 +198,7 @@ class _body_temperatureState extends State<body_temperature> {
                       ),
                     ),
                     Positioned(
-                      bottom: 0,
+                      top: 25,
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Row(
@@ -208,13 +208,13 @@ class _body_temperatureState extends State<body_temperature> {
                               width: 10,
                             ),
                             Text(
-                                '' + bttemp[index].getDate.toString()+" " + bttemp[index].getTemperature.toString() + " " + bttemp[index].getUnit+ " ",
+                                '' + bttemp[index].getDate.toString()+" "
+                                    +"\nTemperature: "+ bttemp[index].getTemperature.toString() + " " + bttemp[index].getUnit+ " ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18
                                 )
                             ),
-
                           ],
                         ),
                       ),

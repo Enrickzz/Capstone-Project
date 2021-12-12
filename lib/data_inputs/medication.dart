@@ -209,7 +209,7 @@ class _medicationState extends State<medication> {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
+                        top: 25,
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Row(
@@ -219,7 +219,10 @@ class _medicationState extends State<medication> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + medtemp[index].getDate.toString()+" " + medtemp[index].getName + " " + medtemp[index].getDosage.toString()+ " " + medtemp[index].getType,
+                                  '' + medtemp[index].getDate.toString()+" "
+                                      + "\nMedicine: " + medtemp[index].getName + " "
+                                      +"\nDosage "+ medtemp[index].getDosage.toString()+ " "
+                                      +"\nType: "+ medtemp[index].getType,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18

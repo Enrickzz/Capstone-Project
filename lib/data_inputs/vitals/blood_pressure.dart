@@ -198,7 +198,7 @@ class _blood_pressureState extends State<blood_pressure> {
                       ),
                     ),
                     Positioned(
-                      bottom: 0,
+                      top: 25,
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Row(
@@ -208,7 +208,8 @@ class _blood_pressureState extends State<blood_pressure> {
                               width: 10,
                             ),
                             Text(
-                                '' + bptemp[index].getDate.toString()+" " + bptemp[index].getSys_pres + "/" + bptemp[index].getDia_pres.toString(),
+                                '' + bptemp[index].getDate.toString()+" "
+                                    +"\nBlood pressure: "+ bptemp[index].getSys_pres + "/" + bptemp[index].getDia_pres.toString(),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18

@@ -65,17 +65,6 @@ class _blood_pressureState extends State<bp_chart> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        'Body Mass Index',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: FitnessAppTheme.fontName,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          letterSpacing: 0.0,
-                          color: FitnessAppTheme.nearlyBlack,
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
                         child: SfCartesianChart(

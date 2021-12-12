@@ -18,6 +18,8 @@ import 'blood_cholesterol.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_blood_cholesterol extends StatefulWidget {
+  final List<Blood_Cholesterol> cholList;
+  add_blood_cholesterol({Key key, this.cholList});
   @override
   _add_blood_cholesterolState createState() => _add_blood_cholesterolState();
 }

@@ -199,7 +199,7 @@ class _heart_rateState extends State<heart_rate> {
                           ),
                         ),
                         Positioned(
-                          bottom: 0,
+                          top: 25,
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Row(
@@ -209,7 +209,9 @@ class _heart_rateState extends State<heart_rate> {
                                   width: 10,
                                 ),
                                 Text(
-                                    '' + hrtemp[index].getDate.toString()+" " + hrtemp[index].getBPM.toString() + "/" + hrtemp[index].getisResting.toString() + "  " ,
+                                    '' + hrtemp[index].getDate.toString()+" "
+                                        +"\nHeart rate: "+ hrtemp[index].getBPM.toString() + " BPM"
+                                        +"\nResting: "+ hrtemp[index].getisResting.toString() + "  " ,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 18
