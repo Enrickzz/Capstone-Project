@@ -26,9 +26,7 @@ class medication extends StatefulWidget {
 class _medicationState extends State<medication> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String initValue="Select your Birth Date";
   bool isDateSelected= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Medication> medtemp = [];

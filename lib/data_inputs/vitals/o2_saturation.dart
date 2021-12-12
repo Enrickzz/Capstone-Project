@@ -55,7 +55,7 @@ class _o2_saturationState extends State<o2_saturation> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Heart Rate', style: TextStyle(
+        title: const Text('Oxygen Saturation', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,

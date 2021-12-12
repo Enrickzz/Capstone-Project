@@ -129,4 +129,78 @@ class Blood_Pressure {
 
 }
 
-class 
+class Heart_Rate {
+  int bpm;
+  bool isResting;
+  DateTime hr_date;
+
+  Heart_Rate({this.bpm, this.isResting,this.hr_date});
+
+  int get getBPM{
+    return bpm;
+  }
+  bool get getisResting{
+    return isResting;
+  }
+  DateTime get getDate{
+    return hr_date;
+  }
+  set setBPM (int bpm){
+    this.bpm = bpm;
+  }
+  set setisResting (bool isresting){
+    isResting = isresting;
+  }
+  set setDate (DateTime date){
+    hr_date = date;
+  }
+
+}
+
+class Body_Temperature {
+  String unit;
+  double temperature;
+  DateTime bt_date;
+
+  Body_Temperature({this.unit, this.temperature,this.bt_date});
+
+  String get getUnit{
+    return unit;
+  }
+  double get getTemperature{
+    return temperature;
+  }
+  DateTime get getDate{
+    return bt_date;
+  }
+  set setUnit (String unit){
+    this.unit = unit;
+  }
+  set setTemperature (double temperature){
+    this.temperature = temperature;
+  }
+  set setDate (DateTime date){
+    bt_date = date;
+  }
+}
+
+class Oxygen_Saturation {
+  double oxygen_saturation;
+  DateTime os_date;
+
+  Oxygen_Saturation({this.oxygen_saturation, this.os_date});
+
+  double get getOxygenSaturation{
+    return oxygen_saturation;
+  }
+  DateTime get getDate{
+    return os_date;
+  }
+  set setTemperature (double oxygen_saturation){
+    this.oxygen_saturation = oxygen_saturation;
+  }
+  set setDate (DateTime date){
+    os_date = date;
+  }
+
+}

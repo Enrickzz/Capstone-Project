@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:my_app/data_inputs/vitals/body_temperature.dart';
+import 'package:my_app/data_inputs/vitals/o2_saturation.dart';
+import 'package:my_app/data_inputs/vitals/respiratory_rate.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
@@ -406,7 +408,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => mainScreen()),
+                      MaterialPageRoute(builder: (context) => respiratory_rate()),
                     );
                   },
                   child: Container(
@@ -472,7 +474,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => mainScreen()),
+                      MaterialPageRoute(builder: (context) => o2_saturation()),
                     );
                   },
                   child: Container(
