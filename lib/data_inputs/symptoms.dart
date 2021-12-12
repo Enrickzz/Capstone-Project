@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -47,7 +48,83 @@ class _symptomsState extends State<symptoms> {
   @override
   void initState() {
     super.initState();
+    List<Symptom> symptomsList = new List<Symptom>();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final symptomsRef = databaseReference.child('users/' + uid +'/symptoms_list/');
+    int tempIntesityLvl = 0;
+    String tempSymptomName = "";
+    String tempSymptomDate = "";
+    String tempSymptomFelt = "";
+    DateFormat format = new DateFormat("MM/dd/yyyy");
+    symptomsRef.once().then((DataSnapshot datasnapshot){
+      listtemp.clear();
+      String temp1 = datasnapshot.value.toString();
+      List<String> temp = temp1.split(',');
+      Symptom symptom;
+
+      for(var i = 0; i < temp.length; i++){
+        String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+        List<String> splitFull = full.split(" ");
+        if(i < 4){
+          switch(i){
+            case 0: {
+              tempIntesityLvl = int.parse(splitFull.last);
+            }
+            break;
+            case 1: {
+              tempSymptomName = splitFull.last;
+            }
+            break;
+            case 2: {
+              tempSymptomDate = splitFull.last;
+            }
+            break;
+            case 3: {
+              tempSymptomFelt = splitFull.last;
+              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
+              listtemp.add(symptom);
+            }
+            break;
+          }
+        }
+        else{
+          switch(i%4){
+            case 0: {
+              tempIntesityLvl = int.parse(splitFull.last);
+            }
+            break;
+            case 1: {
+              tempSymptomName = splitFull.last;
+            }
+            break;
+            case 2: {
+              tempSymptomDate = splitFull.last;
+
+            }
+            break;
+            case 3: {
+              tempSymptomFelt = splitFull.last;
+              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
+              listtemp.add(symptom);
+
+            }
+            break;
+          }
+        }
+      }
+      for(var i=0;i<listtemp.length/2;i++){
+        var temp = listtemp[i];
+        listtemp[i] = listtemp[listtemp.length-1-i];
+        listtemp[listtemp.length-1-i] = temp;
+      }
+    });
     listtemp = widget.symptomlist1;
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
+    });
   }
 
   @override
@@ -84,6 +161,7 @@ class _symptomsState extends State<symptoms> {
                   ).then((value) => setState((){
                     print("setstate symptoms");
                     listtemp = value;
+                    print("SYMP LENGTH AFTER SETSTATE  =="  + listtemp.length.toString() );
                   }));
                 },
                 child: Icon(

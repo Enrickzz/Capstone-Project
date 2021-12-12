@@ -43,6 +43,7 @@ class _medicationState extends State<medication> {
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Medication> medtemp = [];
+
   @override
   void initState() {
     super.initState();

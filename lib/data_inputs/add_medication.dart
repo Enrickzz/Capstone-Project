@@ -265,8 +265,7 @@ class _addMedicationState extends State<add_medication> {
                                     switch(i){
                                       case 0: {
                                         print("1st switch i = 0 " + splitFull.last);
-                                        // tempMedicineDosage = double.parse(splitFull.last);
-                                        tempMedicineDosage = 0;
+                                        tempMedicineDosage = double.parse(splitFull.last);
                                       }
                                       break;
                                       case 1: {
@@ -294,9 +293,7 @@ class _addMedicationState extends State<add_medication> {
                                     switch(i%4){
                                       case 0: {
                                         print("2nd switch intensity lvl " + splitFull.last);
-                                        // tempMedicineDosage = double.parse(splitFull.last);
-
-                                        tempMedicineDosage=0;
+                                        tempMedicineDosage = double.parse(splitFull.last);
                                       }
                                       break;
                                       case 1: {

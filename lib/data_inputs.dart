@@ -47,7 +47,7 @@ class _AppSignUpState extends State<data_inputs> {
     super.initState();
     setState(() {
       print("SET STATE data input");
-      convertFutureListToListSymptom();
+      //convertFutureListToListSymptom();
       // convertFutureListToListMedication();
     });
   }
