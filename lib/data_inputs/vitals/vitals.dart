@@ -14,6 +14,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 
+import 'blood_cholesterol.dart';
 import 'blood_glucose.dart';
 import 'blood_pressure.dart';
 import 'heart_rate.dart';
@@ -277,7 +278,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => mainScreen()),
+                      MaterialPageRoute(builder: (context) => blood_cholesterol()),
                     );
                   },
                   child: Container(
