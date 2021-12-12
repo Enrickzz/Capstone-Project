@@ -160,7 +160,9 @@ class _symptomsState extends State<symptoms> {
                     ),
                   ).then((value) => setState((){
                     print("setstate symptoms");
-                    listtemp = value;
+                    if(value != null){
+                      listtemp = value;
+                    }
                     print("SYMP LENGTH AFTER SETSTATE  =="  + listtemp.length.toString() );
                   }));
                 },

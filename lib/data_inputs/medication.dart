@@ -157,7 +157,9 @@ class _medicationState extends State<medication> {
                     Future.delayed(const Duration(milliseconds: 1500), (){
                       setState((){
                         print("setstate medicines");
-                        medtemp = value;
+                        if(value != null){
+                          medtemp = value;
+                        }
                         print("medetmp.length == " +medtemp.length.toString());
                       });
                     }));

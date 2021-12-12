@@ -146,7 +146,9 @@ class _blood_pressureState extends State<blood_pressure> {
                     ),
                   ).then((value) => setState((){
                     print("setstate blood_pressure");
-                    bptemp = value;
+                    if(value != null){
+                      bptemp = value;
+                    }
                   }));
                 },
                 child: Icon(
