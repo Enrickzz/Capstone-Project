@@ -493,7 +493,7 @@ class _AppSignUpState extends State<data_inputs> {
     List<Medication> medication_list = new List<Medication>();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readMedication = databaseReference.child('users/' + uid + '/medications_list');
+    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
     String tempMedicineName = "";
     String tempMedicineType = "";
     String tempMedicineDate = "";

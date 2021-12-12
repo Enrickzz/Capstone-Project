@@ -193,13 +193,13 @@ class _addMedicationState extends State<add_medication> {
 
                                 // put it here
                                 medicine_date = "${medicineDate.month}/${medicineDate.day}/${medicineDate.year}"; // 08/14/2019
-                                AlertDialog alert = AlertDialog(
-                                  title: Text("My title"),
-                                  content: Text("This is my message."),
-                                  actions: [
-
-                                  ],
-                                );
+                                // AlertDialog alert = AlertDialog(
+                                //   title: Text("My title"),
+                                //   content: Text("This is my message."),
+                                //   actions: [
+                                //
+                                //   ],
+                                // );
 
                               });
                             }
@@ -241,14 +241,14 @@ class _addMedicationState extends State<add_medication> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final readMedication = databaseReference.child('users/' + uid + '/medications_list');
+                            final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
                             readMedication.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
                               List<String> temp = temp1.split(',');
                               Medication medicine;
                               if(datasnapshot.value == null){
-                                final medicationRef = databaseReference.child('users/' + uid + '/medications_list/' + 0.toString());
+                                final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + 0.toString());
                                 medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString()});
                                 print("Added medication Successfully! " + uid);
                               }
@@ -325,7 +325,7 @@ class _addMedicationState extends State<add_medication> {
                                 // symptoms_list.add(symptom);
 
                                 // print("symptom list  " + symptoms_list.toString());
-                                final medicationRef = databaseReference.child('users/' + uid + '/medications_list/' + count.toString());
+                                final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
                                 medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString()});
                                 print("Added Symptom Successfully! " + uid);
                               }

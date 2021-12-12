@@ -100,3 +100,31 @@ class Lab_Result {
     labResult_date = date;
   }
 }
+
+class Blood_Pressure {
+  String systolic_pressure;
+  String diastolic_pressure;
+  DateTime bp_date;
+
+  Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure, this.bp_date});
+
+  String get getSys_pres{
+    return systolic_pressure;
+  }
+  String get getDia_pres{
+    return diastolic_pressure;
+  }
+  DateTime get getDate{
+    return bp_date;
+  }
+  set setSys_pres (String sys){
+    systolic_pressure = sys;
+  }
+  set setDia_pres (String dia){
+    diastolic_pressure = dia;
+  }
+  set setDate (DateTime date){
+    bp_date = date;
+  }
+
+}

@@ -200,7 +200,7 @@ class _addSymptomsState extends State<add_symptoms> {
                     try{
                       final User user = auth.currentUser;
                       final uid = user.uid;
-                      final readsymptom = databaseReference.child('users/' + uid + '/symptoms_list/');
+                      final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
                       readsymptom.once().then((DataSnapshot datasnapshot) {
                         String temp1 = datasnapshot.value.toString();
                         print("temp1 " + temp1);
@@ -210,7 +210,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
 
                         if(datasnapshot.value == null){
-                          final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/' + 0.toString());
+                          final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 0.toString());
                           symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString()});
                           print("Added Symptom Successfully! " + uid);
                         }
@@ -287,7 +287,7 @@ class _addSymptomsState extends State<add_symptoms> {
                           }
                           count = symptoms_list.length;
                           print("count " + count.toString());
-                          final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list/' + count.toString());
+                          final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
                           symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString()});
                           print("Added Symptom Successfully! " + uid);
                         }

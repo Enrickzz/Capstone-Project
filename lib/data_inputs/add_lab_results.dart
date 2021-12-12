@@ -150,7 +150,7 @@ class _addLabResultState extends State<add_lab_results> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final readLabResult = databaseReference.child('users/' + uid + '/labResult_list');
+                            final readLabResult = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list');
                             readLabResult.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
@@ -160,7 +160,7 @@ class _addLabResultState extends State<add_lab_results> {
 
 
                               if(datasnapshot.value == null){
-                                final labResultRef = databaseReference.child('users/' + uid + '/labResult_list/' + 0.toString());
+                                final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + 0.toString());
                                 labResultRef.set({"labResult_name": lab_result_name.toString(), "labResult_date": lab_result_date.toString()});
                                 print("Added Lab Result Successfully! " + uid);
                               }
@@ -215,7 +215,7 @@ class _addLabResultState extends State<add_lab_results> {
                                 }
                                 count = labResult_list.length;
                                 print("count " + count.toString());
-                                final labResultRef = databaseReference.child('users/' + uid + '/labResult_list/' + count.toString());
+                                final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
                                 labResultRef.set({"labResult_name": lab_result_name.toString(), "labResult_date": lab_result_date.toString()});
                                 print("Added Lab Result Successfully! " + uid);
                               }
