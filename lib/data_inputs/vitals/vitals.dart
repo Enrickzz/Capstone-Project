@@ -14,6 +14,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 
+import '../../fitness_app_theme.dart';
 import 'blood_cholesterol.dart';
 import 'blood_glucose.dart';
 import 'blood_pressure.dart';
@@ -120,7 +121,13 @@ class _AppSignUpState extends State<vitals> {
                                             Colors.black.withOpacity(0.7),
                                             Colors.transparent
                                           ]
-                                      )
+                                      ),
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                            color: FitnessAppTheme.grey.withOpacity(0.6),
+                                            offset: Offset(1.1, 1.1),
+                                            blurRadius: 10.0),
+                                      ]
                                   )
                               ),
                             ),

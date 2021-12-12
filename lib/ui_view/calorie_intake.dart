@@ -76,7 +76,7 @@ class _calorie_intakeState extends State<calorie_intake> {
                                 dataSource: finaList,
                                 xValueMapper: (calorie_intake_data sales, _) => sales.date,
                                 yValueMapper: (calorie_intake_data sales, _) => sales.calories,
-                                color: Colors.red,
+                                color: Colors.purple,
                                 animationDuration: 5000, animationDelay: 500
                             ),
                           ],

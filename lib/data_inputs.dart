@@ -14,6 +14,7 @@ import 'package:my_app/data_inputs/symptoms.dart';
 import 'package:my_app/data_inputs/medication.dart';
 import 'package:my_app/data_inputs/vitals/vitals.dart';
 import 'data_inputs/medication.dart';
+import 'fitness_app_theme.dart';
 import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class data_inputs extends StatefulWidget {
@@ -306,6 +307,12 @@ class _AppSignUpState extends State<data_inputs> {
                                             bottomLeft: Radius.circular(50),
                                             bottomRight: Radius.circular(50),
                                           ),
+                                            boxShadow: <BoxShadow>[
+                                              BoxShadow(
+                                                  color: FitnessAppTheme.grey.withOpacity(1),
+                                                  offset: Offset(1.1, 1.5),
+                                                  blurRadius: 100.0),
+                                            ]
                                         ),
                                       ),
                                     ),
