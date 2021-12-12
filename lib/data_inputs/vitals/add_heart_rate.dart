@@ -18,6 +18,8 @@ import '../medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_heart_rate extends StatefulWidget {
+  final List<Heart_Rate> thislist;
+  add_heart_rate({this.thislist});
   @override
   _add_heart_rateState createState() => _add_heart_rateState();
 }
@@ -182,7 +184,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                         ),
                         color: Colors.blue,
                         onPressed:() {
-                          Navigator.pop(context);
+                          Navigator.pop(context, widget.thislist);
                         },
                       ),
                       FlatButton(
@@ -203,12 +205,14 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               Heart_Rate heartRate;
                               if(datasnapshot.value == null){
                                 final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + 0.toString());
-                                heartRateRef.set({"HR_bpm": beats.toString(), "isResting": parseBool(isResting.toString()), "hr_date": heartRate_date.toString()});
+
+                                bool thisBool = isResting.toLowerCase() =='true';
+                                heartRateRef.set({"HR_bpm": beats.toString(), "isResting": thisBool, "hr_date": heartRate_date.toString()});
                                 print("Added Heart Rate Successfully! " + uid);
                               }
                               else{
                                 String tempbeats = "";
-                                bool tempisResting;
+                                String tempisResting;
                                 String tempHeartRateDate;
                                 print(temp.length);
                                 for(var i = 0; i < temp.length; i++){
@@ -224,13 +228,14 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                       break;
                                       case 1: {
                                         print("1st switch i = 1 " + parseBool(splitFull.last).toString());
-                                        tempisResting = parseBool(splitFull.last);
+                                        tempisResting = splitFull.last;
                                       }
                                       break;
                                       case 2: {
                                         print("1st switch i = 3 " + splitFull.last);
                                         tempHeartRateDate = splitFull.last;
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: tempisResting, hr_date: format.parse(tempHeartRateDate));
+                                        bool thisBool = tempisResting.toLowerCase() =='true';
+                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: thisBool, hr_date: format.parse(tempHeartRateDate));
                                         heartRate_list.add(heartRate);
                                       }
                                       break;
@@ -243,12 +248,13 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                       }
                                       break;
                                       case 1: {
-                                        tempisResting = parseBool(splitFull.last);
+                                        tempisResting = splitFull.last;
                                       }
                                       break;
                                       case 2: {
                                         tempHeartRateDate = splitFull.last;
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: tempisResting, hr_date: format.parse(tempHeartRateDate));
+                                        bool thisBool = tempisResting.toLowerCase() =='true';
+                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: thisBool, hr_date: format.parse(tempHeartRateDate));
                                         heartRate_list.add(heartRate);
                                       }
                                       break;
@@ -280,11 +286,6 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               print("POP HERE ==========");
                               Navigator.pop(context, heartRate_list);
                             });
-
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => heart_rate()),
-                            );
 
                           } catch(e) {
                             print("you got an error! $e");
