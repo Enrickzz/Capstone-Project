@@ -81,10 +81,16 @@ class _LogInState extends State<LogIn> {
                     }
                     else if(isFTime == "true"){
                       print("True isFTime first time");
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => additional_data_collection()),
+                            (route) => false,
+                      );
                     }
                   });
                 });
                 print(isFTime);
+
 
               }
             });
