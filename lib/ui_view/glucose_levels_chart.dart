@@ -103,11 +103,11 @@ class _glucose_levelsState extends State<glucose_levels> {
     final User user = auth.currentUser;
     final uid = user.uid;
     final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-    final bmiRef = databaseReference.child('users/' +uid+'/vitals/health_records/glucose_levels/');
+    final bmiRef = databaseReference.child('users/' +uid+'/vitals/health_records/blood_glucose_list/');
     List<glucose_levels_data> tempList= new List();
     Future<void> getData() async{
       await bmiRef.once().then((DataSnapshot snapshot){
-        //print(snapshot.value);
+        print(snapshot.value);
         String temp1 = snapshot.value.toString();
         List<String> temp = temp1.split('},');
         List<String> tempFull = new List();
@@ -122,17 +122,19 @@ class _glucose_levelsState extends State<glucose_levels> {
           List<String> a = _1item[0].split(" ");
           if(i==0){
 
-            _1item[0] = _1item[0].replaceAll(_1item[0],a[2]);
-            _1item[1] = _1item[1].replaceAll("glucose_level: ", "");
-            //print(_1item[0] +"  "+_1item[1]+"\n\n");
-            tempList.add(new glucose_levels_data(_1item[0],double.parse(_1item[1])));
+            _1item[0] = _1item[0].replaceAll("[glucose: ", "");
+            _1item[1] = _1item[1].replaceAll("bloodGlucose_date: ", "");
+            print("======\n\n GLUCOSE \n\n======= \n0 = "+_1item[0] +"\n1 = "+_1item[1]+"\n\n");
+            tempList.add(new glucose_levels_data(_1item[1],double.parse(_1item[0])));
 
           }else{
             //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
-            _1item[0] = _1item[0].replaceAll(_1item[0],a[3]);
-            _1item[1] = _1item[1].replaceAll("glucose_level: ", "");
-            //print(_1item[0] +"  "+_1item[1]+"\n");
-            tempList.add(new glucose_levels_data(_1item[0],double.parse(_1item[1])));
+            _1item[0] = _1item[0].replaceAll("glucose: ", "");
+            _1item[1] = _1item[1].replaceAll("bloodGlucose_date: ", "");
+            print(_1item[0] +"  "+_1item[1]+"\n");
+            print("======\n\n GLUCOSE \n\n======= \n0 = "+_1item[0] +"\n1 = "+_1item[1]+"\n\n");
+
+            tempList.add(new glucose_levels_data(_1item[1],double.parse(_1item[0])));
           }
           //print(_1item[0] + "\n" + _1item[1] + "\n====================================");
         }

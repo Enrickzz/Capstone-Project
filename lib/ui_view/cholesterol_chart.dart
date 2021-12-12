@@ -26,7 +26,7 @@ class _blood_pressureState extends State<cholesterol_chart> {
   void initState(){
     super.initState();
     setState(() {
-      print("SET STATE BP");
+      // print("SET STATE BP");
       _getDefaultLineSeries();
       //finalLine = getLine(finaList);
     });
@@ -194,10 +194,10 @@ List<LineSeries<_ChartData, num>> _getDefaultLineSeries() {
           _1item[2] = _1item[2].replaceAll("triglycerides: ", "");
           _1item[0] = _1item[0].replaceAll("[", "");
           _1item[4] = _1item[4].replaceAll("]", "");
-          print("\n 1: " + _1item[0] + "\n2 =" + _1item[2]+ "\n3 =" + _1item[3]+ "\n4 =" + _1item[4]);
+          // print("\n 1: " + _1item[0] + "\n2 =" + _1item[2]+ "\n3 =" + _1item[3]+ "\n4 =" + _1item[4]);
           finaList.add(new _ChartData(counter,double.parse(_1item[0]),double.parse(_1item[2]),double.parse(_1item[3]),double.parse(_1item[4])));
           counter++;
-          print("counter == " +counter.toString());
+          // print("counter == " +counter.toString());
 
         }else{
           //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
@@ -208,10 +208,10 @@ List<LineSeries<_ChartData, num>> _getDefaultLineSeries() {
           _1item[2] = _1item[2].replaceAll("triglycerides: ", "");
           _1item[0] = _1item[0].replaceAll("[", "");
           _1item[4] = _1item[4].replaceAll("]", "");
-          print("\n 1: " + _1item[0] + "\n2 =" + _1item[2]+ "\n3 =" + _1item[3]+ "\n4 =" + _1item[4]);
+          // print("\n 1: " + _1item[0] + "\n2 =" + _1item[2]+ "\n3 =" + _1item[3]+ "\n4 =" + _1item[4]);
           finaList.add(new _ChartData(counter,double.parse(_1item[0]),double.parse(_1item[2]),double.parse(_1item[3]),double.parse(_1item[4])));
           counter++;
-          print("counter == " +counter.toString());
+          // print("counter == " +counter.toString());
 
         }
         //print(_1item[0] + "\n" + _1item[1] +"\n"+_1item[2] + "\n====================================");

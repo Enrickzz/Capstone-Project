@@ -12,6 +12,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
+import '../../fitness_app_theme.dart';
 import 'add_blood_glucose.dart';
 import 'add_blood_pressure.dart';
 import '../add_lab_results.dart';
@@ -139,10 +140,16 @@ class _blood_glucoseState extends State<blood_glucose> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_blood_glucose(),
+                      child: add_blood_glucose(thislist: bgtemp),
                     ),
                     ),
-                  );
+                  ).then((value) => setState((){
+                    print("setstate symptoms");
+                    if(value != null){
+                      bgtemp = value;
+                    }
+                    print("BGTEMP LENGTH AFTER SETSTATE  =="  + bgtemp.length.toString() );
+                  }));
                 },
                 child: Icon(
                   Icons.add,
@@ -150,6 +157,75 @@ class _blood_glucoseState extends State<blood_glucose> {
               )
           ),
         ],
+      ),
+      body: ListView.builder(
+        itemCount: bgtemp.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                height: 140,
+                child: Stack(
+                    children: [
+                      Positioned (
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                            height: 120,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                    bottomRight: Radius.circular(20)
+                                ),
+                                gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      Colors.white.withOpacity(0.7),
+                                      Colors.white
+                                    ]
+                                ),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: FitnessAppTheme.grey.withOpacity(0.6),
+                                      offset: Offset(1.1, 1.1),
+                                      blurRadius: 10.0),
+                                ]
+                            )
+                        ),
+                      ),
+                      Positioned(
+                        top: 25,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                  '' + bgtemp[index].getDate.toString()+" \n"
+                                      +"Status: "+bgtemp[index].getStatus+
+                                      "\n Blood Glucose: " + bgtemp[index].getGlucose.toString() + " mmol/L",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18
+                                  )
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]
+                )
+            ),
+          );
+        },
       ),
 
     );

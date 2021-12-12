@@ -18,6 +18,8 @@ import '../medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_blood_glucose extends StatefulWidget {
+  final List<Blood_Glucose> thislist;
+  add_blood_glucose({this.thislist});
   @override
   _add_blood_glucoseState createState() => _add_blood_glucoseState();
 }
@@ -261,10 +263,6 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                               print("POP HERE ==========");
                               Navigator.pop(context, glucose_list);
                             });
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => blood_glucose()),
-                            );
 
                           } catch(e) {
                             print("you got an error! $e");
