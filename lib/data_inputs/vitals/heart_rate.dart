@@ -12,6 +12,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
+import '../../fitness_app_theme.dart';
 import 'add_blood_pressure.dart';
 import 'add_heart_rate.dart';
 import '../add_lab_results.dart';
@@ -82,12 +83,15 @@ class _heart_rateState extends State<heart_rate> {
             break;
             case 1: {
               tempisResting = splitFull.last;
+              print("THIS IS RESTING  " + tempisResting);
 
             }
             break;
             case 2: {
               tempHRDate = splitFull.last;
-              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), isResting: parseBool(tempisResting), hr_date: format.parse(tempHRDate));
+              bool thisBool = tempisResting.toLowerCase() =='true';
+              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), isResting: thisBool, hr_date: format.parse(tempHRDate));
+              print("IS RESTING" + thisBool.toString());
               hrtemp.add(heartRate);
             }
             break;
@@ -100,9 +104,10 @@ class _heart_rateState extends State<heart_rate> {
         hrtemp[hrtemp.length-1-i] = temp;
       }
     });
-    // hrtemp = widget.hrlist;
+    hrtemp = widget.hrlist;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        print(hrtemp);
         print("setstate");
       });
     });
@@ -137,10 +142,15 @@ class _heart_rateState extends State<heart_rate> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_heart_rate(),
+                      child: add_heart_rate(thislist: hrtemp),
                     ),
                     ),
-                  );
+                  ).then((value) => setState((){
+                    print("setstate blood_pressure");
+                    if(value != null){
+                      hrtemp = value;
+                    }
+                  }));
                 },
                 child: Icon(
                   Icons.add,
@@ -149,6 +159,73 @@ class _heart_rateState extends State<heart_rate> {
           ),
         ],
       ),
+        body: ListView.builder(
+          itemCount: hrtemp.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  height: 140,
+                  child: Stack(
+                      children: [
+                        Positioned (
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                              height: 120,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                      bottomRight: Radius.circular(20)
+                                  ),
+                                  gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.white.withOpacity(0.7),
+                                        Colors.white
+                                      ]
+                                  ),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: FitnessAppTheme.grey.withOpacity(0.6),
+                                        offset: Offset(1.1, 1.1),
+                                        blurRadius: 10.0),
+                                  ]
+                              )
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                    '' + hrtemp[index].getDate.toString()+" " + hrtemp[index].getBPM.toString() + "/" + hrtemp[index].getisResting.toString() + "  " ,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18
+                                    )
+                                ),
+
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]
+                  )
+              ),
+            );
+          },
+        )
 
     );
   }

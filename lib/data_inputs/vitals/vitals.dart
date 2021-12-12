@@ -43,6 +43,7 @@ class _AppSignUpState extends State<vitals> {
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Blood_Pressure> thisbplist = new List<Blood_Pressure>();
+  List<Heart_Rate> thisHRlist = new List<Heart_Rate>();
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +146,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => heart_rate()),
+                      MaterialPageRoute(builder: (context) => heart_rate(hrlist: thisHRlist)),
                     );
                   },
                   child: Container(
