@@ -5,9 +5,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 import '../lab_results.dart';
@@ -25,9 +27,15 @@ class _add_body_temperatureState extends State<add_body_temperature> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
   double temperature = 0;
-  String unit = 'Celsius (°C)';
+  String unit = 'Celsius';
   String valueChoose;
-  List degrees = ["Celsius (°C)", "Fahrenheit (°F)", "Kelvin"];
+  List degrees = ["Celsius", "Fahrenheit"];
+  String temperature_date = "MM/DD/YYYY";
+  DateTime temperatureDate;
+  bool isDateSelected= false;
+  int count = 0;
+  List<Body_Temperature> body_temp_list = new List<Body_Temperature>();
+  DateFormat format = new DateFormat("MM/dd/yyyy");
 
 
   @override
@@ -69,7 +77,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                           Row(
                             children: [
                               Radio(
-                                value: "Celsius (°C)",
+                                value: "Celsius",
                                 groupValue: unit,
                                 onChanged: (value){
                                   setState(() {
@@ -82,7 +90,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                           Text("Celsius (°C)"),
                           SizedBox(width: 3),
                           Radio(
-                            value: "Fahrenheit (°F)",
+                            value: "Fahrenheit",
                             groupValue: unit,
                             onChanged: (value){
                               setState(() {
@@ -91,17 +99,6 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                             },
                           ),
                           Text("Fahrenheit (°F)"),
-                          SizedBox(width: 3),
-                          Radio(
-                            value: "Kelvin (K)",
-                            groupValue: unit,
-                            onChanged: (value){
-                              setState(() {
-                                this.unit = value;
-                              });
-                            },
-                          ),
-                          Text("Kelvin (K)"),
                           SizedBox(width: 3)
                         ],
                       )
@@ -144,6 +141,23 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                 firstDate: new DateTime(1900),
                                 lastDate: new DateTime(2100)
                             );
+                            if(datePick!=null && datePick!=temperatureDate){
+                              setState(() {
+                                temperatureDate=datePick;
+                                isDateSelected=true;
+
+                                // put it here
+                                temperature_date = "${temperatureDate.month}/${temperatureDate.day}/${temperatureDate.year}"; // 08/14/2019
+                                // AlertDialog alert = AlertDialog(
+                                //   title: Text("My title"),
+                                //   content: Text("This is my message."),
+                                //   actions: [
+                                //
+                                //   ],
+                                // );
+
+                              });
+                            }
 
                           }
                       ), Container(
@@ -204,6 +218,80 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
+                            final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
+                            readTemperature.once().then((DataSnapshot datasnapshot) {
+                              String temp1 = datasnapshot.value.toString();
+                              print("temp1 " + temp1);
+                              List<String> temp = temp1.split(',');
+
+                              Body_Temperature body_temperature;
+
+
+                              if(datasnapshot.value == null){
+                                final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + 0.toString());
+                                temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString()});
+                                print("Added Body Temperature Successfully! " + uid);
+                              }
+                              else{
+                                String tempUnit = "";
+                                String tempTemperature = "";
+                                String tempTemperatureDate = "";
+                                for(var i = 0; i < temp.length; i++){
+                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                  List<String> splitFull = full.split(" ");
+                                  if(i < 3){
+                                    print("i value" + i.toString());
+                                    switch(i){
+                                      case 0: {
+                                        print("1st switch tempUnit " + splitFull.last);
+                                        tempUnit = splitFull.last;
+                                      }
+                                      break;
+                                      case 1: {
+                                        print("1st switch tempTemperature " + splitFull.last);
+                                        tempTemperatureDate = splitFull.last;
+
+                                      }
+                                      break;
+                                      case 2: {
+                                        print("1st switch tempTemperatureDate " + splitFull.last);
+                                        tempTemperature = splitFull.last;
+                                        body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
+                                        body_temp_list.add(body_temperature);
+                                      }
+                                      break;
+                                    }
+                                  }
+                                  else{
+                                    print("i value" + i.toString());
+                                    print("i value modulu " + (i%3).toString());
+                                    switch(i%3){
+                                      case 0: {
+                                        tempUnit = splitFull.last;
+                                      }
+                                      break;
+                                      case 1: {
+                                        tempTemperatureDate = splitFull.last;
+                                      }
+                                      break;
+                                      case 2: {
+                                        tempTemperature = splitFull.last;
+                                        body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
+                                        body_temp_list.add(body_temperature);
+                                      }
+                                      break;
+                                    }
+                                  }
+
+                                }
+                                count = body_temp_list.length;
+                                print("count " + count.toString());
+                                final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
+                                temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString()});
+                                print("Added Body Temperature Successfully! " + uid);
+                              }
+
+                            });
 
                             Navigator.pushReplacement(
                               context,
