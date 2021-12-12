@@ -5,9 +5,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 import '../lab_results.dart';
@@ -24,10 +26,16 @@ class _add_blood_cholesterolState extends State<add_blood_cholesterol> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  double total_cholesterol;
-  double ldl_cholesterol;
-  double hdl_cholesterol;
-  double triglycerides;
+  double total_cholesterol = 0;
+  double ldl_cholesterol = 0;
+  double hdl_cholesterol = 0;
+  double triglycerides = 0;
+  DateTime cholesterolDate;
+  String cholesterol_date = "MM/DD/YYYY";
+  bool isDateSelected= false;
+  int count = 0;
+  List<Blood_Cholesterol> cholesterol_list = new List<Blood_Cholesterol>();
+  DateFormat format = new DateFormat("MM/dd/yyyy");
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +175,23 @@ class _add_blood_cholesterolState extends State<add_blood_cholesterol> {
                                 firstDate: new DateTime(1900),
                                 lastDate: new DateTime(2100)
                             );
+                            if(datePick!=null && datePick!=cholesterolDate){
+                              setState(() {
+                                cholesterolDate=datePick;
+                                isDateSelected=true;
 
+                                // put it here
+                                cholesterol_date = "${cholesterolDate.month}/${cholesterolDate.day}/${cholesterolDate.year}"; // 08/14/2019
+                                // AlertDialog alert = AlertDialog(
+                                //   title: Text("My title"),
+                                //   content: Text("This is my message."),
+                                //   actions: [
+                                //
+                                //   ],
+                                // );
+
+                              });
+                            }
                           }
                       ), Container(
                           child: Text(
@@ -206,11 +230,114 @@ class _add_blood_cholesterolState extends State<add_blood_cholesterol> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
+                            final readCholesterol = databaseReference.child('users/' + uid + '/vitals/health_records/blood_cholesterol_list');
+                            readCholesterol.once().then((DataSnapshot datasnapshot) {
+                              String temp1 = datasnapshot.value.toString();
+                              print("temp1 " + temp1);
+                              List<String> temp = temp1.split(',');
+                              Blood_Cholesterol cholesterol;
+                              if(datasnapshot.value == null){
+                                final cholesterolRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_cholesterol_list/' + 0.toString());
+                                cholesterolRef.set({"total_cholesterol": total_cholesterol.toString(), "ldl_cholesterol": ldl_cholesterol.toString(), "hdl_cholesterol": hdl_cholesterol.toString(), "triglycerides": triglycerides.toString(), "cholesterol_date": cholesterol_date.toString()});
+                                print("Added Blood Cholesterol Successfully! " + uid);
+                              }
+                              else{
+                                String tempTotalCholesterol = "";
+                                String tempLdlCholesterol = "";
+                                String tempHdlCholesterol = "";
+                                String tempTriglycerides = "";
+                                String tempCholesterolDate;
+                                for(var i = 0; i < temp.length; i++){
+                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                  List<String> splitFull = full.split(" ");
+                                  if(i < 5){
+                                    print("i value" + i.toString());
+                                    switch(i){
+                                      case 0: {
+                                        print("1st switch i = 0 " + splitFull.last);
+                                        tempTotalCholesterol = splitFull.last;
+                                      }
+                                      break;
+                                      case 1: {
+                                        print("1st switch i = 1 " + splitFull.last);
+                                        tempCholesterolDate = splitFull.last;
 
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => blood_cholesterol()),
-                            );
+                                      }
+                                      break;
+                                      case 2: {
+                                        print("1st switch i = 2 " + splitFull.last);
+                                        tempTriglycerides = splitFull.last;
+
+                                      }
+                                      break;
+                                      case 3: {
+                                        print("1st switch i = 3 " + splitFull.last);
+                                        tempLdlCholesterol = splitFull.last;
+
+                                      }
+                                      break;
+                                      case 4: {
+                                        print("1st switch i = 4 " + splitFull.last);
+                                        tempHdlCholesterol = splitFull.last;
+                                        cholesterol = new Blood_Cholesterol(total_cholesterol: double.parse(tempTotalCholesterol), ldl_cholesterol: double.parse(tempLdlCholesterol), hdl_cholesterol: double.parse(tempHdlCholesterol),triglycerides: double.parse(tempTriglycerides), cholesterol_date: format.parse(tempCholesterolDate));
+                                        cholesterol_list.add(cholesterol);
+                                      }
+                                      break;
+                                    }
+                                  }
+                                  else{
+                                    print("i value" + i.toString());
+                                    print("i value modulu " + (i%5).toString());
+                                    switch(i%5){
+                                      case 0: {
+                                        tempTotalCholesterol = splitFull.last;
+                                      }
+                                      break;
+                                      case 1: {
+                                        tempCholesterolDate = splitFull.last;
+                                      }
+                                      break;
+                                      case 2: {
+                                        tempTriglycerides = splitFull.last;
+                                      }
+                                      break;
+                                      case 3: {
+                                        tempLdlCholesterol = splitFull.last;
+                                      }
+                                      break;
+                                      case 4: {
+                                        tempHdlCholesterol = splitFull.last;
+                                        cholesterol = new Blood_Cholesterol(total_cholesterol: double.parse(tempTotalCholesterol), ldl_cholesterol: double.parse(tempLdlCholesterol), hdl_cholesterol: double.parse(tempHdlCholesterol),triglycerides: double.parse(tempTriglycerides), cholesterol_date: format.parse(tempCholesterolDate));
+                                        cholesterol_list.add(cholesterol);
+                                      }
+                                      break;
+                                    }
+                                  }
+
+                                }
+                                count = cholesterol_list.length;
+                                print("count " + count.toString());
+                                //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
+
+                                // symptoms_list.add(symptom);
+
+                                // print("symptom list  " + symptoms_list.toString());
+                                final cholesterolRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_cholesterol_list/' + count.toString());
+                                cholesterolRef.set({"total_cholesterol": total_cholesterol.toString(), "ldl_cholesterol": ldl_cholesterol.toString(), "hdl_cholesterol": hdl_cholesterol.toString(), "triglycerides": triglycerides.toString(), "cholesterol_date": cholesterol_date.toString()});
+                                print("Added Blood Cholesterol Successfully! " + uid);
+                              }
+
+                            });
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              cholesterol_list.add(new Blood_Cholesterol(total_cholesterol: total_cholesterol, ldl_cholesterol: ldl_cholesterol, hdl_cholesterol: hdl_cholesterol,triglycerides: triglycerides, cholesterol_date: format.parse(cholesterol_date)));
+                              for(var i=0;i<cholesterol_list.length/2;i++){
+                                var temp = cholesterol_list[i];
+                                cholesterol_list[i] = cholesterol_list[cholesterol_list.length-1-i];
+                                cholesterol_list[cholesterol_list.length-1-i] = temp;
+                              }
+                              print("POP HERE ==========");
+                              Navigator.pop(context, cholesterol_list);
+                            });
 
                           } catch(e) {
                             print("you got an error! $e");

@@ -30,14 +30,14 @@ class Symptom {
   DateTime get getDate{
     return symptom_date;
   }
-  set setName (String name){
-    symptom_name = name;
+  set setName (String temp){
+    symptom_name = temp;
   }
-  set setIntensity_lvl (int level){
-    intesity_lvl = level;
+  set setIntensity_lvl (int integer){
+    intesity_lvl = integer;
   }
-  set setFelt (String felt){
-    symptom_felt = felt;
+  set setFelt (String temp){
+    symptom_felt = temp;
   }
   set setDate (DateTime date){
     symptom_date = date;
@@ -67,14 +67,14 @@ class Medication {
   DateTime get getDate{
     return medicine_date;
   }
-  set setName (String name){
-    medicine_name = name;
+  set setName (String temp){
+    medicine_name = temp;
   }
-  set setDosage (double level){
-    medicine_dosage = level;
+  set setDosage (double number){
+    medicine_dosage = number;
   }
-  set setType (String felt){
-    medicine_type = felt;
+  set setType (String temp){
+    medicine_type = temp;
   }
   set setDate (DateTime date){
     medicine_date = date;
@@ -93,8 +93,8 @@ class Lab_Result {
   DateTime get getDate{
     return labResult_date;
   }
-  set setName (String name){
-    labResult_name = name;
+  set setName (String temp){
+    labResult_name = temp;
   }
   set setDate (DateTime date){
     labResult_date = date;
@@ -117,11 +117,11 @@ class Blood_Pressure {
   DateTime get getDate{
     return bp_date;
   }
-  set setSys_pres (String sys){
-    systolic_pressure = sys;
+  set setSys_pres (String temp){
+    systolic_pressure = temp;
   }
-  set setDia_pres (String dia){
-    diastolic_pressure = dia;
+  set setDia_pres (String temp){
+    diastolic_pressure = temp;
   }
   set setDate (DateTime date){
     bp_date = date;
@@ -145,11 +145,11 @@ class Heart_Rate {
   DateTime get getDate{
     return hr_date;
   }
-  set setBPM (int bpm){
-    this.bpm = bpm;
+  set setBPM (int integer){
+    bpm = integer;
   }
-  set setisResting (bool isresting){
-    isResting = isresting;
+  set setisResting (bool status){
+    isResting = status;
   }
   set setDate (DateTime date){
     hr_date = date;
@@ -173,11 +173,11 @@ class Body_Temperature {
   DateTime get getDate{
     return bt_date;
   }
-  set setUnit (String unit){
-    this.unit = unit;
+  set setUnit (String temp){
+    unit = temp;
   }
-  set setTemperature (double temperature){
-    this.temperature = temperature;
+  set setTemperature (double number){
+    temperature = number;
   }
   set setDate (DateTime date){
     bt_date = date;
@@ -201,6 +201,76 @@ class Oxygen_Saturation {
   }
   set setDate (DateTime date){
     os_date = date;
+  }
+
+}
+
+class Blood_Cholesterol {
+  double total_cholesterol;
+  double ldl_cholesterol;
+  double hdl_cholesterol;
+  double triglycerides;
+  DateTime cholesterol_date;
+
+  Blood_Cholesterol({this.total_cholesterol, this.ldl_cholesterol, this.hdl_cholesterol, this.triglycerides, this.cholesterol_date});
+
+  double get getTotalCholesterol {
+    return total_cholesterol;
+  }
+  double get getldlCholesterol {
+    return ldl_cholesterol;
+  }
+  double get gethdlCholesterol {
+    return hdl_cholesterol;
+  }
+  double get getTriglycerides {
+    return triglycerides;
+  }
+  DateTime get getDate{
+    return cholesterol_date;
+  }
+  set setTotalCholesterol (double number){
+    total_cholesterol = number;
+  }
+  set setldlCholesterol (double number){
+    ldl_cholesterol = number;
+  }
+  set sethdlCholesterol (double number){
+    hdl_cholesterol = number;
+  }
+  set setTriglycerides (double number){
+    triglycerides = number;
+  }
+  set setDate (DateTime date){
+    cholesterol_date = date;
+  }
+}
+
+class Blood_Glucose {
+  double glucose = 0;
+  String status = '';
+  DateTime bloodGlucose_date;
+  Blood_Glucose({this.glucose, this.status, this.bloodGlucose_date});
+
+  double get getGlucose {
+    return glucose;
+  }
+
+  String get getStatus {
+    return status;
+  }
+
+  DateTime get getDate{
+    return bloodGlucose_date;
+  }
+  set setGlucose (double number){
+    glucose = number;
+  }
+  set setStatus (String temp){
+    status = temp;
+  }
+  set setDate (DateTime date){
+    bloodGlucose_date = date;
   }
 
 }
