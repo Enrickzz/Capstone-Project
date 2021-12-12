@@ -123,8 +123,10 @@ class _medicationState extends State<medication> {
       }
     });
     medtemp = widget.medlist;
-    setState(() {
-      print("setstate");
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -161,10 +163,15 @@ class _medicationState extends State<medication> {
                       child: add_medication(thislist: medtemp),
                     ),
                     ),
-                  ).then((value) => setState((){
-                    print("setstate medicines");
-                    medtemp = value;
-                  }));
+                  ).then((value) =>
+                    Future.delayed(const Duration(milliseconds: 1500), (){
+                      setState((){
+                        print("setstate medicines");
+                        medtemp = value;
+                        print("medetmp.length == " +medtemp.length.toString());
+                      });
+                    }));
+
                 },
                 child: Icon(
                   Icons.add,

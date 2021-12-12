@@ -336,7 +336,12 @@ class _addMedicationState extends State<add_medication> {
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + medication_list.length.toString());
-
+                              medication_list.add(new Medication(medicine_name: medicine_name, medicine_type: medicine_type, medicine_dosage: medicine_dosage, medicine_date: format.parse(medicine_date)));
+                              for(var i=0;i<medication_list.length/2;i++){
+                                var temp = medication_list[i];
+                                medication_list[i] = medication_list[medication_list.length-1-i];
+                                medication_list[medication_list.length-1-i] = temp;
+                              }
                               print("POP HERE ==========");
                               Navigator.pop(context, medication_list);
                             });

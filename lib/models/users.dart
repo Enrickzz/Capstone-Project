@@ -79,15 +79,6 @@ class Medication {
   set setDate (DateTime date){
     medicine_date = date;
   }
-
-  Medication.fromSnapshot(DataSnapshot snapshot) {
-    medicine_name = snapshot.value["medicine_name"];
-    medicine_dosage = snapshot.value["medicine_dosage"];
-    medicine_date = snapshot.value["medicine_date"];
-    medicine_type = snapshot.value["medicine_type"];
-  }
-
-
 }
 
 class Lab_Result {
