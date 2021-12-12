@@ -43,7 +43,7 @@ class _symptomsState extends State<symptoms> {
   String height = "";
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Symptom> listtemp;
+  List<Symptom> listtemp=[];
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _symptomsState extends State<symptoms> {
     List<Symptom> symptomsList = new List<Symptom>();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final symptomsRef = databaseReference.child('users/' + uid +'/symptoms_list/');
+    final symptomsRef = databaseReference.child('users/' + uid +'/vitals/health_records/symptoms_list/');
     int tempIntesityLvl = 0;
     String tempSymptomName = "";
     String tempSymptomDate = "";

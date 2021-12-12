@@ -38,7 +38,7 @@ class _medicationState extends State<medication> {
     super.initState();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readMedication = databaseReference.child('users/' + uid + '/medications_list');
+    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
     String tempMedicineName = "";
     String tempMedicineType = "";
     String tempMedicineDate = "";

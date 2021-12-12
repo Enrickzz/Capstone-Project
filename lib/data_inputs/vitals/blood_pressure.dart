@@ -12,6 +12,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
+import '../../fitness_app_theme.dart';
 import 'add_blood_pressure.dart';
 import '../add_lab_results.dart';
 import '../add_medication.dart';
@@ -48,6 +49,7 @@ class _blood_pressureState extends State<blood_pressure> {
     String tempBPDate = "";
     DateFormat format = new DateFormat("MM/dd/yyyy");
     readBP.once().then((DataSnapshot datasnapshot) {
+      bptemp.clear();
       String temp1 = datasnapshot.value.toString();
       List<String> temp = temp1.split(',');
       Blood_Pressure blood_pressure = new Blood_Pressure();
@@ -70,6 +72,7 @@ class _blood_pressureState extends State<blood_pressure> {
             case 2: {
               tempSystolicPressure = splitFull.last;
               blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate));
+              print("THIS ===  " + blood_pressure.getDia_pres.toString());
               bptemp.add(blood_pressure);
             }
             break;
@@ -101,7 +104,7 @@ class _blood_pressureState extends State<blood_pressure> {
       }
     });
     bptemp = widget.bplist;
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         print(bptemp);
         print("setstate");
@@ -141,7 +144,10 @@ class _blood_pressureState extends State<blood_pressure> {
                       child: add_blood_pressure(thislist: bptemp),
                     ),
                     ),
-                  );
+                  ).then((value) => setState((){
+                    print("setstate blood_pressure");
+                    bptemp = value;
+                  }));
                 },
                 child: Icon(
                   Icons.add,
@@ -150,6 +156,73 @@ class _blood_pressureState extends State<blood_pressure> {
           ),
         ],
       ),
+      body: ListView.builder(
+      itemCount: bptemp.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          child: Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              height: 140,
+              child: Stack(
+                  children: [
+                    Positioned (
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                          height: 120,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                  bottomRight: Radius.circular(20)
+                              ),
+                              gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.white.withOpacity(0.7),
+                                    Colors.white
+                                  ]
+                              ),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: FitnessAppTheme.grey.withOpacity(0.6),
+                                    offset: Offset(1.1, 1.1),
+                                    blurRadius: 10.0),
+                              ]
+                          )
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                                '' + bptemp[index].getDate.toString()+" " + bptemp[index].getSys_pres + "/" + bptemp[index].getDia_pres.toString(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18
+                                )
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]
+              )
+          ),
+        );
+      },
+    ),
 
     );
   }

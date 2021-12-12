@@ -8,6 +8,7 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:my_app/data_inputs/vitals/body_temperature.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 
@@ -38,6 +39,7 @@ class _AppSignUpState extends State<vitals> {
   String height = "";
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
+  List<Blood_Pressure> thisbplist = new List<Blood_Pressure>();
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class _AppSignUpState extends State<vitals> {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => blood_pressure()),
+                      MaterialPageRoute(builder: (context) => blood_pressure(bplist: thisbplist)),
                     );
                   },
                   child: Container(

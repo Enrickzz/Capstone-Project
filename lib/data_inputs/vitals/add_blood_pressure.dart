@@ -201,7 +201,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                     switch(i){
                                       case 0: {
                                         print("1st switch i = 0 " + splitFull.last);
-                                        tempSystolicPressure = splitFull.last;
+                                        tempBPDate = format.parse(splitFull.last);
+
                                       }
                                       break;
                                       case 1: {
@@ -211,7 +212,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                       break;
                                       case 2: {
                                         print("1st switch i = 2 " + splitFull.last);
-                                        tempBPDate = format.parse(splitFull.last);
+                                        tempSystolicPressure = splitFull.last;
                                         bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: tempBPDate);
                                         bp_list.add(bloodPressure);
                                       }
@@ -224,7 +225,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                     switch(i%3){
                                       case 0: {
                                         print("2nd switch intensity lvl " + splitFull.last);
-                                        tempSystolicPressure = splitFull.last;
+                                        tempBPDate = format.parse(splitFull.last);
                                       }
                                       break;
                                       case 1: {
@@ -234,7 +235,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                       break;
                                       case 2: {
                                         print("2nd switch symptom date " + splitFull.last);
-                                        tempBPDate = format.parse(splitFull.last);
+                                        tempSystolicPressure = splitFull.last;
                                         bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: tempBPDate);
                                         bp_list.add(bloodPressure);
 
@@ -265,10 +266,10 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                             });
 
 
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => blood_pressure()),
-                            );
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => blood_pressure(bplist: bp_list)),
+                            // );
 
                           } catch(e) {
                             print("you got an error! $e");
