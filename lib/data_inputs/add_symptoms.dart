@@ -190,6 +190,9 @@ class _addSymptomsState extends State<add_symptoms> {
                           final hours = time.hour.toString().padLeft(2,'0');
                           final min = time.minute.toString().padLeft(2,'0');
                           print("time is " + hours + ":" + min);
+                          if(symptom_date!=null){
+                            symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year} $hours:$min";
+                          }
 
                         });
                       }
