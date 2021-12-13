@@ -33,6 +33,7 @@ class _addSymptomsState extends State<add_symptoms> {
   int count = 0;
   List<Symptom> symptoms_list = new List<Symptom>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
+  TimeOfDay time;
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +160,36 @@ class _addSymptomsState extends State<add_symptoms> {
                           //
                           //   ],
                           // );
+
+                        });
+                      }
+                    }
+                ), Container(
+                    child: Text(
+                        " MM/DD/YYYY ",
+                        style: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize,
+                          fontStyle: FontStyle.normal,
+                        )
+                    )
+                ),
+                GestureDetector(
+                    child: new Icon(Icons.timer),
+                    onTap: ()async{
+                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                      final newTime = await showTimePicker(
+                          context: context,
+                          initialTime: time ?? initialTime,
+
+                      );
+                      if(newTime!=null && newTime!=time){
+                        setState(() {
+                          time = newTime;
+                          final hours = time.hour.toString().padLeft(2,'0');
+                          final min = time.minute.toString().padLeft(2,'0');
+                          print("time is " + hours + ":" + min);
 
                         });
                       }
