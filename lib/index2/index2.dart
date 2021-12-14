@@ -109,236 +109,240 @@ class _index2State extends State<index2>
           centerTitle: true,
           backgroundColor: Colors.white,
         ),
-        body: Container(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: Form(
-                  key: _formKey,
-                    autovalidate: true,
-                    child: Row (
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.search),
-                              hintText: 'Search here',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
-                                )
-                              ),
-                              filled: true,
-                              errorStyle: TextStyle(fontSize: 15),
-                              contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        ElevatedButton(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                              child: Text('Search', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                              ),
-                            ),
-                            onPressed: () async{
-                            },
-                          ),
-                      ]
-                    )),
-              ),
-              SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 24),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 230,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                              top: 35,
-                              left: 5,
-                              child: Material(
-
-                                child: Container(
-                                  height: 180.0,
-                                  width: 340,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          blurRadius: 20.0)],
-                                  )
-                                ),
-
-                              )),
-                          Positioned(
-                            top: 0,
-                            left: 13,
-                            child: Card(
-                              elevation: 10.0,
-                              shadowColor: Colors.grey.withOpacity(0.5),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Container(
-                                height: 200,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  image: DecorationImage(
-                                    fit:BoxFit.cover,
-                                    image: AssetImage("assets/images/bloodpressure.jpg")
-                                  )
-                                ),
-                              )
-                            )
-                          ),
-                          Positioned(
-                              top:45,
-                              left: 175,
-                              child: Container(
-                                height: 150,
-                                width: 160,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Sinigang na Baboy",
-                                    style: TextStyle(
-                                      fontSize:18,
-                                      color:Color(0xFF363f93),
-                                      fontWeight: FontWeight.bold
-                                    ),),
-                                    Text("Lunch",
-                                      style: TextStyle(
-                                          fontSize:16,
-                                          color:Colors.grey,
-                                          fontWeight: FontWeight.bold
-                                      ),),
-                                    Divider(color: Colors.blue),
-                                    Text("420kcal",
-                                      style: TextStyle(
-                                          fontSize:16,
-                                          color:Colors.grey,
-                                      ),),
-                                    Text("69g",
-                                      style: TextStyle(
-                                          fontSize:16,
-                                          color:Colors.grey,
-                                      ),),
-                                    Text("Other info",
-                                      style: TextStyle(
-                                        fontSize:16,
-                                        color:Colors.grey,
-                                      ),),
-                                  ]
-                                ),
-                              ))
-                        ]
-                      )
-                    ),
-                    Container(
-                        height: 230,
-                        child: Stack(
+        body: ListView.builder(
+          itemCount: 2,
+          itemBuilder: (context, index){
+            return Container(
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Form(
+                        autovalidateMode: AutovalidateMode.onUserInteraction, key: _formKey,
+                        child: Row (
                             children: [
-                              Positioned(
-                                  top: 35,
-                                  left: 5,
-                                  child: Material(
-
-                                    child: Container(
-                                        height: 180.0,
-                                        width: 340,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(5.0),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey.withOpacity(0.5),
-                                                blurRadius: 20.0)],
+                              Expanded(
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.search),
+                                    hintText: 'Search here',
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                        borderSide: BorderSide(
+                                          width: 0,
+                                          style: BorderStyle.none,
                                         )
                                     ),
+                                    filled: true,
+                                    errorStyle: TextStyle(fontSize: 15),
+                                    contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              ElevatedButton(
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                                  child: Text('Search', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                                  ),
+                                ),
+                                onPressed: () async{
+                                },
+                              ),
+                            ]
+                        )),
+                  ),
+                  SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 24),
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 230,
+                            child: Stack(
+                                children: [
+                                  Positioned(
+                                      top: 35,
+                                      left: 5,
+                                      child: Material(
 
-                                  )),
-                              Positioned(
-                                  top: 0,
-                                  left: 13,
-                                  child: Card(
-                                      elevation: 10.0,
-                                      shadowColor: Colors.grey.withOpacity(0.5),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15.0),
-                                      ),
-                                      child: Container(
-                                        height: 200,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10.0),
-                                            image: DecorationImage(
-                                                fit:BoxFit.cover,
-                                                image: AssetImage("assets/images/bloodcholesterol.jpg")
+                                        child: Container(
+                                            height: 180.0,
+                                            width: 340,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 20.0)],
                                             )
                                         ),
-                                      )
-                                  )
-                              ),
-                              Positioned(
-                                  top:45,
-                                  left: 175,
-                                  child: Container(
-                                    height: 150,
-                                    width: 160,
-                                    child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Dinuguan",
-                                            style: TextStyle(
-                                                fontSize:18,
-                                                color:Color(0xFF363f93),
-                                                fontWeight: FontWeight.bold
-                                            ),),
-                                          Text("Lunch",
-                                            style: TextStyle(
-                                                fontSize:16,
-                                                color:Colors.grey,
-                                                fontWeight: FontWeight.bold
-                                            ),),
-                                          Divider(color: Colors.blue),
-                                          Text("420kcal",
-                                            style: TextStyle(
-                                              fontSize:16,
-                                              color:Colors.grey,
-                                            ),),
-                                          Text("69g",
-                                            style: TextStyle(
-                                              fontSize:16,
-                                              color:Colors.grey,
-                                            ),),
-                                          Text("Other info",
-                                            style: TextStyle(
-                                              fontSize:16,
-                                              color:Colors.grey,
-                                            ),),
-                                        ]
-                                    ),
-                                  ))
-                            ]
-                        )
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
 
-        ),
+                                      )),
+                                  Positioned(
+                                      top: 0,
+                                      left: 13,
+                                      child: Card(
+                                          elevation: 10.0,
+                                          shadowColor: Colors.grey.withOpacity(0.5),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                          ),
+                                          child: Container(
+                                            height: 200,
+                                            width: 150,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10.0),
+                                                image: DecorationImage(
+                                                    fit:BoxFit.cover,
+                                                    image: AssetImage("assets/images/bloodpressure.jpg")
+                                                )
+                                            ),
+                                          )
+                                      )
+                                  ),
+                                  Positioned(
+                                      top:45,
+                                      left: 175,
+                                      child: Container(
+                                        height: 150,
+                                        width: 160,
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text("Sinigang na Baboy",
+                                                style: TextStyle(
+                                                    fontSize:18,
+                                                    color:Color(0xFF363f93),
+                                                    fontWeight: FontWeight.bold
+                                                ),),
+                                              Text("Lunch",
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    color:Colors.grey,
+                                                    fontWeight: FontWeight.bold
+                                                ),),
+                                              Divider(color: Colors.blue),
+                                              Text("420kcal",
+                                                style: TextStyle(
+                                                  fontSize:16,
+                                                  color:Colors.grey,
+                                                ),),
+                                              Text("69g",
+                                                style: TextStyle(
+                                                  fontSize:16,
+                                                  color:Colors.grey,
+                                                ),),
+                                              Text("Other info",
+                                                style: TextStyle(
+                                                  fontSize:16,
+                                                  color:Colors.grey,
+                                                ),),
+                                            ]
+                                        ),
+                                      ))
+                                ]
+                            )
+                        ),
+                        Container(
+                            height: 230,
+                            child: Stack(
+                                children: [
+                                  Positioned(
+                                      top: 35,
+                                      left: 5,
+                                      child: Material(
+
+                                        child: Container(
+                                            height: 180.0,
+                                            width: 340,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 20.0)],
+                                            )
+                                        ),
+
+                                      )),
+                                  Positioned(
+                                      top: 0,
+                                      left: 13,
+                                      child: Card(
+                                          elevation: 10.0,
+                                          shadowColor: Colors.grey.withOpacity(0.5),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                          ),
+                                          child: Container(
+                                            height: 200,
+                                            width: 150,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10.0),
+                                                image: DecorationImage(
+                                                    fit:BoxFit.cover,
+                                                    image: AssetImage("assets/images/bloodcholesterol.jpg")
+                                                )
+                                            ),
+                                          )
+                                      )
+                                  ),
+                                  Positioned(
+                                      top:45,
+                                      left: 175,
+                                      child: Container(
+                                        height: 150,
+                                        width: 160,
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text("Dinuguan",
+                                                style: TextStyle(
+                                                    fontSize:18,
+                                                    color:Color(0xFF363f93),
+                                                    fontWeight: FontWeight.bold
+                                                ),),
+                                              Text("Lunch",
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    color:Colors.grey,
+                                                    fontWeight: FontWeight.bold
+                                                ),),
+                                              Divider(color: Colors.blue),
+                                              Text("420kcal",
+                                                style: TextStyle(
+                                                  fontSize:16,
+                                                  color:Colors.grey,
+                                                ),),
+                                              Text("69g",
+                                                style: TextStyle(
+                                                  fontSize:16,
+                                                  color:Colors.grey,
+                                                ),),
+                                              Text("Other info",
+                                                style: TextStyle(
+                                                  fontSize:16,
+                                                  color:Colors.grey,
+                                                ),),
+                                            ]
+                                        ),
+                                      ))
+                                ]
+                            )
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+            );
+          },
+        ) ,
         backgroundColor: Colors.transparent,
       ),
 

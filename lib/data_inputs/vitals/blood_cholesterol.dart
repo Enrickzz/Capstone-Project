@@ -226,10 +226,10 @@ class _blood_cholesterolState extends State<blood_cholesterol> {
                               ),
                               Text(
                                   '' + bctemp[index].getDate.toString()+" \n"
-                                      + "TOTAL: " +bctemp[index].getTotalCholesterol.toString()+
-                                      "\nHDL: " + bctemp[index].gethdlCholesterol.toString() + " \n"
-                                      "LDL: "+ bctemp[index].getldlCholesterol.toString()+ " \n" +
-                                      "TRI: "+ bctemp[index].getTriglycerides.toString(),
+                                      + "TOTAL: " +bctemp[index].getTotalCholesterol.toString()+ " mmol/l"+
+                                      "\nHDL: " + bctemp[index].gethdlCholesterol.toString() + " mmol/l"+ " \n"
+                                      "LDL: "+ bctemp[index].getldlCholesterol.toString()+  " mmol/l"+" \n" +
+                                      "TRI: "+ bctemp[index].getTriglycerides.toString()+ " mmol/l",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18

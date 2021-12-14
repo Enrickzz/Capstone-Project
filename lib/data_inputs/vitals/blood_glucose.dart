@@ -210,13 +210,12 @@ class _blood_glucoseState extends State<blood_glucose> {
                               Text(
                                   '' + bgtemp[index].getDate.toString()+" \n"
                                       +"Status: "+bgtemp[index].getStatus+
-                                      "\n Blood Glucose: " + bgtemp[index].getGlucose.toString() + " mmol/L",
+                                      "\nBlood Glucose: " + bgtemp[index].getGlucose.toString() + " mg/dL",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
                                   )
                               ),
-
                             ],
                           ),
                         ),
