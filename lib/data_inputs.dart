@@ -86,85 +86,85 @@ class _AppSignUpState extends State<data_inputs> {
               children: <Widget>[
                 GestureDetector(
                   onTap:(){
-                    getSymptoms;
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => symptoms(symptomlist1: thislist)),
+                      MaterialPageRoute(builder: (context) => vitals()),
                     );
                   },
                   child: Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
                       height: 140,
                       child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset('assets/images/symptoms.jpg',
-                              fit: BoxFit.cover
+                          children: [
+                            Positioned.fill(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset('assets/images/vitals.jpg',
+                                    fit: BoxFit.cover
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned (
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: 120,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20)
-                                ),
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    Colors.black.withOpacity(0.7),
-                                    Colors.transparent
-                                  ]
-                                )
-                              )
+                            Positioned (
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20)
+                                      ),
+                                      gradient: LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Colors.black.withOpacity(0.7),
+                                            Colors.transparent
+                                          ]
+                                      )
+                                  )
+                              ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
+                            Positioned(
+                              bottom: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(5),
-                                        child: Container(
-                                            child: Image.asset('assets/images/symptoms2.jpg'),
-                                          height:30,
-                                          width: 30,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(50),
-                                              bottomRight: Radius.circular(50),
-                                            ),
+                                      child: Container(
+                                        child: Image.asset('assets/images/vitals2.png'),
+                                        height:30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(50),
+                                            bottomRight: Radius.circular(50),
                                           ),
                                         ),
+                                      ),
                                     ),
                                     SizedBox(
                                       width: 10,
                                     ),
                                     Text(
-                                          'Symptoms',
-                                          style: TextStyle(
+                                        'Recorded Vitals',
+                                        style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18
-                                          )
+                                        )
                                     )
                                   ],
+                                ),
                               ),
                             ),
-                          ),
-                        ]
+                          ]
                       )
                   ),
                 ),
+
                 GestureDetector(
                   onTap:(){
                     // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
@@ -235,6 +235,87 @@ class _AppSignUpState extends State<data_inputs> {
                                     ),
                                     Text(
                                         'Medication Intake',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18
+                                        )
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ]
+                      )
+                  ),
+                ),
+                GestureDetector(
+                  onTap:(){
+                    getSymptoms;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => symptoms(symptomlist1: thislist)),
+                    );
+                  },
+                  child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                      height: 140,
+                      child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset('assets/images/symptoms.jpg',
+                                    fit: BoxFit.cover
+                                ),
+                              ),
+                            ),
+                            Positioned (
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20)
+                                      ),
+                                      gradient: LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Colors.black.withOpacity(0.7),
+                                            Colors.transparent
+                                          ]
+                                      )
+                                  )
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      child: Container(
+                                        child: Image.asset('assets/images/symptoms2.jpg'),
+                                        height:30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(50),
+                                            bottomRight: Radius.circular(50),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                        'Symptoms',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18
@@ -321,86 +402,6 @@ class _AppSignUpState extends State<data_inputs> {
                                     ),
                                     Text(
                                         'Laboratory Results',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => vitals()),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 140,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/vitals.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Container(
-                                        child: Image.asset('assets/images/vitals2.png'),
-                                        height:30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(50),
-                                            bottomRight: Radius.circular(50),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Recorded Vitals',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18
