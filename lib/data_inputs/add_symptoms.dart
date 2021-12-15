@@ -35,6 +35,7 @@ class _addSymptomsState extends State<add_symptoms> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   TimeOfDay time;
 
+  bool isSwitched = false;
   String valueChoose;
   List<String> listItem = <String>[
     'Bleedings', 'Chest Tightness', 'Dizziness', 'Excess Phlegm', 'Excess Sputum',
@@ -161,6 +162,47 @@ class _addSymptomsState extends State<add_symptoms> {
                 setState(() => symptom_felt = val);
               },
             ),
+            SizedBox(height: 8.0),
+            SwitchListTile(
+                title: Text('Recurring Symptom'),
+                subtitle: Text('This sympyom is recurring'),
+                secondary: Icon(Icons.device_thermostat, size: 34.0, color: Colors.red),
+                controlAffinity: ListTileControlAffinity.trailing,
+                value: isSwitched,
+                onChanged: (value){
+                  setState(() {
+                    isSwitched = value;
+
+                  });
+                },
+            ),
+            SizedBox(height: 8.0),
+            TextFormField(
+              enabled: isSwitched,
+              showCursor: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(
+                    width:0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+                filled: true,
+                fillColor: Color(0xFFF2F3F5),
+                hintStyle: TextStyle(
+                    color: Color(0xFF666666),
+                    fontFamily: defaultFontFamily,
+                    fontSize: defaultFontSize),
+                hintText: "General Area where symptoms is felt",
+              ),
+              validator: (val) => val.isEmpty ? 'Enter General are where Symptom is felt' : null,
+              onChanged: (val){
+                setState(() => symptom_felt = val);
+
+              },
+            ),
+
             SizedBox(height: 8.0),
             Row(
               children: <Widget>[
