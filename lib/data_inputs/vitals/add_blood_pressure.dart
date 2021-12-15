@@ -29,6 +29,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
 
   String systolic_pressure = '';
   String diastolic_pressure = '';
+  String pressure_level = "";
   DateTime bpDate;
   String bp_time;
   String bp_date = "MM/DD/YYYY";
@@ -216,26 +217,58 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                               List<String> temp = temp1.split(',');
                               Blood_Pressure bloodPressure;
                               if(datasnapshot.value == null){
+                                if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
+                                  pressure_level = "low";
+                                  print(pressure_level);
+                                }
+                                else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                  pressure_level = "normal";
+                                  print(pressure_level);
+                                }
+                                else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                  pressure_level = "elevated";
+                                  print(pressure_level);
+                                }
+                                else if (int.parse(systolic_pressure) > 130  || int.parse(diastolic_pressure) > 80){
+                                  pressure_level = "high";
+                                  print(pressure_level);
+                                }
                                 final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + 0.toString());
-                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
+                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
                                 print("Added medication Successfully! " + uid);
                               }
                               else{
+                                if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
+                                  pressure_level = "low";
+                                  print(pressure_level);
+                                }
+                                else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                  pressure_level = "normal";
+                                  print(pressure_level);
+                                }
+                                else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                  pressure_level = "elevated";
+                                  print(pressure_level);
+                                }
+                                else if (int.parse(systolic_pressure) >= 130  || int.parse(diastolic_pressure) > 80){
+                                  pressure_level = "high";
+                                  print(pressure_level);
+                                }
                                 String tempSystolicPressure = "";
                                 String tempDiastolicPressure = "";
-                                String tempBPDate;
-                                String tempBPTime;
+                                String tempBPDate = "";
+                                String tempBPTime = "";
+                                String tempBPLvl = "";
 
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 4){
+                                  if(i < 5){
                                     print("i value" + i.toString());
                                     switch(i){
                                       case 0: {
                                         print("1st switch i = 0 " + splitFull.last);
                                         tempBPDate = splitFull.last;
-
                                       }
                                       break;
                                       case 1: {
@@ -246,13 +279,19 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                       break;
                                       case 2: {
                                         print("1st switch i = 1 " + splitFull.last);
-                                        tempBPTime = splitFull.last;
+                                        tempBPLvl = splitFull.last;
+
                                       }
                                       break;
                                       case 3: {
+                                        print("1st switch i = 1 " + splitFull.last);
+                                        tempBPTime = splitFull.last;
+                                      }
+                                      break;
+                                      case 4: {
                                         print("1st switch i = 2 " + splitFull.last);
                                         tempSystolicPressure = splitFull.last;
-                                        bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
+                                        bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
                                         bp_list.add(bloodPressure);
                                       }
                                       break;
@@ -261,11 +300,10 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                   else{
                                     print("i value" + i.toString());
                                     print("i value modulu " + (i%4).toString());
-                                    switch(i%4){
+                                    switch(i%5){
                                       case 0: {
                                         print("1st switch i = 0 " + splitFull.last);
                                         tempBPDate = splitFull.last;
-
                                       }
                                       break;
                                       case 1: {
@@ -276,13 +314,18 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                       break;
                                       case 2: {
                                         print("1st switch i = 1 " + splitFull.last);
-                                        tempBPTime = splitFull.last;
+                                        tempBPLvl = splitFull.last;
                                       }
                                       break;
                                       case 3: {
+                                        print("1st switch i = 1 " + splitFull.last);
+                                        tempBPTime = splitFull.last;
+                                      }
+                                      break;
+                                      case 4: {
                                         print("1st switch i = 2 " + splitFull.last);
                                         tempSystolicPressure = splitFull.last;
-                                        bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
+                                        bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
                                         bp_list.add(bloodPressure);
                                       }
                                       break;
@@ -293,14 +336,14 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 count = bp_list.length;
                                 print("count " + count.toString());
                                 final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
+                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
                                 print("Added Blood Pressure Successfully! " + uid);
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + bp_list.length.toString());
-                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time)));
+                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure,pressure_level: pressure_level, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time)));
                               for(var i=0;i<bp_list.length/2;i++){
                                 var temp = bp_list[i];
                                 bp_list[i] = bp_list[bp_list.length-1-i];

@@ -151,16 +151,20 @@ class Lab_Result {
 class Blood_Pressure {
   String systolic_pressure;
   String diastolic_pressure;
+  String pressure_level;
   DateTime bp_date;
   DateTime bp_time;
 
-  Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure, this.bp_date, this.bp_time});
+  Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure,this.pressure_level, this.bp_date, this.bp_time});
 
   String get getSys_pres{
     return systolic_pressure;
   }
   String get getDia_pres{
     return diastolic_pressure;
+  }
+  String get getLvl_pres{
+    return pressure_level;
   }
   DateTime get getDate{
     return bp_date;
@@ -173,6 +177,9 @@ class Blood_Pressure {
   }
   void setDia_pres (String temp){
     diastolic_pressure = temp;
+  }
+  void setLvl_pres (String temp){
+    pressure_level = temp;
   }
   void setDate (DateTime date){
     bp_date = date;

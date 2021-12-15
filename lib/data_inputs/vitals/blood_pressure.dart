@@ -46,6 +46,7 @@ class _blood_pressureState extends State<blood_pressure> {
     String tempDiastolicPressure = "";
     String tempBPDate = "";
     String tempBPTime = "";
+    String tempBPLvl = "";
     readBP.once().then((DataSnapshot datasnapshot) {
       bptemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -57,7 +58,7 @@ class _blood_pressureState extends State<blood_pressure> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 4){
+        if(i < 5){
           switch(i){
             case 0: {
               print("i is " + i.toString() + splitFull.last);
@@ -71,37 +72,50 @@ class _blood_pressureState extends State<blood_pressure> {
             break;
             case 2: {
               print("i is " + i.toString() + splitFull.last);
-              tempBPTime = splitFull.last;
 
+              tempBPLvl = splitFull.last;
             }
             break;
             case 3: {
               print("i is " + i.toString() + splitFull.last);
+              tempBPTime = splitFull.last;
+            }
+            break;
+            case 4: {
+              print("i is " + i.toString() + splitFull.last);
               tempSystolicPressure = splitFull.last;
-              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
+              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure,pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
               bptemp.add(blood_pressure);
             }
             break;
           }
         }
         else{
-          switch(i%4){
+          switch(i%5){
             case 0: {
+              print("i is " + i.toString() + splitFull.last);
               tempBPDate = splitFull.last;
             }
             break;
             case 1: {
+              print("i is " + i.toString() + splitFull.last);
               tempDiastolicPressure = splitFull.last;
             }
             break;
             case 2: {
-              tempBPTime = splitFull.last;
-
+              print("i is " + i.toString() + splitFull.last);
+              tempBPLvl = splitFull.last;
             }
             break;
             case 3: {
+              print("i is " + i.toString() + splitFull.last);
+              tempBPTime = splitFull.last;
+            }
+            break;
+            case 4: {
+              print("i is " + i.toString() + splitFull.last);
               tempSystolicPressure = splitFull.last;
-              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
+              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure,pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
               bptemp.add(blood_pressure);
             }
             break;
@@ -219,7 +233,7 @@ class _blood_pressureState extends State<blood_pressure> {
                               width: 10,
                             ),
                             Text(
-                                '' + getDateFormatted(bptemp[index].getDate.toString())+getTimeFormatted(bptemp[index].getTime.toString())+" "
+                                '' + getDateFormatted(bptemp[index].getDate.toString())+getTimeFormatted(bptemp[index].getTime.toString())+" " + bptemp[index].getLvl_pres.toString()
                                     +"\nBlood pressure: "+ bptemp[index].getSys_pres + "/" + bptemp[index].getDia_pres.toString(),
                                 style: TextStyle(
                                     color: Colors.black,
