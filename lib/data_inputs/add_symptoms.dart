@@ -299,6 +299,84 @@ class _addSymptomsState extends State<add_symptoms> {
                 ),
               ],
             ),
+            SizedBox(height: 8.0),
+            GestureDetector(
+              onTap: ()async{
+                final datePick= await showDatePicker(
+                    context: context,
+                    initialDate: new DateTime.now(),
+                    firstDate: new DateTime(1900),
+                    lastDate: new DateTime(2100)
+                );
+                if(datePick!=null && datePick!=symptomDate){
+                  setState(() {
+                    symptomDate=datePick;
+                    isDateSelected=true;
+
+                    // put it here
+                    symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}"; // 08/14/2019
+                    // AlertDialog alert = AlertDialog(
+                    //   title: Text("My title"),
+                    //   content: Text("This is my message."),
+                    //   actions: [
+                    //
+                    //   ],
+                    // );
+
+                  });
+                }
+
+                final initialTime = TimeOfDay(hour:12, minute: 0);
+                final newTime = await showTimePicker(
+                  context: context,
+                  initialTime: time ?? initialTime,
+                );
+                if(newTime!=null && newTime!=time){
+                  setState(() {
+                    time = newTime;
+                    final hours = time.hour.toString().padLeft(2,'0');
+                    final min = time.minute.toString().padLeft(2,'0');
+                    print("time is " + hours + ":" + min);
+                    symptom_time = "$hours:$min";
+
+                  });
+                }
+                else{
+                  print("AAAAAAAAAAA");
+                }
+              },
+              child: AbsorbPointer(
+                child: TextFormField(
+                  showCursor: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(
+                        width:0,
+                        style: BorderStyle.none,
+                      ),
+                    ),
+                    filled: true,
+                    fillColor: Color(0xFFF2F3F5),
+                    hintStyle: TextStyle(
+                        color: Color(0xFF666666),
+                        fontFamily: defaultFontFamily,
+                        fontSize: defaultFontSize),
+                    hintText: "Date and Time",
+                    prefixIcon: Icon(
+                      Icons.calendar_today,
+                      color: Color(0xFF666666),
+                      size: defaultIconSize,
+                    ),
+                  ),
+                  validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                  onChanged: (val){
+                    setState((){
+                    });
+                  },
+                ),
+              ),
+            ),
             SizedBox(height: 18.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -466,6 +544,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
     );
   }
+
   Widget buildSingleCheckbox(CheckBoxState checkbox) =>  Visibility(
     visible: isSwitched,
     child: CheckboxListTile(
@@ -479,4 +558,13 @@ class _addSymptomsState extends State<add_symptoms> {
       controlAffinity: ListTileControlAffinity.leading,
     ),
   );
+
+
+  String getText (String date){
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r$hours:$min";
+  }
+
 }
