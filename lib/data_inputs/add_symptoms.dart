@@ -45,10 +45,16 @@ class _addSymptomsState extends State<add_symptoms> {
     CheckBoxState(title: 'Evening')
 
   };
+//for pinch zoom body image
+  final double minScale = 1;
+  final double maxScale = 1.5;
+
 
   bool isSwitched = false;
-  String valueChoose;
-  List<String> listItem = <String>[
+  bool bodyIsSwitched = false;
+  String valueChooseSymptom;
+  String valueChooseGeneralArea;
+  List<String> listItemSymptoms = <String>[
     'Bleedings', 'Chest Tightness', 'Dizziness', 'Excess Phlegm', 'Excess Sputum',
     'Fatigue', 'Frequent Urination', 'Headaches', 'Imbalance', 'Involuntary Muscle Contractions',
     'Itchy Skin', 'Loss of Balance', 'Loss of Appetite', 'Muscle Cramps',
@@ -56,6 +62,21 @@ class _addSymptomsState extends State<add_symptoms> {
     'Seizures', 'Shortness of Breath', 'Skin Coloration',
     'Swollen Limbs','Swollen Muscles','Vertigo',
     'Vomiting', 'Wheezing', 'Yellowish Eyes', 'Others'
+  ];
+
+  List<String> listItemGeneralAreas = <String>[
+    'Abdominal', 'Acromial','Antecubital',
+    'Axillary', 'Brachial', 'Buccal',
+    'Carpal', 'Cephalic', 'Cervical',
+    'Coxal','Crural (leg)','Deltoid',
+    'Digital', 'Femoral','Fibular',
+    'Gluetal','Inguinal','Lumbar',
+    'Nasal', 'Occipital', 'Orbital',
+    'Oval','Patellar','Pelvic',
+    'Popliteal', 'Pubic','Sacral',
+    'Scapular', 'Sternal', 'Sural',
+    'Tarsal','Thoracic','Umbilical',
+    'Vertebral'
   ];
 
   String dropdownValue = 'Select Symptom';
@@ -104,16 +125,16 @@ class _addSymptomsState extends State<add_symptoms> {
                     iconSize: 36,
                     isExpanded: true,
                     underline: SizedBox(),
-                    value: valueChoose,
+                    value: valueChooseSymptom,
                     onChanged: (newValue){
                       setState(() {
-                        valueChoose = newValue;
+                        valueChooseSymptom = newValue;
 
                       });
 
                     },
 
-                    items: listItem.map((valueItem){
+                    items: listItemSymptoms.map((valueItem){
                         return DropdownMenuItem(
                             value: valueItem,
                             child: Text(valueItem)
@@ -149,31 +170,77 @@ class _addSymptomsState extends State<add_symptoms> {
                 setState(() => intesity_lvl = int.parse(val));
               },
             ),
+
             SizedBox(height: 8.0),
-            TextFormField(
-              showCursor: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(
-                    width:0,
-                    style: BorderStyle.none,
-                  ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.circular(15)
                 ),
-                filled: true,
-                fillColor: Color(0xFFF2F3F5),
-                hintStyle: TextStyle(
-                    color: Color(0xFF666666),
-                    fontFamily: defaultFontFamily,
-                    fontSize: defaultFontSize),
-                hintText: "General Area where symptoms is felt",
+                child: DropdownButton(
+                  dropdownColor: Colors.white,
+                  hint: Text("General Area of Symptom: "),
+                  icon: Icon(Icons.arrow_drop_down),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18
+                  ),
+                  iconSize: 36,
+                  isExpanded: true,
+                  underline: SizedBox(),
+                  value: valueChooseGeneralArea,
+                  onChanged: (newValue){
+                    setState(() {
+                      valueChooseGeneralArea = newValue;
+
+                    });
+
+                  },
+
+                  items: listItemGeneralAreas.map((valueItem){
+                    return DropdownMenuItem(
+                        value: valueItem,
+                        child: Text(valueItem)
+                    );
+                  },
+                  ).toList(),
+
+                ),
               ),
-              validator: (val) => val.isEmpty ? 'Enter General are where Symptom is felt' : null,
-              onChanged: (val){
-                setState(() => symptom_felt = val);
+            ),
+            SizedBox(height: 8.0),
+            SwitchListTile(
+              title: Text('Body General Areas'),
+              subtitle: Text('Show me General Areas of the Body'),
+              secondary: Icon(Icons.accessibility_new_rounded, size: 34.0, color: Colors.blue),
+              controlAffinity: ListTileControlAffinity.trailing,
+              value: bodyIsSwitched,
+              onChanged: (value){
+                setState(() {
+                  bodyIsSwitched = value;
+
+                });
               },
             ),
-            
+            Visibility(
+              visible: bodyIsSwitched,
+              child: InteractiveViewer(
+                  clipBehavior: Clip.none,
+                  minScale: minScale,
+                  maxScale: maxScale,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.asset('assets/images/body.PNG'
+                      ),
+                    ),
+                  ),
+              ),
+            ),
             SizedBox(height: 8.0),
             SwitchListTile(
                 title: Text('Recurring Symptom'),
@@ -214,7 +281,7 @@ class _addSymptomsState extends State<add_symptoms> {
                       fontSize: defaultFontSize),
                   hintText: "What situation triggers your symptom?",
                 ),
-                validator: (val) => val.isEmpty ? 'Enter General are where Symptom is felt' : null,
+                validator: (val) => val.isEmpty ? 'Enter General area where Symptom is felt' : null,
                 onChanged: (val){
                   setState(() => symptom_felt = val);
 
