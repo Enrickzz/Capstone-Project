@@ -8,6 +8,7 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/checkbox_state.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 
@@ -36,6 +37,14 @@ class _addSymptomsState extends State<add_symptoms> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
+
+  bool value = false;
+  final notifications ={
+    CheckBoxState(title: 'Morning'),
+    CheckBoxState(title: 'Afternoon'),
+    CheckBoxState(title: 'Evening')
+
+  };
 
   bool isSwitched = false;
   String valueChoose;
@@ -164,6 +173,7 @@ class _addSymptomsState extends State<add_symptoms> {
                 setState(() => symptom_felt = val);
               },
             ),
+            
             SizedBox(height: 8.0),
             SwitchListTile(
                 title: Text('Recurring Symptom'),
@@ -179,30 +189,38 @@ class _addSymptomsState extends State<add_symptoms> {
                 },
             ),
             SizedBox(height: 8.0),
-            TextFormField(
-              enabled: isSwitched,
-              showCursor: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(
-                    width:0,
-                    style: BorderStyle.none,
-                  ),
-                ),
-                filled: true,
-                fillColor: Color(0xFFF2F3F5),
-                hintStyle: TextStyle(
-                    color: Color(0xFF666666),
-                    fontFamily: defaultFontFamily,
-                    fontSize: defaultFontSize),
-                hintText: "General Area where symptoms is felt",
-              ),
-              validator: (val) => val.isEmpty ? 'Enter General are where Symptom is felt' : null,
-              onChanged: (val){
-                setState(() => symptom_felt = val);
+            ...notifications.map(buildSingleCheckbox).toList(),
 
-              },
+
+
+            SizedBox(height: 8.0),
+            Visibility(
+              visible: isSwitched,
+              child: TextFormField(
+                showCursor: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderSide: BorderSide(
+                      width:0,
+                      style: BorderStyle.none,
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFF2F3F5),
+                  hintStyle: TextStyle(
+                      color: Color(0xFF666666),
+                      fontFamily: defaultFontFamily,
+                      fontSize: defaultFontSize),
+                  hintText: "What situation triggers your symptom?",
+                ),
+                validator: (val) => val.isEmpty ? 'Enter General are where Symptom is felt' : null,
+                onChanged: (val){
+                  setState(() => symptom_felt = val);
+
+                },
+              ),
+
             ),
 
             SizedBox(height: 8.0),
@@ -448,4 +466,17 @@ class _addSymptomsState extends State<add_symptoms> {
 
     );
   }
+  Widget buildSingleCheckbox(CheckBoxState checkbox) =>  Visibility(
+    visible: isSwitched,
+    child: CheckboxListTile(
+      activeColor: Colors.green,
+      value: checkbox.value,
+      title: Text(
+          checkbox.title
+      ),
+      subtitle: Text('I experience this symptom every ' + checkbox.title.toLowerCase()),
+      onChanged: (value) => setState(() => checkbox.value = value),
+      controlAffinity: ListTileControlAffinity.leading,
+    ),
+  );
 }
