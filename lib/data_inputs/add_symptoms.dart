@@ -49,10 +49,14 @@ class _addSymptomsState extends State<add_symptoms> {
 //for pinch zoom body image
   final double minScale = 1;
   final double maxScale = 1.5;
+  final double minScalePain = 1;
+  final double maxScalePain = 4;
+
 
 
   bool isSwitched = false;
   bool bodyIsSwitched = false;
+  bool painIsSwitched = false;
   String valueChooseSymptom;
   String valueChooseGeneralArea;
   List<String> listItemSymptoms = <String>[
@@ -172,6 +176,36 @@ class _addSymptomsState extends State<add_symptoms> {
               onChanged: (val){
                 setState(() => intesity_lvl = int.parse(val));
               },
+            ),
+            SizedBox(height: 8.0),
+            SwitchListTile(
+              title: Text('The Universal Pain Assessment Tool (UPAT)'),
+              subtitle: Text('Show me the UPAT'),
+              secondary: Icon(Icons.accessibility_new_rounded, size: 34.0, color: Colors.blue),
+              controlAffinity: ListTileControlAffinity.trailing,
+              value: painIsSwitched,
+              onChanged: (value){
+                setState(() {
+                  painIsSwitched = value;
+
+                });
+              },
+            ),
+            Visibility(
+              visible: painIsSwitched,
+              child: InteractiveViewer(
+                clipBehavior: Clip.none,
+                minScale: minScalePain,
+                maxScale: maxScalePain,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset('assets/images/pain.png'
+                    ),
+                  ),
+                ),
+              ),
             ),
 
             SizedBox(height: 8.0),
