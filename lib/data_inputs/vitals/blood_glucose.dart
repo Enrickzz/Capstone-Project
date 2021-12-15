@@ -33,8 +33,6 @@ class _blood_glucoseState extends State<blood_glucose> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Blood_Glucose> bgtemp = [];
-  DateFormat format = new DateFormat("MM/dd/yyyy");
-  DateFormat timeformat = new DateFormat("hh:mm");
 
   @override
   void initState() {
@@ -44,8 +42,8 @@ class _blood_glucoseState extends State<blood_glucose> {
     final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
     String tempGlucose = "";
     String tempStatus = "";
-    String tempGlucoseDate = "";
-    String tempGlucoseTime = "";
+    String tempGlucoseDate;
+    DateFormat format = new DateFormat("MM/dd/yyyy");
     readMedication.once().then((DataSnapshot datasnapshot) {
       bgtemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -57,52 +55,42 @@ class _blood_glucoseState extends State<blood_glucose> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 4){
+        if(i < 3){
           print("i value" + i.toString());
           switch(i){
             case 0: {
-              print("i value " + i.toString() + splitFull.last);
+              print("1st switch i = 0 " + splitFull.last);
               tempGlucose = splitFull.last;
             }
             break;
             case 1: {
-              print("i value " + i.toString() + splitFull.last);
-              tempGlucoseTime = splitFull.last;
+              print("1st switch i = 2 " + splitFull.last);
+              tempGlucoseDate = splitFull.last;
 
             }
             break;
             case 2: {
-              print("i value " + i.toString() + splitFull.last);
-              tempGlucoseDate = splitFull.last;
-            }
-            break;
-            case 3: {
-              print("i value " + i.toString() + splitFull.last);
+              print("1st switch i = 3 " + splitFull.last);
               tempStatus = splitFull.last;
-              bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate), bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+              bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate));
               bgtemp.add(bloodGlucose);
             }
             break;
           }
         }
         else{
-          switch(i%4){
+          switch(i%3){
             case 0: {
               tempGlucose = splitFull.last;
             }
             break;
             case 1: {
-              tempGlucoseTime = splitFull.last;
-
-            }
-            break;
-            case 2: {
               tempGlucoseDate = splitFull.last;
             }
             break;
-            case 3: {
+            case 2: {
               tempStatus = splitFull.last;
-              bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate), bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+              bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate));
               bgtemp.add(bloodGlucose);
             }
             break;
@@ -220,7 +208,7 @@ class _blood_glucoseState extends State<blood_glucose> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + getDateFormatted(bgtemp[index].getDate.toString())+getTimeFormatted(bgtemp[index].getTime.toString())+" \n"
+                                  '' + bgtemp[index].getDate.toString()+" \n"
                                       +"Status: "+bgtemp[index].getStatus+
                                       "\nBlood Glucose: " + bgtemp[index].getGlucose.toString() + " mg/dL",
                                   style: TextStyle(
@@ -240,15 +228,5 @@ class _blood_glucoseState extends State<blood_glucose> {
       ),
 
     );
-  }
-  String getDateFormatted (String date){
-    var dateTime = DateTime.parse(date);
-    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
-  }
-  String getTimeFormatted (String date){
-    var dateTime = DateTime.parse(date);
-    var hours = dateTime.hour.toString().padLeft(2, "0");
-    var min = dateTime.minute.toString().padLeft(2, "0");
-    return "$hours:$min";
   }
 }

@@ -255,21 +255,23 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
                               List<String> temp = temp1.split(',');
-                              Body_Temperature body_temperature = new Body_Temperature();
+
+                              Body_Temperature body_temperature;
+
+
                               if(datasnapshot.value == null){
                                 final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + 0.toString());
-                                temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString()});
+                                temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString()});
                                 print("Added Body Temperature Successfully! " + uid);
                               }
                               else{
                                 String tempUnit = "";
                                 String tempTemperature = "";
                                 String tempTemperatureDate = "";
-                                String tempTemperatureTime = "";
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 4){
+                                  if(i < 3){
                                     print("i value" + i.toString());
                                     switch(i){
                                       case 0: {
@@ -278,19 +280,15 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                       }
                                       break;
                                       case 1: {
-                                        print("1st switch tempTemperaturedate " + splitFull.last);
+                                        print("1st switch tempTemperature " + splitFull.last);
                                         tempTemperatureDate = splitFull.last;
+
                                       }
                                       break;
                                       case 2: {
-                                        print("1st switch tempTemperaturetime " + splitFull.last);
+                                        print("1st switch tempTemperatureDate " + splitFull.last);
                                         tempTemperature = splitFull.last;
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("1st switch tempTemperature " + splitFull.last);
-                                        tempTemperatureTime = splitFull.last;
-                                        body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
+                                        body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
                                         body_temp_list.add(body_temperature);
                                       }
                                       break;
@@ -299,26 +297,18 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                   else{
                                     print("i value" + i.toString());
                                     print("i value modulu " + (i%3).toString());
-                                    switch(i%4){
+                                    switch(i%3){
                                       case 0: {
-                                        print("1st switch tempUnit " + splitFull.last);
                                         tempUnit = splitFull.last;
                                       }
                                       break;
                                       case 1: {
-                                        print("1st switch tempTemperaturedate " + splitFull.last);
                                         tempTemperatureDate = splitFull.last;
                                       }
                                       break;
                                       case 2: {
-                                        print("1st switch tempTemperaturetime " + splitFull.last);
                                         tempTemperature = splitFull.last;
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("1st switch tempTemperature " + splitFull.last);
-                                        tempTemperatureTime = splitFull.last;
-                                        body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
+                                        body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
                                         body_temp_list.add(body_temperature);
                                       }
                                       break;
@@ -329,7 +319,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                 count = body_temp_list.length;
                                 print("count " + count.toString());
                                 final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                                temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString()});
+                                temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString()});
                                 print("Added Body Temperature Successfully! " + uid);
                               }
 
@@ -337,7 +327,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
 
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("SYMPTOMS LENGTH: " + body_temp_list.length.toString());
-                              body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time)));
+                              body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date)));
                               for(var i=0;i<body_temp_list.length/2;i++){
                                 var temp = body_temp_list[i];
                                 body_temp_list[i] = body_temp_list[body_temp_list.length-1-i];

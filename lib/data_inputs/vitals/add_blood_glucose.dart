@@ -218,18 +218,17 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                               Blood_Glucose bloodGlucose;
                               if(datasnapshot.value == null){
                                 final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + 0.toString());
-                                glucoseRef.set({"glucose": glucose.toString(), "status": status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
+                                glucoseRef.set({"glucose": glucose.toString(), "status": status.toString(), "bloodGlucose_date": glucose_date.toString()});
                                 print("Added Blood Glucose Successfully! " + uid);
                               }
                               else{
                                 String tempGlucose = "";
                                 String tempStatus = "";
-                                String tempGlucoseDate = "";
-                                String tempGlucoseTime = "";
+                                String tempGlucoseDate;
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 4){
+                                  if(i < 3){
                                     print("i value" + i.toString());
                                     switch(i){
                                       case 0: {
@@ -239,52 +238,33 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                       break;
                                       case 1: {
                                         print("1st switch i = 2 " + splitFull.last);
-                                        tempGlucoseTime = splitFull.last;
-
+                                        tempGlucoseDate = splitFull.last;
 
                                       }
                                       break;
                                       case 2: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempGlucoseDate = splitFull.last;
-
-
-                                      }
-                                      break;
-                                      case 3: {
                                         print("1st switch i = 3 " + splitFull.last);
                                         tempStatus = splitFull.last;
-                                        bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate), bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+                                        bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate));
                                         glucose_list.add(bloodGlucose);
                                       }
                                       break;
                                     }
                                   }
                                   else{
-                                    switch(i%4){
+                                    switch(i%3){
                                       case 0: {
-                                        print("1st switch i = 0 " + splitFull.last);
                                         tempGlucose = splitFull.last;
                                       }
                                       break;
                                       case 1: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempGlucoseTime = splitFull.last;
-
-
+                                        tempGlucoseDate = splitFull.last;
                                       }
                                       break;
                                       case 2: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempGlucoseDate = splitFull.last;
 
-
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("1st switch i = 3 " + splitFull.last);
                                         tempStatus = splitFull.last;
-                                        bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate), bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+                                        bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate));
                                         glucose_list.add(bloodGlucose);
                                       }
                                       break;
@@ -300,13 +280,13 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
 
                                 // print("symptom list  " + symptoms_list.toString());
                                 final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
-                                glucoseRef.set({"glucose": glucose.toString(), "status": status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
+                                glucoseRef.set({"glucose": glucose.toString(), "status": status.toString(), "bloodGlucose_date": glucose_date.toString()});
                                 print("Added Blood Glucose Successfully! " + uid);
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              glucose_list.add(new Blood_Glucose(glucose: glucose, status: status, bloodGlucose_date: format.parse(glucose_date), bloodGlucose_time: timeformat.parse(glucose_time)));
+                              glucose_list.add(new Blood_Glucose(glucose: glucose, status: status, bloodGlucose_date: format.parse(glucose_date)));
                               for(var i=0;i<glucose_list.length/2;i++){
                                 var temp = glucose_list[i];
                                 glucose_list[i] = glucose_list[glucose_list.length-1-i];

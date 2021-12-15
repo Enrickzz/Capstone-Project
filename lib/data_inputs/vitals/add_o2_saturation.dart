@@ -194,17 +194,16 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                               Oxygen_Saturation oxygen;
                               if(datasnapshot.value == null){
                                 final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + 0.toString());
-                                oxygenRef.set({"oxygen_saturation": spo2.toString(), "os_date": oxygen_date.toString(), "os_time":oxygen_time.toString()});
+                                oxygenRef.set({"oxygen_saturation": spo2.toString(), "os_date": oxygen_date.toString()});
                                 print("Added Oxygen Saturation Successfully! " + uid);
                               }
                               else{
                                 String tempOxygen = "";
-                                String tempOxygenDate = "";
-                                String tempOxygenTime = "";
+                                String tempOxygenDate;
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 3){
+                                  if(i < 2){
                                     print("i value" + i.toString());
                                     switch(i){
                                       case 0: {
@@ -213,33 +212,23 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                       }
                                       break;
                                       case 1: {
-                                        print("1st switch i = 1 " + splitFull.last);
+                                        print("1st switch i = 3 " + splitFull.last);
                                         tempOxygenDate = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempOxygenTime = splitFull.last;
-                                        oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
+                                        oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
                                         oxygen_list.add(oxygen);
                                       }
                                       break;
                                     }
                                   }
                                   else{
-                                    switch(i%3){
+                                    switch(i%2){
                                       case 0: {
                                         tempOxygen = splitFull.last;
                                       }
                                       break;
                                       case 1: {
-
                                         tempOxygenDate = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        tempOxygenTime = splitFull.last;
-                                        oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
+                                        oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
                                         oxygen_list.add(oxygen);
                                       }
                                       break;
@@ -255,7 +244,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
 
                                 // print("symptom list  " + symptoms_list.toString());
                                 final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + count.toString());
-                                oxygenRef.set({"oxygen_saturation": spo2.toString(), "os_date": oxygen_date.toString(), "os_time":oxygen_time.toString()});
+                                oxygenRef.set({"oxygen_saturation": spo2.toString(), "os_date": oxygen_date.toString()});
                                 print("Added Oxygen Saturation Successfully! " + uid);
                               }
 
@@ -263,7 +252,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
 
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + oxygen_list.length.toString());
-                              oxygen_list.add(new Oxygen_Saturation(oxygen_saturation: spo2, os_date: format.parse(oxygen_date), os_time: timeformat.parse(oxygen_time)));
+                              oxygen_list.add(new Oxygen_Saturation(oxygen_saturation: spo2, os_date: format.parse(oxygen_date)));
                               for(var i=0;i<oxygen_list.length/2;i++){
                                 var temp = oxygen_list[i];
                                 oxygen_list[i] = oxygen_list[oxygen_list.length-1-i];
