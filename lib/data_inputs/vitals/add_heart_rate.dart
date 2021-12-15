@@ -235,56 +235,71 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               Heart_Rate heartRate;
                               if(datasnapshot.value == null){
                                 final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + 0.toString());
-
                                 bool thisBool = isResting.toLowerCase() =='true';
-                                heartRateRef.set({"HR_bpm": beats.toString(), "isResting": thisBool, "hr_date": heartRate_date.toString()});
+                                heartRateRef.set({"HR_bpm": beats.toString(), "isResting": thisBool, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                 print("Added Heart Rate Successfully! " + uid);
                               }
                               else{
                                 String tempbeats = "";
                                 String tempisResting;
                                 String tempHeartRateDate;
+                                String tempHeartRateTime;
                                 print(temp.length);
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 3){
+                                  if(i < 4){
                                     print("i value" + i.toString());
                                     switch(i){
                                       case 0: {
                                         print("1st switch i = 0 " + splitFull.last);
-                                        tempbeats = splitFull.last;
+                                        tempHeartRateTime = splitFull.last;
                                       }
                                       break;
                                       case 1: {
-                                        print("1st switch i = 1 " + parseBool(splitFull.last).toString());
-                                        tempisResting = splitFull.last;
+                                        print("1st switch i = 1 " + splitFull.last);
+                                        tempbeats = splitFull.last;
+
                                       }
                                       break;
                                       case 2: {
+                                        print("1st switch i = 1 " + splitFull.last);
+                                        tempisResting = splitFull.last;
+
+                                      }
+                                      break;
+                                      case 3: {
                                         print("1st switch i = 3 " + splitFull.last);
                                         tempHeartRateDate = splitFull.last;
                                         bool thisBool = tempisResting.toLowerCase() =='true';
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: thisBool, hr_date: format.parse(tempHeartRateDate));
+                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: thisBool, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
                                         heartRate_list.add(heartRate);
                                       }
                                       break;
                                     }
                                   }
                                   else{
-                                    switch(i%3){
+                                    switch(i%4){
                                       case 0: {
-                                        tempbeats = splitFull.last;
+                                        print("2nd switch i = " + i.toString() + splitFull.last);
+                                        tempHeartRateTime = splitFull.last;
                                       }
                                       break;
                                       case 1: {
-                                        tempisResting = splitFull.last;
+                                        print("2nd switch i = " + i.toString() + splitFull.last);
+                                        tempbeats = splitFull.last;
                                       }
                                       break;
                                       case 2: {
+                                        print("2nd switch i = " + i.toString() + splitFull.last);
+                                        tempisResting = splitFull.last;
+                                      }
+                                      break;
+                                      case 3: {
+                                        print("2nd switch i = " + i.toString() + splitFull.last);
                                         tempHeartRateDate = splitFull.last;
                                         bool thisBool = tempisResting.toLowerCase() =='true';
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: thisBool, hr_date: format.parse(tempHeartRateDate));
+                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: thisBool, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
                                         heartRate_list.add(heartRate);
                                       }
                                       break;
@@ -300,14 +315,14 @@ class _add_heart_rateState extends State<add_heart_rate> {
 
                                 // print("symptom list  " + symptoms_list.toString());
                                 final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
-                                heartRateRef.set({"HR_bpm": beats.toString(), "isResting": parseBool(isResting).toString(), "hr_date": heartRate_date.toString()});
+                                heartRateRef.set({"HR_bpm": beats.toString(), "isResting": parseBool(isResting).toString(), "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                 print("Added Heart Rate Successfully! " + uid);
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + heartRate_list.length.toString());
-                              heartRate_list.add(new Heart_Rate(bpm: beats, isResting: parseBool(isResting), hr_date: format.parse(heartRate_date)));
+                              heartRate_list.add(new Heart_Rate(bpm: beats, isResting: parseBool(isResting), hr_date: format.parse(heartRate_date),hr_time: timeformat.parse(heartRate_time)));
                               for(var i=0;i<heartRate_list.length/2;i++){
                                 var temp = heartRate_list[i];
                                 heartRate_list[i] = heartRate_list[heartRate_list.length-1-i];

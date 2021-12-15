@@ -42,7 +42,10 @@ class _heart_rateState extends State<heart_rate> {
     String tempBmi = ""; // int
     String tempisResting = ""; //bool
     String tempHRDate = "";
+    String tempHRTime = "";
     DateFormat format = new DateFormat("MM/dd/yyyy");
+    DateFormat timeformat = new DateFormat("hh:mm");
+
     readHeartRate.once().then((DataSnapshot datasnapshot) {
       hrtemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -54,44 +57,52 @@ class _heart_rateState extends State<heart_rate> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 3){
+        if(i < 4){
           switch(i){
             case 0: {
-              tempBmi = splitFull.last;
+              print("i = " + i.toString() + splitFull.last);
+              tempHRTime = splitFull.last;
 
             }
             break;
             case 1: {
-              tempisResting = splitFull.last;
+              print("i = " + i.toString() + splitFull.last);
+              tempBmi = splitFull.last;
 
             }
             break;
             case 2: {
+              print("i = " + i.toString() + splitFull.last);
+              tempisResting = splitFull.last;
+            }
+            break;
+            case 3: {
+              print("i = " + i.toString() + splitFull.last);
               tempHRDate = splitFull.last;
-              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), isResting: parseBool(tempisResting), hr_date: format.parse(tempHRDate));
+              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), isResting: parseBool(tempisResting), hr_date: format.parse(tempHRDate), hr_time: timeformat.parse(tempHRTime));
               hrtemp.add(heartRate);
             }
             break;
           }
         }
         else{
-          switch(i%3){
+          switch(i%4){
             case 0: {
+              tempHRTime = splitFull.last;
+            }
+            break;
+            case 1: {
               tempBmi = splitFull.last;
 
             }
             break;
-            case 1: {
+            case 2: {
               tempisResting = splitFull.last;
-              print("THIS IS RESTING  " + tempisResting);
-
             }
             break;
-            case 2: {
+            case 3: {
               tempHRDate = splitFull.last;
-              bool thisBool = tempisResting.toLowerCase() =='true';
-              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), isResting: thisBool, hr_date: format.parse(tempHRDate));
-              print("IS RESTING" + thisBool.toString());
+              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), isResting: parseBool(tempisResting), hr_date: format.parse(tempHRDate), hr_time: timeformat.parse(tempHRTime));
               hrtemp.add(heartRate);
             }
             break;
@@ -209,7 +220,7 @@ class _heart_rateState extends State<heart_rate> {
                                   width: 10,
                                 ),
                                 Text(
-                                    '' + hrtemp[index].getDate.toString()+" "
+                                    '' + getDateFormatted(hrtemp[index].getDate.toString())+getTimeFormatted(hrtemp[index].getTime.toString())+" "
                                         +"\nHeart rate: "+ hrtemp[index].getBPM.toString() + " BPM"
                                         +"\nResting: "+ hrtemp[index].getisResting.toString() + "  " ,
                                     style: TextStyle(
@@ -233,11 +244,22 @@ class _heart_rateState extends State<heart_rate> {
   }
 
   bool parseBool(String temp) {
-    if (temp.toLowerCase() == 'Yes') {
+    if (temp.toLowerCase() == 'false') {
       return false;
-    } else if (temp.toLowerCase() == 'No') {
+    } else if (temp.toLowerCase() == 'true') {
       return true;
     }
+  }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    print(date);
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
   }
 
 }
