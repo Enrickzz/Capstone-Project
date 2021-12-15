@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
 class Users{
   final String uid;
@@ -15,8 +16,10 @@ class Symptom {
   int intesity_lvl;
   String symptom_felt;
   DateTime symptom_date;
+  DateTime symptom_time;
+  bool isActive;
 
-  Symptom({this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date});
+  Symptom({this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date, this.symptom_time, this.isActive});
 
   String get getName{
     return symptom_name;
@@ -30,18 +33,33 @@ class Symptom {
   DateTime get getDate{
     return symptom_date;
   }
-  set setName (String temp){
+  DateTime get getTime{
+    return symptom_time;
+  }
+  bool get getisActive{
+    return isActive;
+  }
+
+  void setName (String temp){
     symptom_name = temp;
   }
-  set setIntensity_lvl (int integer){
+  void setIntensity_lvl (int integer){
     intesity_lvl = integer;
   }
-  set setFelt (String temp){
+  void setFelt (String temp){
     symptom_felt = temp;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     symptom_date = date;
   }
+  void setTime (DateTime date){
+    symptom_date = date;
+  }
+  void setisActive (bool status) {
+   isActive = status;
+  }
+
+
 
 }
 
@@ -67,16 +85,16 @@ class Medication {
   DateTime get getDate{
     return medicine_date;
   }
-  set setName (String temp){
+  void setName (String temp){
     medicine_name = temp;
   }
-  set setDosage (double number){
+  void setDosage (double number){
     medicine_dosage = number;
   }
-  set setType (String temp){
+  void setType (String temp){
     medicine_type = temp;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     medicine_date = date;
   }
 }
@@ -93,10 +111,10 @@ class Lab_Result {
   DateTime get getDate{
     return labResult_date;
   }
-  set setName (String temp){
+  void setName (String temp){
     labResult_name = temp;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     labResult_date = date;
   }
 }
@@ -117,13 +135,13 @@ class Blood_Pressure {
   DateTime get getDate{
     return bp_date;
   }
-  set setSys_pres (String temp){
+  void setSys_pres (String temp){
     systolic_pressure = temp;
   }
-  set setDia_pres (String temp){
+  void setDia_pres (String temp){
     diastolic_pressure = temp;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     bp_date = date;
   }
 
@@ -145,13 +163,13 @@ class Heart_Rate {
   DateTime get getDate{
     return hr_date;
   }
-  set setBPM (int integer){
+  void setBPM (int integer){
     bpm = integer;
   }
-  set setisResting (bool status){
+  void setisResting (bool status){
     isResting = status;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     hr_date = date;
   }
 
@@ -173,15 +191,16 @@ class Body_Temperature {
   DateTime get getDate{
     return bt_date;
   }
-  set setUnit (String temp){
+  void setUnit (String temp){
     unit = temp;
   }
-  set setTemperature (double number){
+  void setTemperature (double number){
     temperature = number;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     bt_date = date;
   }
+
 }
 
 class Oxygen_Saturation {
@@ -196,10 +215,10 @@ class Oxygen_Saturation {
   DateTime get getDate{
     return os_date;
   }
-  set setTemperature (int oxygen_saturation){
+  void setTemperature (int oxygen_saturation){
     this.oxygen_saturation = oxygen_saturation;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     os_date = date;
   }
 
@@ -229,19 +248,19 @@ class Blood_Cholesterol {
   DateTime get getDate{
     return cholesterol_date;
   }
-  set setTotalCholesterol (double number){
+  void setTotalCholesterol (double number){
     total_cholesterol = number;
   }
-  set setldlCholesterol (double number){
+  void setldlCholesterol (double number){
     ldl_cholesterol = number;
   }
-  set sethdlCholesterol (double number){
+  void sethdlCholesterol (double number){
     hdl_cholesterol = number;
   }
-  set setTriglycerides (double number){
+  void setTriglycerides (double number){
     triglycerides = number;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     cholesterol_date = date;
   }
 }
@@ -263,13 +282,13 @@ class Blood_Glucose {
   DateTime get getDate{
     return bloodGlucose_date;
   }
-  set setGlucose (double number){
+  void setGlucose (double number){
     glucose = number;
   }
-  set setStatus (String temp){
+  void setStatus (String temp){
     status = temp;
   }
-  set setDate (DateTime date){
+  void setDate (DateTime date){
     bloodGlucose_date = date;
   }
 

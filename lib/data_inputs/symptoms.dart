@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/add_symptoms.dart';
 import 'package:my_app/database.dart';
@@ -38,11 +39,15 @@ class _symptomsState extends State<symptoms> {
   bool isDateSelected= false;
   DateTime birthDate; // instance of DateTime
   String birthDateInString = "MM/DD/YYYY";
+  TimeOfDay time;
   String weight = "";
   String height = "";
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Symptom> listtemp=[];
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
+  String display = "";
 
   @override
   void initState() {
@@ -55,7 +60,8 @@ class _symptomsState extends State<symptoms> {
     String tempSymptomName = "";
     String tempSymptomDate = "";
     String tempSymptomFelt = "";
-    DateFormat format = new DateFormat("MM/dd/yyyy");
+    DateTime tempSymptomTime;
+    bool tempIsActive;
     symptomsRef.once().then((DataSnapshot datasnapshot){
       listtemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -65,48 +71,79 @@ class _symptomsState extends State<symptoms> {
       for(var i = 0; i < temp.length; i++){
         String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 4){
+        if(i < 6){
           switch(i){
             case 0: {
+              print("1st switch intensity lvl " + splitFull.last);
               tempIntesityLvl = int.parse(splitFull.last);
             }
             break;
             case 1: {
+              print("1st switch symptom name " + splitFull.last);
               tempSymptomName = splitFull.last;
             }
             break;
             case 2: {
+              print("1st switch symptom date " + splitFull.last);
               tempSymptomDate = splitFull.last;
+
             }
             break;
             case 3: {
+              print("1st switch symptom time " + splitFull.last);
+
+              tempSymptomTime = timeformat.parse(splitFull.last);
+            }
+            break;
+            case 4: {
+              print("1st switch is active " + splitFull.last);
+
+            }
+            break;
+            case 5: {
+              print("1st switch symptom felt " + splitFull.last);
               tempSymptomFelt = splitFull.last;
-              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
+              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: tempSymptomTime, isActive: tempIsActive);
               listtemp.add(symptom);
+
             }
             break;
           }
         }
         else{
-          switch(i%4){
+          switch(i%6){
             case 0: {
+              print("1st switch intensity lvl " + splitFull.last);
               tempIntesityLvl = int.parse(splitFull.last);
             }
             break;
             case 1: {
+              print("1st switch symptom name " + splitFull.last);
               tempSymptomName = splitFull.last;
             }
             break;
             case 2: {
+              print("1st switch symptom date " + splitFull.last);
               tempSymptomDate = splitFull.last;
 
             }
             break;
             case 3: {
-              tempSymptomFelt = splitFull.last;
-              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
-              listtemp.add(symptom);
+              print("1st switch symptom time " + splitFull.last);
 
+              tempSymptomTime = timeformat.parse(splitFull.last);
+            }
+            break;
+            case 4: {
+              print("1st switch is active " + splitFull.last);
+
+            }
+            break;
+            case 5: {
+              print("1st switch symptom felt " + splitFull.last);
+              tempSymptomFelt = splitFull.last;
+              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: tempSymptomTime, isActive: tempIsActive);
+              listtemp.add(symptom);
             }
             break;
           }
@@ -222,7 +259,7 @@ class _symptomsState extends State<symptoms> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + listtemp[index].getDate.toString()+" \n" + "Name: " +listtemp[index].getName+
+                                  '' + getDateFormatted(listtemp[index].getDate.toString())+getTimeFormatted(listtemp[index].getTime.toString())+" \n" + "Name: " +listtemp[index].getName+
                                       "\nI felt " + listtemp[index].getFelt + " \n"
                                       "The intensity was "+ listtemp[index].getIntensity_lvl.toString()+ " \n" +
                                       "",
@@ -244,5 +281,15 @@ class _symptomsState extends State<symptoms> {
       ),
 
     );
+  }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +35,7 @@ class _body_temperatureState extends State<body_temperature> {
   bool isDateSelected= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Body_Temperature> bttemp = [];
+  List<File> _image = [];
 
   @override
   void initState() {
@@ -207,6 +210,27 @@ class _body_temperatureState extends State<body_temperature> {
                             SizedBox(
                               width: 10,
                             ),
+                            FlatButton(
+                              child: Text(
+                                'Edit',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              color: Colors.black,
+                              onPressed: () {
+                                print("hi " + index.toString());
+                                print("initial " + bttemp[index].getTemperature.toString());
+                                bttemp[index].setTemperature(30);
+                                print("edited " + bttemp[index].getTemperature.toString());
+                                setState(() {
+                                  print("set state");
+                                });
+
+
+                              },
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Text(
                                 '' + bttemp[index].getDate.toString()+" "
                                     +"\nTemperature: "+ bttemp[index].getTemperature.toString() + " " + bttemp[index].getUnit+ " ",
@@ -215,6 +239,8 @@ class _body_temperatureState extends State<body_temperature> {
                                     fontSize: 18
                                 )
                             ),
+
+
                           ],
                         ),
                       ),
@@ -228,4 +254,5 @@ class _body_temperatureState extends State<body_temperature> {
 
     );
   }
+
 }
