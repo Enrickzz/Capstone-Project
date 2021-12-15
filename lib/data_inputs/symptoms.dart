@@ -29,25 +29,12 @@ class _symptomsState extends State<symptoms> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String firstname = '';
-  String lastname = '';
-  String email = '';
-  String password = '';
-  String error = '';
   List<String> items = List<String>.generate(10000, (i) => 'Item $i');
-  String initValue="Select your Birth Date";
-  bool isDateSelected= false;
-  DateTime birthDate; // instance of DateTime
-  String birthDateInString = "MM/DD/YYYY";
   TimeOfDay time;
-  String weight = "";
-  String height = "";
-  String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Symptom> listtemp=[];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
-  String display = "";
 
   @override
   void initState() {
@@ -60,8 +47,9 @@ class _symptomsState extends State<symptoms> {
     String tempSymptomName = "";
     String tempSymptomDate = "";
     String tempSymptomFelt = "";
-    DateTime tempSymptomTime;
+    String tempSymptomTime = "";
     bool tempIsActive;
+
     symptomsRef.once().then((DataSnapshot datasnapshot){
       listtemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -92,18 +80,18 @@ class _symptomsState extends State<symptoms> {
             case 3: {
               print("1st switch symptom time " + splitFull.last);
 
-              tempSymptomTime = timeformat.parse(splitFull.last);
+
             }
             break;
             case 4: {
               print("1st switch is active " + splitFull.last);
-
+              tempSymptomTime = splitFull.last;
             }
             break;
             case 5: {
               print("1st switch symptom felt " + splitFull.last);
               tempSymptomFelt = splitFull.last;
-              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: tempSymptomTime, isActive: tempIsActive);
+              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: timeformat.parse(tempSymptomTime), symptom_isActive: tempIsActive);
               listtemp.add(symptom);
 
             }
@@ -131,18 +119,18 @@ class _symptomsState extends State<symptoms> {
             case 3: {
               print("1st switch symptom time " + splitFull.last);
 
-              tempSymptomTime = timeformat.parse(splitFull.last);
+
             }
             break;
             case 4: {
               print("1st switch is active " + splitFull.last);
-
+              tempSymptomTime = splitFull.last;
             }
             break;
             case 5: {
               print("1st switch symptom felt " + splitFull.last);
               tempSymptomFelt = splitFull.last;
-              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: tempSymptomTime, isActive: tempIsActive);
+              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: timeformat.parse(tempSymptomTime), symptom_isActive: tempIsActive);
               listtemp.add(symptom);
             }
             break;

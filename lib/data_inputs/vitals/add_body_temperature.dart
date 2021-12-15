@@ -34,11 +34,14 @@ class _add_body_temperatureState extends State<add_body_temperature> {
   List degrees = ["Celsius", "Fahrenheit"];
   String temperature_date = "MM/DD/YYYY";
   DateTime temperatureDate;
+  String temperature_time;
   bool isDateSelected= false;
   int count = 0;
   List<Body_Temperature> body_temp_list = new List<Body_Temperature>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
-
+  DateFormat timeformat = new DateFormat("hh:mm");
+  TimeOfDay time;
+  var dateValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -132,48 +135,75 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                     },
                   ),
                   SizedBox(height: 8.0),
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                          child: new Icon(Icons.calendar_today),
-                          onTap: ()async{
-                            final datePick= await showDatePicker(
-                                context: context,
-                                initialDate: new DateTime.now(),
-                                firstDate: new DateTime(1900),
-                                lastDate: new DateTime(2100)
-                            );
-                            if(datePick!=null && datePick!=temperatureDate){
-                              setState(() {
-                                temperatureDate=datePick;
-                                isDateSelected=true;
+                  GestureDetector(
+                    onTap: ()async{
+                      await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime(1900),
+                          lastDate: new DateTime(2100)
+                      ).then((value){
+                        if(value != null && value != temperatureDate){
+                          setState(() {
+                            temperatureDate = value;
+                            isDateSelected = true;
+                            temperature_date = "${temperatureDate.month}/${temperatureDate.day}/${temperatureDate.year}";
+                          });
+                          dateValue.text = temperature_date + "\r";
+                        }
+                      });
 
-                                // put it here
-                                temperature_date = "${temperatureDate.month}/${temperatureDate.day}/${temperatureDate.year}"; // 08/14/2019
-                                // AlertDialog alert = AlertDialog(
-                                //   title: Text("My title"),
-                                //   content: Text("This is my message."),
-                                //   actions: [
-                                //
-                                //   ],
-                                // );
+                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                      await showTimePicker(
+                        context: context,
+                        initialTime: time ?? initialTime,
+                      ).then((value){
+                        if(value != null && value != time){
+                          setState(() {
+                            time = value;
+                            final hours = time.hour.toString().padLeft(2,'0');
+                            final min = time.minute.toString().padLeft(2,'0');
+                            temperature_time = "$hours:$min";
+                            dateValue.text += "$hours:$min";
+                            print("data value " + dateValue.text);
+                          });
+                        }
+                      });
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateValue,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "Date and Time",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                        onChanged: (val){
 
-                              });
-                            }
-
-                          }
-                      ), Container(
-                          child: Text(
-                              " MM/DD/YYYY ",
-                              style: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                                fontStyle: FontStyle.normal,
-                              )
-                          )
+                          print(dateValue);
+                          setState((){
+                          });
+                        },
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(height: 18.0),
                   // DropdownButton(

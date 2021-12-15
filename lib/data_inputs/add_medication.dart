@@ -30,11 +30,14 @@ class _addMedicationState extends State<add_medication> {
   double medicine_dosage = 0;
   DateTime medicineDate;
   String medicine_date = "MM/DD/YYYY";
+  String medicine_time;
   bool isDateSelected= false;
   int count = 0;
   List<Medication> medication_list = new List<Medication>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
-
+  DateFormat timeformat = new DateFormat("hh:mm");
+  TimeOfDay time;
+  var dateValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -175,47 +178,75 @@ class _addMedicationState extends State<add_medication> {
                     },
                   ),
                   SizedBox(height: 8.0),
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                          child: new Icon(Icons.calendar_today),
-                          onTap: ()async{
-                            final datePick= await showDatePicker(
-                                context: context,
-                                initialDate: new DateTime.now(),
-                                firstDate: new DateTime(1900),
-                                lastDate: new DateTime(2100)
-                            );
-                            if(datePick!=null && datePick!=medicineDate){
-                              setState(() {
-                                medicineDate=datePick;
-                                isDateSelected=true;
+                  GestureDetector(
+                    onTap: ()async{
+                      await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime(1900),
+                          lastDate: new DateTime(2100)
+                      ).then((value){
+                        if(value != null && value != medicineDate){
+                          setState(() {
+                            medicineDate = value;
+                            isDateSelected = true;
+                            medicine_date = "${medicineDate.month}/${medicineDate.day}/${medicineDate.year}";
+                          });
+                          dateValue.text = medicine_date + "\r";
+                        }
+                      });
 
-                                // put it here
-                                medicine_date = "${medicineDate.month}/${medicineDate.day}/${medicineDate.year}"; // 08/14/2019
-                                // AlertDialog alert = AlertDialog(
-                                //   title: Text("My title"),
-                                //   content: Text("This is my message."),
-                                //   actions: [
-                                //
-                                //   ],
-                                // );
+                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                      await showTimePicker(
+                        context: context,
+                        initialTime: time ?? initialTime,
+                      ).then((value){
+                        if(value != null && value != time){
+                          setState(() {
+                            time = value;
+                            final hours = time.hour.toString().padLeft(2,'0');
+                            final min = time.minute.toString().padLeft(2,'0');
+                            medicine_time = "$hours:$min";
+                            dateValue.text += "$hours:$min";
+                            print("data value " + dateValue.text);
+                          });
+                        }
+                      });
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateValue,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "Date and Time",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                        onChanged: (val){
 
-                              });
-                            }
-                          }
-                      ), Container(
-                          child: Text(
-                              " MM/DD/YYYY ",
-                              style: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                                fontStyle: FontStyle.normal,
-                              )
-                          )
+                          print(dateValue);
+                          setState((){
+                          });
+                        },
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(height: 18.0),
                   Row(
@@ -249,28 +280,31 @@ class _addMedicationState extends State<add_medication> {
                               Medication medicine;
                               if(datasnapshot.value == null){
                                 final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + 0.toString());
-                                medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString()});
+                                medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                                 print("Added medication Successfully! " + uid);
                               }
                               else{
                                 double tempMedicineDosage = 0;
                                 String tempMedicineName = "";
                                 DateTime tempMedicineDate;
+                                DateTime tempMedicineTime;
                                 String tempMedicineType = "";
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 4){
+                                  if(i < 5){
                                     print("i value" + i.toString());
                                     switch(i){
                                       case 0: {
                                         print("1st switch i = 0 " + splitFull.last);
-                                        tempMedicineDosage = double.parse(splitFull.last);
+                                        tempMedicineType = splitFull.last;
+
                                       }
                                       break;
                                       case 1: {
                                         print("1st switch i = 1 " + splitFull.last);
-                                        tempMedicineName = splitFull.last;
+                                        tempMedicineDosage = double.parse(splitFull.last);
+
                                       }
                                       break;
                                       case 2: {
@@ -280,8 +314,14 @@ class _addMedicationState extends State<add_medication> {
                                       break;
                                       case 3: {
                                         print("1st switch i = 3 " + splitFull.last);
-                                        tempMedicineType = splitFull.last;
-                                        medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: tempMedicineDate);
+                                        tempMedicineName = splitFull.last;
+                                      }
+                                      break;
+                                      case 4: {
+                                        print("1st switch i = 4 " + splitFull.last);
+
+                                        tempMedicineTime = timeformat.parse(splitFull.last);
+                                        medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: tempMedicineDate, medicine_time: tempMedicineTime);
                                         medication_list.add(medicine);
                                       }
                                       break;
@@ -290,15 +330,17 @@ class _addMedicationState extends State<add_medication> {
                                   else{
                                     print("i value" + i.toString());
                                     print("i value modulu " + (i%4).toString());
-                                    switch(i%4){
+                                    switch(i%5){
                                       case 0: {
                                         print("2nd switch intensity lvl " + splitFull.last);
-                                        tempMedicineDosage = double.parse(splitFull.last);
+                                        tempMedicineType = splitFull.last;
+
                                       }
                                       break;
                                       case 1: {
                                         print("2nd switch symptom name " + splitFull.last);
-                                        tempMedicineName = splitFull.last;
+                                        tempMedicineDosage = double.parse(splitFull.last);
+
                                       }
                                       break;
                                       case 2: {
@@ -308,9 +350,16 @@ class _addMedicationState extends State<add_medication> {
                                       }
                                       break;
                                       case 3: {
+                                        print("2nd switch symptom date " + splitFull.last);
+                                        tempMedicineName = splitFull.last;
+
+
+                                      }
+                                      break;
+                                      case 4: {
                                         print("2nd switch symptom felt " + splitFull.last);
-                                        tempMedicineType = splitFull.last;
-                                        medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: tempMedicineDate);
+                                        tempMedicineTime = timeformat.parse(splitFull.last);
+                                        medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: tempMedicineDate, medicine_time: tempMedicineTime);
                                         medication_list.add(medicine);
                                       }
                                       break;
@@ -326,14 +375,14 @@ class _addMedicationState extends State<add_medication> {
 
                                 // print("symptom list  " + symptoms_list.toString());
                                 final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
-                                medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString()});
+                                medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                                 print("Added Symptom Successfully! " + uid);
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + medication_list.length.toString());
-                              medication_list.add(new Medication(medicine_name: medicine_name, medicine_type: medicine_type, medicine_dosage: medicine_dosage, medicine_date: format.parse(medicine_date)));
+                              medication_list.add(new Medication(medicine_name: medicine_name, medicine_type: medicine_type, medicine_dosage: medicine_dosage, medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time)));
                               for(var i=0;i<medication_list.length/2;i++){
                                 var temp = medication_list[i];
                                 medication_list[i] = medication_list[medication_list.length-1-i];

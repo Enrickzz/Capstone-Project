@@ -32,11 +32,14 @@ class _add_heart_rateState extends State<add_heart_rate> {
   String isResting = 'false';
   DateTime heartRateDate;
   String heartRate_date = "MM/DD/YYYY";
+  String heartRate_time;
   bool isDateSelected= false;
   int count = 0;
   List<Heart_Rate> heartRate_list = new List<Heart_Rate>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
-
+  DateFormat timeformat = new DateFormat("hh:mm");
+  TimeOfDay time;
+  var dateValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -130,48 +133,75 @@ class _add_heart_rateState extends State<add_heart_rate> {
                     ],
                   ),
                   SizedBox(height: 8.0),
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                          child: new Icon(Icons.calendar_today),
-                          onTap: ()async{
-                            final datePick= await showDatePicker(
-                                context: context,
-                                initialDate: new DateTime.now(),
-                                firstDate: new DateTime(1900),
-                                lastDate: new DateTime(2100)
-                            );
-                            if(datePick!=null && datePick!=heartRateDate){
-                              setState(() {
-                                heartRateDate=datePick;
-                                isDateSelected=true;
+                  GestureDetector(
+                    onTap: ()async{
+                      await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime(1900),
+                          lastDate: new DateTime(2100)
+                      ).then((value){
+                        if(value != null && value != heartRateDate){
+                          setState(() {
+                            heartRateDate = value;
+                            isDateSelected = true;
+                            heartRate_date = "${heartRateDate.month}/${heartRateDate.day}/${heartRateDate.year}";
+                          });
+                          dateValue.text = heartRate_date + "\r";
+                        }
+                      });
 
-                                // put it here
-                                heartRate_date = "${heartRateDate.month}/${heartRateDate.day}/${heartRateDate.year}"; // 08/14/2019
-                                // AlertDialog alert = AlertDialog(
-                                //   title: Text("My title"),
-                                //   content: Text("This is my message."),
-                                //   actions: [
-                                //
-                                //   ],
-                                // );
+                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                      await showTimePicker(
+                        context: context,
+                        initialTime: time ?? initialTime,
+                      ).then((value){
+                        if(value != null && value != time){
+                          setState(() {
+                            time = value;
+                            final hours = time.hour.toString().padLeft(2,'0');
+                            final min = time.minute.toString().padLeft(2,'0');
+                            heartRate_time = "$hours:$min";
+                            dateValue.text += "$hours:$min";
+                            print("data value " + dateValue.text);
+                          });
+                        }
+                      });
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateValue,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "Date and Time",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                        onChanged: (val){
 
-                              });
-                            }
-
-                          }
-                      ), Container(
-                          child: Text(
-                              " MM/DD/YYYY ",
-                              style: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                                fontStyle: FontStyle.normal,
-                              )
-                          )
+                          print(dateValue);
+                          setState((){
+                          });
+                        },
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(height: 18.0),
                   Row(

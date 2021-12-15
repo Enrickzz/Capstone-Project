@@ -27,10 +27,15 @@ class _addLabResultState extends State<add_lab_results> {
   String lab_result_name = '';
   String lab_result_date = "MM/DD/YYYY";
   DateTime labResultDate;
+  String lab_result_note = '';
+  String lab_result_time;
   bool isDateSelected= false;
   int count = 0;
   List<Lab_Result> labResult_list = new List<Lab_Result>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
+  TimeOfDay time;
+  var dateValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -83,47 +88,98 @@ class _addLabResultState extends State<add_lab_results> {
                     },
                   ),
                   SizedBox(height: 8.0),
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                          child: new Icon(Icons.calendar_today),
-                          onTap: ()async{
-                            final datePick= await showDatePicker(
-                                context: context,
-                                initialDate: new DateTime.now(),
-                                firstDate: new DateTime(1900),
-                                lastDate: new DateTime(2100)
-                            );
-                            if(datePick!=null && datePick!=labResultDate){
-                              setState(() {
-                                labResultDate=datePick;
-                                isDateSelected=true;
-
-                                // put it here
-                                lab_result_date = "${labResultDate.month}/${labResultDate.day}/${labResultDate.year}"; // 08/14/2019
-                                // AlertDialog alert = AlertDialog(
-                                //   title: Text("My title"),
-                                //   content: Text("This is my message."),
-                                //   actions: [
-                                //
-                                //   ],
-                                // );
-
-                              });
-                            }
-                          }
-                      ), Container(
-                          child: Text(
-                              " MM/DD/YYYY ",
-                              style: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                                fontStyle: FontStyle.normal,
-                              )
-                          )
+                  TextFormField(
+                    showCursor: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width:0,
+                          style: BorderStyle.none,
+                        ),
                       ),
-                    ],
+                      filled: true,
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "Note for Lab Result",
+                    ),
+                    onChanged: (val){
+                      setState(() => lab_result_note = val);
+                    },
+                  ),
+                  SizedBox(height: 8.0),
+                  GestureDetector(
+                    onTap: ()async{
+                      await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime(1900),
+                          lastDate: new DateTime(2100)
+                      ).then((value){
+                        if(value != null && value != labResultDate){
+                          setState(() {
+                            labResultDate = value;
+                            isDateSelected = true;
+                            lab_result_date = "${labResultDate.month}/${labResultDate.day}/${labResultDate.year}";
+                          });
+                          dateValue.text = lab_result_date + "\r";
+                        }
+                      });
+
+                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                      await showTimePicker(
+                        context: context,
+                        initialTime: time ?? initialTime,
+                      ).then((value){
+                        if(value != null && value != time){
+                          setState(() {
+                            time = value;
+                            final hours = time.hour.toString().padLeft(2,'0');
+                            final min = time.minute.toString().padLeft(2,'0');
+                            lab_result_time = "$hours:$min";
+                            dateValue.text += "$hours:$min";
+                            print("data value " + dateValue.text);
+                          });
+                        }
+                      });
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateValue,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "Date and Time",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                        onChanged: (val){
+
+                          print(dateValue);
+                          setState((){
+                          });
+                        },
+                      ),
+                    ),
                   ),
                   SizedBox(height: 18.0),
                   Row(
@@ -155,59 +211,75 @@ class _addLabResultState extends State<add_lab_results> {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
                               List<String> temp = temp1.split(',');
-
                               Lab_Result labResult;
-
-
                               if(datasnapshot.value == null){
                                 final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + 0.toString());
-                                labResultRef.set({"labResult_name": lab_result_name.toString(), "labResult_date": lab_result_date.toString()});
+                                labResultRef.set({"labResult_name": lab_result_name.toString(), "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
                                 print("Added Lab Result Successfully! " + uid);
                               }
                               else{
                                 String tempLabResultName = "";
                                 String tempLabResultDate;
+                                String tempLabResultTime;
+                                String tempLabResultNote = "";
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 2){
+                                  if(i < 4){
                                     print("i value" + i.toString());
                                     switch(i) {
                                       case 0:
                                         {
-                                          print("1st switch lab result name " + splitFull.last);
-                                          tempLabResultName = splitFull.last;
+                                          tempLabResultDate = splitFull.last;
+
                                         }
                                         break;
                                       case 1:
                                         {
-                                          print("1st switch lab result date " + splitFull.last);
-                                          tempLabResultDate = splitFull.last;
-                                          labResult = new Lab_Result(labResult_name: tempLabResultName, labResult_date: format.parse(tempLabResultDate));
+                                          tempLabResultName = splitFull.last;
+
+                                        }
+                                        break;
+                                      case 2:
+                                        {
+                                          tempLabResultNote = splitFull.last;
+                                        }
+                                        break;
+                                      case 3:
+                                        {
+                                          tempLabResultTime = splitFull.last;
+                                          labResult = new Lab_Result(labResult_name: tempLabResultName,labResult_note: tempLabResultNote, labResult_date: format.parse(tempLabResultDate), labResult_time: timeformat.parse(tempLabResultTime));
                                           labResult_list.add(labResult);
-                                          print("lab result  " + labResult.labResult_name + labResult.labResult_date.toString());
                                         }
                                         break;
                                     }
                                   }
                                   else{
-                                    print("i value" + i.toString());
-                                    print("i value modulu " + (i%2).toString());
-                                    switch(i%2){
-                                      case 0: {
-                                        print("2nd switch lab result name " + splitFull.last);
-                                        tempLabResultName = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("2nd switch lab result date " + splitFull.last);
-                                        tempLabResultDate = splitFull.last;
-                                        labResult = new Lab_Result(labResult_name: tempLabResultName, labResult_date: format.parse(tempLabResultDate));
-                                        labResult_list.add(labResult);
-                                        print("lab result  " + labResult.labResult_name + labResult.labResult_date.toString());
-                                      }
-                                      break;
+                                    switch(i%4){
+                                      case 0:
+                                        {
+                                          tempLabResultDate = splitFull.last;
 
+                                        }
+                                        break;
+                                      case 1:
+                                        {
+                                          tempLabResultName = splitFull.last;
+
+                                        }
+                                        break;
+                                      case 2:
+                                        {
+                                          tempLabResultNote = splitFull.last;
+                                        }
+                                        break;
+                                      case 3:
+                                        {
+                                          tempLabResultTime = splitFull.last;
+                                          labResult = new Lab_Result(labResult_name: tempLabResultName,labResult_note: tempLabResultNote, labResult_date: format.parse(tempLabResultDate), labResult_time: timeformat.parse(tempLabResultTime));
+                                          labResult_list.add(labResult);
+                                        }
+                                        break;
                                     }
                                   }
                                   print("lab result list length " + labResult_list.length.toString());
@@ -216,7 +288,7 @@ class _addLabResultState extends State<add_lab_results> {
                                 count = labResult_list.length;
                                 print("count " + count.toString());
                                 final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
-                                labResultRef.set({"labResult_name": lab_result_name.toString(), "labResult_date": lab_result_date.toString()});
+                                labResultRef.set({"labResult_name": lab_result_name.toString(),"labResult_note": lab_result_note.toString(), "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
                                 print("Added Lab Result Successfully! " + uid);
                               }
 

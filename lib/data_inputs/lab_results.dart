@@ -24,20 +24,8 @@ class _lab_resultsState extends State<lab_results> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String firstname = '';
-  String lastname = '';
-  String email = '';
-  String password = '';
-  String error = '';
-
-  String initValue="Select your Birth Date";
-  bool isDateSelected= false;
-  DateTime birthDate; // instance of DateTime
-  String birthDateInString = "MM/DD/YYYY";
-  String weight = "";
-  String height = "";
-  String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
+
 
   @override
   Widget build(BuildContext context) {

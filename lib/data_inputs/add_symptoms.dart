@@ -25,7 +25,7 @@ class _addSymptomsState extends State<add_symptoms> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  String symptom_name = '';
+  String symptom_name;
   int intesity_lvl = 0;
   String symptom_felt = '';
   String symptom_date = "MM/DD/YYYY";
@@ -37,6 +37,7 @@ class _addSymptomsState extends State<add_symptoms> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
+  var dateValue = TextEditingController();
 
   bool value = false;
   final notifications ={
@@ -87,6 +88,7 @@ class _addSymptomsState extends State<add_symptoms> {
     double defaultFontSize = 14;
     double defaultIconSize = 17;
 
+
     return Container(
       key: _formKey,
       color:Color(0xff757575),
@@ -130,6 +132,7 @@ class _addSymptomsState extends State<add_symptoms> {
                       setState(() {
                         valueChooseSymptom = newValue;
 
+
                       });
 
                     },
@@ -137,7 +140,7 @@ class _addSymptomsState extends State<add_symptoms> {
                     items: listItemSymptoms.map((valueItem){
                         return DropdownMenuItem(
                             value: valueItem,
-                            child: Text(valueItem)
+                            child: Text(valueItem),
                         );
                       },
                     ).toList(),
@@ -289,131 +292,45 @@ class _addSymptomsState extends State<add_symptoms> {
               ),
 
             ),
-
-            SizedBox(height: 8.0),
-            Row(
-              children: <Widget>[
-                GestureDetector(
-                    child: new Icon(Icons.calendar_today),
-                    onTap: ()async{
-                      final datePick= await showDatePicker(
-                          context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(1900),
-                          lastDate: new DateTime(2100)
-                      );
-                      if(datePick!=null && datePick!=symptomDate){
-                        setState(() {
-                          symptomDate=datePick;
-                          isDateSelected=true;
-
-                          // put it here
-                          symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}"; // 08/14/2019
-                          // AlertDialog alert = AlertDialog(
-                          //   title: Text("My title"),
-                          //   content: Text("This is my message."),
-                          //   actions: [
-                          //
-                          //   ],
-                          // );
-
-                        });
-                      }
-                    }
-                ), Container(
-                    child: Text(
-                        " MM/DD/YYYY ",
-                        style: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize,
-                          fontStyle: FontStyle.normal,
-                        )
-                    )
-                ),
-                GestureDetector(
-                    child: new Icon(Icons.timer),
-                    onTap: ()async{
-                      final initialTime = TimeOfDay(hour:12, minute: 0);
-                      final newTime = await showTimePicker(
-                          context: context,
-                          initialTime: time ?? initialTime,
-                      );
-                      if(newTime!=null && newTime!=time){
-                        setState(() {
-                          time = newTime;
-                          final hours = time.hour.toString().padLeft(2,'0');
-                          final min = time.minute.toString().padLeft(2,'0');
-                          print("time is " + hours + ":" + min);
-                          symptom_time = "$hours:$min";
-
-                        });
-                      }
-                      else{
-                        print("AAAAAAAAAAA");
-                      }
-                    }
-                ), Container(
-                    child: Text(
-                        " MM/DD/YYYY ",
-                        style: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize,
-                          fontStyle: FontStyle.normal,
-                        )
-                    )
-                ),
-              ],
-            ),
             SizedBox(height: 8.0),
             GestureDetector(
               onTap: ()async{
-                final datePick= await showDatePicker(
+                await showDatePicker(
                     context: context,
                     initialDate: new DateTime.now(),
                     firstDate: new DateTime(1900),
                     lastDate: new DateTime(2100)
-                );
-                if(datePick!=null && datePick!=symptomDate){
-                  setState(() {
-                    symptomDate=datePick;
-                    isDateSelected=true;
-
-                    // put it here
-                    symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}"; // 08/14/2019
-                    // AlertDialog alert = AlertDialog(
-                    //   title: Text("My title"),
-                    //   content: Text("This is my message."),
-                    //   actions: [
-                    //
-                    //   ],
-                    // );
-
-                  });
-                }
+                ).then((value){
+                  if(value != null && value != symptomDate){
+                    setState(() {
+                      symptomDate = value;
+                      isDateSelected = true;
+                      symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}";
+                    });
+                    dateValue.text = symptom_date + "\r";
+                  }
+                });
 
                 final initialTime = TimeOfDay(hour:12, minute: 0);
-                final newTime = await showTimePicker(
+                await showTimePicker(
                   context: context,
                   initialTime: time ?? initialTime,
-                );
-                if(newTime!=null && newTime!=time){
-                  setState(() {
-                    time = newTime;
-                    final hours = time.hour.toString().padLeft(2,'0');
-                    final min = time.minute.toString().padLeft(2,'0');
-                    print("time is " + hours + ":" + min);
-                    symptom_time = "$hours:$min";
-
-                  });
-                }
-                else{
-                  print("AAAAAAAAAAA");
-                }
+                ).then((value){
+                  if(value != null && value != time){
+                    setState(() {
+                      time = value;
+                      final hours = time.hour.toString().padLeft(2,'0');
+                      final min = time.minute.toString().padLeft(2,'0');
+                      symptom_time = "$hours:$min";
+                      dateValue.text += "$hours:$min";
+                      print("data value " + dateValue.text);
+                    });
+                  }
+                });
               },
               child: AbsorbPointer(
                 child: TextFormField(
+                  controller: dateValue,
                   showCursor: false,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -438,6 +355,8 @@ class _addSymptomsState extends State<add_symptoms> {
                   ),
                   validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
                   onChanged: (val){
+
+                    print(dateValue);
                     setState((){
                     });
                   },
@@ -473,13 +392,10 @@ class _addSymptomsState extends State<add_symptoms> {
                         String temp1 = datasnapshot.value.toString();
                         print("temp1 " + temp1);
                         List<String> temp = temp1.split(',');
-
                         Symptom symptom;
-
-
                         if(datasnapshot.value == null){
                           final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 0.toString());
-                          symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString()});
+                          symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true});
                           print("Added Symptom Successfully! " + uid);
                         }
                         else{
@@ -514,18 +430,18 @@ class _addSymptomsState extends State<add_symptoms> {
                                 case 3: {
                                   print("1st switch symptom time " + splitFull.last);
 
-                                  tempSymptomTime = timeformat.parse(splitFull.last);
+
                                 }
                                 break;
                                 case 4: {
                                   print("1st switch is active " + splitFull.last);
-
+                                  tempSymptomTime = timeformat.parse(splitFull.last);
                                 }
                                 break;
                                 case 5: {
                                   print("1st switch symptom felt " + splitFull.last);
                                   tempSymptomFelt = splitFull.last;
-                                  symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, isActive: tempIsActive);
+                                  symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, symptom_isActive: tempIsActive);
                                   symptoms_list.add(symptom);
 
                                 }
@@ -554,18 +470,18 @@ class _addSymptomsState extends State<add_symptoms> {
                                 break;
                                 case 3: {
                                   print("2nd switch symptom name " + splitFull.last);
-                                  tempSymptomTime = timeformat.parse(splitFull.last);
+
                                 }
                                 break;
                                 case 4: {
                                   print("2nd switch isactive " + splitFull.last);
-
+                                  tempSymptomTime = timeformat.parse(splitFull.last);
                                 }
                                 break;
                                 case 5: {
                                   print("2nd switch symptom felt " + splitFull.last);
                                   tempSymptomFelt = splitFull.last;
-                                  symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, isActive: tempIsActive);
+                                  symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, symptom_isActive: tempIsActive);
                                   symptoms_list.add(symptom);
                                   print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt);
                                 }
@@ -578,7 +494,7 @@ class _addSymptomsState extends State<add_symptoms> {
                           count = symptoms_list.length;
                           print("count " + count.toString());
                           final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
-                          symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "isActive": true});
+                          symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true});
                           print("Added Symptom Successfully! " + uid);
                         }
 
@@ -587,7 +503,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
                       Future.delayed(const Duration(milliseconds: 1000), (){
                         print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
-                        symptoms_list.add(new Symptom(symptom_name: symptom_name.toString(), intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: format.parse(symptom_date), symptom_time: timeformat.parse(symptom_time), isActive: true));
+                        symptoms_list.add(new Symptom(symptom_name: symptom_name.toString(), intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: format.parse(symptom_date), symptom_time: timeformat.parse(symptom_time), symptom_isActive: true));
                         for(var i=0;i<symptoms_list.length/2;i++){
                           var temp = symptoms_list[i];
                           symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];

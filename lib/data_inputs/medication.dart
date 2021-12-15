@@ -28,7 +28,10 @@ class _medicationState extends State<medication> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  TimeOfDay time;
   List<Medication> medtemp = [];
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
 
   @override
   void initState() {
@@ -40,7 +43,8 @@ class _medicationState extends State<medication> {
     String tempMedicineType = "";
     String tempMedicineDate = "";
     double tempMedicineDosage = 0;
-    DateFormat format = new DateFormat("MM/dd/yyyy");
+    String tempMedicineTime = "";
+
     readMedication.once().then((DataSnapshot datasnapshot) {
       medtemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -52,41 +56,46 @@ class _medicationState extends State<medication> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 4){
+        if(i < 5){
           switch(i){
             case 0: {
+              print("1 " + splitFull.last);
               tempMedicineType = splitFull.last;
-
             }
             break;
             case 1: {
+              print("2 " + splitFull.last);
               tempMedicineDosage = double.parse(splitFull.last);
-
             }
             break;
             case 2: {
+              print("3 " + splitFull.last);
               tempMedicineDate = splitFull.last;
             }
             break;
             case 3: {
+              print("4 " + splitFull.last);
               tempMedicineName = splitFull.last;
-              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
+
+            }
+            break;
+            case 4: {
+              print("5 " + splitFull.last);
+              tempMedicineTime = splitFull.last;
+              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate),medicine_time: timeformat.parse(tempMedicineTime));
               medtemp.add(medicine);
             }
             break;
           }
         }
         else{
-          switch(i%4){
+          switch(i%5){
             case 0: {
-
               tempMedicineType = splitFull.last;
-              // tempMedicineDosage = 0;
             }
             break;
             case 1: {
               tempMedicineDosage = double.parse(splitFull.last);
-
             }
             break;
             case 2: {
@@ -96,7 +105,12 @@ class _medicationState extends State<medication> {
             break;
             case 3: {
               tempMedicineName = splitFull.last;
-              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
+
+            }
+            break;
+            case 4: {
+              tempMedicineTime = splitFull.last;
+              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate), medicine_time: timeformat.parse(tempMedicineTime));
               medtemp.add(medicine);
             }
             break;
@@ -214,12 +228,11 @@ class _medicationState extends State<medication> {
                           padding: const EdgeInsets.all(10),
                           child: Row(
                             children: [
-
                               SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                  '' + medtemp[index].getDate.toString()+" "
+                                  '' + getDateFormatted(medtemp[index].getDate.toString())+getTimeFormatted(medtemp[index].getTime.toString())+" "
                                       + "\nMedicine: " + medtemp[index].getName + " "
                                       +"\nDosage "+ medtemp[index].getDosage.toString()+ " "
                                       +"\nType: "+ medtemp[index].getType,
@@ -242,5 +255,20 @@ class _medicationState extends State<medication> {
 
 
     );
+  }
+  String getDateFormatted (String date){
+    print(date);
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    print(date);
+    if(date != null){
+      var dateTime = DateTime.parse(date);
+      var hours = dateTime.hour.toString().padLeft(2, "0");
+      var min = dateTime.minute.toString().padLeft(2, "0");
+      return "$hours:$min";
+    }
+
   }
 }

@@ -30,11 +30,15 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   String systolic_pressure = '';
   String diastolic_pressure = '';
   DateTime bpDate;
+  String bp_time;
   String bp_date = "MM/DD/YYYY";
   int count = 0;
   bool isDateSelected= false;
   List<Blood_Pressure> bp_list = new List<Blood_Pressure>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
+  TimeOfDay time;
+  var dateValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -111,47 +115,75 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                     },
                   ),
                   SizedBox(height: 8.0),
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                          child: new Icon(Icons.calendar_today),
-                          onTap: ()async{
-                            final datePick= await showDatePicker(
-                                context: context,
-                                initialDate: new DateTime.now(),
-                                firstDate: new DateTime(1900),
-                                lastDate: new DateTime(2100)
-                            );
-                            if(datePick!=null && datePick!=bpDate){
-                              setState(() {
-                                bpDate=datePick;
-                                isDateSelected=true;
+                  GestureDetector(
+                    onTap: ()async{
+                      await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime(1900),
+                          lastDate: new DateTime(2100)
+                      ).then((value){
+                        if(value != null && value != bpDate){
+                          setState(() {
+                            bpDate = value;
+                            isDateSelected = true;
+                            bp_date = "${bpDate.month}/${bpDate.day}/${bpDate.year}";
+                          });
+                          dateValue.text = bp_date + "\r";
+                        }
+                      });
 
-                                // put it here
-                                bp_date = "${bpDate.month}/${bpDate.day}/${bpDate.year}"; // 08/14/2019
-                                // AlertDialog alert = AlertDialog(
-                                //   title: Text("My title"),
-                                //   content: Text("This is my message."),
-                                //   actions: [
-                                //
-                                //   ],
-                                // );
+                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                      await showTimePicker(
+                        context: context,
+                        initialTime: time ?? initialTime,
+                      ).then((value){
+                        if(value != null && value != time){
+                          setState(() {
+                            time = value;
+                            final hours = time.hour.toString().padLeft(2,'0');
+                            final min = time.minute.toString().padLeft(2,'0');
+                            bp_time = "$hours:$min";
+                            dateValue.text += "$hours:$min";
+                            print("data value " + dateValue.text);
+                          });
+                        }
+                      });
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateValue,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "Date and Time",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                        onChanged: (val){
 
-                              });
-                            }
-                          }
-                      ), Container(
-                          child: Text(
-                              " MM/DD/YYYY ",
-                              style: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                                fontStyle: FontStyle.normal,
-                              )
-                          )
+                          print(dateValue);
+                          setState((){
+                          });
+                        },
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(height: 18.0),
                   Row(
@@ -185,35 +217,42 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                               Blood_Pressure bloodPressure;
                               if(datasnapshot.value == null){
                                 final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + 0.toString());
-                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),  "bp_date": bp_date.toString()});
+                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
                                 print("Added medication Successfully! " + uid);
                               }
                               else{
                                 String tempSystolicPressure = "";
                                 String tempDiastolicPressure = "";
-                                DateTime tempBPDate;
+                                String tempBPDate;
+                                String tempBPTime;
 
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 3){
+                                  if(i < 4){
                                     print("i value" + i.toString());
                                     switch(i){
                                       case 0: {
                                         print("1st switch i = 0 " + splitFull.last);
-                                        tempBPDate = format.parse(splitFull.last);
+                                        tempBPDate = splitFull.last;
 
                                       }
                                       break;
                                       case 1: {
                                         print("1st switch i = 1 " + splitFull.last);
                                         tempDiastolicPressure = splitFull.last;
+
                                       }
                                       break;
                                       case 2: {
+                                        print("1st switch i = 1 " + splitFull.last);
+                                        tempBPTime = splitFull.last;
+                                      }
+                                      break;
+                                      case 3: {
                                         print("1st switch i = 2 " + splitFull.last);
                                         tempSystolicPressure = splitFull.last;
-                                        bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: tempBPDate);
+                                        bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
                                         bp_list.add(bloodPressure);
                                       }
                                       break;
@@ -222,23 +261,29 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                   else{
                                     print("i value" + i.toString());
                                     print("i value modulu " + (i%4).toString());
-                                    switch(i%3){
+                                    switch(i%4){
                                       case 0: {
-                                        print("2nd switch intensity lvl " + splitFull.last);
-                                        tempBPDate = format.parse(splitFull.last);
+                                        print("1st switch i = 0 " + splitFull.last);
+                                        tempBPDate = splitFull.last;
+
                                       }
                                       break;
                                       case 1: {
-                                        print("2nd switch symptom name " + splitFull.last);
+                                        print("1st switch i = 1 " + splitFull.last);
                                         tempDiastolicPressure = splitFull.last;
+
                                       }
                                       break;
                                       case 2: {
-                                        print("2nd switch symptom date " + splitFull.last);
+                                        print("1st switch i = 1 " + splitFull.last);
+                                        tempBPTime = splitFull.last;
+                                      }
+                                      break;
+                                      case 3: {
+                                        print("1st switch i = 2 " + splitFull.last);
                                         tempSystolicPressure = splitFull.last;
-                                        bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: tempBPDate);
+                                        bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
                                         bp_list.add(bloodPressure);
-
                                       }
                                       break;
                                     }
@@ -248,14 +293,14 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 count = bp_list.length;
                                 print("count " + count.toString());
                                 final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),  "bp_date": bp_date.toString()});
+                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
                                 print("Added Blood Pressure Successfully! " + uid);
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + bp_list.length.toString());
-                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure, bp_date: format.parse(bp_date)));
+                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time)));
                               for(var i=0;i<bp_list.length/2;i++){
                                 var temp = bp_list[i];
                                 bp_list[i] = bp_list[bp_list.length-1-i];

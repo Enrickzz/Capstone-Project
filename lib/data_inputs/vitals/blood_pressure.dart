@@ -30,13 +30,11 @@ class _blood_pressureState extends State<blood_pressure> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  bool isDateSelected= false;
-  DateTime birthDate; // instance of DateTime
-  String birthDateInString = "MM/DD/YYYY";
-
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Blood_Pressure> bptemp = [];
+  TimeOfDay time;
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
 
   @override
   void initState(){
@@ -47,7 +45,7 @@ class _blood_pressureState extends State<blood_pressure> {
     String tempSystolicPressure = "";
     String tempDiastolicPressure = "";
     String tempBPDate = "";
-    DateFormat format = new DateFormat("MM/dd/yyyy");
+    String tempBPTime = "";
     readBP.once().then((DataSnapshot datasnapshot) {
       bptemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -62,24 +60,32 @@ class _blood_pressureState extends State<blood_pressure> {
         if(i < 4){
           switch(i){
             case 0: {
+              print("i is " + i.toString() + splitFull.last);
               tempBPDate = splitFull.last;
             }
             break;
             case 1: {
+              print("i is " + i.toString() + splitFull.last);
               tempDiastolicPressure = splitFull.last;
             }
             break;
             case 2: {
+              print("i is " + i.toString() + splitFull.last);
+              tempBPTime = splitFull.last;
+
+            }
+            break;
+            case 3: {
+              print("i is " + i.toString() + splitFull.last);
               tempSystolicPressure = splitFull.last;
-              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate));
-              print("THIS ===  " + blood_pressure.getDia_pres.toString());
+              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
               bptemp.add(blood_pressure);
             }
             break;
           }
         }
         else{
-          switch(i%3){
+          switch(i%4){
             case 0: {
               tempBPDate = splitFull.last;
             }
@@ -89,8 +95,13 @@ class _blood_pressureState extends State<blood_pressure> {
             }
             break;
             case 2: {
+              tempBPTime = splitFull.last;
+
+            }
+            break;
+            case 3: {
               tempSystolicPressure = splitFull.last;
-              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate));
+              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
               bptemp.add(blood_pressure);
             }
             break;
@@ -208,7 +219,7 @@ class _blood_pressureState extends State<blood_pressure> {
                               width: 10,
                             ),
                             Text(
-                                '' + bptemp[index].getDate.toString()+" "
+                                '' + getDateFormatted(bptemp[index].getDate.toString())+getTimeFormatted(bptemp[index].getTime.toString())+" "
                                     +"\nBlood pressure: "+ bptemp[index].getSys_pres + "/" + bptemp[index].getDia_pres.toString(),
                                 style: TextStyle(
                                     color: Colors.black,
@@ -228,5 +239,16 @@ class _blood_pressureState extends State<blood_pressure> {
     ),
 
     );
+  }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    print(date);
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
   }
 }

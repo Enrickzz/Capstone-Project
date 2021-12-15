@@ -17,9 +17,9 @@ class Symptom {
   String symptom_felt;
   DateTime symptom_date;
   DateTime symptom_time;
-  bool isActive;
+  bool symptom_isActive;
 
-  Symptom({this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date, this.symptom_time, this.isActive});
+  Symptom({this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date, this.symptom_time, this.symptom_isActive});
 
   String get getName{
     return symptom_name;
@@ -37,7 +37,7 @@ class Symptom {
     return symptom_time;
   }
   bool get getisActive{
-    return isActive;
+    return symptom_isActive;
   }
 
   void setName (String temp){
@@ -56,7 +56,7 @@ class Symptom {
     symptom_date = date;
   }
   void setisActive (bool status) {
-   isActive = status;
+    symptom_isActive = status;
   }
 
 
@@ -66,11 +66,14 @@ class Symptom {
 class Medication {
   String medicine_name;
   double medicine_dosage;
-  DateTime medicine_date;
   String medicine_type;
+  DateTime medicine_date;
+  DateTime medicine_time;
+  bool medicine_isActive;
 
 
-  Medication({this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date});
+
+  Medication({this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date, this.medicine_time});
   // Medication(this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date);
 
   String get getName{
@@ -85,6 +88,12 @@ class Medication {
   DateTime get getDate{
     return medicine_date;
   }
+  DateTime get getTime{
+    return medicine_time;
+  }
+  bool get getisActive{
+    return medicine_isActive;
+  }
   void setName (String temp){
     medicine_name = temp;
   }
@@ -97,25 +106,45 @@ class Medication {
   void setDate (DateTime date){
     medicine_date = date;
   }
+  void setTime (DateTime date){
+    medicine_date = date;
+  }
+  void setisActive (bool status) {
+    medicine_isActive = status;
+  }
 }
 
 class Lab_Result {
   String labResult_name;
+  String labResult_note;
   DateTime labResult_date;
+  DateTime labResult_time;
 
-  Lab_Result({this.labResult_name, this.labResult_date});
+  Lab_Result({this.labResult_name,this.labResult_note, this.labResult_date, this.labResult_time});
 
   String get getName{
     return labResult_name;
   }
+  String get getNote{
+    return labResult_note;
+  }
   DateTime get getDate{
     return labResult_date;
+  }
+  DateTime get getTime{
+    return labResult_time;
   }
   void setName (String temp){
     labResult_name = temp;
   }
+  void setNote (String temp){
+    labResult_note = temp;
+  }
   void setDate (DateTime date){
     labResult_date = date;
+  }
+  void setTime (DateTime date){
+    labResult_time = date;
   }
 }
 
@@ -123,8 +152,9 @@ class Blood_Pressure {
   String systolic_pressure;
   String diastolic_pressure;
   DateTime bp_date;
+  DateTime bp_time;
 
-  Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure, this.bp_date});
+  Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure, this.bp_date, this.bp_time});
 
   String get getSys_pres{
     return systolic_pressure;
@@ -135,6 +165,9 @@ class Blood_Pressure {
   DateTime get getDate{
     return bp_date;
   }
+  DateTime get getTime{
+    return bp_time;
+  }
   void setSys_pres (String temp){
     systolic_pressure = temp;
   }
@@ -144,6 +177,9 @@ class Blood_Pressure {
   void setDate (DateTime date){
     bp_date = date;
   }
+  void setTime (DateTime date){
+    bp_time = date;
+  }
 
 }
 
@@ -151,8 +187,9 @@ class Heart_Rate {
   int bpm;
   bool isResting;
   DateTime hr_date;
+  DateTime hr_time;
 
-  Heart_Rate({this.bpm, this.isResting,this.hr_date});
+  Heart_Rate({this.bpm, this.isResting,this.hr_date, this.hr_time});
 
   int get getBPM{
     return bpm;
@@ -163,6 +200,9 @@ class Heart_Rate {
   DateTime get getDate{
     return hr_date;
   }
+  DateTime get getTime{
+    return hr_time;
+  }
   void setBPM (int integer){
     bpm = integer;
   }
@@ -172,6 +212,9 @@ class Heart_Rate {
   void setDate (DateTime date){
     hr_date = date;
   }
+  void setTime (DateTime date){
+    hr_time = date;
+  }
 
 }
 
@@ -179,8 +222,9 @@ class Body_Temperature {
   String unit;
   double temperature;
   DateTime bt_date;
+  DateTime bt_time;
 
-  Body_Temperature({this.unit, this.temperature,this.bt_date});
+  Body_Temperature({this.unit, this.temperature,this.bt_date, this.bt_time});
 
   String get getUnit{
     return unit;
@@ -191,6 +235,9 @@ class Body_Temperature {
   DateTime get getDate{
     return bt_date;
   }
+  DateTime get getTime{
+    return bt_time;
+  }
   void setUnit (String temp){
     unit = temp;
   }
@@ -200,14 +247,18 @@ class Body_Temperature {
   void setDate (DateTime date){
     bt_date = date;
   }
+  void setTime (DateTime date){
+    bt_time = date;
+  }
 
 }
 
 class Oxygen_Saturation {
   int oxygen_saturation;
   DateTime os_date;
+  DateTime os_time;
 
-  Oxygen_Saturation({this.oxygen_saturation, this.os_date});
+  Oxygen_Saturation({this.oxygen_saturation, this.os_date, this.os_time});
 
   int get getOxygenSaturation{
     return oxygen_saturation;
@@ -215,11 +266,17 @@ class Oxygen_Saturation {
   DateTime get getDate{
     return os_date;
   }
+  DateTime get getTime{
+    return os_time;
+  }
   void setTemperature (int oxygen_saturation){
     this.oxygen_saturation = oxygen_saturation;
   }
   void setDate (DateTime date){
     os_date = date;
+  }
+  void setTime (DateTime date){
+    os_time = date;
   }
 
 }
@@ -269,18 +326,21 @@ class Blood_Glucose {
   double glucose = 0;
   String status = "";
   DateTime bloodGlucose_date;
-  Blood_Glucose({this.glucose, this.status, this.bloodGlucose_date});
+  DateTime bloodGlucose_time;
+
+  Blood_Glucose({this.glucose, this.status, this.bloodGlucose_date, this.bloodGlucose_time});
 
   double get getGlucose {
     return glucose;
   }
-
   String get getStatus {
     return status;
   }
-
   DateTime get getDate{
     return bloodGlucose_date;
+  }
+  DateTime get getTime{
+    return bloodGlucose_time;
   }
   void setGlucose (double number){
     glucose = number;
@@ -290,6 +350,9 @@ class Blood_Glucose {
   }
   void setDate (DateTime date){
     bloodGlucose_date = date;
+  }
+  void setTime (DateTime date){
+    bloodGlucose_time = date;
   }
 
 }
