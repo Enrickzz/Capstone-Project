@@ -33,6 +33,8 @@ class _o2_saturationState extends State<o2_saturation> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Oxygen_Saturation> oxygentemp = [];
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
 
   @override
   void initState() {
@@ -42,7 +44,8 @@ class _o2_saturationState extends State<o2_saturation> {
     final readOxygen = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list');
     String tempOxygen = "";
     String tempOxygenDate = "";
-    DateFormat format = new DateFormat("MM/dd/yyyy");
+    String tempOxygenTime = "";
+
     readOxygen.once().then((DataSnapshot datasnapshot) {
       oxygentemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -54,29 +57,41 @@ class _o2_saturationState extends State<o2_saturation> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 2){
+        if(i < 3){
           switch(i){
             case 0: {
+              print("1st switch intensity lvl " + splitFull.last);
               tempOxygen = splitFull.last;
             }
             break;
             case 1: {
+              print("1st switch intensity lvl " + splitFull.last);
               tempOxygenDate = splitFull.last;
-              oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
+
+            }
+            break;
+            case 2: {
+              print("1st switch intensity lvl " + splitFull.last);
+              tempOxygenTime = splitFull.last;
+              oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
               oxygentemp.add(oxygen);
             }
             break;
           }
         }
         else{
-          switch(i%2){
+          switch(i%3){
             case 0: {
               tempOxygen = splitFull.last;
             }
             break;
             case 1: {
               tempOxygenDate = splitFull.last;
-              oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
+            }
+            break;
+            case 2: {
+              tempOxygenTime = splitFull.last;
+              oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
               oxygentemp.add(oxygen);
             }
             break;
@@ -194,7 +209,7 @@ class _o2_saturationState extends State<o2_saturation> {
                                   width: 10,
                                 ),
                                 Text(
-                                    '' + oxygentemp[index].getDate.toString()+" \n" + "My O2 level: " +oxygentemp[index].getOxygenSaturation.toString() +" %SpO2",
+                                    '' + getDateFormatted(oxygentemp[index].getDate.toString())+getTimeFormatted(oxygentemp[index].getTime.toString())+" \n" + "My O2 level: " +oxygentemp[index].getOxygenSaturation.toString() +" %SpO2",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 18
@@ -213,5 +228,15 @@ class _o2_saturationState extends State<o2_saturation> {
         )
 
     );
+  }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
   }
 }

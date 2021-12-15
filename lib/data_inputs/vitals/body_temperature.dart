@@ -36,6 +36,8 @@ class _body_temperatureState extends State<body_temperature> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Body_Temperature> bttemp = [];
   List<File> _image = [];
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
 
   @override
   void initState() {
@@ -46,8 +48,7 @@ class _body_temperatureState extends State<body_temperature> {
     String tempUnit = "";
     String tempTemperature = "";
     String tempTemperatureDate = "";
-
-    DateFormat format = new DateFormat("MM/dd/yyyy");
+    String tempTemperatureTime = "";
     readTemperature.once().then((DataSnapshot datasnapshot) {
       bttemp.clear();
       String temp1 = datasnapshot.value.toString();
@@ -59,7 +60,7 @@ class _body_temperatureState extends State<body_temperature> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 3){
+        if(i < 4){
           switch(i){
             case 0: {
               print("1st switch tempUnit " + splitFull.last);
@@ -67,33 +68,43 @@ class _body_temperatureState extends State<body_temperature> {
             }
             break;
             case 1: {
-              print("1st switch tempTemperature " + splitFull.last);
+              print("1st switch tempTemperaturedate " + splitFull.last);
               tempTemperatureDate = splitFull.last;
 
             }
             break;
             case 2: {
-              print("1st switch tempTemperatureDate " + splitFull.last);
+              print("1st switch tempTemperaturetime " + splitFull.last);
               tempTemperature = splitFull.last;
-              bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
+            }
+            break;
+            case 3: {
+              print("1st switch tempTemperature " + splitFull.last);
+              tempTemperatureTime = splitFull.last;
+              bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
               bttemp.add(bodyTemperature);
             }
             break;
           }
         }
         else{
-          switch(i%3){
+          switch(i%4){
             case 0: {
               tempUnit = splitFull.last;
             }
             break;
             case 1: {
               tempTemperatureDate = splitFull.last;
+
             }
             break;
             case 2: {
               tempTemperature = splitFull.last;
-              bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
+            }
+            break;
+            case 3: {
+              tempTemperatureTime = splitFull.last;
+              bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
               bttemp.add(bodyTemperature);
             }
             break;
@@ -232,7 +243,7 @@ class _body_temperatureState extends State<body_temperature> {
                               width: 10,
                             ),
                             Text(
-                                '' + bttemp[index].getDate.toString()+" "
+                                '' + getDateFormatted(bttemp[index].getDate.toString())+getTimeFormatted(bttemp[index].getTime.toString())+" "
                                     +"\nTemperature: "+ bttemp[index].getTemperature.toString() + " " + bttemp[index].getUnit+ " ",
                                 style: TextStyle(
                                     color: Colors.black,
@@ -253,6 +264,16 @@ class _body_temperatureState extends State<body_temperature> {
     ),
 
     );
+  }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
   }
 
 }
