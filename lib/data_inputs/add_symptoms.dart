@@ -35,6 +35,18 @@ class _addSymptomsState extends State<add_symptoms> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   TimeOfDay time;
 
+  String valueChoose;
+  List<String> listItem = <String>[
+    'Bleedings', 'Chest Tightness', 'Dizziness', 'Excess Phlegm', 'Excess Sputum',
+    'Fatigue', 'Frequent Urination', 'Headaches', 'Imbalance', 'Involuntary Muscle Contractions',
+    'Itchy Skin', 'Loss of Balance', 'Loss of Appetite', 'Muscle Cramps',
+    'Muscle Numbness', 'Muscle Pain', 'Nausea', 'Palpitations',
+    'Seizures', 'Shortness of Breath', 'Skin Coloration',
+    'Swollen Limbs','Swollen Muscles','Vertigo',
+    'Vomiting', 'Wheezing', 'Yellowish Eyes'
+  ];
+
+  String dropdownValue = 'Select Symptom';
   @override
   Widget build(BuildContext context) {
 
@@ -61,29 +73,44 @@ class _addSymptomsState extends State<add_symptoms> {
               'Add Symptom',
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 8.0),
-            TextFormField(
-              showCursor: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(
-                    width:0,
-                    style: BorderStyle.none,
-                  ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey, width: 1),
+                  borderRadius: BorderRadius.circular(15)
                 ),
-                filled: true,
-                fillColor: Color(0xFFF2F3F5),
-                hintStyle: TextStyle(
-                    color: Color(0xFF666666),
-                    fontFamily: defaultFontFamily,
-                    fontSize: defaultFontSize),
-                hintText: "Symptom Name",
+                child: DropdownButton(
+                  dropdownColor: Colors.white,
+                    hint: Text("Select Symptom: "),
+                    icon: Icon(Icons.arrow_drop_down),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18
+                    ),
+                    iconSize: 36,
+                    isExpanded: true,
+                    underline: SizedBox(),
+                    value: valueChoose,
+                    onChanged: (newValue){
+                      setState(() {
+                        valueChoose = newValue;
+
+                      });
+
+                    },
+
+                    items: listItem.map((valueItem){
+                        return DropdownMenuItem(
+                            value: valueItem,
+                            child: Text(valueItem)
+                        );
+                      },
+                    ).toList(),
+
+                ),
               ),
-              validator: (val) => val.isEmpty ? 'Enter Symptom Name' : null,
-              onChanged: (val){
-                setState(() => symptom_name = val);
-              },
             ),
             SizedBox(height: 8.0),
             TextFormField(

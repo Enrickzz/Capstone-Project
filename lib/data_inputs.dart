@@ -234,7 +234,7 @@ class _AppSignUpState extends State<data_inputs> {
                                       width: 10,
                                     ),
                                     Text(
-                                        'Medication Intake',
+                                        'Medication',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18
