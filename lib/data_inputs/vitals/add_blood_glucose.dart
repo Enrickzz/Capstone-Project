@@ -40,6 +40,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
+  List <bool> isSelected = [true, false];
 
   @override
   Widget build(BuildContext context) {
@@ -84,12 +85,36 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Blood Glucose Level (mg/dL)",
+                      hintText: "mg/dL",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Blood Glucose Level' : null,
                     onChanged: (val){
                       setState(() => glucose = double.parse(val));
                     },
+                  ),
+                  ToggleButtons(
+                    isSelected: isSelected,
+                    highlightColor: Colors.blue,
+                    children: <Widget> [
+                      Padding (
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text('mmol/L')
+                      ),
+                      Padding (
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text('mg/dL')
+                      ),
+                    ],
+                      onPressed:(int newIndex){
+                        setState(() {
+                          for (int index = 0; index < isSelected.length; index++)
+                            if (index == newIndex) {
+                              isSelected[index] = true;
+                            } else {
+                              isSelected[index] = false;
+                            }
+                        });
+                      },
                   ),
                   SizedBox(height: 8.0),
                   TextFormField(
