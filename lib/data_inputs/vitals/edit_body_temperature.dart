@@ -18,8 +18,8 @@ import 'body_temperature.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class edit_body_temperature extends StatefulWidget {
-  final List<Body_Temperature> btlist;
-  edit_body_temperature({this.btlist});
+  final Body_Temperature bt;
+  edit_body_temperature({this.bt});
   @override
   _edit_body_temperatureState createState() => _edit_body_temperatureState();
 }
@@ -27,7 +27,7 @@ final _formKey = GlobalKey<FormState>();
 class _edit_body_temperatureState extends State<edit_body_temperature> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-
+  Body_Temperature thisBT;
   double temperature = 0;
   String unit = 'Celsius';
   String valueChoose;
@@ -45,10 +45,11 @@ class _edit_body_temperatureState extends State<edit_body_temperature> {
 
   @override
   Widget build(BuildContext context) {
-
+    //print ("THIS BT\n" + bt.);
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
+    thisBT = widget.bt;
 
     return Container(
         key: _formKey,
@@ -127,7 +128,7 @@ class _edit_body_temperatureState extends State<edit_body_temperature> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Temperature",
+                      hintText: "Temperature = " + thisBT.getTemperature.toString(),
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
                     onChanged: (val){

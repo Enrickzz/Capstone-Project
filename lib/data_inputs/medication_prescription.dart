@@ -17,7 +17,8 @@ import 'add_medication_prescription.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class medication_prescription extends StatefulWidget {
   final List<Medication_Prescription> preslist;
-  medication_prescription({Key key, this.preslist}): super(key: key);
+  final int pointer;
+  medication_prescription({Key key, this.preslist, this.pointer}): super(key: key);
   @override
   _medication_prescriptionState createState() => _medication_prescriptionState();
 }
@@ -179,11 +180,12 @@ class _medication_prescriptionState extends State<medication_prescription> {
                       Future.delayed(const Duration(milliseconds: 1500), (){
                         setState((){
                           print("setstate medication prescription");
+                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                           if(value != null){
-                            prestemp = value;
+                            prestemp = value[0];
                           }
                         });
-                      }));;
+                      }));
                 },
                 child: Icon(
                   Icons.add,

@@ -223,7 +223,7 @@ class _body_temperatureState extends State<body_temperature> {
                                   builder: (context) => SingleChildScrollView(child: Container(
                                     padding: EdgeInsets.only(
                                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                                    child: edit_body_temperature(btlist: bttemp),
+                                    child: edit_body_temperature(bt: bttemp[index]),
                                   ),
                                   ),
                                 ).then((value) => setState((){

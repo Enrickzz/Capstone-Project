@@ -406,7 +406,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 prescription_list[prescription_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, prescription_list);
+                              Navigator.pop(context, [prescription_list, 1]);
                             });
 
                           } catch(e) {
