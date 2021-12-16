@@ -85,7 +85,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "mg/dL",
+                      hintText: "Blood Glucose Level",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Blood Glucose Level' : null,
                     onChanged: (val){
