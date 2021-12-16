@@ -19,6 +19,7 @@ import 'add_blood_pressure.dart';
 import '../add_lab_results.dart';
 import '../add_medication.dart';
 import 'add_body_temperature.dart';
+import 'edit_body_temperature.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class body_temperature extends StatefulWidget {
@@ -217,15 +218,21 @@ class _body_temperatureState extends State<body_temperature> {
                               ),
                               color: Colors.black,
                               onPressed: () {
-                                print("hi " + index.toString());
-                                print("initial " + bttemp[index].getTemperature.toString());
-                                bttemp[index].setTemperature(30);
-                                print("edited " + bttemp[index].getTemperature.toString());
-                                setState(() {
-                                  print("set state");
-                                });
-
-
+                                showModalBottomSheet(context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) => SingleChildScrollView(child: Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                                    child: edit_body_temperature(btlist: bttemp),
+                                  ),
+                                  ),
+                                ).then((value) => setState((){
+                                  print("setstate symptoms");
+                                  if(value != null){
+                                    bttemp = value;
+                                  }
+                                  print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
+                                }));;
                               },
                             ),
                             SizedBox(
