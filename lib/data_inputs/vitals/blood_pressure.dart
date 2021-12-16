@@ -1,3 +1,4 @@
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'add_blood_pressure.dart';
 import '../add_lab_results.dart';
 import '../add_medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
+import 'package:collection/collection.dart';
 
 
 class blood_pressure extends StatefulWidget {
@@ -36,6 +38,10 @@ class _blood_pressureState extends State<blood_pressure> {
   TimeOfDay time;
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
+  int _currentSortColumn = 0;
+  bool _isSortAsc = true;
+  List<bool> _selected = [];
+
 
   @override
   void initState(){
@@ -50,6 +56,7 @@ class _blood_pressureState extends State<blood_pressure> {
     String tempBPLvl = "";
     readBP.once().then((DataSnapshot datasnapshot) {
       bptemp.clear();
+      _selected.clear();
       String temp1 = datasnapshot.value.toString();
       List<String> temp = temp1.split(',');
       Blood_Pressure blood_pressure = new Blood_Pressure();
@@ -129,14 +136,20 @@ class _blood_pressureState extends State<blood_pressure> {
         bptemp[bptemp.length-1-i] = temp;
       }
     });
-    bptemp = widget.bplist;
+    // _selected = List<bool>.generate(bptemp.length, (int index) => false);
+    // bptemp = widget.bplist;
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
+        _selected = List<bool>.generate(bptemp.length, (int index) => false);
+
         print(bptemp);
         print("setstate");
       });
     });
+
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +187,8 @@ class _blood_pressureState extends State<blood_pressure> {
                     print("setstate blood_pressure");
                     if(value != null){
                       bptemp = value;
+                      _selected = List<bool>.generate(bptemp.length, (int index) => false);
+
                     }
                   }));
                 },
@@ -184,75 +199,88 @@ class _blood_pressureState extends State<blood_pressure> {
           ),
         ],
       ),
+         body: SingleChildScrollView(
+           scrollDirection: Axis.vertical,
+           child: SingleChildScrollView(
+             scrollDirection: Axis.horizontal,
+             child: _createDataTable()
 
-      body: ListView.builder(
-      itemCount: bptemp.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          child: Container(
-              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              height: 140,
-              child: Stack(
-                  children: [
-                    Positioned (
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                          height: 120,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20)
-                              ),
-                              gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    Colors.white.withOpacity(0.7),
-                                    Colors.white
-                                  ]
-                              ),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: FitnessAppTheme.grey.withOpacity(0.6),
-                                    offset: Offset(1.1, 1.1),
-                                    blurRadius: 10.0),
-                              ]
-                          )
-                      ),
-                    ),
-                    Positioned(
-                      top: 25,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
+           ),
 
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                                '' + getDateFormatted(bptemp[index].getDate.toString())+getTimeFormatted(bptemp[index].getTime.toString())+" " + bptemp[index].getLvl_pres.toString()
-                                    +"\nBlood pressure: "+ bptemp[index].getSys_pres + "/" + bptemp[index].getDia_pres.toString(),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18
-                                )
-                            ),
 
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]
-              )
-          ),
-        );
-      },
-    ),
+
+
+
+         ),
+
+    //   body: ListView.builder(
+    //   itemCount: bptemp.length,
+    //   itemBuilder: (context, index) {
+    //     return GestureDetector(
+    //       child: Container(
+    //           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+    //           height: 140,
+    //           child: Stack(
+    //               children: [
+    //                 Positioned (
+    //                   bottom: 0,
+    //                   left: 0,
+    //                   right: 0,
+    //                   child: Container(
+    //                       height: 120,
+    //                       decoration: BoxDecoration(
+    //                           borderRadius: BorderRadius.only(
+    //                               bottomLeft: Radius.circular(20),
+    //                               topLeft: Radius.circular(20),
+    //                               topRight: Radius.circular(20),
+    //                               bottomRight: Radius.circular(20)
+    //                           ),
+    //                           gradient: LinearGradient(
+    //                               begin: Alignment.bottomCenter,
+    //                               end: Alignment.topCenter,
+    //                               colors: [
+    //                                 Colors.white.withOpacity(0.7),
+    //                                 Colors.white
+    //                               ]
+    //                           ),
+    //                           boxShadow: <BoxShadow>[
+    //                             BoxShadow(
+    //                                 color: FitnessAppTheme.grey.withOpacity(0.6),
+    //                                 offset: Offset(1.1, 1.1),
+    //                                 blurRadius: 10.0),
+    //                           ]
+    //                       )
+    //                   ),
+    //                 ),
+    //                 Positioned(
+    //                   top: 25,
+    //                   child: Padding(
+    //                     padding: const EdgeInsets.all(10),
+    //                     child: Row(
+    //                       children: [
+    //
+    //                         SizedBox(
+    //                           width: 10,
+    //                         ),
+    //                         Text(
+    //                             '' + getDateFormatted(bptemp[index].getDate.toString())+getTimeFormatted(bptemp[index].getTime.toString())+" " + bptemp[index].getLvl_pres.toString()
+    //                                 +"\nBlood pressure: "+ bptemp[index].getSys_pres + "/" + bptemp[index].getDia_pres.toString(),
+    //                             style: TextStyle(
+    //                                 color: Colors.black,
+    //                                 fontSize: 18
+    //                             )
+    //                         ),
+    //
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ]
+    //           )
+    //       ),
+    //     );
+    //   },
+    // ),
     //   body: ListView.builder(
     //   itemCount: bptemp.length,
     //   itemBuilder: (context, index) {
@@ -334,6 +362,104 @@ class _blood_pressureState extends State<blood_pressure> {
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+
+  Color getMyColor(String indication) {
+    if(indication == 'normal'){
+      return Colors.green;
+    }
+    else if(indication == 'low'){
+      return Colors.blue;
+
+    }
+    else
+      return Colors.red;
+
+  }
+
+  DataTable _createDataTable() {
+    return DataTable(
+      columns: _createColumns(),
+      rows: _createRows(),
+      sortColumnIndex: _currentSortColumn,
+      sortAscending: _isSortAsc,
+      dividerThickness: 5,
+      dataRowHeight: 80,
+      showBottomBorder: true,
+      headingTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white
+      ),
+      headingRowColor: MaterialStateProperty.resolveWith(
+              (states) => Colors.lightBlue
+      ),
+    );
+  }
+
+  List<DataColumn> _createColumns() {
+    return [
+      DataColumn(
+        label: Text('Date'),
+        onSort: (columnIndex, _) {
+          setState(() {
+            _currentSortColumn = columnIndex;
+            if (_isSortAsc) {
+              bptemp.sort((a, b) => b.getDate.compareTo(a.getDate));
+            } else {
+              bptemp.sort((a, b) => a.getDate.compareTo(b.getDate));
+            }
+            _isSortAsc = !_isSortAsc;
+          });
+        },
+      ),
+
+
+
+      DataColumn(label: Text('Time')),
+      DataColumn(label: Text('Blood Pressure')),
+      DataColumn(label: Text('Implication'))
+
+    ];
+
+  }
+
+  // List<DataRow> _createRows() {
+  //
+  //   return bptemp
+  //       .mapIndexed((index,bp) => DataRow(cells: [
+  //
+  //           DataCell(Text(getDateFormatted(bp.getDate.toString()))),
+  //           DataCell(Text(getTimeFormatted(bp.getTime.toString()))),
+  //           DataCell(Text(bp.getSys_pres +'/'+ bp.getDia_pres, style: TextStyle(),)),
+  //           DataCell(Text(bp.getLvl_pres, style: TextStyle(color: getMyColor(bp.getLvl_pres)),))
+  //
+  //
+  //   ],
+  //       selected:  _selected[index],
+  //       onSelectChanged: (bool selected){
+  //         setState(() {
+  //           _selected[index] = selected;
+  //         });
+  //       }
+  //
+  //   )).toList();
+  // }
+  List<DataRow> _createRows() {
+    return bptemp
+        .mapIndexed((index, bp) => DataRow(
+        cells: [
+          DataCell(Text(getDateFormatted(bp.getDate.toString()))),
+          DataCell(Text(getTimeFormatted(bp.getTime.toString()))),
+          DataCell(Text(bp.getSys_pres +'/'+ bp.getDia_pres, style: TextStyle(),)),
+          DataCell(Text(bp.getLvl_pres, style: TextStyle(color: getMyColor(bp.getLvl_pres)),))
+        ],
+        selected: _selected[index],
+        onSelectChanged: (bool selected) {
+          setState(() {
+            _selected[index] = selected;
+          });
+        }))
+        .toList();
   }
 
 
