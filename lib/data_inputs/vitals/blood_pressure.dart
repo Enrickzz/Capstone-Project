@@ -184,7 +184,7 @@ class _blood_pressureState extends State<blood_pressure> {
           ),
         ],
       ),
-<<<<<<< Updated upstream
+
       body: ListView.builder(
       itemCount: bptemp.length,
       itemBuilder: (context, index) {
@@ -253,8 +253,6 @@ class _blood_pressureState extends State<blood_pressure> {
         );
       },
     ),
-=======
-    body:buildDataTable(),
     //   body: ListView.builder(
     //   itemCount: bptemp.length,
     //   itemBuilder: (context, index) {
@@ -323,7 +321,6 @@ class _blood_pressureState extends State<blood_pressure> {
     //     );
     //   },
     // ),
->>>>>>> Stashed changes
 
     );
   }
@@ -339,25 +336,6 @@ class _blood_pressureState extends State<blood_pressure> {
     return "$hours:$min";
   }
 
-<<<<<<< Updated upstream
 
-=======
-  Widget buildDataTable(){
-    final columns = ['Date', 'Time', 'Blood Pressure', 'Indication'];
-
-    return DataTable(
-      columns: getColumns(columns),
- 
-
-    );
-
-  }
-
-  List<DataColumn> getColumns(List<String> columns) => columns
-      .map((String column) => DataColumn(
-      label: Text(column),
-  ) )
-      .toList();
->>>>>>> Stashed changes
 
 }
