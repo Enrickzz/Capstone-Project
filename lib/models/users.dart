@@ -305,13 +305,17 @@ class Body_Temperature {
 
 class Oxygen_Saturation {
   int oxygen_saturation;
+  String oxygen_status;
   DateTime os_date;
   DateTime os_time;
 
-  Oxygen_Saturation({this.oxygen_saturation, this.os_date, this.os_time});
+  Oxygen_Saturation({this.oxygen_saturation,this.oxygen_status, this.os_date, this.os_time});
 
   int get getOxygenSaturation{
     return oxygen_saturation;
+  }
+  String get getOxygenStatus{
+    return oxygen_status;
   }
   DateTime get getDate{
     return os_date;
@@ -319,8 +323,11 @@ class Oxygen_Saturation {
   DateTime get getTime{
     return os_time;
   }
-  void setTemperature (int oxygen_saturation){
-    this.oxygen_saturation = oxygen_saturation;
+  void setTemperature (int temp){
+    this.oxygen_saturation = temp;
+  }
+  void setOxygenStatus (String temp){
+    this.oxygen_status = temp;
   }
   void setDate (DateTime date){
     os_date = date;

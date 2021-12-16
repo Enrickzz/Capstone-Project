@@ -47,6 +47,7 @@ class _o2_saturationState extends State<o2_saturation> {
     final uid = user.uid;
     final readOxygen = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list');
     String tempOxygen = "";
+    String tempOxygenStatus = "";
     String tempOxygenDate = "";
     String tempOxygenTime = "";
     DateFormat format = new DateFormat("MM/dd/yyyy");
@@ -63,21 +64,22 @@ class _o2_saturationState extends State<o2_saturation> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        switch(i%3){
+        switch(i%4){
           case 0: {
-            print("i value" + i.toString() + splitFull.last);
             tempOxygen = splitFull.last;
           }
           break;
           case 1: {
-            print("i value" + i.toString() + splitFull.last);
             tempOxygenDate = splitFull.last;
           }
           break;
           case 2: {
-            print("i value" + i.toString() + splitFull.last);
+            tempOxygenStatus = splitFull.last;
+          }
+          break;
+          case 3: {
             tempOxygenTime = splitFull.last;
-            oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
+            oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen),oxygen_status: tempOxygenStatus, os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
             oxygentemp.add(oxygen);
           }
           break;
