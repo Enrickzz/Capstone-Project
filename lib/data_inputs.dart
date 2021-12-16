@@ -42,6 +42,7 @@ class _AppSignUpState extends State<data_inputs> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Symptom> thislist = new List<Symptom>();
   List<Medication> thismedlist = new List<Medication>();
+  List<Medication_Prescription> prescriptionList = new List<Medication_Prescription>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
 
   @override
@@ -172,7 +173,7 @@ class _AppSignUpState extends State<data_inputs> {
                     // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => medication_prescription()),
+                      MaterialPageRoute(builder: (context) => medication_prescription(preslist: prescriptionList)),
                     );
                   },
                   child: Container(

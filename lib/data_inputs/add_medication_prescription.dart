@@ -409,12 +409,6 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               Navigator.pop(context, prescription_list);
                             });
 
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => medication_prescription()),
-                            );
-
-
                           } catch(e) {
                             print("you got an error! $e");
                           }
