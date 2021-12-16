@@ -1,3 +1,4 @@
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,11 @@ class _o2_saturationState extends State<o2_saturation> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Oxygen_Saturation> oxygentemp = [];
 
+  //for table
+  int _currentSortColumn = 0;
+  bool _isSortAsc = true;
+  List<bool> _selected = [];
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +53,7 @@ class _o2_saturationState extends State<o2_saturation> {
     DateFormat timeformat = new DateFormat("hh:mm");
     readOxygen.once().then((DataSnapshot datasnapshot) {
       oxygentemp.clear();
+      _selected.clear();
       String temp1 = datasnapshot.value.toString();
       List<String> temp = temp1.split(',');
       Oxygen_Saturation oxygen;
@@ -86,6 +93,7 @@ class _o2_saturationState extends State<o2_saturation> {
     oxygentemp = widget.oxygenlist;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        _selected = List<bool>.generate(oxygentemp.length, (int index) => false);
         print("setstate");
       });
     });
@@ -127,6 +135,8 @@ class _o2_saturationState extends State<o2_saturation> {
                     print("setstate symptoms");
                     if(value != null){
                       oxygentemp = value;
+                      _selected = List<bool>.generate(oxygentemp.length, (int index) => false);
+
                     }
                     print("OXY LENGTH AFTER SETSTATE  =="  + oxygentemp.length.toString() );
                   }));
@@ -138,73 +148,86 @@ class _o2_saturationState extends State<o2_saturation> {
           ),
         ],
       ),
-        body: ListView.builder(
-          itemCount: oxygentemp.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              child: Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  height: 140,
-                  child: Stack(
-                      children: [
-                        Positioned (
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                              height: 120,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(20),
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                      bottomRight: Radius.circular(20)
-                                  ),
-                                  gradient: LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        Colors.white.withOpacity(0.7),
-                                        Colors.white
-                                      ]
-                                  ),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: FitnessAppTheme.grey.withOpacity(0.6),
-                                        offset: Offset(1.1, 1.1),
-                                        blurRadius: 10.0),
-                                  ]
-                              )
-                          ),
-                        ),
-                        Positioned(
-                          top: 25,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Row(
-                              children: [
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: _createDataTable()
 
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                    '' + getDateFormatted(oxygentemp[index].getDate.toString())+getTimeFormatted(oxygentemp[index].getTime.toString())+" \n" + "My O2 level: " +oxygentemp[index].getOxygenSaturation.toString() +" %SpO2",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18
-                                    )
-                                ),
+          ),
 
-                              ],
-                            ),
-                          ),
-                        ),
-                      ]
-                  )
-              ),
-            );
-          },
-        )
+
+
+
+
+        ),
+        // body: ListView.builder(
+        //   itemCount: oxygentemp.length,
+        //   itemBuilder: (context, index) {
+        //     return GestureDetector(
+        //       child: Container(
+        //           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        //           height: 140,
+        //           child: Stack(
+        //               children: [
+        //                 Positioned (
+        //                   bottom: 0,
+        //                   left: 0,
+        //                   right: 0,
+        //                   child: Container(
+        //                       height: 120,
+        //                       decoration: BoxDecoration(
+        //                           borderRadius: BorderRadius.only(
+        //                               bottomLeft: Radius.circular(20),
+        //                               topLeft: Radius.circular(20),
+        //                               topRight: Radius.circular(20),
+        //                               bottomRight: Radius.circular(20)
+        //                           ),
+        //                           gradient: LinearGradient(
+        //                               begin: Alignment.bottomCenter,
+        //                               end: Alignment.topCenter,
+        //                               colors: [
+        //                                 Colors.white.withOpacity(0.7),
+        //                                 Colors.white
+        //                               ]
+        //                           ),
+        //                           boxShadow: <BoxShadow>[
+        //                             BoxShadow(
+        //                                 color: FitnessAppTheme.grey.withOpacity(0.6),
+        //                                 offset: Offset(1.1, 1.1),
+        //                                 blurRadius: 10.0),
+        //                           ]
+        //                       )
+        //                   ),
+        //                 ),
+        //                 Positioned(
+        //                   top: 25,
+        //                   child: Padding(
+        //                     padding: const EdgeInsets.all(10),
+        //                     child: Row(
+        //                       children: [
+        //
+        //                         SizedBox(
+        //                           width: 10,
+        //                         ),
+        //                         Text(
+        //                             '' + getDateFormatted(oxygentemp[index].getDate.toString())+getTimeFormatted(oxygentemp[index].getTime.toString())+" \n" + "My O2 level: " +oxygentemp[index].getOxygenSaturation.toString() +" %SpO2",
+        //                             style: TextStyle(
+        //                                 color: Colors.black,
+        //                                 fontSize: 18
+        //                             )
+        //                         ),
+        //
+        //                       ],
+        //                     ),
+        //                   ),
+        //                 ),
+        //               ]
+        //           )
+        //       ),
+        //     );
+        //   },
+        // )
 
     );
   }
@@ -217,5 +240,82 @@ class _o2_saturationState extends State<o2_saturation> {
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+  Color getMyColor(int indication) {
+    if(indication < 85){
+      return Colors.red;
+    }
+    else if(indication <= 94 && indication >= 85){
+      return Colors.orange;
+
+    }
+    else{
+      return Colors.green;
+    }
+      return Colors.blue;
+
+  }
+
+  DataTable _createDataTable() {
+    return DataTable(
+      columns: _createColumns(),
+      rows: _createRows(),
+      sortColumnIndex: _currentSortColumn,
+      sortAscending: _isSortAsc,
+      dividerThickness: 5,
+      dataRowHeight: 80,
+      showBottomBorder: true,
+      headingTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white
+      ),
+      headingRowColor: MaterialStateProperty.resolveWith(
+              (states) => Colors.lightBlue
+      ),
+    );
+  }
+
+  List<DataColumn> _createColumns() {
+    return [
+      DataColumn(
+        label: Text('Date'),
+        onSort: (columnIndex, _) {
+          setState(() {
+            _currentSortColumn = columnIndex;
+            if (_isSortAsc) {
+              oxygentemp.sort((a, b) => b.getDate.compareTo(a.getDate));
+            } else {
+              oxygentemp.sort((a, b) => a.getDate.compareTo(b.getDate));
+            }
+            _isSortAsc = !_isSortAsc;
+          });
+        },
+      ),
+
+
+
+      DataColumn(label: Text('Time')),
+      DataColumn(label: Text('Oxygen Level')),
+
+    ];
+
+  }
+
+  List<DataRow> _createRows() {
+    return oxygentemp
+        .mapIndexed((index, os) => DataRow(
+        cells: [
+          DataCell(Text(getDateFormatted(os.getDate.toString()))),
+          DataCell(Text(getTimeFormatted(os.getTime.toString()))),
+          DataCell(Text("          "+os.getOxygenSaturation.toString(), style: TextStyle(color: getMyColor(os.getOxygenSaturation)),))
+
+        ],
+        selected: _selected[index],
+        onSelectChanged: (bool selected) {
+          setState(() {
+            _selected[index] = selected;
+          });
+        }))
+        .toList();
   }
 }

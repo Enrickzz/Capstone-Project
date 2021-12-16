@@ -1,3 +1,4 @@
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,11 @@ class _heart_rateState extends State<heart_rate> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Heart_Rate> hrtemp = [];
 
+  //for table
+  int _currentSortColumn = 0;
+  bool _isSortAsc = true;
+  List<bool> _selected = [];
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +54,7 @@ class _heart_rateState extends State<heart_rate> {
 
     readHeartRate.once().then((DataSnapshot datasnapshot) {
       hrtemp.clear();
+      _selected.clear();
       String temp1 = datasnapshot.value.toString();
       List<String> temp = temp1.split(',');
       Heart_Rate heartRate;
@@ -94,6 +101,7 @@ class _heart_rateState extends State<heart_rate> {
     hrtemp = widget.hrlist;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        _selected = List<bool>.generate(hrtemp.length, (int index) => false);
         print(hrtemp);
         print("setstate");
       });
@@ -136,6 +144,7 @@ class _heart_rateState extends State<heart_rate> {
                     print("setstate blood_pressure");
                     if(value != null){
                       hrtemp = value;
+                      _selected = List<bool>.generate(hrtemp.length, (int index) => false);
                     }
                   }));
                 },
@@ -146,75 +155,88 @@ class _heart_rateState extends State<heart_rate> {
           ),
         ],
       ),
-        body: ListView.builder(
-          itemCount: hrtemp.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              child: Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  height: 140,
-                  child: Stack(
-                      children: [
-                        Positioned (
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                              height: 120,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(20),
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                      bottomRight: Radius.circular(20)
-                                  ),
-                                  gradient: LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        Colors.white.withOpacity(0.7),
-                                        Colors.white
-                                      ]
-                                  ),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: FitnessAppTheme.grey.withOpacity(0.6),
-                                        offset: Offset(1.1, 1.1),
-                                        blurRadius: 10.0),
-                                  ]
-                              )
-                          ),
-                        ),
-                        Positioned(
-                          top: 25,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Row(
-                              children: [
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: _createDataTable()
 
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                    '' + getDateFormatted(hrtemp[index].getDate.toString())+getTimeFormatted(hrtemp[index].getTime.toString())+" "
-                                        +"\nHeart rate: "+ hrtemp[index].getBPM.toString() + " BPM"
-                                        +"\nResting: "+ hrtemp[index].getisResting.toString() + "  " ,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18
-                                    )
-                                ),
+        ),
 
-                              ],
-                            ),
-                          ),
-                        ),
-                      ]
-                  )
-              ),
-            );
-          },
-        )
+
+
+
+
+      ),
+        // body: ListView.builder(
+        //   itemCount: hrtemp.length,
+        //   itemBuilder: (context, index) {
+        //     return GestureDetector(
+        //       child: Container(
+        //           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        //           height: 140,
+        //           child: Stack(
+        //               children: [
+        //                 Positioned (
+        //                   bottom: 0,
+        //                   left: 0,
+        //                   right: 0,
+        //                   child: Container(
+        //                       height: 120,
+        //                       decoration: BoxDecoration(
+        //                           borderRadius: BorderRadius.only(
+        //                               bottomLeft: Radius.circular(20),
+        //                               topLeft: Radius.circular(20),
+        //                               topRight: Radius.circular(20),
+        //                               bottomRight: Radius.circular(20)
+        //                           ),
+        //                           gradient: LinearGradient(
+        //                               begin: Alignment.bottomCenter,
+        //                               end: Alignment.topCenter,
+        //                               colors: [
+        //                                 Colors.white.withOpacity(0.7),
+        //                                 Colors.white
+        //                               ]
+        //                           ),
+        //                           boxShadow: <BoxShadow>[
+        //                             BoxShadow(
+        //                                 color: FitnessAppTheme.grey.withOpacity(0.6),
+        //                                 offset: Offset(1.1, 1.1),
+        //                                 blurRadius: 10.0),
+        //                           ]
+        //                       )
+        //                   ),
+        //                 ),
+        //                 Positioned(
+        //                   top: 25,
+        //                   child: Padding(
+        //                     padding: const EdgeInsets.all(10),
+        //                     child: Row(
+        //                       children: [
+        //
+        //                         SizedBox(
+        //                           width: 10,
+        //                         ),
+        //                         Text(
+        //                             '' + getDateFormatted(hrtemp[index].getDate.toString())+getTimeFormatted(hrtemp[index].getTime.toString())+" "
+        //                                 +"\nHeart rate: "+ hrtemp[index].getBPM.toString() + " BPM"
+        //                                 +"\nResting: "+ hrtemp[index].getisResting.toString() + "  " ,
+        //                             style: TextStyle(
+        //                                 color: Colors.black,
+        //                                 fontSize: 18
+        //                             )
+        //                         ),
+        //
+        //                       ],
+        //                     ),
+        //                   ),
+        //                 ),
+        //               ]
+        //           )
+        //       ),
+        //     );
+        //   },
+        // )
 
     );
   }
@@ -236,6 +258,78 @@ class _heart_rateState extends State<heart_rate> {
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+  Color getMyColor(String indication) {
+    if(indication == 'Active'){
+      return Colors.red;
+    }
+    else
+      return Colors.blue;
+
+  }
+
+  DataTable _createDataTable() {
+    return DataTable(
+      columns: _createColumns(),
+      rows: _createRows(),
+      sortColumnIndex: _currentSortColumn,
+      sortAscending: _isSortAsc,
+      dividerThickness: 5,
+      dataRowHeight: 80,
+      showBottomBorder: true,
+      headingTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white
+      ),
+      headingRowColor: MaterialStateProperty.resolveWith(
+              (states) => Colors.lightBlue
+      ),
+    );
+  }
+
+  List<DataColumn> _createColumns() {
+    return [
+      DataColumn(
+        label: Text('Date'),
+        onSort: (columnIndex, _) {
+          setState(() {
+            _currentSortColumn = columnIndex;
+            if (_isSortAsc) {
+              hrtemp.sort((a, b) => b.getDate.compareTo(a.getDate));
+            } else {
+              hrtemp.sort((a, b) => a.getDate.compareTo(b.getDate));
+            }
+            _isSortAsc = !_isSortAsc;
+          });
+        },
+      ),
+
+
+
+      DataColumn(label: Text('Time')),
+      DataColumn(label: Text('Heart Rate')),
+      DataColumn(label: Text('Status'))
+
+    ];
+
+  }
+
+  List<DataRow> _createRows() {
+    return hrtemp
+        .mapIndexed((index, hr) => DataRow(
+        cells: [
+          DataCell(Text(getDateFormatted(hr.getDate.toString()))),
+          DataCell(Text(getTimeFormatted(hr.getTime.toString()))),
+          DataCell(Text(hr.getBPM.toString())),
+          DataCell(Text(hr.getisResting, style: TextStyle(color: getMyColor(hr.getisResting)),))
+        ],
+        selected: _selected[index],
+        onSelectChanged: (bool selected) {
+          setState(() {
+            _selected[index] = selected;
+          });
+        }))
+        .toList();
   }
 
 }
