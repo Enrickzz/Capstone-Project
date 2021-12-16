@@ -184,6 +184,7 @@ class _blood_pressureState extends State<blood_pressure> {
           ),
         ],
       ),
+<<<<<<< Updated upstream
       body: ListView.builder(
       itemCount: bptemp.length,
       itemBuilder: (context, index) {
@@ -252,6 +253,77 @@ class _blood_pressureState extends State<blood_pressure> {
         );
       },
     ),
+=======
+    body:buildDataTable(),
+    //   body: ListView.builder(
+    //   itemCount: bptemp.length,
+    //   itemBuilder: (context, index) {
+    //     return GestureDetector(
+    //       child: Container(
+    //           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+    //           height: 140,
+    //           child: Stack(
+    //               children: [
+    //                 Positioned (
+    //                   bottom: 0,
+    //                   left: 0,
+    //                   right: 0,
+    //                   child: Container(
+    //                       height: 120,
+    //                       decoration: BoxDecoration(
+    //                           borderRadius: BorderRadius.only(
+    //                               bottomLeft: Radius.circular(20),
+    //                               topLeft: Radius.circular(20),
+    //                               topRight: Radius.circular(20),
+    //                               bottomRight: Radius.circular(20)
+    //                           ),
+    //                           gradient: LinearGradient(
+    //                               begin: Alignment.bottomCenter,
+    //                               end: Alignment.topCenter,
+    //                               colors: [
+    //                                 Colors.white.withOpacity(0.7),
+    //                                 Colors.white
+    //                               ]
+    //                           ),
+    //                           boxShadow: <BoxShadow>[
+    //                             BoxShadow(
+    //                                 color: FitnessAppTheme.grey.withOpacity(0.6),
+    //                                 offset: Offset(1.1, 1.1),
+    //                                 blurRadius: 10.0),
+    //                           ]
+    //                       )
+    //                   ),
+    //                 ),
+    //                 Positioned(
+    //                   top: 25,
+    //                   child: Padding(
+    //                     padding: const EdgeInsets.all(10),
+    //                     child: Row(
+    //                       children: [
+    //
+    //                         SizedBox(
+    //                           width: 10,
+    //                         ),
+    //                         Text(
+    //                             '' + getDateFormatted(bptemp[index].getDate.toString())+getTimeFormatted(bptemp[index].getTime.toString())+" "
+    //                                 +"\nBlood pressure: "+ bptemp[index].getSys_pres + "/" + bptemp[index].getDia_pres.toString(),
+    //                             style: TextStyle(
+    //                                 color: Colors.black,
+    //                                 fontSize: 18
+    //                             )
+    //                         ),
+    //
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ]
+    //           )
+    //       ),
+    //     );
+    //   },
+    // ),
+>>>>>>> Stashed changes
 
     );
   }
@@ -267,6 +339,25 @@ class _blood_pressureState extends State<blood_pressure> {
     return "$hours:$min";
   }
 
+<<<<<<< Updated upstream
 
+=======
+  Widget buildDataTable(){
+    final columns = ['Date', 'Time', 'Blood Pressure', 'Indication'];
+
+    return DataTable(
+      columns: getColumns(columns),
+ 
+
+    );
+
+  }
+
+  List<DataColumn> getColumns(List<String> columns) => columns
+      .map((String column) => DataColumn(
+      label: Text(column),
+  ) )
+      .toList();
+>>>>>>> Stashed changes
 
 }
