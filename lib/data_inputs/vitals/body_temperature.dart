@@ -209,7 +209,7 @@ class _body_temperatureState extends State<body_temperature> {
                                   builder: (context) => SingleChildScrollView(child: Container(
                                     padding: EdgeInsets.only(
                                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                                    child: edit_body_temperature(bt: bttemp[index]),
+                                    child: edit_body_temperature(bt: bttemp[index], pointer: index,),
                                   ),
                                   ),
                                 ).then((value) => setState((){
@@ -225,7 +225,7 @@ class _body_temperatureState extends State<body_temperature> {
                               width: 10,
                             ),
                             Text(
-                                '' + bttemp[index].getDate.toString()+" "
+                                '' + getDateFormatted(bttemp[index].getDate.toString()) + getTimeFormatted(bttemp[index].getTime.toString())+" "
                                     +"\nTemperature: "+ bttemp[index].getTemperature.toString() + " " + bttemp[index].getUnit+ " ",
                                 style: TextStyle(
                                     color: Colors.black,
@@ -247,5 +247,14 @@ class _body_temperatureState extends State<body_temperature> {
 
     );
   }
-
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
+  }
 }
