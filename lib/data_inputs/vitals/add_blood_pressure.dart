@@ -312,8 +312,55 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 bp_list[i] = bp_list[bp_list.length-1-i];
                                 bp_list[bp_list.length-1-i] = temp;
                               }
+                              if(double.parse(systolic_pressure) < 120 && double.parse(diastolic_pressure) < 80 ){
+                                print("YOU ARE NORMAL");
+                                Navigator.pop(context, bp_list);
+                              }else if(double.parse(systolic_pressure) >= 120 &&  double.parse(systolic_pressure) < 130 && double.parse(diastolic_pressure) < 80 ){
+                                print("YOUR BP IS ELEVATED!");
+                                Navigator.pop(context, bp_list);
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => mainScreen()),
+                                // );
+                                // Widget cancelButton = TextButton(
+                                //   child: Text("Cancel"),
+                                //   onPressed:  () {
+                                //     Navigator.pop(context, false);
+                                //   },
+                                // );
+                                // Widget continueButton = TextButton(
+                                //   child: Text("Continue"),
+                                //   onPressed:  () {
+                                //
+                                //     },
+                                // );
+                                //
+                                // // set up the AlertDialog
+                                // AlertDialog alert = AlertDialog(
+                                //   title: Text("Warning"),
+                                //   content: Text("Your BP is elevated"),
+                                //   actions: [
+                                //     cancelButton,
+                                //     continueButton,
+                                //   ],
+                                // );
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (BuildContext context) {
+                                //     return alert;
+                                //   },
+                                // );
+                              }else if(double.parse(systolic_pressure) >= 130 &&  double.parse(systolic_pressure) < 140 && double.parse(diastolic_pressure) >= 80 && double.parse(diastolic_pressure) <= 89 ){
+                                print("YOU ARE ON STAGE 1 HIGH BP");
+                                Navigator.pop(context, bp_list);
+                              }else if(double.parse(systolic_pressure) >= 140 &&  double.parse(systolic_pressure) <= 180 && double.parse(diastolic_pressure) >= 90 && double.parse(diastolic_pressure) <= 119){
+                                print("YOU ARE ON STAGE 2 HIGH BP");
+                                Navigator.pop(context, bp_list);
+                              }else if(double.parse(systolic_pressure) > 180 && double.parse(diastolic_pressure) >= 120 ){
+                                print("YOU ARE HYPERTENSIVE");
+                                Navigator.pop(context, bp_list);
+                              }
                               print("POP HERE ==========");
-                              Navigator.pop(context, bp_list);
                             });
 
 
