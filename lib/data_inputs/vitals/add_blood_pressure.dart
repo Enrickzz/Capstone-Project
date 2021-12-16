@@ -32,7 +32,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   String pressure_level = "";
   DateTime bpDate;
   String bp_time;
-  String bp_date = "MM/DD/YYYY";
+  String bp_date = (new DateTime.now()).toString();
   int count = 0;
   bool isDateSelected= false;
   List<Blood_Pressure> bp_list = new List<Blood_Pressure>();

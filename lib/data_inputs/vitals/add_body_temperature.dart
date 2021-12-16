@@ -32,7 +32,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
   String unit = 'Celsius';
   String valueChoose;
   List degrees = ["Celsius", "Fahrenheit"];
-  String temperature_date = "MM/DD/YYYY";
+  String temperature_date = (new DateTime.now()).toString();
   DateTime temperatureDate;
   String temperature_time;
   bool isDateSelected= false;

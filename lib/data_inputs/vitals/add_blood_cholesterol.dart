@@ -33,7 +33,7 @@ class _add_blood_cholesterolState extends State<add_blood_cholesterol> {
   double hdl_cholesterol = 0;
   double triglycerides = 0;
   DateTime cholesterolDate;
-  String cholesterol_date = "MM/DD/YYYY";
+  String cholesterol_date = (new DateTime.now()).toString();
   String cholesterol_time;
   bool isDateSelected= false;
   int count = 0;

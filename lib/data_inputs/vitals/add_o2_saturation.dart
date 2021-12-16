@@ -31,7 +31,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
   int spo2 = 0;
   bool isDateSelected= false;
   DateTime oxygenDate;
-  String oxygen_date = "MM/DD/YYYY";
+  String oxygen_date = (new DateTime.now()).toString();
   String oxygen_time;
   int count = 0;
   List<Oxygen_Saturation> oxygen_list = new List<Oxygen_Saturation>();

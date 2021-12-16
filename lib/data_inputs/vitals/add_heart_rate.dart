@@ -31,7 +31,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
   int beats = 0;
   String isResting = 'false';
   DateTime heartRateDate;
-  String heartRate_date = "MM/DD/YYYY";
+  String heartRate_date = (new DateTime.now()).toString();
   String heartRate_time;
   bool isDateSelected= false;
   int count = 0;

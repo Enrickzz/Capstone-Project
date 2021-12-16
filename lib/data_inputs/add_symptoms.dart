@@ -28,7 +28,7 @@ class _addSymptomsState extends State<add_symptoms> {
   String symptom_name;
   int intesity_lvl = 0;
   String symptom_felt = '';
-  String symptom_date = "MM/DD/YYYY";
+  String symptom_date = (new DateTime.now()).toString();
   DateTime symptomDate;
   String symptom_time;
   bool isDateSelected= false;

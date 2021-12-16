@@ -29,7 +29,7 @@ class _addMedicationState extends State<add_medication> {
   String medicine_type = 'Liquid';
   double medicine_dosage = 0;
   DateTime medicineDate;
-  String medicine_date = "MM/DD/YYYY";
+  String medicine_date = (new DateTime.now()).toString();
   String medicine_time;
   bool isDateSelected= false;
   int count = 0;

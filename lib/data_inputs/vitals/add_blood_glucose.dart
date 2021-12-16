@@ -31,7 +31,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   double glucose = 0;
   String status = '';
   DateTime glucoseDate;
-  String glucose_date = "MM/DD/YYYY";
+  String glucose_date = (new DateTime.now()).toString();
   String glucose_time;
   bool isDateSelected= false;
   int count = 0;
@@ -39,7 +39,9 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
+  String unitStatus = "mmol/L";
   var dateValue = TextEditingController();
+  var unitValue = TextEditingController();
   List <bool> isSelected = [true, false];
 
   @override
@@ -70,6 +72,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                   ),
                   SizedBox(height: 8.0),
                   TextFormField(
+                    // controller: unitValue,
                     showCursor: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -107,12 +110,30 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                     ],
                       onPressed:(int newIndex){
                         setState(() {
-                          for (int index = 0; index < isSelected.length; index++)
+                          for (int index = 0; index < isSelected.length; index++){
                             if (index == newIndex) {
                               isSelected[index] = true;
+                              print("mmol/L");
                             } else {
                               isSelected[index] = false;
+                              print("mg/dL");
                             }
+                          }
+                          // if(newIndex == 0 && unitStatus != "mmol/L"){
+                          if(newIndex == 0){
+                            print("mmol/L");
+                            unitStatus = "mmol/L";
+                            // unitValue.text = glucose.toStringAsFixed(2);
+                            // print(glucose.toStringAsFixed(2));
+                          }
+                          // if(newIndex == 1 && unitStatus != "mg/dL"){
+                          if(newIndex == 1){
+                            print("mg/dL");
+                            unitStatus = "mg/dL";
+                            // glucose = glucose / 18;
+                            // unitValue.text = glucose.toStringAsFixed(2);
+                            // print(glucose.toStringAsFixed(2));
+                          }
                         });
                       },
                   ),
@@ -232,6 +253,10 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                         ),
                         color: Colors.blue,
                         onPressed:() async {
+                          if(unitStatus == "mmol/L"){
+                            glucose = glucose * 18;
+                          }
+                          print(glucose.toStringAsFixed(2));
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;

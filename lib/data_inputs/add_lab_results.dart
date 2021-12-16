@@ -25,7 +25,7 @@ class _addLabResultState extends State<add_lab_results> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
   String lab_result_name = '';
-  String lab_result_date = "MM/DD/YYYY";
+  String lab_result_date = (new DateTime.now()).toString();
   DateTime labResultDate;
   String lab_result_note = '';
   String lab_result_time;
