@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
@@ -30,6 +31,7 @@ class _index3State extends State<index3>
   final ScrollController scrollController = ScrollController();
 
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   double topBarOpacity = 0.0;
 
@@ -96,49 +98,196 @@ class _index3State extends State<index3>
     //     print("FULL SET STATE");
     //   });
     // });
+
+    String defaultFontFamily = 'Roboto-Light.ttf';
+    double defaultFontSize = 14;
+    double defaultIconSize = 17;
+
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: <Widget>[
-            getMainListViewUI(),
-            getAppBarUI(),
-            SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
-            )
-          ],
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.black
+          ),
+          title: const Text('Profile', style: TextStyle(
+              color: Colors.black
+          )),
+          centerTitle: true,
+          backgroundColor: Colors.white,
         ),
-      ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(width: 2, color: Colors.white),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
+                        ],
+                      ),
+                      child: Icon(Icons.person_outlined, size: 50, color: Colors.blue,),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 28),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text( "Chan, Gian Lord",
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold
+                              )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text('gian_lord_chan@dlsu.edu.ph',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                  )
+                                )
+                              ]
+                            )
+                          )
+                        ]
+                    )
+                  )
+                ]
+              ),
+              SizedBox(height: 24),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:<Widget>[
+                  Text( "Personal Information",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                      )
+                  ),
+                  Text( "Edit",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
+                      )
+                  ),
+                ]
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                  height: 230,
+                  child: Stack(
+                      children: [
+                        Positioned(
+                            child: Material(
+                              child: Container(
+                                  height: 180.0,
+                                  width: 340,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          blurRadius: 20.0)],
+                                  )
+                              ),
+                            )),
+                        Positioned(
+
+                            child: Container(
+
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Sinigang na Baboy",
+                                      style: TextStyle(
+                                          fontSize:18,
+                                          color:Color(0xFF363f93),
+                                          fontWeight: FontWeight.bold
+                                      ),),
+                                    Text("Lunch",
+                                      style: TextStyle(
+                                          fontSize:16,
+                                          color:Colors.grey,
+                                          fontWeight: FontWeight.bold
+                                      ),),
+                                    Text("420kcal",
+                                      style: TextStyle(
+                                        fontSize:16,
+                                        color:Colors.grey,
+                                      ),),
+                                    Text("69g",
+                                      style: TextStyle(
+                                        fontSize:16,
+                                        color:Colors.grey,
+                                      ),),
+                                    Text("Other info",
+                                      style: TextStyle(
+                                        fontSize:16,
+                                        color:Colors.grey,
+                                      ),),
+                                  ]
+                              ),
+                            ))
+                      ]
+                  )
+              ),
+            ]
+          ),
+
+
+
+          // child: Row(
+          //   children: [
+          //     Column(
+          //       children: [
+          //         Container(
+          //           alignment: Alignment.topLeft,
+          //           child: Container(
+          //             padding: EdgeInsets.all(10),
+          //             decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(100),
+          //               border: Border.all(width: 2, color: Colors.white),
+          //               color: Colors.white,
+          //               boxShadow: [
+          //                 BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
+          //               ],
+          //             ),
+          //             child: Icon(Icons.person_outlined, size: 50, color: Colors.blue,),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //     SizedBox(width: 20.0),
+          //     Container(
+          //       alignment: Alignment.topLeft,
+          //       child:  Text( "Chan, Gian Lord", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+        ),
+
+      )
     );
   }
 
-  Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
-          return ListView.builder(
-            controller: scrollController,
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
-            ),
-            itemCount: listViews.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              widget.animationController?.forward();
-              return listViews[index];
-            },
-          );
-        }
-      },
-    );
-  }
+
 
   Widget getAppBarUI() {
     return Column(
@@ -165,105 +314,7 @@ class _index3State extends State<index3>
                           blurRadius: 10.0),
                     ],
                   ),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: MediaQuery.of(context).padding.top,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 16,
-                            right: 16,
-                            top: 16 - 8.0 * topBarOpacity,
-                            bottom: 12 - 8.0 * topBarOpacity),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'My Health',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 22 + 6 - 6 * topBarOpacity,
-                                    letterSpacing: 1.2,
-                                    color: FitnessAppTheme.darkerText,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () {},
-                                child: Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_left,
-                                    color: FitnessAppTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 8,
-                                right: 8,
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: Icon(
-                                      Icons.calendar_today,
-                                      color: FitnessAppTheme.grey,
-                                      size: 18,
-                                    ),
-                                  ),
-                                  Text(
-                                    '15 May',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontFamily: FitnessAppTheme.fontName,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 18,
-                                      letterSpacing: -0.2,
-                                      color: FitnessAppTheme.darkerText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () async {
-                                  await _auth.signOut();
-                                  print('signed out');
-                                },
-                                child: Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: FitnessAppTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+
                 ),
               ),
             );
