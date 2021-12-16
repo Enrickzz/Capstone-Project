@@ -17,18 +17,19 @@ import '../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class medication_prescription extends StatefulWidget {
-  final List<Medication_Prescription> medpreslist;
-  medication_prescription({Key key, this.medpreslist}): super(key: key);
+  final List<Medication> medlist;
+  medication_prescription({Key key, this.medlist}): super(key: key);
   @override
-  _medicationPresState createState() => _medicationPresState();
+  _medication_prescriptionState createState() => _medication_prescriptionState();
 }
 
-class _medicationPresState extends State<medication_prescription> {
+class _medication_prescriptionState extends State<medication_prescription> {
+  // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
   TimeOfDay time;
-  List<Medication> medprestemp = [];
+  List<Medication> medtemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
 
@@ -37,109 +38,92 @@ class _medicationPresState extends State<medication_prescription> {
     super.initState();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readMedicationPres = databaseReference.child('users/' + uid + '/vitals/health_records/medications_prescription_list');
-    String tempMedicationBName = "";
-    String tempMedicationGName = "";
-    String tempIntakeTime = "";
-    String tempSpecialInstruction = "";
-    String tempStartDate = "";
-    String tempEndDate = "";
+    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
+    String tempMedicineName = "";
+    String tempMedicineType = "";
+    String tempMedicineDate = "";
+    double tempMedicineDosage = 0;
+    String tempMedicineTime = "";
 
-    readMedicationPres.once().then((DataSnapshot datasnapshot) {
-      medprestemp.clear();
+    readMedication.once().then((DataSnapshot datasnapshot) {
+      medtemp.clear();
       String temp1 = datasnapshot.value.toString();
       List<String> temp = temp1.split(',');
-      Medication_Prescription prescription;
+      Medication medicine;
       for(var i = 0; i < temp.length; i++) {
         String full = temp[i].replaceAll("{", "")
             .replaceAll("}", "")
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 6){
+        if(i < 5){
           switch(i){
             case 0: {
               print("1 " + splitFull.last);
-              tempMedicationBName = splitFull.last;
+              tempMedicineType = splitFull.last;
             }
             break;
             case 1: {
               print("2 " + splitFull.last);
-              tempMedicationGName = splitFull.last;
+              tempMedicineDosage = double.parse(splitFull.last);
             }
             break;
             case 2: {
               print("3 " + splitFull.last);
-              tempIntakeTime = splitFull.last;
+              tempMedicineDate = splitFull.last;
             }
             break;
             case 3: {
               print("4 " + splitFull.last);
-              tempSpecialInstruction = splitFull.last;
+              tempMedicineName = splitFull.last;
 
             }
             break;
             case 4: {
               print("5 " + splitFull.last);
-              tempStartDate = splitFull.last;
-
-            }
-            break;
-            case 5: {
-              print("6 " + splitFull.last);
-              tempEndDate = splitFull.last;
-              prescription = new Medication_Prescription(generic_name: tempMedicationGName, branded_name: tempMedicationBName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate),intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction));
-              medprestemp.add(prescription);
+              tempMedicineTime = splitFull.last;
+              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate),medicine_time: timeformat.parse(tempMedicineTime));
+              medtemp.add(medicine);
             }
             break;
           }
         }
         else{
-          switch(i%6){
+          switch(i%5){
             case 0: {
-              print("1 " + splitFull.last);
-              tempMedicationBName = splitFull.last;
+              tempMedicineType = splitFull.last;
             }
             break;
             case 1: {
-              print("2 " + splitFull.last);
-              tempMedicationGName = splitFull.last;
+              tempMedicineDosage = double.parse(splitFull.last);
             }
             break;
             case 2: {
-              print("3 " + splitFull.last);
-              tempIntakeTime = splitFull.last;
+              tempMedicineDate = splitFull.last;
+
             }
             break;
             case 3: {
-              print("4 " + splitFull.last);
-              tempSpecialInstruction = splitFull.last;
+              tempMedicineName = splitFull.last;
 
             }
             break;
             case 4: {
-              print("5 " + splitFull.last);
-              tempStartDate = splitFull.last;
-
-            }
-            break;
-            case 5: {
-              print("6 " + splitFull.last);
-              tempEndDate = splitFull.last;
-              prescription = new Medication_Prescription(generic_name: tempMedicationGName, branded_name: tempMedicationBName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate),intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction));
-              medprestemp.add(prescription);
+              tempMedicineTime = splitFull.last;
+              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate), medicine_time: timeformat.parse(tempMedicineTime));
+              medtemp.add(medicine);
             }
             break;
           }
         }
       }
-      for(var i=0;i<medprestemp.length/2;i++){
-        var temp = medprestemp[i];
-        medprestemp[i] = medprestemp[medprestemp.length-1-i];
-      medprestemp[medprestemp.length-1-i] = temp;
+      for(var i=0;i<medtemp.length/2;i++){
+        var temp = medtemp[i];
+        medtemp[i] = medtemp[medtemp.length-1-i];
+        medtemp[medtemp.length-1-i] = temp;
       }
     });
-    medprestemp = widget.medpreslist;
+    medtemp = widget.medlist;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -149,6 +133,7 @@ class _medicationPresState extends State<medication_prescription> {
 
   @override
   Widget build(BuildContext context) {
+
 
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
@@ -170,36 +155,36 @@ class _medicationPresState extends State<medication_prescription> {
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(context: context,
-                      isScrollControlled: true,
-                      builder: (context) => SingleChildScrollView(child: Container(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: add_medication(thislist: medprestemp),
-                      ),
-                      ),
-                    ).then((value) =>
-                        Future.delayed(const Duration(milliseconds: 1500), (){
-                          setState((){
-                            print("setstate medicines");
-                            if(value != null){
-                              medprestemp = value;
-                            }
-                            print("medetmp.length == " +medprestemp.length.toString());
-                          });
-                        }));
+                onTap: () {
+                  showModalBottomSheet(context: context,
+                    isScrollControlled: true,
+                    builder: (context) => SingleChildScrollView(child: Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: add_medication(thislist: medtemp),
+                    ),
+                    ),
+                  ).then((value) =>
+                    Future.delayed(const Duration(milliseconds: 1500), (){
+                      setState((){
+                        print("setstate medicines");
+                        if(value != null){
+                          medtemp = value;
+                        }
+                        print("medetmp.length == " +medtemp.length.toString());
+                      });
+                    }));
 
-                  },
-                  child: Icon(
-                    Icons.add,
-                  )
+                },
+                child: Icon(
+                  Icons.add,
+                )
               )
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: medprestemp.length,
+        itemCount: medtemp.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
@@ -247,10 +232,10 @@ class _medicationPresState extends State<medication_prescription> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + getDateFormatted(medprestemp[index].getDate.toString())+getTimeFormatted(medprestemp[index].getTime.toString())+" "
-                                      + "\nMedicine: " + medprestemp[index].getName + " "
-                                      +"\nDosage "+ medprestemp[index].getDosage.toString()+ " "
-                                      +"\nType: "+ medprestemp[index].getType,
+                                  '' + getDateFormatted(medtemp[index].getDate.toString())+getTimeFormatted(medtemp[index].getTime.toString())+" "
+                                      + "\nMedicine: " + medtemp[index].getName + " "
+                                      +"\nDosage "+ medtemp[index].getDosage.toString()+ " "
+                                      +"\nType: "+ medtemp[index].getType,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18

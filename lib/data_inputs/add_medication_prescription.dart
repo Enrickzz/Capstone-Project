@@ -15,23 +15,25 @@ import 'medication.dart';
 import '../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_medication_prescription extends StatefulWidget {
-  final List<Medication_Prescription> medpreslist;
-  add_medication_prescription({this.medpreslist});
+  final List<Medication> thislist;
+  add_medication_prescription({this.thislist});
   @override
-  _addMedicationPresState createState() => _addMedicationPresState();
+  _add_medicine_prescriptionState createState() => _add_medicine_prescriptionState();
 }
 final _formKey = GlobalKey<FormState>();
-class _addMedicationPresState extends State<add_medication_prescription> {
+class _add_medicine_prescriptionState extends State<add_medication_prescription> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  String generic_name = '';
-  String branded_name = '';
-  DateTime presDate;
-  String pres_date = "MM/DD/YYYY";
+  String medicine_name = '';
+  String medicine_type = 'Liquid';
+  double medicine_dosage = 0;
+  DateTime medicineDate;
+  String medicine_date = "MM/DD/YYYY";
+  String medicine_time;
   bool isDateSelected= false;
   int count = 0;
-  List<Medication_Prescription> medicationpres_list = new List<Medication_Prescription>();
+  List<Medication> medication_list = new List<Medication>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
