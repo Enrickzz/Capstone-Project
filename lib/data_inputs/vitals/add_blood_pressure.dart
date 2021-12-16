@@ -137,7 +137,10 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                       final initialTime = TimeOfDay(hour:12, minute: 0);
                       await showTimePicker(
                         context: context,
-                        initialTime: time ?? initialTime,
+                        initialTime: TimeOfDay(
+                            hour: TimeOfDay.now().hour,
+                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
+                                .toInt()),
                       ).then((value){
                         if(value != null && value != time){
                           setState(() {

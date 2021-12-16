@@ -132,7 +132,10 @@ class _addLabResultState extends State<add_lab_results> {
                       final initialTime = TimeOfDay(hour:12, minute: 0);
                       await showTimePicker(
                         context: context,
-                        initialTime: time ?? initialTime,
+                        initialTime: TimeOfDay(
+                            hour: TimeOfDay.now().hour,
+                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
+                                .toInt()),
                       ).then((value){
                         if(value != null && value != time){
                           setState(() {
