@@ -10,6 +10,11 @@ import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
+import 'package:my_app/models/nutritionixApi.dart';
+import 'dart:convert' as convert;
+
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
@@ -26,6 +31,7 @@ class _index2State extends State<index2>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
+  String search="";
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
 
@@ -132,6 +138,9 @@ class _index2State extends State<index2>
                               errorStyle: TextStyle(fontSize: 15),
                               contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
                             ),
+                            onChanged: (val) {
+                              setState(() => search = val);
+                            },
                           ),
                         ),
                         SizedBox(
@@ -144,6 +153,7 @@ class _index2State extends State<index2>
                             ),
                           ),
                           onPressed: () async{
+                            fetchNutritionix(search);
                           },
                         ),
                       ]
@@ -301,4 +311,48 @@ class _index2State extends State<index2>
       ],
     );
   }
+}
+Future<void> fetchNutritionix(String thisquery) async {
+  var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
+  Map<String, String> headers = {
+    "x-app-id": "f4507302",
+    "x-app-key": "6db30b5553ddddbb5e2543a32c2d58de",
+    "x-remote-user-id": "0",
+  };
+  // String query = '{ "query" : "chicken noodle soup" }';
+
+  // http.Response response = await http.post(url, headers: headers, body: query);
+
+  var response = await http.post(
+    url,
+    headers: headers,
+    body: {
+      'query': '$thisquery',
+      // 'brand': 'USDA',
+    },
+  );
+
+  if(response.statusCode == 200){
+    String data = response.body;
+    print(data);
+    final parsedJson = convert.jsonDecode(data);
+    final food = nutritionixApi.fromJson(parsedJson);
+    // var food_name = convert.jsonDecode(data)['food_name'];
+    // print(food_name);
+    // var calories = convert.jsonDecode(data)['nf_calories'];
+    // print(calories);
+
+    // Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => mainScreen(
+    //           nutritionixApi: food,
+    // )), (route) => false);
+  }
+  else{
+    print("response status code is " + response.statusCode.toString());
+  }
+  // final responseJson = json.decode(response.body);
+
+  //print('This is the API response: $responseJson');
 }

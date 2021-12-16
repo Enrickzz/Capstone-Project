@@ -28,7 +28,7 @@ class _calorie_intakeState extends State<calorie_intake> {
     super.initState();
     setState(() {
       getChartData();
-      fetchNutritionix();
+      //fetchNutritionix();
     });
   }
   @override
@@ -214,47 +214,3 @@ class calorie_intake_data{
 // Future<void> getData (var name, var id) async {
 //   var url = Uri.parse("https://trackapi.nutritionix.com/v2/natural/nutrients");
 // }
-Future<void> fetchNutritionix() async {
-    var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
-    Map<String, String> headers = {
-      "x-app-id": "f4507302",
-      "x-app-key": "6db30b5553ddddbb5e2543a32c2d58de",
-      "x-remote-user-id": "0",
-    };
-    // String query = '{ "query" : "chicken noodle soup" }';
-
-    // http.Response response = await http.post(url, headers: headers, body: query);
-
-    var response = await http.post(
-      url,
-      headers: headers,
-      body: {
-        'query': 'Brown Rice',
-        // 'brand': 'USDA',
-      },
-    );
-
-    if(response.statusCode == 200){
-      String data = response.body;
-      print(data);
-      final parsedJson = convert.jsonDecode(data);
-      final food = nutritionixApi.fromJson(parsedJson);
-      // var food_name = convert.jsonDecode(data)['food_name'];
-      // print(food_name);
-      // var calories = convert.jsonDecode(data)['nf_calories'];
-      // print(calories);
-
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => mainScreen(
-      //           nutritionixApi: food,
-      // )), (route) => false);
-    }
-    else{
-      print("response status code is " + response.statusCode.toString());
-    }
-    // final responseJson = json.decode(response.body);
-
-    //print('This is the API response: $responseJson');
-}
