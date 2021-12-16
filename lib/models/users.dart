@@ -235,17 +235,17 @@ class Blood_Pressure {
 
 class Heart_Rate {
   int bpm;
-  bool isResting;
+  String hr_status;
   DateTime hr_date;
   DateTime hr_time;
 
-  Heart_Rate({this.bpm, this.isResting,this.hr_date, this.hr_time});
+  Heart_Rate({this.bpm, this.hr_status,this.hr_date, this.hr_time});
 
   int get getBPM{
     return bpm;
   }
-  bool get getisResting{
-    return isResting;
+  String get getisResting{
+    return hr_status;
   }
   DateTime get getDate{
     return hr_date;
@@ -256,8 +256,8 @@ class Heart_Rate {
   void setBPM (int integer){
     bpm = integer;
   }
-  void setisResting (bool status){
-    isResting = status;
+  void setisResting (String status){
+    hr_status = status;
   }
   void setDate (DateTime date){
     hr_date = date;

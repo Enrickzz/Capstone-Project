@@ -33,6 +33,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
   DateTime heartRateDate;
   String heartRate_date = (new DateTime.now()).toString();
   String heartRate_time;
+  String hr_status ="";
   bool isDateSelected= false;
   int count = 0;
   List<Heart_Rate> heartRate_list = new List<Heart_Rate>();
@@ -40,6 +41,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
+  var heartRateValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                   ),
                   SizedBox(height: 8.0),
                   TextFormField(
+                    controller: heartRateValue,
                     showCursor: true,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -89,7 +92,10 @@ class _add_heart_rateState extends State<add_heart_rate> {
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Number of Beats' : null,
                     onChanged: (val){
-                      setState(() => beats = int.parse(val));
+
+                      setState(() =>
+
+                      beats = int.parse(val));
                     },
                   ),
                   SizedBox(height: 8.0),
@@ -224,6 +230,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                         ),
                         color: Colors.blue,
                         onPressed:() async {
+                         beats *= 4;
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
@@ -235,8 +242,13 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               Heart_Rate heartRate;
                               if(datasnapshot.value == null){
                                 final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + 0.toString());
-                                bool thisBool = isResting.toLowerCase() =='true';
-                                heartRateRef.set({"HR_bpm": beats.toString(), "isResting": thisBool, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
+                                if(isResting.toLowerCase() =='true'){
+                                  hr_status = "Active";
+                                }
+                                else{
+                                  hr_status = "Resting";
+                                }
+                                heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                 print("Added Heart Rate Successfully! " + uid);
                               }
                               else{
@@ -271,8 +283,13 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                       case 3: {
                                         print("1st switch i = 3 " + splitFull.last);
                                         tempHeartRateDate = splitFull.last;
-                                        bool thisBool = tempisResting.toLowerCase() =='true';
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: thisBool, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
+                                        if(tempisResting.toLowerCase() =='true'){
+                                          hr_status = "Active";
+                                        }
+                                        else{
+                                          hr_status = "Resting";
+                                        }
+                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), hr_status: hr_status, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
                                         heartRate_list.add(heartRate);
                                       }
                                       break;
@@ -298,8 +315,13 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                       case 3: {
                                         print("2nd switch i = " + i.toString() + splitFull.last);
                                         tempHeartRateDate = splitFull.last;
-                                        bool thisBool = tempisResting.toLowerCase() =='true';
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), isResting: thisBool, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
+                                        if(tempisResting.toLowerCase() =='true'){
+                                          hr_status = "Active";
+                                        }
+                                        else{
+                                          hr_status = "Resting";
+                                        }
+                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), hr_status: hr_status, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
                                         heartRate_list.add(heartRate);
                                       }
                                       break;
@@ -315,14 +337,14 @@ class _add_heart_rateState extends State<add_heart_rate> {
 
                                 // print("symptom list  " + symptoms_list.toString());
                                 final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
-                                heartRateRef.set({"HR_bpm": beats.toString(), "isResting": parseBool(isResting).toString(), "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
+                                heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                 print("Added Heart Rate Successfully! " + uid);
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + heartRate_list.length.toString());
-                              heartRate_list.add(new Heart_Rate(bpm: beats, isResting: parseBool(isResting), hr_date: format.parse(heartRate_date),hr_time: timeformat.parse(heartRate_time)));
+                              heartRate_list.add(new Heart_Rate(bpm: beats, hr_status: hr_status, hr_date: format.parse(heartRate_date),hr_time: timeformat.parse(heartRate_time)));
                               for(var i=0;i<heartRate_list.length/2;i++){
                                 var temp = heartRate_list[i];
                                 heartRate_list[i] = heartRate_list[heartRate_list.length-1-i];

@@ -79,7 +79,7 @@ class _heart_rateState extends State<heart_rate> {
             case 3: {
               print("i = " + i.toString() + splitFull.last);
               tempHRDate = splitFull.last;
-              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), isResting: parseBool(tempisResting), hr_date: format.parse(tempHRDate), hr_time: timeformat.parse(tempHRTime));
+              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), hr_status: tempisResting, hr_date: format.parse(tempHRDate), hr_time: timeformat.parse(tempHRTime));
               hrtemp.add(heartRate);
             }
             break;
@@ -102,7 +102,7 @@ class _heart_rateState extends State<heart_rate> {
             break;
             case 3: {
               tempHRDate = splitFull.last;
-              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), isResting: parseBool(tempisResting), hr_date: format.parse(tempHRDate), hr_time: timeformat.parse(tempHRTime));
+              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), hr_status: tempisResting, hr_date: format.parse(tempHRDate), hr_time: timeformat.parse(tempHRTime));
               hrtemp.add(heartRate);
             }
             break;
