@@ -107,7 +107,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Branded Name",
+                      hintText: "Medicine Brand",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Branded Name' : null,
                     onChanged: (val){
