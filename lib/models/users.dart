@@ -136,6 +136,12 @@ class Medication_Prescription{
   String get getSpecial_instruction{
     return special_instruction;
   }
+  DateTime get getSDate{
+    return startdate;
+  }
+  DateTime get getEDate{
+    return enddate;
+  }
   void setGName (String temp){
     generic_name = temp;
   }

@@ -269,6 +269,5 @@ class _medicationState extends State<medication> {
       var min = dateTime.minute.toString().padLeft(2, "0");
       return "$hours:$min";
     }
-
   }
 }

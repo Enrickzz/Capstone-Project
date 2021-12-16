@@ -9,11 +9,14 @@ import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'medication_prescription.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_medication_prescription extends StatefulWidget {
+  final List<Medication_Prescription> thislist;
+  add_medication_prescription({this.thislist});
   @override
   _addMedicationPrescriptionState createState() => _addMedicationPrescriptionState();
 }
@@ -22,19 +25,20 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  String symptom_date = "MM/DD/YYYY";
-  DateTime symptomDate;
-  String symptom_time;
+  DateTime prescriptionDate;
   bool isDateSelected= false;
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
-  TimeOfDay time;
-  var dateValue = TextEditingController();
-
-  String medicine_name = '';
-  String medicine_type = 'Liquid';
-  String medicine_quantity = '';
-
+  var startDate = TextEditingController();
+  var endDate = TextEditingController();
+  String generic_name = "";
+  String branded_name = "";
+  String startdate = "";
+  String enddate = "";
+  String intake_time = "";
+  String special_instruction = "";
+  int count = 0;
+  List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +87,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Generic Name' : null,
                     onChanged: (val){
-                      setState(() => medicine_name = val);
+                      setState(() => generic_name = val);
                     },
                   ),
                   SizedBox(height: 8.0),
@@ -107,7 +111,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Branded Name' : null,
                     onChanged: (val){
-                      setState(() => medicine_name = val);
+                      setState(() => branded_name = val);
                     },
                   ),
                   SizedBox(height: 8.0),
@@ -119,19 +123,19 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                           firstDate: new DateTime(1900),
                           lastDate: new DateTime(2100)
                       ).then((value){
-                        if(value != null && value != symptomDate){
+                        if(value != null && value != prescriptionDate){
                           setState(() {
-                            symptomDate = value;
+                            prescriptionDate = value;
                             isDateSelected = true;
-                            symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}";
+                            startdate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
                           });
-                          dateValue.text = symptom_date + "\r";
+                          startDate.text = startdate + "\r";
                         }
                       });
                     },
                     child: AbsorbPointer(
                       child: TextFormField(
-                        controller: dateValue,
+                        controller: startDate,
                         showCursor: false,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -157,7 +161,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                         validator: (val) => val.isEmpty ? 'Select Start Date' : null,
                         onChanged: (val){
 
-                          print(dateValue);
+                          print(startDate);
                           setState((){
                           });
                         },
@@ -173,19 +177,19 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                           firstDate: new DateTime(1900),
                           lastDate: new DateTime(2100)
                       ).then((value){
-                        if(value != null && value != symptomDate){
+                        if(value != null && value != prescriptionDate){
                           setState(() {
-                            symptomDate = value;
+                            prescriptionDate = value;
                             isDateSelected = true;
-                            symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}";
+                            enddate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
                           });
-                          dateValue.text = symptom_date + "\r";
+                          endDate.text = enddate + "\r";
                         }
                       });
                     },
                     child: AbsorbPointer(
                       child: TextFormField(
-                        controller: dateValue,
+                        controller: endDate,
                         showCursor: false,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -211,7 +215,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                         validator: (val) => val.isEmpty ? 'Select End Date' : null,
                         onChanged: (val){
 
-                          print(dateValue);
+                          print(endDate);
                           setState((){
                           });
                         },
@@ -239,7 +243,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Intake Time' : null,
                     onChanged: (val){
-                      setState(() => medicine_name = val);
+                      setState(() => intake_time = val);
                     },
                   ),
                   SizedBox(height: 8.0),
@@ -263,7 +267,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Special Instructions' : null,
                     onChanged: (val){
-                      setState(() => medicine_name = val);
+                      setState(() => special_instruction = val);
                     },
                   ),
                   SizedBox(height: 18.0),
@@ -290,8 +294,120 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final symptomRef = databaseReference.child('users/' + uid + '/symptoms_list');
+                            final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
+                            readPrescription.once().then((DataSnapshot datasnapshot) {
+                              String temp1 = datasnapshot.value.toString();
+                              print("temp1 " + temp1);
+                              List<String> temp = temp1.split(',');
+                              Medication_Prescription prescription;
+                              if(datasnapshot.value == null){
+                                final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + 0.toString());
+                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": intake_time.toString(), "special_instruction": special_instruction});
+                                print("Added Medication Prescription Successfully! " + uid);
+                              }
+                              else{
+                                String tempGenericName = "";
+                                String tempBrandedName = "";
+                                String tempIntakeTime = "";
+                                String tempSpecialInstruction = "";
+                                String tempStartDate = "";
+                                String tempEndDate = "";
+                                for(var i = 0; i < temp.length; i++){
+                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                  List<String> splitFull = full.split(" ");
+                                  if(i < 6){
+                                    print("i value" + i.toString());
+                                    switch(i){
+                                      case 0: {
+                                        print("1st switch i = 0 " + splitFull.last);
+                                        tempEndDate = splitFull.last;
+                                      }
+                                      break;
+                                      case 1: {
+                                        print("1st switch i = 1 " + splitFull.last);
+                                        tempIntakeTime = splitFull.last;
+                                      }
+                                      break;
+                                      case 2: {
+                                        print("1st switch i = 2 " + splitFull.last);
+                                        tempBrandedName = splitFull.last;
+                                      }
+                                      break;
+                                      case 3: {
+                                        print("1st switch i = 3 " + splitFull.last);
+                                        tempSpecialInstruction = splitFull.last;
+                                      }
+                                      break;
+                                      case 4: {
+                                        print("1st switch i = 4 " + splitFull.last);
+                                        tempGenericName = splitFull.last;
+                                      }
+                                      break;
+                                      case 5: {
+                                        print("1st switch i = 5 " + splitFull.last);
+                                        tempStartDate = splitFull.last;
+                                        prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction);
+                                        prescription_list.add(prescription);
+                                      }
+                                      break;
+                                    }
+                                  }
+                                  else{
+                                    switch(i%6){
+                                      case 0: {
+                                        tempEndDate = splitFull.last;
+                                      }
+                                      break;
+                                      case 1: {
+                                        tempIntakeTime = splitFull.last;
+                                      }
+                                      break;
+                                      case 2: {
+                                        tempBrandedName = splitFull.last;
+                                      }
+                                      break;
+                                      case 3: {
+                                        tempSpecialInstruction = splitFull.last;
+                                      }
+                                      break;
+                                      case 4: {
+                                        tempGenericName = splitFull.last;
+                                      }
+                                      break;
+                                      case 5: {
+                                        tempStartDate = splitFull.last;
+                                        prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction);
+                                        prescription_list.add(prescription);
+                                      }
+                                      break;
+                                    }
+                                  }
 
+                                }
+                                count = prescription_list.length;
+                                print("count " + count.toString());
+                                //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
+
+                                // symptoms_list.add(symptom);
+
+                                // print("symptom list  " + symptoms_list.toString());
+                                final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + count.toString());
+                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": intake_time.toString(), "special_instruction": special_instruction});
+                                print("Added Medication Prescription Successfully! " + uid);
+                              }
+
+                            });
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              print("MEDICATION LENGTH: " + prescription_list.length.toString());
+                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: intake_time, special_instruction: special_instruction));
+                              for(var i=0;i<prescription_list.length/2;i++){
+                                var temp = prescription_list[i];
+                                prescription_list[i] = prescription_list[prescription_list.length-1-i];
+                                prescription_list[prescription_list.length-1-i] = temp;
+                              }
+                              print("POP HERE ==========");
+                              Navigator.pop(context, prescription_list);
+                            });
 
                             Navigator.pushReplacement(
                               context,
