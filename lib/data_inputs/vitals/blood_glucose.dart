@@ -44,11 +44,13 @@ class _blood_glucoseState extends State<blood_glucose> {
     final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
     String tempGlucose = "";
     String tempStatus = "";
+    String tempGlucoseStatus = "";
     String tempGlucoseDate = "";
     String tempGlucoseTime = "";
     readMedication.once().then((DataSnapshot datasnapshot) {
       bgtemp.clear();
       String temp1 = datasnapshot.value.toString();
+      print("temp1 " + temp1);
       List<String> temp = temp1.split(',');
       Blood_Glucose bloodGlucose;
       for(var i = 0; i < temp.length; i++) {
@@ -57,24 +59,26 @@ class _blood_glucoseState extends State<blood_glucose> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        switch(i%4){
+        switch(i%5){
           case 0: {
             tempGlucose = splitFull.last;
           }
           break;
           case 1: {
             tempGlucoseTime = splitFull.last;
-
           }
           break;
           case 2: {
-            tempGlucoseDate = splitFull.last;
-
+            tempStatus = splitFull.last;
           }
           break;
           case 3: {
-            tempStatus = splitFull.last;
-            bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate), bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+            tempGlucoseStatus = splitFull.last;
+          }
+          break;
+          case 4: {
+            tempGlucoseDate = splitFull.last;
+            bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), bloodGlucose_unit: tempStatus, bloodGlucose_status: tempGlucoseStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
             bgtemp.add(bloodGlucose);
           }
           break;
@@ -193,7 +197,7 @@ class _blood_glucoseState extends State<blood_glucose> {
                               ),
                               Text(
                                   '' + getDateFormatted(bgtemp[index].getDate.toString())+getTimeFormatted(bgtemp[index].getTime.toString())+" \n"
-                                      +"Status: "+bgtemp[index].getStatus+
+                                      +"Status: "+bgtemp[index].getUnitStatus+
                                       "\nBlood Glucose: " + bgtemp[index].getGlucose.toString() + " mg/dL",
                                   style: TextStyle(
                                       color: Colors.black,

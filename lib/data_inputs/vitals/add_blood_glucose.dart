@@ -29,7 +29,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
   double glucose = 0;
-  String status = '';
+  String unitstatus = '';
   DateTime glucoseDate;
   String glucose_date = (new DateTime.now()).toString();
   String glucose_time;
@@ -40,6 +40,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   String unitStatus = "mmol/L";
+  String glucose_status = "";
   var dateValue = TextEditingController();
   var unitValue = TextEditingController();
   List <bool> isSelected = [true, false];
@@ -158,7 +159,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                     ),
                     validator: (val) => val.isEmpty ? 'Enter status when you took your blood glucose level' : null,
                     onChanged: (val){
-                      setState(() => status = val);
+                      setState(() => unitstatus = val);
                     },
                   ),
                   SizedBox(height: 8.0),
@@ -269,21 +270,31 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                               print("temp1 " + temp1);
                               List<String> temp = temp1.split(',');
                               Blood_Glucose bloodGlucose;
+                              if(glucose < 80){
+                                glucose_status = "low";
+                              }
+                              else if (glucose >= 80 && glucose <= 120){
+                                glucose_status = "normal";
+                              }
+                              else if(glucose > 120){
+                                glucose_status = "high";
+                              }
                               if(datasnapshot.value == null){
                                 final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + 0.toString());
-                                glucoseRef.set({"glucose": glucose.toString(), "status": status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
+                                glucoseRef.set({"glucose": glucose.toString(), "unit_status": unitstatus.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
                                 print("Added Blood Glucose Successfully! " + uid);
                               }
                               else{
                                 String tempGlucose = "";
                                 String tempStatus = "";
+                                String tempGlucoseStatus = "";
                                 String tempGlucoseDate = "";
                                 String tempGlucoseTime = "";
 
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  switch(i%4){
+                                  switch(i%5){
                                     case 0: {
                                       tempGlucose = splitFull.last;
                                     }
@@ -293,32 +304,37 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                     }
                                     break;
                                     case 2: {
-                                      tempGlucoseDate = splitFull.last;
+                                      tempStatus = splitFull.last;
                                     }
                                     break;
                                     case 3: {
-                                      tempStatus = splitFull.last;
-                                      bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+                                      tempGlucoseStatus = splitFull.last;
+                                    }
+                                    break;
+                                    case 4: {
+                                      tempGlucoseDate = splitFull.last;
+                                      bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), bloodGlucose_unit: tempStatus, bloodGlucose_status: tempGlucoseStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
                                       glucose_list.add(bloodGlucose);
                                     }
                                     break;
                                   }
                                 }
-                                count = glucose_list.length;
-                                print("count " + count.toString());
-                                //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
+                                  count = glucose_list.length;
+                                  print("count " + count.toString());
+                                  //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
 
-                                // symptoms_list.add(symptom);
+                                  // symptoms_list.add(symptom);
 
-                                // print("symptom list  " + symptoms_list.toString());
-                                final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
-                                glucoseRef.set({"glucose": glucose.toString(), "status": status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
-                                print("Added Blood Glucose Successfully! " + uid);
-                              }
+                                  // print("symptom list  " + symptoms_list.toString());
+                                  final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
+                                  glucoseRef.set({"glucose": glucose.toString(), "unit_status": unitstatus.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
+                                  print("Added Blood Glucose Successfully! " + uid);
+                                };
+
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              glucose_list.add(new Blood_Glucose(glucose: glucose, status: status, bloodGlucose_date: format.parse(glucose_date), bloodGlucose_time: timeformat.parse(glucose_time)));
+                              glucose_list.add(new Blood_Glucose(glucose: glucose, bloodGlucose_unit: unitstatus, bloodGlucose_status: glucose_status, bloodGlucose_date: format.parse(glucose_date), bloodGlucose_time: timeformat.parse(glucose_time)));
                               for(var i=0;i<glucose_list.length/2;i++){
                                 var temp = glucose_list[i];
                                 glucose_list[i] = glucose_list[glucose_list.length-1-i];

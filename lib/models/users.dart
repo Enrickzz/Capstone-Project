@@ -381,17 +381,21 @@ class Blood_Cholesterol {
 
 class Blood_Glucose {
   double glucose = 0;
-  String status = "";
+  String bloodGlucose_unit = "";
+  String bloodGlucose_status = "";
   DateTime bloodGlucose_date;
   DateTime bloodGlucose_time;
 
-  Blood_Glucose({this.glucose, this.status, this.bloodGlucose_date, this.bloodGlucose_time});
+  Blood_Glucose({this.glucose, this.bloodGlucose_unit, this.bloodGlucose_status, this.bloodGlucose_date, this.bloodGlucose_time});
 
   double get getGlucose {
     return glucose;
   }
   String get getStatus {
-    return status;
+    return bloodGlucose_status;
+  }
+  String get getUnitStatus {
+    return bloodGlucose_unit;
   }
   DateTime get getDate{
     return bloodGlucose_date;
@@ -403,7 +407,7 @@ class Blood_Glucose {
     glucose = number;
   }
   void setStatus (String temp){
-    status = temp;
+    bloodGlucose_unit = temp;
   }
   void setDate (DateTime date){
     bloodGlucose_date = date;
