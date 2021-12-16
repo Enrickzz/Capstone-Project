@@ -293,42 +293,6 @@ class _addMedicationState extends State<add_medication> {
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 5){
-                                    print("i value" + i.toString());
-                                    switch(i){
-                                      case 0: {
-                                        print("1st switch i = 0 " + splitFull.last);
-                                        tempMedicineType = splitFull.last;
-
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("1st switch i = 1 " + splitFull.last);
-                                        tempMedicineDosage = double.parse(splitFull.last);
-
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempMedicineDate = format.parse(splitFull.last);
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("1st switch i = 3 " + splitFull.last);
-                                        tempMedicineName = splitFull.last;
-                                      }
-                                      break;
-                                      case 4: {
-                                        print("1st switch i = 4 " + splitFull.last);
-
-                                        tempMedicineTime = timeformat.parse(splitFull.last);
-                                        medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: tempMedicineDate, medicine_time: tempMedicineTime);
-                                        medication_list.add(medicine);
-                                      }
-                                      break;
-                                    }
-                                  }
-                                  else{
                                     print("i value" + i.toString());
                                     print("i value modulu " + (i%4).toString());
                                     switch(i%5){
@@ -365,7 +329,7 @@ class _addMedicationState extends State<add_medication> {
                                       }
                                       break;
                                     }
-                                  }
+
 
                                 }
                                 count = medication_list.length;

@@ -284,69 +284,33 @@ class _add_blood_cholesterolState extends State<add_blood_cholesterol> {
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 5){
-                                    print("i value" + i.toString());
-                                    switch(i){
-                                      case 0: {
-                                        print("1st switch i = 0 " + splitFull.last);
-                                        tempTotalCholesterol = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("1st switch i = 1 " + splitFull.last);
-                                        tempCholesterolDate = splitFull.last;
-
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempTriglycerides = splitFull.last;
-
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("1st switch i = 3 " + splitFull.last);
-                                        tempLdlCholesterol = splitFull.last;
-
-                                      }
-                                      break;
-                                      case 4: {
-                                        print("1st switch i = 4 " + splitFull.last);
-                                        tempHdlCholesterol = splitFull.last;
-                                        cholesterol = new Blood_Cholesterol(total_cholesterol: double.parse(tempTotalCholesterol), ldl_cholesterol: double.parse(tempLdlCholesterol), hdl_cholesterol: double.parse(tempHdlCholesterol),triglycerides: double.parse(tempTriglycerides), cholesterol_date: format.parse(tempCholesterolDate));
-                                        cholesterol_list.add(cholesterol);
-                                      }
-                                      break;
+                                  print("i value" + i.toString());
+                                  print("i value modulu " + (i%5).toString());
+                                  switch(i%5){
+                                    case 0: {
+                                      tempTotalCholesterol = splitFull.last;
                                     }
-                                  }
-                                  else{
-                                    print("i value" + i.toString());
-                                    print("i value modulu " + (i%5).toString());
-                                    switch(i%5){
-                                      case 0: {
-                                        tempTotalCholesterol = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        tempCholesterolDate = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        tempTriglycerides = splitFull.last;
-                                      }
-                                      break;
-                                      case 3: {
-                                        tempLdlCholesterol = splitFull.last;
-                                      }
-                                      break;
-                                      case 4: {
-                                        tempHdlCholesterol = splitFull.last;
-                                        cholesterol = new Blood_Cholesterol(total_cholesterol: double.parse(tempTotalCholesterol), ldl_cholesterol: double.parse(tempLdlCholesterol), hdl_cholesterol: double.parse(tempHdlCholesterol),triglycerides: double.parse(tempTriglycerides), cholesterol_date: format.parse(tempCholesterolDate));
-                                        cholesterol_list.add(cholesterol);
-                                      }
-                                      break;
+                                    break;
+                                    case 1: {
+                                      tempCholesterolDate = splitFull.last;
                                     }
+                                    break;
+                                    case 2: {
+                                      tempTriglycerides = splitFull.last;
+                                    }
+                                    break;
+                                    case 3: {
+                                      tempLdlCholesterol = splitFull.last;
+                                    }
+                                    break;
+                                    case 4: {
+                                      tempHdlCholesterol = splitFull.last;
+                                      cholesterol = new Blood_Cholesterol(total_cholesterol: double.parse(tempTotalCholesterol), ldl_cholesterol: double.parse(tempLdlCholesterol), hdl_cholesterol: double.parse(tempHdlCholesterol),triglycerides: double.parse(tempTriglycerides), cholesterol_date: format.parse(tempCholesterolDate));
+                                      cholesterol_list.add(cholesterol);
+                                    }
+                                    break;
                                   }
+
 
                                 }
                                 count = cholesterol_list.length;

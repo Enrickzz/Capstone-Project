@@ -280,56 +280,26 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 4){
-                                    print("i value" + i.toString());
-                                    switch(i){
-                                      case 0: {
-                                        print("1st switch i = 0 " + splitFull.last);
-                                        tempGlucose = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempGlucoseTime = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempGlucoseDate = splitFull.last;
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("1st switch i = 3 " + splitFull.last);
-                                        tempStatus = splitFull.last;
-                                        bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
-                                        glucose_list.add(bloodGlucose);
-                                      }
-                                      break;
+                                  switch(i%4){
+                                    case 0: {
+                                      tempGlucose = splitFull.last;
                                     }
-                                  }
-                                  else{
-                                    switch(i%4){
-                                      case 0: {
-                                        tempGlucose = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        tempGlucoseTime = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        tempGlucoseDate = splitFull.last;
-                                      }
-                                      break;
-                                      case 3: {
-                                        tempStatus = splitFull.last;
-                                        bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
-                                        glucose_list.add(bloodGlucose);
-                                      }
-                                      break;
+                                    break;
+                                    case 1: {
+                                      tempGlucoseTime = splitFull.last;
                                     }
+                                    break;
+                                    case 2: {
+                                      tempGlucoseDate = splitFull.last;
+                                    }
+                                    break;
+                                    case 3: {
+                                      tempStatus = splitFull.last;
+                                      bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), status: tempStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+                                      glucose_list.add(bloodGlucose);
+                                    }
+                                    break;
                                   }
-
                                 }
                                 count = glucose_list.length;
                                 print("count " + count.toString());

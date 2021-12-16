@@ -66,69 +66,36 @@ class _blood_pressureState extends State<blood_pressure> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 5){
-          switch(i){
-            case 0: {
-              print("i is " + i.toString() + splitFull.last);
-              tempBPDate = splitFull.last;
-            }
-            break;
-            case 1: {
-              print("i is " + i.toString() + splitFull.last);
-              tempDiastolicPressure = splitFull.last;
-            }
-            break;
-            case 2: {
-              print("i is " + i.toString() + splitFull.last);
+        switch(i%5){
+          case 0: {
+            print("i is " + i.toString() + splitFull.last);
+            tempBPDate = splitFull.last;
+          }
+          break;
+          case 1: {
+            print("i is " + i.toString() + splitFull.last);
+            tempDiastolicPressure = splitFull.last;
+          }
+          break;
+          case 2: {
+            print("i is " + i.toString() + splitFull.last);
+            tempBPLvl = splitFull.last;
+          }
+          break;
+          case 3: {
+            print("i is " + i.toString() + splitFull.last);
+            tempBPTime = splitFull.last;
+          }
+          break;
+          case 4: {
+            print("i is " + i.toString() + splitFull.last);
+            tempSystolicPressure = splitFull.last;
+            blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure,pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
+            bptemp.add(blood_pressure);
+          }
+          break;
+        }
 
-              tempBPLvl = splitFull.last;
-            }
-            break;
-            case 3: {
-              print("i is " + i.toString() + splitFull.last);
-              tempBPTime = splitFull.last;
-            }
-            break;
-            case 4: {
-              print("i is " + i.toString() + splitFull.last);
-              tempSystolicPressure = splitFull.last;
-              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure,pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
-              bptemp.add(blood_pressure);
-            }
-            break;
-          }
-        }
-        else{
-          switch(i%5){
-            case 0: {
-              print("i is " + i.toString() + splitFull.last);
-              tempBPDate = splitFull.last;
-            }
-            break;
-            case 1: {
-              print("i is " + i.toString() + splitFull.last);
-              tempDiastolicPressure = splitFull.last;
-            }
-            break;
-            case 2: {
-              print("i is " + i.toString() + splitFull.last);
-              tempBPLvl = splitFull.last;
-            }
-            break;
-            case 3: {
-              print("i is " + i.toString() + splitFull.last);
-              tempBPTime = splitFull.last;
-            }
-            break;
-            case 4: {
-              print("i is " + i.toString() + splitFull.last);
-              tempSystolicPressure = splitFull.last;
-              blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure,pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
-              bptemp.add(blood_pressure);
-            }
-            break;
-          }
-        }
       }
       for(var i=0;i<bptemp.length/2;i++){
         var temp = bptemp[i];

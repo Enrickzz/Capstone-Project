@@ -56,39 +56,7 @@ class _medicationState extends State<medication> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 5){
-          switch(i){
-            case 0: {
-              print("1 " + splitFull.last);
-              tempMedicineType = splitFull.last;
-            }
-            break;
-            case 1: {
-              print("2 " + splitFull.last);
-              tempMedicineDosage = double.parse(splitFull.last);
-            }
-            break;
-            case 2: {
-              print("3 " + splitFull.last);
-              tempMedicineDate = splitFull.last;
-            }
-            break;
-            case 3: {
-              print("4 " + splitFull.last);
-              tempMedicineName = splitFull.last;
 
-            }
-            break;
-            case 4: {
-              print("5 " + splitFull.last);
-              tempMedicineTime = splitFull.last;
-              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate),medicine_time: timeformat.parse(tempMedicineTime));
-              medtemp.add(medicine);
-            }
-            break;
-          }
-        }
-        else{
           switch(i%5){
             case 0: {
               tempMedicineType = splitFull.last;
@@ -115,7 +83,6 @@ class _medicationState extends State<medication> {
             }
             break;
           }
-        }
       }
       for(var i=0;i<medtemp.length/2;i++){
         var temp = medtemp[i];

@@ -315,74 +315,34 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 6){
-                                    print("i value" + i.toString());
-                                    switch(i){
-                                      case 0: {
-                                        print("1st switch i = 0 " + splitFull.last);
-                                        tempEndDate = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("1st switch i = 1 " + splitFull.last);
-                                        tempIntakeTime = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("1st switch i = 2 " + splitFull.last);
-                                        tempBrandedName = splitFull.last;
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("1st switch i = 3 " + splitFull.last);
-                                        tempSpecialInstruction = splitFull.last;
-                                      }
-                                      break;
-                                      case 4: {
-                                        print("1st switch i = 4 " + splitFull.last);
-                                        tempGenericName = splitFull.last;
-                                      }
-                                      break;
-                                      case 5: {
-                                        print("1st switch i = 5 " + splitFull.last);
-                                        tempStartDate = splitFull.last;
-                                        prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction);
-                                        prescription_list.add(prescription);
-                                      }
-                                      break;
+                                  switch(i%6){
+                                    case 0: {
+                                      tempEndDate = splitFull.last;
                                     }
-                                  }
-                                  else{
-                                    switch(i%6){
-                                      case 0: {
-                                        tempEndDate = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        tempIntakeTime = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        tempBrandedName = splitFull.last;
-                                      }
-                                      break;
-                                      case 3: {
-                                        tempSpecialInstruction = splitFull.last;
-                                      }
-                                      break;
-                                      case 4: {
-                                        tempGenericName = splitFull.last;
-                                      }
-                                      break;
-                                      case 5: {
-                                        tempStartDate = splitFull.last;
-                                        prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction);
-                                        prescription_list.add(prescription);
-                                      }
-                                      break;
+                                    break;
+                                    case 1: {
+                                      tempIntakeTime = splitFull.last;
                                     }
+                                    break;
+                                    case 2: {
+                                      tempBrandedName = splitFull.last;
+                                    }
+                                    break;
+                                    case 3: {
+                                      tempSpecialInstruction = splitFull.last;
+                                    }
+                                    break;
+                                    case 4: {
+                                      tempGenericName = splitFull.last;
+                                    }
+                                    break;
+                                    case 5: {
+                                      tempStartDate = splitFull.last;
+                                      prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction);
+                                      prescription_list.add(prescription);
+                                    }
+                                    break;
                                   }
-
                                 }
                                 count = prescription_list.length;
                                 print("count " + count.toString());

@@ -242,7 +242,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               Heart_Rate heartRate;
                               if(datasnapshot.value == null){
                                 final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + 0.toString());
-                                if(isResting.toLowerCase() =='true'){
+                                if(isResting.toLowerCase() =='yes'){
                                   hr_status = "Active";
                                 }
                                 else{
@@ -260,42 +260,6 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 4){
-                                    print("i value" + i.toString());
-                                    switch(i){
-                                      case 0: {
-                                        print("1st switch i = 0 " + splitFull.last);
-                                        tempHeartRateTime = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("1st switch i = 1 " + splitFull.last);
-                                        tempbeats = splitFull.last;
-
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("1st switch i = 1 " + splitFull.last);
-                                        tempisResting = splitFull.last;
-
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("1st switch i = 3 " + splitFull.last);
-                                        tempHeartRateDate = splitFull.last;
-                                        if(tempisResting.toLowerCase() =='true'){
-                                          hr_status = "Active";
-                                        }
-                                        else{
-                                          hr_status = "Resting";
-                                        }
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), hr_status: hr_status, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
-                                        heartRate_list.add(heartRate);
-                                      }
-                                      break;
-                                    }
-                                  }
-                                  else{
                                     switch(i%4){
                                       case 0: {
                                         print("2nd switch i = " + i.toString() + splitFull.last);
@@ -315,27 +279,20 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                       case 3: {
                                         print("2nd switch i = " + i.toString() + splitFull.last);
                                         tempHeartRateDate = splitFull.last;
-                                        if(tempisResting.toLowerCase() =='true'){
-                                          hr_status = "Active";
-                                        }
-                                        else{
-                                          hr_status = "Resting";
-                                        }
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), hr_status: hr_status, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
+                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), hr_status: tempisResting, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
                                         heartRate_list.add(heartRate);
                                       }
                                       break;
                                     }
-                                  }
-
                                 }
                                 count = heartRate_list.length;
                                 print("count " + count.toString());
-                                //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-
-                                // symptoms_list.add(symptom);
-
-                                // print("symptom list  " + symptoms_list.toString());
+                                if(isResting.toLowerCase() =='yes'){
+                                  hr_status = "Active";
+                                }
+                                else{
+                                  hr_status = "Resting";
+                                }
                                 final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
                                 heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                 print("Added Heart Rate Successfully! " + uid);

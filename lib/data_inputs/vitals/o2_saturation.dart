@@ -54,34 +54,19 @@ class _o2_saturationState extends State<o2_saturation> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 2){
-          switch(i){
-            case 0: {
-              tempOxygen = splitFull.last;
-            }
-            break;
-            case 1: {
-              tempOxygenDate = splitFull.last;
-              oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
-              oxygentemp.add(oxygen);
-            }
-            break;
+        switch(i%2){
+          case 0: {
+            tempOxygen = splitFull.last;
           }
-        }
-        else{
-          switch(i%2){
-            case 0: {
-              tempOxygen = splitFull.last;
-            }
-            break;
-            case 1: {
-              tempOxygenDate = splitFull.last;
-              oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
-              oxygentemp.add(oxygen);
-            }
-            break;
+          break;
+          case 1: {
+            tempOxygenDate = splitFull.last;
+            oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
+            oxygentemp.add(oxygen);
           }
+          break;
         }
+
       }
       for(var i=0;i<oxygentemp.length/2;i++){
         var temp = oxygentemp[i];

@@ -56,46 +56,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 6){
-          switch(i){
-            case 0: {
-              print("1 " + splitFull.last);
-              tempEndDate = splitFull.last;
 
-            }
-            break;
-            case 1: {
-              print("2 " + splitFull.last);
-              tempIntakeTime = splitFull.last;
-
-            }
-            break;
-            case 2: {
-              print("3 " + splitFull.last);
-              tempBrandedName = splitFull.last;
-            }
-            break;
-            case 3: {
-              print("4 " + splitFull.last);
-              tempSpecialInstruction = splitFull.last;
-
-            }
-            break;
-            case 4: {
-              print("5 " + splitFull.last);
-              tempGenericName = splitFull.last;
-            }
-            break;
-            case 5: {
-              print("6 " + splitFull.last);
-              tempStartDate = splitFull.last;
-              prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction);
-              prestemp.add(prescription);
-            }
-            break;
-          }
-        }
-        else{
           switch(i%6){
             case 0: {
               tempEndDate = splitFull.last;
@@ -127,7 +88,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
             }
             break;
           }
-        }
+
       }
       for(var i=0;i<prestemp.length/2;i++){
         var temp = prestemp[i];

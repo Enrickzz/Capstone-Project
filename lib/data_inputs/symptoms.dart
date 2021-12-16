@@ -59,46 +59,6 @@ class _symptomsState extends State<symptoms> {
       for(var i = 0; i < temp.length; i++){
         String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 6){
-          switch(i){
-            case 0: {
-              print("1st switch intensity lvl " + splitFull.last);
-              tempIntesityLvl = int.parse(splitFull.last);
-            }
-            break;
-            case 1: {
-              print("1st switch symptom name " + splitFull.last);
-              tempSymptomName = splitFull.last;
-            }
-            break;
-            case 2: {
-              print("1st switch symptom date " + splitFull.last);
-              tempSymptomDate = splitFull.last;
-
-            }
-            break;
-            case 3: {
-              print("1st switch symptom time " + splitFull.last);
-
-
-            }
-            break;
-            case 4: {
-              print("1st switch is active " + splitFull.last);
-              tempSymptomTime = splitFull.last;
-            }
-            break;
-            case 5: {
-              print("1st switch symptom felt " + splitFull.last);
-              tempSymptomFelt = splitFull.last;
-              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: timeformat.parse(tempSymptomTime), symptom_isActive: tempIsActive);
-              listtemp.add(symptom);
-
-            }
-            break;
-          }
-        }
-        else{
           switch(i%6){
             case 0: {
               print("1st switch intensity lvl " + splitFull.last);
@@ -135,7 +95,7 @@ class _symptomsState extends State<symptoms> {
             }
             break;
           }
-        }
+
       }
       for(var i=0;i<listtemp.length/2;i++){
         var temp = listtemp[i];

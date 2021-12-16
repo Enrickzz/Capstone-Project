@@ -271,50 +271,24 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 3){
-                                    print("i value" + i.toString());
-                                    switch(i){
-                                      case 0: {
-                                        print("1st switch tempUnit " + splitFull.last);
-                                        tempUnit = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("1st switch tempTemperature " + splitFull.last);
-                                        tempTemperatureDate = splitFull.last;
-
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("1st switch tempTemperatureDate " + splitFull.last);
-                                        tempTemperature = splitFull.last;
-                                        body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
-                                        body_temp_list.add(body_temperature);
-                                      }
-                                      break;
+                                  print("i value" + i.toString());
+                                  print("i value modulu " + (i%3).toString());
+                                  switch(i%3){
+                                    case 0: {
+                                      tempUnit = splitFull.last;
                                     }
-                                  }
-                                  else{
-                                    print("i value" + i.toString());
-                                    print("i value modulu " + (i%3).toString());
-                                    switch(i%3){
-                                      case 0: {
-                                        tempUnit = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        tempTemperatureDate = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        tempTemperature = splitFull.last;
-                                        body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
-                                        body_temp_list.add(body_temperature);
-                                      }
-                                      break;
+                                    break;
+                                    case 1: {
+                                      tempTemperatureDate = splitFull.last;
                                     }
+                                    break;
+                                    case 2: {
+                                      tempTemperature = splitFull.last;
+                                      body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate));
+                                      body_temp_list.add(body_temperature);
+                                    }
+                                    break;
                                   }
-
                                 }
                                 count = body_temp_list.length;
                                 print("count " + count.toString());

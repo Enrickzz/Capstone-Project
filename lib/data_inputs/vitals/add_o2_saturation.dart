@@ -203,38 +203,18 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 2){
-                                    print("i value" + i.toString());
-                                    switch(i){
-                                      case 0: {
-                                        print("1st switch i = 0 " + splitFull.last);
-                                        tempOxygen = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("1st switch i = 3 " + splitFull.last);
-                                        tempOxygenDate = splitFull.last;
-                                        oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
-                                        oxygen_list.add(oxygen);
-                                      }
-                                      break;
+                                  switch(i%2){
+                                    case 0: {
+                                      tempOxygen = splitFull.last;
                                     }
-                                  }
-                                  else{
-                                    switch(i%2){
-                                      case 0: {
-                                        tempOxygen = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        tempOxygenDate = splitFull.last;
-                                        oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
-                                        oxygen_list.add(oxygen);
-                                      }
-                                      break;
+                                    break;
+                                    case 1: {
+                                      tempOxygenDate = splitFull.last;
+                                      oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen), os_date: format.parse(tempOxygenDate));
+                                      oxygen_list.add(oxygen);
                                     }
+                                    break;
                                   }
-
                                 }
                                 count = oxygen_list.length;
                                 print("count " + count.toString());

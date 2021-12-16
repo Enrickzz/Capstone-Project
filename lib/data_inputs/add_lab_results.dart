@@ -225,62 +225,32 @@ class _addLabResultState extends State<add_lab_results> {
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  if(i < 4){
-                                    print("i value" + i.toString());
-                                    switch(i) {
-                                      case 0:
-                                        {
-                                          tempLabResultDate = splitFull.last;
+                                  switch(i%4){
+                                    case 0:
+                                      {
+                                        tempLabResultDate = splitFull.last;
 
-                                        }
-                                        break;
-                                      case 1:
-                                        {
-                                          tempLabResultName = splitFull.last;
+                                      }
+                                      break;
+                                    case 1:
+                                      {
+                                        tempLabResultName = splitFull.last;
 
-                                        }
-                                        break;
-                                      case 2:
-                                        {
-                                          tempLabResultNote = splitFull.last;
-                                        }
-                                        break;
-                                      case 3:
-                                        {
-                                          tempLabResultTime = splitFull.last;
-                                          labResult = new Lab_Result(labResult_name: tempLabResultName,labResult_note: tempLabResultNote, labResult_date: format.parse(tempLabResultDate), labResult_time: timeformat.parse(tempLabResultTime));
-                                          labResult_list.add(labResult);
-                                        }
-                                        break;
-                                    }
-                                  }
-                                  else{
-                                    switch(i%4){
-                                      case 0:
-                                        {
-                                          tempLabResultDate = splitFull.last;
+                                      }
+                                      break;
+                                    case 2:
+                                      {
+                                        tempLabResultNote = splitFull.last;
+                                      }
+                                      break;
+                                    case 3:
+                                      {
+                                        tempLabResultTime = splitFull.last;
+                                        labResult = new Lab_Result(labResult_name: tempLabResultName,labResult_note: tempLabResultNote, labResult_date: format.parse(tempLabResultDate), labResult_time: timeformat.parse(tempLabResultTime));
+                                        labResult_list.add(labResult);
+                                      }
+                                      break;
 
-                                        }
-                                        break;
-                                      case 1:
-                                        {
-                                          tempLabResultName = splitFull.last;
-
-                                        }
-                                        break;
-                                      case 2:
-                                        {
-                                          tempLabResultNote = splitFull.last;
-                                        }
-                                        break;
-                                      case 3:
-                                        {
-                                          tempLabResultTime = splitFull.last;
-                                          labResult = new Lab_Result(labResult_name: tempLabResultName,labResult_note: tempLabResultNote, labResult_date: format.parse(tempLabResultDate), labResult_time: timeformat.parse(tempLabResultTime));
-                                          labResult_list.add(labResult);
-                                        }
-                                        break;
-                                    }
                                   }
                                   print("lab result list length " + labResult_list.length.toString());
 

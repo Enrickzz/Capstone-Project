@@ -442,54 +442,12 @@ class _addSymptomsState extends State<add_symptoms> {
                           for(var i = 0; i < temp.length; i++){
                             String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                             List<String> splitFull = full.split(" ");
-                            if(i < 6){
-                              print("i value" + i.toString());
-                              switch(i){
-                                case 0: {
-                                  print("1st switch intensity lvl " + splitFull.last);
-                                  tempIntesityLvl = int.parse(splitFull.last);
-                                }
-                                break;
-                                case 1: {
-                                  print("1st switch symptom name " + splitFull.last);
-                                  tempSymptomName = splitFull.last;
-                                }
-                                break;
-                                case 2: {
-                                  print("1st switch symptom date " + splitFull.last);
-                                  tempSymptomDate = format.parse(splitFull.last);
-
-                                }
-                                break;
-                                case 3: {
-                                  print("1st switch symptom time " + splitFull.last);
-
-
-                                }
-                                break;
-                                case 4: {
-                                  print("1st switch is active " + splitFull.last);
-                                  tempSymptomTime = timeformat.parse(splitFull.last);
-                                }
-                                break;
-                                case 5: {
-                                  print("1st switch symptom felt " + splitFull.last);
-                                  tempSymptomFelt = splitFull.last;
-                                  symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, symptom_isActive: tempIsActive);
-                                  symptoms_list.add(symptom);
-
-                                }
-                                break;
-                              }
-                            }
-                            else{
                               print("i value" + i.toString());
                               print("i value modulu " + (i%4).toString());
                               switch(i%6){
                                 case 0: {
                                   print("2nd switch intensity lvl " + splitFull.last);
                                   tempIntesityLvl = int.parse(splitFull.last);
-
                                 }
                                 break;
                                 case 1: {
@@ -521,7 +479,7 @@ class _addSymptomsState extends State<add_symptoms> {
                                 }
                                 break;
                               }
-                            }
+
                             print("symptom list length " + symptoms_list.length.toString());
 
                           }

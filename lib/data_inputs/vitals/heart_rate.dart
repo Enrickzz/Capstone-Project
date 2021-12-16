@@ -57,57 +57,33 @@ class _heart_rateState extends State<heart_rate> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-        if(i < 4){
-          switch(i){
-            case 0: {
-              print("i = " + i.toString() + splitFull.last);
-              tempHRTime = splitFull.last;
-
-            }
-            break;
-            case 1: {
-              print("i = " + i.toString() + splitFull.last);
-              tempBmi = splitFull.last;
-
-            }
-            break;
-            case 2: {
-              print("i = " + i.toString() + splitFull.last);
-              tempisResting = splitFull.last;
-            }
-            break;
-            case 3: {
-              print("i = " + i.toString() + splitFull.last);
-              tempHRDate = splitFull.last;
-              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), hr_status: tempisResting, hr_date: format.parse(tempHRDate), hr_time: timeformat.parse(tempHRTime));
-              hrtemp.add(heartRate);
-            }
-            break;
+          switch(i%4) {
+            case 0:
+              {
+                tempHRTime = splitFull.last;
+              }
+              break;
+            case 1:
+              {
+                tempBmi = splitFull.last;
+              }
+              break;
+            case 2:
+              {
+                tempisResting = splitFull.last;
+              }
+              break;
+            case 3:
+              {
+                tempHRDate = splitFull.last;
+                heartRate = new Heart_Rate(bpm: int.parse(tempBmi),
+                    hr_status: tempisResting,
+                    hr_date: format.parse(tempHRDate),
+                    hr_time: timeformat.parse(tempHRTime));
+                hrtemp.add(heartRate);
+              }
+              break;
           }
-        }
-        else{
-          switch(i%4){
-            case 0: {
-              tempHRTime = splitFull.last;
-            }
-            break;
-            case 1: {
-              tempBmi = splitFull.last;
-
-            }
-            break;
-            case 2: {
-              tempisResting = splitFull.last;
-            }
-            break;
-            case 3: {
-              tempHRDate = splitFull.last;
-              heartRate = new Heart_Rate(bpm: int.parse(tempBmi), hr_status: tempisResting, hr_date: format.parse(tempHRDate), hr_time: timeformat.parse(tempHRTime));
-              hrtemp.add(heartRate);
-            }
-            break;
-          }
-        }
       }
       for(var i=0;i<hrtemp.length/2;i++){
         var temp = hrtemp[i];
