@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -20,6 +21,15 @@ final _formKey = GlobalKey<FormState>();
 class _addMedicationPrescriptionState extends State<add_medication_prescription> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+
+  String symptom_date = "MM/DD/YYYY";
+  DateTime symptomDate;
+  String symptom_time;
+  bool isDateSelected= false;
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
+  TimeOfDay time;
+  var dateValue = TextEditingController();
 
   String medicine_name = '';
   String medicine_type = 'Liquid';
@@ -69,80 +79,16 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Medicine Name",
+                      hintText: "Generic Name",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Medicine Name' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Generic Name' : null,
                     onChanged: (val){
                       setState(() => medicine_name = val);
                     },
                   ),
-                  SizedBox(height: 16.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget> [
-                      Text(
-                        "Medicine Type",
-                        textAlign: TextAlign.left,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Radio(
-                                value: "Liquid",
-                                groupValue: medicine_type,
-                                onChanged: (value){
-                                  setState(() {
-                                    this.medicine_type = value;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          Text("Liquid"),
-                          SizedBox(width: 3),
-                          Radio(
-                            value: "Tablet",
-                            groupValue: medicine_type,
-                            onChanged: (value){
-                              setState(() {
-                                this.medicine_type = value;
-                              });
-                            },
-                          ),
-                          Text("Tablet"),
-                          SizedBox(width: 3),
-                          Radio(
-                            value: "Pill",
-                            groupValue: medicine_type,
-                            onChanged: (value){
-                              setState(() {
-                                this.medicine_type = value;
-                              });
-                            },
-                          ),
-                          Text("Pill"),
-                          SizedBox(width: 3),
-                          Radio(
-                            value: "Others",
-                            groupValue: medicine_type,
-                            onChanged: (value){
-                              setState(() {
-                                this.medicine_type = value;
-                              });
-                            },
-                          ),
-                          Text("Others"),
-                          SizedBox(width: 3)
-                        ],
-                      )
-
-                    ],
-                  ),
                   SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
-                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -157,39 +103,168 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Dosage (mG / mL)",
+                      hintText: "Branded Name",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter General are where Symptom is felt' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Branded Name' : null,
                     onChanged: (val){
-                      setState(() => medicine_quantity = val);
+                      setState(() => medicine_name = val);
                     },
                   ),
                   SizedBox(height: 8.0),
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                          child: new Icon(Icons.calendar_today),
-                          onTap: ()async{
-                            final datePick= await showDatePicker(
-                                context: context,
-                                initialDate: new DateTime.now(),
-                                firstDate: new DateTime(1900),
-                                lastDate: new DateTime(2100)
-                            );
+                  GestureDetector(
+                    onTap: ()async{
+                      await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime(1900),
+                          lastDate: new DateTime(2100)
+                      ).then((value){
+                        if(value != null && value != symptomDate){
+                          setState(() {
+                            symptomDate = value;
+                            isDateSelected = true;
+                            symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}";
+                          });
+                          dateValue.text = symptom_date + "\r";
+                        }
+                      });
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateValue,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "Start Date",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select Start Date' : null,
+                        onChanged: (val){
 
-                          }
-                      ), Container(
-                          child: Text(
-                              " MM/DD/YYYY ",
-                              style: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                                fontStyle: FontStyle.normal,
-                              )
-                          )
+                          print(dateValue);
+                          setState((){
+                          });
+                        },
                       ),
-                    ],
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  GestureDetector(
+                    onTap: ()async{
+                      await showDatePicker(
+                          context: context,
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime(1900),
+                          lastDate: new DateTime(2100)
+                      ).then((value){
+                        if(value != null && value != symptomDate){
+                          setState(() {
+                            symptomDate = value;
+                            isDateSelected = true;
+                            symptom_date = "${symptomDate.month}/${symptomDate.day}/${symptomDate.year}";
+                          });
+                          dateValue.text = symptom_date + "\r";
+                        }
+                      });
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateValue,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "End Date",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select End Date' : null,
+                        onChanged: (val){
+
+                          print(dateValue);
+                          setState((){
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  TextFormField(
+                    showCursor: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width:0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "Intake Time",
+                    ),
+                    validator: (val) => val.isEmpty ? 'Enter Intake Time' : null,
+                    onChanged: (val){
+                      setState(() => medicine_name = val);
+                    },
+                  ),
+                  SizedBox(height: 8.0),
+                  TextFormField(
+                    showCursor: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width:0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "Special Instructions",
+                    ),
+                    validator: (val) => val.isEmpty ? 'Enter Special Instructions' : null,
+                    onChanged: (val){
+                      setState(() => medicine_name = val);
+                    },
                   ),
                   SizedBox(height: 18.0),
                   Row(

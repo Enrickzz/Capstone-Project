@@ -249,89 +249,89 @@ class _AppSignUpState extends State<data_inputs> {
                   ),
                 ),
 
-                // GestureDetector(
-                //   onTap:(){
-                //     // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                //     // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                //     // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(builder: (context) => medication(medlist: thismedlist)),
-                //     );
-                //   },
-                //   child: Container(
-                //       margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                //       height: 140,
-                //       child: Stack(
-                //           children: [
-                //             Positioned.fill(
-                //               child: ClipRRect(
-                //                 borderRadius: BorderRadius.circular(20),
-                //                 child: Image.asset('assets/images/medication.jpg',
-                //                     fit: BoxFit.cover
-                //                 ),
-                //               ),
-                //             ),
-                //             Positioned (
-                //               bottom: 0,
-                //               left: 0,
-                //               right: 0,
-                //               child: Container(
-                //                   height: 120,
-                //                   decoration: BoxDecoration(
-                //                       borderRadius: BorderRadius.only(
-                //                           bottomLeft: Radius.circular(20),
-                //                           bottomRight: Radius.circular(20)
-                //                       ),
-                //                       gradient: LinearGradient(
-                //                           begin: Alignment.bottomCenter,
-                //                           end: Alignment.topCenter,
-                //                           colors: [
-                //                             Colors.black.withOpacity(0.7),
-                //                             Colors.transparent
-                //                           ]
-                //                       )
-                //                   )
-                //               ),
-                //             ),
-                //             Positioned(
-                //               bottom: 0,
-                //               child: Padding(
-                //                 padding: const EdgeInsets.all(10),
-                //                 child: Row(
-                //                   children: [
-                //                     Container(
-                //                       padding: EdgeInsets.all(5),
-                //                       child: Container(
-                //                         child: Image.asset('assets/images/medication2.jpg'),
-                //                         height:30,
-                //                         width: 30,
-                //                         decoration: BoxDecoration(
-                //                           borderRadius: BorderRadius.only(
-                //                             bottomLeft: Radius.circular(50),
-                //                             bottomRight: Radius.circular(50),
-                //                           ),
-                //                         ),
-                //                       ),
-                //                     ),
-                //                     SizedBox(
-                //                       width: 10,
-                //                     ),
-                //                     Text(
-                //                         'Medication',
-                //                         style: TextStyle(
-                //                             color: Colors.white,
-                //                             fontSize: 18
-                //                         )
-                //                     )
-                //                   ],
-                //                 ),
-                //               ),
-                //             ),
-                //           ]
-                //       )
-                //   ),
-                // ),
+                GestureDetector(
+                  onTap:(){
+                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => medication(medlist: thismedlist)),
+                    );
+                  },
+                  child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                      height: 140,
+                      child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset('assets/images/medication.jpg',
+                                    fit: BoxFit.cover
+                                ),
+                              ),
+                            ),
+                            Positioned (
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20)
+                                      ),
+                                      gradient: LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Colors.black.withOpacity(0.7),
+                                            Colors.transparent
+                                          ]
+                                      )
+                                  )
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      child: Container(
+                                        child: Image.asset('assets/images/medication2.jpg'),
+                                        height:30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(50),
+                                            bottomRight: Radius.circular(50),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                        'Medication',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18
+                                        )
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ]
+                      )
+                  ),
+                ),
                 GestureDetector(
                   onTap:(){
                     getSymptoms;
