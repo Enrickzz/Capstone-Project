@@ -135,8 +135,6 @@ class _addSymptomsState extends State<add_symptoms> {
                     onChanged: (newValue){
                       setState(() {
                         valueChooseSymptom = newValue;
-
-
                       });
 
                     },
@@ -432,7 +430,7 @@ class _addSymptomsState extends State<add_symptoms> {
                         Symptom symptom;
                         if(datasnapshot.value == null){
                           final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 0.toString());
-                          symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true});
+                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true});
                           print("Added Symptom Successfully! " + uid);
                         }
                         else{
@@ -478,7 +476,6 @@ class _addSymptomsState extends State<add_symptoms> {
                                   tempSymptomFelt = splitFull.last;
                                   symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, symptom_isActive: tempIsActive);
                                   symptoms_list.add(symptom);
-                                  print("symptom  " + symptom.symptom_name + symptom.intesity_lvl.toString() + symptom.symptom_felt);
                                 }
                                 break;
                               }
@@ -489,7 +486,7 @@ class _addSymptomsState extends State<add_symptoms> {
                           count = symptoms_list.length;
                           print("count " + count.toString());
                           final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
-                          symptomRef.set({"symptom_name": symptom_name.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": symptom_felt.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true});
+                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true});
                           print("Added Symptom Successfully! " + uid);
                         }
 
@@ -498,7 +495,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
                       Future.delayed(const Duration(milliseconds: 1000), (){
                         print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
-                        symptoms_list.add(new Symptom(symptom_name: symptom_name.toString(), intesity_lvl: intesity_lvl, symptom_felt: symptom_felt,symptom_date: format.parse(symptom_date), symptom_time: timeformat.parse(symptom_time), symptom_isActive: true));
+                        symptoms_list.add(new Symptom(symptom_name: valueChooseSymptom.toString(), intesity_lvl: intesity_lvl, symptom_felt: valueChooseGeneralArea,symptom_date: format.parse(symptom_date), symptom_time: timeformat.parse(symptom_time), symptom_isActive: true));
                         for(var i=0;i<symptoms_list.length/2;i++){
                           var temp = symptoms_list[i];
                           symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
