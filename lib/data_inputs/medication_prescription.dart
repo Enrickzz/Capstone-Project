@@ -5,20 +5,14 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/symptoms.dart';
 import 'add_medication.dart';
-import '../fitness_app_theme.dart';
-import '../models/users.dart';
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
+import 'add_medication_prescription.dart';
 
+//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class medication_prescription extends StatefulWidget {
-  final List<Medication> medlist;
-  medication_prescription({Key key, this.medlist}): super(key: key);
   @override
   _medication_prescriptionState createState() => _medication_prescriptionState();
 }
@@ -26,110 +20,22 @@ class medication_prescription extends StatefulWidget {
 class _medication_prescriptionState extends State<medication_prescription> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String firstname = '';
+  String lastname = '';
+  String email = '';
+  String password = '';
+  String error = '';
+
+  String initValue="Select your Birth Date";
+  bool isDateSelected= false;
+  DateTime birthDate; // instance of DateTime
+  String birthDateInString = "MM/DD/YYYY";
+  String weight = "";
+  String height = "";
+  String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
-  TimeOfDay time;
-  List<Medication> medtemp = [];
-  DateFormat format = new DateFormat("MM/dd/yyyy");
-  DateFormat timeformat = new DateFormat("hh:mm");
-
-  @override
-  void initState() {
-    super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
-    String tempMedicineName = "";
-    String tempMedicineType = "";
-    String tempMedicineDate = "";
-    double tempMedicineDosage = 0;
-    String tempMedicineTime = "";
-
-    readMedication.once().then((DataSnapshot datasnapshot) {
-      medtemp.clear();
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Medication medicine;
-      for(var i = 0; i < temp.length; i++) {
-        String full = temp[i].replaceAll("{", "")
-            .replaceAll("}", "")
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-        if(i < 5){
-          switch(i){
-            case 0: {
-              print("1 " + splitFull.last);
-              tempMedicineType = splitFull.last;
-            }
-            break;
-            case 1: {
-              print("2 " + splitFull.last);
-              tempMedicineDosage = double.parse(splitFull.last);
-            }
-            break;
-            case 2: {
-              print("3 " + splitFull.last);
-              tempMedicineDate = splitFull.last;
-            }
-            break;
-            case 3: {
-              print("4 " + splitFull.last);
-              tempMedicineName = splitFull.last;
-
-            }
-            break;
-            case 4: {
-              print("5 " + splitFull.last);
-              tempMedicineTime = splitFull.last;
-              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate),medicine_time: timeformat.parse(tempMedicineTime));
-              medtemp.add(medicine);
-            }
-            break;
-          }
-        }
-        else{
-          switch(i%5){
-            case 0: {
-              tempMedicineType = splitFull.last;
-            }
-            break;
-            case 1: {
-              tempMedicineDosage = double.parse(splitFull.last);
-            }
-            break;
-            case 2: {
-              tempMedicineDate = splitFull.last;
-
-            }
-            break;
-            case 3: {
-              tempMedicineName = splitFull.last;
-
-            }
-            break;
-            case 4: {
-              tempMedicineTime = splitFull.last;
-              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate), medicine_time: timeformat.parse(tempMedicineTime));
-              medtemp.add(medicine);
-            }
-            break;
-          }
-        }
-      }
-      for(var i=0;i<medtemp.length/2;i++){
-        var temp = medtemp[i];
-        medtemp[i] = medtemp[medtemp.length-1-i];
-        medtemp[medtemp.length-1-i] = temp;
-      }
-    });
-    medtemp = widget.medlist;
-    Future.delayed(const Duration(milliseconds: 1500), (){
-      setState(() {
-        print("setstate");
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,114 +67,19 @@ class _medication_prescriptionState extends State<medication_prescription> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_medication(thislist: medtemp),
+                      child: add_medication_prescription(),
                     ),
                     ),
-                  ).then((value) =>
-                    Future.delayed(const Duration(milliseconds: 1500), (){
-                      setState((){
-                        print("setstate medicines");
-                        if(value != null){
-                          medtemp = value;
-                        }
-                        print("medetmp.length == " +medtemp.length.toString());
-                      });
-                    }));
-
+                  );
                 },
                 child: Icon(
                   Icons.add,
-                )
+                ),
               )
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: medtemp.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                height: 140,
-                child: Stack(
-                    children: [
-                      Positioned (
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                            height: 120,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                    bottomRight: Radius.circular(20)
-                                ),
-                                gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.white.withOpacity(0.7),
-                                      Colors.white
-                                    ]
-                                ),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.grey.withOpacity(0.6),
-                                      offset: Offset(1.1, 1.1),
-                                      blurRadius: 10.0),
-                                ]
-                            )
-                        ),
-                      ),
-                      Positioned(
-                        top: 25,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                  '' + getDateFormatted(medtemp[index].getDate.toString())+getTimeFormatted(medtemp[index].getTime.toString())+" "
-                                      + "\nMedicine: " + medtemp[index].getName + " "
-                                      +"\nDosage "+ medtemp[index].getDosage.toString()+ " "
-                                      +"\nType: "+ medtemp[index].getType,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18
-                                  )
-                              ),
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ]
-                )
-            ),
-          );
-        },
-      ),
-
 
     );
-  }
-  String getDateFormatted (String date){
-    print(date);
-    var dateTime = DateTime.parse(date);
-    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
-  }
-  String getTimeFormatted (String date){
-    print(date);
-    if(date != null){
-      var dateTime = DateTime.parse(date);
-      var hours = dateTime.hour.toString().padLeft(2, "0");
-      var min = dateTime.minute.toString().padLeft(2, "0");
-      return "$hours:$min";
-    }
-
   }
 }
