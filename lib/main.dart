@@ -4,12 +4,15 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/additional_data_collection.dart';
 import 'package:my_app/models/tabIcon_data.dart';
+import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:my_app/training/training_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
@@ -23,6 +26,7 @@ import 'package:flutter/gestures.dart';
 
 Future<void>  main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(LogIn());
 }
 
@@ -45,7 +49,9 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     isFirstTime();
-    return MaterialApp(
+    return ChangeNotifierProvider(
+      create: (context) => GoogleAuthProvider(),
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CVD Flutter',
       theme: ThemeData(
@@ -105,6 +111,7 @@ class _LogInState extends State<LogIn> {
           }
         },
       )
+      ),
     );
   }
   void isFirstTime () async {
@@ -306,6 +313,20 @@ class _AppSignInState extends State<AppSignIn> {
                                   )
                                 ],
                               ),
+                            ),
+                            SizedBox(height: 15.0),
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.blue,
+                                onPrimary: Colors.white,
+                                minimumSize: Size(double.infinity, 40),
+                              ),
+                                icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
+                                label: Text("Sign up with Google"),
+                                onPressed: (){
+                                final provider = Provider.of<GoogleSignInProvider>(context, listen:false);
+                                provider.googleLogin();
+                               },
                             ),
                             SizedBox(height: 15.0),
                             // Flexible(
