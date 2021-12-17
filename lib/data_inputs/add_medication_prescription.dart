@@ -46,6 +46,27 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   double _currentSliderValue = 1;
 
   DateTimeRange dateRange;
+
+  String getForm(){
+    if(dateRange == null){
+      return 'From';
+    }
+    else{
+      return DateFormat('MM/dd/yyyy').format(dateRange.start);
+
+    }
+  }
+
+  String getUntil(){
+    if(dateRange == null){
+      return 'Until';
+    }
+    else{
+      return DateFormat('MM/dd/yyyy').format(dateRange.end);
+
+    }
+  }
+
   Future pickDateRange(BuildContext context) async{
     final initialDateRange = DateTimeRange(
         start: DateTime.now(),
@@ -198,7 +219,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               color: Color(0xFF666666),
                               fontFamily: defaultFontFamily,
                               fontSize: defaultFontSize),
-                          hintText: "Start Date",
+                          hintText: getForm(),
                           prefixIcon: Icon(
                             Icons.calendar_today,
                             color: Color(0xFF666666),
@@ -236,7 +257,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               color: Color(0xFF666666),
                               fontFamily: defaultFontFamily,
                               fontSize: defaultFontSize),
-                          hintText: "End Date",
+                          hintText: getUntil(),
                           prefixIcon: Icon(
                             Icons.calendar_today,
                             color: Color(0xFF666666),
