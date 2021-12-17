@@ -33,6 +33,7 @@ class _AppSignUpState extends State<additional_data_collection> {
   String height = "";
   String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
+  var dateValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -103,15 +104,8 @@ class _AppSignUpState extends State<additional_data_collection> {
                                   isDateSelected=true;
 
                                   // put it here
-                                  birthDateInString = "${birthDate.month}/${birthDate.day}/${birthDate.year}"; // 08/14/2019
-                                  AlertDialog alert = AlertDialog(
-                                    title: Text("My title"),
-                                    content: Text("This is my message."),
-                                    actions: [
-
-                                    ],
-                                  );
-
+                                  birthDateInString = "${birthDate.month}/${birthDate.day}/${birthDate.year}";
+                                  dateValue.text = birthDateInString;
                                 });
                               }
                             }

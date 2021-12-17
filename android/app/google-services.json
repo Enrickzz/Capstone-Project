@@ -1,18 +1,56 @@
 {
   "project_info": {
     "project_number": "993827517549",
+    "firebase_url": "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "capstone-heart-disease",
     "storage_bucket": "capstone-heart-disease.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:993827517549:android:0c3c76e71036debe22bb64",
+        "mobilesdk_app_id": "1:993827517549:android:8044bdd9ea291d0922bb64",
         "android_client_info": {
           "package_name": "com.capstone.cvd_app"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "993827517549-sa9hlqvat1mnv4b5d5ulu9h2usqsbpc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFFsmBgpfkXobbxeoN_FGrAc9YT_d4O4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993827517549-sa9hlqvat1mnv4b5d5ulu9h2usqsbpc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993827517549:android:0c3c76e71036debe22bb64",
+        "android_client_info": {
+          "package_name": "com.example.my_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993827517549-ibt8a2hc149qv362vs1mhtj06b8im5eu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.my_app",
+            "certificate_hash": "356a9c23e0c979dd47713249bff858d319971dc5"
+          }
+        },
         {
           "client_id": "993827517549-sa9hlqvat1mnv4b5d5ulu9h2usqsbpc3.apps.googleusercontent.com",
           "client_type": 3

@@ -49,7 +49,9 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     isFirstTime();
-    return MaterialApp(
+    return ChangeNotifierProvider(
+      create: (ctx) => GoogleSignInProvider(),
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CVD Flutter',
       theme: ThemeData(
@@ -108,7 +110,8 @@ class _LogInState extends State<LogIn> {
             );
           }
         },
-      )
+      ),
+      ),
     );
   }
   void isFirstTime () async {
@@ -184,7 +187,6 @@ class _AppSignInState extends State<AppSignIn> {
               ),
             ),
             Container(
-
                 child: Column(
                   children: [
                     SizedBox(height: 8.0),
@@ -594,6 +596,7 @@ class _AppSignInState extends State<AppSignIn> {
       //     ),
       //   ),
       // ),
+
     );
   }
 
