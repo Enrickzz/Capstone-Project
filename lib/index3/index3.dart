@@ -148,7 +148,8 @@ class _index3State extends State<index3>
                           Text( "Chan, Gian Lord",
                               style: TextStyle(
                                   fontSize: 24,
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.bold,
+                                  color:Color(0xFF363f93),
                               )
                           ),
                           Padding(
@@ -159,6 +160,7 @@ class _index3State extends State<index3>
                                 Text('gian_lord_chan@dlsu.edu.ph',
                                   style: TextStyle(
                                       fontSize: 14,
+                                      color:Color(0xFF363f93),
                                   )
                                 )
                               ]
@@ -170,22 +172,27 @@ class _index3State extends State<index3>
                 ]
               ),
               SizedBox(height: 24),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children:<Widget>[
-                  Text( "Personal Information",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold
-                      )
-                  ),
-                  Text( "Edit",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold
-                      )
-                  ),
-                ]
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children:<Widget>[
+                    Text( "Personal Information",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color:Color(0xFF253840),
+                        )
+                    ),
+                    Text( "Edit",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color:Color(0xFF363f93),
+                        )
+                    ),
+                  ]
+                ),
               ),
               SizedBox(height: 10.0),
               Container(
@@ -208,40 +215,41 @@ class _index3State extends State<index3>
                               ),
                             )),
                         Positioned(
-
                             child: Container(
-
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Sinigang na Baboy",
-                                      style: TextStyle(
-                                          fontSize:18,
-                                          color:Color(0xFF363f93),
-                                          fontWeight: FontWeight.bold
-                                      ),),
-                                    Text("Lunch",
-                                      style: TextStyle(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Sinigang na Baboy",
+                                        style: TextStyle(
+                                            fontSize:18,
+                                            color:Color(0xFF363f93),
+                                            fontWeight: FontWeight.bold
+                                        ),),
+                                      Text("Lunch",
+                                        style: TextStyle(
+                                            fontSize:16,
+                                            color:Colors.grey,
+                                            fontWeight: FontWeight.bold
+                                        ),),
+                                      Text("420kcal",
+                                        style: TextStyle(
                                           fontSize:16,
                                           color:Colors.grey,
-                                          fontWeight: FontWeight.bold
-                                      ),),
-                                    Text("420kcal",
-                                      style: TextStyle(
-                                        fontSize:16,
-                                        color:Colors.grey,
-                                      ),),
-                                    Text("69g",
-                                      style: TextStyle(
-                                        fontSize:16,
-                                        color:Colors.grey,
-                                      ),),
-                                    Text("Other info",
-                                      style: TextStyle(
-                                        fontSize:16,
-                                        color:Colors.grey,
-                                      ),),
-                                  ]
+                                        ),),
+                                      Text("69g",
+                                        style: TextStyle(
+                                          fontSize:16,
+                                          color:Colors.grey,
+                                        ),),
+                                      Text("Other info",
+                                        style: TextStyle(
+                                          fontSize:16,
+                                          color:Colors.grey,
+                                        ),),
+                                    ]
+                                ),
                               ),
                             ))
                       ]
