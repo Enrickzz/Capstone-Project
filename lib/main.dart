@@ -49,9 +49,7 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     isFirstTime();
-    return ChangeNotifierProvider(
-      create: (context) => GoogleAuthProvider(),
-      child: MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CVD Flutter',
       theme: ThemeData(
@@ -111,7 +109,6 @@ class _LogInState extends State<LogIn> {
           }
         },
       )
-      ),
     );
   }
   void isFirstTime () async {

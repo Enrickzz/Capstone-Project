@@ -26,7 +26,9 @@ class index2 extends StatefulWidget {
   @override
   _index2State createState() => _index2State();
 }
+
 final _formKey = GlobalKey<FormState>();
+List<Food> result = [];
 class _index2State extends State<index2>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
@@ -153,7 +155,7 @@ class _index2State extends State<index2>
                             ),
                           ),
                           onPressed: () async{
-                            fetchNutritionix(search);
+                              result = await fetchNutritionix(search);
                           },
                         ),
                       ]
@@ -226,7 +228,7 @@ class _index2State extends State<index2>
                                         child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text("Sinigang na Baboy",
+                                              Text(result[0].food_name,
                                                 style: TextStyle(
                                                     fontSize:18,
                                                     color:Color(0xFF363f93),
@@ -312,7 +314,7 @@ class _index2State extends State<index2>
     );
   }
 }
-Future<void> fetchNutritionix(String thisquery) async {
+Future<List<Food>> fetchNutritionix(String thisquery) async {
   var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
   Map<String, String> headers = {
     "x-app-id": "f4507302",
@@ -337,6 +339,11 @@ Future<void> fetchNutritionix(String thisquery) async {
     print(data);
     final parsedJson = convert.jsonDecode(data);
     final food = nutritionixApi.fromJson(parsedJson);
+    print("food " + food.food[0].tag_name);
+    // print("food " + food.serving_unit);
+    // print("food " + food.tag_name);
+    // print("food " + food.serving_qty.toString());
+    // print("food " + food.tag_id);
     // var food_name = convert.jsonDecode(data)['food_name'];
     // print(food_name);
     // var calories = convert.jsonDecode(data)['nf_calories'];
@@ -348,6 +355,7 @@ Future<void> fetchNutritionix(String thisquery) async {
     //         builder: (context) => mainScreen(
     //           nutritionixApi: food,
     // )), (route) => false);
+    return food.food;
   }
   else{
     print("response status code is " + response.statusCode.toString());
@@ -355,4 +363,5 @@ Future<void> fetchNutritionix(String thisquery) async {
   // final responseJson = json.decode(response.body);
 
   //print('This is the API response: $responseJson');
+
 }
