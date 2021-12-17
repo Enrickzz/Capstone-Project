@@ -171,6 +171,44 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                       ),
                     ),
                   ),
+                  SizedBox(height: 8.0),
+                  GestureDetector(
+                    onTap: () => pickDateRange(context),
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: endDate,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "End Date",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select End Date' : null,
+                        onChanged: (val){
+
+                          print(endDate);
+                          setState((){
+                          });
+                        },
+                      ),
+                    ),
+                  ),
                   // SizedBox(height: 8.0),
                   // GestureDetector(
                   //   onTap: ()async{

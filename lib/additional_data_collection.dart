@@ -87,40 +87,59 @@ class _AppSignUpState extends State<additional_data_collection> {
                     SizedBox(
                       height: 8,
                     ),
-                    Row(
-                      children: <Widget>[
-                        GestureDetector(
-                            child: new Icon(Icons.calendar_today),
-                            onTap: ()async{
-                              final datePick= await showDatePicker(
-                                  context: context,
-                                  initialDate: new DateTime.now(),
-                                  firstDate: new DateTime(1900),
-                                  lastDate: new DateTime(2100)
-                              );
-                              if(datePick!=null && datePick!=birthDate){
-                                setState(() {
-                                  birthDate=datePick;
-                                  isDateSelected=true;
+                    GestureDetector(
+                      onTap: ()async{
+                        final datePick= await showDatePicker(
+                            context: context,
+                            initialDate: new DateTime.now(),
+                            firstDate: new DateTime(1900),
+                            lastDate: new DateTime(2100)
+                        );
+                        if(datePick!=null && datePick!=birthDate){
+                          setState(() {
+                            birthDate=datePick;
+                            isDateSelected=true;
 
-                                  // put it here
-                                  birthDateInString = "${birthDate.month}/${birthDate.day}/${birthDate.year}";
-                                  dateValue.text = birthDateInString;
-                                });
-                              }
-                            }
-                        ), Container(
-                          child: Text(
-                              " MM/DD/YYYY ",
-                              style: TextStyle(
+                            // put it here
+                            birthDateInString = "${birthDate.month}/${birthDate.day}/${birthDate.year}";
+                            dateValue.text = birthDateInString;
+                          });
+                        }
+                      },
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                          controller: dateValue,
+                          showCursor: false,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
                                 color: Color(0xFF666666),
                                 fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize,
-                                fontStyle: FontStyle.normal,
-                              )
-                          )
+                                fontSize: defaultFontSize),
+                            hintText: "Birthday",
+                            prefixIcon: Icon(
+                              Icons.calendar_today,
+                              color: Color(0xFF666666),
+                              size: defaultIconSize,
+                            ),
+                          ),
+                          validator: (val) => val.isEmpty ? 'Select Birthday' : null,
+                          onChanged: (val){
+
+                            print(dateValue);
+                            setState((){
+                            });
+                          },
                         ),
-                      ],
+                      ),
                     ),
                     SizedBox(
                       height: 8,
