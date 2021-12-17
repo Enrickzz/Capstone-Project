@@ -149,7 +149,7 @@ class _index3State extends State<index3>
                               style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color:Color(0xFF363f93),
+                                  // color:Color(0xFF363f93),
                               )
                           ),
                           Padding(
@@ -160,7 +160,7 @@ class _index3State extends State<index3>
                                 Text('gian_lord_chan@dlsu.edu.ph',
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color:Color(0xFF363f93),
+                                      // color:Color(0xFF363f93),
                                   )
                                 )
                               ]
@@ -175,34 +175,57 @@ class _index3State extends State<index3>
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
                 child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:<Widget>[
-                    Text( "Personal Information",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color:Color(0xFF253840),
-                        )
-                    ),
-                    Text( "Edit",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color:Color(0xFF363f93),
-                        )
-                    ),
+                      Expanded(
+                        child: Text( "Personal Information",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color:Color(0xFF4A6572),
+                            )
+                        ),
+                      ),
+                      InkWell(
+                        highlightColor: Colors.transparent,
+                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                        onTap: () {},
+                        // child: Padding(
+                          // padding: const EdgeInsets.only(left: 8),
+                          child: Row(
+                            children: <Widget>[
+                              Text( "Edit",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal,
+                                    color:Color(0xFF2633C5),
+                                  )
+                              ),
+                              // SizedBox(
+                              //   height: 38,
+                              //   width: 26,
+                              //   // child: Icon(
+                              //   //   Icons.arrow_forward,
+                              //   //   color: FitnessAppTheme.darkText,
+                              //   //   size: 18,
+                              //   // ),
+                              // ),
+                            ],
+                          )
+                        // )
+                      )
                   ]
                 ),
               ),
               SizedBox(height: 10.0),
               Container(
-                  height: 230,
+                  height: 340,
+                  // margin: EdgeInsets.only(bottom: 50),
                   child: Stack(
                       children: [
                         Positioned(
                             child: Material(
                               child: Container(
-                                  height: 180.0,
                                   width: 340,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -217,37 +240,52 @@ class _index3State extends State<index3>
                         Positioned(
                             child: Container(
                               child: Padding(
-                                padding: const EdgeInsets.all(12.0),
+                                padding: const EdgeInsets.all(18.0),
                                 child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("Sinigang na Baboy",
+                                      Text("Complete Name",
                                         style: TextStyle(
-                                            fontSize:18,
+                                            fontSize:14,
                                             color:Color(0xFF363f93),
-                                            fontWeight: FontWeight.bold
-                                        ),),
-                                      Text("Lunch",
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text("Gian Lord Chan",
                                         style: TextStyle(
                                             fontSize:16,
-                                            color:Colors.grey,
                                             fontWeight: FontWeight.bold
-                                        ),),
-                                      Text("420kcal",
+                                        ),
+                                      ),
+                                      SizedBox(height: 24),
+                                      Text("Birthday",
                                         style: TextStyle(
-                                          fontSize:16,
-                                          color:Colors.grey,
-                                        ),),
-                                      Text("69g",
+                                          fontSize:14,
+                                          color:Color(0xFF363f93),
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text("08/07/1999",
                                         style: TextStyle(
-                                          fontSize:16,
-                                          color:Colors.grey,
-                                        ),),
-                                      Text("Other info",
+                                            fontSize:16,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                      SizedBox(height: 24),
+                                      Text("Email address",
                                         style: TextStyle(
-                                          fontSize:16,
-                                          color:Colors.grey,
-                                        ),),
+                                          fontSize:14,
+                                          color:Color(0xFF363f93),
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text("gian_lord_chan@dlsu.edu.ph",
+                                        style: TextStyle(
+                                            fontSize:16,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                      SizedBox(height: 24),
                                     ]
                                 ),
                               ),
@@ -255,40 +293,10 @@ class _index3State extends State<index3>
                       ]
                   )
               ),
+
             ]
           ),
 
-
-
-          // child: Row(
-          //   children: [
-          //     Column(
-          //       children: [
-          //         Container(
-          //           alignment: Alignment.topLeft,
-          //           child: Container(
-          //             padding: EdgeInsets.all(10),
-          //             decoration: BoxDecoration(
-          //               borderRadius: BorderRadius.circular(100),
-          //               border: Border.all(width: 2, color: Colors.white),
-          //               color: Colors.white,
-          //               boxShadow: [
-          //                 BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
-          //               ],
-          //             ),
-          //             child: Icon(Icons.person_outlined, size: 50, color: Colors.blue,),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //     SizedBox(width: 20.0),
-          //     Container(
-          //       alignment: Alignment.topLeft,
-          //       child:  Text( "Chan, Gian Lord", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          //       ),
-          //     ),
-          //   ],
-          // ),
         ),
 
       )
