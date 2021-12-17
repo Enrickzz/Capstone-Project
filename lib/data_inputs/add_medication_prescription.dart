@@ -39,6 +39,11 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   String special_instruction = "";
   int count = 0;
   List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
+  String valueChooseInterval;
+  List<String> listItemSymptoms = <String>[
+    '1', '2', '3','4'
+  ];
+  double _currentSliderValue = 1;
 
   DateTimeRange dateRange;
   Future pickDateRange(BuildContext context) async{
@@ -131,6 +136,45 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                     onChanged: (val){
                       setState(() => branded_name = val);
                     },
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey, width: 1),
+                          borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: DropdownButton(
+                        dropdownColor: Colors.white,
+                        hint: Text("How many times a day? "),
+                        icon: Icon(Icons.arrow_drop_down),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18
+                        ),
+                        iconSize: 36,
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        value: valueChooseInterval,
+                        onChanged: (newValue){
+                          setState(() {
+                            valueChooseInterval = newValue;
+                          });
+
+                        },
+
+                        items: listItemSymptoms.map((valueItem){
+                          return DropdownMenuItem(
+                            value: valueItem,
+                            child: Text(valueItem),
+                          );
+                        },
+                        ).toList(),
+
+                      ),
+                    ),
                   ),
                   SizedBox(height: 8.0),
                   GestureDetector(
