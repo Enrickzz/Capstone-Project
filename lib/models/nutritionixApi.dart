@@ -1,89 +1,121 @@
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class nutritionixApi {
+  List<Common> common;
 
-  List<Food> food;
+  nutritionixApi({this.common});
 
-  nutritionixApi({
-    this.food,
-});
+  nutritionixApi.fromJson(Map<String, dynamic> json) {
+    if (json['common'] != null) {
+      common = new List<Common>();
+      json['common'].forEach((v) {
+        common.add(new Common.fromJson(v));
+      });
+    }
+  }
 
-
-  factory nutritionixApi.fromJson(Map<String, dynamic> json) => nutritionixApi(
-    food: List<Food>.from(json["common"].map((x) => Food.fromJson(x))),
-    // food_name: json['food_name'] as String,
-    // serving_unit: json['serving_unit'] as String,
-    // tag_name: json['tag_name'] as String,
-    // tag_id: json['tag_id'] as int,
-    // serving_qty: json['serving_qty'] as double,
-  );
-
-  // Map<String, dynamic> toJson() => {
-  //   "food_name": food_name,
-  //   "serving_unit": serving_unit,
-  //   "tag_name": tag_name,
-  //   "tag_id": tag_id,
-  //   "serving_qty": serving_qty,
-  // };
-
-  // final String id;
-  // final double calories;
-  // Food({required this.id, required this.calories});
-  //
-  //
-  // factory Food.fromJson(Map<String, dynamic> data){
-  //   final id = data['id'] as String;
-  //   final calories = data['calories'] as double;
-  //   return Food(id: id, calories: calories);
-  // }
-  //
-  // Map<String, dynamic> toJson() {
-  //   return{
-  //     'id' : id,
-  //     'calories' : calories,
-  //   };
-  // }
-
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.common != null) {
+      data['common'] = this.common.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
-class Food {
-  String food_name;
-  String serving_unit;
-  String tag_name;
-  int serving_qty;
-  String tag_id;
+class Common {
+  String foodName;
+  String servingUnit;
+  String tagName;
+  String servingQty;
+  String tagId;
+  Photo photo;
+  String servingWeightGrams;
+  List<FullNutrients> fullNutrients;
+  String locale;
 
-  Food({this.food_name, this.serving_unit, this.tag_name, this.serving_qty, this.tag_id});
+  Common(
+      {this.foodName,
+        this.servingUnit,
+        this.tagName,
+        this.servingQty,
+        this.tagId,
+        this.photo,
+        this.servingWeightGrams,
+        this.fullNutrients,
+        this.locale});
 
-  factory Food.fromJson(Map<String, dynamic> json) => Food(
-    food_name:  json["food_name"] as String,
-    serving_unit: json["serving_unit"] as String,
-    tag_name: json["tag_name"] as String,
-    serving_qty: json["serving_qty"] as int,
-    tag_id: json["tag_id"] as String,
-  );
-  Map<String, dynamic> toJson() => {
-    "food_name": food_name,
-    "serving_unit": serving_unit,
-    "tag_name": tag_name,
-    "tag_id": tag_id,
-    "serving_qty": serving_qty,
-  };
-  String get getFName {
-    return food_name;
-  }
-  String get getUnit {
-    return serving_unit;
-  }
-  String get getTName {
-    return tag_name;
-  }
-  int get getQty {
-    return serving_qty;
-  }
-  String get getID {
-    return tag_id;
+  Common.fromJson(Map<String, dynamic> json) {
+    foodName = json['food_name'];
+    servingUnit = json['serving_unit'];
+    tagName = json['tag_name'];
+    servingQty = json['serving_qty'].toString();
+    tagId = json['tag_id'];
+    photo = json['photo'] != null ? new Photo.fromJson(json['photo']) : null;
+    servingWeightGrams = json['serving_weight_grams'].toString();
+    if (json['full_nutrients'] != null) {
+      fullNutrients = new List<FullNutrients>();
+      json['full_nutrients'].forEach((v) {
+        fullNutrients.add(new FullNutrients.fromJson(v));
+      });
+    }
+    locale = json['locale'];
   }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['food_name'] = this.foodName;
+    data['serving_unit'] = this.servingUnit;
+    data['tag_name'] = this.tagName;
+    data['serving_qty'] = this.servingQty;
+    data['tag_id'] = this.tagId;
+    if (this.photo != null) {
+      data['photo'] = this.photo.toJson();
+    }
+    data['serving_weight_grams'] = this.servingWeightGrams;
+    if (this.fullNutrients != null) {
+      data['full_nutrients'] =
+          this.fullNutrients.map((v) => v.toJson()).toList();
+    }
+    data['locale'] = this.locale;
+    return data;
+  }
+}
 
+class Photo {
+  String thumb;
 
+  Photo({this.thumb});
+
+  Photo.fromJson(Map<String, dynamic> json) {
+    thumb = json['thumb'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['thumb'] = this.thumb;
+    return data;
+  }
+}
+
+class FullNutrients {
+  double value;
+  int attrId;
+
+  FullNutrients({this.value, this.attrId});
+
+  FullNutrients.fromJson(Map<String, dynamic> json) {
+    value = double.parse(json['value'].toString());
+    attrId = json['attr_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['value'] = this.value;
+    data['attr_id'] = this.attrId;
+    return data;
+  }
 }

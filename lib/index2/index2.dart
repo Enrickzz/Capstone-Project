@@ -28,7 +28,8 @@ class index2 extends StatefulWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
-List<Food> result = [];
+List<Common> result = [];
+List<double> calories;
 class _index2State extends State<index2>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
@@ -228,7 +229,7 @@ class _index2State extends State<index2>
                                         child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(result[0].food_name,
+                                              Text(result[0].foodName,
                                                 style: TextStyle(
                                                     fontSize:18,
                                                     color:Color(0xFF363f93),
@@ -241,7 +242,7 @@ class _index2State extends State<index2>
                                                     fontWeight: FontWeight.bold
                                                 ),),
                                               Divider(color: Colors.blue),
-                                              Text("420kcal",
+                                              Text("calories is " + calories.toString(),
                                                 style: TextStyle(
                                                   fontSize:16,
                                                   color:Colors.grey,
@@ -314,7 +315,7 @@ class _index2State extends State<index2>
     );
   }
 }
-Future<List<Food>> fetchNutritionix(String thisquery) async {
+Future<List<Common>> fetchNutritionix(String thisquery) async {
   var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
   Map<String, String> headers = {
     "x-app-id": "f4507302",
@@ -330,16 +331,29 @@ Future<List<Food>> fetchNutritionix(String thisquery) async {
     headers: headers,
     body: {
       'query': '$thisquery',
-      // 'brand': 'USDA',
+      'detailed': "true",
     },
   );
 
   if(response.statusCode == 200){
     String data = response.body;
-    print(data);
+    // print(data);
     final parsedJson = convert.jsonDecode(data);
     final food = nutritionixApi.fromJson(parsedJson);
-    print("food " + food.food[0].tag_name);
+    print("nutrients " + food.common[0].fullNutrients[0].value.toString());
+    // for(int i = 0; i < food.common.length; i++){
+    //   for(int j = 0; j < food.common[i].fullNutrients.length; j++){
+    //     if(food.common[i].fullNutrients[j].attrId == 208){ // getting calories
+    //       calories = food.common[i].fullNutrients[j].value;
+    //     }
+    //   }
+    // }
+      for(int j = 0; j < food.common[0].fullNutrients.length; j++){
+        if(food.common[0].fullNutrients[j].attrId == 208){ // getting calories
+          calories[0] = food.common[0].fullNutrients[j].value;
+        }
+      }
+
     // print("food " + food.serving_unit);
     // print("food " + food.tag_name);
     // print("food " + food.serving_qty.toString());
@@ -355,7 +369,7 @@ Future<List<Food>> fetchNutritionix(String thisquery) async {
     //         builder: (context) => mainScreen(
     //           nutritionixApi: food,
     // )), (route) => false);
-    return food.food;
+    return food.common;
   }
   else{
     print("response status code is " + response.statusCode.toString());
