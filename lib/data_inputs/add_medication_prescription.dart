@@ -40,6 +40,24 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   int count = 0;
   List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
 
+  DateTimeRange dateRange;
+  Future pickDateRange(BuildContext context) async{
+    final initialDateRange = DateTimeRange(
+        start: DateTime.now(),
+        end: DateTime.now().add(Duration(hours:24 * 3)),
+    );
+
+    final newDateRange = await showDateRangePicker(
+        context: context,
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime(DateTime.now().year + 5),
+        initialDateRange: dateRange ?? initialDateRange,
+    );
+
+    if(newDateRange == null) return;
+
+    setState(() => dateRange = newDateRange);
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -116,23 +134,8 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                   ),
                   SizedBox(height: 8.0),
                   GestureDetector(
-                    onTap: ()async{
-                      await showDatePicker(
-                          context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(1900),
-                          lastDate: new DateTime(2100)
-                      ).then((value){
-                        if(value != null && value != prescriptionDate){
-                          setState(() {
-                            prescriptionDate = value;
-                            isDateSelected = true;
-                            startdate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
-                          });
-                          startDate.text = startdate + "\r";
-                        }
-                      });
-                    },
+                    onTap: () => pickDateRange(context),
+
                     child: AbsorbPointer(
                       child: TextFormField(
                         controller: startDate,
@@ -168,60 +171,116 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.0),
-                  GestureDetector(
-                    onTap: ()async{
-                      await showDatePicker(
-                          context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(1900),
-                          lastDate: new DateTime(2100)
-                      ).then((value){
-                        if(value != null && value != prescriptionDate){
-                          setState(() {
-                            prescriptionDate = value;
-                            isDateSelected = true;
-                            enddate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
-                          });
-                          endDate.text = enddate + "\r";
-                        }
-                      });
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: endDate,
-                        showCursor: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: "End Date",
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color(0xFF666666),
-                            size: defaultIconSize,
-                          ),
-                        ),
-                        validator: (val) => val.isEmpty ? 'Select End Date' : null,
-                        onChanged: (val){
+                  // SizedBox(height: 8.0),
+                  // GestureDetector(
+                  //   onTap: ()async{
+                  //     await showDatePicker(
+                  //         context: context,
+                  //         initialDate: new DateTime.now(),
+                  //         firstDate: new DateTime(1900),
+                  //         lastDate: new DateTime(2100)
+                  //     ).then((value){
+                  //       if(value != null && value != prescriptionDate){
+                  //         setState(() {
+                  //           prescriptionDate = value;
+                  //           isDateSelected = true;
+                  //           startdate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
+                  //         });
+                  //         startDate.text = startdate + "\r";
+                  //       }
+                  //     });
+                  //   },
+                  //   child: AbsorbPointer(
+                  //     child: TextFormField(
+                  //       controller: startDate,
+                  //       showCursor: false,
+                  //       decoration: InputDecoration(
+                  //         border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //           borderSide: BorderSide(
+                  //             width:0,
+                  //             style: BorderStyle.none,
+                  //           ),
+                  //         ),
+                  //         filled: true,
+                  //         fillColor: Color(0xFFF2F3F5),
+                  //         hintStyle: TextStyle(
+                  //             color: Color(0xFF666666),
+                  //             fontFamily: defaultFontFamily,
+                  //             fontSize: defaultFontSize),
+                  //         hintText: "Start Date",
+                  //         prefixIcon: Icon(
+                  //           Icons.calendar_today,
+                  //           color: Color(0xFF666666),
+                  //           size: defaultIconSize,
+                  //         ),
+                  //       ),
+                  //       validator: (val) => val.isEmpty ? 'Select Start Date' : null,
+                  //       onChanged: (val){
+                  //
+                  //         print(startDate);
+                  //         setState((){
+                  //         });
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
 
-                          print(endDate);
-                          setState((){
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+
+                  // SizedBox(height: 8.0),
+                  // GestureDetector(
+                  //   onTap: ()async{
+                  //     await showDatePicker(
+                  //         context: context,
+                  //         initialDate: new DateTime.now(),
+                  //         firstDate: new DateTime(1900),
+                  //         lastDate: new DateTime(2100)
+                  //     ).then((value){
+                  //       if(value != null && value != prescriptionDate){
+                  //         setState(() {
+                  //           prescriptionDate = value;
+                  //           isDateSelected = true;
+                  //           enddate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
+                  //         });
+                  //         endDate.text = enddate + "\r";
+                  //       }
+                  //     });
+                  //   },
+                  //   child: AbsorbPointer(
+                  //     child: TextFormField(
+                  //       controller: endDate,
+                  //       showCursor: false,
+                  //       decoration: InputDecoration(
+                  //         border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //           borderSide: BorderSide(
+                  //             width:0,
+                  //             style: BorderStyle.none,
+                  //           ),
+                  //         ),
+                  //         filled: true,
+                  //         fillColor: Color(0xFFF2F3F5),
+                  //         hintStyle: TextStyle(
+                  //             color: Color(0xFF666666),
+                  //             fontFamily: defaultFontFamily,
+                  //             fontSize: defaultFontSize),
+                  //         hintText: "End Date",
+                  //         prefixIcon: Icon(
+                  //           Icons.calendar_today,
+                  //           color: Color(0xFF666666),
+                  //           size: defaultIconSize,
+                  //         ),
+                  //       ),
+                  //       validator: (val) => val.isEmpty ? 'Select End Date' : null,
+                  //       onChanged: (val){
+                  //
+                  //         print(endDate);
+                  //         setState((){
+                  //         });
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
