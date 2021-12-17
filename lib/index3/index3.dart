@@ -404,7 +404,7 @@ class _index3State extends State<index3>
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children:<Widget>[
                           Expanded(
-                            child: Text( "Health Information",
+                            child: Text( "Medical History",
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -558,6 +558,45 @@ class _index3State extends State<index3>
               ),  // Health Information
               SizedBox(height: 30),
               Container(
+                child: Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: Text("Personal Information"),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        onTap:(){
+
+                        },
+                      ),
+                      _buildDivider(),
+                      ListTile(
+                        title: Text("Medical History"),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        onTap:(){
+
+                        },
+                      ),
+                      _buildDivider(),
+                      ListTile(
+                        title: Text("Settings Information"),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        onTap:(){
+
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 20.0)],
+                  )
+              ),
+              SizedBox(height: 30),
+              Container(
                 child: ElevatedButton(
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -577,6 +616,15 @@ class _index3State extends State<index3>
         ),
 
       )
+    );
+  }
+
+  Container _buildDivider() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      width: double.infinity,
+      height: 1.0,
+      color: Colors.grey.shade400,
     );
   }
 
