@@ -156,7 +156,8 @@ class _index2State extends State<index2>
                           ),
                           onPressed: () async{
                               result = await fetchNutritionix(search);
-
+                              //result.getPhoto();
+                              //print("photo url: " + result.getPhoto());
                           },
                         ),
                       ]
@@ -214,7 +215,7 @@ class _index2State extends State<index2>
                                                 borderRadius: BorderRadius.circular(10.0),
                                                 image: DecorationImage(
                                                     fit:BoxFit.cover,
-                                                    image: AssetImage("assets/images/bloodpressure.jpg")
+                                                    image: NetworkImage(""+result[index].photo.thumb)
                                                 )
                                             ),
                                           )

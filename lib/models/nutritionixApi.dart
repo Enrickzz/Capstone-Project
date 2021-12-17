@@ -37,6 +37,7 @@ class Common {
   List<FullNutrients> fullNutrients;
   String locale;
 
+
   Common(
       {this.foodName,
         this.servingUnit,
@@ -55,6 +56,8 @@ class Common {
         }
       }
   }
+
+
   double getSugar(){
     for(int j = 0; j < this.fullNutrients.length; j++){
       if(fullNutrients[j].attrId == 539){ // getting calories
@@ -62,7 +65,10 @@ class Common {
       }
     }
   }
-  
+  // String photoToString(){
+  //   // this.photo;
+  //   return "assets/images/bloodpressure.jpg";
+  // }
   Common.fromJson(Map<String, dynamic> json) {
     foodName = json['food_name'];
     servingUnit = json['serving_unit'];
