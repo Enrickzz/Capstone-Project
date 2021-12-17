@@ -29,7 +29,7 @@ class index2 extends StatefulWidget {
 
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
-List<double> calories;
+List<double> calories = [];
 class _index2State extends State<index2>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
@@ -41,7 +41,6 @@ class _index2State extends State<index2>
   final AuthService _auth = AuthService();
 
   double topBarOpacity = 0.0;
-
   @override
   void initState() {
 
@@ -157,6 +156,7 @@ class _index2State extends State<index2>
                           ),
                           onPressed: () async{
                               result = await fetchNutritionix(search);
+
                           },
                         ),
                       ]
@@ -166,7 +166,7 @@ class _index2State extends State<index2>
         ),
         body: ListView.builder(
           padding: EdgeInsets.fromLTRB(0, 25, 0, 90),
-          itemCount: 7,
+          itemCount: result.length,
           itemBuilder: (context, index){
             return Container(
               child: Column(
@@ -229,7 +229,7 @@ class _index2State extends State<index2>
                                         child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(result[0].foodName,
+                                              Text(result[index].foodName,
                                                 style: TextStyle(
                                                     fontSize:18,
                                                     color:Color(0xFF363f93),
@@ -242,12 +242,12 @@ class _index2State extends State<index2>
                                                     fontWeight: FontWeight.bold
                                                 ),),
                                               Divider(color: Colors.blue),
-                                              Text("calories is " + calories.toString(),
+                                              Text("calories is " + result[index].getCalories().toString(),
                                                 style: TextStyle(
                                                   fontSize:16,
                                                   color:Colors.grey,
                                                 ),),
-                                              Text("69g",
+                                              Text("Sugar is " + result[index].getSugar().toString(),
                                                 style: TextStyle(
                                                   fontSize:16,
                                                   color:Colors.grey,
@@ -325,7 +325,7 @@ Future<List<Common>> fetchNutritionix(String thisquery) async {
   // String query = '{ "query" : "chicken noodle soup" }';
 
   // http.Response response = await http.post(url, headers: headers, body: query);
-
+  List<FullNutrients> temp;
   var response = await http.post(
     url,
     headers: headers,
@@ -344,15 +344,15 @@ Future<List<Common>> fetchNutritionix(String thisquery) async {
     // for(int i = 0; i < food.common.length; i++){
     //   for(int j = 0; j < food.common[i].fullNutrients.length; j++){
     //     if(food.common[i].fullNutrients[j].attrId == 208){ // getting calories
-    //       calories = food.common[i].fullNutrients[j].value;
+    //       calories[i] = food.common[i].fullNutrients[j].value;
     //     }
     //   }
     // }
-      for(int j = 0; j < food.common[0].fullNutrients.length; j++){
-        if(food.common[0].fullNutrients[j].attrId == 208){ // getting calories
-          calories[0] = food.common[0].fullNutrients[j].value;
-        }
-      }
+    //   for(int j = 0; j < food.common[0].fullNutrients.length; j++){
+    //     if(food.common[0].fullNutrients[j].attrId == 208){ // getting calories
+    //       calories[0] = food.common[0].fullNutrients[j].value;
+    //     }
+    //   }
 
     // print("food " + food.serving_unit);
     // print("food " + food.tag_name);

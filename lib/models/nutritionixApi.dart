@@ -48,6 +48,21 @@ class Common {
         this.fullNutrients,
         this.locale});
 
+  double getCalories(){
+      for(int j = 0; j < this.fullNutrients.length; j++){
+        if(fullNutrients[j].attrId == 208){ // getting calories
+          return fullNutrients[j].value;
+        }
+      }
+  }
+  double getSugar(){
+    for(int j = 0; j < this.fullNutrients.length; j++){
+      if(fullNutrients[j].attrId == 539){ // getting calories
+        return fullNutrients[j].value;
+      }
+    }
+  }
+  
   Common.fromJson(Map<String, dynamic> json) {
     foodName = json['food_name'];
     servingUnit = json['serving_unit'];
