@@ -9,12 +9,12 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class goalWeight extends StatefulWidget {
+class medicalHistory extends StatefulWidget {
   @override
-  _GoalWeightState createState() => _GoalWeightState();
+  _MedicalHistoryState createState() => _MedicalHistoryState();
 }
 
-class _GoalWeightState extends State<goalWeight> {
+class _MedicalHistoryState extends State<medicalHistory> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -37,8 +37,6 @@ class _GoalWeightState extends State<goalWeight> {
 
   bool isSwitched = false;
   bool isSwitchedLifestyle = false;
-  bool isSwitchedSmoker = false;
-  bool isSwitchedDrinker = false;
 
   String goal = '';
   DateTime prescriptionDate;
@@ -56,17 +54,6 @@ class _GoalWeightState extends State<goalWeight> {
     'Very Active',
     'Extremely Active'
   ];
-
-  String valueAlcohol;
-
-  List<String> listAlcohol = <String>[
-    'Never',
-    'Rarely',
-    'Sometimes',
-    'Often',
-    'Always'
-  ];
-
 
 
 
@@ -114,7 +101,7 @@ class _GoalWeightState extends State<goalWeight> {
                       width: 300,
                       height: 90,
                       alignment: Alignment.center,
-                      child: Text("Additional Information",
+                      child: Text("Medical History",
                           style: TextStyle(
                             color: Color(0xFF666666),
                             fontFamily: defaultFontFamily,
@@ -328,94 +315,13 @@ class _GoalWeightState extends State<goalWeight> {
                       },
                     ),
 
-                      Visibility(
-                        visible: isSwitchedLifestyle,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: _createDataTable(),
-                        ),
-                      ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    SwitchListTile(
-                      title: Text('Smoking'),
-                      subtitle: Text('I am a smoker'),
-                      secondary: Icon(Icons.smoking_rooms, size: 34.0, color: Colors.red),
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      value: isSwitchedSmoker,
-                      onChanged: (value){
-                        setState(() {
-                          isSwitchedSmoker = value;
-
-                        });
-                      },
-                    ),
                     Visibility(
-                      visible: isSwitchedSmoker,
-                      child: TextFormField(
-                        showCursor: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: "Average sticks per day?",
-                          prefixIcon: Icon(
-                            Icons.smoking_rooms,
-                            color: Color(0xFF666666),
-                            size: 22,
-                          ),
-                        ),
-                        validator: (val) => val.isEmpty ? 'Number of sticks' : null,
-                        onChanged: (val){
-                          setState(() => goal = val);
-
-                        },
+                      visible: isSwitchedLifestyle,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: _createDataTable(),
                       ),
                     ),
-                    DropdownButton(
-                      dropdownColor: Colors.white,
-                      hint: Text("When do I drink Alcohol? "),
-                      icon: Icon(Icons.arrow_drop_down),
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18
-                      ),
-                      iconSize: 36,
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      value: valueAlcohol,
-                      onChanged: (newValue){
-                        setState(() {
-                          valueAlcohol = newValue;
-
-                        });
-
-                      },
-
-                      items: listAlcohol.map((valueItem){
-                        return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem)
-                        );
-                      },
-                      ).toList(),
-
-                    ),
-                    
-
-
-
 
 
                     // SizedBox(
@@ -586,5 +492,3 @@ class _GoalWeightState extends State<goalWeight> {
     ];
   }
 }
-
-
