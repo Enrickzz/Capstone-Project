@@ -45,6 +45,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   ];
   double _currentSliderValue = 1;
   List <bool> isSelected = [true, false, false, false, false];
+  int quantity = 1;
 
   DateTimeRange dateRange;
 
@@ -238,44 +239,117 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                       });
                     },
                   ),
-                  SizedBox(height: 8.0),
-                  Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Container(
-                      padding: EdgeInsets.only(left: 16, right: 16),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey, width: 1),
-                          borderRadius: BorderRadius.circular(15)
+                  SizedBox(height: 16.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget> [
+                      Text(
+                        "Take how many times a day?",
+                        textAlign: TextAlign.left,
                       ),
-                      child: DropdownButton(
-                        dropdownColor: Colors.white,
-                        hint: Text("Take how many times a day? "),
-                        icon: Icon(Icons.arrow_drop_down),
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14
-                        ),
-                        iconSize: 36,
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        value: valueChooseInterval,
-                        onChanged: (newValue){
-                          setState(() {
-                            valueChooseInterval = newValue;
-                          });
-                        },
-
-                        items: listItemSymptoms.map((valueItem){
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        },
-                        ).toList(),
-
-                      ),
-                    ),
+                      Row(
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              Radio(
+                                value: 1,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("1"),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 2,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("2"),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 3,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("3"),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 4,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("4"),
+                            ],
+                          ),
+                          SizedBox(width: 3)
+                        ],
+                      )
+                    ],
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(0.0),
+                  //   child: Container(
+                  //     padding: EdgeInsets.only(left: 16, right: 16),
+                  //     decoration: BoxDecoration(
+                  //         border: Border.all(color: Colors.grey, width: 1),
+                  //         borderRadius: BorderRadius.circular(15)
+                  //     ),
+                  //     child: DropdownButton(
+                  //       dropdownColor: Colors.white,
+                  //       hint: Text("Take how many times a day? "),
+                  //       icon: Icon(Icons.arrow_drop_down),
+                  //       style: TextStyle(
+                  //           color: Colors.black,
+                  //           fontSize: 14
+                  //       ),
+                  //       iconSize: 36,
+                  //       isExpanded: true,
+                  //       underline: SizedBox(),
+                  //       value: valueChooseInterval,
+                  //       onChanged: (newValue){
+                  //         setState(() {
+                  //           valueChooseInterval = newValue;
+                  //         });
+                  //       },
+                  //
+                  //       items: listItemSymptoms.map((valueItem){
+                  //         return DropdownMenuItem(
+                  //           value: valueItem,
+                  //           child: Text(valueItem),
+                  //         );
+                  //       },
+                  //       ).toList(),
+                  //
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 8.0),
                   GestureDetector(
                     onTap: () => pickDateRange(context),

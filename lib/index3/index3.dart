@@ -316,7 +316,6 @@ class _index3State extends State<index3>
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
                     child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children:<Widget>[
                           Expanded(
                             child: Text("Personal Information",
@@ -331,8 +330,6 @@ class _index3State extends State<index3>
                             highlightColor: Colors.transparent,
                             borderRadius: BorderRadius.all(Radius.circular(4.0)),
                             onTap: () {},
-                            // child: Padding(
-                              // padding: const EdgeInsets.only(left: 8),
                               child: Row(
                                 children: <Widget>[
                                   Text("Edit",
@@ -342,18 +339,8 @@ class _index3State extends State<index3>
                                         color:Color(0xFF2633C5),
                                       )
                                   ),
-                                  // SizedBox(
-                                  //   height: 38,
-                                  //   width: 26,
-                                  //   // child: Icon(
-                                  //   //   Icons.arrow_forward,
-                                  //   //   color: FitnessAppTheme.darkText,
-                                  //   //   size: 18,
-                                  //   // ),
-                                  // ),
                                 ],
                               )
-                            // )
                           )
                       ]
                     ),
@@ -361,8 +348,6 @@ class _index3State extends State<index3>
                   SizedBox(height: 10.0),
                   Container(
                       height: 380,
-                      // height: 500, if may contact number and email
-                      // margin: EdgeInsets.only(bottom: 50),
                       child: Stack(
                           children: [
                             Positioned(
@@ -402,43 +387,11 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                           SizedBox(height: 16),
-                                          // Text("Email address",
-                                          //   style: TextStyle(
-                                          //     fontSize:14,
-                                          //     color:Color(0xFF363f93),
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 8),
-                                          // Text("gian_lord_chan@dlsu.edu.ph",
-                                          //   style: TextStyle(
-                                          //       fontSize:16,
-                                          //       fontWeight: FontWeight.bold
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 16),
-                                          // Text("Contact Number",
-                                          //   style: TextStyle(
-                                          //     fontSize:14,
-                                          //     color:Color(0xFF363f93),
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 8),
-                                          // Text("09123456789",
-                                          //   style: TextStyle(
-                                          //       fontSize:16,
-                                          //       fontWeight: FontWeight.bold
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 16),
-                                          Row(
-                                            children: [
-                                              Text("Birthday",
-                                                style: TextStyle(
-                                                  fontSize:14,
-                                                  color:Color(0xFF363f93),
-                                                ),
-                                              ),
-                                            ],
+                                          Text("Birthday",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              color:Color(0xFF363f93),
+                                            ),
                                           ),
                                           SizedBox(height: 8),
                                           Text(info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
@@ -604,34 +557,6 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                           SizedBox(height: 16),
-                                          // Text("Email address",
-                                          //   style: TextStyle(
-                                          //     fontSize:14,
-                                          //     color:Color(0xFF363f93),
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 8),
-                                          // Text("gian_lord_chan@dlsu.edu.ph",
-                                          //   style: TextStyle(
-                                          //       fontSize:16,
-                                          //       fontWeight: FontWeight.bold
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 16),
-                                          // Text("Contact Number",
-                                          //   style: TextStyle(
-                                          //     fontSize:14,
-                                          //     color:Color(0xFF363f93),
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 8),
-                                          // Text("09123456789",
-                                          //   style: TextStyle(
-                                          //       fontSize:16,
-                                          //       fontWeight: FontWeight.bold
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 16),
                                           Row(
                                             children: [
                                               Text("Comorbidities",
@@ -664,7 +589,6 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                         ]
-
                                     ),
                                   ),
                                 ))
@@ -696,7 +620,15 @@ class _index3State extends State<index3>
                       ),
                       _buildDivider(),
                       ListTile(
-                        title: Text("Settings Information"),
+                        title: Text("Manage Support System"),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        onTap:(){
+
+                        },
+                      ),
+                      _buildDivider(),
+                      ListTile(
+                        title: Text("Manage Healthcare Team"),
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap:(){
 
