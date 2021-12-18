@@ -243,12 +243,12 @@ class _index2State extends State<index2>
                                                     fontWeight: FontWeight.bold
                                                 ),),
                                               Divider(color: Colors.blue),
-                                              Text("calories is " + result[index].getCalories().toString(),
+                                              Text("Calories: " + result[index].getCalories().round().toString() + " kcal",
                                                 style: TextStyle(
                                                   fontSize:16,
                                                   color:Colors.grey,
                                                 ),),
-                                              Text("Sugar is " + result[index].getSugar().toString(),
+                                              Text("Sugar: " + result[index].getSugar().toString()==null?result[index].getSugar().toString():'Sugar: 0',
                                                 style: TextStyle(
                                                   fontSize:16,
                                                   color:Colors.grey,
