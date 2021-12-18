@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/training/training_screen.dart';
+import 'package:my_app/training/dashboards.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'index2/index2.dart';
 import 'index3/index3.dart';
-import 'my_diary/my_diary_screen.dart';
+import 'my_diary/exercise_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/storage_service.dart';
 
@@ -73,7 +73,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = MyDiaryScreen(animationController: animationController);
+    tabBody = ExerciseScreen(animationController: animationController);
     super.initState();
   }
 
@@ -148,7 +148,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
                 }
                 setState(() {
                   tabBody =
-                      MyDiaryScreen(animationController: animationController);
+                      Dashboards(animationController: animationController);
                 });
               });
             } else if (index == 1) {
@@ -158,7 +158,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
                 }
                 setState(() {
                   tabBody =
-                      TrainingScreen(animationController: animationController);
+                      ExerciseScreen(animationController: animationController);
                 });
               });
             }else if(index ==2){
