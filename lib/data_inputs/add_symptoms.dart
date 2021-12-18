@@ -38,6 +38,7 @@ class _addSymptomsState extends State<add_symptoms> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
+  List<String> checkboxStatus = [];
 
   bool value = false;
   final notifications ={
@@ -430,7 +431,7 @@ class _addSymptomsState extends State<add_symptoms> {
                         Symptom symptom;
                         if(datasnapshot.value == null){
                           final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 0.toString());
-                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true});
+                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "recurring": checkboxStatus});
                           print("Added Symptom Successfully! " + uid);
                         }
                         else{
@@ -440,11 +441,10 @@ class _addSymptomsState extends State<add_symptoms> {
                           DateTime tempSymptomTime;
                           bool tempIsActive;
                           String tempSymptomFelt = "";
+                          List<String> tempRecurring = [];
                           for(var i = 0; i < temp.length; i++){
                             String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                             List<String> splitFull = full.split(" ");
-                              print("i value" + i.toString());
-                              print("i value modulu " + (i%4).toString());
                               switch(i%6){
                                 case 0: {
                                   print("2nd switch intensity lvl " + splitFull.last);
@@ -529,7 +529,19 @@ class _addSymptomsState extends State<add_symptoms> {
           checkbox.title
       ),
       subtitle: Text('I experience this symptom every ' + checkbox.title.toLowerCase()),
-      onChanged: (value) => setState(() => checkbox.value = value),
+      onChanged: (value) => setState(() => {
+        checkbox.value = value,
+        if(checkbox.value){
+          checkboxStatus.add(checkbox.title)
+        }
+        else{
+          for(int i = 0; i < checkboxStatus.length; i++){
+            if(checkboxStatus[i] == checkbox.title){
+              checkboxStatus.removeAt(i)
+            },
+          },
+        },
+      }),
       controlAffinity: ListTileControlAffinity.leading,
     ),
   );

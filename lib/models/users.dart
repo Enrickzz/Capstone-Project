@@ -20,7 +20,7 @@ class Additional_Info {
   List<String> foodAller;
   List<String> drugAller;
   List<String> otherAller;
-  
+
   Additional_Info({this.bmi,this.birthday, this.gender, this.height, this.weight, this.foodAller, this.drugAller,this.otherAller});
 }
 
@@ -31,8 +31,11 @@ class Symptom {
   DateTime symptom_date;
   DateTime symptom_time;
   bool symptom_isActive;
+  String symptom_trigger;
+  List<String> recurring;
 
-  Symptom({this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date, this.symptom_time, this.symptom_isActive});
+
+  Symptom({this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date, this.symptom_time, this.symptom_isActive, this.symptom_trigger, this.recurring});
 
   String get getName{
     return symptom_name;
@@ -134,8 +137,9 @@ class Medication_Prescription{
   DateTime enddate;
   String intake_time;
   String special_instruction;
+  String prescription_unit;
 
-  Medication_Prescription({this.generic_name, this.branded_name, this.startdate, this.enddate, this.intake_time, this.special_instruction});
+  Medication_Prescription({this.generic_name, this.branded_name, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit});
 
   String get getGName{
     return generic_name;

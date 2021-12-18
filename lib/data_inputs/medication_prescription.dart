@@ -44,6 +44,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
     String tempSpecialInstruction = "";
     String tempStartDate = "";
     String tempEndDate = "";
+    String tempPrescriptionUnit = "";
 
     readPrescription.once().then((DataSnapshot datasnapshot) {
       prestemp.clear();
@@ -56,34 +57,36 @@ class _medication_prescriptionState extends State<medication_prescription> {
             .replaceAll("[", "")
             .replaceAll("]", "");
         List<String> splitFull = full.split(" ");
-
-          switch(i%6){
+          switch(i%7){
             case 0: {
+              tempPrescriptionUnit = splitFull.last;
+            }
+            break;
+            case 1: {
               tempEndDate = splitFull.last;
 
             }
             break;
-            case 1: {
-              tempIntakeTime = splitFull.last;
-
-            }
-            break;
             case 2: {
-              tempBrandedName = splitFull.last;
+              tempIntakeTime = splitFull.last;
             }
             break;
             case 3: {
-              tempSpecialInstruction = splitFull.last;
+              tempBrandedName = splitFull.last;
 
             }
             break;
             case 4: {
-              tempGenericName = splitFull.last;
+              tempSpecialInstruction = splitFull.last;
             }
             break;
             case 5: {
+              tempGenericName = splitFull.last;
+            }
+            break;
+            case 6: {
               tempStartDate = splitFull.last;
-              prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction);
+              prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
               prestemp.add(prescription);
             }
             break;

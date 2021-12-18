@@ -37,6 +37,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   String enddate = "";
   String intake_time = "";
   String special_instruction = "";
+  String prescription_unit = "";
   int count = 0;
   List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
   String valueChooseInterval;
@@ -84,7 +85,13 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
 
     if(newDateRange == null) return;
 
-    setState(() => dateRange = newDateRange);
+    setState(() => {
+      dateRange = newDateRange,
+      startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
+      enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
+
+    });
+    print("date Range " + dateRange.toString());
   }
   @override
   Widget build(BuildContext context) {
@@ -214,27 +221,30 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                         for (int index = 0; index < isSelected.length; index++){
                           if (index == newIndex) {
                             isSelected[index] = true;
-                            print("mL");
                           } else {
                             isSelected[index] = false;
-                            print("Mg");
                           }
                         }
 
                         if(newIndex == 0){
-                          print("mL");
+                          prescription_unit = "mL";
+                          print(prescription_unit);
                         }
                         if(newIndex == 1){
-                          print("Mg");
+                          prescription_unit = "Mg";
+                          print(prescription_unit);
                         }
                         if(newIndex == 2){
-                          print("g");
+                          prescription_unit = "g";
+                          print(prescription_unit);
                         }
                         if(newIndex == 3){
-                          print("Ug");
+                          prescription_unit = "Ug";
+                          print(prescription_unit);
                         }
                         if(newIndex == 4){
-                          print("Iu");
+                          prescription_unit = "Iu";
+                          print(prescription_unit);
                         }
                       });
                     },
@@ -352,7 +362,17 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                   // ),
                   SizedBox(height: 8.0),
                   GestureDetector(
-                    onTap: () => pickDateRange(context),
+                    onTap: () => pickDateRange(context).then((value){
+                      if(value != null && value != prescriptionDate){
+                        setState(() {
+                          print("set state value " + value.toString());
+                          prescriptionDate = value;
+                          isDateSelected = true;
+                          startDate.text = startdate + "\r";
+                        });
+
+                      }
+                    }),
 
                     child: AbsorbPointer(
                       child: TextFormField(
@@ -391,7 +411,16 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                   ),
                   SizedBox(height: 8.0),
                   GestureDetector(
-                    onTap: () => pickDateRange(context),
+                    onTap: () => pickDateRange(context).then((value){
+                      if(value != null && value != prescriptionDate){
+                        setState(() {
+                          prescriptionDate = value;
+                          isDateSelected = true;
+                          endDate.text = enddate + "\r";
+                        });
+
+                      }
+                    }),
                     child: AbsorbPointer(
                       child: TextFormField(
                         controller: endDate,
@@ -428,114 +457,114 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                     ),
                   ),
 
-                  SizedBox(height: 27.0),
-                  GestureDetector(
-                    onTap: ()async{
-                      await showDatePicker(
-                          context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(1900),
-                          lastDate: new DateTime(2100)
-                      ).then((value){
-                        if(value != null && value != prescriptionDate){
-                          setState(() {
-                            prescriptionDate = value;
-                            isDateSelected = true;
-                            startdate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
-                          });
-                          startDate.text = startdate + "\r";
-                        }
-                      });
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: startDate,
-                        showCursor: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: "Start Date",
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color(0xFF666666),
-                            size: defaultIconSize,
-                          ),
-                        ),
-                        validator: (val) => val.isEmpty ? 'Select Start Date' : null,
-                        onChanged: (val){
-
-                          print(startDate);
-                          setState((){
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  GestureDetector(
-                    onTap: ()async{
-                      await showDatePicker(
-                          context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(1900),
-                          lastDate: new DateTime(2100)
-                      ).then((value){
-                        if(value != null && value != prescriptionDate){
-                          setState(() {
-                            prescriptionDate = value;
-                            isDateSelected = true;
-                            enddate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
-                          });
-                          endDate.text = enddate + "\r";
-                        }
-                      });
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: endDate,
-                        showCursor: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: "End Date",
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color(0xFF666666),
-                            size: defaultIconSize,
-                          ),
-                        ),
-                        validator: (val) => val.isEmpty ? 'Select End Date' : null,
-                        onChanged: (val){
-
-                          print(endDate);
-                          setState((){
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+                  // SizedBox(height: 27.0),
+                  // GestureDetector(
+                  //   onTap: ()async{
+                  //     await showDatePicker(
+                  //         context: context,
+                  //         initialDate: new DateTime.now(),
+                  //         firstDate: new DateTime(1900),
+                  //         lastDate: new DateTime(2100)
+                  //     ).then((value){
+                  //       if(value != null && value != prescriptionDate){
+                  //         setState(() {
+                  //           prescriptionDate = value;
+                  //           isDateSelected = true;
+                  //           startdate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
+                  //         });
+                  //         startDate.text = startdate + "\r";
+                  //       }
+                  //     });
+                  //   },
+                  //   child: AbsorbPointer(
+                  //     child: TextFormField(
+                  //       controller: startDate,
+                  //       showCursor: false,
+                  //       decoration: InputDecoration(
+                  //         border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //           borderSide: BorderSide(
+                  //             width:0,
+                  //             style: BorderStyle.none,
+                  //           ),
+                  //         ),
+                  //         filled: true,
+                  //         fillColor: Color(0xFFF2F3F5),
+                  //         hintStyle: TextStyle(
+                  //             color: Color(0xFF666666),
+                  //             fontFamily: defaultFontFamily,
+                  //             fontSize: defaultFontSize),
+                  //         hintText: "Start Date",
+                  //         prefixIcon: Icon(
+                  //           Icons.calendar_today,
+                  //           color: Color(0xFF666666),
+                  //           size: defaultIconSize,
+                  //         ),
+                  //       ),
+                  //       validator: (val) => val.isEmpty ? 'Select Start Date' : null,
+                  //       onChanged: (val){
+                  //
+                  //         print(startDate);
+                  //         setState((){
+                  //         });
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 8.0),
+                  // GestureDetector(
+                  //   onTap: ()async{
+                  //     await showDatePicker(
+                  //         context: context,
+                  //         initialDate: new DateTime.now(),
+                  //         firstDate: new DateTime(1900),
+                  //         lastDate: new DateTime(2100)
+                  //     ).then((value){
+                  //       if(value != null && value != prescriptionDate){
+                  //         setState(() {
+                  //           prescriptionDate = value;
+                  //           isDateSelected = true;
+                  //           enddate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
+                  //         });
+                  //         endDate.text = enddate + "\r";
+                  //       }
+                  //     });
+                  //   },
+                  //   child: AbsorbPointer(
+                  //     child: TextFormField(
+                  //       controller: endDate,
+                  //       showCursor: false,
+                  //       decoration: InputDecoration(
+                  //         border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //           borderSide: BorderSide(
+                  //             width:0,
+                  //             style: BorderStyle.none,
+                  //           ),
+                  //         ),
+                  //         filled: true,
+                  //         fillColor: Color(0xFFF2F3F5),
+                  //         hintStyle: TextStyle(
+                  //             color: Color(0xFF666666),
+                  //             fontFamily: defaultFontFamily,
+                  //             fontSize: defaultFontSize),
+                  //         hintText: "End Date",
+                  //         prefixIcon: Icon(
+                  //           Icons.calendar_today,
+                  //           color: Color(0xFF666666),
+                  //           size: defaultIconSize,
+                  //         ),
+                  //       ),
+                  //       validator: (val) => val.isEmpty ? 'Select End Date' : null,
+                  //       onChanged: (val){
+                  //
+                  //         print(endDate);
+                  //         setState((){
+                  //         });
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 8.0),
                   // TextFormField(
                   //   showCursor: true,
@@ -616,7 +645,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               Medication_Prescription prescription;
                               if(datasnapshot.value == null){
                                 final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + 0.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": intake_time.toString(), "special_instruction": special_instruction});
+                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit});
                                 print("Added Medication Prescription Successfully! " + uid);
                               }
                               else{
@@ -626,33 +655,43 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 String tempSpecialInstruction = "";
                                 String tempStartDate = "";
                                 String tempEndDate = "";
+                                String tempPrescriptionUnit = "";
                                 for(var i = 0; i < temp.length; i++){
                                   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
                                   List<String> splitFull = full.split(" ");
-                                  switch(i%6){
+                                  switch(i%7){
                                     case 0: {
-                                      tempEndDate = splitFull.last;
+                                      tempPrescriptionUnit = splitFull.last;
+
                                     }
                                     break;
                                     case 1: {
-                                      tempIntakeTime = splitFull.last;
+                                      tempEndDate = splitFull.last;
+
                                     }
                                     break;
                                     case 2: {
-                                      tempBrandedName = splitFull.last;
+                                      tempIntakeTime = splitFull.last;
+
                                     }
                                     break;
                                     case 3: {
-                                      tempSpecialInstruction = splitFull.last;
+                                      tempBrandedName = splitFull.last;
+
                                     }
                                     break;
                                     case 4: {
-                                      tempGenericName = splitFull.last;
+                                      tempSpecialInstruction = splitFull.last;
+
                                     }
                                     break;
                                     case 5: {
+                                      tempGenericName = splitFull.last;
+                                    }
+                                    break;
+                                    case 6: {
                                       tempStartDate = splitFull.last;
-                                      prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction);
+                                      prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
                                       prescription_list.add(prescription);
                                     }
                                     break;
@@ -666,14 +705,14 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
 
                                 // print("symptom list  " + symptoms_list.toString());
                                 final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + count.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": intake_time.toString(), "special_instruction": special_instruction});
+                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit});
                                 print("Added Medication Prescription Successfully! " + uid);
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + prescription_list.length.toString());
-                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: intake_time, special_instruction: special_instruction));
+                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit));
                               for(var i=0;i<prescription_list.length/2;i++){
                                 var temp = prescription_list[i];
                                 prescription_list[i] = prescription_list[prescription_list.length-1-i];
