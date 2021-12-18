@@ -13,6 +13,7 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:my_app/training/dashboards.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/ui_view/set_up.dart';
 import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'allergies.dart';
@@ -178,7 +179,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => goalWeight()),
+                      MaterialPageRoute(builder: (context) => set_up()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),
