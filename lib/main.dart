@@ -14,6 +14,7 @@ import 'package:my_app/training/training_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
+import 'allergies.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
@@ -171,7 +172,15 @@ class _AppSignInState extends State<AppSignIn> {
               height: 120,
               margin: EdgeInsets.only(top: 80.0),
               alignment: Alignment.center,
-              child: Image.asset("assets/images/heart_icon.png"),
+              child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => allergies()),
+                    );
+                  },
+                  child: Image.asset("assets/images/heart_icon.png")),
+
             ),
             SizedBox(height: 40.0),
             Container(

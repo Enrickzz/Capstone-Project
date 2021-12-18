@@ -249,7 +249,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                       ),
                       child: DropdownButton(
                         dropdownColor: Colors.white,
-                        hint: Text("How many times a day? "),
+                        hint: Text("Take how many times a day? "),
                         icon: Icon(Icons.arrow_drop_down),
                         style: TextStyle(
                             color: Colors.black,
