@@ -17,7 +17,11 @@ class Additional_Info {
   double height;
   double weight;
   double bmi;
-  Additional_Info({this.bmi,this.birthday, this.gender, this.height, this.weight});
+  List<String> foodAller;
+  List<String> drugAller;
+  List<String> otherAller;
+  
+  Additional_Info({this.bmi,this.birthday, this.gender, this.height, this.weight, this.foodAller, this.drugAller,this.otherAller});
 }
 
 class Symptom {

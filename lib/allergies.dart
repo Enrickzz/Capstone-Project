@@ -124,6 +124,27 @@ class _AllergiesState extends State<allergies> {
                         if(_formKey.currentState.validate()){
                           _formKey.currentState.save();
                         }
+                        final User user = auth.currentUser;
+                        final uid = user.uid;
+                        final foodRef = databaseReference.child('users/' + uid + '/vitals/additional_info/food_allergies/');
+                        final drugRef = databaseReference.child('users/' + uid + '/vitals/additional_info/drug_allergies/');
+                        final otherRef = databaseReference.child('users/' + uid + '/vitals/additional_info/other_allergies/');
+                        if(foodList != null){
+                          for(int i = 0; i < foodList.length; i++){
+                            foodRef.set({"food_allergy " + i.toString(): foodList[i]});
+                          }
+                        }
+                        if(drugList != null){
+                          for(int i = 0; i < drugList.length; i++){
+                            drugRef.set({"drug_allergy " + i.toString(): drugList[i]});
+                          }
+                        }
+                        if(otherList != null){
+                          for(int i = 0; i < otherList.length; i++){
+                            otherRef.set({"other_allergy " + i.toString(): otherList[i]});
+                          }
+                        }
+
                       },
                       child: Text('Submit'),
                       color: Colors.green,
