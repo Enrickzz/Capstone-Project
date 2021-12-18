@@ -28,6 +28,9 @@ class _AllergiesState extends State<allergies> {
 
   //added for allergies
   TextEditingController _nameController;
+  TextEditingController _nameControllerFoods;
+  TextEditingController _nameControllerDrugs;
+  TextEditingController _nameControllerOthers;
   static List<String> foodList = [null];
   static List<String> drugList = [null];
   static List<String> otherList = [null];
@@ -510,17 +513,17 @@ class OtherTextFields extends StatefulWidget {
 
 
 class _FoodTextFieldsState extends State<FoodTextFields> {
-  TextEditingController _nameController;
+  TextEditingController _nameControllerFoods;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
+    _nameControllerFoods = TextEditingController();
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _nameControllerFoods.dispose();
     super.dispose();
   }
 
@@ -528,14 +531,14 @@ class _FoodTextFieldsState extends State<FoodTextFields> {
   Widget build(BuildContext context) {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _nameController.text = _AllergiesState.foodList[widget.index] ?? '';
+      _nameControllerFoods.text = _AllergiesState.foodList[widget.index] ?? '';
     });
 
     return TextFormField(
-      controller: _nameController,
+      controller: _nameControllerFoods,
       onChanged: (v) => _AllergiesState.foodList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter your friend\'s name'
+          hintText: 'Enter your Food Allergies'
       ),
       validator: (f){
         if(f.trim().isEmpty) return 'Please enter something';
@@ -549,17 +552,17 @@ class _FoodTextFieldsState extends State<FoodTextFields> {
 
 //drugs after this
 class _DrugsTextFieldsState extends State<DrugsTextFields> {
-  TextEditingController _nameController;
+  TextEditingController _nameControllerDrugs;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
+    _nameControllerDrugs = TextEditingController();
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _nameControllerDrugs.dispose();
     super.dispose();
   }
 
@@ -567,14 +570,14 @@ class _DrugsTextFieldsState extends State<DrugsTextFields> {
   Widget build(BuildContext context) {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _nameController.text = _AllergiesState.drugList[widget.index] ?? '';
+      _nameControllerDrugs.text = _AllergiesState.drugList[widget.index] ?? '';
     });
 
     return TextFormField(
-      controller: _nameController,
+      controller: _nameControllerDrugs,
       onChanged: (v) => _AllergiesState.drugList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter your friend\'s name'
+          hintText: 'Enter your Medicine Allergies'
       ),
       validator: (v){
         if(v.trim().isEmpty) return 'Please enter something';
@@ -587,17 +590,17 @@ class _DrugsTextFieldsState extends State<DrugsTextFields> {
 //others after this
 
 class _OtherTextFieldsState extends State<OtherTextFields> {
-  TextEditingController _nameController;
+  TextEditingController _nameControllerOthers;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
+    _nameControllerOthers = TextEditingController();
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _nameControllerOthers.dispose();
     super.dispose();
   }
 
@@ -605,14 +608,14 @@ class _OtherTextFieldsState extends State<OtherTextFields> {
   Widget build(BuildContext context) {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _nameController.text = _AllergiesState.otherList[widget.index] ?? '';
+      _nameControllerOthers.text = _AllergiesState.otherList[widget.index] ?? '';
     });
 
     return TextFormField(
-      controller: _nameController,
+      controller: _nameControllerOthers,
       onChanged: (v) => _AllergiesState.otherList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter your friend\'s name'
+          hintText: 'Enter your Other Allergies'
       ),
       validator: (v){
         if(v.trim().isEmpty) return 'Please enter something';
