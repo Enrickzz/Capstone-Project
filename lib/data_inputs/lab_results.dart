@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:my_app/data_inputs/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 import 'add_lab_results.dart';
@@ -25,6 +27,21 @@ class _lab_resultsState extends State<lab_results> {
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  List<FirebaseFile> trythis =[];
+
+  @override
+  void initState(){
+    super.initState();
+    print("ASFASFUIASFH");
+    listAll("path");
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("SET STATE LAB ");
+        print("LENGTH = " + trythis.length.toString());
+      });
+    });
+  }
 
 
   @override
@@ -76,12 +93,12 @@ class _lab_resultsState extends State<lab_results> {
               childAspectRatio: 1,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10),
-        itemCount: 5,
+        itemCount: trythis.length,
         // Generate 100 widgets that display their index in the List.
         itemBuilder: (context, index){
           return Center(
             child: Container(
-              child: Image.network('https://firebasestorage.googleapis.com/v0/b/capstone-heart-disease.appspot.com/o/test/2F5P4oNXb7KSYb87OA4Y1E1bYHhX82Get%20shit%20Done.jpg_lab_resultcounter?alt=media&token=f1139efb-0de8-4f66-accf-5b243f54667f'),
+              child: Image.network('' + trythis[index].url),
               height:190,
               width: 190,
               decoration: BoxDecoration(
@@ -119,5 +136,28 @@ class _lab_resultsState extends State<lab_results> {
       ),
 
     );
+  }
+  Future <List<String>>_getDownloadLinks(List<Reference> refs) {
+    return Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
+  }
+
+  Future<List<FirebaseFile>> listAll (String path) async {
+    final ref = FirebaseStorage.instance.ref('test/');
+    final result = await ref.listAll();
+    final urls = await _getDownloadLinks(result.items);
+    print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
+    return urls
+        .asMap()
+        .map((index, url){
+      final ref = result.items[index];
+      final name = ref.name;
+      final file = FirebaseFile(ref: ref, name:name, url: url);
+      trythis.add(file);
+      print("This file " + file.url);
+      return MapEntry(index, file);
+    })
+        .values
+        .toList();
+
   }
 }

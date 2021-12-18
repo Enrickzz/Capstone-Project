@@ -14,6 +14,7 @@ import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
+import 'package:my_app/ui_view/grid_images.dart';
 import 'lab_results.dart';
 import 'medication.dart';
 import 'package:my_app/storage_service.dart';
@@ -41,7 +42,7 @@ class _addLabResultState extends State<add_lab_results> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
-
+  List<FirebaseFile> trythis =[];
 
   @override
   Widget build(BuildContext context) {
@@ -212,9 +213,11 @@ class _addLabResultState extends State<add_lab_results> {
                         print("fileName " + fileName);
                         fileName = uid + fileName + "_lab_result" + "counter";
                         storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
+
                         setState(() {
                           downloadUrl("5P4oNXb7KSYb87OA4Y1E1bYHhX82Get shit Done.jpg_lab_resultcounter");
                           //print("THIS IS THE LINK = " + thisURL);
+                          listAll("path");
                           Navigator.pop(context);
                         });
                       }
@@ -327,26 +330,31 @@ class _addLabResultState extends State<add_lab_results> {
         )
     );
   }
-  // Future<List<FirebaseFile>> listAll (String path) async {
-  //   final ref = FirebaseStorage.instance.ref(path);
-  //   final result = await ref.listAll();
-  //   final urls = await _getDownloadLinks(result.items);
-  //
-  //   return urls
-  //       .asMap()
-  //       .map((index, url){
-  //     final ref = result.items[index];
-  //     final name = ref.name;
-  //     final file = FirebaseFile(ref: ref, name:name, url: url);
-  //     return MapEntry(index, file);
-  //   })
-  //       .values
-  //       .toList();
-  // }
+   Future <List<String>>_getDownloadLinks(List<Reference> refs) {
+    return Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
+  }
 
-  // Future <List<String>>_getDownloadLinks(List<Reference> refs) {
-  //   Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
-  // }
+   Future<List<FirebaseFile>> listAll (String path) async {
+    final ref = FirebaseStorage.instance.ref('test/');
+    final result = await ref.listAll();
+    final urls = await _getDownloadLinks(result.items);
+    print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
+    return urls
+        .asMap()
+        .map((index, url){
+      final ref = result.items[index];
+      final name = ref.name;
+      final file = FirebaseFile(ref: ref, name:name, url: url);
+      trythis.add(file);
+      print("This file " + file.url);
+      return MapEntry(index, file);
+    })
+        .values
+        .toList();
+
+  }
+
+
 
   Future <String> downloadUrl(String imagename) async{
     final ref = FirebaseStorage.instance.ref('test/$imagename');
