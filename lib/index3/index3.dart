@@ -1,4 +1,10 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
+import 'package:intl/intl.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
@@ -32,11 +38,122 @@ class _index3State extends State<index3>
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
   double topBarOpacity = 0.0;
+  Users profile = new Users();
+  Additional_Info info = new Additional_Info();
+  String DisplayName = " ";
+  String email = " ";
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateTime birthdate;
+  final test = DateTime(1999, 5, 18); // for test
+  int age = 0;
+  String gender = "";
+  double weight = 0;
+  double height = 0;
 
   @override
   void initState() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final userRef = databaseReference.child('users/' + uid +'/personal_info/');
+    final infoRef = databaseReference.child('users/' + uid +'/vitals/additional_info/');
+    String tempFName = "";
+    String tempLName = "";
+    String tempEmail = "";
+    String tempPassword = "";
+    String tempBMI = "";
+    String tempBirthDay = "";
+    String tempGender = "";
+    String tempHeight = "";
+    String tempWeight = "";
+    userRef.once().then((DataSnapshot datasnapshot) {
+      String temp1 = datasnapshot.value.toString();
+      print(temp1);
+      List<String> temp = temp1.split(',');
+
+      for(var i = 0; i < temp.length; i++){
+        String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+        List<String> splitFull = full.split(" ");
+        switch(i){
+          case 0: {
+            print("i = " + i.toString() + splitFull.last);
+            tempEmail = splitFull.last;
+          }
+          break;
+          case 1: {
+            print("i = " + i.toString() + splitFull.last);
+            tempFName = splitFull.last;
+          }
+          break;
+          case 2: {
+            print("i = " + i.toString() + splitFull.last);
+
+          }
+          break;
+          case 3: {
+            print("i = " + i.toString() + splitFull.last);
+            tempLName = splitFull.last;
+          }
+          break;
+          case 4: {
+            print("i = " + i.toString() + splitFull.last);
+            tempPassword = splitFull.last;
+            profile = new Users(uid: uid, firstname: tempFName,lastname: tempLName,email: tempEmail,password: tempPassword);
+            print("email " + profile.email);
+          }
+          break;
+        }
+      }
+    });
+    infoRef.once().then((DataSnapshot datasnapshot) {
+      String temp2 = datasnapshot.value.toString();
+      print(temp2);
+      List<String> templist = temp2.split(',');
+
+      for(var i = 0; i < templist.length; i++){
+        String full = templist[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+        List<String> splitFull = full.split(" ");
+        switch(i){
+          case 0: {
+            print("i = " + i.toString() + splitFull.last);
+            tempBMI = splitFull.last;
+          }
+          break;
+          case 1: {
+            print("i = " + i.toString() + splitFull.last);
+            tempBirthDay = splitFull.last;
+          }
+          break;
+          case 2: {
+            print("i = " + i.toString() + splitFull.last);
+            tempGender = splitFull.last;
+          }
+          break;
+          case 3: {
+            print("i = " + i.toString() + splitFull.last);
+            tempHeight = splitFull.last;
+          }
+          break;
+          case 4: {
+            print("i = " + i.toString() + splitFull.last);
+            tempWeight = splitFull.last;
+            info = new Additional_Info(bmi: double.parse(tempBMI), birthday: format.parse(tempBirthDay), gender: tempGender, height: double.parse(tempHeight), weight: double.parse(tempWeight));
+          }
+          break;
+        }
+      }
+    });
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        DisplayName = profile.firstname + " " + profile.lastname;
+        email = profile.email;
+        print("display name " + DisplayName);
+        print("setstate");
+      });
+    });
+
 
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
@@ -67,6 +184,7 @@ class _index3State extends State<index3>
       }
     });
     super.initState();
+
   }
 
   void addAllListData() {
@@ -91,6 +209,7 @@ class _index3State extends State<index3>
     return true;
   }
 
+
   @override
   Widget build(BuildContext context) {
     // Future.delayed(const Duration(milliseconds: 5000), () {
@@ -102,6 +221,7 @@ class _index3State extends State<index3>
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
+
 
     return Container(
       color: FitnessAppTheme.background,
@@ -164,7 +284,7 @@ class _index3State extends State<index3>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text( "Chan, Gian Lord",
+                          Text(DisplayName,
                               style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -176,7 +296,7 @@ class _index3State extends State<index3>
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Text('gian_lord_chan@dlsu.edu.ph',
+                                Text(email,
                                   style: TextStyle(
                                       fontSize: 14,
                                       // color:Color(0xFF363f93),
@@ -199,7 +319,7 @@ class _index3State extends State<index3>
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children:<Widget>[
                           Expanded(
-                            child: Text( "Personal Information",
+                            child: Text("Personal Information",
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -215,7 +335,7 @@ class _index3State extends State<index3>
                               // padding: const EdgeInsets.only(left: 8),
                               child: Row(
                                 children: <Widget>[
-                                  Text( "Edit",
+                                  Text("Edit",
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.normal,
@@ -275,7 +395,7 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                           SizedBox(height: 8),
-                                          Text("Gian Lord Chan",
+                                          Text(DisplayName,
                                             style: TextStyle(
                                                 fontSize:16,
                                                 fontWeight: FontWeight.bold
@@ -321,7 +441,7 @@ class _index3State extends State<index3>
                                             ],
                                           ),
                                           SizedBox(height: 8),
-                                          Text("08/07/1999",
+                                          Text(info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
                                             style: TextStyle(
                                                 fontSize:16,
                                                 fontWeight: FontWeight.bold
@@ -335,7 +455,7 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                           SizedBox(height: 8),
-                                          Text("22 years old",
+                                          Text(getAge(info.birthday) + " years old",
                                             style: TextStyle(
                                                 fontSize:16,
                                                 fontWeight: FontWeight.bold
@@ -349,7 +469,7 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                           SizedBox(height: 8),
-                                          Text("Male",
+                                          Text(info.gender,
                                             style: TextStyle(
                                                 fontSize:16,
                                                 fontWeight: FontWeight.bold
@@ -363,7 +483,7 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                           SizedBox(height: 8),
-                                          Text("54.0 kg",
+                                          Text(info.weight.toString() + " kg",
                                             style: TextStyle(
                                                 fontSize:16,
                                                 fontWeight: FontWeight.bold
@@ -377,16 +497,13 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                           SizedBox(height: 8),
-                                          Text("161.0 cm",
+                                          Text(info.height.toString() + " cm",
                                             style: TextStyle(
                                                 fontSize:16,
                                                 fontWeight: FontWeight.bold
                                             ),
                                           ),
-
-
                                         ]
-
                                     ),
                                   ),
                                 ))
@@ -664,4 +781,37 @@ class _index3State extends State<index3>
       ],
     );
   }
+  String formatDate (String date) {
+    return format.parse(date).toString();
+  }
+  String getAge (DateTime birthday) {
+    DateTime today = new DateTime.now();
+    String days1 = "";
+    String month1 = "";
+    String year1 = "";
+    int d = int.parse(DateFormat("dd").format(birthday));
+    int m = int.parse(DateFormat("MM").format(birthday));
+    int y = int.parse(DateFormat("yyyy").format(birthday));
+    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
+    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
+    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
+    int age = 0;
+    age = y1 - y;
+    print(age);
+
+    // dec < jan
+    if(m1 < m){
+      print("month --");
+      age--;
+    }
+    else if (m1 == m){
+      if(d1 < d){
+        print("day --");
+        age--;
+      }
+    }
+    return age.toString();
+  }
+
+
 }

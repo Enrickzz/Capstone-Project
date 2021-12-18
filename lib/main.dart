@@ -77,6 +77,7 @@ class _LogInState extends State<LogIn> {
                 Future.delayed(const Duration(milliseconds: 3000), (){
                   setState(() {
                     print("SETSTATE INSIDE WIDGET ");
+                    print(isFTime);
                     if(isFTime == "false"){
 
                       Navigator.pushAndRemoveUntil(

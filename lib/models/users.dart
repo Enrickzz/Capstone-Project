@@ -1,14 +1,23 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 
-class Users{
+class Users {
   final String uid;
   String firstname;
   String lastname;
   String email;
   String password;
 
-  Users({this.uid});
+  Users({this.uid, this.firstname, this.lastname, this.email, this.password});
+}
+
+class Additional_Info {
+  DateTime birthday;
+  String gender;
+  double height;
+  double weight;
+  double bmi;
+  Additional_Info({this.bmi,this.birthday, this.gender, this.height, this.weight});
 }
 
 class Symptom {
