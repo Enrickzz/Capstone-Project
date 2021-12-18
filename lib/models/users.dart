@@ -12,7 +12,7 @@ class Users {
 }
 
 class Additional_Info {
-  DateTime birthday;
+  DateTime birthday = new DateTime.now();
   String gender;
   double height;
   double weight;

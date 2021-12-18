@@ -79,6 +79,7 @@ class PhotoItem {
   final String name;
   PhotoItem(this.image, this.name);
 }
+
 Future<List<FirebaseFile>> listAll (String path) async {
   final ref = FirebaseStorage.instance.ref(path);
   final result = await ref.listAll();

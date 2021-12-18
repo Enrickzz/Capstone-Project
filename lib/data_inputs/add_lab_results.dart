@@ -1,3 +1,5 @@
+
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +10,14 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
 import 'lab_results.dart';
 import 'medication.dart';
+import 'package:my_app/storage_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_lab_results extends StatefulWidget {
@@ -23,7 +28,7 @@ final _formKey = GlobalKey<FormState>();
 class _addLabResultState extends State<add_lab_results> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-
+  String thisURL;
   String lab_result_name = '';
   String lab_result_date = (new DateTime.now()).toString();
   DateTime labResultDate;
@@ -37,13 +42,14 @@ class _addLabResultState extends State<add_lab_results> {
   TimeOfDay time;
   var dateValue = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
 
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
-
+    final Storage storage = Storage();
     return Container(
         key: _formKey,
         color:Color(0xff757575),
@@ -185,6 +191,34 @@ class _addLabResultState extends State<add_lab_results> {
                     ),
                   ),
                   SizedBox(height: 18.0),
+                  GestureDetector(
+                      child: Text(
+                        'Upload',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onTap: () async {
+                        final result = await FilePicker.platform.pickFiles(
+                          allowMultiple: false,
+                          // type: FileType.custom,
+                          // allowedExtensions: ['jpg', 'png'],
+                        );
+                        if(result == null) return;
+                        final FirebaseAuth auth = FirebaseAuth.instance;
+                        final path = result.files.single.path;
+                        final User user = auth.currentUser;
+                        final uid = user.uid;
+                        var fileName = result.files.single.name;
+                        print("path" + path);
+                        print("fileName " + fileName);
+                        fileName = uid + fileName + "_lab_result" + "counter";
+                        storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
+                        setState(() {
+                          downloadUrl("5P4oNXb7KSYb87OA4Y1E1bYHhX82Get shit Done.jpg_lab_resultcounter");
+                          //print("THIS IS THE LINK = " + thisURL);
+                          Navigator.pop(context);
+                        });
+                      }
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -291,7 +325,34 @@ class _addLabResultState extends State<add_lab_results> {
                 ]
             )
         )
-
     );
+  }
+  // Future<List<FirebaseFile>> listAll (String path) async {
+  //   final ref = FirebaseStorage.instance.ref(path);
+  //   final result = await ref.listAll();
+  //   final urls = await _getDownloadLinks(result.items);
+  //
+  //   return urls
+  //       .asMap()
+  //       .map((index, url){
+  //     final ref = result.items[index];
+  //     final name = ref.name;
+  //     final file = FirebaseFile(ref: ref, name:name, url: url);
+  //     return MapEntry(index, file);
+  //   })
+  //       .values
+  //       .toList();
+  // }
+
+  // Future <List<String>>_getDownloadLinks(List<Reference> refs) {
+  //   Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
+  // }
+
+  Future <String> downloadUrl(String imagename) async{
+    final ref = FirebaseStorage.instance.ref('test/$imagename');
+    String downloadurl = await ref.getDownloadURL();
+    print ("THIS IS THE URL = "+ downloadurl);
+    thisURL = downloadurl;
+    return downloadurl;
   }
 }

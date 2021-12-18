@@ -81,7 +81,7 @@ class _lab_resultsState extends State<lab_results> {
         itemBuilder: (context, index){
           return Center(
             child: Container(
-              child: Image.asset('assets/images/labresults2.jpg'),
+              child: Image.network('https://firebasestorage.googleapis.com/v0/b/capstone-heart-disease.appspot.com/o/test/2F5P4oNXb7KSYb87OA4Y1E1bYHhX82Get%20shit%20Done.jpg_lab_resultcounter?alt=media&token=f1139efb-0de8-4f66-accf-5b243f54667f'),
               height:190,
               width: 190,
               decoration: BoxDecoration(

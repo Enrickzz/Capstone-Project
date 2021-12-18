@@ -41,7 +41,6 @@ class _index3State extends State<index3>
   final FirebaseAuth auth = FirebaseAuth.instance;
   double topBarOpacity = 0.0;
   Users profile = new Users();
-  Additional_Info info = new Additional_Info();
   String DisplayName = " ";
   String email = " ";
   DateFormat format = new DateFormat("MM/dd/yyyy");
@@ -51,9 +50,14 @@ class _index3State extends State<index3>
   String gender = "";
   double weight = 0;
   double height = 0;
+  String bday ="";
+  Additional_Info info;
+
 
   @override
   void initState() {
+    super.initState();
+    info = new Additional_Info(bmi: 0, birthday: format.parse("01/01/0000"), gender: "Male", height: 0, weight: 0);
     final User user = auth.currentUser;
     final uid = user.uid;
     final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
@@ -124,6 +128,7 @@ class _index3State extends State<index3>
           case 1: {
             print("i = " + i.toString() + splitFull.last);
             tempBirthDay = splitFull.last;
+            bday = tempBirthDay;
           }
           break;
           case 2: {
@@ -140,27 +145,19 @@ class _index3State extends State<index3>
             print("i = " + i.toString() + splitFull.last);
             tempWeight = splitFull.last;
             info = new Additional_Info(bmi: double.parse(tempBMI), birthday: format.parse(tempBirthDay), gender: tempGender, height: double.parse(tempHeight), weight: double.parse(tempWeight));
+            print("THIS = " +info.toString());
+            print("BDAY = " + format.parse(tempBirthDay).toString());
+
           }
           break;
         }
       }
     });
-    Future.delayed(const Duration(milliseconds: 1500), (){
-      setState(() {
-        DisplayName = profile.firstname + " " + profile.lastname;
-        email = profile.email;
-        print("display name " + DisplayName);
-        print("setstate");
-      });
-    });
-
-
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
     addAllListData();
-
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
@@ -183,30 +180,14 @@ class _index3State extends State<index3>
         }
       }
     });
-    super.initState();
-
-  }
-
-  void addAllListData() {
-    const int count = 5;
-
-    listViews.add(
-      GridImages(
-        titleTxt: 'Your program',
-        subTxt: 'Details',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-  }
-
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        DisplayName = profile.firstname + " " + profile.lastname;
+        email = profile.email;
+        print("display name " + DisplayName);
+        print("setstate");
+      });
+    });
   }
 
 
@@ -221,7 +202,6 @@ class _index3State extends State<index3>
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
-
 
     return Container(
       color: FitnessAppTheme.background,
@@ -394,7 +374,7 @@ class _index3State extends State<index3>
                                             ),
                                           ),
                                           SizedBox(height: 8),
-                                          Text(info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
+                                          Text( info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
                                             style: TextStyle(
                                                 fontSize:16,
                                                 fontWeight: FontWeight.bold
@@ -744,6 +724,26 @@ class _index3State extends State<index3>
     }
     return age.toString();
   }
+  void addAllListData() {
+    const int count = 5;
 
+    listViews.add(
+      GridImages(
+        titleTxt: 'Your program',
+        subTxt: 'Details',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+  }
+
+  // Future<bool> getData() async {
+  //   await Future<dynamic>.delayed(const Duration(milliseconds: 50));
+  //   return true;
+  // }
 
 }

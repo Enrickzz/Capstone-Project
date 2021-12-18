@@ -21,7 +21,6 @@ import '../fitness_app_theme.dart';
 
 class index2 extends StatefulWidget {
   const index2({Key key, this.animationController}) : super(key: key);
-
   final AnimationController animationController;
   @override
   _index2State createState() => _index2State();
