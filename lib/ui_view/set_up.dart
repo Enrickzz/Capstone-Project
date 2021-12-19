@@ -553,7 +553,28 @@ class _set_upState extends State<set_up> {
 
           }
         },
-        onStepTapped: (step) => setState(() => currentStep = step),
+        onStepTapped: (step) {
+          setState(() {
+            currentStep = step;
+          });
+          // if (formKeys[0].currentState.validate() && currentStep == 0) {
+          //   setState(() {
+          //     currentStep = step;
+          //   });
+          // } else if (currentStep == 1) {
+          //   setState(() {
+          //     currentStep = step;
+          //   });
+          // } else if (currentStep == 2) {
+          //   setState(() {
+          //     currentStep = step;
+          //   });
+          // } else if (currentStep == 3) {
+          //   setState(() {
+          //     currentStep = step;
+          //   });
+          // }
+        },
         onStepCancel:
             currentStep == 0 ? null : () => setState(() => currentStep -= 1),
 
