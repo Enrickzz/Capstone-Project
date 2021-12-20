@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -649,64 +651,68 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 print("Added Medication Prescription Successfully! " + uid);
                               }
                               else{
-                                String tempGenericName = "";
-                                String tempBrandedName = "";
-                                String tempIntakeTime = "";
-                                String tempSpecialInstruction = "";
-                                String tempStartDate = "";
-                                String tempEndDate = "";
-                                String tempPrescriptionUnit = "";
-                                for(var i = 0; i < temp.length; i++){
-                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                  List<String> splitFull = full.split(" ");
-                                  switch(i%7){
-                                    case 0: {
-                                      tempPrescriptionUnit = splitFull.last;
-
-                                    }
-                                    break;
-                                    case 1: {
-                                      tempEndDate = splitFull.last;
-
-                                    }
-                                    break;
-                                    case 2: {
-                                      tempIntakeTime = splitFull.last;
-
-                                    }
-                                    break;
-                                    case 3: {
-                                      tempBrandedName = splitFull.last;
-
-                                    }
-                                    break;
-                                    case 4: {
-                                      tempSpecialInstruction = splitFull.last;
-
-                                    }
-                                    break;
-                                    case 5: {
-                                      tempGenericName = splitFull.last;
-                                    }
-                                    break;
-                                    case 6: {
-                                      tempStartDate = splitFull.last;
-                                      prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-                                      prescription_list.add(prescription);
-                                    }
-                                    break;
-                                  }
-                                }
-                                count = prescription_list.length;
-                                print("count " + count.toString());
+                                // String tempGenericName = "";
+                                // String tempBrandedName = "";
+                                // String tempIntakeTime = "";
+                                // String tempSpecialInstruction = "";
+                                // String tempStartDate = "";
+                                // String tempEndDate = "";
+                                // String tempPrescriptionUnit = "";
+                                // for(var i = 0; i < temp.length; i++){
+                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                //   List<String> splitFull = full.split(" ");
+                                //   switch(i%7){
+                                //     case 0: {
+                                //       tempPrescriptionUnit = splitFull.last;
+                                //
+                                //     }
+                                //     break;
+                                //     case 1: {
+                                //       tempEndDate = splitFull.last;
+                                //
+                                //     }
+                                //     break;
+                                //     case 2: {
+                                //       tempIntakeTime = splitFull.last;
+                                //
+                                //     }
+                                //     break;
+                                //     case 3: {
+                                //       tempBrandedName = splitFull.last;
+                                //
+                                //     }
+                                //     break;
+                                //     case 4: {
+                                //       tempSpecialInstruction = splitFull.last;
+                                //
+                                //     }
+                                //     break;
+                                //     case 5: {
+                                //       tempGenericName = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 6: {
+                                //       tempStartDate = splitFull.last;
+                                //       prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
+                                //       prescription_list.add(prescription);
+                                //     }
+                                //     break;
+                                //   }
+                                // }
+                                //
+                                // print("count " + count.toString());
                                 //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
 
                                 // symptoms_list.add(symptom);
 
                                 // print("symptom list  " + symptoms_list.toString());
-                                final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + count.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit});
-                                print("Added Medication Prescription Successfully! " + uid);
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = prescription_list.length;
+                                  final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + count.toString());
+                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit});
+                                  print("Added Medication Prescription Successfully! " + uid);
+                                });
+
                               }
 
                             });
@@ -736,5 +742,16 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
         )
 
     );
+  }
+  void getMedicalPrescription() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+    readprescription.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        prescription_list.add(Medication_Prescription.fromJson(jsonString));
+      });
+    });
   }
 }

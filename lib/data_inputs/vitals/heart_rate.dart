@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -42,63 +44,64 @@ class _heart_rateState extends State<heart_rate> {
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readHeartRate = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list');
-    String tempBmi = ""; // int
-    String tempisResting = ""; //bool
-    String tempHRDate = "";
-    String tempHRTime = "";
-    DateFormat format = new DateFormat("MM/dd/yyyy");
-    DateFormat timeformat = new DateFormat("hh:mm");
+    hrtemp.clear();
+    _selected.clear();
+    getHeartRate();
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    // final readHeartRate = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list');
+    // String tempBmi = ""; // int
+    // String tempisResting = ""; //bool
+    // String tempHRDate = "";
+    // String tempHRTime = "";
+    // DateFormat format = new DateFormat("MM/dd/yyyy");
+    // DateFormat timeformat = new DateFormat("hh:mm");
+    //
+    // readHeartRate.once().then((DataSnapshot datasnapshot) {
 
-    readHeartRate.once().then((DataSnapshot datasnapshot) {
-      hrtemp.clear();
-      _selected.clear();
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Heart_Rate heartRate;
-      for(var i = 0; i < temp.length; i++) {
-        String full = temp[i].replaceAll("{", "")
-            .replaceAll("}", "")
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-          switch(i%4) {
-            case 0:
-              {
-                tempHRTime = splitFull.last;
-              }
-              break;
-            case 1:
-              {
-                tempBmi = splitFull.last;
-              }
-              break;
-            case 2:
-              {
-                tempisResting = splitFull.last;
-              }
-              break;
-            case 3:
-              {
-                tempHRDate = splitFull.last;
-                heartRate = new Heart_Rate(bpm: int.parse(tempBmi),
-                    hr_status: tempisResting,
-                    hr_date: format.parse(tempHRDate),
-                    hr_time: timeformat.parse(tempHRTime));
-                hrtemp.add(heartRate);
-              }
-              break;
-          }
-      }
-      for(var i=0;i<hrtemp.length/2;i++){
-        var temp = hrtemp[i];
-        hrtemp[i] = hrtemp[hrtemp.length-1-i];
-        hrtemp[hrtemp.length-1-i] = temp;
-      }
-    });
-    hrtemp = widget.hrlist;
+    //   String temp1 = datasnapshot.value.toString();
+    //   List<String> temp = temp1.split(',');
+    //   Heart_Rate heartRate;
+    //   for(var i = 0; i < temp.length; i++) {
+    //     String full = temp[i].replaceAll("{", "")
+    //         .replaceAll("}", "")
+    //         .replaceAll("[", "")
+    //         .replaceAll("]", "");
+    //     List<String> splitFull = full.split(" ");
+    //       switch(i%4) {
+    //         case 0:
+    //           {
+    //             tempHRTime = splitFull.last;
+    //           }
+    //           break;
+    //         case 1:
+    //           {
+    //             tempBmi = splitFull.last;
+    //           }
+    //           break;
+    //         case 2:
+    //           {
+    //             tempisResting = splitFull.last;
+    //           }
+    //           break;
+    //         case 3:
+    //           {
+    //             tempHRDate = splitFull.last;
+    //             heartRate = new Heart_Rate(bpm: int.parse(tempBmi),
+    //                 hr_status: tempisResting,
+    //                 hr_date: format.parse(tempHRDate),
+    //                 hr_time: timeformat.parse(tempHRTime));
+    //             hrtemp.add(heartRate);
+    //           }
+    //           break;
+    //       }
+    //   }
+    //   for(var i=0;i<hrtemp.length/2;i++){
+    //     var temp = hrtemp[i];
+    //     hrtemp[i] = hrtemp[hrtemp.length-1-i];
+    //     hrtemp[hrtemp.length-1-i] = temp;
+    //   }
+    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         _selected = List<bool>.generate(hrtemp.length, (int index) => false);
@@ -295,9 +298,9 @@ class _heart_rateState extends State<heart_rate> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              hrtemp.sort((a, b) => b.getDate.compareTo(a.getDate));
+              hrtemp.sort((a, b) => b.hr_date.compareTo(a.hr_date));
             } else {
-              hrtemp.sort((a, b) => a.getDate.compareTo(b.getDate));
+              hrtemp.sort((a, b) => a.hr_date.compareTo(b.hr_date));
             }
             _isSortAsc = !_isSortAsc;
           });
@@ -318,10 +321,10 @@ class _heart_rateState extends State<heart_rate> {
     return hrtemp
         .mapIndexed((index, hr) => DataRow(
         cells: [
-          DataCell(Text(getDateFormatted(hr.getDate.toString()))),
-          DataCell(Text(getTimeFormatted(hr.getTime.toString()))),
-          DataCell(Text(hr.getBPM.toString())),
-          DataCell(Text(hr.getisResting, style: TextStyle(color: getMyColor(hr.getisResting)),))
+          DataCell(Text(getDateFormatted(hr.hr_date.toString()))),
+          DataCell(Text(getTimeFormatted(hr.hr_time.toString()))),
+          DataCell(Text(hr.bpm.toString())),
+          DataCell(Text(hr.hr_status, style: TextStyle(color: getMyColor(hr.hr_status)),))
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
@@ -331,5 +334,15 @@ class _heart_rateState extends State<heart_rate> {
         }))
         .toList();
   }
-
+  void getHeartRate() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readHR = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/');
+    readHR.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        hrtemp.add(Heart_Rate.fromJson(jsonString));
+      });
+    });
+  }
 }

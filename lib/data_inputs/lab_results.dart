@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -158,6 +160,16 @@ class _lab_resultsState extends State<lab_results> {
     })
         .values
         .toList();
-
   }
+  // void getLabResult() {
+  //   final User user = auth.currentUser;
+  //   final uid = user.uid;
+  //   final readlabresult = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/');
+  //   readlabresult.once().then((DataSnapshot snapshot){
+  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+  //     temp.forEach((jsonString) {
+  //       labResult_list.add(Lab_Result.fromJson(jsonString));
+  //     });
+  //   });
+  // }
 }

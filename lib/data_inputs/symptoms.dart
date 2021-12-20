@@ -41,16 +41,6 @@ class _symptomsState extends State<symptoms> {
   @override
   void initState() {
     super.initState();
-    List<Symptom> symptomsList = new List<Symptom>();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final symptomsRef = databaseReference.child('users/' + uid +'/vitals/health_records/symptoms_list/');
-    int tempIntesityLvl = 0;
-    String tempSymptomName = "";
-    String tempSymptomDate = "";
-    String tempSymptomFelt = "";
-    String tempSymptomTime = "";
-    bool tempIsActive;
     listtemp.clear();
     getSymptoms();
 

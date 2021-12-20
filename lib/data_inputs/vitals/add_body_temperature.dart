@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -268,43 +270,47 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                 print("Added Body Temperature Successfully! " + uid);
                               }
                               else{
-                                String tempUnit = "";
-                                String tempTemperature = "";
-                                String tempTemperatureDate = "";
-                                String tempTemperatureTime = "";
-                                for(var i = 0; i < temp.length; i++){
-                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                  List<String> splitFull = full.split(" ");
-                                  switch(i%4){
-                                    case 0: {
-                                      print("i value" + i.toString() + splitFull.last);
-                                      tempUnit = splitFull.last;
-                                    }
-                                    break;
-                                    case 1: {
-                                      print("i value" + i.toString() + splitFull.last);
-                                      tempTemperatureDate = splitFull.last;
-                                    }
-                                    break;
-                                    case 2: {
-                                      print("i value" + i.toString() + splitFull.last);
-                                      tempTemperature = splitFull.last;
-                                    }
-                                    break;
-                                    case 3: {
-                                      print("i value" + i.toString() + splitFull.last);
-                                      tempTemperatureTime = splitFull.last;
-                                      body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
-                                      body_temp_list.add(body_temperature);
-                                    }
-                                    break;
-                                  }
-                                }
-                                count = body_temp_list.length;
-                                print("count " + count.toString());
-                                final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                                temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString()});
-                                print("Added Body Temperature Successfully! " + uid);
+                                // String tempUnit = "";
+                                // String tempTemperature = "";
+                                // String tempTemperatureDate = "";
+                                // String tempTemperatureTime = "";
+                                // for(var i = 0; i < temp.length; i++){
+                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                //   List<String> splitFull = full.split(" ");
+                                //   switch(i%4){
+                                //     case 0: {
+                                //       print("i value" + i.toString() + splitFull.last);
+                                //       tempUnit = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 1: {
+                                //       print("i value" + i.toString() + splitFull.last);
+                                //       tempTemperatureDate = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 2: {
+                                //       print("i value" + i.toString() + splitFull.last);
+                                //       tempTemperature = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 3: {
+                                //       print("i value" + i.toString() + splitFull.last);
+                                //       tempTemperatureTime = splitFull.last;
+                                //       body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
+                                //       body_temp_list.add(body_temperature);
+                                //     }
+                                //     break;
+                                //   }
+                                // }
+                                getBodyTemp();
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = body_temp_list.length;
+                                  print("count " + count.toString());
+                                  final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
+                                  temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString()});
+                                  print("Added Body Temperature Successfully! " + uid);
+                                });
+
                               }
 
                             });
@@ -335,5 +341,16 @@ class _add_body_temperatureState extends State<add_body_temperature> {
         )
 
     );
+  }
+  void getBodyTemp() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
+    readBT.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        body_temp_list.add(Body_Temperature.fromJson(jsonString));
+      });
+    });
   }
 }

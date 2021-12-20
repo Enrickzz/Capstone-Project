@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -285,50 +287,49 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                 print("Added Blood Glucose Successfully! " + uid);
                               }
                               else{
-                                String tempGlucose = "";
-                                String tempStatus = "";
-                                String tempGlucoseStatus = "";
-                                String tempGlucoseDate = "";
-                                String tempGlucoseTime = "";
-
-                                for(var i = 0; i < temp.length; i++){
-                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                  List<String> splitFull = full.split(" ");
-                                  switch(i%5){
-                                    case 0: {
-                                      tempGlucose = splitFull.last;
-                                    }
-                                    break;
-                                    case 1: {
-                                      tempGlucoseTime = splitFull.last;
-                                    }
-                                    break;
-                                    case 2: {
-                                      tempStatus = splitFull.last;
-                                    }
-                                    break;
-                                    case 3: {
-                                      tempGlucoseStatus = splitFull.last;
-                                    }
-                                    break;
-                                    case 4: {
-                                      tempGlucoseDate = splitFull.last;
-                                      bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), bloodGlucose_unit: tempStatus, bloodGlucose_status: tempGlucoseStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
-                                      glucose_list.add(bloodGlucose);
-                                    }
-                                    break;
-                                  }
-                                }
+                                // String tempGlucose = "";
+                                // String tempStatus = "";
+                                // String tempGlucoseStatus = "";
+                                // String tempGlucoseDate = "";
+                                // String tempGlucoseTime = "";
+                                //
+                                // for(var i = 0; i < temp.length; i++){
+                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                //   List<String> splitFull = full.split(" ");
+                                //   switch(i%5){
+                                //     case 0: {
+                                //       tempGlucose = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 1: {
+                                //       tempGlucoseTime = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 2: {
+                                //       tempStatus = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 3: {
+                                //       tempGlucoseStatus = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 4: {
+                                //       tempGlucoseDate = splitFull.last;
+                                //       bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), bloodGlucose_unit: tempStatus, bloodGlucose_status: tempGlucoseStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+                                //       glucose_list.add(bloodGlucose);
+                                //     }
+                                //     break;
+                                //   }
+                                // }
+                                getBloodGlucose();
+                                Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = glucose_list.length;
                                   print("count " + count.toString());
-                                  //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-
-                                  // symptoms_list.add(symptom);
-
-                                  // print("symptom list  " + symptoms_list.toString());
                                   final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
                                   glucoseRef.set({"glucose": glucose.toString(), "unit_status": unitstatus.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
                                   print("Added Blood Glucose Successfully! " + uid);
+                                });
+
                                 };
 
 
@@ -358,5 +359,16 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
         )
 
     );
+  }
+  void getBloodGlucose() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBC = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/');
+    readBC.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        glucose_list.add(Blood_Glucose.fromJson(jsonString));
+      });
+    });
   }
 }

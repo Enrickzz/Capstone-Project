@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -257,53 +259,57 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                   pressure_level = "high";
                                   print(pressure_level);
                                 }
-                                String tempSystolicPressure = "";
-                                String tempDiastolicPressure = "";
-                                String tempBPDate = "";
-                                String tempBPTime = "";
-                                String tempBPLvl = "";
+                                // String tempSystolicPressure = "";
+                                // String tempDiastolicPressure = "";
+                                // String tempBPDate = "";
+                                // String tempBPTime = "";
+                                // String tempBPLvl = "";
+                                //
+                                // for(var i = 0; i < temp.length; i++){
+                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                //   List<String> splitFull = full.split(" ");
+                                //   print("i value" + i.toString());
+                                //   print("i value modulu " + (i%4).toString());
+                                //   switch(i%5){
+                                //     case 0: {
+                                //       print("1st switch i = 0 " + splitFull.last);
+                                //       tempBPDate = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 1: {
+                                //       print("1st switch i = 1 " + splitFull.last);
+                                //       tempDiastolicPressure = splitFull.last;
+                                //
+                                //     }
+                                //     break;
+                                //     case 2: {
+                                //       print("1st switch i = 1 " + splitFull.last);
+                                //       tempBPLvl = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 3: {
+                                //       print("1st switch i = 1 " + splitFull.last);
+                                //       tempBPTime = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 4: {
+                                //       print("1st switch i = 2 " + splitFull.last);
+                                //       tempSystolicPressure = splitFull.last;
+                                //       bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
+                                //       bp_list.add(bloodPressure);
+                                //     }
+                                //     break;
+                                //   }
+                                // }
+                                getBloodPressure();
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = bp_list.length;
+                                  print("count " + count.toString());
+                                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
+                                  bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
+                                  print("Added Blood Pressure Successfully! " + uid);
+                                });
 
-                                for(var i = 0; i < temp.length; i++){
-                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                  List<String> splitFull = full.split(" ");
-                                  print("i value" + i.toString());
-                                  print("i value modulu " + (i%4).toString());
-                                  switch(i%5){
-                                    case 0: {
-                                      print("1st switch i = 0 " + splitFull.last);
-                                      tempBPDate = splitFull.last;
-                                    }
-                                    break;
-                                    case 1: {
-                                      print("1st switch i = 1 " + splitFull.last);
-                                      tempDiastolicPressure = splitFull.last;
-
-                                    }
-                                    break;
-                                    case 2: {
-                                      print("1st switch i = 1 " + splitFull.last);
-                                      tempBPLvl = splitFull.last;
-                                    }
-                                    break;
-                                    case 3: {
-                                      print("1st switch i = 1 " + splitFull.last);
-                                      tempBPTime = splitFull.last;
-                                    }
-                                    break;
-                                    case 4: {
-                                      print("1st switch i = 2 " + splitFull.last);
-                                      tempSystolicPressure = splitFull.last;
-                                      bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
-                                      bp_list.add(bloodPressure);
-                                    }
-                                    break;
-                                  }
-                                }
-                                count = bp_list.length;
-                                print("count " + count.toString());
-                                final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
-                                print("Added Blood Pressure Successfully! " + uid);
                               }
 
                             });
@@ -387,4 +393,16 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
 
     );
   }
+  void getBloodPressure() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        bp_list.add(Blood_Pressure.fromJson(jsonString));
+      });
+    });
+  }
+
 }

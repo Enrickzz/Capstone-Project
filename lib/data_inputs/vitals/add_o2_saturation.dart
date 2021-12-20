@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -214,45 +216,49 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                 print("Added Oxygen Saturation Successfully! " + uid);
                               }
                               else{
-                                String tempOxygen = "";
-                                String tempOxygenStatus = "";
-                                String tempOxygenDate = "";
-                                String tempOxygenTime = "";
+                                // String tempOxygen = "";
+                                // String tempOxygenStatus = "";
+                                // String tempOxygenDate = "";
+                                // String tempOxygenTime = "";
+                                //
+                                // for(var i = 0; i < temp.length; i++){
+                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                //   List<String> splitFull = full.split(" ");
+                                //   switch(i%4){
+                                //     case 0: {
+                                //       tempOxygen = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 1: {
+                                //       tempOxygenDate = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 2: {
+                                //       tempOxygenStatus = splitFull.last;
+                                //     }
+                                //     break;
+                                //     case 3: {
+                                //       tempOxygenTime = splitFull.last;
+                                //       oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen),oxygen_status: tempOxygenStatus, os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
+                                //       oxygen_list.add(oxygen);
+                                //     }
+                                //     break;
+                                //   }
+                                // }
+                                getOxygenSaturation();
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = oxygen_list.length;
+                                  print("count " + count.toString());
+                                  //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
 
-                                for(var i = 0; i < temp.length; i++){
-                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                  List<String> splitFull = full.split(" ");
-                                  switch(i%4){
-                                    case 0: {
-                                      tempOxygen = splitFull.last;
-                                    }
-                                    break;
-                                    case 1: {
-                                      tempOxygenDate = splitFull.last;
-                                    }
-                                    break;
-                                    case 2: {
-                                      tempOxygenStatus = splitFull.last;
-                                    }
-                                    break;
-                                    case 3: {
-                                      tempOxygenTime = splitFull.last;
-                                      oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen),oxygen_status: tempOxygenStatus, os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
-                                      oxygen_list.add(oxygen);
-                                    }
-                                    break;
-                                  }
-                                }
-                                count = oxygen_list.length;
-                                print("count " + count.toString());
-                                //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
+                                  // symptoms_list.add(symptom);
 
-                                // symptoms_list.add(symptom);
+                                  // print("symptom list  " + symptoms_list.toString());
+                                  final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + count.toString());
+                                  oxygenRef.set({"oxygen_saturation": spo2.toString(),"oxygen_status": oxygen_status.toString(), "os_date": oxygen_date.toString(), "os_time": oxygen_time.toString()});
+                                  print("Added Oxygen Saturation Successfully! " + uid);
+                                });
 
-                                // print("symptom list  " + symptoms_list.toString());
-                                final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + count.toString());
-                                oxygenRef.set({"oxygen_saturation": spo2.toString(),"oxygen_status": oxygen_status.toString(), "os_date": oxygen_date.toString(), "os_time": oxygen_time.toString()});
-                                print("Added Oxygen Saturation Successfully! " + uid);
                               }
 
                             });
@@ -283,5 +289,16 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
         )
 
     );
+  }
+  void getOxygenSaturation() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readOS = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/');
+    readOS.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        oxygen_list.add(Oxygen_Saturation.fromJson(jsonString));
+      });
+    });
   }
 }

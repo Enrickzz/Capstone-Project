@@ -489,7 +489,6 @@ class _addSymptomsState extends State<add_symptoms> {
                             print("count " + count.toString());
                             final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
                             symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "symptom_trigger": symptom_felt, "recurring": checkboxStatus});
-
                             print("Added Symptom Successfully! " + uid);
                           });
 
@@ -559,21 +558,16 @@ class _addSymptomsState extends State<add_symptoms> {
     return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r$hours:$min";
   }
 
-  List<Symptom> getSymptoms() {
+  void getSymptoms() {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
-    List<Symptom> symptoms = [];
     readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      //print(temp);
       temp.forEach((jsonString) {
-        symptoms.add(Symptom.fromJson(jsonString));
         symptoms_list.add(Symptom.fromJson(jsonString));
-        //print(symptoms[0].symptomName);
       });
     });
-    return symptoms;
   }
 
 }

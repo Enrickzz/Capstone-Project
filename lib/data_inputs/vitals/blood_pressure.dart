@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -46,63 +48,65 @@ class _blood_pressureState extends State<blood_pressure> {
   @override
   void initState(){
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list');
-    String tempSystolicPressure = "";
-    String tempDiastolicPressure = "";
-    String tempBPDate = "";
-    String tempBPTime = "";
-    String tempBPLvl = "";
-    readBP.once().then((DataSnapshot datasnapshot) {
-      bptemp.clear();
-      _selected.clear();
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Blood_Pressure blood_pressure = new Blood_Pressure();
-      for(var i = 0; i < temp.length; i++) {
-        String full = temp[i].replaceAll("{", "")
-            .replaceAll("}", "")
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-        switch(i%5){
-          case 0: {
-            print("i is " + i.toString() + splitFull.last);
-            tempBPDate = splitFull.last;
-          }
-          break;
-          case 1: {
-            print("i is " + i.toString() + splitFull.last);
-            tempDiastolicPressure = splitFull.last;
-          }
-          break;
-          case 2: {
-            print("i is " + i.toString() + splitFull.last);
-            tempBPLvl = splitFull.last;
-          }
-          break;
-          case 3: {
-            print("i is " + i.toString() + splitFull.last);
-            tempBPTime = splitFull.last;
-          }
-          break;
-          case 4: {
-            print("i is " + i.toString() + splitFull.last);
-            tempSystolicPressure = splitFull.last;
-            blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure,pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
-            bptemp.add(blood_pressure);
-          }
-          break;
-        }
-
-      }
-      for(var i=0;i<bptemp.length/2;i++){
-        var temp = bptemp[i];
-        bptemp[i] = bptemp[bptemp.length-1-i];
-        bptemp[bptemp.length-1-i] = temp;
-      }
-    });
+    bptemp.clear();
+    _selected.clear();
+    getBloodPressure();
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    // final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list');
+    // String tempSystolicPressure = "";
+    // String tempDiastolicPressure = "";
+    // String tempBPDate = "";
+    // String tempBPTime = "";
+    // String tempBPLvl = "";
+    // readBP.once().then((DataSnapshot datasnapshot) {
+    //
+    //   String temp1 = datasnapshot.value.toString();
+    //   List<String> temp = temp1.split(',');
+    //   Blood_Pressure blood_pressure = new Blood_Pressure();
+    //   for(var i = 0; i < temp.length; i++) {
+    //     String full = temp[i].replaceAll("{", "")
+    //         .replaceAll("}", "")
+    //         .replaceAll("[", "")
+    //         .replaceAll("]", "");
+    //     List<String> splitFull = full.split(" ");
+    //     switch(i%5){
+    //       case 0: {
+    //         print("i is " + i.toString() + splitFull.last);
+    //         tempBPDate = splitFull.last;
+    //       }
+    //       break;
+    //       case 1: {
+    //         print("i is " + i.toString() + splitFull.last);
+    //         tempDiastolicPressure = splitFull.last;
+    //       }
+    //       break;
+    //       case 2: {
+    //         print("i is " + i.toString() + splitFull.last);
+    //         tempBPLvl = splitFull.last;
+    //       }
+    //       break;
+    //       case 3: {
+    //         print("i is " + i.toString() + splitFull.last);
+    //         tempBPTime = splitFull.last;
+    //       }
+    //       break;
+    //       case 4: {
+    //         print("i is " + i.toString() + splitFull.last);
+    //         tempSystolicPressure = splitFull.last;
+    //         blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure,pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
+    //         bptemp.add(blood_pressure);
+    //       }
+    //       break;
+    //     }
+    //
+    //   }
+    //   for(var i=0;i<bptemp.length/2;i++){
+    //     var temp = bptemp[i];
+    //     bptemp[i] = bptemp[bptemp.length-1-i];
+    //     bptemp[bptemp.length-1-i] = temp;
+    //   }
+    // });
     // _selected = List<bool>.generate(bptemp.length, (int index) => false);
     // bptemp = widget.bplist;
     Future.delayed(const Duration(milliseconds: 2000), (){
@@ -371,9 +375,9 @@ class _blood_pressureState extends State<blood_pressure> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              bptemp.sort((a, b) => b.getDate.compareTo(a.getDate));
+              bptemp.sort((a, b) => b.bp_date.compareTo(a.bp_date));
             } else {
-              bptemp.sort((a, b) => a.getDate.compareTo(b.getDate));
+              bptemp.sort((a, b) => a.bp_date.compareTo(b.bp_date));
             }
             _isSortAsc = !_isSortAsc;
           });
@@ -415,10 +419,10 @@ class _blood_pressureState extends State<blood_pressure> {
     return bptemp
         .mapIndexed((index, bp) => DataRow(
         cells: [
-          DataCell(Text(getDateFormatted(bp.getDate.toString()))),
-          DataCell(Text(getTimeFormatted(bp.getTime.toString()))),
-          DataCell(Text(bp.getSys_pres +'/'+ bp.getDia_pres, style: TextStyle(),)),
-          DataCell(Text(bp.getLvl_pres, style: TextStyle(color: getMyColor(bp.getLvl_pres)),))
+          DataCell(Text(getDateFormatted(bp.bp_date.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bp_time.toString()))),
+          DataCell(Text(bp.systolic_pressure +'/'+ bp.diastolic_pressure, style: TextStyle(),)),
+          DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),))
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
@@ -428,7 +432,17 @@ class _blood_pressureState extends State<blood_pressure> {
         }))
         .toList();
   }
-
+  void getBloodPressure() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        bptemp.add(Blood_Pressure.fromJson(jsonString));
+      });
+    });
+  }
 
 
 }

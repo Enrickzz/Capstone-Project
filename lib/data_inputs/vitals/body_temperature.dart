@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -42,58 +43,59 @@ class _body_temperatureState extends State<body_temperature> {
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list');
-    String tempUnit = "";
-    String tempTemperature = "";
-    String tempTemperatureDate = "";
-    String tempTemperatureTime = "";
-
-
-    readTemperature.once().then((DataSnapshot datasnapshot) {
-      bttemp.clear();
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Body_Temperature bodyTemperature;
-      for(var i = 0; i < temp.length; i++) {
-        String full = temp[i].replaceAll("{", "")
-            .replaceAll("}", "")
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-        switch(i%4){
-          case 0: {
-            print("i is "+ i.toString() + splitFull.last);
-            tempUnit = splitFull.last;
-          }
-          break;
-          case 1: {
-            print("i is "+ i.toString() + splitFull.last);
-            tempTemperatureDate = splitFull.last;
-          }
-          break;
-          case 2: {
-            print("i is "+ i.toString() + splitFull.last);
-            tempTemperature = splitFull.last;
-          }
-          break;
-          case 3: {
-            print("i is "+ i.toString() + splitFull.last);
-            tempTemperatureTime = splitFull.last;
-            bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
-            bttemp.add(bodyTemperature);
-          }
-          break;
-        }
-      }
-      for(var i=0;i<bttemp.length/2;i++){
-        var temp = bttemp[i];
-        bttemp[i] = bttemp[bttemp.length-1-i];
-        bttemp[bttemp.length-1-i] = temp;
-      }
-    });
-    bttemp = widget.btlist;
+    bttemp.clear();
+    getBodyTemp();
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    // final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list');
+    // String tempUnit = "";
+    // String tempTemperature = "";
+    // String tempTemperatureDate = "";
+    // String tempTemperatureTime = "";
+    //
+    //
+    // readTemperature.once().then((DataSnapshot datasnapshot) {
+    //
+    //   String temp1 = datasnapshot.value.toString();
+    //   List<String> temp = temp1.split(',');
+    //   Body_Temperature bodyTemperature;
+    //   for(var i = 0; i < temp.length; i++) {
+    //     String full = temp[i].replaceAll("{", "")
+    //         .replaceAll("}", "")
+    //         .replaceAll("[", "")
+    //         .replaceAll("]", "");
+    //     List<String> splitFull = full.split(" ");
+    //     switch(i%4){
+    //       case 0: {
+    //         print("i is "+ i.toString() + splitFull.last);
+    //         tempUnit = splitFull.last;
+    //       }
+    //       break;
+    //       case 1: {
+    //         print("i is "+ i.toString() + splitFull.last);
+    //         tempTemperatureDate = splitFull.last;
+    //       }
+    //       break;
+    //       case 2: {
+    //         print("i is "+ i.toString() + splitFull.last);
+    //         tempTemperature = splitFull.last;
+    //       }
+    //       break;
+    //       case 3: {
+    //         print("i is "+ i.toString() + splitFull.last);
+    //         tempTemperatureTime = splitFull.last;
+    //         bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
+    //         bttemp.add(bodyTemperature);
+    //       }
+    //       break;
+    //     }
+    //   }
+    //   for(var i=0;i<bttemp.length/2;i++){
+    //     var temp = bttemp[i];
+    //     bttemp[i] = bttemp[bttemp.length-1-i];
+    //     bttemp[bttemp.length-1-i] = temp;
+    //   }
+    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -225,8 +227,8 @@ class _body_temperatureState extends State<body_temperature> {
                               width: 10,
                             ),
                             Text(
-                                '' + getDateFormatted(bttemp[index].getDate.toString()) + getTimeFormatted(bttemp[index].getTime.toString())+" "
-                                    +"\nTemperature: "+ bttemp[index].getTemperature.toString() + " " + bttemp[index].getUnit+ " ",
+                                '' + getDateFormatted(bttemp[index].bt_date.toString()) + getTimeFormatted(bttemp[index].bt_time.toString())+" "
+                                    +"\nTemperature: "+ bttemp[index].temperature.toString() + " " + bttemp[index].unit+ " ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18
@@ -256,5 +258,17 @@ class _body_temperatureState extends State<body_temperature> {
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+  void getBodyTemp() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
+    readBT.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        bttemp.add(Body_Temperature.fromJson(jsonString));
+      });
+
+    });
   }
 }

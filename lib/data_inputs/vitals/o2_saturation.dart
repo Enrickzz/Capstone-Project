@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -43,56 +45,57 @@ class _o2_saturationState extends State<o2_saturation> {
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readOxygen = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list');
-    String tempOxygen = "";
-    String tempOxygenStatus = "";
-    String tempOxygenDate = "";
-    String tempOxygenTime = "";
-    DateFormat format = new DateFormat("MM/dd/yyyy");
-    DateFormat timeformat = new DateFormat("hh:mm");
-    readOxygen.once().then((DataSnapshot datasnapshot) {
-      oxygentemp.clear();
-      _selected.clear();
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Oxygen_Saturation oxygen;
-      for(var i = 0; i < temp.length; i++) {
-        String full = temp[i].replaceAll("{", "")
-            .replaceAll("}", "")
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-        switch(i%4){
-          case 0: {
-            tempOxygen = splitFull.last;
-          }
-          break;
-          case 1: {
-            tempOxygenDate = splitFull.last;
-          }
-          break;
-          case 2: {
-            tempOxygenStatus = splitFull.last;
-          }
-          break;
-          case 3: {
-            tempOxygenTime = splitFull.last;
-            oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen),oxygen_status: tempOxygenStatus, os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
-            oxygentemp.add(oxygen);
-          }
-          break;
-        }
-
-      }
-      for(var i=0;i<oxygentemp.length/2;i++){
-        var temp = oxygentemp[i];
-        oxygentemp[i] = oxygentemp[oxygentemp.length-1-i];
-        oxygentemp[oxygentemp.length-1-i] = temp;
-      }
-    });
-    oxygentemp = widget.oxygenlist;
+    oxygentemp.clear();
+    _selected.clear();
+    getOxygenSaturation();
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    // final readOxygen = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list');
+    // String tempOxygen = "";
+    // String tempOxygenStatus = "";
+    // String tempOxygenDate = "";
+    // String tempOxygenTime = "";
+    // DateFormat format = new DateFormat("MM/dd/yyyy");
+    // DateFormat timeformat = new DateFormat("hh:mm");
+    // readOxygen.once().then((DataSnapshot datasnapshot) {
+    //
+    //   String temp1 = datasnapshot.value.toString();
+    //   List<String> temp = temp1.split(',');
+    //   Oxygen_Saturation oxygen;
+    //   for(var i = 0; i < temp.length; i++) {
+    //     String full = temp[i].replaceAll("{", "")
+    //         .replaceAll("}", "")
+    //         .replaceAll("[", "")
+    //         .replaceAll("]", "");
+    //     List<String> splitFull = full.split(" ");
+    //     switch(i%4){
+    //       case 0: {
+    //         tempOxygen = splitFull.last;
+    //       }
+    //       break;
+    //       case 1: {
+    //         tempOxygenDate = splitFull.last;
+    //       }
+    //       break;
+    //       case 2: {
+    //         tempOxygenStatus = splitFull.last;
+    //       }
+    //       break;
+    //       case 3: {
+    //         tempOxygenTime = splitFull.last;
+    //         oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen),oxygen_status: tempOxygenStatus, os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
+    //         oxygentemp.add(oxygen);
+    //       }
+    //       break;
+    //     }
+    //
+    //   }
+    //   for(var i=0;i<oxygentemp.length/2;i++){
+    //     var temp = oxygentemp[i];
+    //     oxygentemp[i] = oxygentemp[oxygentemp.length-1-i];
+    //     oxygentemp[oxygentemp.length-1-i] = temp;
+    //   }
+    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         _selected = List<bool>.generate(oxygentemp.length, (int index) => false);
@@ -285,9 +288,9 @@ class _o2_saturationState extends State<o2_saturation> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              oxygentemp.sort((a, b) => b.getDate.compareTo(a.getDate));
+              oxygentemp.sort((a, b) => b.os_date.compareTo(a.os_date));
             } else {
-              oxygentemp.sort((a, b) => a.getDate.compareTo(b.getDate));
+              oxygentemp.sort((a, b) => a.os_date.compareTo(b.os_date));
             }
             _isSortAsc = !_isSortAsc;
           });
@@ -307,9 +310,9 @@ class _o2_saturationState extends State<o2_saturation> {
     return oxygentemp
         .mapIndexed((index, os) => DataRow(
         cells: [
-          DataCell(Text(getDateFormatted(os.getDate.toString()))),
-          DataCell(Text(getTimeFormatted(os.getTime.toString()))),
-          DataCell(Text("          "+os.getOxygenSaturation.toString(), style: TextStyle(color: getMyColor(os.getOxygenSaturation)),))
+          DataCell(Text(getDateFormatted(os.os_date.toString()))),
+          DataCell(Text(getTimeFormatted(os.os_time.toString()))),
+          DataCell(Text("          "+os.oxygen_saturation.toString(), style: TextStyle(color: getMyColor(os.oxygen_saturation)),))
 
         ],
         selected: _selected[index],
@@ -319,5 +322,16 @@ class _o2_saturationState extends State<o2_saturation> {
           });
         }))
         .toList();
+  }
+  void getOxygenSaturation() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readOS = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/');
+    readOS.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        oxygentemp.add(Oxygen_Saturation.fromJson(jsonString));
+      });
+    });
   }
 }

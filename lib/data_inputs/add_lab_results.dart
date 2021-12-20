@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -538,48 +540,52 @@ class _addLabResultState extends State<add_lab_results> {
                                 print("Added Lab Result Successfully! " + uid);
                               }
                               else{
-                                String tempLabResultName = "";
-                                String tempLabResultDate;
-                                String tempLabResultTime;
-                                String tempLabResultNote = "";
-                                for(var i = 0; i < temp.length; i++){
-                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                  List<String> splitFull = full.split(" ");
-                                  switch(i%4){
-                                    case 0:
-                                      {
-                                        tempLabResultDate = splitFull.last;
+                                getLabResult();
+                                // String tempLabResultName = "";
+                                // String tempLabResultDate;
+                                // String tempLabResultTime;
+                                // String tempLabResultNote = "";
+                                // for(var i = 0; i < temp.length; i++){
+                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                //   List<String> splitFull = full.split(" ");
+                                //   switch(i%4){
+                                //     case 0:
+                                //       {
+                                //         tempLabResultDate = splitFull.last;
+                                //
+                                //       }
+                                //       break;
+                                //     case 1:
+                                //       {
+                                //         tempLabResultName = splitFull.last;
+                                //
+                                //       }
+                                //       break;
+                                //     case 2:
+                                //       {
+                                //         tempLabResultNote = splitFull.last;
+                                //       }
+                                //       break;
+                                //     case 3:
+                                //       {
+                                //         tempLabResultTime = splitFull.last;
+                                //         labResult = new Lab_Result(labResult_name: tempLabResultName,labResult_note: tempLabResultNote, labResult_date: format.parse(tempLabResultDate), labResult_time: timeformat.parse(tempLabResultTime));
+                                //         labResult_list.add(labResult);
+                                //       }
+                                //       break;
+                                //
+                                //   }
+                                //   print("lab result list length " + labResult_list.length.toString());
+                                //
+                                // }
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = labResult_list.length;
+                                  print("count " + count.toString());
+                                  final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
+                                  labResultRef.set({"labResult_name": lab_result_name.toString(),"labResult_note": lab_result_note.toString(), "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
+                                  print("Added Lab Result Successfully! " + uid);
+                                });
 
-                                      }
-                                      break;
-                                    case 1:
-                                      {
-                                        tempLabResultName = splitFull.last;
-
-                                      }
-                                      break;
-                                    case 2:
-                                      {
-                                        tempLabResultNote = splitFull.last;
-                                      }
-                                      break;
-                                    case 3:
-                                      {
-                                        tempLabResultTime = splitFull.last;
-                                        labResult = new Lab_Result(labResult_name: tempLabResultName,labResult_note: tempLabResultNote, labResult_date: format.parse(tempLabResultDate), labResult_time: timeformat.parse(tempLabResultTime));
-                                        labResult_list.add(labResult);
-                                      }
-                                      break;
-
-                                  }
-                                  print("lab result list length " + labResult_list.length.toString());
-
-                                }
-                                count = labResult_list.length;
-                                print("count " + count.toString());
-                                final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
-                                labResultRef.set({"labResult_name": lab_result_name.toString(),"labResult_note": lab_result_note.toString(), "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
-                                print("Added Lab Result Successfully! " + uid);
                               }
 
                             });
@@ -643,4 +649,16 @@ class _addLabResultState extends State<add_lab_results> {
     thisURL = downloadurl;
     return downloadurl;
   }
+  void getLabResult() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readlabresult = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/');
+    readlabresult.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        labResult_list.add(Lab_Result.fromJson(jsonString));
+      });
+    });
+  }
+
 }

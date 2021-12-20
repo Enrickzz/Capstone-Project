@@ -80,43 +80,23 @@ class Medication {
 
 
   Medication({this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date, this.medicine_time});
-  // Medication(this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date);
 
-  String get getName{
-    return medicine_name;
+  Medication.fromJson(Map<String, dynamic> json) {
+    medicine_name = json['symptom_name'];
+    medicine_type = json['intensity_lvl'];
+    medicine_dosage = double.parse(json['symptom_felt']);
+    medicine_date = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
+    medicine_time = DateFormat("hh:mm").parse(json['symptom_time']);
   }
-  double get getDosage{
-    return medicine_dosage;
-  }
-  String get getType{
-    return medicine_type;
-  }
-  DateTime get getDate{
-    return medicine_date;
-  }
-  DateTime get getTime{
-    return medicine_time;
-  }
-  bool get getisActive{
-    return medicine_isActive;
-  }
-  void setName (String temp){
-    medicine_name = temp;
-  }
-  void setDosage (double number){
-    medicine_dosage = number;
-  }
-  void setType (String temp){
-    medicine_type = temp;
-  }
-  void setDate (DateTime date){
-    medicine_date = date;
-  }
-  void setTime (DateTime date){
-    medicine_date = date;
-  }
-  void setisActive (bool status) {
-    medicine_isActive = status;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['medicine_name'] = this.medicine_name;
+    data['medicine_type'] = this.medicine_type;
+    data['medicine_dosage'] = this.medicine_dosage;
+    data['medicine_date'] = this.medicine_date;
+    data['medicine_time'] = this.medicine_time;
+    return data;
   }
 }
 
@@ -131,35 +111,26 @@ class Medication_Prescription{
 
   Medication_Prescription({this.generic_name, this.branded_name, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit});
 
-  String get getGName{
-    return generic_name;
+  Medication_Prescription.fromJson(Map<String, dynamic> json) {
+    generic_name = json['generic_name'];
+    branded_name = json['branded_name'];
+    startdate = DateFormat("MM/dd/yyyy").parse(json['startDate']);
+    enddate = DateFormat("MM/dd/yyyy").parse(json['endDate']);
+    intake_time = json['intake_time'];
+    special_instruction = json['special_instruction'];
+    prescription_unit = json['medical_prescription_unit'];
   }
-  String get GetBName{
-    return branded_name;
-  }
-  String get GetIntake_time{
-    return intake_time;
-  }
-  String get getSpecial_instruction{
-    return special_instruction;
-  }
-  DateTime get getSDate{
-    return startdate;
-  }
-  DateTime get getEDate{
-    return enddate;
-  }
-  void setGName (String temp){
-    generic_name = temp;
-  }
-  void setBName (String temp){
-    branded_name = temp;
-  }
-  void setIntake_time (String temp){
-    intake_time = temp;
-  }
-  void setSpecial_instruction (String temp){
-    special_instruction = temp;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['generic_name'] = this.generic_name;
+    data['branded_name'] = this.branded_name;
+    data['endDate'] = this.startdate;
+    data['intake_time'] = this.enddate;
+    data['startDate'] = this.intake_time;
+    data['special_instruction'] = this.special_instruction;
+    data['medical_prescription_unit'] = this.prescription_unit;
+    return data;
   }
 
 }
@@ -175,35 +146,26 @@ class Supplement_Prescription{
 
   Supplement_Prescription({this.generic_name, this.branded_name, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit});
 
-  String get getGName{
-    return generic_name;
+  Supplement_Prescription.fromJson(Map<String, dynamic> json) {
+    generic_name = json['generic_name'];
+    branded_name = json['branded_name'];
+    startdate = DateFormat("MM/dd/yyyy").parse(json['startDate']);
+    enddate = DateFormat("MM/dd/yyyy").parse(json['endDate']);
+    intake_time = json['intake_time'];
+    special_instruction = json['special_instruction'];
+    prescription_unit = json['medical_prescription_unit'];
   }
-  String get GetBName{
-    return branded_name;
-  }
-  String get GetIntake_time{
-    return intake_time;
-  }
-  String get getSpecial_instruction{
-    return special_instruction;
-  }
-  DateTime get getSDate{
-    return startdate;
-  }
-  DateTime get getEDate{
-    return enddate;
-  }
-  void setGName (String temp){
-    generic_name = temp;
-  }
-  void setBName (String temp){
-    branded_name = temp;
-  }
-  void setIntake_time (String temp){
-    intake_time = temp;
-  }
-  void setSpecial_instruction (String temp){
-    special_instruction = temp;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['generic_name'] = this.generic_name;
+    data['branded_name'] = this.branded_name;
+    data['endDate'] = this.startdate;
+    data['intake_time'] = this.enddate;
+    data['startDate'] = this.intake_time;
+    data['special_instruction'] = this.special_instruction;
+    data['medical_prescription_unit'] = this.prescription_unit;
+    return data;
   }
 
 }
@@ -216,30 +178,22 @@ class Lab_Result {
 
   Lab_Result({this.labResult_name,this.labResult_note, this.labResult_date, this.labResult_time});
 
-  String get getName{
-    return labResult_name;
+  Lab_Result.fromJson(Map<String, dynamic> json) {
+    labResult_name = json['labResult_name'];
+    labResult_note = json['labResult_note'];
+    labResult_date = DateFormat("MM/dd/yyyy").parse(json['labResult_date']);
+    labResult_time = DateFormat("hh:mm").parse(json['labResult_time']);
   }
-  String get getNote{
-    return labResult_note;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['labResult_name'] = this.labResult_name;
+    data['labResult_note'] = this.labResult_note;
+    data['labResult_date'] = this.labResult_date;
+    data['labResult_time'] = this.labResult_time;
+    return data;
   }
-  DateTime get getDate{
-    return labResult_date;
-  }
-  DateTime get getTime{
-    return labResult_time;
-  }
-  void setName (String temp){
-    labResult_name = temp;
-  }
-  void setNote (String temp){
-    labResult_note = temp;
-  }
-  void setDate (DateTime date){
-    labResult_date = date;
-  }
-  void setTime (DateTime date){
-    labResult_time = date;
-  }
+
 }
 
 class Blood_Pressure {
@@ -251,35 +205,22 @@ class Blood_Pressure {
 
   Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure,this.pressure_level, this.bp_date, this.bp_time});
 
-  String get getSys_pres{
-    return systolic_pressure;
+  Blood_Pressure.fromJson(Map<String, dynamic> json) {
+    systolic_pressure = json['systolic_pressure'];
+    diastolic_pressure = json['diastolic_pressure'];
+    pressure_level = json['pressure_level'];
+    bp_date = DateFormat("MM/dd/yyyy").parse(json['bp_date']);
+    bp_time = DateFormat("hh:mm").parse(json['bp_time']);
   }
-  String get getDia_pres{
-    return diastolic_pressure;
-  }
-  String get getLvl_pres{
-    return pressure_level;
-  }
-  DateTime get getDate{
-    return bp_date;
-  }
-  DateTime get getTime{
-    return bp_time;
-  }
-  void setSys_pres (String temp){
-    systolic_pressure = temp;
-  }
-  void setDia_pres (String temp){
-    diastolic_pressure = temp;
-  }
-  void setLvl_pres (String temp){
-    pressure_level = temp;
-  }
-  void setDate (DateTime date){
-    bp_date = date;
-  }
-  void setTime (DateTime date){
-    bp_time = date;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['systolic_pressure'] = this.systolic_pressure;
+    data['diastolic_pressure'] = this.diastolic_pressure;
+    data['pressure_level'] = this.pressure_level;
+    data['bp_date'] = this.bp_date;
+    data['bp_time'] = this.bp_time;
+    return data;
   }
 
 }
@@ -292,29 +233,20 @@ class Heart_Rate {
 
   Heart_Rate({this.bpm, this.hr_status,this.hr_date, this.hr_time});
 
-  int get getBPM{
-    return bpm;
+  Heart_Rate.fromJson(Map<String, dynamic> json) {
+    bpm = int.parse(json['HR_bpm']);
+    hr_status = json['hr_status'];
+    hr_date = DateFormat("MM/dd/yyyy").parse(json['hr_date']);
+    hr_time = DateFormat("hh:mm").parse(json['hr_time']);
   }
-  String get getisResting{
-    return hr_status;
-  }
-  DateTime get getDate{
-    return hr_date;
-  }
-  DateTime get getTime{
-    return hr_time;
-  }
-  void setBPM (int integer){
-    bpm = integer;
-  }
-  void setisResting (String status){
-    hr_status = status;
-  }
-  void setDate (DateTime date){
-    hr_date = date;
-  }
-  void setTime (DateTime date){
-    hr_time = date;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['HR_bpm'] = this.bpm;
+    data['hr_status'] = this.hr_status;
+    data['hr_date'] = this.hr_date;
+    data['hr_time'] = this.hr_time;
+    return data;
   }
 
 }
@@ -327,29 +259,20 @@ class Body_Temperature {
 
   Body_Temperature({this.unit, this.temperature,this.bt_date, this.bt_time});
 
-  String get getUnit{
-    return unit;
+  Body_Temperature.fromJson(Map<String, dynamic> json) {
+    unit = json['unit'];
+    temperature = double.parse(json['temperature']);
+    bt_date = DateFormat("MM/dd/yyyy").parse(json['bt_date']);
+    bt_time = DateFormat("hh:mm").parse(json['bt_time']);
   }
-  double get getTemperature{
-    return temperature;
-  }
-  DateTime get getDate{
-    return bt_date;
-  }
-  DateTime get getTime{
-    return bt_time;
-  }
-  void setUnit (String temp){
-    unit = temp;
-  }
-  void setTemperature (double number){
-    temperature = number;
-  }
-  void setDate (DateTime date){
-    bt_date = date;
-  }
-  void setTime (DateTime date){
-    bt_time = date;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['unit'] = this.unit;
+    data['temperature'] = this.temperature;
+    data['bt_date'] = this.bt_date;
+    data['bt_time'] = this.bt_time;
+    return data;
   }
 
 }
@@ -362,29 +285,20 @@ class Oxygen_Saturation {
 
   Oxygen_Saturation({this.oxygen_saturation,this.oxygen_status, this.os_date, this.os_time});
 
-  int get getOxygenSaturation{
-    return oxygen_saturation;
+  Oxygen_Saturation.fromJson(Map<String, dynamic> json) {
+    oxygen_saturation = int.parse(json['oxygen_saturation']);
+    oxygen_status = json['oxygen_status'];
+    os_date = DateFormat("MM/dd/yyyy").parse(json['os_date']);
+    os_time = DateFormat("hh:mm").parse(json['os_time']);
   }
-  String get getOxygenStatus{
-    return oxygen_status;
-  }
-  DateTime get getDate{
-    return os_date;
-  }
-  DateTime get getTime{
-    return os_time;
-  }
-  void setTemperature (int temp){
-    this.oxygen_saturation = temp;
-  }
-  void setOxygenStatus (String temp){
-    this.oxygen_status = temp;
-  }
-  void setDate (DateTime date){
-    os_date = date;
-  }
-  void setTime (DateTime date){
-    os_time = date;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['oxygen_saturation'] = this.oxygen_saturation;
+    data['oxygen_status'] = this.oxygen_status;
+    data['os_date'] = this.os_date;
+    data['os_time'] = this.os_time;
+    return data;
   }
 
 }
@@ -439,32 +353,22 @@ class Blood_Glucose {
 
   Blood_Glucose({this.glucose, this.bloodGlucose_unit, this.bloodGlucose_status, this.bloodGlucose_date, this.bloodGlucose_time});
 
-  double get getGlucose {
-    return glucose;
+  Blood_Glucose.fromJson(Map<String, dynamic> json) {
+    glucose = double.parse(json['glucose']);
+    bloodGlucose_unit = json['unit_status'];
+    bloodGlucose_status = json['glucose_status'];
+    bloodGlucose_date = DateFormat("MM/dd/yyyy").parse(json['bloodGlucose_date']);
+    bloodGlucose_time = DateFormat("hh:mm").parse(json['bloodGlucose_time']);
   }
-  String get getStatus {
-    return bloodGlucose_status;
-  }
-  String get getUnitStatus {
-    return bloodGlucose_unit;
-  }
-  DateTime get getDate{
-    return bloodGlucose_date;
-  }
-  DateTime get getTime{
-    return bloodGlucose_time;
-  }
-  void setGlucose (double number){
-    glucose = number;
-  }
-  void setStatus (String temp){
-    bloodGlucose_unit = temp;
-  }
-  void setDate (DateTime date){
-    bloodGlucose_date = date;
-  }
-  void setTime (DateTime date){
-    bloodGlucose_time = date;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['glucose'] = this.glucose;
+    data['unit_status'] = this.bloodGlucose_unit;
+    data['glucose_status'] = this.bloodGlucose_status;
+    data['bloodGlucose_date'] = this.bloodGlucose_date;
+    data['bloodGlucose_time'] = this.bloodGlucose_time;
+    return data;
   }
 
 }

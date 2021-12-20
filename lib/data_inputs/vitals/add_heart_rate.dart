@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -255,50 +257,54 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 print("Added Heart Rate Successfully! " + uid);
                               }
                               else{
-                                String tempbeats = "";
-                                String tempisResting;
-                                String tempHeartRateDate;
-                                String tempHeartRateTime;
-                                print(temp.length);
-                                for(var i = 0; i < temp.length; i++){
-                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                  List<String> splitFull = full.split(" ");
-                                    switch(i%4){
-                                      case 0: {
-                                        print("2nd switch i = " + i.toString() + splitFull.last);
-                                        tempHeartRateTime = splitFull.last;
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("2nd switch i = " + i.toString() + splitFull.last);
-                                        tempbeats = splitFull.last;
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("2nd switch i = " + i.toString() + splitFull.last);
-                                        tempisResting = splitFull.last;
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("2nd switch i = " + i.toString() + splitFull.last);
-                                        tempHeartRateDate = splitFull.last;
-                                        heartRate = new Heart_Rate(bpm: int.parse(tempbeats), hr_status: tempisResting, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
-                                        heartRate_list.add(heartRate);
-                                      }
-                                      break;
-                                    }
-                                }
-                                count = heartRate_list.length;
-                                print("count " + count.toString());
-                                if(isResting.toLowerCase() =='yes'){
-                                  hr_status = "Active";
-                                }
-                                else{
-                                  hr_status = "Resting";
-                                }
-                                final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
-                                heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
-                                print("Added Heart Rate Successfully! " + uid);
+                                // String tempbeats = "";
+                                // String tempisResting;
+                                // String tempHeartRateDate;
+                                // String tempHeartRateTime;
+                                // print(temp.length);
+                                // for(var i = 0; i < temp.length; i++){
+                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                //   List<String> splitFull = full.split(" ");
+                                //     switch(i%4){
+                                //       case 0: {
+                                //         print("2nd switch i = " + i.toString() + splitFull.last);
+                                //         tempHeartRateTime = splitFull.last;
+                                //       }
+                                //       break;
+                                //       case 1: {
+                                //         print("2nd switch i = " + i.toString() + splitFull.last);
+                                //         tempbeats = splitFull.last;
+                                //       }
+                                //       break;
+                                //       case 2: {
+                                //         print("2nd switch i = " + i.toString() + splitFull.last);
+                                //         tempisResting = splitFull.last;
+                                //       }
+                                //       break;
+                                //       case 3: {
+                                //         print("2nd switch i = " + i.toString() + splitFull.last);
+                                //         tempHeartRateDate = splitFull.last;
+                                //         heartRate = new Heart_Rate(bpm: int.parse(tempbeats), hr_status: tempisResting, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
+                                //         heartRate_list.add(heartRate);
+                                //       }
+                                //       break;
+                                //     }
+                                // }
+                                getHeartRate();
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = heartRate_list.length;
+                                  print("count " + count.toString());
+                                  if(isResting.toLowerCase() =='yes'){
+                                    hr_status = "Active";
+                                  }
+                                  else{
+                                    hr_status = "Resting";
+                                  }
+                                  final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
+                                  heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
+                                  print("Added Heart Rate Successfully! " + uid);
+                                });
+
                               }
 
                             });
@@ -329,14 +335,25 @@ class _add_heart_rateState extends State<add_heart_rate> {
 
     );
   }
-}
-bool parseBool(String temp) {
-  if (temp.toLowerCase() == 'yes') {
-    return false;
-  } else if (temp.toLowerCase() == 'no') {
-    return true;
+  bool parseBool(String temp) {
+    if (temp.toLowerCase() == 'yes') {
+      return false;
+    } else if (temp.toLowerCase() == 'no') {
+      return true;
+    }
+    else{
+      print("error parsing bool");
+    }
   }
-  else{
-    print("error parsing bool");
+  void getHeartRate() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readHR = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/');
+    readHR.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        heartRate_list.add(Heart_Rate.fromJson(jsonString));
+      });
+    });
   }
 }

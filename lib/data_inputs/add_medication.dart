@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -329,63 +331,68 @@ class _addMedicationState extends State<add_medication> {
                                 print("Added medication Successfully! " + uid);
                               }
                               else{
-                                double tempMedicineDosage = 0;
-                                String tempMedicineName = "";
-                                DateTime tempMedicineDate;
-                                DateTime tempMedicineTime;
-                                String tempMedicineType = "";
-                                for(var i = 0; i < temp.length; i++){
-                                  String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                  List<String> splitFull = full.split(" ");
-                                    print("i value" + i.toString());
-                                    print("i value modulu " + (i%4).toString());
-                                    switch(i%5){
-                                      case 0: {
-                                        print("2nd switch intensity lvl " + splitFull.last);
-                                        tempMedicineType = splitFull.last;
+                                getMedication();
+                            //     double tempMedicineDosage = 0;
+                            //     String tempMedicineName = "";
+                            //     DateTime tempMedicineDate;
+                            //     DateTime tempMedicineTime;
+                            //     String tempMedicineType = "";
+                            //     for(var i = 0; i < temp.length; i++){
+                            //       String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                            //       List<String> splitFull = full.split(" ");
+                            //         print("i value" + i.toString());
+                            //         print("i value modulu " + (i%4).toString());
+                            //         switch(i%5){
+                            //           case 0: {
+                            //             print("2nd switch intensity lvl " + splitFull.last);
+                            //             tempMedicineType = splitFull.last;
+                            //
+                            //           }
+                            //           break;
+                            //           case 1: {
+                            //             print("2nd switch symptom name " + splitFull.last);
+                            //             tempMedicineDosage = double.parse(splitFull.last);
+                            //
+                            //           }
+                            //           break;
+                            //           case 2: {
+                            //             print("2nd switch symptom date " + splitFull.last);
+                            //             tempMedicineDate = format.parse(splitFull.last);
+                            //
+                            //           }
+                            //           break;
+                            //           case 3: {
+                            //             print("2nd switch symptom date " + splitFull.last);
+                            //             tempMedicineName = splitFull.last;
+                            //
+                            //
+                            //           }
+                            //           break;
+                            //           case 4: {
+                            //             print("2nd switch symptom felt " + splitFull.last);
+                            //             tempMedicineTime = timeformat.parse(splitFull.last);
+                            //             medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: tempMedicineDate, medicine_time: tempMedicineTime);
+                            //             medication_list.add(medicine);
+                            //           }
+                            //           break;
+                            //         }
+                            //
+                            //
+                            //     }
 
-                                      }
-                                      break;
-                                      case 1: {
-                                        print("2nd switch symptom name " + splitFull.last);
-                                        tempMedicineDosage = double.parse(splitFull.last);
-
-                                      }
-                                      break;
-                                      case 2: {
-                                        print("2nd switch symptom date " + splitFull.last);
-                                        tempMedicineDate = format.parse(splitFull.last);
-
-                                      }
-                                      break;
-                                      case 3: {
-                                        print("2nd switch symptom date " + splitFull.last);
-                                        tempMedicineName = splitFull.last;
-
-
-                                      }
-                                      break;
-                                      case 4: {
-                                        print("2nd switch symptom felt " + splitFull.last);
-                                        tempMedicineTime = timeformat.parse(splitFull.last);
-                                        medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: tempMedicineDate, medicine_time: tempMedicineTime);
-                                        medication_list.add(medicine);
-                                      }
-                                      break;
-                                    }
-
-
-                                }
-                                count = medication_list.length;
-                                print("count " + count.toString());
-                                //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-
-                                // symptoms_list.add(symptom);
-
+                            //     print("count " + count.toString());
+                            //     //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
+                            //
+                            //     // symptoms_list.add(symptom);
+                            //
                                 // print("symptom list  " + symptoms_list.toString());
-                                final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
-                                medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
-                                print("Added Symptom Successfully! " + uid);
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = medication_list.length;
+                                  final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
+                                  medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
+                                  print("Added Symptom Successfully! " + uid);
+                                });
+
                               }
 
                             });
@@ -422,5 +429,16 @@ class _addMedicationState extends State<add_medication> {
         )
 
     );
+  }
+  void getMedication() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readmedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/');
+    readmedication.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        medication_list.add(Medication.fromJson(jsonString));
+      });
+    });
   }
 }

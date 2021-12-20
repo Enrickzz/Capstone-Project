@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -37,71 +39,72 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-    String tempGenericName = "";
-    String tempBrandedName = "";
-    String tempIntakeTime = "";
-    String tempSpecialInstruction = "";
-    String tempStartDate = "";
-    String tempEndDate = "";
-    String tempPrescriptionUnit = "";
-
-    readPrescription.once().then((DataSnapshot datasnapshot) {
-      prestemp.clear();
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Supplement_Prescription prescription;
-      for(var i = 0; i < temp.length; i++) {
-        String full = temp[i].replaceAll("{", "")
-            .replaceAll("}", "")
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-        switch(i%7){
-          case 0: {
-            tempPrescriptionUnit = splitFull.last;
-          }
-          break;
-          case 1: {
-            tempEndDate = splitFull.last;
-
-          }
-          break;
-          case 2: {
-            tempIntakeTime = splitFull.last;
-          }
-          break;
-          case 3: {
-            tempBrandedName = splitFull.last;
-
-          }
-          break;
-          case 4: {
-            tempSpecialInstruction = splitFull.last;
-          }
-          break;
-          case 5: {
-            tempGenericName = splitFull.last;
-          }
-          break;
-          case 6: {
-            tempStartDate = splitFull.last;
-            prescription = new Supplement_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-            prestemp.add(prescription);
-          }
-          break;
-        }
-
-      }
-      for(var i=0;i<prestemp.length/2;i++){
-        var temp = prestemp[i];
-        prestemp[i] = prestemp[prestemp.length-1-i];
-        prestemp[prestemp.length-1-i] = temp;
-      }
-    });
-    prestemp = widget.preslist;
+    prestemp.clear();
+    getSupplementPrescription();
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    // final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
+    // String tempGenericName = "";
+    // String tempBrandedName = "";
+    // String tempIntakeTime = "";
+    // String tempSpecialInstruction = "";
+    // String tempStartDate = "";
+    // String tempEndDate = "";
+    // String tempPrescriptionUnit = "";
+    //
+    // readPrescription.once().then((DataSnapshot datasnapshot) {
+    //
+    //   String temp1 = datasnapshot.value.toString();
+    //   List<String> temp = temp1.split(',');
+    //   Supplement_Prescription prescription;
+    //   for(var i = 0; i < temp.length; i++) {
+    //     String full = temp[i].replaceAll("{", "")
+    //         .replaceAll("}", "")
+    //         .replaceAll("[", "")
+    //         .replaceAll("]", "");
+    //     List<String> splitFull = full.split(" ");
+    //     switch(i%7){
+    //       case 0: {
+    //         tempPrescriptionUnit = splitFull.last;
+    //       }
+    //       break;
+    //       case 1: {
+    //         tempEndDate = splitFull.last;
+    //
+    //       }
+    //       break;
+    //       case 2: {
+    //         tempIntakeTime = splitFull.last;
+    //       }
+    //       break;
+    //       case 3: {
+    //         tempBrandedName = splitFull.last;
+    //
+    //       }
+    //       break;
+    //       case 4: {
+    //         tempSpecialInstruction = splitFull.last;
+    //       }
+    //       break;
+    //       case 5: {
+    //         tempGenericName = splitFull.last;
+    //       }
+    //       break;
+    //       case 6: {
+    //         tempStartDate = splitFull.last;
+    //         prescription = new Supplement_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
+    //         prestemp.add(prescription);
+    //       }
+    //       break;
+    //     }
+    //
+    //   }
+    //   for(var i=0;i<prestemp.length/2;i++){
+    //     var temp = prestemp[i];
+    //     prestemp[i] = prestemp[prestemp.length-1-i];
+    //     prestemp[prestemp.length-1-i] = temp;
+    //   }
+    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -209,10 +212,10 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                                 width: 10,
                               ),
                               Text(
-                                  '' +"Start Date: " + getDateFormatted(prestemp[index].getSDate.toString())+"End Date: "+getDateFormatted(prestemp[index].getEDate.toString())+" "
-                                      + "\nBrand Name: " + prestemp[index].GetBName + " " + "Generic Name: " + prestemp[index].getGName
-                                      +"\nIntake Time: "+ prestemp[index].GetIntake_time+ " "
-                                      +"\nSpecial Instruction: "+ prestemp[index].getSpecial_instruction,
+                                  '' +"Start Date: " + getDateFormatted(prestemp[index].startdate.toString())+"End Date: "+getDateFormatted(prestemp[index].enddate.toString())+" "
+                                      + "\nBrand Name: " + prestemp[index].branded_name + " " + "Generic Name: " + prestemp[index].generic_name
+                                      +"\nIntake Time: "+ prestemp[index].intake_time+ " "
+                                      +"\nSpecial Instruction: "+ prestemp[index].special_instruction,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
@@ -244,5 +247,16 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
       var min = dateTime.minute.toString().padLeft(2, "0");
       return "$hours:$min";
     }
+  }
+  void getSupplementPrescription() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
+    readsupplement.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        prestemp.add(Supplement_Prescription.fromJson(jsonString));
+      });
+    });
   }
 }
