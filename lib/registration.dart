@@ -31,6 +31,14 @@ class _AppSignUpState extends State<registration> {
   bool checkboxValue = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  //added by borj
+  String valueChooseUserStatus;
+  List<String> listUserStatus = <String>[
+    'Patient', 'Doctor', 'Family member/Caregiver'
+  ];
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -246,6 +254,42 @@ class _AppSignUpState extends State<registration> {
                                 onChanged: (val){
                                   setState(() => confirmpassword = val);
                                 },
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(left: 16, right: 16),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey, width: 1),
+                                  borderRadius: BorderRadius.circular(15)
+                              ),
+                              child: DropdownButton(
+                                dropdownColor: Colors.white,
+                                hint: Text("I am a: "),
+                                icon: Icon(Icons.arrow_drop_down),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18
+                                ),
+                                iconSize: 36,
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                value: valueChooseUserStatus,
+                                onChanged: (newValue){
+                                  setState(() {
+                                    valueChooseUserStatus = newValue;
+
+                                  });
+
+                                },
+
+                                items: listUserStatus.map((valueItem){
+                                  return DropdownMenuItem(
+                                      value: valueItem,
+                                      child: Text(valueItem)
+                                  );
+                                },
+                                ).toList(),
+
                               ),
                             ),
                             SizedBox(height: 5.0),

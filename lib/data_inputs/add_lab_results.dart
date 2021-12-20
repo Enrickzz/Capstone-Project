@@ -44,6 +44,27 @@ class _addLabResultState extends State<add_lab_results> {
   var dateValue = TextEditingController();
   List<FirebaseFile> trythis =[];
 
+  //added by borj
+  String valueChooseLabResult;
+  List<String> listLabResult = <String>[
+     '2D Echocardiogram', 'ALT&AST', 'Angiogram',
+    'Bun&Creatinine', 'Chest X-ray', 'Complete Blood Count',
+    'Electrocardiogram','Filtration Rate', 'Glomerular',
+    'Lipid Profile', 'Lung Biopsy' 'MRI CT Scan', 'Prothrombin Time','Pleural Fluid Analysis', 'Serum Electrolytes',
+    'Ultrasound', 'Urine Microalbumin', 'A1C Test',
+     'Others'
+  ];
+
+  bool ptCheck = false;
+  bool serumElectrolytesCheck = false;
+  bool cbcCheck = false;
+  bool bunCreaCheck = false;
+  bool lipidProfileCheck = false;
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -71,29 +92,288 @@ class _addLabResultState extends State<add_lab_results> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey, width: 1),
+                          borderRadius: BorderRadius.circular(15)
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Name of Lab Result",
+                      child: DropdownButton(
+                        dropdownColor: Colors.white,
+                        hint: Text("Select Lab Result: "),
+                        icon: Icon(Icons.arrow_drop_down),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18
+                        ),
+                        iconSize: 36,
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        value: valueChooseLabResult,
+                        onChanged: (newValue){
+                          setState(() {
+                            valueChooseLabResult = newValue;
+
+                            if(valueChooseLabResult == 'Prothrombin Time'){
+                             ptCheck = true;
+                             serumElectrolytesCheck = false;
+                             cbcCheck = false;
+                             bunCreaCheck = false;
+                             lipidProfileCheck = false;
+                            }
+                            else if(valueChooseLabResult == 'Serum Electrolytes'){
+                              ptCheck = false;
+                              serumElectrolytesCheck = true;
+                              cbcCheck = false;
+                              bunCreaCheck = false;
+                              lipidProfileCheck = false;
+                            }
+                            else if(valueChooseLabResult == 'Complete Blood Count'){
+                              ptCheck = false;
+                              serumElectrolytesCheck = false;
+                              cbcCheck = true;
+                              bunCreaCheck = false;
+                              lipidProfileCheck = false;
+                            }
+                            else if(valueChooseLabResult == 'Bun&Creatinine'){
+                              ptCheck = false;
+                              serumElectrolytesCheck = false;
+                              cbcCheck = false;
+                              bunCreaCheck = true;
+                              lipidProfileCheck = false;
+                            }
+
+                            else if(valueChooseLabResult == 'Lipid Profile'){
+                              ptCheck = false;
+                              serumElectrolytesCheck = false;
+                              cbcCheck = false;
+                              bunCreaCheck = false;
+                              lipidProfileCheck = true;
+                            }
+                            else{
+                              ptCheck = false;
+                              serumElectrolytesCheck = false;
+                              cbcCheck = false;
+                              bunCreaCheck = false;
+                              lipidProfileCheck = false;
+                            }
+                          });
+
+                        },
+
+                        items: listLabResult.map((valueItem){
+                          return DropdownMenuItem(
+                            value: valueItem,
+                            child: Text(valueItem),
+                          );
+                        },
+                        ).toList(),
+
+                      ),
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Name of Lab Result' : null,
-                    onChanged: (val){
-                      setState(() => lab_result_name = val);
-                    },
                   ),
+                  // TextFormField(
+                  //   showCursor: true,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //       borderSide: BorderSide(
+                  //         width:0,
+                  //         style: BorderStyle.none,
+                  //       ),
+                  //     ),
+                  //     filled: true,
+                  //     fillColor: Color(0xFFF2F3F5),
+                  //     hintStyle: TextStyle(
+                  //         color: Color(0xFF666666),
+                  //         fontFamily: defaultFontFamily,
+                  //         fontSize: defaultFontSize),
+                  //     hintText: "Name of Lab Result",
+                  //   ),
+                  //   validator: (val) => val.isEmpty ? 'Enter Name of Lab Result' : null,
+                  //   onChanged: (val){
+                  //     setState(() => lab_result_name = val);
+                  //   },
+                  // ),
+                  SizedBox(height: 8.0),
+                  Visibility(
+                    visible: ptCheck,
+                    child: TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "International Normal Ratio",
+                      ),
+                      onChanged: (val){
+                        setState(() => lab_result_note = val);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: serumElectrolytesCheck,
+                    child: TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "Potassium (mmol/L)",
+                      ),
+                      onChanged: (val){
+                        setState(() => lab_result_note = val);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: cbcCheck,
+                    child: TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "Hemoglobin (Hb)",
+                      ),
+                      onChanged: (val){
+                        setState(() => lab_result_note = val);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: bunCreaCheck,
+                    child: TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "BUN mg/dL",
+                      ),
+                      onChanged: (val){
+                        setState(() => lab_result_note = val);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: bunCreaCheck,
+                    child: TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "Creatinine mg/dL",
+                      ),
+                      onChanged: (val){
+                        setState(() => lab_result_note = val);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: lipidProfileCheck,
+                    child: TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "LDL Cholesterol mg/dL",
+                      ),
+                      onChanged: (val){
+                        setState(() => lab_result_note = val);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: lipidProfileCheck,
+                    child: TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "HDL Cholesterol mg/dL",
+                      ),
+                      onChanged: (val){
+                        setState(() => lab_result_note = val);
+                      },
+                    ),
+                  ),
+
                   SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
