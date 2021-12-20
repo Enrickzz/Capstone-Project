@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -49,64 +51,70 @@ class _symptomsState extends State<symptoms> {
     String tempSymptomFelt = "";
     String tempSymptomTime = "";
     bool tempIsActive;
-
-    symptomsRef.once().then((DataSnapshot datasnapshot){
-      listtemp.clear();
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Symptom symptom;
-
-      for(var i = 0; i < temp.length; i++){
-        String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-          switch(i%6){
-            case 0: {
-              print("1st switch intensity lvl " + splitFull.last);
-              tempIntesityLvl = int.parse(splitFull.last);
-            }
-            break;
-            case 1: {
-              print("1st switch symptom name " + splitFull.last);
-              tempSymptomName = splitFull.last;
-            }
-            break;
-            case 2: {
-              print("1st switch symptom date " + splitFull.last);
-              tempSymptomDate = splitFull.last;
-
-            }
-            break;
-            case 3: {
-              print("1st switch symptom time " + splitFull.last);
+    listtemp.clear();
+    listtemp = getSymptoms();
 
 
-            }
-            break;
-            case 4: {
-              print("1st switch is active " + splitFull.last);
-              tempSymptomTime = splitFull.last;
-            }
-            break;
-            case 5: {
-              print("1st switch symptom felt " + splitFull.last);
-              tempSymptomFelt = splitFull.last;
-              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: timeformat.parse(tempSymptomTime), symptom_isActive: tempIsActive);
-              listtemp.add(symptom);
-            }
-            break;
-          }
+    // symptomsRef.once().then((DataSnapshot datasnapshot){
+    //   listtemp.clear();
+    //   String temp1 = datasnapshot.value.toString();
+    //   List<String> temp = temp1.split(',');
+    //   Symptom symptom;
+    //
+    //   for(var i = 0; i < temp.length; i++){
+    //     String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+    //     List<String> splitFull = full.split(" ");
+    //       switch(i%6){
+    //         case 0: {
+    //           print("1st switch intensity lvl " + splitFull.last);
+    //           tempIntesityLvl = int.parse(splitFull.last);
+    //         }
+    //         break;
+    //         case 1: {
+    //           print("1st switch symptom name " + splitFull.last);
+    //           tempSymptomName = splitFull.last;
+    //         }
+    //         break;
+    //         case 2: {
+    //           print("1st switch symptom date " + splitFull.last);
+    //           tempSymptomDate = splitFull.last;
+    //
+    //         }
+    //         break;
+    //         case 3: {
+    //           print("1st switch symptom time " + splitFull.last);
+    //
+    //
+    //         }
+    //         break;
+    //         case 4: {
+    //           print("1st switch is active " + splitFull.last);
+    //           tempSymptomTime = splitFull.last;
+    //         }
+    //         break;
+    //         case 5: {
+    //           print("1st switch symptom felt " + splitFull.last);
+    //           tempSymptomFelt = splitFull.last;
+    //           // symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: timeformat.parse(tempSymptomTime), symptom_isActive: tempIsActive);
+    //           listtemp.add(symptom);
+    //         }
+    //         break;
+    //       }
+    //
+    //   }
+    //   for(var i=0;i<listtemp.length/2;i++){
+    //     var temp = listtemp[i];
+    //     listtemp[i] = listtemp[listtemp.length-1-i];
+    //     listtemp[listtemp.length-1-i] = temp;
+    //   }
+    // });
 
-      }
-      for(var i=0;i<listtemp.length/2;i++){
-        var temp = listtemp[i];
-        listtemp[i] = listtemp[listtemp.length-1-i];
-        listtemp[listtemp.length-1-i] = temp;
-      }
-    });
-    listtemp = widget.symptomlist1;
+    print(listtemp.toString());
+
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
+        print(getDateFormatted(listtemp[0].symptomDate.toString()));
       });
     });
   }
@@ -206,16 +214,16 @@ class _symptomsState extends State<symptoms> {
                               SizedBox(
                                 width: 10,
                               ),
-                              Text(
-                                  '' + getDateFormatted(listtemp[index].getDate.toString())+getTimeFormatted(listtemp[index].getTime.toString())+" \n" + "Name: " +listtemp[index].getName+
-                                      "\nI felt " + listtemp[index].getFelt + " \n"
-                                      "The intensity was "+ listtemp[index].getIntensity_lvl.toString()+ " \n" +
-                                      "",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18
-                                  )
-                              ),
+                              // Text(
+                              //     '' + getDateFormatted(listtemp[index].symptomDate.toString()) + getTimeFormatted(listtemp[index].symptomTime.toString())+" \n" + "Name: " +listtemp[index].symptomName+
+                              //         "\nI felt " + listtemp[index].symptomFelt + " \n"
+                              //         "The intensity was "+ listtemp[index].intensityLvl.toString()+ " \n" +
+                              //         "trigger "+ listtemp[index].symptomTrigger + "recurring during: "+ listtemp[index].recurring[0] + " ," + listtemp[index].recurring[1] + " ," + listtemp[index].recurring[2] + " \n",
+                              //     style: TextStyle(
+                              //         color: Colors.black,
+                              //         fontSize: 18
+                              //     )
+                              // ),
 
                             ],
                           ),
@@ -231,13 +239,29 @@ class _symptomsState extends State<symptoms> {
     );
   }
   String getDateFormatted (String date){
-    var dateTime = DateTime.parse(date);
+    var dateTime = DateTime.tryParse(date);
     return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
   }
   String getTimeFormatted (String date){
-    var dateTime = DateTime.parse(date);
+    var dateTime = DateTime.tryParse(date);
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+  List<Symptom> getSymptoms() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
+    List<Symptom> symptoms = [];
+    readsymptom.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print(temp);
+      temp.forEach((jsonString) {
+        symptoms.add(Symptom.fromJson(jsonString));
+        print(symptoms[0].symptomName);
+      });
+    });
+
+    return symptoms;
   }
 }

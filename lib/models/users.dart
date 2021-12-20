@@ -25,58 +25,48 @@ class Additional_Info {
 }
 
 class Symptom {
-  String symptom_name;
-  int intesity_lvl;
-  String symptom_felt;
-  DateTime symptom_date;
-  DateTime symptom_time;
-  bool symptom_isActive;
-  String symptom_trigger;
+  String symptomName;
+  int intensityLvl;
+  String symptomFelt;
+  DateTime symptomDate;
+  DateTime symptomTime;
+  bool symptomIsActive;
+  String symptomTrigger;
   List<String> recurring;
 
+  Symptom(
+      {this.symptomName,
+        this.intensityLvl,
+        this.symptomFelt,
+        this.symptomDate,
+        this.symptomTime,
+        this.symptomIsActive,
+        this.symptomTrigger,
+        this.recurring});
 
-  Symptom({this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date, this.symptom_time, this.symptom_isActive, this.symptom_trigger, this.recurring});
-
-  String get getName{
-    return symptom_name;
-  }
-  int get getIntensity_lvl{
-    return intesity_lvl;
-  }
-  String get getFelt{
-    return symptom_felt;
-  }
-  DateTime get getDate{
-    return symptom_date;
-  }
-  DateTime get getTime{
-    return symptom_time;
-  }
-  bool get getisActive{
-    return symptom_isActive;
-  }
-
-  void setName (String temp){
-    symptom_name = temp;
-  }
-  void setIntensity_lvl (int integer){
-    intesity_lvl = integer;
-  }
-  void setFelt (String temp){
-    symptom_felt = temp;
-  }
-  void setDate (DateTime date){
-    symptom_date = date;
-  }
-  void setTime (DateTime date){
-    symptom_date = date;
-  }
-  void setisActive (bool status) {
-    symptom_isActive = status;
+  Symptom.fromJson(Map<String, dynamic> json) {
+    symptomName = json['symptom_name'];
+    intensityLvl = int.parse(json['intensity_lvl']);
+    symptomFelt = json['symptom_felt'];
+    symptomDate = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
+    symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
+    symptomIsActive = json['symptom_isActive'];
+    symptomTrigger = json['symptom_trigger'];
+    recurring = json['recurring'].cast<String>();
   }
 
-
-
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['symptom_name'] = this.symptomName;
+    data['intensity_lvl'] = this.intensityLvl;
+    data['symptom_felt'] = this.symptomFelt;
+    data['symptom_date'] = this.symptomDate;
+    data['symptom_time'] = this.symptomTime;
+    data['symptom_isActive'] = this.symptomIsActive;
+    data['symptom_trigger'] = this.symptomTrigger;
+    data['recurring'] = this.recurring;
+    return data;
+  }
 }
 
 class Medication {

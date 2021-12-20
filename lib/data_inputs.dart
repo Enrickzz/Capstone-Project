@@ -632,7 +632,7 @@ class _AppSignUpState extends State<data_inputs> {
             break;
             case 3: {
               tempSymptomFelt = splitFull.last;
-              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date:format.parse(tempSymptomDate));
+              // symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date:format.parse(tempSymptomDate));
               symptomsList.add(symptom);
             }
             break;
@@ -655,7 +655,7 @@ class _AppSignUpState extends State<data_inputs> {
             break;
             case 3: {
               tempSymptomFelt = splitFull.last;
-              symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
+              // symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
               symptomsList.add(symptom);
 
             }

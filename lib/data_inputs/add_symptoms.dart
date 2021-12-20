@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -231,11 +233,8 @@ class _addSymptomsState extends State<add_symptoms> {
                   onChanged: (newValue){
                     setState(() {
                       valueChooseGeneralArea = newValue;
-
                     });
-
                   },
-
                   items: listItemGeneralAreas.map((valueItem){
                     return DropdownMenuItem(
                         value: valueItem,
@@ -287,7 +286,6 @@ class _addSymptomsState extends State<add_symptoms> {
                 onChanged: (value){
                   setState(() {
                     isSwitched = value;
-
                   });
                 },
             ),
@@ -420,10 +418,12 @@ class _addSymptomsState extends State<add_symptoms> {
                   ),
                   color: Colors.blue,
                   onPressed:() async {
+
                     try{
                       final User user = auth.currentUser;
                       final uid = user.uid;
                       final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
+                      List<Symptom> symptoms;
                       readsymptom.once().then((DataSnapshot datasnapshot) {
                         String temp1 = datasnapshot.value.toString();
                         print("temp1 " + temp1);
@@ -431,63 +431,66 @@ class _addSymptomsState extends State<add_symptoms> {
                         Symptom symptom;
                         if(datasnapshot.value == null){
                           final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 0.toString());
-                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "recurring": checkboxStatus});
+                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true,"symptom_trigger": symptom_felt, "recurring": checkboxStatus});
                           print("Added Symptom Successfully! " + uid);
                         }
                         else{
-                          int tempIntesityLvl = 0;
-                          String tempSymptomName = "";
-                          DateTime tempSymptomDate;
-                          DateTime tempSymptomTime;
-                          bool tempIsActive;
-                          String tempSymptomFelt = "";
-                          List<String> tempRecurring = [];
-                          for(var i = 0; i < temp.length; i++){
-                            String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                            List<String> splitFull = full.split(" ");
-                              switch(i%6){
-                                case 0: {
-                                  print("2nd switch intensity lvl " + splitFull.last);
-                                  tempIntesityLvl = int.parse(splitFull.last);
-                                }
-                                break;
-                                case 1: {
-                                  print("2nd switch symptom name " + splitFull.last);
-                                  tempSymptomName = splitFull.last;
-                                }
-                                break;
-                                case 2: {
-                                  print("2nd switch symptom name " + splitFull.last);
-                                  tempSymptomDate = format.parse(splitFull.last);
-                                }
-                                break;
-                                case 3: {
-                                  print("2nd switch symptom name " + splitFull.last);
+                          symptoms_list = getSymptoms();
+                          // int tempIntesityLvl = 0;
+                          // String tempSymptomName = "";
+                          // DateTime tempSymptomDate;
+                          // DateTime tempSymptomTime;
+                          // bool tempIsActive;
+                          // String tempSymptomFelt = "";
+                          // List<String> tempRecurring = [];
+                          // for(var i = 0; i < temp.length; i++){
+                          //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                          //   List<String> splitFull = full.split(" ");
+                          //     switch(i%6){
+                          //       case 0: {
+                          //         print("2nd switch intensity lvl " + splitFull.last);
+                          //         tempIntesityLvl = int.parse(splitFull.last);
+                          //       }
+                          //       break;
+                          //       case 1: {
+                          //         print("2nd switch symptom name " + splitFull.last);
+                          //         tempSymptomName = splitFull.last;
+                          //       }
+                          //       break;
+                          //       case 2: {
+                          //         print("2nd switch symptom name " + splitFull.last);
+                          //         tempSymptomDate = format.parse(splitFull.last);
+                          //       }
+                          //       break;
+                          //       case 3: {
+                          //         print("2nd switch symptom name " + splitFull.last);
+                          //
+                          //       }
+                          //       break;
+                          //       case 4: {
+                          //         print("2nd switch isactive " + splitFull.last);
+                          //         tempSymptomTime = timeformat.parse(splitFull.last);
+                          //       }
+                          //       break;
+                          //       case 5: {
+                          //         print("2nd switch symptom felt " + splitFull.last);
+                          //         tempSymptomFelt = splitFull.last;
+                          //         // symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, symptom_isActive: tempIsActive);
+                          //         symptoms_list.add(symptom);
+                          //       }
+                          //       break;
+                          //     }
+                          //   print("symptom list length " + symptoms_list.length.toString());
+                          // }
+                          Future.delayed(const Duration(milliseconds: 1000), (){
+                            print(symptoms_list.length);
+                            count = symptoms_list.length;
+                            print("count " + count.toString());
+                            final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
+                            symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "symptom_trigger": symptom_felt, "recurring": checkboxStatus});
+                            print("Added Symptom Successfully! " + uid);
+                          });
 
-                                }
-                                break;
-                                case 4: {
-                                  print("2nd switch isactive " + splitFull.last);
-                                  tempSymptomTime = timeformat.parse(splitFull.last);
-                                }
-                                break;
-                                case 5: {
-                                  print("2nd switch symptom felt " + splitFull.last);
-                                  tempSymptomFelt = splitFull.last;
-                                  symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, symptom_isActive: tempIsActive);
-                                  symptoms_list.add(symptom);
-                                }
-                                break;
-                              }
-
-                            print("symptom list length " + symptoms_list.length.toString());
-
-                          }
-                          count = symptoms_list.length;
-                          print("count " + count.toString());
-                          final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
-                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true});
-                          print("Added Symptom Successfully! " + uid);
                         }
 
                       });
@@ -495,7 +498,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
                       Future.delayed(const Duration(milliseconds: 1000), (){
                         print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
-                        symptoms_list.add(new Symptom(symptom_name: valueChooseSymptom.toString(), intesity_lvl: intesity_lvl, symptom_felt: valueChooseGeneralArea,symptom_date: format.parse(symptom_date), symptom_time: timeformat.parse(symptom_time), symptom_isActive: true));
+                        // symptoms_list.add(new Symptom(symptom_name: valueChooseSymptom.toString(), intesity_lvl: intesity_lvl, symptom_felt: valueChooseGeneralArea,symptom_date: format.parse(symptom_date), symptom_time: timeformat.parse(symptom_time), symptom_isActive: true));
                         for(var i=0;i<symptoms_list.length/2;i++){
                           var temp = symptoms_list[i];
                           symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
@@ -532,7 +535,7 @@ class _addSymptomsState extends State<add_symptoms> {
       onChanged: (value) => setState(() => {
         checkbox.value = value,
         if(checkbox.value){
-          checkboxStatus.add(checkbox.title)
+          checkboxStatus.add(checkbox.title),
         }
         else{
           for(int i = 0; i < checkboxStatus.length; i++){
@@ -552,6 +555,22 @@ class _addSymptomsState extends State<add_symptoms> {
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r$hours:$min";
+  }
+
+  List<Symptom> getSymptoms() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
+    List<Symptom> symptoms = [];
+    readsymptom.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print(temp);
+      temp.forEach((jsonString) {
+        symptoms.add(Symptom.fromJson(jsonString));
+        print(symptoms[0].symptomName);
+      });
+    });
+    return symptoms;
   }
 
 }
