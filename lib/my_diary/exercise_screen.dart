@@ -1,6 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/ExRxApi.dart';
+import 'package:my_app/models/exrxTEST.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -29,17 +36,20 @@ class ExerciseScreen extends StatefulWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
-List<Common> result = [];
-List<double> calories = [];
+List<ExercisesTest> listexercises=[];
+
+
 class Exercise_screen_state extends State<ExerciseScreen>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final AuthService _auth = AuthService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   String search="";
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
 
-  final AuthService _auth = AuthService();
 
   double topBarOpacity = 0.0;
   @override
@@ -156,18 +166,20 @@ class Exercise_screen_state extends State<ExerciseScreen>
                               ),
                             ),
                             onPressed: () async{
-
+                              await getExercises(search).then((value) => setState((){
+                                listexercises=value;
+                              }));
 
                               final queryParameters = {
                                 'exercisename': '$search',
                               };
                               // var uri =
                               // Uri.https('204.235.60.194', 'exrxapi/v1/allinclusive/exercises?', queryParameters);
-                              var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$search"),
-                                  headers: {
-                                'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjM5OTg1MDc1LCJleHAiOjE2Mzk5ODg2NzUsIm5hbWUiOiJsb3Vpc2V4cngifQ.y277OFo5gHGma1jCKU022ofm9ouDLsEdHgkRsdzyqJ0",
-                              });
-                              print("THIS\n" +response.body.toString());
+                              // var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$search"),
+                              //     headers: {
+                              //   'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjM5OTg1MDc1LCJleHAiOjE2Mzk5ODg2NzUsIm5hbWUiOiJsb3Vpc2V4cngifQ.y277OFo5gHGma1jCKU022ofm9ouDLsEdHgkRsdzyqJ0",
+                              // });
+                              // print("THIS\n" +response.body.toString());
                             },
                           ),
                         ]
@@ -177,7 +189,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
         ),
         body: ListView.builder(
           padding: EdgeInsets.fromLTRB(0, 25, 0, 90),
-          itemCount: result.length,
+          itemCount: listexercises.length,
           itemBuilder: (context, index){
             return Container(
               child: Column(
@@ -225,7 +237,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
                                                 borderRadius: BorderRadius.circular(10.0),
                                                 image: DecorationImage(
                                                     fit:BoxFit.cover,
-                                                    image: NetworkImage(""+result[index].photo.thumb)
+                                                    image: NetworkImage("https:"+listexercises[index].largImg1)
                                                 )
                                             ),
                                           )
@@ -240,34 +252,34 @@ class Exercise_screen_state extends State<ExerciseScreen>
                                         child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(result[index].foodName,
+                                              Text(listexercises[index].exerciseName,
                                                 style: TextStyle(
                                                     fontSize:18,
                                                     color:Color(0xFF363f93),
                                                     fontWeight: FontWeight.bold
                                                 ),),
-                                              Text("Lunch",
+                                              Text(listexercises[index].exerciseId.toString(),
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     color:Colors.grey,
                                                     fontWeight: FontWeight.bold
                                                 ),),
                                               Divider(color: Colors.blue),
-                                              Text("Calories: " + result[index].getCalories().round().toString() + " kcal",
+                                              Text("" + listexercises[index].apparatusName,
                                                 style: TextStyle(
                                                   fontSize:16,
                                                   color:Colors.grey,
                                                 ),),
-                                              Text("Sugar: " + result[index].getSugar().toString()==null?result[index].getSugar().toString():'Sugar: 0',
+                                              Text("" + listexercises[index].apparatusAbbreviation,
                                                 style: TextStyle(
                                                   fontSize:16,
                                                   color:Colors.grey,
                                                 ),),
-                                              Text("Other info",
-                                                style: TextStyle(
-                                                  fontSize:16,
-                                                  color:Colors.grey,
-                                                ),),
+                                              // Text("Other info",
+                                              //   style: TextStyle(
+                                              //     fontSize:16,
+                                              //     color:Colors.grey,
+                                              //   ),),
                                             ]
                                         ),
                                       ))
@@ -325,7 +337,34 @@ class Exercise_screen_state extends State<ExerciseScreen>
       ],
     );
   }
+  Future<List<ExercisesTest>> getExercises(String query) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
+    var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+        headers: {
+          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQwMDE3Mjk2LCJleHAiOjE2NDAwMjA4OTYsIm5hbWUiOiJsb3Vpc2V4cngifQ.Uh0W7_HT_8P741CDOIwYhHYzkHs-kJVmbp8Pv1q8-so",
+        });
+    List<Symptom> symptoms = [];
+    symptoms.clear();
+    //print(response.body);
+    //String temp = jsonDecode(response.body);
+// print("THIS IS TEMP \n" + response.body.toString() );
+
+    List<ExercisesTest> exers=[];
+    exers = ExRxTest.fromJson(jsonDecode(response.body)).exercises;
+    print("EXERS LENGTH " + exers.length.toString());
+    for(var i =0; i < exers.length; i++){
+      print("EXER NAME = "  + exers[i].exerciseName);
+      print("IMG = " + exers[i].largImg1);
+    }
+    listexercises= exers;
+    return exers;
+  }
 }
+
+
+
 Future<List<Common>> fetchNutritionix(String thisquery) async {
   var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
   Map<String, String> headers = {

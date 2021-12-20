@@ -1,35 +1,33 @@
+class ExRX {
+  List<Exercises> exercises;
+  Api api;
 
+  ExRX({this.exercises, this.api});
 
-class ExRx{
-  Exercises exercises;
-
-  ExRx(this.exercises);
-}
-
-class Exercises {
-  List<Detailed_Exercises> detailExer;
-
-  Exercises.fromJson(Map<String, dynamic> json) {
+  ExRX.fromJson(Map<String, dynamic> json) {
     if (json['exercises'] != null) {
-      detailExer = new List<Detailed_Exercises>();
+      exercises = new List<Exercises>();
+      print("IN EXERCISE ++++\n" + json.toString());
       json['exercises'].forEach((v) {
-        json['$v'].forEach((r) {
-          detailExer.add(new Detailed_Exercises.fromJson(r));
-        });
+        exercises.add(new Exercises.fromJson(v));
       });
     }
+    api = json['api'] != null ? new Api.fromJson(json['api']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.detailExer != null) {
-      data['exercises'] = this.detailExer.map((v) => v.toJson()).toList();
+    if (this.exercises != null) {
+      data['exercises'] = this.exercises.map((v) => v.toJson()).toList();
+    }
+    if (this.api != null) {
+      data['api'] = this.api.toJson();
     }
     return data;
   }
 }
 
-class Detailed_Exercises {
+class Exercises {
   int exerciseId;
   String exerciseName;
   String uRL;
@@ -76,7 +74,8 @@ class Detailed_Exercises {
   String exerciseNameCompleteAbbreviation;
   String utilityIcon;
   String targetMuscleGroup;
-  Detailed_Exercises(
+
+  Exercises(
       {this.exerciseId,
         this.exerciseName,
         this.uRL,
@@ -124,8 +123,7 @@ class Detailed_Exercises {
         this.utilityIcon,
         this.targetMuscleGroup});
 
-
-  Detailed_Exercises.fromJson(Map<String, dynamic> json) {
+  Exercises.fromJson(Map<String, dynamic> json) {
     exerciseId = json['Exercise_Id'];
     exerciseName = json['Exercise_Name'];
     uRL = json['URL'];
@@ -224,6 +222,43 @@ class Detailed_Exercises {
         this.exerciseNameCompleteAbbreviation;
     data['Utility_Icon'] = this.utilityIcon;
     data['Target_Muscle_Group'] = this.targetMuscleGroup;
+    return data;
+  }
+}
+
+class Api {
+  String videoAccess;
+  int guidTier;
+  int callCountWithinMinute;
+  int callCountLimitMinute;
+  int callCountWithinHour;
+  int callCountLimitHour;
+
+  Api(
+      {this.videoAccess,
+        this.guidTier,
+        this.callCountWithinMinute,
+        this.callCountLimitMinute,
+        this.callCountWithinHour,
+        this.callCountLimitHour});
+
+  Api.fromJson(Map<String, dynamic> json) {
+    videoAccess = json['videoAccess'];
+    guidTier = json['guid-tier'];
+    callCountWithinMinute = json['call-count-within-minute'];
+    callCountLimitMinute = json['call-count-limit-minute'];
+    callCountWithinHour = json['call-count-within-hour'];
+    callCountLimitHour = json['call-count-limit-hour'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['videoAccess'] = this.videoAccess;
+    data['guid-tier'] = this.guidTier;
+    data['call-count-within-minute'] = this.callCountWithinMinute;
+    data['call-count-limit-minute'] = this.callCountLimitMinute;
+    data['call-count-within-hour'] = this.callCountWithinHour;
+    data['call-count-limit-hour'] = this.callCountLimitHour;
     return data;
   }
 }
