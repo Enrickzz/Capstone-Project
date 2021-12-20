@@ -18,6 +18,10 @@ import 'data_inputs/medication.dart';
 import 'fitness_app_theme.dart';
 import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
+
+import 'package:my_app/data_inputs/supplement_prescription.dart';
+
+
 class data_inputs extends StatefulWidget {
   @override
   _AppSignUpState createState() => _AppSignUpState();
@@ -44,6 +48,9 @@ class _AppSignUpState extends State<data_inputs> {
   List<Medication> thismedlist = new List<Medication>();
   List<Medication_Prescription> prescriptionList = new List<Medication_Prescription>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
+
+  //added by borj
+  List<Supplement_Prescription> supplementList = new List<Supplement_Prescription>();
 
   @override
   void initState(){
@@ -256,7 +263,7 @@ class _AppSignUpState extends State<data_inputs> {
                     // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => medication_prescription(preslist: prescriptionList)),
+                      MaterialPageRoute(builder: (context) => supplement_prescription(preslist: supplementList)),
                     );
                   },
                   child: Container(

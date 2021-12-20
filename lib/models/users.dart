@@ -174,6 +174,50 @@ class Medication_Prescription{
 
 }
 
+class Supplement_Prescription{
+  String generic_name;
+  String branded_name;
+  DateTime startdate;
+  DateTime enddate;
+  String intake_time;
+  String special_instruction;
+  String prescription_unit;
+
+  Supplement_Prescription({this.generic_name, this.branded_name, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit});
+
+  String get getGName{
+    return generic_name;
+  }
+  String get GetBName{
+    return branded_name;
+  }
+  String get GetIntake_time{
+    return intake_time;
+  }
+  String get getSpecial_instruction{
+    return special_instruction;
+  }
+  DateTime get getSDate{
+    return startdate;
+  }
+  DateTime get getEDate{
+    return enddate;
+  }
+  void setGName (String temp){
+    generic_name = temp;
+  }
+  void setBName (String temp){
+    branded_name = temp;
+  }
+  void setIntake_time (String temp){
+    intake_time = temp;
+  }
+  void setSpecial_instruction (String temp){
+    special_instruction = temp;
+  }
+
+}
+
 class Lab_Result {
   String labResult_name;
   String labResult_note;

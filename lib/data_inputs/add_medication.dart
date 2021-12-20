@@ -40,6 +40,11 @@ class _addMedicationState extends State<add_medication> {
 
   var dateValue = TextEditingController();
 
+  String valueChooseMedicineSupplement;
+  List<String> listMedicineSupplement = <String>[
+    'Add dynamic list here'
+  ];
+
   @override
   Widget build(BuildContext context) {
 
@@ -67,92 +72,128 @@ class _addMedicationState extends State<add_medication> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
+                  Container(
+                    padding: EdgeInsets.only(left: 16, right: 16),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey, width: 1),
+                        borderRadius: BorderRadius.circular(15)
+                    ),
+                    child: DropdownButton(
+                      dropdownColor: Colors.white,
+                      hint: Text("Medicine/Supplement: "),
+                      icon: Icon(Icons.arrow_drop_down),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Medicine Name",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Medicine Name' : null,
-                    onChanged: (val){
-                      setState(() => medicine_name = val);
-                    },
-                  ),
-                  SizedBox(height: 16.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget> [
-                Text(
-                  "Medicine Type",
-                  textAlign: TextAlign.left,
-                ),
-                Row(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Radio(
-                          value: "Liquid",
-                          groupValue: medicine_type,
-                          onChanged: (value){
-                            setState(() {
-                              this.medicine_type = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    Text("Liquid"),
-                    SizedBox(width: 3),
-                    Radio(
-                      value: "Tablet",
-                      groupValue: medicine_type,
-                      onChanged: (value){
+                      iconSize: 36,
+                      isExpanded: true,
+                      underline: SizedBox(),
+                      value: valueChooseMedicineSupplement,
+                      onChanged: (newValue){
                         setState(() {
-                          this.medicine_type = value;
-                        });
-                      },
-                    ),
-                    Text("Tablet"),
-                    SizedBox(width: 3),
-                    Radio(
-                      value: "Pill",
-                      groupValue: medicine_type,
-                      onChanged: (value){
-                        setState(() {
-                          this.medicine_type = value;
-                        });
-                      },
-                    ),
-                    Text("Pill"),
-                    SizedBox(width: 3),
-                    Radio(
-                      value: "Others",
-                      groupValue: medicine_type,
-                      onChanged: (value){
-                        setState(() {
-                          this.medicine_type = value;
-                        });
-                      },
-                    ),
-                    Text("Others"),
-                    SizedBox(width: 3)
-                  ],
-                )
+                          valueChooseMedicineSupplement = newValue;
 
-              ],
-            ),
+                        });
+
+                      },
+
+                      items: listMedicineSupplement.map((valueItem){
+                        return DropdownMenuItem(
+                            value: valueItem,
+                            child: Text(valueItem)
+                        );
+                      },
+                      ).toList(),
+
+                    ),
+                  ),
+                  // TextFormField(
+                  //   showCursor: true,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //       borderSide: BorderSide(
+                  //         width:0,
+                  //         style: BorderStyle.none,
+                  //       ),
+                  //     ),
+                  //     filled: true,
+                  //     fillColor: Color(0xFFF2F3F5),
+                  //     hintStyle: TextStyle(
+                  //         color: Color(0xFF666666),
+                  //         fontFamily: defaultFontFamily,
+                  //         fontSize: defaultFontSize),
+                  //     hintText: "Medicine Name",
+                  //   ),
+                  //   validator: (val) => val.isEmpty ? 'Enter Medicine Name' : null,
+                  //   onChanged: (val){
+                  //     setState(() => medicine_name = val);
+                  //   },
+                  // ),
+                  // SizedBox(height: 16.0),
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.stretch,
+            //   children: <Widget> [
+            //     Text(
+            //       "Medicine Type",
+            //       textAlign: TextAlign.left,
+            //     ),
+            //     Row(
+            //       children: <Widget>[
+            //         Row(
+            //           children: [
+            //             Radio(
+            //               value: "Liquid",
+            //               groupValue: medicine_type,
+            //               onChanged: (value){
+            //                 setState(() {
+            //                   this.medicine_type = value;
+            //                 });
+            //               },
+            //             ),
+            //           ],
+            //         ),
+            //         Text("Liquid"),
+            //         SizedBox(width: 3),
+            //         Radio(
+            //           value: "Tablet",
+            //           groupValue: medicine_type,
+            //           onChanged: (value){
+            //             setState(() {
+            //               this.medicine_type = value;
+            //             });
+            //           },
+            //         ),
+            //         Text("Tablet"),
+            //         SizedBox(width: 3),
+            //         Radio(
+            //           value: "Pill",
+            //           groupValue: medicine_type,
+            //           onChanged: (value){
+            //             setState(() {
+            //               this.medicine_type = value;
+            //             });
+            //           },
+            //         ),
+            //         Text("Pill"),
+            //         SizedBox(width: 3),
+            //         Radio(
+            //           value: "Others",
+            //           groupValue: medicine_type,
+            //           onChanged: (value){
+            //             setState(() {
+            //               this.medicine_type = value;
+            //             });
+            //           },
+            //         ),
+            //         Text("Others"),
+            //         SizedBox(width: 3)
+            //       ],
+            //     )
+            //
+            //   ],
+            // ),
                   SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
@@ -171,7 +212,7 @@ class _addMedicationState extends State<add_medication> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Dosage (mG / mL)",
+                      hintText: "Dosage: dapat dito makukuha sa db anong unit ",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Medicine Dosage' : null,
                     onChanged: (val){
