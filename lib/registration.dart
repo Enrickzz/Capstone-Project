@@ -109,7 +109,7 @@ class _AppSignUpState extends State<registration> {
                                       color: Color(0xFF666666),
                                       fontFamily: defaultFontFamily,
                                       fontSize: defaultFontSize),
-                                  hintText: "First Name",
+                                  hintText: "First Name *",
                                 ),
                                 validator: (val) => val.isEmpty ? 'Enter First Name' : null,
                                 onChanged: (val){
@@ -135,7 +135,7 @@ class _AppSignUpState extends State<registration> {
                                       color: Color(0xFF666666),
                                       fontFamily: defaultFontFamily,
                                       fontSize: defaultFontSize),
-                                  hintText: "Last Name",
+                                  hintText: "Last Name *",
                                 ),
                                 validator: (val) => val.isEmpty ? 'Enter Last Name' : null,
                                 onChanged: (val){
@@ -166,7 +166,7 @@ class _AppSignUpState extends State<registration> {
                                       color: Color(0xFF666666),
                                       fontFamily: defaultFontFamily,
                                       fontSize: defaultFontSize),
-                                  hintText: "Email Address",
+                                  hintText: "Email Address *",
                                 ),
                                 validator: (val) => val.isEmpty ? 'Enter Email Address' : null,
                                 onChanged: (val){
@@ -204,7 +204,7 @@ class _AppSignUpState extends State<registration> {
                                     fontFamily: defaultFontFamily,
                                     fontSize: defaultFontSize,
                                   ),
-                                  hintText: "Password",
+                                  hintText: "Password *",
                                 ),
                                 validator: (val) => val.length < 6 ? 'Minimum password length should be 6 characters' : null,
                                 onChanged: (val){
@@ -242,7 +242,7 @@ class _AppSignUpState extends State<registration> {
                                     fontFamily: defaultFontFamily,
                                     fontSize: defaultFontSize,
                                   ),
-                                  hintText: "Confirm Password",
+                                  hintText: "Confirm Password *",
                                 ),
                                 validator: (val) {
                                   if(val.isEmpty)
@@ -272,7 +272,7 @@ class _AppSignUpState extends State<registration> {
                                     color: Color(0xFF666666),
                                     fontFamily: defaultFontFamily,
                                     fontSize: defaultFontSize),
-                                hintText: "I am a:",
+                                hintText: "I am a: *",
                               ),
                               isExpanded: true,
                               value: valueChooseUserStatus,

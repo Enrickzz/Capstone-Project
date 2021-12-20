@@ -230,7 +230,7 @@ class _AppSignInState extends State<AppSignIn> {
                                     color: Color(0xFF666666),
                                     fontFamily: defaultFontFamily,
                                     fontSize: defaultFontSize),
-                                  hintText: "Email Address",
+                                  hintText: "Email Address *",
                                 ),
                                 validator: (val) => val.isEmpty ? 'Enter Email Address' : null,
                                 onChanged: (val){
@@ -268,7 +268,7 @@ class _AppSignInState extends State<AppSignIn> {
                                     fontFamily: defaultFontFamily,
                                     fontSize: defaultFontSize,
                                   ),
-                                  hintText: "Password",
+                                  hintText: "Password *",
                                 ),
                                 validator: (val) => val.isEmpty ? 'Enter Password' : null,
                                 onChanged: (val){
