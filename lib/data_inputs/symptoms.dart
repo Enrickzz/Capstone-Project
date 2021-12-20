@@ -52,7 +52,7 @@ class _symptomsState extends State<symptoms> {
     String tempSymptomTime = "";
     bool tempIsActive;
     listtemp.clear();
-    listtemp = getSymptoms();
+    getSymptoms();
 
 
     // symptomsRef.once().then((DataSnapshot datasnapshot){
@@ -111,10 +111,11 @@ class _symptomsState extends State<symptoms> {
 
     print(listtemp.toString());
 
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         print("setstate");
-        print(getDateFormatted(listtemp[0].symptomDate.toString()));
+        //print(getDateFormatted(listtemp[0].symptomDate.toString()));
+        print("LIST TEMP " +listtemp.length.toString());
       });
     });
   }
@@ -214,16 +215,16 @@ class _symptomsState extends State<symptoms> {
                               SizedBox(
                                 width: 10,
                               ),
-                              // Text(
-                              //     '' + getDateFormatted(listtemp[index].symptomDate.toString()) + getTimeFormatted(listtemp[index].symptomTime.toString())+" \n" + "Name: " +listtemp[index].symptomName+
-                              //         "\nI felt " + listtemp[index].symptomFelt + " \n"
-                              //         "The intensity was "+ listtemp[index].intensityLvl.toString()+ " \n" +
-                              //         "trigger "+ listtemp[index].symptomTrigger + "recurring during: "+ listtemp[index].recurring[0] + " ," + listtemp[index].recurring[1] + " ," + listtemp[index].recurring[2] + " \n",
-                              //     style: TextStyle(
-                              //         color: Colors.black,
-                              //         fontSize: 18
-                              //     )
-                              // ),
+                              Text(
+                                  '' + getDateFormatted(listtemp[index].symptomDate.toString()) + getTimeFormatted(listtemp[index].symptomTime.toString())+" \n" + "Name: " +listtemp[index].symptomName+
+                                      "\nI felt " + listtemp[index].symptomFelt.toString() + " \n"
+                                      "The intensity was "+ listtemp[index].intensityLvl.toString()+ " \n"
+                                      //"trigger "+ listtemp[index].symptomTrigger + "recurring during: "+ listtemp[index].recurring[0] + " ," + listtemp[index].recurring[1] + " ," + listtemp[index].recurring[2] + " \n",
+                                  ,style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18
+                                  )
+                              ),
 
                             ],
                           ),
@@ -253,12 +254,15 @@ class _symptomsState extends State<symptoms> {
     final uid = user.uid;
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     List<Symptom> symptoms = [];
+    symptoms.clear();
     readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print(temp);
+      //print("this is temp : "+temp.toString());
       temp.forEach((jsonString) {
         symptoms.add(Symptom.fromJson(jsonString));
-        print(symptoms[0].symptomName);
+        listtemp.add(Symptom.fromJson(jsonString));
+        //print(symptoms[0].symptomName);
+        //print("symptoms length " + symptoms.length.toString());
       });
     });
 

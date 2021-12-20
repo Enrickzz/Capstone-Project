@@ -73,7 +73,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = ExerciseScreen(animationController: animationController);
+    tabBody = Dashboards(animationController: animationController);
     super.initState();
   }
 

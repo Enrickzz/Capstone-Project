@@ -165,7 +165,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
                               // Uri.https('204.235.60.194', 'exrxapi/v1/allinclusive/exercises?', queryParameters);
                               var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$search"),
                                   headers: {
-                                'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjM5ODM4NDA4LCJleHAiOjE2Mzk4NDIwMDgsIm5hbWUiOiJsb3Vpc2V4cngifQ.HP_tz9RAV3PvG2qiwXZShOJbxDrAoR0z4k7o9_ZMmMU",
+                                'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjM5OTg1MDc1LCJleHAiOjE2Mzk5ODg2NzUsIm5hbWUiOiJsb3Vpc2V4cngifQ.y277OFo5gHGma1jCKU022ofm9ouDLsEdHgkRsdzyqJ0",
                               });
                               print("THIS\n" +response.body.toString());
                             },
