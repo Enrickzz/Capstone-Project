@@ -579,32 +579,32 @@ class _set_upState extends State<set_up> {
             currentStep == 0 ? null : () => setState(() => currentStep -= 1),
 
 
-        controlsBuilder: (context, {onStepContinue, onStepCancel}) {
-          final isLastStep = currentStep == getSteps().length - 1;
-          print(currentStep);
-
-          return Container(
-            margin: EdgeInsets.only(top: 30),
-              child: Row(
-                children: [
-                  if (currentStep != 0)
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: onStepCancel,
-                      child: const Text('BACK'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: onStepContinue,
-                      child: Text(isLastStep ? 'CONFIRM' : 'NEXT'),
-                    ),
-                  ),
-                ],
-              ),
-          );
-        },
+        // controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+        //   final isLastStep = currentStep == getSteps().length - 1;
+        //   print(currentStep);
+        //
+        //   return Container(
+        //     margin: EdgeInsets.only(top: 30),
+        //       child: Row(
+        //         children: [
+        //           if (currentStep != 0)
+        //           Expanded(
+        //             child: ElevatedButton(
+        //               onPressed: onStepCancel,
+        //               child: const Text('BACK'),
+        //             ),
+        //           ),
+        //           const SizedBox(width: 12),
+        //           Expanded(
+        //             child: ElevatedButton(
+        //               onPressed: onStepContinue,
+        //               child: Text(isLastStep ? 'CONFIRM' : 'NEXT'),
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //   );
+        // },
 
       ),
     );
