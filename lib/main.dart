@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/additional_data_collection.dart';
 import 'package:my_app/goal_weight.dart';
+import 'package:my_app/medical_history.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/services/auth.dart';
@@ -180,7 +181,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => set_up()),
+                      MaterialPageRoute(builder: (context) => medicalHistory()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),
