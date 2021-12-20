@@ -255,80 +255,80 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                       });
                     },
                   ),
-                  // SizedBox(height: 16.0),
-                  // Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //   children: <Widget> [
-                  //     Text(
-                  //       "Take how many times a day?",
-                  //       textAlign: TextAlign.left,
-                  //     ),
-                  //     Row(
-                  //       children: <Widget>[
-                  //         Row(
-                  //           children: [
-                  //             Radio(
-                  //               value: 1,
-                  //               groupValue: quantity,
-                  //               onChanged: (value){
-                  //                 setState(() {
-                  //                   this.quantity = value;
-                  //                 });
-                  //               },
-                  //             ),
-                  //             Text("1"),
-                  //           ],
-                  //         ),
-                  //         SizedBox(width: 8),
-                  //         Row(
-                  //           children: [
-                  //             Radio(
-                  //               value: 2,
-                  //               groupValue: quantity,
-                  //               onChanged: (value){
-                  //                 setState(() {
-                  //                   this.quantity = value;
-                  //                 });
-                  //               },
-                  //             ),
-                  //             Text("2"),
-                  //           ],
-                  //         ),
-                  //         SizedBox(width: 8),
-                  //         Row(
-                  //           children: [
-                  //             Radio(
-                  //               value: 3,
-                  //               groupValue: quantity,
-                  //               onChanged: (value){
-                  //                 setState(() {
-                  //                   this.quantity = value;
-                  //                 });
-                  //               },
-                  //             ),
-                  //             Text("3"),
-                  //           ],
-                  //         ),
-                  //         SizedBox(width: 8),
-                  //         Row(
-                  //           children: [
-                  //             Radio(
-                  //               value: 4,
-                  //               groupValue: quantity,
-                  //               onChanged: (value){
-                  //                 setState(() {
-                  //                   this.quantity = value;
-                  //                 });
-                  //               },
-                  //             ),
-                  //             Text("4"),
-                  //           ],
-                  //         ),
-                  //         SizedBox(width: 3)
-                  //       ],
-                  //     )
-                  //   ],
-                  // ),
+                  SizedBox(height: 16.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget> [
+                      Text(
+                        "Take how many times a day?",
+                        textAlign: TextAlign.left,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              Radio(
+                                value: 1,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("1"),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 2,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("2"),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 3,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("3"),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 4,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("4"),
+                            ],
+                          ),
+                          SizedBox(width: 3)
+                        ],
+                      )
+                    ],
+                  ),
                   // Padding(
                   //   padding: const EdgeInsets.all(0.0),
                   //   child: Container(
