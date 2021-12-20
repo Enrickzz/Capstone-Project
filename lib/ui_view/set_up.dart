@@ -93,7 +93,7 @@ class _set_upState extends State<set_up> {
     for(int i=0; i<foodList.length; i++){
       foodsTextFields.add(
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Row(
               children: [
                 Expanded(child: FoodTextFields(i)),
@@ -123,7 +123,7 @@ class _set_upState extends State<set_up> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: (add) ? Colors.green : Colors.red,
+          color: (add) ? Colors.blue : Colors.red,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
@@ -138,7 +138,7 @@ class _set_upState extends State<set_up> {
     for(int i=0; i<drugList.length; i++){
       drugsTextFields.add(
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Row(
               children: [
                 Expanded(child: DrugsTextFields(i)),
@@ -168,7 +168,7 @@ class _set_upState extends State<set_up> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: (add) ? Colors.green : Colors.red,
+          color: (add) ? Colors.blue : Colors.red,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
@@ -183,7 +183,7 @@ class _set_upState extends State<set_up> {
     for(int i=0; i<otherList.length; i++){
       othersTextFields.add(
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Row(
               children: [
                 Expanded(child: OtherTextFields(i)),
@@ -213,7 +213,7 @@ class _set_upState extends State<set_up> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: (add) ? Colors.green : Colors.red,
+          color: (add) ? Colors.blue : Colors.red,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
@@ -244,6 +244,7 @@ class _set_upState extends State<set_up> {
                   alignment: Alignment.center,
                   child: Text("Additional Information",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  margin: EdgeInsets.only(bottom: 30),
                 ),
                 SizedBox(
                   height: 8,
@@ -285,7 +286,7 @@ class _set_upState extends State<set_up> {
                             color: Color(0xFF666666),
                             fontFamily: defaultFontFamily,
                             fontSize: defaultFontSize),
-                        hintText: "Birthday",
+                        hintText: "Birthday *",
                         prefixIcon: Icon(
                           Icons.calendar_today,
                           color: Color(0xFF666666),
@@ -326,7 +327,7 @@ class _set_upState extends State<set_up> {
                         color: Color(0xFF666666),
                         fontFamily: defaultFontFamily,
                         fontSize: defaultFontSize),
-                    hintText: "Weight in KG",
+                    hintText: "Weight (kg) *",
                   ),
                   validator: (val) => val.isEmpty ? 'Enter Weight in KG' : null,
                   onChanged: (val){
@@ -363,7 +364,7 @@ class _set_upState extends State<set_up> {
                         color: Color(0xFF666666),
                         fontFamily: defaultFontFamily,
                         fontSize: defaultFontSize),
-                    hintText: "Height in cm",
+                    hintText: "Height (cm) *",
                   ),
                   validator: (val) => val.isEmpty ? 'Enter Height in cm' : null,
                   onChanged: (val){
@@ -418,20 +419,29 @@ class _set_upState extends State<set_up> {
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
+                  margin: EdgeInsets.only(bottom: 30),
                   child: Text("Allergies",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                   ),
                 ),
-                SizedBox(height: 20,),
-                Text('Food Allergies', style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),),
+                SizedBox(height: 16,),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Food Allergies', style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),)),
+                SizedBox(height: 8,),
                 ..._getFoodAllergies(),
-                SizedBox(height: 20,),
-                Text('Drug Allergies', style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),),
+                SizedBox(height: 16,),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Drug Allergies', style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),)),
+                SizedBox(height: 8,),
                 ..._getDrugs(),
-                SizedBox(height: 20,),
-                Text('Other Allergies', style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),),
+                SizedBox(height: 16,),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Other Allergies', style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),)),
+                SizedBox(height: 8,),
                 ..._getOthers(),
-                SizedBox(height: 40,),
               ],
             )
           )
@@ -450,15 +460,16 @@ class _set_upState extends State<set_up> {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
-                    child: Text("Goal Weight",
+                    margin: EdgeInsets.only(bottom: 30),
+                    child: Text("Goal Setting",
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(
                     height: 8,
                   ),
                   SwitchListTile(
-                    title: Text('My Weight Goals'),
-                    subtitle: Text('I want to set my Weight Goals'),
+                    title: Text('My Weight Goals', style: TextStyle(fontSize: 14.0)),
+                    subtitle: Text('I want to set my weight goals', style: TextStyle(fontSize: 12.0)),
                     secondary: Icon(Icons.accessibility_new_outlined, size: 34.0, color: Colors.green),
                     controlAffinity: ListTileControlAffinity.trailing,
                     value: isSwitched,
@@ -491,7 +502,7 @@ class _set_upState extends State<set_up> {
                             color: Color(0xFF666666),
                             fontFamily: defaultFontFamily,
                             fontSize: defaultFontSize),
-                        hintText: "What is my weight goal?",
+                        hintText: "What is my weight goal? *",
                         prefixIcon: Icon(
                           Icons.add_reaction_outlined,
                           color: Color(0xFF666666),
@@ -592,14 +603,14 @@ class _set_upState extends State<set_up> {
                                 color: Color(0xFF666666),
                                 fontFamily: defaultFontFamily,
                                 fontSize: defaultFontSize),
-                            hintText: "When do I need to accomplish this goal?",
+                            hintText: "When do I need to accomplish this goal? *",
                             prefixIcon: Icon(
                               Icons.calendar_today,
                               color: Color(0xFF666666),
                               size: defaultIconSize,
                             ),
                           ),
-                          validator: (val) => val.isEmpty ? 'Select Start Date' : null,
+                          validator: (val) => val.isEmpty ? 'Select Date' : null,
                           onChanged: (val){
 
                             print(startDate);
@@ -609,6 +620,15 @@ class _set_upState extends State<set_up> {
                         ),
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(bottom: 30, top: 50),
+                    child: Text("Lifestyle",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(
                     height: 8,
@@ -628,12 +648,7 @@ class _set_upState extends State<set_up> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "My Lifestyle:",
-                      prefixIcon: Icon(
-                        Icons.calendar_today,
-                        color: Color(0xFF666666),
-                        size: defaultIconSize,
-                      ),
+                      hintText: "My Lifestyle *",
                     ),
                     isExpanded: true,
                     value: valueLifestyle,
@@ -655,8 +670,8 @@ class _set_upState extends State<set_up> {
                   ),
 
                   SwitchListTile(
-                    title: Text('Show Lifestyles'),
-                    subtitle: Text('What Lifestyles?'),
+                    title: Text('Show Lifestyles', style: TextStyle(fontSize: 14.0)),
+                    subtitle: Text('What are the lifestyles?', style: TextStyle(fontSize: 12.0)),
                     secondary: Icon(Icons.accessibility_new_outlined, size: 34.0, color: Colors.green),
                     controlAffinity: ListTileControlAffinity.trailing,
                     value: isSwitchedLifestyle,
@@ -681,8 +696,8 @@ class _set_upState extends State<set_up> {
                     height: 8,
                   ),
                   SwitchListTile(
-                    title: Text('Smoking'),
-                    subtitle: Text('I am a smoker'),
+                    title: Text('Smoking', style: TextStyle(fontSize: 14.0)),
+                    subtitle: Text('I am a smoker', style: TextStyle(fontSize: 12.0)),
                     secondary: Icon(Icons.smoking_rooms, size: 34.0, color: Colors.red),
                     controlAffinity: ListTileControlAffinity.trailing,
                     value: isSwitchedSmoker,
@@ -711,14 +726,14 @@ class _set_upState extends State<set_up> {
                             color: Color(0xFF666666),
                             fontFamily: defaultFontFamily,
                             fontSize: defaultFontSize),
-                        hintText: "Average sticks per day?",
+                        hintText: "Average sticks per day? *",
                         prefixIcon: Icon(
                           Icons.smoking_rooms,
                           color: Color(0xFF666666),
                           size: 22,
                         ),
                       ),
-                      validator: (val) => val.isEmpty ? 'Number of sticks' : null,
+                      validator: (val) => val.isEmpty ? 'Enter number of sticks' : null,
                       onChanged: (val){
                         setState(() => goal = val);
 
@@ -743,7 +758,7 @@ class _set_upState extends State<set_up> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "When do I drink alcohol?",
+                      hintText: "When do I drink alcohol? *",
                       prefixIcon: Icon(
                         Icons.calendar_today,
                         color: Color(0xFF666666),
@@ -990,17 +1005,33 @@ class _FoodTextFieldsState extends State<FoodTextFields> {
       _nameControllerFoods.text = _set_upState.foodList[widget.index] ?? '';
     });
 
+
     return TextFormField(
       controller: _nameControllerFoods,
       onChanged: (v) => _set_upState.foodList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter your Food Allergies'
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+        filled: true,
+        fillColor: Color(0xFFF2F3F5),
+        hintStyle: TextStyle(
+            color: Color(0xFF666666),
+            fontSize: 14),
+        hintText: "Enter your food allergies",
       ),
       validator: (f){
         if(f.trim().isEmpty) return 'Please enter something';
         return null;
       },
     );
+
+
+
   }
 
 }
@@ -1034,7 +1065,19 @@ class _DrugsTextFieldsState extends State<DrugsTextFields> {
       controller: _nameControllerDrugs,
       onChanged: (v) => _set_upState.drugList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter your Medicine Allergies'
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+        filled: true,
+        fillColor: Color(0xFFF2F3F5),
+        hintStyle: TextStyle(
+            color: Color(0xFF666666),
+            fontSize: 14),
+        hintText: "Enter your drug allergies",
       ),
       validator: (v){
         if(v.trim().isEmpty) return 'Please enter something';
@@ -1071,7 +1114,19 @@ class _OtherTextFieldsState extends State<OtherTextFields> {
       controller: _nameControllerOthers,
       onChanged: (v) => _set_upState.otherList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter your Other Allergies'
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+        filled: true,
+        fillColor: Color(0xFFF2F3F5),
+        hintStyle: TextStyle(
+            color: Color(0xFF666666),
+            fontSize: 14),
+        hintText: "Enter your other allergies",
       ),
       validator: (v){
         if(v.trim().isEmpty) return 'Please enter something';
