@@ -181,7 +181,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => medicalHistory()),
+                      MaterialPageRoute(builder: (context) => set_up()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

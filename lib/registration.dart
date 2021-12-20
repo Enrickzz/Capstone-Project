@@ -34,7 +34,7 @@ class _AppSignUpState extends State<registration> {
   //added by borj
   String valueChooseUserStatus;
   List<String> listUserStatus = <String>[
-    'Patient', 'Doctor', 'Family member/Caregiver'
+    'Patient', 'Doctor', 'Family member / Caregiver'
   ];
 
 
@@ -256,41 +256,38 @@ class _AppSignUpState extends State<registration> {
                                 },
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.only(left: 16, right: 16),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey, width: 1),
-                                  borderRadius: BorderRadius.circular(15)
-                              ),
-                              child: DropdownButton(
-                                dropdownColor: Colors.white,
-                                hint: Text("I am a: "),
-                                icon: Icon(Icons.arrow_drop_down),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18
+                            SizedBox(height: 8.0),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(
+                                    width:0,
+                                    style: BorderStyle.none,
+                                  ),
                                 ),
-                                iconSize: 36,
-                                isExpanded: true,
-                                underline: SizedBox(),
-                                value: valueChooseUserStatus,
-                                onChanged: (newValue){
-                                  setState(() {
-                                    valueChooseUserStatus = newValue;
-
-                                  });
-
-                                },
-
-                                items: listUserStatus.map((valueItem){
-                                  return DropdownMenuItem(
-                                      value: valueItem,
-                                      child: Text(valueItem)
-                                  );
-                                },
-                                ).toList(),
-
+                                filled: true,
+                                fillColor: Color(0xFFF2F3F5),
+                                hintStyle: TextStyle(
+                                    color: Color(0xFF666666),
+                                    fontFamily: defaultFontFamily,
+                                    fontSize: defaultFontSize),
+                                hintText: "I am a:",
                               ),
+                              isExpanded: true,
+                              value: valueChooseUserStatus,
+                              onChanged: (newValue){
+                                setState(() {
+                                  valueChooseUserStatus = newValue;
+                                });
+                              },
+                              items: listUserStatus.map((valueItem){
+                                return DropdownMenuItem(
+                                    value: valueItem,
+                                    child: Text(valueItem)
+                                );
+                              },
+                              ).toList(),
                             ),
                             SizedBox(height: 5.0),
                             FormField<bool>(
