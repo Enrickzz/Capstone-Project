@@ -31,6 +31,7 @@ class _addMedicationState extends State<add_medication> {
   String medicine_type = 'Liquid';
   double medicine_dosage = 0;
   double hint_dosage = 0;
+  String hint_unit = "";
   DateTime medicineDate;
   String medicine_date = (new DateTime.now()).toString();
   String medicine_time;
@@ -121,6 +122,7 @@ class _addMedicationState extends State<add_medication> {
                         setState(() {
                           valueChooseMedicineSupplement = newValue;
                           picked = listMedicineSupplement.indexOf(newValue);
+                          hint_unit = medical_list[picked].prescription_unit;
                         });
                       },
 
@@ -230,7 +232,7 @@ class _addMedicationState extends State<add_medication> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: medical_list[picked].prescription_unit + "Dosage: dapat dito makukuha sa db anong unit ",
+                      hintText: hint_unit + "Dosage: dapat dito makukuha sa db anong unit ",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Medicine Dosage' : null,
                     onChanged: (val){
