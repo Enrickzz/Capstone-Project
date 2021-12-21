@@ -795,6 +795,7 @@ class _set_upState extends State<set_up> {
     ];
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Set Up Your Account'),
         automaticallyImplyLeading: false,

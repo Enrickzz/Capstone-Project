@@ -172,10 +172,12 @@ class _blood_pressureState extends State<blood_pressure> {
       ),
          body: SingleChildScrollView(
            scrollDirection: Axis.vertical,
-           child: SingleChildScrollView(
-             scrollDirection: Axis.horizontal,
-             child: _createDataTable()
+           child: Scrollbar(
+             child: SingleChildScrollView(
+               scrollDirection: Axis.horizontal,
+               child: _createDataTable()
 
+             ),
            ),
 
 
