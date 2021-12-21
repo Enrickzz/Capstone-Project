@@ -39,16 +39,15 @@ class _medication_prescriptionState extends State<medication_prescription> {
     super.initState();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-    String tempGenericName = "";
-    String tempBrandedName = "";
-    String tempIntakeTime = "";
-    String tempSpecialInstruction = "";
-    String tempStartDate = "";
-    String tempEndDate = "";
-    String tempPrescriptionUnit = "";
     prestemp.clear();
-
+    // final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
+    // String tempGenericName = "";
+    // String tempBrandedName = "";
+    // String tempIntakeTime = "";
+    // String tempSpecialInstruction = "";
+    // String tempStartDate = "";
+    // String tempEndDate = "";
+    // String tempPrescriptionUnit = "";
     // readPrescription.once().then((DataSnapshot datasnapshot) {
     //
     //   String temp1 = datasnapshot.value.toString();
@@ -209,7 +208,8 @@ class _medication_prescriptionState extends State<medication_prescription> {
                                 width: 10,
                               ),
                               Text(
-                                  '' +"Start Date: " + getDateFormatted(prestemp[index].startdate.toString())+"End Date: "+getDateFormatted(prestemp[index].enddate.toString())+" "
+                                  '' +"Start Date: " + getDateFormatted(prestemp[index].startdate.toString())+"End Date: "+getDateFormatted(prestemp[index].enddate.toString())+" "+
+                                      "\nDosage: " + prestemp[index].dosage.toString()
                                       + "\nBrand Name: " + prestemp[index].branded_name + " " + "Generic Name: " + prestemp[index].generic_name
                                       +"\nIntake Time: "+ prestemp[index].intake_time+ " "
                                       +"\nSpecial Instruction: "+ prestemp[index].special_instruction,

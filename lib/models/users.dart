@@ -103,17 +103,19 @@ class Medication {
 class Medication_Prescription{
   String generic_name;
   String branded_name;
+  double dosage;
   DateTime startdate;
   DateTime enddate;
   String intake_time;
   String special_instruction;
   String prescription_unit;
 
-  Medication_Prescription({this.generic_name, this.branded_name, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit});
+  Medication_Prescription({this.generic_name, this.branded_name,this.dosage, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit});
 
   Medication_Prescription.fromJson(Map<String, dynamic> json) {
     generic_name = json['generic_name'];
     branded_name = json['branded_name'];
+    dosage = double.parse(json['dosage']);
     startdate = DateFormat("MM/dd/yyyy").parse(json['startDate']);
     enddate = DateFormat("MM/dd/yyyy").parse(json['endDate']);
     intake_time = json['intake_time'];
@@ -125,6 +127,7 @@ class Medication_Prescription{
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['generic_name'] = this.generic_name;
     data['branded_name'] = this.branded_name;
+    data['dosage'] = this.dosage;
     data['endDate'] = this.startdate;
     data['intake_time'] = this.enddate;
     data['startDate'] = this.intake_time;
@@ -138,21 +141,18 @@ class Medication_Prescription{
 class Supplement_Prescription{
   String generic_name;
   String branded_name;
-  DateTime startdate;
-  DateTime enddate;
+  // DateTime startdate;
+  // DateTime enddate;
   String intake_time;
-  String special_instruction;
+  // String special_instruction;
   String prescription_unit;
 
-  Supplement_Prescription({this.generic_name, this.branded_name, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit});
+  Supplement_Prescription({this.generic_name, this.branded_name, this.intake_time, this.prescription_unit});
 
   Supplement_Prescription.fromJson(Map<String, dynamic> json) {
     generic_name = json['generic_name'];
     branded_name = json['branded_name'];
-    startdate = DateFormat("MM/dd/yyyy").parse(json['startDate']);
-    enddate = DateFormat("MM/dd/yyyy").parse(json['endDate']);
     intake_time = json['intake_time'];
-    special_instruction = json['special_instruction'];
     prescription_unit = json['medical_prescription_unit'];
   }
 
@@ -160,10 +160,7 @@ class Supplement_Prescription{
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['generic_name'] = this.generic_name;
     data['branded_name'] = this.branded_name;
-    data['endDate'] = this.startdate;
-    data['intake_time'] = this.enddate;
     data['startDate'] = this.intake_time;
-    data['special_instruction'] = this.special_instruction;
     data['medical_prescription_unit'] = this.prescription_unit;
     return data;
   }

@@ -30,22 +30,39 @@ class _addMedicationState extends State<add_medication> {
   String medicine_name = '';
   String medicine_type = 'Liquid';
   double medicine_dosage = 0;
+  double hint_dosage = 0;
   DateTime medicineDate;
   String medicine_date = (new DateTime.now()).toString();
   String medicine_time;
   bool isDateSelected= false;
   int count = 0;
+  int picked = 0;
   List<Medication> medication_list = new List<Medication>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
+  List<Medication_Prescription> medical_list = [];
+  List<Supplement_Prescription> supplement_list = [];
+  List<String> medical_name = [];
 
   var dateValue = TextEditingController();
-
   String valueChooseMedicineSupplement;
-  List<String> listMedicineSupplement = <String>[
-    'Add dynamic list here'
-  ];
+  List<String> listMedicineSupplement;
+
+  @override
+  void initState() {
+    super.initState();
+    getPrescriptionGName();
+    getPrescriptionBName();
+    getSupplementName();
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      listMedicineSupplement= medical_name;
+      setState(() {
+        print("setstate");
+      });
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +70,7 @@ class _addMedicationState extends State<add_medication> {
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
-
+    print(listMedicineSupplement);
     return Container(
         key: _formKey,
         color:Color(0xff757575),
@@ -92,13 +109,6 @@ class _addMedicationState extends State<add_medication> {
                       isExpanded: true,
                       underline: SizedBox(),
                       value: valueChooseMedicineSupplement,
-                      onChanged: (newValue){
-                        setState(() {
-                          valueChooseMedicineSupplement = newValue;
-
-                        });
-
-                      },
 
                       items: listMedicineSupplement.map((valueItem){
                         return DropdownMenuItem(
@@ -107,6 +117,12 @@ class _addMedicationState extends State<add_medication> {
                         );
                       },
                       ).toList(),
+                      onChanged: (newValue){
+                        setState(() {
+                          valueChooseMedicineSupplement = newValue;
+                          picked = listMedicineSupplement.indexOf(newValue);
+                        });
+                      },
 
                     ),
                   ),
@@ -214,7 +230,7 @@ class _addMedicationState extends State<add_medication> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Dosage: dapat dito makukuha sa db anong unit ",
+                      hintText: medical_list[picked].prescription_unit + "Dosage: dapat dito makukuha sa db anong unit ",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Medicine Dosage' : null,
                     onChanged: (val){
@@ -438,6 +454,49 @@ class _addMedicationState extends State<add_medication> {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         medication_list.add(Medication.fromJson(jsonString));
+      });
+    });
+  }
+  void getPrescriptionGName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+    readprescription.once().then((DataSnapshot snapshot){
+      int count = 0;
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        medical_list.add(Medication_Prescription.fromJson(jsonString));
+        medical_name.add(medical_list[count].generic_name);
+        count++;
+      });
+    });
+  }
+  void getPrescriptionBName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+    readprescription.once().then((DataSnapshot snapshot){
+      int count = 0;
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        medical_list.add(Medication_Prescription.fromJson(jsonString));
+        medical_name.add(medical_list[count].branded_name);
+        count++;
+      });
+    });
+  }
+  void getSupplementName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
+    readsupplement.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        int count = 0;
+        supplement_list.add(Supplement_Prescription.fromJson(jsonString));
+        supplement_list.add(Supplement_Prescription.fromJson(jsonString));
+        medical_name.add(supplement_list[count].generic_name);
+        count++;
       });
     });
   }

@@ -33,13 +33,13 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Supplement_Prescription> prestemp = [];
+  List<Supplement_Prescription> supptemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
 
   @override
   void initState() {
     super.initState();
-    prestemp.clear();
+    supptemp.clear();
     getSupplementPrescription();
     // final User user = auth.currentUser;
     // final uid = user.uid;
@@ -142,16 +142,16 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_supplement_prescription(thislist: prestemp),
+                      child: add_supplement_prescription(thislist: supptemp),
                     ),
                     ),
                   ).then((value) =>
                       Future.delayed(const Duration(milliseconds: 1500), (){
                         setState((){
-                          print("setstate medication prescription");
+                          print("setstate supplement prescription");
                           print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                           if(value != null){
-                            prestemp = value[0];
+                            supptemp = value[0];
                           }
                         });
                       }));
@@ -164,7 +164,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
         ],
       ),
       body: ListView.builder(
-        itemCount: prestemp.length,
+        itemCount: supptemp.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
@@ -212,10 +212,8 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                                 width: 10,
                               ),
                               Text(
-                                  '' +"Start Date: " + getDateFormatted(prestemp[index].startdate.toString())+"End Date: "+getDateFormatted(prestemp[index].enddate.toString())+" "
-                                      + "\nBrand Name: " + prestemp[index].branded_name + " " + "Generic Name: " + prestemp[index].generic_name
-                                      +"\nIntake Time: "+ prestemp[index].intake_time+ " "
-                                      +"\nSpecial Instruction: "+ prestemp[index].special_instruction,
+                                  '' + "Brand Name: " + supptemp[index].branded_name + " " + "\nGeneric Name: " + supptemp[index].generic_name
+                                      +"\nIntake Time: "+ supptemp[index].intake_time+ " ",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
@@ -255,7 +253,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        prestemp.add(Supplement_Prescription.fromJson(jsonString));
+        supptemp.add(Supplement_Prescription.fromJson(jsonString));
       });
     });
   }

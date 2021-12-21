@@ -651,8 +651,8 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                               Medication_Prescription prescription;
                               if(datasnapshot.value == null){
                                 final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + 0.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit});
-                                print("Added Medication Prescription Successfully! " + uid);
+                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "intake_time": quantity.toString(), "medical_prescription_unit": prescription_unit});
+                                print("Added Supplement Prescription Successfully! " + uid);
                               }
                               else{
                                 getSupplementPrescription();
@@ -714,8 +714,8 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = supplement_list.length;
                                   final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + count.toString());
-                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit});
-                                  print("Added Medication Prescription Successfully! " + uid);
+                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "intake_time": quantity.toString(), "medical_prescription_unit": prescription_unit});
+                                  print("Added Supplement Prescription Successfully! " + uid);
                                 });
 
                               }
@@ -723,7 +723,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + supplement_list.length.toString());
-                              supplement_list.add(new Supplement_Prescription(generic_name: generic_name, branded_name: branded_name, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit));
+                              supplement_list.add(new Supplement_Prescription(generic_name: generic_name, branded_name: branded_name, intake_time: quantity.toString(), prescription_unit: prescription_unit));
                               for(var i=0;i<supplement_list.length/2;i++){
                                 var temp = supplement_list[i];
                                 supplement_list[i] = supplement_list[supplement_list.length-1-i];
