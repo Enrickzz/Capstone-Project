@@ -63,6 +63,8 @@ class _addLabResultState extends State<add_lab_results> {
   bool bunCreaCheck = false;
   bool lipidProfileCheck = false;
 
+  bool otherLabResultCheck = false;
+
 
 
 
@@ -119,13 +121,15 @@ class _addLabResultState extends State<add_lab_results> {
                             valueChooseLabResult = newValue;
 
                             if(valueChooseLabResult == 'Prothrombin Time'){
-                             ptCheck = true;
+                              otherLabResultCheck = false;
+                              ptCheck = true;
                              serumElectrolytesCheck = false;
                              cbcCheck = false;
                              bunCreaCheck = false;
                              lipidProfileCheck = false;
                             }
                             else if(valueChooseLabResult == 'Serum Electrolytes'){
+                              otherLabResultCheck = false;
                               ptCheck = false;
                               serumElectrolytesCheck = true;
                               cbcCheck = false;
@@ -133,6 +137,7 @@ class _addLabResultState extends State<add_lab_results> {
                               lipidProfileCheck = false;
                             }
                             else if(valueChooseLabResult == 'Complete Blood Count'){
+                              otherLabResultCheck = false;
                               ptCheck = false;
                               serumElectrolytesCheck = false;
                               cbcCheck = true;
@@ -140,6 +145,7 @@ class _addLabResultState extends State<add_lab_results> {
                               lipidProfileCheck = false;
                             }
                             else if(valueChooseLabResult == 'Bun&Creatinine'){
+                              otherLabResultCheck = false;
                               ptCheck = false;
                               serumElectrolytesCheck = false;
                               cbcCheck = false;
@@ -148,13 +154,23 @@ class _addLabResultState extends State<add_lab_results> {
                             }
 
                             else if(valueChooseLabResult == 'Lipid Profile'){
+                              otherLabResultCheck = false;
                               ptCheck = false;
                               serumElectrolytesCheck = false;
                               cbcCheck = false;
                               bunCreaCheck = false;
                               lipidProfileCheck = true;
                             }
+                            else if(valueChooseLabResult == 'Others'){
+                              otherLabResultCheck = true;
+                              ptCheck = false;
+                              serumElectrolytesCheck = false;
+                              cbcCheck = false;
+                              bunCreaCheck = false;
+                              lipidProfileCheck = false;
+                            }
                             else{
+                              otherLabResultCheck = false;
                               ptCheck = false;
                               serumElectrolytesCheck = false;
                               cbcCheck = false;
@@ -176,29 +192,33 @@ class _addLabResultState extends State<add_lab_results> {
                       ),
                     ),
                   ),
-                  // TextFormField(
-                  //   showCursor: true,
-                  //   decoration: InputDecoration(
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(
-                  //         width:0,
-                  //         style: BorderStyle.none,
-                  //       ),
-                  //     ),
-                  //     filled: true,
-                  //     fillColor: Color(0xFFF2F3F5),
-                  //     hintStyle: TextStyle(
-                  //         color: Color(0xFF666666),
-                  //         fontFamily: defaultFontFamily,
-                  //         fontSize: defaultFontSize),
-                  //     hintText: "Name of Lab Result",
-                  //   ),
-                  //   validator: (val) => val.isEmpty ? 'Enter Name of Lab Result' : null,
-                  //   onChanged: (val){
-                  //     setState(() => lab_result_name = val);
-                  //   },
-                  // ),
+                  SizedBox(height: 8.0),
+                  Visibility(
+                    visible: otherLabResultCheck,
+                    child: TextFormField(
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "Name of Lab Result",
+                      ),
+                      validator: (val) => val.isEmpty ? 'Enter Name of Lab Result' : null,
+                      onChanged: (val){
+                        // setState(() => lab_result_name = val);
+                      },
+                    ),
+                  ),
                   SizedBox(height: 8.0),
                   Visibility(
                     visible: ptCheck,
