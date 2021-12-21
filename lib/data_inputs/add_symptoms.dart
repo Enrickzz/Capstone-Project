@@ -88,6 +88,8 @@ class _addSymptomsState extends State<add_symptoms> {
     'Vertebral'
   ];
 
+  bool otherSymptomsCheck = false;
+
   String dropdownValue = 'Select Symptom';
   @override
   Widget build(BuildContext context) {
@@ -139,6 +141,13 @@ class _addSymptomsState extends State<add_symptoms> {
                     onChanged: (newValue){
                       setState(() {
                         valueChooseSymptom = newValue;
+
+                        if(valueChooseSymptom == 'Others'){
+                          otherSymptomsCheck = true;
+                        }
+                        else{
+                          otherSymptomsCheck = false;
+                        }
                       });
 
                     },

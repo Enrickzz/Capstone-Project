@@ -478,11 +478,14 @@ class _addMedicationState extends State<add_medication> {
     readprescription.once().then((DataSnapshot snapshot){
       int count = 0;
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        medical_list.add(Medication_Prescription.fromJson(jsonString));
-        medical_name.add(medical_list[count].branded_name);
-        count++;
-      });
+      if(temp != null){
+        temp.forEach((jsonString) {
+          medical_list.add(Medication_Prescription.fromJson(jsonString));
+          medical_name.add(medical_list[count].branded_name);
+          count++;
+        });
+      }
+
     });
   }
   void getSupplementName() {
@@ -491,13 +494,16 @@ class _addMedicationState extends State<add_medication> {
     final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        int count = 0;
-        supplement_list.add(Supplement_Prescription.fromJson(jsonString));
-        supplement_list.add(Supplement_Prescription.fromJson(jsonString));
-        medical_name.add(supplement_list[count].generic_name);
-        count++;
-      });
+      if(temp != null){
+        temp.forEach((jsonString) {
+          int count = 0;
+          supplement_list.add(Supplement_Prescription.fromJson(jsonString));
+          supplement_list.add(Supplement_Prescription.fromJson(jsonString));
+          medical_name.add(supplement_list[count].generic_name);
+          count++;
+        });
+      }
+
     });
   }
 }
