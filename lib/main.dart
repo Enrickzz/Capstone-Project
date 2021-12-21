@@ -27,6 +27,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:my_app/lab_results_test_borj.dart';
+import 'package:my_app/medical_history.dart';
 
 
 Future<void>  main() async {
@@ -181,7 +182,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => set_up()),
+                      MaterialPageRoute(builder: (context) => medicalHistory()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

@@ -49,6 +49,7 @@ class _addSymptomsState extends State<add_symptoms> {
     CheckBoxState(title: 'Evening')
 
   };
+
 //for pinch zoom body image
   final double minScale = 1;
   final double maxScale = 1.5;
@@ -294,6 +295,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
 
 
+
             SizedBox(height: 8.0),
             Visibility(
               visible: isSwitched,
@@ -323,6 +325,7 @@ class _addSymptomsState extends State<add_symptoms> {
               ),
 
             ),
+
             SizedBox(height: 8.0),
             GestureDetector(
               onTap: ()async{
@@ -549,6 +552,8 @@ class _addSymptomsState extends State<add_symptoms> {
       controlAffinity: ListTileControlAffinity.leading,
     ),
   );
+
+
 
 
   String getText (String date){
