@@ -142,37 +142,37 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Generic Name",
+                      hintText: "Supplement/Medicine name",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Generic Name' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Supplement/Medicine name' : null,
                     onChanged: (val){
                       setState(() => generic_name = val);
                     },
                   ),
-                  SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Brand Name",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Brand Name' : null,
-                    onChanged: (val){
-                      setState(() => branded_name = val);
-                    },
-                  ),
+                  // SizedBox(height: 8.0),
+                  // TextFormField(
+                  //   showCursor: true,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //       borderSide: BorderSide(
+                  //         width:0,
+                  //         style: BorderStyle.none,
+                  //       ),
+                  //     ),
+                  //     filled: true,
+                  //     fillColor: Color(0xFFF2F3F5),
+                  //     hintStyle: TextStyle(
+                  //         color: Color(0xFF666666),
+                  //         fontFamily: defaultFontFamily,
+                  //         fontSize: defaultFontSize),
+                  //     hintText: "Brand Name",
+                  //   ),
+                  //   validator: (val) => val.isEmpty ? 'Enter Brand Name' : null,
+                  //   onChanged: (val){
+                  //     setState(() => branded_name = val);
+                  //   },
+                  // ),
                   SizedBox(height: 8.0),
                   TextFormField(
                     // controller: unitValue,

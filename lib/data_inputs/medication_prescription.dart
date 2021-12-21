@@ -101,6 +101,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
     //     prestemp[prestemp.length-1-i] = temp;
     //   }
     // });
+    getMedicalPrescription();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
