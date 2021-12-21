@@ -785,7 +785,7 @@ class _set_upState extends State<set_up> {
           ),
         ),
       ),
-      Step( /// medical history scre
+      Step( /// medical history screen
         state: currentStep > 3 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 3,
         title: Text(''),
@@ -886,31 +886,32 @@ class _set_upState extends State<set_up> {
 
 
         // controlsBuilder: (context, {onStepContinue, onStepCancel}) {
-        //   final isLastStep = currentStep == getSteps().length - 1;
-        //   print(currentStep);
-        //
-        //   return Container(
-        //     margin: EdgeInsets.only(top: 30),
-        //       child: Row(
-        //         children: [
-        //           if (currentStep != 0)
-        //           Expanded(
-        //             child: ElevatedButton(
-        //               onPressed: onStepCancel,
-        //               child: const Text('BACK'),
-        //             ),
-        //           ),
-        //           const SizedBox(width: 12),
-        //           Expanded(
-        //             child: ElevatedButton(
-        //               onPressed: onStepContinue,
-        //               child: Text(isLastStep ? 'CONFIRM' : 'NEXT'),
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //   );
-        // },
+        controlsBuilder: (BuildContext context, ControlsDetails controls) {
+          final isLastStep = currentStep == getSteps().length - 1;
+          print(currentStep);
+
+          return Container(
+            margin: EdgeInsets.only(top: 30),
+              child: Row(
+                children: [
+                  if (currentStep != 0)
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: controls.onStepCancel,
+                      child: const Text('BACK'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: controls.onStepContinue,
+                      child: Text(isLastStep ? 'CONFIRM' : 'NEXT'),
+                    ),
+                  ),
+                ],
+              ),
+          );
+        },
 
       ),
     );
