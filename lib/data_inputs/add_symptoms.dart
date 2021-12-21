@@ -164,6 +164,37 @@ class _addSymptomsState extends State<add_symptoms> {
               ),
             ),
             SizedBox(height: 8.0),
+            Visibility(
+              visible: otherSymptomsCheck,
+              child: TextFormField(
+                showCursor: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderSide: BorderSide(
+                      width:0,
+                      style: BorderStyle.none,
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFF2F3F5),
+                  hintStyle: TextStyle(
+                      color: Color(0xFF666666),
+                      fontFamily: defaultFontFamily,
+                      fontSize: defaultFontSize),
+                  hintText: "Other Symptom: ",
+                ),
+                validator: (val) => val.isEmpty ? 'Enter General area where Symptom is felt' : null,
+                onChanged: (val){
+                  // setState(() => symptom_felt = val);
+
+                },
+              ),
+
+            ),
+
+
+            SizedBox(height: 8.0),
             TextFormField(
               showCursor: true,
               keyboardType: TextInputType.number,
