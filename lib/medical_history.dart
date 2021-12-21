@@ -84,62 +84,41 @@ class _MedicalHistoryState extends State<medicalHistory> {
     double defaultIconSize = 17;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white70,
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Flexible(
-                flex: 1,
-                child: InkWell(
-                  child: Container(
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Icon(Icons.close),
-                    ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 300,
+                    height: 90,
+                    alignment: Alignment.center,
+                    child: Text("Medical History",
+                        style: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: 30,
+                          fontStyle: FontStyle.normal,
+                        )),
                   ),
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              Flexible(
-                flex: 5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: 300,
-                      height: 90,
-                      alignment: Alignment.center,
-                      child: Text("Medical History",
-                          style: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: 30,
-                            fontStyle: FontStyle.normal,
-                          )),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(bottom: 30),
-                      child: Text("What kind of Cardiovascular disease do you have? (choose all that applies)",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(bottom: 30),
+                    child: Text("What kind of Cardiovascular disease do you have? (choose all that applies)",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  ),
 
-                    SizedBox(height: 8.0),
-                    ...cvd_list.map(buildSingleCheckbox).toList(),
+                  SizedBox(height: 8.0),
+                  ...cvd_list.map(buildSingleCheckbox).toList(),
 
-                  ],
-                ),
+                ],
               ),
             ],
           ),
