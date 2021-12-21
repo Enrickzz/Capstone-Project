@@ -136,9 +136,10 @@ class _MedicalHistoryState extends State<medicalHistory> {
                    Visibility(
                        visible: cvd_others_check,
                        child: Text('Other Cardiovascular Diseases', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
-                       )
+                       ),
                    ),
                     ..._getOtherCVD(),
+
 
 
 
@@ -249,21 +250,25 @@ class _MedicalHistoryState extends State<medicalHistory> {
     List<Widget> foodsTextFields = [];
     for(int i=0; i<otherCVDList.length; i++){
       foodsTextFields.add(
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Row(
-              children: [
-                Expanded(child: FoodTextFields(i)),
-                SizedBox(width: 16,),
-                // we need add button at last friends row
-                _addRemoveButtonFood(i == otherCVDList.length-1, i),
-              ],
+          Visibility(
+            visible: cvd_others_check,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Row(
+                children: [
+                  Expanded(child: FoodTextFields(i)),
+                  SizedBox(width: 16,),
+                  // we need add button at last friends row
+                  _addRemoveButtonFood(i == otherCVDList.length-1, i),
+                ],
+              ),
             ),
           )
       );
     }
     return foodsTextFields;
   }
+
   Widget _addRemoveButtonFood(bool add, int index){
     return InkWell(
       onTap: (){
