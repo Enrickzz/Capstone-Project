@@ -70,6 +70,15 @@ class _MedicalHistoryState extends State<medicalHistory> {
 
   };
 
+  final cvdOthers ={
+    CheckBoxState(title: 'Others'),
+
+  };
+
+  bool cvd_others_check = false;
+  static List<String> otherCVDList = [null];
+
+
 
 
 
@@ -84,43 +93,59 @@ class _MedicalHistoryState extends State<medicalHistory> {
     double defaultIconSize = 17;
 
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 300,
-                    height: 90,
-                    alignment: Alignment.center,
-                    child: Text("Medical History",
-                        style: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: 30,
-                          fontStyle: FontStyle.normal,
-                        )),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(bottom: 30),
-                    child: Text("What kind of Cardiovascular disease do you have? (choose all that applies)",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 300,
+                      height: 90,
+                      alignment: Alignment.center,
+                      child: Text("Medical History",
+                          style: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: 30,
+                            fontStyle: FontStyle.normal,
+                          )),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(bottom: 30),
+                      child: Text("What kind of Cardiovascular disease do you have? (choose all that applies)",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    ),
 
-                  SizedBox(height: 8.0),
-                  ...cvd_list.map(buildSingleCheckbox).toList(),
+                    SizedBox(height: 8.0),
+                    ...cvd_list.map(buildSingleCheckboxCVD).toList(),
+                    ...cvdOthers.map(buildSingleCheckboxCVDOthers).toList(),
 
-                ],
-              ),
-            ],
+                    SizedBox(
+                      height: 8,
+                    ),
+
+                   Visibility(
+                       visible: cvd_others_check,
+                       child: Text('Other Cardiovascular Diseases', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                       )
+                   ),
+                    ..._getOtherCVD(),
+
+
+
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -166,7 +191,7 @@ class _MedicalHistoryState extends State<medicalHistory> {
 
     ];
   }
-  Widget buildSingleCheckbox(CheckBoxState checkbox) =>  Visibility(
+  Widget buildSingleCheckboxCVD(CheckBoxState checkbox) =>  Visibility(
     visible: true,
     child: CheckboxListTile(
       activeColor: Colors.green,
@@ -191,4 +216,120 @@ class _MedicalHistoryState extends State<medicalHistory> {
       controlAffinity: ListTileControlAffinity.leading,
     ),
   );
+  Widget buildSingleCheckboxCVDOthers(CheckBoxState checkbox) =>  Visibility(
+    visible: true,
+    child: CheckboxListTile(
+      activeColor: Colors.green,
+      value: checkbox.value,
+      title: Text(
+          checkbox.title
+      ),
+
+      onChanged: (value) => setState(() => {
+        checkbox.value = value,
+        if(checkbox.value){
+          cvdChecboxStatus.add(checkbox.title),
+          cvd_others_check = true
+        }
+        else{
+          for(int i = 0; i < cvdChecboxStatus.length; i++){
+            if(cvdChecboxStatus[i] == checkbox.title){
+              cvdChecboxStatus.removeAt(i),
+              cvd_others_check = false
+
+
+            },
+          },
+        },
+      }),
+      controlAffinity: ListTileControlAffinity.leading,
+    ),
+  );
+  List<Widget> _getOtherCVD(){
+    List<Widget> foodsTextFields = [];
+    for(int i=0; i<otherCVDList.length; i++){
+      foodsTextFields.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(
+              children: [
+                Expanded(child: FoodTextFields(i)),
+                SizedBox(width: 16,),
+                // we need add button at last friends row
+                _addRemoveButtonFood(i == otherCVDList.length-1, i),
+              ],
+            ),
+          )
+      );
+    }
+    return foodsTextFields;
+  }
+  Widget _addRemoveButtonFood(bool add, int index){
+    return InkWell(
+      onTap: (){
+        if(add){
+          // add new text-fields at the top of all friends textfields
+          otherCVDList.insert(0, null);
+        }
+        else otherCVDList.removeAt(index);
+        setState((){});
+      },
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          color: (add) ? Colors.green : Colors.red,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
+      ),
+    );
+  }
 }
+
+class FoodTextFields extends StatefulWidget {
+  final int index;
+  FoodTextFields(this.index);
+  @override
+  _FoodTextFieldsState createState() => _FoodTextFieldsState();
+}
+
+class _FoodTextFieldsState extends State<FoodTextFields> {
+  TextEditingController _nameControllerFoods;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameControllerFoods = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameControllerFoods.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _nameControllerFoods.text = _MedicalHistoryState.otherCVDList[widget.index] ?? '';
+    });
+
+    return TextFormField(
+      controller: _nameControllerFoods,
+      onChanged: (v) => _MedicalHistoryState.otherCVDList[widget.index] = v,
+      decoration: InputDecoration(
+          hintText: 'Enter your Food Allergies'
+      ),
+      validator: (f){
+        if(f.trim().isEmpty) return 'Please enter something';
+        return null;
+      },
+    );
+  }
+
+
+}
+
+
