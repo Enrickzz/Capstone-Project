@@ -855,12 +855,16 @@ class _set_upState extends State<set_up> {
 
 
           } else {
-            if (formKeys[0].currentState.validate())
+            if (formKeys[0].currentState.validate() && currentStep == 0) {
               setState(() => currentStep += 1);
-            else if (currentStep == 1)
+            }
+            else if (currentStep == 1) {
               setState(() => currentStep += 1);
-            else if (formKeys[2].currentState.validate())
+            }
+            else if (formKeys[2].currentState.validate() && currentStep == 2) {
               setState(() => currentStep += 1);
+            }
+
           }
         },
         onStepTapped: (step) {
@@ -876,7 +880,7 @@ class _set_upState extends State<set_up> {
             setState(() {
               currentStep = step;
             });
-          } else if (currentStep == 2) {
+          } else if (formKeys[2].currentState.validate() && currentStep == 2) {
             setState(() {
               currentStep = step;
             });
