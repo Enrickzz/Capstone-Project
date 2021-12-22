@@ -479,3 +479,25 @@ class Blood_Glucose {
   }
 
 }
+class Respiratory_Rate {
+  int bpm = 0;
+  DateTime bpm_date;
+  DateTime bpm_time;
+
+  Respiratory_Rate({this.bpm, this.bpm_date, this.bpm_time});
+
+  Respiratory_Rate.fromJson(Map<String, dynamic> json) {
+    bpm = int.parse(json['bpm']);
+    bpm_date = DateFormat("MM/dd/yyyy").parse(json['bpm_date']);
+    bpm_time = DateFormat("hh:mm").parse(json['bpm_time']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['bpm'] = this.bpm;
+    data['bpm_date'] = this.bpm_date;
+    data['bpm_time'] = this.bpm_time;
+    return data;
+  }
+}
+
