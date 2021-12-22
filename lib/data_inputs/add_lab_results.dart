@@ -584,7 +584,7 @@ class _addLabResultState extends State<add_lab_results> {
                                   "potassium": potassium, "hemoglobin_hb": hemoglobin_hb,
                                   "Bun_mgDl": Bun_mgDl, "creatinine_mgDl": creatinine_mgDl,
                                   "ldl": ldl,
-                                  "hdl": hdl});
+                                  "hdl": hdl, "imgRef": fileName.toString()});
 
                                 print("Added Lab Result Successfully! " + uid);
                               }
@@ -606,7 +606,7 @@ class _addLabResultState extends State<add_lab_results> {
                                     "potassium": potassium, "hemoglobin_hb": hemoglobin_hb,
                                     "Bun_mgDl": Bun_mgDl, "creatinine_mgDl": creatinine_mgDl,
                                     "ldl": ldl,
-                                    "hdl": hdl});
+                                    "hdl": hdl, "imgRef": fileName.toString()});
                                   print("Added Lab Result Successfully! " + uid);
                                 });
 
@@ -631,7 +631,9 @@ class _addLabResultState extends State<add_lab_results> {
                                   Bun_mgDl: Bun_mgDl,
                                   creatinine_mgDl: creatinine_mgDl,
                                   ldl:ldl,
-                                  hdl:hdl)
+                                  hdl:hdl,
+                                  imgRef: fileName.toString()
+                              )
                               );
                               for(var i=0;i<labResult_list.length/2;i++){
                                 var temp = labResult_list[i];

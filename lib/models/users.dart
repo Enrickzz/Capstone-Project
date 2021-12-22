@@ -191,6 +191,7 @@ class Lab_Result {
   String creatinine_mgDl=" ";
   String ldl=" ";
   String hdl=" ";
+  String imgRef ='';
 
   Lab_Result({
     this.labResult_name,
@@ -203,7 +204,8 @@ class Lab_Result {
     this.Bun_mgDl,
     this.creatinine_mgDl,
     this.ldl,
-    this.hdl
+    this.hdl,
+    this.imgRef
   });
 
   Lab_Result.fromJson(Map<String, dynamic> json) {
@@ -218,6 +220,7 @@ class Lab_Result {
     creatinine_mgDl = json['creatinine_mgDl'];
     ldl = json['ldl'];
     hdl = json['hdl'];
+    imgRef = json['imgRef'];
   }
 
   Map<String, dynamic> toJson() {
@@ -233,6 +236,7 @@ class Lab_Result {
     data['creatinine_mgDl'] = this.creatinine_mgDl;
     data['ldl'] = this.ldl;
     data['hdl'] = this.hdl;
+    data['imgRef'] = this.imgRef;
     return data;
   }
 
