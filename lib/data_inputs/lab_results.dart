@@ -19,6 +19,8 @@ import 'add_medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class lab_results extends StatefulWidget {
+  final List<FirebaseFile> files;
+  lab_results({Key key, this.files});
   @override
   _lab_resultsState createState() => _lab_resultsState();
 }
@@ -75,10 +77,16 @@ class _lab_resultsState extends State<lab_results> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_lab_results(),
+                      child: add_lab_results(files: trythis),
                     ),
                     ),
-                  );
+                  ).then((value) => setState((){
+                    print("setstate lab\n\n" + value.toString());
+
+                    if(value != null){
+                      trythis = value;
+                    }
+                  }));
                 },
                 child: Icon(
                   Icons.add,
@@ -115,26 +123,6 @@ class _lab_resultsState extends State<lab_results> {
             ),
           );
         }
-
-        // List.generate(100, (index) {
-        //   return Center(
-        //     child: Container(
-        //       child: Image.asset('assets/images/labresults2.jpg'),
-        //       height:190,
-        //       width: 190,
-        //
-        //       decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.only(
-        //           topLeft: Radius.circular(10),
-        //           topRight: Radius.circular(10),
-        //           bottomLeft: Radius.circular(10),
-        //           bottomRight: Radius.circular(10),
-        //         ),
-        //         color: Colors.black
-        //       ),
-        //     ),
-        //   );
-        // }),
       ),
 
     );
@@ -144,10 +132,13 @@ class _lab_resultsState extends State<lab_results> {
   }
 
   Future<List<FirebaseFile>> listAll (String path) async {
-    final ref = FirebaseStorage.instance.ref('test/');
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    print("UID = " + uid);
+    final ref = FirebaseStorage.instance.ref('test/' + uid +"/");
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);
-    print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
+    //print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
     return urls
         .asMap()
         .map((index, url){

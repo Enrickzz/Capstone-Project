@@ -1,5 +1,7 @@
 
 import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,9 +23,13 @@ import 'lab_results.dart';
 import 'medication.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
+
 class add_lab_results extends StatefulWidget {
+  final List<FirebaseFile> files;
+  add_lab_results({Key key, this.files});
   @override
   _addLabResultState createState() => _addLabResultState();
 }
@@ -66,17 +72,14 @@ class _addLabResultState extends State<add_lab_results> {
 
   bool otherLabResultCheck = false;
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
+    // trythis.clear();
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
     final Storage storage = Storage();
+
     return Container(
         key: _formKey,
         color:Color(0xff757575),
@@ -509,21 +512,24 @@ class _addLabResultState extends State<add_lab_results> {
                         );
                         if(result == null) return;
                         final FirebaseAuth auth = FirebaseAuth.instance;
+                        // final storehere
+
                         final path = result.files.single.path;
                         final User user = auth.currentUser;
                         final uid = user.uid;
                         var fileName = result.files.single.name;
-                        print("path" + path);
-                        print("fileName " + fileName);
-                        fileName = uid + fileName + "_lab_result" + "counter";
-                        storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-
-                        setState(() {
-                          downloadUrl("5P4oNXb7KSYb87OA4Y1E1bYHhX82Get shit Done.jpg_lab_resultcounter");
-                          //print("THIS IS THE LINK = " + thisURL);
-                          listAll("path");
-                          Navigator.pop(context);
+                        File file = File(path);
+                        final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                          setState(() {
+                            trythis.clear();
+                            listAll("path");
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              Navigator.pop(context, trythis);
+                            });
+                          });
                         });
+                        // fileName = uid + fileName + "_lab_result" + "counter";
+                        //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
                       }
                   ),
                   Row(
@@ -654,10 +660,12 @@ class _addLabResultState extends State<add_lab_results> {
   }
 
    Future<List<FirebaseFile>> listAll (String path) async {
-    final ref = FirebaseStorage.instance.ref('test/');
+     final User user = auth.currentUser;
+     final uid = user.uid;
+    final ref = FirebaseStorage.instance.ref('test/' + uid + "/");
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);
-    print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
+    // print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
     return urls
         .asMap()
         .map((index, url){
