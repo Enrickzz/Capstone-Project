@@ -32,6 +32,7 @@ class _AppSignUpState extends State<registration> {
   bool checkboxValue = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool _isHidden = true;
+  bool _isCHidden = true;
 
 
   //added by borj
@@ -230,7 +231,7 @@ class _AppSignUpState extends State<registration> {
                             SizedBox(height: 8.0),
                             Container(
                               child: TextFormField(
-                                obscureText: _isHidden,
+                                obscureText: _isCHidden,
                                 showCursor: true,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
@@ -247,7 +248,7 @@ class _AppSignUpState extends State<registration> {
                                     size: defaultIconSize,
                                   ),
                                   suffix: InkWell(
-                                    onTap: _togglePassword,
+                                    onTap: _toggleCPassword,
                                     child: Icon(
                                       Icons.remove_red_eye,
                                       color: Color(0xFF666666),
@@ -465,6 +466,11 @@ class _AppSignUpState extends State<registration> {
   void _togglePassword() {
     setState(() {
       _isHidden = !_isHidden;
+    });
+  }
+  void _toggleCPassword() {
+    setState(() {
+      _isCHidden = !_isCHidden;
     });
   }
 }

@@ -20,8 +20,69 @@ class Additional_Info {
   List<String> foodAller;
   List<String> drugAller;
   List<String> otherAller;
+  double weight_goal;
+  String weight_unit;
+  DateTime endDate;
+  String lifestyle;
+  int average_stick;
+  String alcohol_freq;
+  List<String> disease;
 
-  Additional_Info({this.bmi,this.birthday, this.gender, this.height, this.weight, this.foodAller, this.drugAller,this.otherAller});
+  Additional_Info({
+    this.birthday,
+    this.gender,
+    this.height,
+    this.weight,
+    this.bmi,
+    this.foodAller,
+    this.drugAller,
+    this.otherAller,
+    this.weight_goal,
+    this.weight_unit,
+    this.endDate,
+    this.lifestyle,
+    this.average_stick,
+    this.alcohol_freq,
+    this.disease
+  });
+  Additional_Info.fromJson(Map<String, dynamic> json) {
+    birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
+    gender = json['gender'];
+    height = double.parse(json['height']);
+    weight = double.parse(json['weight']);
+    bmi = double.parse(json['bmi']);
+    foodAller = json['foodAller'].cast<String>();
+    drugAller = json['drugAller'].cast<String>();
+    otherAller = json['otherAller'].cast<String>();
+    weight_goal = double.parse(json['weight_goal']);
+    weight_unit = json['weight_unit'];
+    endDate = DateFormat("MM/dd/yyyy").parse(json['endDate']);
+    lifestyle = json['lifestyle'];
+    average_stick = int.parse(json['average_stick']);
+    alcohol_freq = json['alcohol_freq'];
+    disease = json['disease'].cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['birthday'] = this.birthday;
+    data['gender'] = this.gender;
+    data['height'] = this.height;
+    data['weight'] = this.weight;
+    data['bmi'] = this.bmi;
+    data['foodAller'] = this.foodAller;
+    data['drugAller'] = this.drugAller;
+    data['otherAller'] = this.otherAller;
+    data['weight_goal'] = this.weight_goal;
+    data['weight_unit'] = this.weight_unit;
+    data['endDate'] = this.endDate;
+    data['lifestyle'] = this.lifestyle;
+    data['average_stick'] = this.average_stick;
+    data['alcohol_freq'] = this.alcohol_freq;
+    data['disease'] = this.disease;
+    return data;
+  }
+
 }
 
 class Symptom {

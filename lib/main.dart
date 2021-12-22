@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:my_app/additional_data_collection.dart';
 import 'package:my_app/goal_weight.dart';
 import 'package:my_app/medical_history.dart';
 import 'package:my_app/models/tabIcon_data.dart';
@@ -77,7 +76,7 @@ class _LogInState extends State<LogIn> {
                 .listen((User user) {
               if (user == null) {
                 print('User is currently signed out!');
-                //return runApp(AppSignIn());
+                // return runApp(AppSignIn());
               } else {
                 print('User is signed in!');
                 Future.delayed(const Duration(milliseconds: 3000), (){
@@ -97,7 +96,7 @@ class _LogInState extends State<LogIn> {
                       print("True isFTime first time");
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => additional_data_collection()),
+                        MaterialPageRoute(builder: (context) => set_up()),
                             (route) => false,
                       );
                     }

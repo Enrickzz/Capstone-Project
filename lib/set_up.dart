@@ -52,12 +52,12 @@ class _set_upState extends State<set_up> {
 
   String goal = '';
   DateTime prescriptionDate;
-  var startDate = TextEditingController();
-  String startdate = "";
+  var goalDate = TextEditingController();
+  String goaldate = "";
   List <bool> isSelected = [true, false];
-  String unitstatus = '';
-  String unitStatus = "kg";
+  String unitStatus = "lbs";
   String valueLifestyle;
+  int average_sticks;
 
   List<String> listLifestyle = <String>[
     'Sedentary',
@@ -367,9 +367,9 @@ class _set_upState extends State<set_up> {
                       ),
                       validator: (val) => val.isEmpty ? 'Select Birthday' : null,
                       onChanged: (val){
-
                         print(dateValue);
                         setState((){
+
                         });
                       },
                     ),
@@ -653,9 +653,9 @@ class _set_upState extends State<set_up> {
                           setState(() {
                             prescriptionDate = value;
                             isDateSelected = true;
-                            startdate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
+                            goaldate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
                           });
-                          startDate.text = startdate + "\r";
+                          goalDate.text = goaldate + "\r";
                         }
                       });
                     },
@@ -663,7 +663,7 @@ class _set_upState extends State<set_up> {
                       visible: isSwitched,
                       child: AbsorbPointer(
                         child: TextFormField(
-                          controller: startDate,
+                          controller: goalDate,
                           showCursor: false,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -688,8 +688,7 @@ class _set_upState extends State<set_up> {
                           ),
                           validator: (val) => val.isEmpty ? 'Select Date' : null,
                           onChanged: (val){
-
-                            print(startDate);
+                            goaldate = val;
                             setState((){
                             });
                           },
@@ -811,7 +810,7 @@ class _set_upState extends State<set_up> {
                       ),
                       validator: (val) => val.isEmpty ? 'Enter number of sticks' : null,
                       onChanged: (val){
-                        setState(() => goal = val);
+                        setState(() => average_sticks = int.parse(val));
 
                       },
                     ),
@@ -937,12 +936,27 @@ class _set_upState extends State<set_up> {
           if (isLastStep) {
             print("Completed");
 
-            // try{
-            //   final User user = auth.currentUser;
-            //   final uid = user.uid;
-            //   final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
-            //   final loginRef = databaseReference.child('users/' + uid + '/personal_info');
-            //   usersRef.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString(), "height":height.toString(),"BMI": "0"});
+            try{
+              final User user = auth.currentUser;
+              final uid = user.uid;
+              final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
+              usersRef.set({
+                "birthday": birthDateInString.toString(),
+                "gender": genderIn.toString(),
+                "height":height.toString(),
+                "weight": weight.toString(),
+                "BMI": "0",
+                "foodAller": foodList,
+                "drugAller": drugList,
+                "otherAller": otherList,
+                "weight_goal": goal,
+                "weight_unit": unitStatus,
+                "endDate": goaldate,
+                "lifestyle": valueLifestyle,
+                "average_stick": average_sticks,
+                "alcohol_freq": valueAlcohol,
+                "disease": additionalConditionFamilyChecboxStatus
+              });
             //   print("Additional information collected!");
             //
             //   final foodRef = databaseReference.child('users/' + uid + '/vitals/additional_info/food_allergies/');
@@ -972,9 +986,9 @@ class _set_upState extends State<set_up> {
             //     MaterialPageRoute(builder: (context) => mainScreen()),
             //   );
             //
-            // } catch(e) {
-            //   print("you got an error! $e");
-            // }
+            } catch(e) {
+              print("you got an error! $e");
+            }
             //   print("birthday: " + birthDateInString.toString() + "gender: " + genderIn.toString() + "weight " + weight.toString() + "height " + height.toString() + "BMI 0");
 
 
