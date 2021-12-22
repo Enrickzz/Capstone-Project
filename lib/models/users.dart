@@ -27,6 +27,8 @@ class Additional_Info {
   int average_stick;
   String alcohol_freq;
   List<String> disease;
+  List<String> other_disease;
+  List<String> family_disease;
 
   Additional_Info({
     this.birthday,
@@ -43,7 +45,9 @@ class Additional_Info {
     this.lifestyle,
     this.average_stick,
     this.alcohol_freq,
-    this.disease
+    this.disease,
+    this.other_disease,
+    this.family_disease
   });
   Additional_Info.fromJson(Map<String, dynamic> json) {
     birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
@@ -61,6 +65,8 @@ class Additional_Info {
     average_stick = int.parse(json['average_stick']);
     alcohol_freq = json['alcohol_freq'];
     disease = json['disease'].cast<String>();
+    other_disease = json['other_disease'].cast<String>();
+    family_disease = json['family_disease'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +86,8 @@ class Additional_Info {
     data['average_stick'] = this.average_stick;
     data['alcohol_freq'] = this.alcohol_freq;
     data['disease'] = this.disease;
+    data['other_disease'] = this.other_disease;
+    data['family_disease'] = this.family_disease;
     return data;
   }
 
