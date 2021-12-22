@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/ui_view/set_up.dart';
 import 'additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 
@@ -388,7 +389,7 @@ class _AppSignUpState extends State<registration> {
                                     if(isFirstTime){
                                       Navigator.pushReplacement(
                                         context,
-                                        MaterialPageRoute(builder: (context) => additional_data_collection()),
+                                        MaterialPageRoute(builder: (context) => set_up()),
                                       );
                                       isFirstTime = true;
                                       await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString()});
