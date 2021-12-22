@@ -23,6 +23,7 @@ class add_medication extends StatefulWidget {
   _addMedicationState createState() => _addMedicationState();
 }
 final _formKey = GlobalKey<FormState>();
+
 class _addMedicationState extends State<add_medication> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
@@ -44,11 +45,11 @@ class _addMedicationState extends State<add_medication> {
   TimeOfDay time;
   List<Medication_Prescription> medical_list = [];
   List<Supplement_Prescription> supplement_list = [];
-  List<String> medical_name = [];
+  List<listMeds> medical_name = [];
 
   var dateValue = TextEditingController();
   String valueChooseMedicineSupplement;
-  List<String> listMedicineSupplement;
+  List<listMeds> listMedicineSupplement =[];
 
   @override
   void initState() {
@@ -115,26 +116,30 @@ class _addMedicationState extends State<add_medication> {
 
                       items: listMedicineSupplement.map((valueItem){
                         return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem)
+                            value: valueItem.name,
+                            child: Text(valueItem.name)
                         );
                       },
                       ).toList(),
                       onChanged: (newValue){
                         setState(() {
                           valueChooseMedicineSupplement = newValue;
-                          picked = listMedicineSupplement.indexOf(newValue);
-                          for(int i = 0; i < medical_list.length; i++){
-                            if(medical_list[i].branded_name == newValue){
-                              hint_unit = medical_list[i].prescription_unit;
+                          print("NEW VALUE " + newValue);
+                          // picked = listMedicineSupplement.indexOf(newValue);
+                          for(int i = 0; i < medical_name.length; i++){
+                            if(medical_name[i].name == newValue){
+                              hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
+                              medicine_dosage = double.parse(medical_name[i].dosage);
                             }
-                            else if (medical_list[i].generic_name == newValue){
-                              hint_unit = medical_list[i].prescription_unit;
+                            else if (medical_name[i].name == newValue){
+                              hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
+                              medicine_dosage = double.parse(medical_name[i].dosage);
                             }
                           }
-                          for(int i = 0; i < supplement_list.length; i++){
-                            if(supplement_list[i].supplement_name == newValue){
-                              hint_unit = supplement_list[i].prescription_unit;
+                          for(int i = 0; i < medical_name.length; i++){
+                            if(medical_name[i].name == newValue){
+                              hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
+                              medicine_dosage = double.parse(medical_name[i].dosage);
                             }
                           }
                         });
@@ -246,7 +251,7 @@ class _addMedicationState extends State<add_medication> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: hint_unit + "Dosage: dapat dito makukuha sa db anong unit ",
+                      hintText: hint_unit + "  <<<<< tama? ",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Medicine Dosage' : null,
                     onChanged: (val){
@@ -482,7 +487,8 @@ class _addMedicationState extends State<add_medication> {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         medical_list.add(Medication_Prescription.fromJson(jsonString));
-        medical_name.add(medical_list[gcount].generic_name);
+        //medical_name.add(medical_list[gcount].generic_name);
+        //medical_name.add(new listMeds(medical_list[gcount].generic_name, medical_list[gcount].dosage.toString(), medical_list[gcount].prescription_unit));
         gcount++;
       });
     });
@@ -497,7 +503,9 @@ class _addMedicationState extends State<add_medication> {
       if(temp != null){
         temp.forEach((jsonString) {
           medical_list.add(Medication_Prescription.fromJson(jsonString));
-          medical_name.add(medical_list[bcount].branded_name);
+          // medical_name.add(medical_list[bcount].branded_name);
+          medical_name.add(new listMeds(medical_list[bcount].generic_name, medical_list[bcount].dosage.toString(), medical_list[bcount].prescription_unit));
+
           bcount++;
         });
       }
@@ -514,10 +522,20 @@ class _addMedicationState extends State<add_medication> {
       if(temp != null){
         temp.forEach((jsonString) {
           supplement_list.add(Supplement_Prescription.fromJson(jsonString));
-          medical_name.add(supplement_list[suppcount].supplement_name);
+          // medical_name.add(supplement_list[suppcount].supplement_name);
+          medical_name.add(new listMeds(supplement_list[suppcount].supplement_name, supplement_list[suppcount].dosage.toString(), supplement_list[suppcount].prescription_unit));
+
           suppcount++;
         });
       }
     });
   }
+
+}
+class listMeds{
+  String name;
+  String dosage;
+  String unit;
+
+  listMeds(this.name, this.dosage, this.unit);
 }

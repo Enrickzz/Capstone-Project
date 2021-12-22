@@ -343,7 +343,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
         headers: {
-          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQwMDE3Mjk2LCJleHAiOjE2NDAwMjA4OTYsIm5hbWUiOiJsb3Vpc2V4cngifQ.Uh0W7_HT_8P741CDOIwYhHYzkHs-kJVmbp8Pv1q8-so",
+          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQwMTc3Njk3LCJleHAiOjE2NDAxODEyOTcsIm5hbWUiOiJsb3Vpc2V4cngifQ.iQ6tOlisi1geHw2XM5nnwXdtz_Wp6jMRoQQhjMimTFI",
         });
     List<Symptom> symptoms = [];
     symptoms.clear();

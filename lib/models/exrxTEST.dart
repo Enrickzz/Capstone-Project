@@ -38,35 +38,11 @@ class ExRxTest {
         instructionsPreparationtemp = getThisLabel(cleanthis,"Instructions_Preparation:", "Instructions_Execution:" );
         instructionsExecutiontemp= getThisLabel(cleanthis, "Instructions_Execution:", "Small_Img_1");
         imagephoto = getThisLabel(cleanthis, "Larg_Img_1:", "Larg_Img_2");
-
-        print(imagephoto);
-        for(var j=0; j < splitarr.length && j < 33; j++){
-          String thisres = splitarr[j].substring(splitarr[j].indexOf(":")+1);
-          String finalres = thisres.trim();
-          switch(j){
-            case 0:{
-              exerciseIdtemp = finalres;
-
-            }  break;
-            case 1: {
-              exerciseNametemp = finalres;
-            }break;
-            case 2: {
-              uRLtemp = finalres;
-            } break;
-            case 3: {
-              apparatusNametemp = finalres;
-
-            } break;
-            case 4: {
-              apparatusAbbreviationtemp = finalres;
-            } break;
-          }
-        }
-        print("\n\n");
-        if(exerciseIdtemp == ""){
-          exerciseIdtemp ="1";
-        }
+        exerciseIdtemp = getThisLabel(cleanthis, "Exercise_Id:", "Exercise_Name:");
+        exerciseNametemp = getThisLabel(cleanthis, "Exercise_Name:", "URL:");
+        uRLtemp = getThisLabel(cleanthis, "URL:", "Apparatus_Name:");
+        apparatusNametemp = getThisLabel(cleanthis, "Apparatus_Name:", "Apparatus_Abbreviation:");
+        apparatusAbbreviationtemp = getThisLabel(cleanthis, "Apparatus_Abbreviation:", "IV:");
 
         exercises.add(new ExercisesTest(exerciseId: int.parse(exerciseIdtemp), exerciseName: exerciseNametemp,
         apparatusAbbreviation: apparatusAbbreviationtemp, apparatusName: apparatusNametemp, largImg1: imagephoto,
