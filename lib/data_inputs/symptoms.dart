@@ -207,10 +207,10 @@ class _symptomsState extends State<symptoms> {
                               ),
                               Text(
                                   '' + getDateFormatted(listtemp[index].symptomDate.toString()) + getTimeFormatted(listtemp[index].symptomTime.toString())+" \n" + "Name: " +listtemp[index].symptomName+
-                                      "\nI felt " + listtemp[index].symptomFelt.toString() + " \n"
-                                      "The intensity was "+ listtemp[index].intensityLvl.toString()+ " \n"
-                                      //"trigger "+ listtemp[index].symptomTrigger + "recurring during: "+ listtemp[index].recurring[0] + " ," + listtemp[index].recurring[1] + " ," + listtemp[index].recurring[2] + " \n",
-                                  ,style: TextStyle(
+                                      "\nI felt " + listtemp[index].symptomFelt.toString() + " \n" +
+                                      "The intensity was "+ listtemp[index].intensityLvl.toString()+ " \n",
+                                      // "trigger "+ listtemp[index].symptomTrigger + "recurring during: "+ listtemp[index].recurring[0] + " ," + listtemp[index].recurring[1] + " ," + listtemp[index].recurring[2] + " \n",
+                                  style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
                                   )
@@ -249,8 +249,15 @@ class _symptomsState extends State<symptoms> {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       //print("this is temp : "+temp.toString());
       temp.forEach((jsonString) {
-        symptoms.add(Symptom.fromJson(jsonString));
-        listtemp.add(Symptom.fromJson(jsonString));
+        if(!jsonString.toString().contains("recurring")){
+          symptoms.add(Symptom.fromJson2(jsonString));
+          listtemp.add(Symptom.fromJson2(jsonString));
+        }
+        else{
+          symptoms.add(Symptom.fromJson(jsonString));
+          listtemp.add(Symptom.fromJson(jsonString));
+        }
+
         //print(symptoms[0].symptomName);
         //print("symptoms length " + symptoms.length.toString());
       });

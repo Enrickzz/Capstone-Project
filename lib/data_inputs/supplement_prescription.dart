@@ -212,7 +212,9 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + "Brand Name: " + supptemp[index].branded_name + " " + "\nGeneric Name: " + supptemp[index].generic_name
+                                  '' + "Supplement Name: " + supptemp[index].supplement_name + " "
+                                      +"\nDosage: "+ supptemp[index].dosage.toString()+ " "
+                                      +"\nunit: "+ supptemp[index].prescription_unit+ " "
                                       +"\nIntake Time: "+ supptemp[index].intake_time+ " ",
                                   style: TextStyle(
                                       color: Colors.black,

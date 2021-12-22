@@ -37,11 +37,13 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
   DateFormat timeformat = new DateFormat("hh:mm");
   var startDate = TextEditingController();
   var endDate = TextEditingController();
-  String generic_name = "";
-  String branded_name = "";
-  String startdate = "";
-  String enddate = "";
+  String supplement_name = "";
+  // String generic_name = "";
+  // String branded_name = "";
+  // String startdate = "";
+  // String enddate = "";
   String intake_time = "";
+  double supp_dosage = 0;
   String special_instruction = "";
   String prescription_unit = "";
   int count = 0;
@@ -91,13 +93,13 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
 
     if(newDateRange == null) return;
 
-    setState(() => {
-      dateRange = newDateRange,
-      startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
-      enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
-
-    });
-    print("date Range " + dateRange.toString());
+    // setState(() => {
+    //   dateRange = newDateRange,
+    //   startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
+    //   enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
+    //
+    // });
+    // print("date Range " + dateRange.toString());
   }
   @override
   Widget build(BuildContext context) {
@@ -146,7 +148,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Supplement/Medicine name' : null,
                     onChanged: (val){
-                      setState(() => generic_name = val);
+                      setState(() => supplement_name = val);
                     },
                   ),
                   // SizedBox(height: 8.0),
@@ -195,6 +197,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Dosage' : null,
                     onChanged: (val){
+                      supp_dosage = double.parse(val);
                     },
                   ),
                   ToggleButtons(
@@ -650,8 +653,8 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                               List<String> temp = temp1.split(',');
                               Medication_Prescription prescription;
                               if(datasnapshot.value == null){
-                                final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + 0.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "intake_time": quantity.toString(), "medical_prescription_unit": prescription_unit});
+                                final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + count.toString());
+                                prescriptionRef.set({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit});
                                 print("Added Supplement Prescription Successfully! " + uid);
                               }
                               else{
@@ -712,9 +715,9 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
 
                                 // print("symptom list  " + symptoms_list.toString());
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = supplement_list.length;
+                                  count = supplement_list.length--;
                                   final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + count.toString());
-                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(), "intake_time": quantity.toString(), "medical_prescription_unit": prescription_unit});
+                                  prescriptionRef.set({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit});
                                   print("Added Supplement Prescription Successfully! " + uid);
                                 });
 
@@ -723,7 +726,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + supplement_list.length.toString());
-                              supplement_list.add(new Supplement_Prescription(generic_name: generic_name, branded_name: branded_name, intake_time: quantity.toString(), prescription_unit: prescription_unit));
+                              supplement_list.add(new Supplement_Prescription(supplement_name: supplement_name, intake_time: quantity.toString(),dosage: supp_dosage, prescription_unit: prescription_unit));
                               for(var i=0;i<supplement_list.length/2;i++){
                                 var temp = supplement_list[i];
                                 supplement_list[i] = supplement_list[supplement_list.length-1-i];

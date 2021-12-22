@@ -53,11 +53,13 @@ class _addMedicationState extends State<add_medication> {
   @override
   void initState() {
     super.initState();
+    getSupplementName();
     getPrescriptionGName();
     getPrescriptionBName();
-    getSupplementName();
+
     Future.delayed(const Duration(milliseconds: 1000), (){
-      listMedicineSupplement= medical_name;
+      listMedicineSupplement = medical_name;
+      print("list medicine supplement length " + listMedicineSupplement.length.toString());
       setState(() {
         print("setstate");
       });
@@ -122,7 +124,19 @@ class _addMedicationState extends State<add_medication> {
                         setState(() {
                           valueChooseMedicineSupplement = newValue;
                           picked = listMedicineSupplement.indexOf(newValue);
-                          hint_unit = medical_list[picked].prescription_unit;
+                          for(int i = 0; i < medical_list.length; i++){
+                            if(medical_list[i].branded_name == newValue){
+                              hint_unit = medical_list[i].prescription_unit;
+                            }
+                            else if (medical_list[i].generic_name == newValue){
+                              hint_unit = medical_list[i].prescription_unit;
+                            }
+                          }
+                          for(int i = 0; i < supplement_list.length; i++){
+                            if(supplement_list[i].supplement_name == newValue){
+                              hint_unit = supplement_list[i].prescription_unit;
+                            }
+                          }
                         });
                       },
 
@@ -464,12 +478,12 @@ class _addMedicationState extends State<add_medication> {
     final uid = user.uid;
     final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
-      int count = 0;
+      int gcount = 0;
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         medical_list.add(Medication_Prescription.fromJson(jsonString));
-        medical_name.add(medical_list[count].generic_name);
-        count++;
+        medical_name.add(medical_list[gcount].generic_name);
+        gcount++;
       });
     });
   }
@@ -478,13 +492,13 @@ class _addMedicationState extends State<add_medication> {
     final uid = user.uid;
     final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
-      int count = 0;
+      int bcount = 0;
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
         temp.forEach((jsonString) {
           medical_list.add(Medication_Prescription.fromJson(jsonString));
-          medical_name.add(medical_list[count].branded_name);
-          count++;
+          medical_name.add(medical_list[bcount].branded_name);
+          bcount++;
         });
       }
 
@@ -495,17 +509,15 @@ class _addMedicationState extends State<add_medication> {
     final uid = user.uid;
     final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
+      int suppcount = 0;
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
         temp.forEach((jsonString) {
-          int count = 0;
           supplement_list.add(Supplement_Prescription.fromJson(jsonString));
-          supplement_list.add(Supplement_Prescription.fromJson(jsonString));
-          medical_name.add(supplement_list[count].generic_name);
-          count++;
+          medical_name.add(supplement_list[suppcount].supplement_name);
+          suppcount++;
         });
       }
-
     });
   }
 }

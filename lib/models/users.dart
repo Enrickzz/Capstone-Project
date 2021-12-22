@@ -55,6 +55,15 @@ class Symptom {
     recurring = json['recurring'].cast<String>();
   }
 
+  Symptom.fromJson2(Map<String, dynamic> json) {
+    symptomName = json['symptom_name'];
+    intensityLvl = int.parse(json['intensity_lvl']);
+    symptomFelt = json['symptom_felt'];
+    symptomDate = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
+    symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
+    symptomIsActive = json['symptom_isActive'];
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['symptom_name'] = this.symptomName;
@@ -139,28 +148,28 @@ class Medication_Prescription{
 }
 
 class Supplement_Prescription{
-  String generic_name;
-  String branded_name;
+  String supplement_name;
   // DateTime startdate;
   // DateTime enddate;
   String intake_time;
+  double dosage;
   // String special_instruction;
   String prescription_unit;
 
-  Supplement_Prescription({this.generic_name, this.branded_name, this.intake_time, this.prescription_unit});
+  Supplement_Prescription({this.supplement_name, this.intake_time,this.dosage, this.prescription_unit});
 
   Supplement_Prescription.fromJson(Map<String, dynamic> json) {
-    generic_name = json['generic_name'];
-    branded_name = json['branded_name'];
+    supplement_name = json['supplement_name'];
     intake_time = json['intake_time'];
+    dosage = double.parse(json['supp_dosage']);
     prescription_unit = json['medical_prescription_unit'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['generic_name'] = this.generic_name;
-    data['branded_name'] = this.branded_name;
+    data['supplement_name'] = this.supplement_name;
     data['startDate'] = this.intake_time;
+    data['supp_dosage'] = this.dosage;
     data['medical_prescription_unit'] = this.prescription_unit;
     return data;
   }

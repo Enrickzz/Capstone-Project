@@ -704,9 +704,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 //
                                 // print("count " + count.toString());
                                 //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-
                                 // symptoms_list.add(symptom);
-
                                 // print("symptom list  " + symptoms_list.toString());
                                 getMedicalPrescription();
                                 Future.delayed(const Duration(milliseconds: 1000), (){

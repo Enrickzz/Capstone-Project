@@ -31,10 +31,11 @@ class _addSymptomsState extends State<add_symptoms> {
   int intesity_lvl = 0;
   String symptom_felt = '';
   String symptom_date = (new DateTime.now()).toString();
+  String other_name = "";
   DateTime symptomDate;
   String symptom_time;
   bool isDateSelected= false;
-  int count = 0;
+  int count = 1;
   List<Symptom> symptoms_list = new List<Symptom>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -186,6 +187,7 @@ class _addSymptomsState extends State<add_symptoms> {
                 ),
                 validator: (val) => val.isEmpty ? 'Enter General area where Symptom is felt' : null,
                 onChanged: (val){
+                  other_name = val;
                   // setState(() => symptom_felt = val);
 
                 },
@@ -466,17 +468,19 @@ class _addSymptomsState extends State<add_symptoms> {
                       final User user = auth.currentUser;
                       final uid = user.uid;
                       final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
-                      List<Symptom> symptoms;
                       readsymptom.once().then((DataSnapshot datasnapshot) {
-                        String temp1 = datasnapshot.value.toString();
-                        print("temp1 " + temp1);
-                        List<String> temp = temp1.split(',');
-                        Symptom symptom;
+                        // String temp1 = datasnapshot.value.toString();
+                        // print("temp1 " + temp1);
+                        // List<String> temp = temp1.split(',');
+                        // Symptom symptom;
                         if(datasnapshot.value == null){
-                          final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 0.toString());
+                          if(valueChooseSymptom == "Others"){
+                            valueChooseSymptom = other_name;
+                          }
+                          final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
                           symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true,"symptom_trigger": symptom_felt, "recurring": checkboxStatus});
-
                           print("Added Symptom Successfully! " + uid);
+
                         }
                         else{
                           getSymptoms();
@@ -530,6 +534,9 @@ class _addSymptomsState extends State<add_symptoms> {
                             print(symptoms_list.length);
                             count = symptoms_list.length;
                             print("count " + count.toString());
+                            if(valueChooseSymptom == "Others"){
+                              valueChooseSymptom = other_name;
+                            }
                             final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
                             symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "symptom_trigger": symptom_felt, "recurring": checkboxStatus});
                             print("Added Symptom Successfully! " + uid);
@@ -541,6 +548,9 @@ class _addSymptomsState extends State<add_symptoms> {
 
 
                       Future.delayed(const Duration(milliseconds: 1000), (){
+                        if(valueChooseSymptom == "Others"){
+                          valueChooseSymptom = other_name;
+                        }
                         print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
                         symptoms_list.add(new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl, symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date), symptomTime: timeformat.parse(symptom_time), symptomIsActive: true, recurring: checkboxStatus, symptomTrigger: symptom_felt));
                         for(var i=0;i<symptoms_list.length/2;i++){
@@ -610,7 +620,13 @@ class _addSymptomsState extends State<add_symptoms> {
     readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        symptoms_list.add(Symptom.fromJson(jsonString));
+        if(!jsonString.toString().contains("recurring")){
+          symptoms_list.add(Symptom.fromJson2(jsonString));
+        }
+        else{
+          symptoms_list.add(Symptom.fromJson(jsonString));
+        }
+
       });
     });
   }

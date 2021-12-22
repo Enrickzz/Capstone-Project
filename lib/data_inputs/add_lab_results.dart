@@ -37,8 +37,9 @@ class _addLabResultState extends State<add_lab_results> {
   DateTime labResultDate;
   String lab_result_note = '';
   String lab_result_time;
+  String other_name = "";
   bool isDateSelected= false;
-  int count = 0;
+  int count = 1;
   List<Lab_Result> labResult_list = new List<Lab_Result>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -215,6 +216,7 @@ class _addLabResultState extends State<add_lab_results> {
                       ),
                       validator: (val) => val.isEmpty ? 'Enter Name of Lab Result' : null,
                       onChanged: (val){
+                        other_name = val;
                         // setState(() => lab_result_name = val);
                       },
                     ),
@@ -550,16 +552,20 @@ class _addLabResultState extends State<add_lab_results> {
                             final uid = user.uid;
                             final readLabResult = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list');
                             readLabResult.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              Lab_Result labResult;
+                              // String temp1 = datasnapshot.value.toString();
+                              // print("temp1 " + temp1);
+                              // List<String> temp = temp1.split(',');
+                              // Lab_Result labResult;
                               if(datasnapshot.value == null){
-                                final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + 0.toString());
-                                labResultRef.set({"labResult_name": lab_result_name.toString(), "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
+                                if(valueChooseLabResult == "Others"){
+                                  valueChooseLabResult = other_name;
+                                }
+                                final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
+                                labResultRef.set({"labResult_name": valueChooseLabResult.toString() ,"labResult_note": lab_result_note.toString() , "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
                                 print("Added Lab Result Successfully! " + uid);
                               }
                               else{
+
                                 getLabResult();
                                 // String tempLabResultName = "";
                                 // String tempLabResultDate;
@@ -600,9 +606,13 @@ class _addLabResultState extends State<add_lab_results> {
                                 // }
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = labResult_list.length;
+                                  print(labResult_list.toString());
                                   print("count " + count.toString());
+                                  if(valueChooseLabResult == "Others"){
+                                    valueChooseLabResult = other_name;
+                                  }
                                   final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
-                                  labResultRef.set({"labResult_name": lab_result_name.toString(),"labResult_note": lab_result_note.toString(), "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
+                                  labResultRef.set({"labResult_name": valueChooseLabResult.toString(),"labResult_note": lab_result_note.toString(), "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
                                   print("Added Lab Result Successfully! " + uid);
                                 });
 
@@ -612,8 +622,11 @@ class _addLabResultState extends State<add_lab_results> {
 
 
                             Future.delayed(const Duration(milliseconds: 1000), (){
+                              if(valueChooseLabResult == "Others"){
+                                valueChooseLabResult = other_name;
+                              }
                               print("LAB RESULT LENGTH: " + labResult_list.length.toString());
-                              labResult_list.add(new Lab_Result(labResult_name: lab_result_name.toString(), labResult_date: format.parse(lab_result_date)));
+                              labResult_list.add(new Lab_Result(labResult_name: valueChooseLabResult.toString(), labResult_date: format.parse(lab_result_date)));
                               for(var i=0;i<labResult_list.length/2;i++){
                                 var temp = labResult_list[i];
                                 labResult_list[i] = labResult_list[labResult_list.length-1-i];

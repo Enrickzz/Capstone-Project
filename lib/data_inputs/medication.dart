@@ -203,7 +203,7 @@ class _medicationState extends State<medication> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + getDateFormatted(medtemp[index].medicine_date.toString())+getTimeFormatted(medtemp[index].medicine_time.toString())+" "
+                                  '' + getDateFormatted(medtemp[index].medicine_date.toString()) + getTimeFormatted(medtemp[index].medicine_time.toString())+" "
                                       + "\nMedicine: " + medtemp[index].medicine_name + " "
                                       +"\nDosage "+ medtemp[index].medicine_dosage.toString()+ " "
                                       +"\nType: "+ medtemp[index].medicine_type,
