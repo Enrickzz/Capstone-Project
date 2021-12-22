@@ -184,14 +184,40 @@ class Lab_Result {
   String labResult_note;
   DateTime labResult_date;
   DateTime labResult_time;
+  String international_normal_ratio=" ";
+  String potassium=" ";
+  String hemoglobin_hb=" ";
+  String Bun_mgDl=" ";
+  String creatinine_mgDl=" ";
+  String ldl=" ";
+  String hdl=" ";
 
-  Lab_Result({this.labResult_name,this.labResult_note, this.labResult_date, this.labResult_time});
+  Lab_Result({
+    this.labResult_name,
+    this.labResult_note,
+    this.labResult_date,
+    this.labResult_time,
+    this.international_normal_ratio,
+    this.potassium,
+    this.hemoglobin_hb,
+    this.Bun_mgDl,
+    this.creatinine_mgDl,
+    this.ldl,
+    this.hdl
+  });
 
   Lab_Result.fromJson(Map<String, dynamic> json) {
     labResult_name = json['labResult_name'];
     labResult_note = json['labResult_note'];
     labResult_date = DateFormat("MM/dd/yyyy").parse(json['labResult_date']);
     labResult_time = DateFormat("hh:mm").parse(json['labResult_time']);
+    international_normal_ratio = json['international_normal_ratio'];
+    potassium = json['potassium'];
+    hemoglobin_hb = json['hemoglobin_hb'];
+    Bun_mgDl = json['Bun_mgDl'];
+    creatinine_mgDl = json['creatinine_mgDl'];
+    ldl = json['ldl'];
+    hdl = json['hdl'];
   }
 
   Map<String, dynamic> toJson() {
@@ -200,6 +226,13 @@ class Lab_Result {
     data['labResult_note'] = this.labResult_note;
     data['labResult_date'] = this.labResult_date;
     data['labResult_time'] = this.labResult_time;
+    data['international_normal_ratio'] = this.international_normal_ratio;
+    data['potassium'] = this.potassium;
+    data['hemoglobin_hb'] = this.hemoglobin_hb;
+    data['Bun_mgDl'] = this.Bun_mgDl;
+    data['creatinine_mgDl'] = this.creatinine_mgDl;
+    data['ldl'] = this.ldl;
+    data['hdl'] = this.hdl;
     return data;
   }
 

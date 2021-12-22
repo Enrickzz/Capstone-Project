@@ -37,6 +37,10 @@ final _formKey = GlobalKey<FormState>();
 class _addLabResultState extends State<add_lab_results> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  var path;
+  User user;
+  var uid, fileName;
+  File file;
   String thisURL;
   String lab_result_name = '';
   String lab_result_date = (new DateTime.now()).toString();
@@ -71,6 +75,13 @@ class _addLabResultState extends State<add_lab_results> {
   bool lipidProfileCheck = false;
 
   bool otherLabResultCheck = false;
+  String international_normal_ratio=" ";
+  String potassium=" ";
+  String hemoglobin_hb=" ";
+  String Bun_mgDl=" ";
+  String creatinine_mgDl=" ";
+  String ldl=" ";
+  String hdl=" ";
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +257,7 @@ class _addLabResultState extends State<add_lab_results> {
                         hintText: "International Normal Ratio",
                       ),
                       onChanged: (val){
-                        setState(() => lab_result_note = val);
+                        setState(() => international_normal_ratio = val);
                       },
                     ),
                   ),
@@ -271,7 +282,7 @@ class _addLabResultState extends State<add_lab_results> {
                         hintText: "Potassium (mmol/L)",
                       ),
                       onChanged: (val){
-                        setState(() => lab_result_note = val);
+                        setState(() => potassium = val);
                       },
                     ),
                   ),
@@ -296,7 +307,7 @@ class _addLabResultState extends State<add_lab_results> {
                         hintText: "Hemoglobin (Hb)",
                       ),
                       onChanged: (val){
-                        setState(() => lab_result_note = val);
+                        setState(() => hemoglobin_hb = val);
                       },
                     ),
                   ),
@@ -321,7 +332,7 @@ class _addLabResultState extends State<add_lab_results> {
                         hintText: "BUN mg/dL",
                       ),
                       onChanged: (val){
-                        setState(() => lab_result_note = val);
+                        setState(() => Bun_mgDl = val);
                       },
                     ),
                   ),
@@ -346,7 +357,7 @@ class _addLabResultState extends State<add_lab_results> {
                         hintText: "Creatinine mg/dL",
                       ),
                       onChanged: (val){
-                        setState(() => lab_result_note = val);
+                        setState(() => creatinine_mgDl = val);
                       },
                     ),
                   ),
@@ -371,7 +382,7 @@ class _addLabResultState extends State<add_lab_results> {
                         hintText: "LDL Cholesterol mg/dL",
                       ),
                       onChanged: (val){
-                        setState(() => lab_result_note = val);
+                        setState(() => ldl = val);
                       },
                     ),
                   ),
@@ -396,7 +407,7 @@ class _addLabResultState extends State<add_lab_results> {
                         hintText: "HDL Cholesterol mg/dL",
                       ),
                       onChanged: (val){
-                        setState(() => lab_result_note = val);
+                        setState(() => hdl = val);
                       },
                     ),
                   ),
@@ -512,22 +523,20 @@ class _addLabResultState extends State<add_lab_results> {
                         );
                         if(result == null) return;
                         final FirebaseAuth auth = FirebaseAuth.instance;
-                        // final storehere
-
                         final path = result.files.single.path;
-                        final User user = auth.currentUser;
-                        final uid = user.uid;
-                        var fileName = result.files.single.name;
-                        File file = File(path);
-                        final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                          setState(() {
-                            trythis.clear();
-                            listAll("path");
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              Navigator.pop(context, trythis);
-                            });
-                          });
-                        });
+                        user = auth.currentUser;
+                        uid = user.uid;
+                        fileName = result.files.single.name;
+                        file = File(path);
+                        // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                        //   setState(() {
+                        //     trythis.clear();
+                        //     listAll("path");
+                        //     Future.delayed(const Duration(milliseconds: 1000), (){
+                        //       Navigator.pop(context, trythis);
+                        //     });
+                        //   });
+                        // });
                         // fileName = uid + fileName + "_lab_result" + "counter";
                         //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
                       }
@@ -567,49 +576,20 @@ class _addLabResultState extends State<add_lab_results> {
                                   valueChooseLabResult = other_name;
                                 }
                                 final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
-                                labResultRef.set({"labResult_name": valueChooseLabResult.toString() ,"labResult_note": lab_result_note.toString() , "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
+                                labResultRef.set({"labResult_name": valueChooseLabResult.toString() ,
+                                  "labResult_note": lab_result_note.toString(),
+                                  "labResult_date": lab_result_date.toString(),
+                                  "labResult_time": lab_result_time.toString(),
+                                  "international_normal_ratio": international_normal_ratio,
+                                  "potassium": potassium, "hemoglobin_hb": hemoglobin_hb,
+                                  "Bun_mgDl": Bun_mgDl, "creatinine_mgDl": creatinine_mgDl,
+                                  "ldl": ldl,
+                                  "hdl": hdl});
+
                                 print("Added Lab Result Successfully! " + uid);
                               }
                               else{
-
                                 getLabResult();
-                                // String tempLabResultName = "";
-                                // String tempLabResultDate;
-                                // String tempLabResultTime;
-                                // String tempLabResultNote = "";
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //   switch(i%4){
-                                //     case 0:
-                                //       {
-                                //         tempLabResultDate = splitFull.last;
-                                //
-                                //       }
-                                //       break;
-                                //     case 1:
-                                //       {
-                                //         tempLabResultName = splitFull.last;
-                                //
-                                //       }
-                                //       break;
-                                //     case 2:
-                                //       {
-                                //         tempLabResultNote = splitFull.last;
-                                //       }
-                                //       break;
-                                //     case 3:
-                                //       {
-                                //         tempLabResultTime = splitFull.last;
-                                //         labResult = new Lab_Result(labResult_name: tempLabResultName,labResult_note: tempLabResultNote, labResult_date: format.parse(tempLabResultDate), labResult_time: timeformat.parse(tempLabResultTime));
-                                //         labResult_list.add(labResult);
-                                //       }
-                                //       break;
-                                //
-                                //   }
-                                //   print("lab result list length " + labResult_list.length.toString());
-                                //
-                                // }
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = labResult_list.length;
                                   print(labResult_list.toString());
@@ -618,7 +598,15 @@ class _addLabResultState extends State<add_lab_results> {
                                     valueChooseLabResult = other_name;
                                   }
                                   final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
-                                  labResultRef.set({"labResult_name": valueChooseLabResult.toString(),"labResult_note": lab_result_note.toString(), "labResult_date": lab_result_date.toString(), "labResult_time": lab_result_time.toString()});
+                                  labResultRef.set({"labResult_name": valueChooseLabResult.toString() ,
+                                    "labResult_note": lab_result_note.toString(),
+                                    "labResult_date": lab_result_date.toString(),
+                                    "labResult_time": lab_result_time.toString(),
+                                    "international_normal_ratio": international_normal_ratio,
+                                    "potassium": potassium, "hemoglobin_hb": hemoglobin_hb,
+                                    "Bun_mgDl": Bun_mgDl, "creatinine_mgDl": creatinine_mgDl,
+                                    "ldl": ldl,
+                                    "hdl": hdl});
                                   print("Added Lab Result Successfully! " + uid);
                                 });
 
@@ -632,14 +620,36 @@ class _addLabResultState extends State<add_lab_results> {
                                 valueChooseLabResult = other_name;
                               }
                               print("LAB RESULT LENGTH: " + labResult_list.length.toString());
-                              labResult_list.add(new Lab_Result(labResult_name: valueChooseLabResult.toString(), labResult_date: format.parse(lab_result_date)));
+                              //labResult_list.add(new Lab_Result(labResult_name: valueChooseLabResult.toString(), labResult_date: format.parse(lab_result_date)));
+                              labResult_list.add(new Lab_Result(labResult_name: lab_result_name,
+                                  labResult_note:lab_result_note,
+                                  labResult_date:format.parse(lab_result_date),
+                                  labResult_time:timeformat.parse(lab_result_time),
+                                  international_normal_ratio: international_normal_ratio.toString(),
+                                  potassium: potassium.toString(),
+                                  hemoglobin_hb: hemoglobin_hb.toString(),
+                                  Bun_mgDl: Bun_mgDl,
+                                  creatinine_mgDl: creatinine_mgDl,
+                                  ldl:ldl,
+                                  hdl:hdl)
+                              );
                               for(var i=0;i<labResult_list.length/2;i++){
                                 var temp = labResult_list[i];
                                 labResult_list[i] = labResult_list[labResult_list.length-1-i];
                                 labResult_list[labResult_list.length-1-i] = temp;
                               }
-                              print("POP HERE ==========");
-                              Navigator.pop(context, labResult_list);
+
+                              FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                                setState(() {
+                                  trythis.clear();
+                                  listAll("path");
+                                  Future.delayed(const Duration(milliseconds: 1000), (){
+                                    Navigator.pop(context, trythis);
+                                  });
+                                });
+                              });
+                              // print("POP HERE ==========");
+                              // Navigator.pop(context, labResult_list);
                             });
                           } catch(e) {
                             print("you got an error! $e");
