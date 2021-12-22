@@ -649,7 +649,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               Medication_Prescription prescription;
                               if(datasnapshot.value == null){
                                 final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + 0.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit});
+                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit, "prescribedBy": uid});
                                 print("Added Medication Prescription Successfully! " + uid);
                               }
                               else{
@@ -708,9 +708,9 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 // print("symptom list  " + symptoms_list.toString());
                                 getMedicalPrescription();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = prescription_list.length;
+                                  count = prescription_list.length--;
                                   final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + count.toString());
-                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit});
+                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit, "prescribedBy": uid});
                                   print("Added Medication Prescription Successfully! " + uid);
                                 });
 
@@ -719,7 +719,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + prescription_list.length.toString());
-                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit));
+                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid));
                               for(var i=0;i<prescription_list.length/2;i++){
                                 var temp = prescription_list[i];
                                 prescription_list[i] = prescription_list[prescription_list.length-1-i];

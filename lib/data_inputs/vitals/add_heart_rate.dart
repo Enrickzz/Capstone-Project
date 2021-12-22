@@ -292,7 +292,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 // }
                                 getHeartRate();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = heartRate_list.length;
+                                  count = heartRate_list.length--;
                                   print("count " + count.toString());
                                   if(isResting.toLowerCase() =='yes'){
                                     hr_status = "Active";

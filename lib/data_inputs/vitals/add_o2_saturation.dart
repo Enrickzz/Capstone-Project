@@ -247,7 +247,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                 // }
                                 getOxygenSaturation();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = oxygen_list.length;
+                                  count = oxygen_list.length--;
                                   print("count " + count.toString());
                                   //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
 

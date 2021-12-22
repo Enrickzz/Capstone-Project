@@ -531,8 +531,7 @@ class _addSymptomsState extends State<add_symptoms> {
                           //   print("symptom list length " + symptoms_list.length.toString());
                           // }
                           Future.delayed(const Duration(milliseconds: 1000), (){
-                            print(symptoms_list.length);
-                            count = symptoms_list.length;
+                            count = symptoms_list.length--;
                             print("count " + count.toString());
                             if(valueChooseSymptom == "Others"){
                               valueChooseSymptom = other_name;

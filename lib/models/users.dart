@@ -118,8 +118,9 @@ class Medication_Prescription{
   String intake_time;
   String special_instruction;
   String prescription_unit;
+  String prescribedBy;
 
-  Medication_Prescription({this.generic_name, this.branded_name,this.dosage, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit});
+  Medication_Prescription({this.generic_name, this.branded_name,this.dosage, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit, this.prescribedBy});
 
   Medication_Prescription.fromJson(Map<String, dynamic> json) {
     generic_name = json['generic_name'];
@@ -130,6 +131,7 @@ class Medication_Prescription{
     intake_time = json['intake_time'];
     special_instruction = json['special_instruction'];
     prescription_unit = json['medical_prescription_unit'];
+    prescribedBy = json['prescribedBy'];
   }
 
   Map<String, dynamic> toJson() {
@@ -142,6 +144,7 @@ class Medication_Prescription{
     data['startDate'] = this.intake_time;
     data['special_instruction'] = this.special_instruction;
     data['medical_prescription_unit'] = this.prescription_unit;
+    data['prescribedBy'] = this.prescribedBy;
     return data;
   }
 

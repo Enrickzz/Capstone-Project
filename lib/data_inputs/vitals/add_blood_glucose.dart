@@ -323,7 +323,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                 // }
                                 getBloodGlucose();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = glucose_list.length;
+                                  count = glucose_list.length--;
                                   print("count " + count.toString());
                                   final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
                                   glucoseRef.set({"glucose": glucose.toString(), "unit_status": unitstatus.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});

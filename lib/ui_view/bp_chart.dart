@@ -189,7 +189,7 @@ class _blood_pressureState extends State<bp_chart> {
           if(i==0){
             //print(_1item[0].replaceAll(_1item[0],a[2]) +"\n\n");
             // _1item[0] = _1item[0].replaceAll(_1item[0],a[2]);
-            print("LOOK\n" +_1item[0]+"\n" + _1item[1] + "\n" + _1item[2] + "\n" + _1item[3] + "\n" + _1item[4]);
+            // print("LOOK\n" +_1item[0]+"\n" + _1item[1] + "\n" + _1item[2] + "\n" + _1item[3] + "\n" + _1item[4]);
             _1item[1] = _1item[1].replaceAll("diastolic_pressure: ", "");
             _1item[4] = _1item[4].replaceAll("systolic_pressure: ", "");
             _1item[4] = _1item[4].replaceAll("]", "");

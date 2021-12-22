@@ -304,7 +304,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                 // }
                                 getBodyTemp();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = body_temp_list.length;
+                                  count = body_temp_list.length--;
                                   print("count " + count.toString());
                                   final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
                                   temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString()});

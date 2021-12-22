@@ -303,7 +303,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 // }
                                 getBloodPressure();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = bp_list.length;
+                                  count = bp_list.length--;
                                   print("count " + count.toString());
                                   final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
                                   bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
