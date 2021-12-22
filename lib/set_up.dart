@@ -621,14 +621,14 @@ class _set_upState extends State<set_up> {
                               // if(newIndex == 0 && unitStatus != "mmol/L"){
                               if(newIndex == 0){
                                 print("lbs");
-                                unitStatus = "mmol/L";
+                                unitStatus = "lbs";
                                 // unitValue.text = glucose.toStringAsFixed(2);
                                 // print(glucose.toStringAsFixed(2));
                               }
                               // if(newIndex == 1 && unitStatus != "mg/dL"){
                               if(newIndex == 1){
                                 print("kg");
-                                unitStatus = "mg/dL";
+                                unitStatus = "kg";
                                 // glucose = glucose / 18;
                                 // unitValue.text = glucose.toStringAsFixed(2);
                                 // print(glucose.toStringAsFixed(2));
@@ -941,6 +941,7 @@ class _set_upState extends State<set_up> {
               final User user = auth.currentUser;
               final uid = user.uid;
               final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
+              final loginRef = databaseReference.child('users/' + uid + '/personal_info');
               usersRef.set({
                 "birthday": birthDateInString.toString(),
                 "gender": genderIn.toString(),
@@ -960,6 +961,7 @@ class _set_upState extends State<set_up> {
                 "other_disease": additionalConditionChecboxStatus,
                 "family_disease": familyConditionCheckboxStatus
               });
+              loginRef.update({"isFirstTime": false});
               print("Completed " + uid);
             //   print("Additional information collected!");
             //
@@ -985,10 +987,10 @@ class _set_upState extends State<set_up> {
             //
             //   loginRef.update({"isFirstTime": "false"});
             //
-            //   Navigator.pushReplacement(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => mainScreen()),
-            //   );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => mainScreen()),
+              );
             //
             } catch(e) {
               print("you got an error! $e");
@@ -1402,15 +1404,40 @@ class _set_upState extends State<set_up> {
     );
   }
   void getOtherDisease(){
-    for(int i = 0; i < cvdOtherChecboxStatus.length; i++){
-      cvdChecboxStatus.add(cvdOtherChecboxStatus[i].toString());
+    if(cvdChecboxStatus != null){
+      for(int j = 0; j < cvdChecboxStatus.length; j++){
+        if(cvdChecboxStatus[j].toString() == "Others"){
+          cvdChecboxStatus.removeAt(j);
+          for(int i = 0; i < cvdOtherChecboxStatus.length; i++){
+            cvdChecboxStatus.add(cvdOtherChecboxStatus[i].toString());
+          }
+        }
+      }
     }
-    for(int i = 0; i < additionalConditionOthersChecboxStatus.length; i++){
-      additionalConditionChecboxStatus.add(additionalConditionOthersChecboxStatus[i].toString());
+    if(additionalConditionChecboxStatus != null){
+      for(int j = 0; j < additionalConditionChecboxStatus.length; j++){
+        if(additionalConditionChecboxStatus[j].toString() == "Others"){
+          additionalConditionChecboxStatus.removeAt(j);
+          for(int i = 0; i < additionalConditionOthersChecboxStatus.length; i++){
+            additionalConditionChecboxStatus.add(additionalConditionOthersChecboxStatus[i].toString());
+          }
+        }
+      }
     }
-    for(int i = 0; i < familyConditionOthersChecboxStatus.length; i++){
-      familyConditionCheckboxStatus.add(familyConditionOthersChecboxStatus[i].toString());
+    if(familyConditionCheckboxStatus != null){
+      for(int j = 0; j < familyConditionCheckboxStatus.length; j++){
+        if(familyConditionCheckboxStatus[j].toString() == "Others"){
+          familyConditionCheckboxStatus.removeAt(j);
+          for(int i = 0; i < additionalConditionFamilyChecboxStatus.length; i++){
+            familyConditionCheckboxStatus.add(additionalConditionFamilyChecboxStatus[i].toString());
+          }
+        }
+      }
     }
+
+
+
+
   }
 }
 
