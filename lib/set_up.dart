@@ -558,82 +558,86 @@ class _set_upState extends State<set_up> {
                   SizedBox(height: 8.0),
                   Visibility(
                     visible: isSwitched,
-                    child: TextFormField(
-                      showCursor: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                            width:0,
-                            style: BorderStyle.none,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            showCursor: true,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(
+                                  width:0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3F5),
+                              hintStyle: TextStyle(
+                                  color: Color(0xFF666666),
+                                  fontFamily: defaultFontFamily,
+                                  fontSize: defaultFontSize),
+                              hintText: "What is my weight goal? *",
+                              prefixIcon: Icon(
+                                Icons.add_reaction_outlined,
+                                color: Color(0xFF666666),
+                                size: 22,
+                              ),
+                            ),
+                            validator: (val) => val.isEmpty ? 'My weight goal is' : null,
+                            onChanged: (val){
+                              setState(() => goal = val);
+
+                            },
                           ),
                         ),
-                        filled: true,
-                        fillColor: Color(0xFFF2F3F5),
-                        hintStyle: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize),
-                        hintText: "What is my weight goal? *",
-                        prefixIcon: Icon(
-                          Icons.add_reaction_outlined,
-                          color: Color(0xFF666666),
-                          size: 22,
-                        ),
-                      ),
-                      validator: (val) => val.isEmpty ? 'My weight goal is' : null,
-                      onChanged: (val){
-                        setState(() => goal = val);
-
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: isSwitched,
-                    child: ToggleButtons(
-                      isSelected: isSelected,
-                      highlightColor: Colors.blue,
-                      children: <Widget> [
-                        Padding (
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Text('ibs')
-                        ),
-                        Padding (
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Text('kg')
+                        SizedBox(width: 8,),
+                        ToggleButtons(
+                          isSelected: isSelected,
+                          highlightColor: Colors.blue,
+                          borderRadius: BorderRadius.circular(10),
+                          children: <Widget> [
+                            Padding (
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                child: Text('lbs')
+                            ),
+                            Padding (
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                child: Text('kg')
+                            ),
+                          ],
+                          onPressed:(int newIndex){
+                            setState(() {
+                              for (int index = 0; index < isSelected.length; index++){
+                                if (index == newIndex) {
+                                  isSelected[index] = true;
+                                  print("mmol/L");
+                                } else {
+                                  isSelected[index] = false;
+                                  print("mg/dL");
+                                }
+                              }
+                              // if(newIndex == 0 && unitStatus != "mmol/L"){
+                              if(newIndex == 0){
+                                print("lbs");
+                                unitStatus = "mmol/L";
+                                // unitValue.text = glucose.toStringAsFixed(2);
+                                // print(glucose.toStringAsFixed(2));
+                              }
+                              // if(newIndex == 1 && unitStatus != "mg/dL"){
+                              if(newIndex == 1){
+                                print("kg");
+                                unitStatus = "mg/dL";
+                                // glucose = glucose / 18;
+                                // unitValue.text = glucose.toStringAsFixed(2);
+                                // print(glucose.toStringAsFixed(2));
+                              }
+                            });
+                          },
                         ),
                       ],
-                      onPressed:(int newIndex){
-                        setState(() {
-                          for (int index = 0; index < isSelected.length; index++){
-                            if (index == newIndex) {
-                              isSelected[index] = true;
-                              print("mmol/L");
-                            } else {
-                              isSelected[index] = false;
-                              print("mg/dL");
-                            }
-                          }
-                          // if(newIndex == 0 && unitStatus != "mmol/L"){
-                          if(newIndex == 0){
-                            print("ibs");
-                            unitStatus = "mmol/L";
-                            // unitValue.text = glucose.toStringAsFixed(2);
-                            // print(glucose.toStringAsFixed(2));
-                          }
-                          // if(newIndex == 1 && unitStatus != "mg/dL"){
-                          if(newIndex == 1){
-                            print("kg");
-                            unitStatus = "mg/dL";
-                            // glucose = glucose / 18;
-                            // unitValue.text = glucose.toStringAsFixed(2);
-                            // print(glucose.toStringAsFixed(2));
-                          }
-                        });
-                      },
                     ),
                   ),
-
                   SizedBox(
                     height: 8,
                   ),
@@ -831,11 +835,6 @@ class _set_upState extends State<set_up> {
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
                       hintText: "When do I drink alcohol? *",
-                      prefixIcon: Icon(
-                        Icons.calendar_today,
-                        color: Color(0xFF666666),
-                        size: defaultIconSize,
-                      ),
                     ),
                     isExpanded: true,
                     value: valueAlcohol,
@@ -885,50 +884,32 @@ class _set_upState extends State<set_up> {
                 ),
                 ...cvd_list.map(buildSingleCheckboxCVD).toList(),
                 ...cvdOthers.map(buildSingleCheckboxCVDOthers).toList(),
-                SizedBox(
-                  height: 8,
-                ),
-                Visibility(
-                  visible: cvd_others_check,
-                  child: Text('Other Cardiovascular Diseases', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                  ),
-                ),
                 ..._getOtherCVD(),
+
+                SizedBox(
+                  height: 24,
+                ),
+
                 Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(bottom: 30),
                   child: Text("Do you have any other medical conditions? (choose all that applies)",
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),),
                 ),
                 ...additional_list.map(buildSingleCheckboxAdditionalConditions).toList(),
                 ...additionalConditionOthers.map(buildSingleCheckboxAdditionalConditionsOthers).toList(),
+                ..._getAdditionalConditions(),
 
                 SizedBox(
-                  height: 8,
+                  height: 24,
                 ),
-                Visibility(
-                  visible: additional_condition_others_check,
-                  child: Text('Other Medical Conditions', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                  ),
-                ),
-                ..._getAdditionalConditions(),
+
                 Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(bottom: 30),
                   child: Text("Any family members with medical conditions? (choose all that applies)",
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),),
                 ),
                 ...family_condition_list.map(buildSingleCheckboxFamilyConditions).toList(),
                 ...faimlyConditionOthers.map(buildSingleCheckboxFamilyConditionsOthers).toList(),
-                SizedBox(
-                  height: 8,
-                ),
-                Visibility(
-                  visible: family_condition_others_check,
-                  child: Text('Family History Medical Conditions',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                  ),
-                ),
                 ..._getFamilyConditions()
               ],
             ),
@@ -1075,174 +1056,193 @@ class _set_upState extends State<set_up> {
   /// medical history
   Widget buildSingleCheckboxCVD(CheckBoxState checkbox) =>  Visibility(
     visible: true,
-    child: CheckboxListTile(
-      activeColor: Colors.green,
-      value: checkbox.value,
-      title: Text(
-          checkbox.title,
-          style: TextStyle(fontSize: 14.0)
-      ),
+    child: SizedBox(
+      height:45,
+      child: CheckboxListTile(
+        activeColor: Colors.blue,
+        value: checkbox.value,
+        title: Text(
+            checkbox.title,
+            style: TextStyle(fontSize: 14.0)
+        ),
 
-      onChanged: (value) => setState(() => {
-        checkbox.value = value,
-        if(checkbox.value){
-          cvdChecboxStatus.add(checkbox.title),
-        }
-        else{
-          for(int i = 0; i < cvdChecboxStatus.length; i++){
-            if(cvdChecboxStatus[i] == checkbox.title){
-              cvdChecboxStatus.removeAt(i)
+        onChanged: (value) => setState(() => {
+          checkbox.value = value,
+          if(checkbox.value){
+            cvdChecboxStatus.add(checkbox.title),
+          }
+          else{
+            for(int i = 0; i < cvdChecboxStatus.length; i++){
+              if(cvdChecboxStatus[i] == checkbox.title){
+                cvdChecboxStatus.removeAt(i)
+              },
             },
           },
-        },
-      }),
-      controlAffinity: ListTileControlAffinity.leading,
+        }),
+        controlAffinity: ListTileControlAffinity.leading,
+      ),
     ),
   );
 
   Widget buildSingleCheckboxCVDOthers(CheckBoxState checkbox) =>  Visibility(
     visible: true,
-    child: CheckboxListTile(
-      activeColor: Colors.green,
-      value: checkbox.value,
-      title: Text(
-          checkbox.title,
-          style: TextStyle(fontSize: 14.0)
-      ),
+    child: SizedBox(
+      height: 45,
 
-      onChanged: (value) => setState(() => {
-        checkbox.value = value,
-        if(checkbox.value){
-          cvdOtherChecboxStatus.add(checkbox.title),
-          cvd_others_check = true
-        }
-        else{
-          for(int i = 0; i < cvdOtherChecboxStatus.length; i++){
-            if(cvdOtherChecboxStatus[i] == checkbox.title){
-              cvdOtherChecboxStatus.removeAt(i),
-              cvd_others_check = false
+      child: CheckboxListTile(
+        activeColor: Colors.blue,
+        value: checkbox.value,
+        title: Text(
+            checkbox.title,
+            style: TextStyle(fontSize: 14.0)
+        ),
+
+        onChanged: (value) => setState(() => {
+          checkbox.value = value,
+          if(checkbox.value){
+            cvdOtherChecboxStatus.add(checkbox.title),
+            cvd_others_check = true
+          }
+          else{
+            for(int i = 0; i < cvdOtherChecboxStatus.length; i++){
+              if(cvdOtherChecboxStatus[i] == checkbox.title){
+                cvdOtherChecboxStatus.removeAt(i),
+                cvd_others_check = false
 
 
+              },
             },
           },
-        },
-      }),
-      controlAffinity: ListTileControlAffinity.leading,
+        }),
+        controlAffinity: ListTileControlAffinity.leading,
+      ),
     ),
   );
 
   Widget buildSingleCheckboxAdditionalConditions(CheckBoxState checkbox) =>  Visibility(
     visible: true,
-    child: CheckboxListTile(
-      activeColor: Colors.green,
-      value: checkbox.value,
-      title: Text(
-          checkbox.title,
-          style: TextStyle(fontSize: 14.0)
-      ),
+    child: SizedBox(
+      height: 45,
+      child: CheckboxListTile(
+        activeColor: Colors.blue,
+        value: checkbox.value,
+        title: Text(
+            checkbox.title,
+            style: TextStyle(fontSize: 14.0)
+        ),
 
-      onChanged: (value) => setState(() => {
-        checkbox.value = value,
-        if(checkbox.value){
-          additionalConditionChecboxStatus.add(checkbox.title),
-        }
-        else{
-          for(int i = 0; i < additionalConditionChecboxStatus.length; i++){
-            if(additionalConditionChecboxStatus[i] == checkbox.title){
-              additionalConditionChecboxStatus.removeAt(i)
+        onChanged: (value) => setState(() => {
+          checkbox.value = value,
+          if(checkbox.value){
+            additionalConditionChecboxStatus.add(checkbox.title),
+          }
+          else{
+            for(int i = 0; i < additionalConditionChecboxStatus.length; i++){
+              if(additionalConditionChecboxStatus[i] == checkbox.title){
+                additionalConditionChecboxStatus.removeAt(i)
+              },
             },
           },
-        },
-      }),
-      controlAffinity: ListTileControlAffinity.leading,
+        }),
+        controlAffinity: ListTileControlAffinity.leading,
+      ),
     ),
   );
 
   Widget buildSingleCheckboxAdditionalConditionsOthers(CheckBoxState checkbox) =>  Visibility(
     visible: true,
-    child: CheckboxListTile(
-      activeColor: Colors.green,
-      value: checkbox.value,
-      title: Text(
-          checkbox.title,
-          style: TextStyle(fontSize: 14.0)
-      ),
+    child: SizedBox(
+      height: 45,
+      child: CheckboxListTile(
+        activeColor: Colors.blue,
+        value: checkbox.value,
+        title: Text(
+            checkbox.title,
+            style: TextStyle(fontSize: 14.0)
+        ),
 
-      onChanged: (value) => setState(() => {
-        checkbox.value = value,
-        if(checkbox.value){
-          additionalConditionOthersChecboxStatus.add(checkbox.title),
-          additional_condition_others_check = true
-        }
-        else{
-          for(int i = 0; i < additionalConditionOthersChecboxStatus.length; i++){
-            if(additionalConditionOthersChecboxStatus[i] == checkbox.title){
-              additionalConditionOthersChecboxStatus.removeAt(i),
-              additional_condition_others_check = false
+        onChanged: (value) => setState(() => {
+          checkbox.value = value,
+          if(checkbox.value){
+            additionalConditionOthersChecboxStatus.add(checkbox.title),
+            additional_condition_others_check = true
+          }
+          else{
+            for(int i = 0; i < additionalConditionOthersChecboxStatus.length; i++){
+              if(additionalConditionOthersChecboxStatus[i] == checkbox.title){
+                additionalConditionOthersChecboxStatus.removeAt(i),
+                additional_condition_others_check = false
 
 
+              },
             },
           },
-        },
-      }),
-      controlAffinity: ListTileControlAffinity.leading,
+        }),
+        controlAffinity: ListTileControlAffinity.leading,
+      ),
     ),
   );
   Widget buildSingleCheckboxFamilyConditions(CheckBoxState checkbox) =>  Visibility(
     visible: true,
-    child: CheckboxListTile(
-      activeColor: Colors.green,
-      value: checkbox.value,
-      title: Text(
-          checkbox.title,
-          style: TextStyle(fontSize: 14.0)
-      ),
+    child: SizedBox(
+      height: 45,
+      child: CheckboxListTile(
+        activeColor: Colors.blue,
+        value: checkbox.value,
+        title: Text(
+            checkbox.title,
+            style: TextStyle(fontSize: 14.0)
+        ),
 
-      onChanged: (value) => setState(() => {
-        checkbox.value = value,
-        if(checkbox.value){
-          familyConditionChecboxStatus.add(checkbox.title),
-        }
-        else{
-          for(int i = 0; i < familyConditionChecboxStatus.length; i++){
-            if(familyConditionChecboxStatus[i] == checkbox.title){
-              familyConditionChecboxStatus.removeAt(i)
+        onChanged: (value) => setState(() => {
+          checkbox.value = value,
+          if(checkbox.value){
+            familyConditionChecboxStatus.add(checkbox.title),
+          }
+          else{
+            for(int i = 0; i < familyConditionChecboxStatus.length; i++){
+              if(familyConditionChecboxStatus[i] == checkbox.title){
+                familyConditionChecboxStatus.removeAt(i)
+              },
             },
           },
-        },
-      }),
-      controlAffinity: ListTileControlAffinity.leading,
+        }),
+        controlAffinity: ListTileControlAffinity.leading,
+      ),
     ),
   );
 
   Widget buildSingleCheckboxFamilyConditionsOthers(CheckBoxState checkbox) =>  Visibility(
     visible: true,
-    child: CheckboxListTile(
-      activeColor: Colors.green,
-      value: checkbox.value,
-      title: Text(
-          checkbox.title,
-          style: TextStyle(fontSize: 14.0)
-      ),
+    child: SizedBox(
+      height: 45,
+      child: CheckboxListTile(
+        activeColor: Colors.blue,
+        value: checkbox.value,
+        title: Text(
+            checkbox.title,
+            style: TextStyle(fontSize: 14.0)
+        ),
 
-      onChanged: (value) => setState(() => {
-        checkbox.value = value,
-        if(checkbox.value){
-          additionalConditionFamilyChecboxStatus.add(checkbox.title),
-          family_condition_others_check = true
-        }
-        else{
-          for(int i = 0; i < additionalConditionFamilyChecboxStatus.length; i++){
-            if(additionalConditionFamilyChecboxStatus[i] == checkbox.title){
-              additionalConditionFamilyChecboxStatus.removeAt(i),
-              family_condition_others_check = false
+        onChanged: (value) => setState(() => {
+          checkbox.value = value,
+          if(checkbox.value){
+            additionalConditionFamilyChecboxStatus.add(checkbox.title),
+            family_condition_others_check = true
+          }
+          else{
+            for(int i = 0; i < additionalConditionFamilyChecboxStatus.length; i++){
+              if(additionalConditionFamilyChecboxStatus[i] == checkbox.title){
+                additionalConditionFamilyChecboxStatus.removeAt(i),
+                family_condition_others_check = false
 
 
+              },
             },
           },
-        },
-      }),
-      controlAffinity: ListTileControlAffinity.leading,
+        }),
+        controlAffinity: ListTileControlAffinity.leading,
+      ),
     ),
   );
 
@@ -1253,7 +1253,7 @@ class _set_upState extends State<set_up> {
           Visibility(
             visible: cvd_others_check,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Row(
                 children: [
                   Expanded(child: OtherCVDTextFields(i)),
@@ -1299,7 +1299,7 @@ class _set_upState extends State<set_up> {
           Visibility(
             visible: additional_condition_others_check,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Row(
                 children: [
                   Expanded(child: AdditionalConditionsTextFields(i)),
@@ -1345,7 +1345,7 @@ class _set_upState extends State<set_up> {
           Visibility(
             visible: family_condition_others_check,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Row(
                 children: [
                   Expanded(child: FamilyConditionsTextFields(i)),
@@ -1436,7 +1436,19 @@ class _OtherCVDFieldsState extends State<OtherCVDTextFields> {
       controller: _nameControllerOtherCVD,
       onChanged: (v) => _set_upState.otherCVDList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter your other Cardiovascular Disease'
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+        filled: true,
+        fillColor: Color(0xFFF2F3F5),
+        hintStyle: TextStyle(
+            color: Color(0xFF666666),
+            fontSize: 14),
+        hintText: "Enter your other cardiovascular disease",
       ),
       validator: (f){
         if(f.trim().isEmpty) return 'Please enter something';
@@ -1475,7 +1487,19 @@ class _AdditionalConditionsTextFieldsState extends State<AdditionalConditionsTex
       controller: _nameControllerAdditionalConditions,
       onChanged: (v) => _set_upState.additionalConditionList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter your Other Medical Conditions'
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+        filled: true,
+        fillColor: Color(0xFFF2F3F5),
+        hintStyle: TextStyle(
+            color: Color(0xFF666666),
+            fontSize: 14),
+        hintText: "Enter your other medical condition",
       ),
       validator: (v){
         if(v.trim().isEmpty) return 'Please enter something';
@@ -1512,7 +1536,19 @@ class _FamilyConditionsTextFieldsState extends State<FamilyConditionsTextFields>
       controller: _nameControllerFamilyConditions,
       onChanged: (v) => _set_upState.familyConditionList[widget.index] = v,
       decoration: InputDecoration(
-          hintText: 'Enter Family Medical Conditions'
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+        filled: true,
+        fillColor: Color(0xFFF2F3F5),
+        hintStyle: TextStyle(
+            color: Color(0xFF666666),
+            fontSize: 14),
+        hintText: "Enter family medical condition",
       ),
       validator: (v){
         if(v.trim().isEmpty) return 'Please enter something';
@@ -1741,5 +1777,7 @@ class _OtherTextFieldsState extends State<OtherTextFields> {
         return null;
       },
     );
+
+
   }
 }

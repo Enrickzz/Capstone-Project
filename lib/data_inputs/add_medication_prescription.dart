@@ -171,87 +171,95 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                     },
                   ),
                   SizedBox(height: 8.0),
-                  TextFormField(
-                    // controller: unitValue,
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          // controller: unitValue,
+                          showCursor: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Dosage",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter Dosage' : null,
+                          onChanged: (val){
+                            dosage = double.parse(val);
+                          },
                         ),
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Dosage",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Dosage' : null,
-                    onChanged: (val){
-                      dosage = double.parse(val);
-                    },
-                  ),
-                  ToggleButtons(
-                    isSelected: isSelected,
-                    highlightColor: Colors.blue,
-                    children: <Widget> [
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('mL')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('Mg')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('g')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('Ug')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('Iu')
+                      SizedBox(width: 8.0),
+                      ToggleButtons(
+                        isSelected: isSelected,
+                        highlightColor: Colors.blue,
+                        borderRadius: BorderRadius.circular(10),
+                        children: <Widget> [
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('mL')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Mg')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('g')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Ug')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Iu')
+                          ),
+                        ],
+                        onPressed:(int newIndex){
+                          setState(() {
+                            for (int index = 0; index < isSelected.length; index++){
+                              if (index == newIndex) {
+                                isSelected[index] = true;
+                              } else {
+                                isSelected[index] = false;
+                              }
+                            }
+
+                            if(newIndex == 0){
+                              prescription_unit = "mL";
+                              print(prescription_unit);
+                            }
+                            if(newIndex == 1){
+                              prescription_unit = "Mg";
+                              print(prescription_unit);
+                            }
+                            if(newIndex == 2){
+                              prescription_unit = "g";
+                              print(prescription_unit);
+                            }
+                            if(newIndex == 3){
+                              prescription_unit = "Ug";
+                              print(prescription_unit);
+                            }
+                            if(newIndex == 4){
+                              prescription_unit = "Iu";
+                              print(prescription_unit);
+                            }
+                          });
+                        },
                       ),
                     ],
-                    onPressed:(int newIndex){
-                      setState(() {
-                        for (int index = 0; index < isSelected.length; index++){
-                          if (index == newIndex) {
-                            isSelected[index] = true;
-                          } else {
-                            isSelected[index] = false;
-                          }
-                        }
-
-                        if(newIndex == 0){
-                          prescription_unit = "mL";
-                          print(prescription_unit);
-                        }
-                        if(newIndex == 1){
-                          prescription_unit = "Mg";
-                          print(prescription_unit);
-                        }
-                        if(newIndex == 2){
-                          prescription_unit = "g";
-                          print(prescription_unit);
-                        }
-                        if(newIndex == 3){
-                          prescription_unit = "Ug";
-                          print(prescription_unit);
-                        }
-                        if(newIndex == 4){
-                          prescription_unit = "Iu";
-                          print(prescription_unit);
-                        }
-                      });
-                    },
                   ),
                   SizedBox(height: 16.0),
                   Column(
@@ -365,100 +373,108 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                   //   ),
                   // ),
                   SizedBox(height: 8.0),
-                  GestureDetector(
-                    onTap: () => pickDateRange(context).then((value){
-                      if(value != null && value != prescriptionDate){
-                        setState(() {
-                          print("set state value " + value.toString());
-                          prescriptionDate = value;
-                          isDateSelected = true;
-                          startDate.text = startdate + "\r";
-                        });
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => pickDateRange(context).then((value){
+                            if(value != null && value != prescriptionDate){
+                              setState(() {
+                                print("set state value " + value.toString());
+                                prescriptionDate = value;
+                                isDateSelected = true;
+                                startDate.text = startdate + "\r";
+                              });
 
-                      }
-                    }),
+                            }
+                          }),
 
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: startDate,
-                        showCursor: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
+                          child: AbsorbPointer(
+                            child: TextFormField(
+                              controller: startDate,
+                              showCursor: false,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(
+                                    width:0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: Color(0xFFF2F3F5),
+                                hintStyle: TextStyle(
+                                    color: Color(0xFF666666),
+                                    fontFamily: defaultFontFamily,
+                                    fontSize: defaultFontSize),
+                                hintText: getFrom(),
+                                prefixIcon: Icon(
+                                  Icons.calendar_today,
+                                  color: Color(0xFF666666),
+                                  size: defaultIconSize,
+                                ),
+                              ),
+                              validator: (val) => val.isEmpty ? 'Select Start Date' : null,
+                              onChanged: (val){
+
+                                print(startDate);
+                                setState((){
+                                });
+                              },
                             ),
                           ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: getFrom(),
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color(0xFF666666),
-                            size: defaultIconSize,
-                          ),
                         ),
-                        validator: (val) => val.isEmpty ? 'Select Start Date' : null,
-                        onChanged: (val){
-
-                          print(startDate);
-                          setState((){
-                          });
-                        },
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  GestureDetector(
-                    onTap: () => pickDateRange(context).then((value){
-                      if(value != null && value != prescriptionDate){
-                        setState(() {
-                          prescriptionDate = value;
-                          isDateSelected = true;
-                          endDate.text = enddate + "\r";
-                        });
+                      SizedBox(width: 8.0),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => pickDateRange(context).then((value){
+                            if(value != null && value != prescriptionDate){
+                              setState(() {
+                                prescriptionDate = value;
+                                isDateSelected = true;
+                                endDate.text = enddate + "\r";
+                              });
 
-                      }
-                    }),
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: endDate,
-                        showCursor: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
+                            }
+                          }),
+                          child: AbsorbPointer(
+                            child: TextFormField(
+                              controller: endDate,
+                              showCursor: false,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(
+                                    width:0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: Color(0xFFF2F3F5),
+                                hintStyle: TextStyle(
+                                    color: Color(0xFF666666),
+                                    fontFamily: defaultFontFamily,
+                                    fontSize: defaultFontSize),
+                                hintText: getUntil(),
+                                prefixIcon: Icon(
+                                  Icons.calendar_today,
+                                  color: Color(0xFF666666),
+                                  size: defaultIconSize,
+                                ),
+                              ),
+                              validator: (val) => val.isEmpty ? 'Select End Date' : null,
+                              onChanged: (val){
+
+                                print(endDate);
+                                setState((){
+                                });
+                              },
                             ),
                           ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: getUntil(),
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color(0xFF666666),
-                            size: defaultIconSize,
-                          ),
                         ),
-                        validator: (val) => val.isEmpty ? 'Select End Date' : null,
-                        onChanged: (val){
-
-                          print(endDate);
-                          setState((){
-                          });
-                        },
                       ),
-                    ),
+                    ],
                   ),
 
                   // SizedBox(height: 27.0),

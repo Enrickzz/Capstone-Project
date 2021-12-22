@@ -74,71 +74,79 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.0),
-                  TextFormField(
-                    // controller: unitValue,
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          // controller: unitValue,
+                          showCursor: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Blood Glucose Level",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter Blood Glucose Level' : null,
+                          onChanged: (val){
+                            setState(() => glucose = double.parse(val));
+                          },
                         ),
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Blood Glucose Level",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Blood Glucose Level' : null,
-                    onChanged: (val){
-                      setState(() => glucose = double.parse(val));
-                    },
-                  ),
-                  ToggleButtons(
-                    isSelected: isSelected,
-                    highlightColor: Colors.blue,
-                    children: <Widget> [
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('mmol/L')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('mg/dL')
+                      SizedBox(width: 8,),
+                      ToggleButtons(
+                        isSelected: isSelected,
+                        highlightColor: Colors.blue,
+                        borderRadius: BorderRadius.circular(10),
+                        children: <Widget> [
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('mmol/L')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('mg/dL')
+                          ),
+                        ],
+                        onPressed:(int newIndex){
+                          setState(() {
+                            for (int index = 0; index < isSelected.length; index++){
+                              if (index == newIndex) {
+                                isSelected[index] = true;
+                                print("mmol/L");
+                              } else {
+                                isSelected[index] = false;
+                                print("mg/dL");
+                              }
+                            }
+                            // if(newIndex == 0 && unitStatus != "mmol/L"){
+                            if(newIndex == 0){
+                              print("mmol/L");
+                              unitStatus = "mmol/L";
+                              // unitValue.text = glucose.toStringAsFixed(2);
+                              // print(glucose.toStringAsFixed(2));
+                            }
+                            // if(newIndex == 1 && unitStatus != "mg/dL"){
+                            if(newIndex == 1){
+                              print("mg/dL");
+                              unitStatus = "mg/dL";
+                              // glucose = glucose / 18;
+                              // unitValue.text = glucose.toStringAsFixed(2);
+                              // print(glucose.toStringAsFixed(2));
+                            }
+                          });
+                        },
                       ),
                     ],
-                      onPressed:(int newIndex){
-                        setState(() {
-                          for (int index = 0; index < isSelected.length; index++){
-                            if (index == newIndex) {
-                              isSelected[index] = true;
-                              print("mmol/L");
-                            } else {
-                              isSelected[index] = false;
-                              print("mg/dL");
-                            }
-                          }
-                          // if(newIndex == 0 && unitStatus != "mmol/L"){
-                          if(newIndex == 0){
-                            print("mmol/L");
-                            unitStatus = "mmol/L";
-                            // unitValue.text = glucose.toStringAsFixed(2);
-                            // print(glucose.toStringAsFixed(2));
-                          }
-                          // if(newIndex == 1 && unitStatus != "mg/dL"){
-                          if(newIndex == 1){
-                            print("mg/dL");
-                            unitStatus = "mg/dL";
-                            // glucose = glucose / 18;
-                            // unitValue.text = glucose.toStringAsFixed(2);
-                            // print(glucose.toStringAsFixed(2));
-                          }
-                        });
-                      },
                   ),
                   SizedBox(height: 8.0),
                   TextFormField(

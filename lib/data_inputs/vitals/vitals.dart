@@ -72,488 +72,490 @@ class _AppSignUpState extends State<vitals> {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 10,
-            ),
-            Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => blood_pressure(bplist: thisbplist)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 100,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/bloodpressure.jpg',
-                                    fit: BoxFit.cover
+      body: Scrollbar(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 10,
+              ),
+              Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => blood_pressure(bplist: thisbplist)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 100,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/bloodpressure.jpg',
+                                      fit: BoxFit.cover
+                                  ),
                                 ),
                               ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      ),
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: FitnessAppTheme.grey.withOpacity(0.6),
-                                            offset: Offset(1.1, 1.1),
-                                            blurRadius: 10.0),
-                                      ]
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Blood Pressure',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
+                                        ),
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              color: FitnessAppTheme.grey.withOpacity(0.6),
+                                              offset: Offset(1.1, 1.1),
+                                              blurRadius: 10.0),
+                                        ]
                                     )
-                                  ],
                                 ),
                               ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => heart_rate(hrlist: thisHRlist)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 100,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/heartrate.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
                                       ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
+                                      Text(
+                                          'Blood Pressure',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
                                       )
-                                  )
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Heart Rate',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => heart_rate(hrlist: thisHRlist)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 100,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/heartrate.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
                                         )
                                     )
-                                  ],
                                 ),
                               ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => body_temperature(btlist: thisBTlist)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 100,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/bodytemperature.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
                                       ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
+                                      Text(
+                                          'Heart Rate',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
                                       )
-                                  )
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Body Temperature',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => body_temperature(btlist: thisBTlist)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 100,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/bodytemperature.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
                                         )
                                     )
-                                  ],
                                 ),
                               ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => blood_cholesterol(bclist: bclist)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 100,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/bloodcholesterol.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
                                       ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
+                                      Text(
+                                          'Body Temperature',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
                                       )
-                                  )
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Blood Cholesterol Level',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => blood_cholesterol(bclist: bclist)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 100,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/bloodcholesterol.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
                                         )
                                     )
-                                  ],
                                 ),
                               ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => blood_glucose(bglist: bglist)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 100,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/bloodglucose.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
                                       ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
+                                      Text(
+                                          'Blood Cholesterol Level',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
                                       )
-                                  )
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Blood Glucose Level',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => blood_glucose(bglist: bglist)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 100,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/bloodglucose.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
                                         )
                                     )
-                                  ],
                                 ),
                               ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => respiratory_rate()),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 100,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/respiratoryrate.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
                                       ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
+                                      Text(
+                                          'Blood Glucose Level',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
                                       )
-                                  )
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Respiratory Rate',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => respiratory_rate()),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 100,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/respiratoryrate.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
                                         )
                                     )
-                                  ],
                                 ),
                               ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => o2_saturation(oxygenlist: o2List)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 100,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/o2saturation.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
                                       ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
+                                      Text(
+                                          'Respiratory Rate',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
                                       )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Oxygen Saturation',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
-                                    )
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ]
-                      )
+                            ]
+                        )
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => o2_saturation(oxygenlist: o2List)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 100,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/o2saturation.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
+                                        )
+                                    )
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          'Oxygen Saturation',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

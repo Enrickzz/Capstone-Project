@@ -82,518 +82,520 @@ class _AppSignUpState extends State<data_inputs> {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 10,
-            ),
-            Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => vitals()),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 140,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/vitals.jpg',
-                                    fit: BoxFit.cover
+      body: Scrollbar(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 10,
+              ),
+              Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => vitals()),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 140,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/vitals.jpg',
+                                      fit: BoxFit.cover
+                                  ),
                                 ),
                               ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Container(
-                                        child: Image.asset('assets/images/vitals2.png'),
-                                        height:30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(50),
-                                            bottomRight: Radius.circular(50),
-                                          ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Recorded Vitals',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => medication_prescription(preslist: prescriptionList)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 140,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/medication.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Container(
-                                        child: Image.asset('assets/images/medication2.jpg'),
-                                        height:30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(50),
-                                            bottomRight: Radius.circular(50),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Medication Prescription',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => supplement_prescription(preslist: supplementList)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 140,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/vitamins.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Container(
-                                        child: Image.asset('assets/images/medication2.jpg'),
-                                        height:30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(50),
-                                            bottomRight: Radius.circular(50),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Supplements and Other Medicine',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-
-                GestureDetector(
-                  onTap:(){
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => medication(medlist: thismedlist)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 140,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/medicine_intake.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Container(
-                                        child: Image.asset('assets/images/medication2.jpg'),
-                                        height:30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(50),
-                                            bottomRight: Radius.circular(50),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Medicine Intake',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    getSymptoms;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => symptoms(symptomlist1: thislist)),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 140,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/symptoms.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Container(
-                                        child: Image.asset('assets/images/symptoms2.jpg'),
-                                        height:30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(50),
-                                            bottomRight: Radius.circular(50),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Symptoms',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
-                                        )
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]
-                      )
-                  ),
-                ),
-                GestureDetector(
-                  onTap:(){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => lab_results()),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                      height: 140,
-                      child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset('assets/images/labresults.jpg',
-                                    fit: BoxFit.cover
-                                ),
-                              ),
-                            ),
-                            Positioned (
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)
-                                      ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0.7),
-                                            Colors.transparent
-                                          ]
-                                      )
-                                  )
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Container(
-                                        child: Image.asset('assets/images/labresults2.jpg'),
-                                        height:30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(50),
-                                            bottomRight: Radius.circular(50),
-                                          ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: FitnessAppTheme.grey.withOpacity(1),
-                                                  offset: Offset(1.1, 1.5),
-                                                  blurRadius: 100.0),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
                                             ]
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                        'Laboratory Results',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18
                                         )
                                     )
-                                  ],
                                 ),
                               ),
-                            ),
-                          ]
-                      )
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image.asset('assets/images/vitals2.png'),
+                                          height:30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(50),
+                                              bottomRight: Radius.circular(50),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          'Recorded Vitals',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap:(){
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => medication_prescription(preslist: prescriptionList)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 140,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/medication.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
+                                        )
+                                    )
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image.asset('assets/images/medication2.jpg'),
+                                          height:30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(50),
+                                              bottomRight: Radius.circular(50),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          'Medication Prescription',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => supplement_prescription(preslist: supplementList)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 140,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/vitamins.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
+                                        )
+                                    )
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image.asset('assets/images/medication2.jpg'),
+                                          height:30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(50),
+                                              bottomRight: Radius.circular(50),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          'Supplements & Other Medicines',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 17
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    ),
+                  ),
 
-              ],
-            ),
-          ],
+                  GestureDetector(
+                    onTap:(){
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => medication(medlist: thismedlist)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 140,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/medicine_intake.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
+                                        )
+                                    )
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image.asset('assets/images/medication2.jpg'),
+                                          height:30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(50),
+                                              bottomRight: Radius.circular(50),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          'Medicine Intake',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      getSymptoms;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => symptoms(symptomlist1: thislist)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 140,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/symptoms.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
+                                        )
+                                    )
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image.asset('assets/images/symptoms2.jpg'),
+                                          height:30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(50),
+                                              bottomRight: Radius.circular(50),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          'Symptoms',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => lab_results()),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 140,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/labresults.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
+                                        )
+                                    )
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
+                                          child: Image.asset('assets/images/labresults2.jpg'),
+                                          height:30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(50),
+                                              bottomRight: Radius.circular(50),
+                                            ),
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                    color: FitnessAppTheme.grey.withOpacity(1),
+                                                    offset: Offset(1.1, 1.5),
+                                                    blurRadius: 100.0),
+                                              ]
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          'Laboratory Results',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    ),
+                  ),
+
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -127,8 +127,9 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Supplement & Other Meds', style: TextStyle(
-            color: Colors.black
+        title: const Text('Supplements & Other Medicines', style: TextStyle(
+            color: Colors.black,
+          fontSize: 16,
         )),
         centerTitle: true,
         backgroundColor: Colors.white,

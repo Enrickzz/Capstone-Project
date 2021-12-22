@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/set_up.dart';
+import 'package:my_app/set_up.dart';
 import 'additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 
@@ -31,6 +31,8 @@ class _AppSignUpState extends State<registration> {
   bool isFirstTime = true;
   bool checkboxValue = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  bool _isHidden = true;
+
 
   //added by borj
   String valueChooseUserStatus;
@@ -56,7 +58,7 @@ class _AppSignUpState extends State<registration> {
           children: [
             InkWell(
               child: Container(
-                margin: EdgeInsets.only(top: 70.0),
+                margin: EdgeInsets.only(top: 60.0),
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: IconButton(
@@ -93,56 +95,60 @@ class _AppSignUpState extends State<registration> {
                         key: _formKey,
                         child: Column(
                           children: [
-                            Container(
-                              child: TextFormField(
-                                showCursor: true,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide: BorderSide(
-                                      width:0,
-                                      style: BorderStyle.none,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    showCursor: true,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                        borderSide: BorderSide(
+                                          width:0,
+                                          style: BorderStyle.none,
+                                        ),
+                                      ),
+                                      filled: true,
+                                      fillColor: Color(0xFFF2F3F5),
+                                      hintStyle: TextStyle(
+                                          color: Color(0xFF666666),
+                                          fontFamily: defaultFontFamily,
+                                          fontSize: defaultFontSize),
+                                      hintText: "First Name *",
                                     ),
+                                    validator: (val) => val.isEmpty ? 'Enter First Name' : null,
+                                    onChanged: (val){
+                                      setState(() => firstname = val);
+                                    },
                                   ),
-                                  filled: true,
-                                  fillColor: Color(0xFFF2F3F5),
-                                  hintStyle: TextStyle(
-                                      color: Color(0xFF666666),
-                                      fontFamily: defaultFontFamily,
-                                      fontSize: defaultFontSize),
-                                  hintText: "First Name *",
                                 ),
-                                validator: (val) => val.isEmpty ? 'Enter First Name' : null,
-                                onChanged: (val){
-                                  setState(() => firstname = val);
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 8.0),
-                            Container(
-                              child: TextFormField(
-                                showCursor: true,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide: BorderSide(
-                                      width:0,
-                                      style: BorderStyle.none,
+                                SizedBox(width: 8.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    showCursor: true,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                        borderSide: BorderSide(
+                                          width:0,
+                                          style: BorderStyle.none,
+                                        ),
+                                      ),
+                                      filled: true,
+                                      fillColor: Color(0xFFF2F3F5),
+                                      hintStyle: TextStyle(
+                                          color: Color(0xFF666666),
+                                          fontFamily: defaultFontFamily,
+                                          fontSize: defaultFontSize),
+                                      hintText: "Last Name *",
                                     ),
+                                    validator: (val) => val.isEmpty ? 'Enter Last Name' : null,
+                                    onChanged: (val){
+                                      setState(() => lastname = val);
+                                    },
                                   ),
-                                  filled: true,
-                                  fillColor: Color(0xFFF2F3F5),
-                                  hintStyle: TextStyle(
-                                      color: Color(0xFF666666),
-                                      fontFamily: defaultFontFamily,
-                                      fontSize: defaultFontSize),
-                                  hintText: "Last Name *",
                                 ),
-                                validator: (val) => val.isEmpty ? 'Enter Last Name' : null,
-                                onChanged: (val){
-                                  setState(() => lastname = val);
-                                },
-                              ),
+                              ],
                             ),
                             SizedBox(height: 8.0),
                             Container(
@@ -178,7 +184,7 @@ class _AppSignUpState extends State<registration> {
                             SizedBox(height: 8.0),
                             Container(
                               child: TextFormField(
-                                obscureText: true,
+                                obscureText: _isHidden,
                                 showCursor: true,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
@@ -194,11 +200,19 @@ class _AppSignUpState extends State<registration> {
                                     color: Color(0xFF666666),
                                     size: defaultIconSize,
                                   ),
-                                  suffixIcon: Icon(
-                                    Icons.remove_red_eye,
-                                    color: Color(0xFF666666),
-                                    size: defaultIconSize,
+                                  suffix: InkWell(
+                                    onTap: _togglePassword,
+                                    child: Icon(
+                                      Icons.remove_red_eye,
+                                      color: Color(0xFF666666),
+                                      size: defaultIconSize,
+                                    ),
                                   ),
+                                  // suffixIcon: Icon(
+                                  //   Icons.remove_red_eye,
+                                  //   color: Color(0xFF666666),
+                                  //   size: defaultIconSize,
+                                  // ),
                                   fillColor: Color(0xFFF2F3F5),
                                   hintStyle: TextStyle(
                                     color: Color(0xFF666666),
@@ -216,7 +230,7 @@ class _AppSignUpState extends State<registration> {
                             SizedBox(height: 8.0),
                             Container(
                               child: TextFormField(
-                                obscureText: true,
+                                obscureText: _isHidden,
                                 showCursor: true,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
@@ -232,11 +246,19 @@ class _AppSignUpState extends State<registration> {
                                     color: Color(0xFF666666),
                                     size: defaultIconSize,
                                   ),
-                                  suffixIcon: Icon(
-                                    Icons.remove_red_eye,
-                                    color: Color(0xFF666666),
-                                    size: defaultIconSize,
+                                  suffix: InkWell(
+                                    onTap: _togglePassword,
+                                    child: Icon(
+                                      Icons.remove_red_eye,
+                                      color: Color(0xFF666666),
+                                      size: defaultIconSize,
+                                    ),
                                   ),
+                                  // suffixIcon: Icon(
+                                  //   Icons.remove_red_eye,
+                                  //   color: Color(0xFF666666),
+                                  //   size: defaultIconSize,
+                                  // ),
                                   fillColor: Color(0xFFF2F3F5),
                                   hintStyle: TextStyle(
                                     color: Color(0xFF666666),
@@ -439,4 +461,11 @@ class _AppSignUpState extends State<registration> {
       ),
     );
   }
+
+  void _togglePassword() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
+  }
 }
+

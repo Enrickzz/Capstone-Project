@@ -70,52 +70,64 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          showCursor: true,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Systolic Pressure",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter Systolic Pressure' : null,
+                          onChanged: (val){
+                            setState(() => systolic_pressure = val);
+                          },
                         ),
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Systolic Pressure",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Systolic Pressure' : null,
-                    onChanged: (val){
-                      setState(() => systolic_pressure = val);
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
+                      SizedBox(width: 8.0),
+                      Text('/'),
+                      SizedBox(width: 8.0),
+                      Expanded(
+                        child: TextFormField(
+                          showCursor: true,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Diastolic Pressure",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter Diastolic Pressure' : null,
+                          onChanged: (val){
+                            setState(() => diastolic_pressure = val);
+                          },
                         ),
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Diastolic Pressure",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Diastolic Pressure' : null,
-                    onChanged: (val){
-                      setState(() => diastolic_pressure = val);
-                    },
+                    ],
                   ),
                   SizedBox(height: 8.0),
                   GestureDetector(

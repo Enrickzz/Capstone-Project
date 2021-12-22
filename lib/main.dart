@@ -9,12 +9,13 @@ import 'package:my_app/additional_data_collection.dart';
 import 'package:my_app/goal_weight.dart';
 import 'package:my_app/medical_history.dart';
 import 'package:my_app/models/tabIcon_data.dart';
+import 'package:my_app/notifications.dart';
 import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:my_app/training/dashboards.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/ui_view/set_up.dart';
+import 'package:my_app/set_up.dart';
 import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'allergies.dart';
@@ -157,7 +158,7 @@ class _AppSignInState extends State<AppSignIn> {
   String password = '';
   String error = '';
   // File file;
-
+  bool _isHidden = true;
 
 
   @override
@@ -244,7 +245,7 @@ class _AppSignInState extends State<AppSignIn> {
                             SizedBox(height: 8.0),
                             Container(
                               child: TextFormField(
-                                obscureText: true,
+                                obscureText: _isHidden,
                                 showCursor: true,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
@@ -260,11 +261,19 @@ class _AppSignInState extends State<AppSignIn> {
                                     color: Color(0xFF666666),
                                     size: defaultIconSize,
                                   ),
-                                  suffixIcon: Icon(
-                                    Icons.remove_red_eye,
-                                    color: Color(0xFF666666),
-                                    size: defaultIconSize,
+                                  suffix: InkWell(
+                                    onTap: _togglePassword,
+                                    child: Icon(
+                                      Icons.remove_red_eye,
+                                      color: Color(0xFF666666),
+                                      size: defaultIconSize,
+                                    ),
                                   ),
+                                  // suffixIcon: Icon(
+                                  //   Icons.remove_red_eye,
+                                  //   color: Color(0xFF666666),
+                                  //   size: defaultIconSize,
+                                  // ),
                                   fillColor: Color(0xFFF2F3F5),
                                   hintStyle: TextStyle(
                                     color: Color(0xFF666666),
@@ -615,6 +624,12 @@ class _AppSignInState extends State<AppSignIn> {
       // ),
 
     );
+  }
+
+  void _togglePassword() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
   }
 
 }
