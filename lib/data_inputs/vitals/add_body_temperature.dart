@@ -44,6 +44,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
+  List <bool> isSelected = [true, false];
 
   @override
   Widget build(BuildContext context) {
@@ -69,72 +70,78 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                 children: <Widget>[
                   Text(
                     'Add Body Temperature',
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget> [
-                      Text(
-                        "Unit of Measurement",
-                        textAlign: TextAlign.left,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Radio(
-                                value: "Celsius",
-                                groupValue: unit,
-                                onChanged: (value){
-                                  setState(() {
-                                    this.unit = value;
-                                  });
-                                },
+                  Divider(),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          showCursor: true,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
                               ),
-                            ],
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Temperature",
                           ),
-                          Text("Celsius (°C)"),
-                          SizedBox(width: 3),
-                          Radio(
-                            value: "Fahrenheit",
-                            groupValue: unit,
-                            onChanged: (value){
-                              setState(() {
-                                this.unit = value;
-                              });
-                            },
-                          ),
-                          Text("Fahrenheit (°F)"),
-                          SizedBox(width: 3)
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
+                          validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
+                          onChanged: (val){
+                            setState(() => temperature = double.parse(val));
+                          },
                         ),
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Temperature",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
-                    onChanged: (val){
-                      setState(() => temperature = double.parse(val));
-                    },
+                      SizedBox(width: 8,),
+                      ToggleButtons(
+                        isSelected: isSelected,
+                        highlightColor: Colors.blue,
+                        borderRadius: BorderRadius.circular(10),
+                        children: <Widget> [
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Celsius (°C)')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Fahrenheit (°F)')
+                          ),
+                        ],
+                        onPressed:(int newIndex){
+                          setState(() {
+                            for (int index = 0; index < isSelected.length; index++){
+                              if (index == newIndex) {
+                                isSelected[index] = true;
+                                print("Celsius (°C)");
+                              } else {
+                                isSelected[index] = false;
+                                print("Fahrenheit (°F)");
+                              }
+                            }
+                            if(newIndex == 0){
+                              print("Celsius (°C)");
+                              unit = "Celsius";
+                            }
+                            if(newIndex == 1){
+                              print("Fahrenheit (°F)");
+                              unit = "Fahrenheit";
+
+                            }
+                          });
+                        },
+                      ),
+                    ],
                   ),
                   SizedBox(height: 8.0),
                   GestureDetector(
@@ -210,7 +217,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   // DropdownButton(
                   //   hint: Text("Select items:"),
                   //   dropdownColor: Colors.grey,

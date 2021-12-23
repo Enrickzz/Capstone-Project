@@ -70,8 +70,11 @@ class _add_heart_rateState extends State<add_heart_rate> {
                   Text(
                     'Add Heart Rate',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
+                  Divider(),
+                  SizedBox(height: 8),
                   TextFormField(
                     controller: heartRateValue,
                     showCursor: true,
@@ -100,13 +103,17 @@ class _add_heart_rateState extends State<add_heart_rate> {
                       beats = int.parse(val));
                     },
                   ),
-                  SizedBox(height: 8.0),
+                  SizedBox(height: 16.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget> [
-                      Text(
-                        "Did you just finish exercising?",
-                        textAlign: TextAlign.left,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          "Did you just finish exercising?",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
+                        ),
                       ),
                       Row(
                         children: <Widget>[
@@ -124,7 +131,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                             ],
                           ),
                           Text("Yes"),
-                          SizedBox(width: 3),
+                          SizedBox(width: 16),
                           Radio(
                             value: "No",
                             groupValue: isResting,
@@ -135,7 +142,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                             },
                           ),
                           Text("No"),
-                          SizedBox(width: 3)
+                          SizedBox(width: 16)
                         ],
                       )
                     ],
@@ -214,7 +221,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

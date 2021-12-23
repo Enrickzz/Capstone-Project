@@ -68,8 +68,11 @@ class _add_respiratory_rateState extends State<add_respiratory_rate> {
                   Text(
                     'Add Respiratory Rate',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
+                  Divider(),
+                  SizedBox(height: 8),
                   TextFormField(
                     showCursor: true,
                     keyboardType: TextInputType.number,
@@ -184,7 +187,8 @@ class _add_respiratory_rateState extends State<add_respiratory_rate> {
                       // ),
                     ],
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

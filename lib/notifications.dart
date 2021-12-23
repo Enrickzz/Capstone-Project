@@ -82,8 +82,52 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       body: TabBarView(
         controller: controller,
         children: [
-          Container(
-            color: FitnessAppTheme.background,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              color: FitnessAppTheme.background,
+                child: Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: Text("Personal Information"),
+                        subtitle: Text("Hello World! asdasdasd ad ad a da adsa d a sda sd a  a asd asdasdasd ad sad  asdasda adsadasda adadasdasdaas asdasda asdasdas da asdasdaad ad asd a da ad asd"),
+                        onTap:(){
+
+                        },
+                        dense: true,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal:
+                        16.0),
+                      ),
+
+                      ListTile(
+                        title: Text("Medical History"),
+                        subtitle: Text("Hello World! asdasdasd ad ad a da adsa d a sda sd a  a asd asdasdasd ad sad"),
+                        onTap:(){
+
+                        },
+                        dense: true,
+                      ),
+
+                      ListTile(
+                        title: Text("Manage Support System"),
+                        onTap:(){
+
+                        },
+                        dense: true,
+                      ),
+
+                      ListTile(
+                        title: Text("Manage Healthcare Team"),
+                        onTap:(){
+
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+            ),
           ),
           Container(
             color: FitnessAppTheme.background,

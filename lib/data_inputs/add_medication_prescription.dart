@@ -121,8 +121,11 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                   Text(
                     'Add Medication Prescription',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
+                  Divider(),
+                  SizedBox(height: 8),
                   TextFormField(
                     showCursor: true,
                     decoration: InputDecoration(
@@ -177,6 +180,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                         child: TextFormField(
                           // controller: unitValue,
                           showCursor: true,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -265,9 +269,13 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget> [
-                      Text(
-                        "Take how many times a day?",
-                        textAlign: TextAlign.left,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          "Take how many times a day?",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
+                        ),
                       ),
                       Row(
                         children: <Widget>[
@@ -285,7 +293,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               Text("1"),
                             ],
                           ),
-                          SizedBox(width: 8),
+                            SizedBox(width: 16),
                           Row(
                             children: [
                               Radio(
@@ -300,7 +308,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               Text("2"),
                             ],
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 16),
                           Row(
                             children: [
                               Radio(
@@ -315,7 +323,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               Text("3"),
                             ],
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 16),
                           Row(
                             children: [
                               Radio(
@@ -633,7 +641,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                       setState(() => special_instruction = val);
                     },
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

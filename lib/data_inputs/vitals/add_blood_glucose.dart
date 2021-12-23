@@ -72,14 +72,19 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                   Text(
                     'Add Blood Glucose Level',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
+                  Divider(),
+                  SizedBox(height: 8),
+
                   Row(
                     children: [
                       Expanded(
                         child: TextFormField(
                           // controller: unitValue,
                           showCursor: true,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -246,7 +251,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

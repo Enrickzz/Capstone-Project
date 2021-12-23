@@ -68,8 +68,12 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                   Text(
                     'Add Oxygen Saturation',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
+                  Divider(),
+                  SizedBox(height: 8),
+
                   TextFormField(
                     showCursor: true,
                     keyboardType: TextInputType.number,
@@ -168,7 +172,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

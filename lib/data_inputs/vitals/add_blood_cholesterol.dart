@@ -68,8 +68,12 @@ class _add_blood_cholesterolState extends State<add_blood_cholesterol> {
                   Text(
                     'Add Blood Cholesterol Level',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
+                  Divider(),
+                  SizedBox(height: 8),
+
                   TextFormField(
                     showCursor: true,
                     keyboardType: TextInputType.number,
@@ -243,7 +247,7 @@ class _add_blood_cholesterolState extends State<add_blood_cholesterol> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

@@ -68,8 +68,11 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                   Text(
                     'Add Blood Pressure',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
-                  SizedBox(height: 8.0),
+                  SizedBox(height: 8),
+                  Divider(),
+                  SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
@@ -203,7 +206,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

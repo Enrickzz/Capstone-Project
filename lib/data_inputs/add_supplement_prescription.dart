@@ -126,8 +126,11 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                   Text(
                     'Add Supplements or Other Medicines',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
+                  Divider(),
+                  SizedBox(height: 8),
                   TextFormField(
                     showCursor: true,
                     decoration: InputDecoration(
@@ -176,95 +179,109 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                   //   },
                   // ),
                   SizedBox(height: 8.0),
-                  TextFormField(
-                    // controller: unitValue,
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          // controller: unitValue,
+                          showCursor: true,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Dosage",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter Dosage' : null,
+                          onChanged: (val){
+                            supp_dosage = double.parse(val);
+                          },
                         ),
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Dosage",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Dosage' : null,
-                    onChanged: (val){
-                      supp_dosage = double.parse(val);
-                    },
-                  ),
-                  ToggleButtons(
-                    isSelected: isSelected,
-                    highlightColor: Colors.blue,
-                    children: <Widget> [
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('mL')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('Mg')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('g')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('Ug')
-                      ),
-                      Padding (
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('Iu')
+                      SizedBox(width: 8.0),
+                      ToggleButtons(
+                        isSelected: isSelected,
+                        borderRadius: BorderRadius.circular(10),
+                        highlightColor: Colors.blue,
+                        children: <Widget> [
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('mL')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Mg')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('g')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Ug')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Iu')
+                          ),
+                        ],
+                        onPressed:(int newIndex){
+                          setState(() {
+                            for (int index = 0; index < isSelected.length; index++){
+                              if (index == newIndex) {
+                                isSelected[index] = true;
+                              } else {
+                                isSelected[index] = false;
+                              }
+                            }
+
+                            if(newIndex == 0){
+                              prescription_unit = "mL";
+                              print(prescription_unit);
+                            }
+                            if(newIndex == 1){
+                              prescription_unit = "Mg";
+                              print(prescription_unit);
+                            }
+                            if(newIndex == 2){
+                              prescription_unit = "g";
+                              print(prescription_unit);
+                            }
+                            if(newIndex == 3){
+                              prescription_unit = "Ug";
+                              print(prescription_unit);
+                            }
+                            if(newIndex == 4){
+                              prescription_unit = "Iu";
+                              print(prescription_unit);
+                            }
+                          });
+                        },
                       ),
                     ],
-                    onPressed:(int newIndex){
-                      setState(() {
-                        for (int index = 0; index < isSelected.length; index++){
-                          if (index == newIndex) {
-                            isSelected[index] = true;
-                          } else {
-                            isSelected[index] = false;
-                          }
-                        }
-
-                        if(newIndex == 0){
-                          prescription_unit = "mL";
-                          print(prescription_unit);
-                        }
-                        if(newIndex == 1){
-                          prescription_unit = "Mg";
-                          print(prescription_unit);
-                        }
-                        if(newIndex == 2){
-                          prescription_unit = "g";
-                          print(prescription_unit);
-                        }
-                        if(newIndex == 3){
-                          prescription_unit = "Ug";
-                          print(prescription_unit);
-                        }
-                        if(newIndex == 4){
-                          prescription_unit = "Iu";
-                          print(prescription_unit);
-                        }
-                      });
-                    },
                   ),
                   SizedBox(height: 16.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget> [
-                      Text(
-                        "Take how many times a day?",
-                        textAlign: TextAlign.left,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          "Take how many times a day?",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
+
+                        ),
                       ),
                       Row(
                         children: <Widget>[
@@ -282,7 +299,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                               Text("1"),
                             ],
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 16),
                           Row(
                             children: [
                               Radio(
@@ -297,7 +314,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                               Text("2"),
                             ],
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 16),
                           Row(
                             children: [
                               Radio(
@@ -312,7 +329,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                               Text("3"),
                             ],
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 16),
                           Row(
                             children: [
                               Radio(
@@ -327,7 +344,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                               Text("4"),
                             ],
                           ),
-                          SizedBox(width: 3)
+                          SizedBox(width: 16)
                         ],
                       )
                     ],
@@ -574,7 +591,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                   //     ),
                   //   ),
                   // ),
-                  SizedBox(height: 8.0),
+                  // SizedBox(height: 8.0),
                   // TextFormField(
                   //   showCursor: true,
                   //   decoration: InputDecoration(
@@ -622,7 +639,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                   //     setState(() => special_instruction = val);
                   //   },
                   // ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
