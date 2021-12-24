@@ -63,14 +63,14 @@ packages:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.6"
+    version: "5.4.10"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.1"
+    version: "2.6.5"
   collection:
     dependency: transitive
     description:
@@ -105,49 +105,49 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.7"
+    version: "4.3.0"
   firebase_auth:
     dependency: "direct main"
     description:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.0"
+    version: "3.3.4"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.5"
+    version: "6.1.9"
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.1"
+    version: "3.3.5"
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.2"
+    version: "1.10.6"
   firebase_core_platform_interface:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.0"
+    version: "4.2.3"
   firebase_core_web:
     dependency: transitive
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "1.5.3"
   firebase_database:
     dependency: "direct main"
     description:
@@ -175,21 +175,21 @@ packages:
       name: firebase_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.2.0"
+    version: "10.2.4"
   firebase_storage_platform_interface:
     dependency: transitive
     description:
       name: firebase_storage_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.7"
+    version: "4.0.11"
   firebase_storage_web:
     dependency: transitive
     description:
       name: firebase_storage_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.5"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -201,14 +201,14 @@ packages:
       name: flutter_facebook_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.6+3"
+    version: "3.5.7"
   flutter_facebook_auth_platform_interface:
     dependency: transitive
     description:
       name: flutter_facebook_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.7.0"
+    version: "2.7.1"
   flutter_facebook_auth_web:
     dependency: transitive
     description:
@@ -426,21 +426,21 @@ packages:
       name: syncfusion_flutter_charts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.3.57"
+    version: "19.4.38"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.3.57"
+    version: "19.4.38"
   syncfusion_flutter_gauges:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_gauges
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.3.57"
+    version: "19.4.38"
   term_glyph:
     dependency: transitive
     description:

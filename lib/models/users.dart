@@ -22,7 +22,7 @@ class Additional_Info {
   List<String> otherAller;
   double weight_goal;
   String weight_unit;
-  DateTime endDate;
+  DateTime goalDate;
   String lifestyle;
   int average_stick;
   String alcohol_freq;
@@ -41,7 +41,7 @@ class Additional_Info {
     this.otherAller,
     this.weight_goal,
     this.weight_unit,
-    this.endDate,
+    this.goalDate,
     this.lifestyle,
     this.average_stick,
     this.alcohol_freq,
@@ -60,7 +60,7 @@ class Additional_Info {
     otherAller = json['otherAller'].cast<String>();
     weight_goal = double.parse(json['weight_goal']);
     weight_unit = json['weight_unit'];
-    endDate = DateFormat("MM/dd/yyyy").parse(json['endDate']);
+    goalDate = DateFormat("MM/dd/yyyy").parse(json['goalDate']);
     lifestyle = json['lifestyle'];
     average_stick = int.parse(json['average_stick']);
     alcohol_freq = json['alcohol_freq'];
@@ -81,7 +81,7 @@ class Additional_Info {
     data['otherAller'] = this.otherAller;
     data['weight_goal'] = this.weight_goal;
     data['weight_unit'] = this.weight_unit;
-    data['endDate'] = this.endDate;
+    data['goalDate'] = this.goalDate;
     data['lifestyle'] = this.lifestyle;
     data['average_stick'] = this.average_stick;
     data['alcohol_freq'] = this.alcohol_freq;

@@ -227,6 +227,7 @@ class _set_upState extends State<set_up> {
   /// medical history
   // for the list of all CVD
   List<String> cvdChecboxStatus = [];
+
   final cvd_list ={
     CheckBoxState(title: 'Arrhythmia'),
     CheckBoxState(title: 'Bradycardia'),
@@ -250,6 +251,7 @@ class _set_upState extends State<set_up> {
 
   // for the list of other medical conditions
   List<String> additionalConditionChecboxStatus = [];
+
   final additional_list ={
     CheckBoxState(title: 'Chronic Obstructive Pulmonary Disease'),
     CheckBoxState(title: 'Chronic Kidney Disease'),
@@ -272,6 +274,7 @@ class _set_upState extends State<set_up> {
 
   //for family history
   List<String> familyConditionCheckboxStatus = [];
+
   final family_condition_list ={
     CheckBoxState(title: 'Chronic Obstructive Pulmonary Disease'),
     CheckBoxState(title: 'Chronic Kidney Disease'),
@@ -935,34 +938,37 @@ class _set_upState extends State<set_up> {
           print(currentStep);
 
           if (isLastStep) {
-
             getOtherDisease();
+
             try{
-              final User user = auth.currentUser;
-              final uid = user.uid;
-              final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
-              final loginRef = databaseReference.child('users/' + uid + '/personal_info');
-              usersRef.set({
-                "birthday": birthDateInString.toString(),
-                "gender": genderIn.toString(),
-                "height":height.toString(),
-                "weight": weight.toString(),
-                "BMI": "0",
-                "foodAller": foodList,
-                "drugAller": drugList,
-                "otherAller": otherList,
-                "weight_goal": goal,
-                "weight_unit": unitStatus,
-                "endDate": goaldate,
-                "lifestyle": valueLifestyle,
-                "average_stick": average_sticks,
-                "alcohol_freq": valueAlcohol,
-                "disease": cvdChecboxStatus,
-                "other_disease": additionalConditionChecboxStatus,
-                "family_disease": familyConditionCheckboxStatus
+              Future.delayed(const Duration(milliseconds: 1000), () {
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
+                final loginRef = databaseReference.child('users/' + uid + '/personal_info');
+                usersRef.set({
+                  "birthday": birthDateInString.toString(),
+                  "gender": genderIn.toString(),
+                  "height":height.toString(),
+                  "weight": weight.toString(),
+                  "BMI": "0",
+                  "foodAller": foodList,
+                  "drugAller": drugList,
+                  "otherAller": otherList,
+                  "weight_goal": goal,
+                  "weight_unit": unitStatus,
+                  "goalDate": goaldate,
+                  "lifestyle": valueLifestyle,
+                  "average_stick": average_sticks,
+                  "alcohol_freq": valueAlcohol,
+                  "disease": cvdChecboxStatus,
+                  "other_disease": additionalConditionChecboxStatus,
+                  "family_disease": familyConditionCheckboxStatus
+                });
+                loginRef.update({"isFirstTime": false});
+                print("Completed " + uid);
               });
-              loginRef.update({"isFirstTime": false});
-              print("Completed " + uid);
+
             //   print("Additional information collected!");
             //
             //   final foodRef = databaseReference.child('users/' + uid + '/vitals/additional_info/food_allergies/');
@@ -991,6 +997,7 @@ class _set_upState extends State<set_up> {
                 context,
                 MaterialPageRoute(builder: (context) => mainScreen()),
               );
+
             //
             } catch(e) {
               print("you got an error! $e");
@@ -1405,31 +1412,24 @@ class _set_upState extends State<set_up> {
   }
   void getOtherDisease(){
     if(cvdChecboxStatus != null){
-      for(int j = 0; j < cvdChecboxStatus.length; j++){
-        if(cvdChecboxStatus[j].toString() == "Others"){
-          cvdChecboxStatus.removeAt(j);
-          for(int i = 0; i < cvdOtherChecboxStatus.length; i++){
-            cvdChecboxStatus.add(cvdOtherChecboxStatus[i].toString());
-          }
+      if(cvd_others_check){
+        for(int i = 0; i < otherCVDList.length; i++){
+          cvdChecboxStatus.add(otherCVDList[i].toString());
         }
       }
+
     }
     if(additionalConditionChecboxStatus != null){
-      for(int j = 0; j < additionalConditionChecboxStatus.length; j++){
-        if(additionalConditionChecboxStatus[j].toString() == "Others"){
-          additionalConditionChecboxStatus.removeAt(j);
-          for(int i = 0; i < additionalConditionOthersChecboxStatus.length; i++){
-            additionalConditionChecboxStatus.add(additionalConditionOthersChecboxStatus[i].toString());
-          }
+      if(additional_condition_others_check){
+        for(int i = 0; i < additionalConditionList.length; i++){
+          additionalConditionChecboxStatus.add(additionalConditionList[i].toString());
         }
       }
     }
     if(familyConditionCheckboxStatus != null){
-      for(int j = 0; j < familyConditionCheckboxStatus.length; j++){
-        if(familyConditionCheckboxStatus[j].toString() == "Others"){
-          familyConditionCheckboxStatus.removeAt(j);
-          for(int i = 0; i < additionalConditionFamilyChecboxStatus.length; i++){
-            familyConditionCheckboxStatus.add(additionalConditionFamilyChecboxStatus[i].toString());
+        if(family_condition_others_check){
+          for(int i = 0; i < familyConditionList.length; i++){
+            familyConditionCheckboxStatus.add(familyConditionList[i].toString());
           }
         }
       }
@@ -1439,7 +1439,7 @@ class _set_upState extends State<set_up> {
 
 
   }
-}
+
 
 
 //other cvd
