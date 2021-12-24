@@ -13,6 +13,8 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import '../fitness_app_theme.dart';
+import 'package:my_app/data_inputs/add_medication.dart';
+import 'package:my_app/data_inputs/add_medication_prescription.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class medication_prescription_patientView extends StatefulWidget {
@@ -20,10 +22,10 @@ class medication_prescription_patientView extends StatefulWidget {
   final int pointer;
   medication_prescription_patientView({Key key, this.preslist, this.pointer}): super(key: key);
   @override
-  _medication_prescriptionState createState() => _medication_prescriptionState();
+  _medication_prescriptionPatientViewState createState() => _medication_prescriptionPatientViewState();
 }
 
-class _medication_prescriptionState extends State<medication_prescription_patientView> {
+class _medication_prescriptionPatientViewState extends State<medication_prescription_patientView> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();

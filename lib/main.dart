@@ -30,6 +30,9 @@ import 'package:my_app/lab_results_test_borj.dart';
 import 'package:my_app/medical_history.dart';
 import 'package:my_app/patient_view_support_system.dart';
 import 'package:my_app/specific_medical_prescription_viewAsDoctor.dart';
+import 'package:my_app/specific_medical_prescription_viewAsPatient.dart';
+import 'package:my_app/view_medical_prescription_as_patient.dart';
+
 
 
 Future<void>  main() async {
@@ -186,7 +189,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor()),
+                      MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsPatient()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

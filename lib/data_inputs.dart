@@ -20,6 +20,7 @@ import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 import 'package:my_app/data_inputs/supplement_prescription.dart';
+import 'package:my_app/data_inputs/medication_prescription.dart';
 
 
 class data_inputs extends StatefulWidget {
@@ -775,4 +776,5 @@ class _AppSignUpState extends State<data_inputs> {
     List list = await _futureOfList ;
     thismedlist = list;
   }
+
 }
