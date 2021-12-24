@@ -48,7 +48,6 @@ class _addSymptomsState extends State<add_symptoms> {
     CheckBoxState(title: 'Morning'),
     CheckBoxState(title: 'Afternoon'),
     CheckBoxState(title: 'Evening')
-
   };
 
 //for pinch zoom body image
@@ -118,51 +117,50 @@ class _addSymptomsState extends State<add_symptoms> {
             Text(
               'Add Symptom',
               textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1),
-                  borderRadius: BorderRadius.circular(15)
+            SizedBox(height: 8.0),
+            Divider(),
+            SizedBox(height: 8),
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(
+                    width:0,
+                    style: BorderStyle.none,
+                  ),
                 ),
-                child: DropdownButton(
-                  dropdownColor: Colors.white,
-                    hint: Text("Select Symptom: "),
-                    icon: Icon(Icons.arrow_drop_down),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18
-                    ),
-                    iconSize: 36,
-                    isExpanded: true,
-                    underline: SizedBox(),
-                    value: valueChooseSymptom,
-                    onChanged: (newValue){
-                      setState(() {
-                        valueChooseSymptom = newValue;
-
-                        if(valueChooseSymptom == 'Others'){
-                          otherSymptomsCheck = true;
-                        }
-                        else{
-                          otherSymptomsCheck = false;
-                        }
-                      });
-
-                    },
-
-                    items: listItemSymptoms.map((valueItem){
-                        return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                        );
-                      },
-                    ).toList(),
-
-                ),
+                filled: true,
+                fillColor: Color(0xFFF2F3F5),
+                hintStyle: TextStyle(
+                    color: Color(0xFF666666),
+                    fontFamily: defaultFontFamily,
+                    fontSize: defaultFontSize),
+                hintText: "Select Symptom:",
               ),
+              isExpanded: true,
+              value: valueChooseSymptom,
+              onChanged: (newValue){
+                setState(() {
+                  valueChooseSymptom = newValue;
+
+                  if(valueChooseSymptom == 'Others'){
+                    otherSymptomsCheck = true;
+                  }
+                  else{
+                    otherSymptomsCheck = false;
+                  }
+                });
+
+              },
+              items: listItemSymptoms.map((valueItem){
+                return DropdownMenuItem(
+                    value: valueItem,
+                    child: Text(valueItem),
+                );
+              },
+              ).toList(),
             ),
             SizedBox(height: 8.0),
             Visibility(
@@ -192,11 +190,10 @@ class _addSymptomsState extends State<add_symptoms> {
 
                 },
               ),
-
             ),
-
-
-            SizedBox(height: 8.0),
+            Visibility(
+                visible: otherSymptomsCheck,
+                child: SizedBox(height: 8.0)),
             TextFormField(
               showCursor: true,
               keyboardType: TextInputType.number,
@@ -223,9 +220,9 @@ class _addSymptomsState extends State<add_symptoms> {
             ),
             SizedBox(height: 8.0),
             SwitchListTile(
-              title: Text('The Universal Pain Assessment Tool (UPAT)'),
-              subtitle: Text('Show me the UPAT'),
-              secondary: Icon(Icons.accessibility_new_rounded, size: 34.0, color: Colors.blue),
+              title: Text('The Universal Pain Assessment Tool (UPAT)', style: TextStyle(fontSize: 14.0)),
+              subtitle: Text('Show me the UPAT', style: TextStyle(fontSize: 12.0)),
+              secondary: Icon(Icons.sentiment_neutral, size: 34.0, color: Colors.orange),
               controlAffinity: ListTileControlAffinity.trailing,
               value: painIsSwitched,
               onChanged: (value){
@@ -237,62 +234,59 @@ class _addSymptomsState extends State<add_symptoms> {
             ),
             Visibility(
               visible: painIsSwitched,
-              child: InteractiveViewer(
-                clipBehavior: Clip.none,
-                minScale: minScalePain,
-                maxScale: maxScalePain,
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset('assets/images/pain.png'
+              child: Container(
+                child: InteractiveViewer(
+                  clipBehavior: Clip.none,
+                  minScale: minScalePain,
+                  maxScale: maxScalePain,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.asset('assets/images/pain.png'
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-
-            SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey, width: 1),
-                    borderRadius: BorderRadius.circular(15)
-                ),
-                child: DropdownButton(
-                  dropdownColor: Colors.white,
-                  hint: Text("General Area of Symptom: "),
-                  icon: Icon(Icons.arrow_drop_down),
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18
+            SizedBox(height: 8),
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide(
+                    width:0,
+                    style: BorderStyle.none,
                   ),
-                  iconSize: 36,
-                  isExpanded: true,
-                  underline: SizedBox(),
-                  value: valueChooseGeneralArea,
-                  onChanged: (newValue){
-                    setState(() {
-                      valueChooseGeneralArea = newValue;
-                    });
-                  },
-                  items: listItemGeneralAreas.map((valueItem){
-                    return DropdownMenuItem(
-                        value: valueItem,
-                        child: Text(valueItem)
-                    );
-                  },
-                  ).toList(),
-
                 ),
+                filled: true,
+                fillColor: Color(0xFFF2F3F5),
+                hintStyle: TextStyle(
+                    color: Color(0xFF666666),
+                    fontFamily: defaultFontFamily,
+                    fontSize: defaultFontSize),
+                hintText: "General Area of Symptom:",
               ),
+              isExpanded: true,
+              value: valueChooseGeneralArea,
+              onChanged: (newValue){
+                setState(() {
+                  valueChooseGeneralArea = newValue;
+                });
+              },
+              items: listItemGeneralAreas.map((valueItem){
+                return DropdownMenuItem(
+                    value: valueItem,
+                    child: Text(valueItem)
+                );
+              },
+              ).toList(),
             ),
             SizedBox(height: 8.0),
             SwitchListTile(
-              title: Text('Body General Areas'),
-              subtitle: Text('Show me General Areas of the Body'),
+              title: Text('Body General Areas', style: TextStyle(fontSize: 14.0)),
+              subtitle: Text('Show me General Areas of the Body', style: TextStyle(fontSize: 12.0)),
               secondary: Icon(Icons.accessibility_new_rounded, size: 34.0, color: Colors.blue),
               controlAffinity: ListTileControlAffinity.trailing,
               value: bodyIsSwitched,
@@ -321,8 +315,8 @@ class _addSymptomsState extends State<add_symptoms> {
             ),
             SizedBox(height: 8.0),
             SwitchListTile(
-                title: Text('Recurring Symptom'),
-                subtitle: Text('This sympyom is recurring'),
+                title: Text('Recurring Symptom', style: TextStyle(fontSize: 14.0)),
+                subtitle: Text('This symptom is recurring', style: TextStyle(fontSize: 12.0)),
                 secondary: Icon(Icons.device_thermostat, size: 34.0, color: Colors.red),
                 controlAffinity: ListTileControlAffinity.trailing,
                 value: isSwitched,
@@ -334,11 +328,12 @@ class _addSymptomsState extends State<add_symptoms> {
             ),
             SizedBox(height: 8.0),
             ...notifications.map(buildSingleCheckbox).toList(),
-
-
-
-
-            SizedBox(height: 8.0),
+            Visibility(
+              visible: isSwitched,
+              child: SizedBox(
+                height: 24,
+              ),
+            ),
             Visibility(
               visible: isSwitched,
               child: TextFormField(
@@ -359,16 +354,14 @@ class _addSymptomsState extends State<add_symptoms> {
                       fontSize: defaultFontSize),
                   hintText: "What situation triggers your symptom?",
                 ),
-                validator: (val) => val.isEmpty ? 'Enter General area where Symptom is felt' : null,
-                onChanged: (val){
-                  setState(() => symptom_felt = val);
-
-                },
               ),
-
             ),
-
-            SizedBox(height: 8.0),
+            Visibility(
+              visible: isSwitched,
+              child: SizedBox(
+                height: 8,
+              ),
+            ),
             GestureDetector(
               onTap: ()async{
                 await showDatePicker(
@@ -442,7 +435,7 @@ class _addSymptomsState extends State<add_symptoms> {
                 ),
               ),
             ),
-            SizedBox(height: 18.0),
+            SizedBox(height: 24.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -578,27 +571,33 @@ class _addSymptomsState extends State<add_symptoms> {
 
   Widget buildSingleCheckbox(CheckBoxState checkbox) =>  Visibility(
     visible: isSwitched,
-    child: CheckboxListTile(
-      activeColor: Colors.green,
-      value: checkbox.value,
-      title: Text(
-          checkbox.title
-      ),
-      subtitle: Text('I experience this symptom every ' + checkbox.title.toLowerCase()),
-      onChanged: (value) => setState(() => {
-        checkbox.value = value,
-        if(checkbox.value){
-          checkboxStatus.add(checkbox.title),
-        }
-        else{
-          for(int i = 0; i < checkboxStatus.length; i++){
-            if(checkboxStatus[i] == checkbox.title){
-              checkboxStatus.removeAt(i)
+    child: SizedBox(
+      height: 50,
+      child: CheckboxListTile(
+        activeColor: Colors.blue,
+        value: checkbox.value,
+        title: Text(
+          checkbox.title,
+          style: TextStyle(fontSize: 14),
+        ),
+        subtitle: Text('I experience this symptom every ' + checkbox.title.toLowerCase(),
+          style: TextStyle(fontSize: 12),
+        ),
+        onChanged: (value) => setState(() => {
+          checkbox.value = value,
+          if(checkbox.value){
+            checkboxStatus.add(checkbox.title),
+          }
+          else{
+            for(int i = 0; i < checkboxStatus.length; i++){
+              if(checkboxStatus[i] == checkbox.title){
+                checkboxStatus.removeAt(i)
+              },
             },
           },
-        },
-      }),
-      controlAffinity: ListTileControlAffinity.leading,
+        }),
+        controlAffinity: ListTileControlAffinity.leading,
+      ),
     ),
   );
 

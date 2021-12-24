@@ -109,105 +109,104 @@ class _addLabResultState extends State<add_lab_results> {
                   Text(
                     'Add Laboratory Result',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      padding: EdgeInsets.only(left: 16, right: 16),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey, width: 1),
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: DropdownButton(
-                        dropdownColor: Colors.white,
-                        hint: Text("Select Lab Result: "),
-                        icon: Icon(Icons.arrow_drop_down),
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18
+                  Divider(),
+                  SizedBox(height: 8),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width:0,
+                          style: BorderStyle.none,
                         ),
-                        iconSize: 36,
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        value: valueChooseLabResult,
-                        onChanged: (newValue){
-                          setState(() {
-                            valueChooseLabResult = newValue;
-
-                            if(valueChooseLabResult == 'Prothrombin Time'){
-                              otherLabResultCheck = false;
-                              ptCheck = true;
-                             serumElectrolytesCheck = false;
-                             cbcCheck = false;
-                             bunCreaCheck = false;
-                             lipidProfileCheck = false;
-                            }
-                            else if(valueChooseLabResult == 'Serum Electrolytes'){
-                              otherLabResultCheck = false;
-                              ptCheck = false;
-                              serumElectrolytesCheck = true;
-                              cbcCheck = false;
-                              bunCreaCheck = false;
-                              lipidProfileCheck = false;
-                            }
-                            else if(valueChooseLabResult == 'Complete Blood Count'){
-                              otherLabResultCheck = false;
-                              ptCheck = false;
-                              serumElectrolytesCheck = false;
-                              cbcCheck = true;
-                              bunCreaCheck = false;
-                              lipidProfileCheck = false;
-                            }
-                            else if(valueChooseLabResult == 'Bun&Creatinine'){
-                              otherLabResultCheck = false;
-                              ptCheck = false;
-                              serumElectrolytesCheck = false;
-                              cbcCheck = false;
-                              bunCreaCheck = true;
-                              lipidProfileCheck = false;
-                            }
-
-                            else if(valueChooseLabResult == 'Lipid Profile'){
-                              otherLabResultCheck = false;
-                              ptCheck = false;
-                              serumElectrolytesCheck = false;
-                              cbcCheck = false;
-                              bunCreaCheck = false;
-                              lipidProfileCheck = true;
-                            }
-                            else if(valueChooseLabResult == 'Others'){
-                              otherLabResultCheck = true;
-                              ptCheck = false;
-                              serumElectrolytesCheck = false;
-                              cbcCheck = false;
-                              bunCreaCheck = false;
-                              lipidProfileCheck = false;
-                            }
-                            else{
-                              otherLabResultCheck = false;
-                              ptCheck = false;
-                              serumElectrolytesCheck = false;
-                              cbcCheck = false;
-                              bunCreaCheck = false;
-                              lipidProfileCheck = false;
-                            }
-                          });
-
-                        },
-
-                        items: listLabResult.map((valueItem){
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        },
-                        ).toList(),
-
                       ),
+                      filled: true,
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "Select Laboratory Result:",
                     ),
+                    isExpanded: true,
+                    value: valueChooseLabResult,
+                    onChanged: (newValue){
+                      setState(() {
+                        valueChooseLabResult = newValue;
+
+                        if(valueChooseLabResult == 'Prothrombin Time'){
+                          otherLabResultCheck = false;
+                          ptCheck = true;
+                          serumElectrolytesCheck = false;
+                          cbcCheck = false;
+                          bunCreaCheck = false;
+                          lipidProfileCheck = false;
+                        }
+                        else if(valueChooseLabResult == 'Serum Electrolytes'){
+                          otherLabResultCheck = false;
+                          ptCheck = false;
+                          serumElectrolytesCheck = true;
+                          cbcCheck = false;
+                          bunCreaCheck = false;
+                          lipidProfileCheck = false;
+                        }
+                        else if(valueChooseLabResult == 'Complete Blood Count'){
+                          otherLabResultCheck = false;
+                          ptCheck = false;
+                          serumElectrolytesCheck = false;
+                          cbcCheck = true;
+                          bunCreaCheck = false;
+                          lipidProfileCheck = false;
+                        }
+                        else if(valueChooseLabResult == 'Bun&Creatinine'){
+                          otherLabResultCheck = false;
+                          ptCheck = false;
+                          serumElectrolytesCheck = false;
+                          cbcCheck = false;
+                          bunCreaCheck = true;
+                          lipidProfileCheck = false;
+                        }
+
+                        else if(valueChooseLabResult == 'Lipid Profile'){
+                          otherLabResultCheck = false;
+                          ptCheck = false;
+                          serumElectrolytesCheck = false;
+                          cbcCheck = false;
+                          bunCreaCheck = false;
+                          lipidProfileCheck = true;
+                        }
+                        else if(valueChooseLabResult == 'Others'){
+                          otherLabResultCheck = true;
+                          ptCheck = false;
+                          serumElectrolytesCheck = false;
+                          cbcCheck = false;
+                          bunCreaCheck = false;
+                          lipidProfileCheck = false;
+                        }
+                        else{
+                          otherLabResultCheck = false;
+                          ptCheck = false;
+                          serumElectrolytesCheck = false;
+                          cbcCheck = false;
+                          bunCreaCheck = false;
+                          lipidProfileCheck = false;
+                        }
+                      });
+
+                    },
+                    items: listLabResult.map((valueItem){
+                      return DropdownMenuItem(
+                        value: valueItem,
+                        child: Text(valueItem),
+                      );
+                    },
+                    ).toList(),
                   ),
-                  SizedBox(height: 8.0),
+                  Visibility(visible: otherLabResultCheck, child: SizedBox(height: 8.0)),
+
                   Visibility(
                     visible: otherLabResultCheck,
                     child: TextFormField(
@@ -235,7 +234,7 @@ class _addLabResultState extends State<add_lab_results> {
                       },
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  Visibility(visible: ptCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: ptCheck,
                     child: TextFormField(
@@ -261,6 +260,7 @@ class _addLabResultState extends State<add_lab_results> {
                       },
                     ),
                   ),
+                  Visibility(visible: serumElectrolytesCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: serumElectrolytesCheck,
                     child: TextFormField(
@@ -286,6 +286,7 @@ class _addLabResultState extends State<add_lab_results> {
                       },
                     ),
                   ),
+                  Visibility(visible: cbcCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: cbcCheck,
                     child: TextFormField(
@@ -311,6 +312,7 @@ class _addLabResultState extends State<add_lab_results> {
                       },
                     ),
                   ),
+                  Visibility(visible: bunCreaCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: bunCreaCheck,
                     child: TextFormField(
@@ -336,6 +338,7 @@ class _addLabResultState extends State<add_lab_results> {
                       },
                     ),
                   ),
+                  Visibility(visible: bunCreaCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: bunCreaCheck,
                     child: TextFormField(
@@ -361,6 +364,7 @@ class _addLabResultState extends State<add_lab_results> {
                       },
                     ),
                   ),
+                  Visibility(visible: lipidProfileCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: lipidProfileCheck,
                     child: TextFormField(
@@ -386,6 +390,7 @@ class _addLabResultState extends State<add_lab_results> {
                       },
                     ),
                   ),
+                  Visibility(visible: lipidProfileCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: lipidProfileCheck,
                     child: TextFormField(
@@ -415,6 +420,8 @@ class _addLabResultState extends State<add_lab_results> {
                   SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 3,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),

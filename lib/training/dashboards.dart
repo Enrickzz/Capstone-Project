@@ -13,6 +13,7 @@ import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
+import '../main.dart';
 
 class Dashboards extends StatefulWidget {
   const Dashboards({Key key, this.animationController}) : super(key: key);
@@ -356,6 +357,10 @@ class _DashboardsState extends State<Dashboards>
                                 onTap: () async {
                                   await _auth.signOut();
                                   print('signed out');
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => LogIn()),
+                                  );
                                 },
                                 child: Center(
                                   child: Icon(

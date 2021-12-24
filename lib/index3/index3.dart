@@ -20,6 +20,7 @@ import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
+import '../main.dart';
 import '../notifications.dart';
 
 class index3 extends StatefulWidget {
@@ -661,8 +662,13 @@ class _index3State extends State<index3>
                       child: Text('Sign Out', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ),
-                    onPressed: () async{
-
+                    onPressed: () async {
+                      await _auth.signOut();
+                      print('signed out');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LogIn()),
+                      );
                     },
                   ),
                 ),

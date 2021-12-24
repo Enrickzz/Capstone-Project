@@ -93,60 +93,62 @@ class _addMedicationState extends State<add_medication> {
                   Text(
                     'Add Medication Intake',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
-                  Container(
-                    padding: EdgeInsets.only(left: 16, right: 16),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 1),
-                        borderRadius: BorderRadius.circular(15)
-                    ),
-                    child: DropdownButton(
-                      dropdownColor: Colors.white,
-                      hint: Text("Medicine/Supplement: "),
-                      icon: Icon(Icons.arrow_drop_down),
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18
+                  Divider(),
+                  SizedBox(height: 8),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width:0,
+                          style: BorderStyle.none,
+                        ),
                       ),
-                      iconSize: 36,
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      value: valueChooseMedicineSupplement,
-
-                      items: listMedicineSupplement.map((valueItem){
-                        return DropdownMenuItem(
-                            value: valueItem.name,
-                            child: Text(valueItem.name)
-                        );
-                      },
-                      ).toList(),
-                      onChanged: (newValue){
-                        setState(() {
-                          valueChooseMedicineSupplement = newValue;
-                          print("NEW VALUE " + newValue);
-                          // picked = listMedicineSupplement.indexOf(newValue);
-                          for(int i = 0; i < medical_name.length; i++){
-                            if(medical_name[i].name == newValue){
-                              hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
-                              medicine_dosage = double.parse(medical_name[i].dosage);
-                            }
-                            else if (medical_name[i].name == newValue){
-                              hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
-                              medicine_dosage = double.parse(medical_name[i].dosage);
-                            }
-                          }
-                          for(int i = 0; i < medical_name.length; i++){
-                            if(medical_name[i].name == newValue){
-                              hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
-                              medicine_dosage = double.parse(medical_name[i].dosage);
-                            }
-                          }
-                        });
-                      },
-
+                      filled: true,
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "Medicine/Supplement: ",
                     ),
+                    isExpanded: true,
+                    value: valueChooseMedicineSupplement,
+                    onChanged: (newValue){
+                      setState(() {
+                        valueChooseMedicineSupplement = newValue;
+                        print("NEW VALUE " + newValue);
+                        // picked = listMedicineSupplement.indexOf(newValue);
+                        for(int i = 0; i < medical_name.length; i++){
+                          if(medical_name[i].name == newValue){
+                            hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
+                            medicine_dosage = double.parse(medical_name[i].dosage);
+                          }
+                          else if (medical_name[i].name == newValue){
+                            hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
+                            medicine_dosage = double.parse(medical_name[i].dosage);
+                          }
+                        }
+                        for(int i = 0; i < medical_name.length; i++){
+                          if(medical_name[i].name == newValue){
+                            hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
+                            medicine_dosage = double.parse(medical_name[i].dosage);
+                          }
+                        }
+                      });
+                    },
+                    items: listMedicineSupplement.map((valueItem){
+                      return DropdownMenuItem(
+                          value: valueItem.name,
+                          child: Text(valueItem.name)
+                      );
+                    },
+                    ).toList(),
                   ),
+
                   // TextFormField(
                   //   showCursor: true,
                   //   decoration: InputDecoration(
@@ -332,7 +334,7 @@ class _addMedicationState extends State<add_medication> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 18.0),
+                  SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
