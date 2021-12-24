@@ -39,15 +39,16 @@ class HealthTeam extends StatefulWidget {
   @override
   _HealthTeamState createState() => _HealthTeamState();
 }
-
+final FirebaseAuth auth = FirebaseAuth.instance;
 class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-  final FirebaseAuth auth = FirebaseAuth.instance;
+
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
+
 
   @override
   void initState() {
@@ -65,9 +66,11 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
 
     super.dispose();
   }
+  final User user = auth.currentUser;
 
   @override
   Widget build(BuildContext context) {
+    final uid = user.uid;
     return Scaffold(
         appBar: AppBar(
           title: Text('My Healthteam'),
@@ -173,7 +176,7 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("*Palagay dito yung access code*",
+                                            Text(uid,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -181,7 +184,8 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                                             ),
                                             ElevatedButton(
                                                 onPressed: (){
-                                                  Clipboard.setData(new ClipboardData(text: "put access code here")).then((_){
+
+                                                  Clipboard.setData(new ClipboardData(text: uid)).then((_){
                                                     ScaffoldMessenger.of(context)
                                                         .showSnackBar(SnackBar(content: Text('Copied to your clipboard !')));
                                                   });
