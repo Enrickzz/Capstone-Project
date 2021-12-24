@@ -53,6 +53,7 @@ dependencies:
   syncfusion_flutter_gauges: ^19.3.55
   http: ^0.13.4
 
+clipboard: ^0.1.3
 
 
 
