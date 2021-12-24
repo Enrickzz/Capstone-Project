@@ -15,6 +15,7 @@ import 'dialogs/policy_dialog.dart';
 import 'fitness_app_theme.dart';
 import 'package:my_app/data_inputs/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/edit_medication_prescription.dart';
 
 
 
@@ -111,7 +112,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                     builder: (context) => SingleChildScrollView(child: Container(
                                       padding: EdgeInsets.only(
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: add_medication_prescription(thislist: prestemp),
+                                      child: edit_medication_prescription(thislist: prestemp),
                                     ),
                                     ),
                                   ).then((value) =>
