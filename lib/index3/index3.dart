@@ -22,6 +22,11 @@ import 'package:flutter/material.dart';
 import '../fitness_app_theme.dart';
 import '../main.dart';
 import '../notifications.dart';
+import 'package:my_app/patient_view_support_system.dart';
+import 'package:my_app/data_inputs/medication_prescription.dart';
+import 'package:my_app/view_medical_prescription_as_patient.dart';
+
+
 
 class index3 extends StatefulWidget {
   const index3({Key key, this.animationController}) : super(key: key);
@@ -630,7 +635,18 @@ class _index3State extends State<index3>
                         ),
                         _buildDivider(),
                         ListTile(
-                          title: Text("Manage Support System"),
+                          title: Text("Doctors' Prescriptions"),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap:(){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => medication_prescription_patientView()),
+                            );
+
+                          },
+                        ),
+                        ListTile(
+                          title: Text("Doctors' Orders"),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap:(){
 
@@ -641,6 +657,10 @@ class _index3State extends State<index3>
                           title: Text("Manage Healthcare Team"),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap:(){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HealthTeam()),
+                            );
 
                           },
                         ),
