@@ -20,35 +20,42 @@ class ExRxTest {
     if (json['exercises'] != null) {
       exercises = new List<ExercisesTest>();
       String temp1 = json['exercises'].toString();
-      List<String> tempArr1 = temp1.split("{");
-      String tempNew= "{ exercises: [ ";
-      for(var i = 0 ; i < tempArr1.length;i++){
-        if(i>1){
-          String a = tempArr1[i];
-          tempNew = tempNew + "{"+ tempArr1[i].replaceFirst((i).toString()+":", "", a.length-3);
+      print(temp1);
+      if(temp1[0] == "["){
+        json['exercises'].forEach((v) {
+          exercises.add(new ExercisesTest.fromJson2(v));
+        });
+      }else{
+        List<String> tempArr1 = temp1.split("{");
+        String tempNew= "{ exercises: [ ";
+        for(var i = 0 ; i < tempArr1.length;i++){
+          if(i>1){
+            String a = tempArr1[i];
+            tempNew = tempNew + "{"+ tempArr1[i].replaceFirst((i).toString()+":", "", a.length-3);
+          }
         }
-      }
-      tempArr1.removeAt(0);
-      tempArr1.removeAt(1);
-      for(var i = 1 ; i < tempArr1.length;i++){
-        String splitthis = tempArr1[i].replaceAll("}", "").replaceAll("]", "");
-        String cleanthis = splitthis.substring(0, splitthis.length-3);
-        
-        List<String> splitarr= cleanthis.split(",");
-        instructionsPreparationtemp = getThisLabel(cleanthis,"Instructions_Preparation:", "Instructions_Execution:" );
-        instructionsExecutiontemp= getThisLabel(cleanthis, "Instructions_Execution:", "Small_Img_1");
-        imagephoto = getThisLabel(cleanthis, "Larg_Img_1:", "Larg_Img_2");
-        exerciseIdtemp = getThisLabel(cleanthis, "Exercise_Id:", "Exercise_Name:");
-        exerciseNametemp = getThisLabel(cleanthis, "Exercise_Name:", "URL:");
-        uRLtemp = getThisLabel(cleanthis, "URL:", "Apparatus_Name:");
-        apparatusNametemp = getThisLabel(cleanthis, "Apparatus_Name:", "Apparatus_Abbreviation:");
-        apparatusAbbreviationtemp = getThisLabel(cleanthis, "Apparatus_Abbreviation:", "IV:");
-        videoSrctemp = getThisLabel(cleanthis, "video_src:", "Exercise_Name_Complete:");
+        tempArr1.removeAt(0);
+        tempArr1.removeAt(1);
+        for(var i = 1 ; i < tempArr1.length;i++){
+          String splitthis = tempArr1[i].replaceAll("}", "").replaceAll("]", "");
+          String cleanthis = splitthis.substring(0, splitthis.length-3);
 
-        exercises.add(new ExercisesTest(exerciseId: int.parse(exerciseIdtemp), exerciseName: exerciseNametemp,
-        apparatusAbbreviation: apparatusAbbreviationtemp, apparatusName: apparatusNametemp, largImg1: imagephoto,
-        instructionsExecution: instructionsExecutiontemp, instructionsPreparation: instructionsPreparationtemp,
-        uRL: uRLtemp, videoSrc: videoSrctemp));
+          List<String> splitarr= cleanthis.split(",");
+          instructionsPreparationtemp = getThisLabel(cleanthis,"Instructions_Preparation:", "Instructions_Execution:" );
+          instructionsExecutiontemp= getThisLabel(cleanthis, "Instructions_Execution:", "Small_Img_1");
+          imagephoto = getThisLabel(cleanthis, "Larg_Img_1:", "Larg_Img_2");
+          exerciseIdtemp = getThisLabel(cleanthis, "Exercise_Id:", "Exercise_Name:");
+          exerciseNametemp = getThisLabel(cleanthis, "Exercise_Name:", "URL:");
+          uRLtemp = getThisLabel(cleanthis, "URL:", "Apparatus_Name:");
+          apparatusNametemp = getThisLabel(cleanthis, "Apparatus_Name:", "Apparatus_Abbreviation:");
+          apparatusAbbreviationtemp = getThisLabel(cleanthis, "Apparatus_Abbreviation:", "IV:");
+          videoSrctemp = getThisLabel(cleanthis, "video_src:", "Exercise_Name_Complete:");
+
+          exercises.add(new ExercisesTest(exerciseId: int.parse(exerciseIdtemp), exerciseName: exerciseNametemp,
+              apparatusAbbreviation: apparatusAbbreviationtemp, apparatusName: apparatusNametemp, largImg1: imagephoto,
+              instructionsExecution: instructionsExecutiontemp, instructionsPreparation: instructionsPreparationtemp,
+              uRL: uRLtemp, videoSrc: videoSrctemp));
+      }
       }
     }
     api = json['api'] != null ? new ApiTest.fromJson(json['api']) : null;
@@ -227,8 +234,57 @@ class ExercisesTest {
     apparatusAbbreviation= getThisLabel(thisstring, "{apparatusAbbreviation:", "apparatusName:");
     instructionsPreparation= getThisLabel(thisstring, "instructionsPreparation:", "exerciseName:");
     instructionsExecution= getThisLabel(thisstring, "instructionsExecution:", "videoSrc:");
-    largImg1= getThisLabel(thisstring, "largImg1:", "uRL:");   
+    largImg1= getThisLabel(thisstring, "largImg1:", "uRL:");
     videoSrc= getThisLabel(thisstring, "videoSrc:", "largImg1:");
+  }
+  ExercisesTest.fromJson2(Map<String, dynamic> json) {
+    exerciseId = json['Exercise_Id'];
+    exerciseName = json['Exercise_Name'];
+    uRL = json['URL'];
+    apparatusName = json['Apparatus_Name'];
+    apparatusAbbreviation = json['Apparatus_Abbreviation'];
+    // // iV = json['IV'];
+    // // intensityWeight = json['Intensity_Weight'];
+    // // intensityRM1 = json['Intensity_RM1'];
+    // // intensityMeasurement = json['Intensity_Measurement'];
+    // // intensityCardio = json['Intensity_Cardio'];
+    // // durationReps = json['Duration_Reps'];
+    // // durationDistance = json['Duration_Distance'];
+    // // durationTime = json['Duration_Time'];
+    // // durationInterval = json['Duration_Interval'];
+    // // cardioHR = json['Cardio_HR'];
+    // // cardioLevel = json['Cardio_Level'];
+    // // cardioMETs = json['Cardio_METs'];
+    // // cardioHRMax = json['Cardio_HRMax'];
+    // // cardioHRReserve = json['Cardio_HRReserve'];
+    // // cardioMETMax = json['Cardio_METMax'];
+    // // cardioVO2Max = json['Cardio_VO2Max'];
+    // // cardioVO2Reserve = json['Cardio_VO2Reserve'];
+    // // cardioRPE110 = json['Cardio_RPE1_10'];
+    // // cardioRPE620 = json['Cardio_RPE6_20'];
+    // // cardioSpeed = json['Cardio_Speed'];
+    // // cardioWatts = json['Cardio_Watts'];
+    // // apparatusGroupsName = json['Apparatus_Groups_Name'];
+    // // isConcatenate = json['is_concatenate'];
+    // // utilityName = json['Utility_Name'];
+    // // secondaryMuscleGroup = json['Secondary_Muscle_Group'];
+    // // movementName = json['Movement_Name'];
+    // // bilateralLoading = json['Bilateral_Loading'];
+    // // bodyWeightPercent = json['Body_Weight_Percent'];
+    instructionsPreparation = json['Instructions_Preparation'];
+    instructionsExecution = json['Instructions_Execution'];
+    // // smallImg1 = json['Small_Img_1'];
+    // // smallImg2 = json['Small_Img_2'];
+    largImg1 = json['Larg_Img_1'];
+    // // largImg2 = json['Larg_Img_2'];
+    // // gIFImg = json['GIF_Img'];
+    // // recommendImage = json['Recommend_Image'];
+    videoSrc = json['video_src'];
+    // exerciseNameComplete = json['Exercise_Name_Complete'];
+    // exerciseNameCompleteAbbreviation =
+    // json['Exercise_Name_Complete_Abbreviation'];
+    // utilityIcon = json['Utility_Icon'];
+    // targetMuscleGroup = json['Target_Muscle_Group'];
   }
   String getThisLabel (String source,String label, String next){
     String str2 = source.substring(source.indexOf("$label"));

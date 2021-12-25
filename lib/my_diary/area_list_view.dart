@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/exrxTEST.dart';
+import 'package:my_app/my_diary/view_exrx.dart';
+import 'package:my_app/my_diary/viewexrx_added.dart';
 
 import '../fitness_app_theme.dart';
 
@@ -118,6 +120,7 @@ class AreaView extends StatelessWidget {
             transform: Matrix4.translationValues(
                 0.0, 50 * (1.0 - animation.value), 0.0),
             child: Container(
+
               decoration: BoxDecoration(
                 color: FitnessAppTheme.white,
                 borderRadius: const BorderRadius.only(
@@ -140,16 +143,42 @@ class AreaView extends StatelessWidget {
                   hoverColor: Colors.transparent,
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   splashColor: FitnessAppTheme.nearlyDarkBlue.withOpacity(0.2),
-                  onTap: () {},
+                  onTap: () {
+                    print("MAMA mo" + thisExer.exerciseName);
+                    showModalBottomSheet(context: context,
+                      isScrollControlled: true,
+                      builder: (context) => SingleChildScrollView(child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: view_exrx_added(exercise: thisExer),
+                      ),
+                      ),
+                    );
+                  },
                   child: Column(
                     children: <Widget>[
                       Padding(
                         padding:
-                            const EdgeInsets.only(top: 16, left: 16, right: 16),
-                        child: Image.network("https:"+imagepath),
+                            const EdgeInsets.only(top: 5, left: 5, right: 5),
+                        child: Container(
+                          width: 170,
+                          height: 110,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: DecorationImage(
+                                  fit:BoxFit.cover,
+                                  image: NetworkImage("https:"+imagepath)
+                              )
+                          ),
+                        )
+
+
                       ),
                       SizedBox(height: 8,),
-                      Text(thisExer.exerciseName),
+                      Padding(padding: const EdgeInsets.all(3),
+                      child: Text(thisExer.exerciseName),)
+                      ,
+
                     ],
                   ),
                 ),

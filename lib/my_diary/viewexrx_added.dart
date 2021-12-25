@@ -25,15 +25,15 @@ import 'package:video_player/video_player.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class view_exrx extends StatefulWidget {
+class view_exrx_added extends StatefulWidget {
   final ExercisesTest exercise;
-  view_exrx({this.exercise});
+  view_exrx_added({this.exercise});
   @override
-  _view_exrxState createState() => _view_exrxState();
+  _view_exrx_addedState createState() => _view_exrx_addedState();
 }
 final _formKey = GlobalKey<FormState>();
 
-class _view_exrxState extends State<view_exrx> {
+class _view_exrx_addedState extends State<view_exrx_added> {
 
 
   VideoPlayerController videoPlayerController;
@@ -167,7 +167,7 @@ class _view_exrxState extends State<view_exrx> {
                     children: <Widget>[
                       FlatButton(
                         child: Text(
-                          'Cancel',
+                          'Remove from my list',
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
@@ -175,70 +175,70 @@ class _view_exrxState extends State<view_exrx> {
                           Navigator.pop(context);
                         },
                       ),
-                      FlatButton(
-                        child: Text(
-                          'Add',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() async {
-                          try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
-                            final readExers = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
-                            readExers.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              if(datasnapshot.value == null){
-                                final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + 0.toString());
-                                exerRef.set({"exerciseId": widget.exercise.exerciseId,
-                                  "exerciseName": widget.exercise.exerciseName,
-                                  "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
-                                  "apparatusName": widget.exercise.apparatusName,
-                                  "largImg1": widget.exercise.largImg1,
-                                  "instructionsExecution": widget.exercise.instructionsExecution,
-                                  "instructionsPreparation": widget.exercise.instructionsPreparation,
-                                  "uRL": widget.exercise.uRL,
-                                  "videoSrc": widget.exercise.videoSrc,
-                                });
-                                print("Added Body exercise Successfully! " + uid);
-                              }
-                              else{
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = myexerciselist.length--;
-                                  print("count " + count.toString());
-                                  final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + count.toString());
-                                  exerRef.set({"exerciseId": widget.exercise.exerciseId,
-                                    "exerciseName": widget.exercise.exerciseName,
-                                    "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
-                                    "apparatusName": widget.exercise.apparatusName,
-                                    "largImg1": widget.exercise.largImg1,
-                                    "instructionsExecution": widget.exercise.instructionsExecution,
-                                    "instructionsPreparation": widget.exercise.instructionsPreparation,
-                                    "uRL": widget.exercise.uRL,
-                                    "videoSrc": widget.exercise.videoSrc,
-                                  });
-                                });
-                              }
-                            });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              //myexerciselist.add(new myexerciselist(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time)));
-                              for(var i=0;i<myexerciselist.length/2;i++){
-                                var temp = myexerciselist[i];
-                                myexerciselist[i] = myexerciselist[myexerciselist.length-1-i];
-                                myexerciselist[myexerciselist.length-1-i] = temp;
-                              }
-                              print("POP HERE ==========");
-                              Navigator.pop(context, myexerciselist);
-                            });
-
-                          } catch(e) {
-                            print("you got an error! $e");
-                          }
-                          // // Navigator.pop(context);
-                        },
-                      )
+                      // FlatButton(
+                      //   child: Text(
+                      //     'Add',
+                      //     style: TextStyle(color: Colors.white),
+                      //   ),
+                      //   color: Colors.blue,
+                      //   onPressed:() async {
+                      //     try{
+                      //       final User user = auth.currentUser;
+                      //       final uid = user.uid;
+                      //       final readExers = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+                      //       readExers.once().then((DataSnapshot datasnapshot) {
+                      //         String temp1 = datasnapshot.value.toString();
+                      //         print("temp1 " + temp1);
+                      //         List<String> temp = temp1.split(',');
+                      //         if(datasnapshot.value == null){
+                      //           final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + 0.toString());
+                      //           exerRef.set({"exerciseId": widget.exercise.exerciseId,
+                      //             "exerciseName": widget.exercise.exerciseName,
+                      //             "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
+                      //             "apparatusName": widget.exercise.apparatusName,
+                      //             "largImg1": widget.exercise.largImg1,
+                      //             "instructionsExecution": widget.exercise.instructionsExecution,
+                      //             "instructionsPreparation": widget.exercise.instructionsExecution,
+                      //             "uRL": widget.exercise.uRL,
+                      //             "videoSrc": widget.exercise.videoSrc,
+                      //           });
+                      //           print("Added Body exercise Successfully! " + uid);
+                      //         }
+                      //         else{
+                      //           Future.delayed(const Duration(milliseconds: 1000), (){
+                      //             count = myexerciselist.length--;
+                      //             print("count " + count.toString());
+                      //             final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + count.toString());
+                      //             exerRef.set({"exerciseId": widget.exercise.exerciseId,
+                      //               "exerciseName": widget.exercise.exerciseName,
+                      //               "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
+                      //               "apparatusName": widget.exercise.apparatusName,
+                      //               "largImg1": widget.exercise.largImg1,
+                      //               "instructionsExecution": widget.exercise.instructionsExecution,
+                      //               "instructionsPreparation": widget.exercise.instructionsExecution,
+                      //               "uRL": widget.exercise.uRL,
+                      //               "videoSrc": widget.exercise.videoSrc,
+                      //             });
+                      //           });
+                      //         }
+                      //       });
+                      //       Future.delayed(const Duration(milliseconds: 1000), (){
+                      //         //myexerciselist.add(new myexerciselist(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time)));
+                      //         for(var i=0;i<myexerciselist.length/2;i++){
+                      //           var temp = myexerciselist[i];
+                      //           myexerciselist[i] = myexerciselist[myexerciselist.length-1-i];
+                      //           myexerciselist[myexerciselist.length-1-i] = temp;
+                      //         }
+                      //         print("POP HERE ==========");
+                      //         Navigator.pop(context, myexerciselist);
+                      //       });
+                      //
+                      //     } catch(e) {
+                      //       print("you got an error! $e");
+                      //     }
+                      //     // // Navigator.pop(context);
+                      //   },
+                      // )
                     ],
                   ),
 
