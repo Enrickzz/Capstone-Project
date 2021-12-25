@@ -3,13 +3,15 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/data_inputs/vitals/add_blood_pressure.dart';
 import 'package:my_app/models/ExRxApi.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/my_diary/view_exrx.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/ui_view/area_list_view.dart';
+import 'package:my_app/my_diary/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/diet_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
@@ -275,11 +277,25 @@ class Exercise_screen_state extends State<ExerciseScreen>
                                                   fontSize:16,
                                                   color:Colors.grey,
                                                 ),),
-                                              // Text("Other info",
-                                              //   style: TextStyle(
-                                              //     fontSize:16,
-                                              //     color:Colors.grey,
-                                              //   ),),
+
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20))),
+                                                child: Text('View Exercise', style: TextStyle(fontSize: 10),),
+                                                onPressed: () {
+                                                  showModalBottomSheet(context: context,
+                                                    isScrollControlled: true,
+                                                    builder: (context) => SingleChildScrollView(child: Container(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                      child: view_exrx(exercise: listexercises[index]),
+                                                    ),
+                                                    ),
+                                                  );
+                                                },
+                                              )
                                             ]
                                         ),
                                       ))
@@ -343,7 +359,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
         headers: {
-          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQwMTc3Njk3LCJleHAiOjE2NDAxODEyOTcsIm5hbWUiOiJsb3Vpc2V4cngifQ.iQ6tOlisi1geHw2XM5nnwXdtz_Wp6jMRoQQhjMimTFI",
+          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQwNDMwMzg2LCJleHAiOjE2NDA0MzM5ODYsIm5hbWUiOiJsb3Vpc2V4cngifQ.5PdUhuXqjNorVs2_FZWAT7DKeISh_z5J9hDNth7PJdI",
         });
     List<Symptom> symptoms = [];
     symptoms.clear();

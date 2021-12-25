@@ -1,5 +1,6 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/my_diary/exercise_screen.dart';
 
 class TitleView extends StatelessWidget {
   final String titleTxt;
@@ -51,16 +52,24 @@ class TitleView extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8),
                         child: Row(
                           children: <Widget>[
-                            Text(
-                              subTxt,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: FitnessAppTheme.fontName,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16,
-                                letterSpacing: 0.5,
-                                color: FitnessAppTheme.nearlyDarkBlue,
+                            GestureDetector(
+                              child: Text(
+                                subTxt,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontFamily: FitnessAppTheme.fontName,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  letterSpacing: 0.5,
+                                  color: FitnessAppTheme.nearlyDarkBlue,
+                                ),
                               ),
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ExerciseScreen(animationController: animationController)),
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 38,

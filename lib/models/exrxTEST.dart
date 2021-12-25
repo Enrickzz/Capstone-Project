@@ -43,11 +43,12 @@ class ExRxTest {
         uRLtemp = getThisLabel(cleanthis, "URL:", "Apparatus_Name:");
         apparatusNametemp = getThisLabel(cleanthis, "Apparatus_Name:", "Apparatus_Abbreviation:");
         apparatusAbbreviationtemp = getThisLabel(cleanthis, "Apparatus_Abbreviation:", "IV:");
+        videoSrctemp = getThisLabel(cleanthis, "video_src:", "Exercise_Name_Complete:");
 
         exercises.add(new ExercisesTest(exerciseId: int.parse(exerciseIdtemp), exerciseName: exerciseNametemp,
         apparatusAbbreviation: apparatusAbbreviationtemp, apparatusName: apparatusNametemp, largImg1: imagephoto,
         instructionsExecution: instructionsExecutiontemp, instructionsPreparation: instructionsPreparationtemp,
-        uRL: uRLtemp));
+        uRL: uRLtemp, videoSrc: videoSrctemp));
 
 
       }
@@ -116,7 +117,7 @@ class ExercisesTest {
   // String largImg2;
   // String gIFImg;
   // int recommendImage;
-  // String videoSrc;
+  String videoSrc;
   // String exerciseNameComplete;
   // String exerciseNameCompleteAbbreviation;
   // String utilityIcon;
@@ -164,7 +165,7 @@ class ExercisesTest {
         // this.largImg2,
         // this.gIFImg,
         // this.recommendImage,
-        // this.videoSrc,
+        this.videoSrc,
         // this.exerciseNameComplete,
         // this.exerciseNameCompleteAbbreviation,
         // this.utilityIcon,
@@ -213,7 +214,7 @@ class ExercisesTest {
     // largImg2 = json['Larg_Img_2'];
     // gIFImg = json['GIF_Img'];
     // recommendImage = json['Recommend_Image'];
-    // videoSrc = json['video_src'];
+    videoSrc = json['video_src'];
     // exerciseNameComplete = json['Exercise_Name_Complete'];
     // exerciseNameCompleteAbbreviation =
     // json['Exercise_Name_Complete_Abbreviation'];
@@ -264,7 +265,7 @@ class ExercisesTest {
     // data['Larg_Img_2'] = this.largImg2;
     // data['GIF_Img'] = this.gIFImg;
     // data['Recommend_Image'] = this.recommendImage;
-    // data['video_src'] = this.videoSrc;
+    data['video_src'] = this.videoSrc;
     // data['Exercise_Name_Complete'] = this.exerciseNameComplete;
     // data['Exercise_Name_Complete_Abbreviation'] =
     //     this.exerciseNameCompleteAbbreviation;

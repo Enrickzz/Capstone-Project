@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/models/tabIcon_data.dart';
+import 'package:my_app/my_diary/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/training/dashboards.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +159,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
                 }
                 setState(() {
                   tabBody =
-                      ExerciseScreen(animationController: animationController);
+                      my_exercises(animationController: animationController);
                 });
               });
             }else if(index ==2){

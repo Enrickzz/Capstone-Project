@@ -26,7 +26,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-
+  List<String> generate =  List<String>.generate(100, (index) => "$index ror");
   @override
   void initState() {
     super.initState();
@@ -90,6 +90,20 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   child: Column(
                     children: <Widget>[
+                      // ListView.builder(
+                      //   itemCount: 2,
+                      //     itemBuilder: (context, index){
+                      //   return ListTile(
+                      //     title: Text("Personal Information"),
+                      //     subtitle: Text("Hello World! asdasdasd ad ad a da adsa d a sda sd a  a asd asdasdasd ad sad  asdasda adsadasda adadasdasdaas asdasda asdasdas da asdasdaad ad asd a da ad asd"),
+                      //     onTap:(){
+                      //
+                      //     },
+                      //     dense: true,
+                      //     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal:
+                      //     16.0),
+                      //   );
+                      // }),
                       ListTile(
                         title: Text("Personal Information"),
                         subtitle: Text("Hello World! asdasdasd ad ad a da adsa d a sda sd a  a asd asdasdasd ad sad  asdasda adsadasda adadasdasdaas asdasda asdasdas da asdasdaad ad asd a da ad asd"),

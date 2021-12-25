@@ -14,6 +14,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
+import '../../notifications.dart';
 import '../lab_results.dart';
 import '../medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
@@ -376,7 +377,11 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 // );
                               }else if(double.parse(systolic_pressure) >= 130 &&  double.parse(systolic_pressure) < 140 && double.parse(diastolic_pressure) >= 80 && double.parse(diastolic_pressure) <= 89 ){
                                 print("YOU ARE ON STAGE 1 HIGH BP");
-                                Navigator.pop(context, bp_list);
+                                //Navigator.pop(context, bp_list);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => notifications()),
+                                  );
                               }else if(double.parse(systolic_pressure) >= 140 &&  double.parse(systolic_pressure) <= 180 && double.parse(diastolic_pressure) >= 90 && double.parse(diastolic_pressure) <= 119){
                                 print("YOU ARE ON STAGE 2 HIGH BP");
                                 Navigator.pop(context, bp_list);
