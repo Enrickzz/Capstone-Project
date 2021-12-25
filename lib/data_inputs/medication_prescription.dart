@@ -12,6 +12,7 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/specific_medical_prescription_viewAsDoctor.dart';
 import '../fitness_app_theme.dart';
 import 'add_medication.dart';
 import 'add_medication_prescription.dart';
@@ -164,6 +165,12 @@ class _medication_prescriptionState extends State<medication_prescription> {
         itemCount: prestemp.length,
         itemBuilder: (context, index) {
           return GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor()),
+              );
+            },
             child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 height: 140,
