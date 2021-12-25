@@ -170,6 +170,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
                             onPressed: () async{
                               await getExercises(search).then((value) => setState((){
                                 listexercises=value;
+                                FocusScope.of(context).requestFocus(FocusNode());
                               }));
 
                               final queryParameters = {
@@ -356,17 +357,10 @@ class Exercise_screen_state extends State<ExerciseScreen>
   Future<List<ExercisesTest>> getExercises(String query) async{
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
         headers: {
-          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQwNDMwMzg2LCJleHAiOjE2NDA0MzM5ODYsIm5hbWUiOiJsb3Vpc2V4cngifQ.5PdUhuXqjNorVs2_FZWAT7DKeISh_z5J9hDNth7PJdI",
+          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQwNDQxMDkwLCJleHAiOjE2NDA0NDQ2OTAsIm5hbWUiOiJsb3Vpc2V4cngifQ.PBIq4Eb5kFq5JJZoaogDSDgnagpbXdip3ZEGZG0C36M",
         });
-    List<Symptom> symptoms = [];
-    symptoms.clear();
-    //print(response.body);
-    //String temp = jsonDecode(response.body);
-// print("THIS IS TEMP \n" + response.body.toString() );
-
     List<ExercisesTest> exers=[];
     exers = ExRxTest.fromJson(jsonDecode(response.body)).exercises;
     print("EXERS LENGTH " + exers.length.toString());
@@ -377,71 +371,4 @@ class Exercise_screen_state extends State<ExerciseScreen>
     listexercises= exers;
     return exers;
   }
-}
-
-
-
-Future<List<Common>> fetchNutritionix(String thisquery) async {
-  var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
-  Map<String, String> headers = {
-    "x-app-id": "f4507302",
-    "x-app-key": "6db30b5553ddddbb5e2543a32c2d58de",
-    "x-remote-user-id": "0",
-  };
-  // String query = '{ "query" : "chicken noodle soup" }';
-
-  // http.Response response = await http.post(url, headers: headers, body: query);
-  List<FullNutrients> temp;
-  var response = await http.post(
-    url,
-    headers: headers,
-    body: {
-      'query': '$thisquery',
-      'detailed': "true",
-    },
-  );
-
-  if(response.statusCode == 200){
-    String data = response.body;
-    // print(data);
-    final parsedJson = convert.jsonDecode(data);
-    final food = nutritionixApi.fromJson(parsedJson);
-    print("nutrients " + food.common[0].fullNutrients[0].value.toString());
-    // for(int i = 0; i < food.common.length; i++){
-    //   for(int j = 0; j < food.common[i].fullNutrients.length; j++){
-    //     if(food.common[i].fullNutrients[j].attrId == 208){ // getting calories
-    //       calories[i] = food.common[i].fullNutrients[j].value;
-    //     }
-    //   }
-    // }
-    //   for(int j = 0; j < food.common[0].fullNutrients.length; j++){
-    //     if(food.common[0].fullNutrients[j].attrId == 208){ // getting calories
-    //       calories[0] = food.common[0].fullNutrients[j].value;
-    //     }
-    //   }
-
-    // print("food " + food.serving_unit);
-    // print("food " + food.tag_name);
-    // print("food " + food.serving_qty.toString());
-    // print("food " + food.tag_id);
-    // var food_name = convert.jsonDecode(data)['food_name'];
-    // print(food_name);
-    // var calories = convert.jsonDecode(data)['nf_calories'];
-    // print(calories);
-
-    // Navigator.pushAndRemoveUntil(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => mainScreen(
-    //           nutritionixApi: food,
-    // )), (route) => false);
-    return food.common;
-  }
-  else{
-    print("response status code is " + response.statusCode.toString());
-  }
-  // final responseJson = json.decode(response.body);
-
-  //print('This is the API response: $responseJson');
-
 }

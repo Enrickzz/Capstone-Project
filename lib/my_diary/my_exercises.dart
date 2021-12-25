@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
@@ -19,7 +24,6 @@ import 'exercise_screen.dart';
 
 class my_exercises extends StatefulWidget {
   const my_exercises({Key key, this.animationController}) : super(key: key);
-
   final AnimationController animationController;
   @override
   _my_exercisesState createState() => _my_exercisesState();
@@ -28,17 +32,19 @@ class my_exercises extends StatefulWidget {
 class _my_exercisesState extends State<my_exercises>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
-
+  List<ExercisesTest> myexerciselist= [];
   final AuthService _auth = AuthService();
 
   double topBarOpacity = 0.0;
 
   @override
   void initState() {
-
+    myexerciselist.clear();
+    getMyExercises();
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -105,6 +111,7 @@ class _my_exercisesState extends State<my_exercises>
 
     listViews.add(
       AreaListView(
+        exerlist: myexerciselist,
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController,
@@ -115,6 +122,8 @@ class _my_exercisesState extends State<my_exercises>
     );
   }
 
+
+
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
@@ -122,11 +131,6 @@ class _my_exercisesState extends State<my_exercises>
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(milliseconds: 5000), () {
-    //   setState(() {
-    //     print("FULL SET STATE");
-    //   });
-    // });
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
@@ -264,5 +268,16 @@ class _my_exercisesState extends State<my_exercises>
         )
       ],
     );
+  }
+  void getMyExercises() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+    readprescription.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        myexerciselist.add(ExercisesTest.fromJson(jsonString));
+      });
+    });
   }
 }

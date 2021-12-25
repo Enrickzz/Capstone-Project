@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/models/exrxTEST.dart';
 
 import '../fitness_app_theme.dart';
 
 class AreaListView extends StatefulWidget {
   const AreaListView(
-      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
+      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation, this.exerlist})
       : super(key: key);
-
+  final List<ExercisesTest> exerlist;
   final AnimationController mainScreenAnimationController;
   final Animation<double> mainScreenAnimation;
   @override
@@ -56,9 +57,9 @@ class _AreaListViewState extends State<AreaListView>
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   children: List<Widget>.generate(
-                    areaListData.length,
+                    widget.exerlist.length,
                     (int index) {
-                      final int count = areaListData.length;
+                      final int count = widget.exerlist.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
@@ -69,9 +70,10 @@ class _AreaListViewState extends State<AreaListView>
                       );
                       animationController?.forward();
                       return AreaView(
-                        imagepath: areaListData[index],
+                        imagepath: widget.exerlist[index].largImg1,
                         animation: animation,
                         animationController: animationController,
+                        thisExer: widget.exerlist[index],
                       );
                     },
                   ),
@@ -97,11 +99,13 @@ class AreaView extends StatelessWidget {
     this.imagepath,
     this.animationController,
     this.animation,
+    this.thisExer
   }) : super(key: key);
 
   final String imagepath;
   final AnimationController animationController;
   final Animation<double> animation;
+  final ExercisesTest thisExer;
 
   @override
   Widget build(BuildContext context) {
@@ -142,8 +146,10 @@ class AreaView extends StatelessWidget {
                       Padding(
                         padding:
                             const EdgeInsets.only(top: 16, left: 16, right: 16),
-                        child: Image.asset(imagepath),
+                        child: Image.network("https:"+imagepath),
                       ),
+                      SizedBox(height: 8,),
+                      Text(thisExer.exerciseName),
                     ],
                   ),
                 ),

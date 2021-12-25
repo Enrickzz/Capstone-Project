@@ -26,7 +26,6 @@ class _blood_pressureState extends State<bp_chart> {
   void initState(){
     super.initState();
     setState(() {
-      print("SET STATE BP");
       _getDefaultLineSeries();
       //finalLine = getLine(finaList);
     });
@@ -193,7 +192,7 @@ class _blood_pressureState extends State<bp_chart> {
             _1item[1] = _1item[1].replaceAll("diastolic_pressure: ", "");
             _1item[4] = _1item[4].replaceAll("systolic_pressure: ", "");
             _1item[4] = _1item[4].replaceAll("]", "");
-            print("\n y" + _1item[2] + "\ny2 =" + _1item[1]);
+            // print("\n y" + _1item[2] + "\ny2 =" + _1item[1]);
             finaList.add(new _ChartData(counter,double.parse(_1item[4]),double.parse(_1item[1])));
             counter++;
             print("counter == " +counter.toString());
@@ -204,12 +203,12 @@ class _blood_pressureState extends State<bp_chart> {
             _1item[1] = _1item[1].replaceAll("diastolic_pressure: ", "");
             _1item[4] = _1item[4].replaceAll("systolic_pressure: ", "");
             _1item[4] = _1item[4].replaceAll("]", "");
-            print("LOOK\n" +_1item[0]+"\n" + _1item[1] + "\n" + _1item[2] + "\n" + _1item[3] + "\n" + _1item[4]);
+            // print("LOOK\n" +_1item[0]+"\n" + _1item[1] + "\n" + _1item[2] + "\n" + _1item[3] + "\n" + _1item[4]);
 
            // print("\n y" + _1item[2] + "\ny2 =" + _1item[1]);
             finaList.add(new _ChartData(counter,double.parse(_1item[4]),double.parse(_1item[1])));
             counter++;
-            print("counter == " +counter.toString());
+            // print("counter == " +counter.toString());
 
           }
           //print(_1item[0] + "\n" + _1item[1] +"\n"+_1item[2] + "\n====================================");

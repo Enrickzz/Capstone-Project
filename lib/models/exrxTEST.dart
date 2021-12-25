@@ -49,20 +49,11 @@ class ExRxTest {
         apparatusAbbreviation: apparatusAbbreviationtemp, apparatusName: apparatusNametemp, largImg1: imagephoto,
         instructionsExecution: instructionsExecutiontemp, instructionsPreparation: instructionsPreparationtemp,
         uRL: uRLtemp, videoSrc: videoSrctemp));
-
-
       }
     }
     api = json['api'] != null ? new ApiTest.fromJson(json['api']) : null;
   }
-  String getThisLabel (String source,String label, String next){
-    String str2 = source.substring(source.indexOf("$label"));
-    str2 = str2.substring(0,str2.indexOf("$next"));
-    str2 = str2.replaceFirst(",", "", str2.length-2);
-    str2 = str2.substring(str2.indexOf(":")+1);
-    str2 = str2.trim();
-    return str2;
-  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.exercises != null) {
@@ -72,6 +63,14 @@ class ExRxTest {
       data['api'] = this.api.toJson();
     }
     return data;
+  }
+  String getThisLabel (String source,String label, String next){
+    String str2 = source.substring(source.indexOf("$label"));
+    str2 = str2.substring(0,str2.indexOf("$next"));
+    str2 = str2.replaceFirst(",", "", str2.length-2);
+    str2 = str2.substring(str2.indexOf(":")+1);
+    str2 = str2.trim();
+    return str2;
   }
 }
 
@@ -173,55 +172,72 @@ class ExercisesTest {
       });
 
   ExercisesTest.fromJson(Map<String, dynamic> json) {
-    exerciseId = json['Exercise_Id'];
-    exerciseName = json['Exercise_Name'];
-    uRL = json['URL'];
-    apparatusName = json['Apparatus_Name'];
-    apparatusAbbreviation = json['Apparatus_Abbreviation'];
-    // iV = json['IV'];
-    // intensityWeight = json['Intensity_Weight'];
-    // intensityRM1 = json['Intensity_RM1'];
-    // intensityMeasurement = json['Intensity_Measurement'];
-    // intensityCardio = json['Intensity_Cardio'];
-    // durationReps = json['Duration_Reps'];
-    // durationDistance = json['Duration_Distance'];
-    // durationTime = json['Duration_Time'];
-    // durationInterval = json['Duration_Interval'];
-    // cardioHR = json['Cardio_HR'];
-    // cardioLevel = json['Cardio_Level'];
-    // cardioMETs = json['Cardio_METs'];
-    // cardioHRMax = json['Cardio_HRMax'];
-    // cardioHRReserve = json['Cardio_HRReserve'];
-    // cardioMETMax = json['Cardio_METMax'];
-    // cardioVO2Max = json['Cardio_VO2Max'];
-    // cardioVO2Reserve = json['Cardio_VO2Reserve'];
-    // cardioRPE110 = json['Cardio_RPE1_10'];
-    // cardioRPE620 = json['Cardio_RPE6_20'];
-    // cardioSpeed = json['Cardio_Speed'];
-    // cardioWatts = json['Cardio_Watts'];
-    // apparatusGroupsName = json['Apparatus_Groups_Name'];
-    // isConcatenate = json['is_concatenate'];
-    // utilityName = json['Utility_Name'];
-    // secondaryMuscleGroup = json['Secondary_Muscle_Group'];
-    // movementName = json['Movement_Name'];
-    // bilateralLoading = json['Bilateral_Loading'];
-    // bodyWeightPercent = json['Body_Weight_Percent'];
-    instructionsPreparation = json['Instructions_Preparation'];
-    instructionsExecution = json['Instructions_Execution'];
-    // smallImg1 = json['Small_Img_1'];
-    // smallImg2 = json['Small_Img_2'];
-    largImg1 = json['Larg_Img_1'];
-    // largImg2 = json['Larg_Img_2'];
-    // gIFImg = json['GIF_Img'];
-    // recommendImage = json['Recommend_Image'];
-    videoSrc = json['video_src'];
+    // exerciseId = json['Exercise_Id'];
+    // exerciseName = json['Exercise_Name'];
+    // uRL = json['URL'];
+    // apparatusName = json['Apparatus_Name'];
+    // apparatusAbbreviation = json['Apparatus_Abbreviation'];
+    // // iV = json['IV'];
+    // // intensityWeight = json['Intensity_Weight'];
+    // // intensityRM1 = json['Intensity_RM1'];
+    // // intensityMeasurement = json['Intensity_Measurement'];
+    // // intensityCardio = json['Intensity_Cardio'];
+    // // durationReps = json['Duration_Reps'];
+    // // durationDistance = json['Duration_Distance'];
+    // // durationTime = json['Duration_Time'];
+    // // durationInterval = json['Duration_Interval'];
+    // // cardioHR = json['Cardio_HR'];
+    // // cardioLevel = json['Cardio_Level'];
+    // // cardioMETs = json['Cardio_METs'];
+    // // cardioHRMax = json['Cardio_HRMax'];
+    // // cardioHRReserve = json['Cardio_HRReserve'];
+    // // cardioMETMax = json['Cardio_METMax'];
+    // // cardioVO2Max = json['Cardio_VO2Max'];
+    // // cardioVO2Reserve = json['Cardio_VO2Reserve'];
+    // // cardioRPE110 = json['Cardio_RPE1_10'];
+    // // cardioRPE620 = json['Cardio_RPE6_20'];
+    // // cardioSpeed = json['Cardio_Speed'];
+    // // cardioWatts = json['Cardio_Watts'];
+    // // apparatusGroupsName = json['Apparatus_Groups_Name'];
+    // // isConcatenate = json['is_concatenate'];
+    // // utilityName = json['Utility_Name'];
+    // // secondaryMuscleGroup = json['Secondary_Muscle_Group'];
+    // // movementName = json['Movement_Name'];
+    // // bilateralLoading = json['Bilateral_Loading'];
+    // // bodyWeightPercent = json['Body_Weight_Percent'];
+    // instructionsPreparation = json['Instructions_Preparation'];
+    // instructionsExecution = json['Instructions_Execution'];
+    // // smallImg1 = json['Small_Img_1'];
+    // // smallImg2 = json['Small_Img_2'];
+    // largImg1 = json['Larg_Img_1'];
+    // // largImg2 = json['Larg_Img_2'];
+    // // gIFImg = json['GIF_Img'];
+    // // recommendImage = json['Recommend_Image'];
+    // videoSrc = json['video_src'];
     // exerciseNameComplete = json['Exercise_Name_Complete'];
     // exerciseNameCompleteAbbreviation =
     // json['Exercise_Name_Complete_Abbreviation'];
     // utilityIcon = json['Utility_Icon'];
     // targetMuscleGroup = json['Target_Muscle_Group'];
+    String thisstring= json.toString();
+    exerciseId = int.parse(getThisLabel(thisstring, "exerciseId:", "instructionsExecution:"));
+    exerciseName = getThisLabel(thisstring, "exerciseName:", "exerciseId:");
+    uRL = getThisLabel(thisstring, "uRL:", "}");
+    apparatusName= getThisLabel(thisstring, "apparatusName:", "instructionsPreparation:");
+    apparatusAbbreviation= getThisLabel(thisstring, "{apparatusAbbreviation:", "apparatusName:");
+    instructionsPreparation= getThisLabel(thisstring, "instructionsPreparation:", "exerciseName:");
+    instructionsExecution= getThisLabel(thisstring, "instructionsExecution:", "videoSrc:");
+    largImg1= getThisLabel(thisstring, "largImg1:", "uRL:");   
+    videoSrc= getThisLabel(thisstring, "videoSrc:", "largImg1:");
   }
-
+  String getThisLabel (String source,String label, String next){
+    String str2 = source.substring(source.indexOf("$label"));
+    str2 = str2.substring(0,str2.indexOf("$next"));
+    str2 = str2.replaceFirst(",", "", str2.length-2);
+    str2 = str2.substring(str2.indexOf(":")+1);
+    str2 = str2.trim();
+    return str2;
+  }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Exercise_Id'] = this.exerciseId;
@@ -310,4 +326,5 @@ class ApiTest {
     data['call-count-limit-hour'] = this.callCountLimitHour;
     return data;
   }
+
 }

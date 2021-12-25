@@ -1,5 +1,6 @@
 import 'dart:convert';
 // import 'dart:html';
+// import 'dart:html';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -40,13 +41,14 @@ class _view_exrxState extends State<view_exrx> {
   @override
   void initState() {
     super.initState();
+    getMyExercises();
     print(widget.exercise.videoSrc);
     initializeVideoPlayer();
   }
 
   Future<void> initializeVideoPlayer() async {
     videoPlayerController = VideoPlayerController.network(
-        "https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4");
+        ""+widget.exercise.videoSrc+".m3u8");
     await Future.wait([
       videoPlayerController.initialize()
     ]).then((value) => setState((){
@@ -54,16 +56,18 @@ class _view_exrxState extends State<view_exrx> {
         videoPlayerController: videoPlayerController,
         autoPlay: true,
         looping: true,
+        aspectRatio: 1,
+
       );
     }));
   }
 
-  // @override
-  // void dispose() {
-  //   videoPlayerController.dispose();
-  //   chewieController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    videoPlayerController.dispose();
+    chewieController.dispose();
+    super.dispose();
+  }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
@@ -77,7 +81,7 @@ class _view_exrxState extends State<view_exrx> {
   String temperature_time;
   bool isDateSelected= false;
   int count = 0;
-  List<Body_Temperature> body_temp_list = new List<Body_Temperature>();
+  List<ExercisesTest> myexerciselist = new List<ExercisesTest>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
@@ -118,6 +122,8 @@ class _view_exrxState extends State<view_exrx> {
 
                       Expanded(
                           child:Container(
+                            width: 200,
+                            height: 200,
                             child: Center(
                                 child: chewieController != null && chewieController.videoPlayerController.value.isInitialized ? Chewie(
                                   controller: chewieController,
@@ -132,32 +138,6 @@ class _view_exrxState extends State<view_exrx> {
                             ),
                           )
                       ),
-                        // child: TextFormField(
-                        //   showCursor: true,
-                        //   keyboardType: TextInputType.number,
-                        //   decoration: InputDecoration(
-                        //     border: OutlineInputBorder(
-                        //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        //       borderSide: BorderSide(
-                        //         width:0,
-                        //         style: BorderStyle.none,
-                        //       ),
-                        //     ),
-                        //     filled: true,
-                        //     fillColor: Color(0xFFF2F3F5),
-                        //     hintStyle: TextStyle(
-                        //         color: Color(0xFF666666),
-                        //         fontFamily: defaultFontFamily,
-                        //         fontSize: defaultFontSize),
-                        //     hintText: "Temperature",
-                        //   ),
-                        //   validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
-                        //   onChanged: (val){
-                        //     setState(() => temperature = double.parse(val));
-                        //   },
-                        // ),
-                      // ),
-                      // SizedBox(width: 8,),
                     ],
                   ),
                   SizedBox(height: 8.0),
@@ -202,51 +182,60 @@ class _view_exrxState extends State<view_exrx> {
                         ),
                         color: Colors.blue,
                         onPressed:() async {
-                          // try{
-                          //   final User user = auth.currentUser;
-                          //   final uid = user.uid;
-                          //   final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-                          //   readTemperature.once().then((DataSnapshot datasnapshot) {
-                          //     String temp1 = datasnapshot.value.toString();
-                          //     print("temp1 " + temp1);
-                          //     List<String> temp = temp1.split(',');
-                          //
-                          //     Body_Temperature body_temperature;
-                          //
-                          //
-                          //     if(datasnapshot.value == null){
-                          //       final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + 0.toString());
-                          //       temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString()});
-                          //       print("Added Body Temperature Successfully! " + uid);
-                          //     }
-                          //     else{
-                          //       Future.delayed(const Duration(milliseconds: 1000), (){
-                          //         count = body_temp_list.length--;
-                          //         print("count " + count.toString());
-                          //         final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                          //         temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString()});
-                          //         print("Added Body Temperature Successfully! " + uid);
-                          //       });
-                          //
-                          //     }
-                          //
-                          //   });
-                          //
-                          //   Future.delayed(const Duration(milliseconds: 1000), (){
-                          //     print("SYMPTOMS LENGTH: " + body_temp_list.length.toString());
-                          //     body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time)));
-                          //     for(var i=0;i<body_temp_list.length/2;i++){
-                          //       var temp = body_temp_list[i];
-                          //       body_temp_list[i] = body_temp_list[body_temp_list.length-1-i];
-                          //       body_temp_list[body_temp_list.length-1-i] = temp;
-                          //     }
-                          //     print("POP HERE ==========");
-                          //     Navigator.pop(context, body_temp_list);
-                          //   });
-                          //
-                          // } catch(e) {
-                          //   print("you got an error! $e");
-                          // }
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            final readExers = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+                            readExers.once().then((DataSnapshot datasnapshot) {
+                              String temp1 = datasnapshot.value.toString();
+                              print("temp1 " + temp1);
+                              List<String> temp = temp1.split(',');
+                              if(datasnapshot.value == null){
+                                final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + 0.toString());
+                                exerRef.set({"exerciseId": widget.exercise.exerciseId,
+                                  "exerciseName": widget.exercise.exerciseName,
+                                  "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
+                                  "apparatusName": widget.exercise.apparatusName,
+                                  "largImg1": widget.exercise.largImg1,
+                                  "instructionsExecution": widget.exercise.instructionsExecution,
+                                  "instructionsPreparation": widget.exercise.instructionsExecution,
+                                  "uRL": widget.exercise.uRL,
+                                  "videoSrc": widget.exercise.videoSrc,
+                                });
+                                print("Added Body exercise Successfully! " + uid);
+                              }
+                              else{
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = myexerciselist.length--;
+                                  print("count " + count.toString());
+                                  final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + count.toString());
+                                  exerRef.set({"exerciseId": widget.exercise.exerciseId,
+                                    "exerciseName": widget.exercise.exerciseName,
+                                    "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
+                                    "apparatusName": widget.exercise.apparatusName,
+                                    "largImg1": widget.exercise.largImg1,
+                                    "instructionsExecution": widget.exercise.instructionsExecution,
+                                    "instructionsPreparation": widget.exercise.instructionsExecution,
+                                    "uRL": widget.exercise.uRL,
+                                    "videoSrc": widget.exercise.videoSrc,
+                                  });
+                                });
+                              }
+                            });
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              //myexerciselist.add(new myexerciselist(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time)));
+                              for(var i=0;i<myexerciselist.length/2;i++){
+                                var temp = myexerciselist[i];
+                                myexerciselist[i] = myexerciselist[myexerciselist.length-1-i];
+                                myexerciselist[myexerciselist.length-1-i] = temp;
+                              }
+                              print("POP HERE ==========");
+                              Navigator.pop(context, myexerciselist);
+                            });
+
+                          } catch(e) {
+                            print("you got an error! $e");
+                          }
                           // // Navigator.pop(context);
                         },
                       )
@@ -259,5 +248,15 @@ class _view_exrxState extends State<view_exrx> {
 
     );
   }
-
+  void getMyExercises() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+    readprescription.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        myexerciselist.add(ExercisesTest.fromJson(jsonString));
+      });
+    });
+  }
 }
