@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_app/doctor_add_patient.dart';
+import 'package:my_app/index3/doctor_view_patient_profile.dart';
+
+
 
 class MyApp extends StatelessWidget {
   @override
@@ -34,7 +38,50 @@ class _PatientListState extends State<PatientList>  {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('My Patient List'),
+          iconTheme: IconThemeData(
+              color: Colors.black
+          ),
+          title: const Text('Patient List', style: TextStyle(
+              color: Colors.black
+          )),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          actions: [
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DoctorAddPatient()),
+                    );
+
+
+                    // showModalBottomSheet(context: context,
+                    //   isScrollControlled: true,
+                    //   builder: (context) => SingleChildScrollView(child: Container(
+                    //     padding: EdgeInsets.only(
+                    //         bottom: MediaQuery.of(context).viewInsets.bottom),
+                    //     child: add_medication_prescription(thislist: prestemp),
+                    //   ),
+                    //   ),
+                    // ).then((value) =>
+                    //     Future.delayed(const Duration(milliseconds: 1500), (){
+                    //       setState((){
+                    //         print("setstate medication prescription");
+                    //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                    //         if(value != null){
+                    //           prestemp = value[0];
+                    //         }
+                    //       });
+                    //     }));
+                  },
+                  child: Icon(
+                    Icons.add,
+                  ),
+                )
+            ),
+          ],
         ),
       body: ListView.builder(
           itemCount: 10,
@@ -43,68 +90,42 @@ class _PatientListState extends State<PatientList>  {
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Card(
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-               borderRadius: BorderRadius.circular(0.0),
-              ),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: 55.0,
-                          height: 55.0,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.green,
-                            foregroundColor: Colors.green,
-                            backgroundImage: NetworkImage
-                              ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
-                          ),
-                        ),
-                        SizedBox(width: 10.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(names[index],
-                                style:TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
+              child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.green,
+                    backgroundImage: NetworkImage
+                      ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
+                  ),
+                  title: Text(names[index],
+                      style:TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
 
-                                )),
-                            Text(designations[index],
-                                style:TextStyle(
-                                    color: Colors.grey,
-                                )),
-                          ],
-                        )
-                      ],
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                      child: FlatButton(
-                        onPressed: (){
-                        },
-                        color: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: Text("Visit", style: TextStyle(color: Colors.white),),
-                      ),
+                      )),
+                  subtitle:        Text(designations[index],
+                      style:TextStyle(
+                        color: Colors.grey,
+                      )),
+                  trailing: Icon(Icons.sick_rounded ),
+                  isThreeLine: true,
+                  dense: true,
+                  selected: true,
 
-                    )
-                  ],
-                ),
+
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => view_patient_profile()),
+                    );
+
+
+                  }
 
               ),
+
             ),
           )
       )

@@ -34,6 +34,7 @@ import 'package:my_app/specific_medical_prescription_viewAsPatient.dart';
 import 'package:my_app/view_medical_prescription_as_patient.dart';
 import 'package:my_app/doctor_add_patient.dart';
 import 'package:my_app/patient_list.dart';
+import 'package:my_app/pateint_list_try.dart';
 
 
 
