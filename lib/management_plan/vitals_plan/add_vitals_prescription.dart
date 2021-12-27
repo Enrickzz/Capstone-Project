@@ -16,14 +16,14 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class add_food_prescription extends StatefulWidget {
+class add_vitals_prescription extends StatefulWidget {
   final List<Medication_Prescription> thislist;
-  add_food_prescription({this.thislist});
+  add_vitals_prescription({this.thislist});
   @override
-  _addFoodPrescriptionState createState() => _addFoodPrescriptionState();
+  _addVitalsrescriptionState createState() => _addVitalsrescriptionState();
 }
 final _formKey = GlobalKey<FormState>();
-class _addFoodPrescriptionState extends State<add_food_prescription> {
+class _addVitalsrescriptionState extends State<add_vitals_prescription> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
@@ -54,11 +54,12 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
   DateTimeRange dateRange;
 
   // added by borj
-  List<String> listFoodTime = <String>[
-    'Breakfast', 'Lunch','Merienda', 'Dinner'
+  List<String> listVitals = <String>[
+    'Blood Pressure', 'Blood Glucose','Oxygen Saturation', 'Body Temperature'
+    ,'Heart Rate', 'Respiratory Rate'
 
   ];
-  String valueChooseFoodTime;
+  String valueChooseVital;
 
 
   String getFrom(){
@@ -127,7 +128,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Add Food Plan',
+                    'Add Vitals Recording Plan',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
@@ -157,56 +158,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                       setState(() => generic_name = val);
                     },
                   ),
-                  SizedBox(height: 8),
-                  TextFormField(
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Food",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Generic Name' : null,
-                    onChanged: (val){
-                      setState(() => generic_name = val);
-                    },
-                  ),
 
-                  SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Quantity of food (grams)",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Brand Name' : null,
-                    onChanged: (val){
-                      setState(() => branded_name = val);
-                    },
-                  ),
                   SizedBox(height: 8.0),
                   DropdownButtonFormField(
                     decoration: InputDecoration(
@@ -223,23 +175,100 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Eat for:",
+                      hintText: "Which Vital:",
                     ),
                     isExpanded: true,
-                    value: valueChooseFoodTime,
+                    value: valueChooseVital,
                     onChanged: (newValue){
                       setState(() {
 
                       });
 
                     },
-                    items: listFoodTime.map((valueItem){
+                    items: listVitals.map((valueItem){
                       return DropdownMenuItem(
                         value: valueItem,
                         child: Text(valueItem),
                       );
                     },
                     ).toList(),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget> [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          "Record how many times a day?",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
+                        ),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              Radio(
+                                value: 1,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("1"),
+                            ],
+                          ),
+                          SizedBox(width: 16),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 2,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("2"),
+                            ],
+                          ),
+                          SizedBox(width: 16),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 3,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("3"),
+                            ],
+                          ),
+                          SizedBox(width: 16),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 4,
+                                groupValue: quantity,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.quantity = value;
+                                  });
+                                },
+                              ),
+                              Text("4"),
+                            ],
+                          ),
+                          SizedBox(width: 3)
+                        ],
+                      )
+                    ],
                   ),
 
                   SizedBox(height: 8.0),

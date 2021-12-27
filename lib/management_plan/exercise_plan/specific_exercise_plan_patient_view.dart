@@ -31,21 +31,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SpecificFoodPrescriptionViewAsDoctor(title: 'Flutter Demo Home Page'),
+      home: SpecificExercisePrescriptionViewAsPatient(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class SpecificFoodPrescriptionViewAsDoctor extends StatefulWidget {
-  SpecificFoodPrescriptionViewAsDoctor({Key key, this.title}) : super(key: key);
+class SpecificExercisePrescriptionViewAsPatient extends StatefulWidget {
+  SpecificExercisePrescriptionViewAsPatient({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _SpecificFoodPrescriptionViewAsDoctorState createState() => _SpecificFoodPrescriptionViewAsDoctorState();
+  _SpecificExercisePrescriptionViewAsPatientState createState() => _SpecificExercisePrescriptionViewAsPatientState();
 }
 
-class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPrescriptionViewAsDoctor> with SingleTickerProviderStateMixin {
+class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExercisePrescriptionViewAsPatient> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -77,7 +77,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Food Plan'),
+          title: Text('Exercise Plan'),
         ),
         body:  Scrollbar(
           child: SingleChildScrollView(
@@ -95,7 +95,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Food Plan",
+                              child: Text( "My Exercise Plan",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -103,61 +103,13 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                   )
                               ),
                             ),
-                            InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                onTap: () {
-                                  showModalBottomSheet(context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => SingleChildScrollView(child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_medication_prescription(thislist: prestemp),
-                                    ),
-                                    ),
-                                  ).then((value) =>
-                                      Future.delayed(const Duration(milliseconds: 1500), (){
-                                        setState((){
-                                          print("setstate medication prescription");
-                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                          if(value != null){
-                                            prestemp = value[0];
-                                          }
-                                        });
-                                      }));
-                                },
-                                // child: Padding(
-                                // padding: const EdgeInsets.only(left: 8),
-                                child: Row(
-                                  children: <Widget>[
-                                    Text( "Edit",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                          color:Color(0xFF2633C5),
 
-                                        )
-                                    ),
-
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
-                                  ],
-                                )
-                              // )
-                            )
                           ]
                       ),
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 300,
+                        height: 350,
                         // height: 500, if may contact number and email
                         // margin: EdgeInsets.only(bottom: 50),
                         child: Stack(
@@ -201,7 +153,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                Text("Eat more of",
+                                                Text("Type of exercise",
                                                   style: TextStyle(
                                                     fontSize:14,
                                                     color:Color(0xFF363f93),
@@ -210,21 +162,39 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put food here",
+                                            Text("Put exercise here",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
                                             SizedBox(height: 16),
-                                            Text("Eat during",
+                                            Row(
+                                              children: [
+                                                Text("Intensity of Exercise",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text("Put exercise intensity here",
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            SizedBox(height: 16),
+                                            Text("Frequency of Exercise",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 color:Color(0xFF363f93),
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put which meal time/s",
+                                            Text("X" + " Times a day",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -307,7 +277,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put date when medicine was prescribed",
+                                            Text("Put date when exercise was prescribed",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold

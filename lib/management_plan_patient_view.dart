@@ -18,6 +18,10 @@ import '../fitness_app_theme.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 import 'package:my_app/view_medical_prescription_as_patient.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
+import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
+
+import 'management_plan/exercise_plan/exercise_plan_patient_view.dart';
+import 'management_plan/vitals_plan/vitals_plan_patient_view.dart';
 class management_plan_patient_view extends StatefulWidget {
 
   @override
@@ -135,7 +139,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                                         width: 10,
                                       ),
                                       Text(
-                                          'Medication Prescription',
+                                          'My Medication Prescription',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18
@@ -150,12 +154,12 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     ),
                   ),
                   GestureDetector(
-                    // onTap:(){
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => heart_rate(hrlist: thisHRlist)),
-                    //   );
-                    // },
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => food_prescription_patient_view()),
+                      );
+                    },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
                         height: 100,
@@ -201,7 +205,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                                         width: 10,
                                       ),
                                       Text(
-                                          'Food Consumption',
+                                          'My Food Plan',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18
@@ -216,12 +220,12 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     ),
                   ),
                   GestureDetector(
-                    // onTap:(){
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => body_temperature(btlist: thisBTlist)),
-                    //   );
-                    // },
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => exercise_prescription_patient_view()),
+                      );
+                    },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
                         height: 100,
@@ -351,7 +355,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => respiratory_rate()),
+                        MaterialPageRoute(builder: (context) => vitals_prescription_patient_view()),
                       );
                     },
                     child: Container(

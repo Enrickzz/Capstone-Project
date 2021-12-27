@@ -31,21 +31,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SpecificFoodPrescriptionViewAsDoctor(title: 'Flutter Demo Home Page'),
+      home: SpecificVitalsPrescriptionViewAsDoctor(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class SpecificFoodPrescriptionViewAsDoctor extends StatefulWidget {
-  SpecificFoodPrescriptionViewAsDoctor({Key key, this.title}) : super(key: key);
+class SpecificVitalsPrescriptionViewAsDoctor extends StatefulWidget {
+  SpecificVitalsPrescriptionViewAsDoctor({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _SpecificFoodPrescriptionViewAsDoctorState createState() => _SpecificFoodPrescriptionViewAsDoctorState();
+  _SpecificVitalsPrescriptionViewAsDoctorState createState() => _SpecificVitalsPrescriptionViewAsDoctorState();
 }
 
-class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPrescriptionViewAsDoctor> with SingleTickerProviderStateMixin {
+class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsPrescriptionViewAsDoctor> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -77,7 +77,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Food Plan'),
+          title: Text('Vitals Recording Plan'),
         ),
         body:  Scrollbar(
           child: SingleChildScrollView(
@@ -95,7 +95,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Food Plan",
+                              child: Text( "Vitals Recording Plan",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -201,7 +201,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                Text("Eat more of",
+                                                Text("Recorded Vital",
                                                   style: TextStyle(
                                                     fontSize:14,
                                                     color:Color(0xFF363f93),
@@ -210,21 +210,21 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put food here",
+                                            Text("Put which vital here",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
                                             SizedBox(height: 16),
-                                            Text("Eat during",
+                                            Text("Frequency",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 color:Color(0xFF363f93),
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put which meal time/s",
+                                            Text("Record " + "X" + " times a day.",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold

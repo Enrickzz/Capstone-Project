@@ -31,13 +31,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SpecificFoodPrescriptionViewAsDoctor(title: 'Flutter Demo Home Page'),
+      home: SpecificFoodPrescriptionViewAsPatient(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class SpecificFoodPrescriptionViewAsDoctor extends StatefulWidget {
-  SpecificFoodPrescriptionViewAsDoctor({Key key, this.title}) : super(key: key);
+class SpecificFoodPrescriptionViewAsPatient extends StatefulWidget {
+  SpecificFoodPrescriptionViewAsPatient({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -45,7 +45,7 @@ class SpecificFoodPrescriptionViewAsDoctor extends StatefulWidget {
   _SpecificFoodPrescriptionViewAsDoctorState createState() => _SpecificFoodPrescriptionViewAsDoctorState();
 }
 
-class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPrescriptionViewAsDoctor> with SingleTickerProviderStateMixin {
+class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPrescriptionViewAsPatient> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();

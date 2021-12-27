@@ -18,6 +18,9 @@ import 'package:my_app/data_inputs/medication_prescription.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 import 'package:my_app/management_plan/food_plan/food_plan_doctor_view.dart';
+import 'package:my_app/management_plan/exercise_plan/exercise_plan_doctor_view.dart';
+
+import 'management_plan/vitals_plan/vitals_plan_doctor_view.dart';
 
 class management_plan extends StatefulWidget {
 
@@ -217,12 +220,12 @@ class _AppSignUpState extends State<management_plan> {
                     ),
                   ),
                   GestureDetector(
-                    // onTap:(){
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => body_temperature(btlist: thisBTlist)),
-                    //   );
-                    // },
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => exercise_prescription_doctor_view()),
+                      );
+                    },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
                         height: 100,
@@ -349,12 +352,12 @@ class _AppSignUpState extends State<management_plan> {
                     ),
                   ),
                   GestureDetector(
-                    // onTap:(){
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => respiratory_rate()),
-                    //   );
-                    // },
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => vitals_prescription_doctor_view()),
+                      );
+                    },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
                         height: 100,
