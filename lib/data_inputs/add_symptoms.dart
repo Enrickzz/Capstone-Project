@@ -354,6 +354,12 @@ class _addSymptomsState extends State<add_symptoms> {
                       fontSize: defaultFontSize),
                   hintText: "What situation triggers your symptom?",
                 ),
+                validator: (val) => val.isEmpty ? 'Enter Syptom Trigger' : null,
+                onChanged: (val){
+                  symptom_felt = val;
+                  // setState(() => symptom_felt = val);
+
+                },
               ),
             ),
             Visibility(
