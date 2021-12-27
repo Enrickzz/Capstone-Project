@@ -52,6 +52,7 @@ class LogIn extends StatefulWidget {
   
 }
 String isFTime;
+String usertype = "";
 class _LogInState extends State<LogIn> {
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
@@ -65,6 +66,7 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     isFirstTime();
+    getUserType();
     return ChangeNotifierProvider(
       create: (ctx) => GoogleSignInProvider(),
       child: MaterialApp(
@@ -88,28 +90,41 @@ class _LogInState extends State<LogIn> {
                 print('User is currently signed out!');
                 // return runApp(AppSignIn());
               } else {
+
                 print('User is signed in!');
-                Future.delayed(const Duration(milliseconds: 3000), (){
+                Future.delayed(const Duration(milliseconds: 2000), (){
                   setState(() {
                     print("SETSTATE INSIDE WIDGET ");
                     print(isFTime);
-                    if(isFTime == "false"){
-
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => mainScreen()),
-                          (route) => false,
-                      );
-                      print("isFTime == false");
+                    print("USER TYPE IS " + usertype);
+                    if(usertype == "Patient"){
+                      print("should be PATIENT " + usertype);
+                      if(isFTime == "false"){
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => mainScreen()),
+                              (route) => false,
+                        );
+                        print("isFTime == false");
+                      }
+                      else if(isFTime == "true"){
+                        print("True isFTime first time");
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => set_up()),
+                              (route) => false,
+                        );
+                      }
                     }
-                    else if(isFTime == "true"){
-                      print("True isFTime first time");
+                    else{
+                      print("should be doctor or support " + usertype);
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => set_up()),
+                        MaterialPageRoute(builder: (context) => PatientList()),
                             (route) => false,
                       );
                     }
+
                   });
                 });
                 print(isFTime);
@@ -149,6 +164,17 @@ class _LogInState extends State<LogIn> {
         isFTime= "true";
         print("true statement " + isFTime.toString());
       }
+    });
+  }
+  void getUserType () async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final userRef = databaseReference.child('users/' + uid +'/personal_info/userType/');
+    await userRef.once().then((DataSnapshot datasnapshot) {
+      usertype = datasnapshot.value.toString();
+      print("user type = " + usertype);
     });
   }
 }

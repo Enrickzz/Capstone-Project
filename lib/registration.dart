@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/patient_list.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'additional_data_collection.dart';
@@ -303,6 +304,7 @@ class _AppSignUpState extends State<registration> {
                               onChanged: (newValue){
                                 setState(() {
                                   valueChooseUserStatus = newValue;
+                                  print(valueChooseUserStatus);
                                 });
                               },
                               items: listUserStatus.map((valueItem){
@@ -408,16 +410,26 @@ class _AppSignUpState extends State<registration> {
                                     final uid = user.uid;
                                     final usersRef = databaseReference.child('users/' + uid + '/personal_info');
 
-                                    print("user registered Sucessfully!");
-                                    if(isFirstTime){
+
+                                    if(valueChooseUserStatus == "Patient"){
+                                      if(isFirstTime){
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => set_up()),
+                                        );
+                                        isFirstTime = true;
+                                        await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+                                      }
+                                    }
+                                    else{
                                       Navigator.pushReplacement(
                                         context,
-                                        MaterialPageRoute(builder: (context) => set_up()),
+                                        MaterialPageRoute(builder: (context) => PatientList()),
                                       );
-                                      isFirstTime = true;
-                                      await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString()});
+                                      isFirstTime = false;
+                                      await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
                                     }
-
+                                    print("user registered Sucessfully!");
                                   } catch(e) {
                                     print("you got an error! $e");
                                   }
