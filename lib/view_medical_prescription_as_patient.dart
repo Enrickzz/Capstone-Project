@@ -125,7 +125,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Medication Prescription', style: TextStyle(
+        title: const Text('My Medication Prescriptions', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,

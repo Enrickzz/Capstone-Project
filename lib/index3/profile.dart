@@ -26,7 +26,7 @@ import '../notifications.dart';
 import 'package:my_app/patient_view_support_system.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 import 'package:my_app/view_medical_prescription_as_patient.dart';
-import 'package:my_app/view_medical_prescription_as_patient_try.dart';
+import 'package:my_app/management_plan_patient_view.dart';
 
 
 
@@ -536,23 +536,25 @@ class _index3State extends State<index3>
                           },
                         ),
                         _buildDivider(),
-                        ListTile(
-                          title: Text("Doctors' Prescriptions"),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap:(){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => medication_prescription_patientView()),
-                            );
-
-                          },
-                        ),
+                        // ListTile(
+                        //   title: Text("Doctors' Prescriptions"),
+                        //   trailing: Icon(Icons.keyboard_arrow_right),
+                        //   onTap:(){
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(builder: (context) => medication_prescription_patientView()),
+                        //     );
+                        //
+                        //   },
+                        // ),
                         ListTile(
                           title: Text("Doctors' Orders"),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap:(){
-
-
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => management_plan_patient_view()),
+                            );
 
                           },
                         ),

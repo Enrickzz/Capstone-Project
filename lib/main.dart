@@ -34,7 +34,7 @@ import 'package:my_app/specific_medical_prescription_viewAsPatient.dart';
 import 'package:my_app/view_medical_prescription_as_patient.dart';
 import 'package:my_app/doctor_add_patient.dart';
 import 'package:my_app/patient_list.dart';
-import 'package:my_app/index3/doctor_view_patient_profile_try.dart';
+import 'package:my_app/index3/doctor_view_patient_profile.dart';
 
 
 
@@ -220,7 +220,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => view_patient_profileTry()),
+                      MaterialPageRoute(builder: (context) => view_patient_profile()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),
