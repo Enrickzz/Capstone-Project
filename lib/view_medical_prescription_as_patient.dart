@@ -132,82 +132,49 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
         backgroundColor: Colors.white,
 
       ),
-      body: ListView.builder(
-        itemCount: prestemp.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsPatient()),
-              );
-            },
-            child: Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                height: 140,
-                child: Stack(
-                    children: [
-                      Positioned (
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                            height: 120,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                    bottomRight: Radius.circular(20)
-                                ),
-                                gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.white.withOpacity(0.7),
-                                      Colors.white
-                                    ]
-                                ),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.grey.withOpacity(0.6),
-                                      offset: Offset(1.1, 1.1),
-                                      blurRadius: 10.0),
-                                ]
-                            )
-                        ),
-                      ),
-                      Positioned(
-                        top: 25,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                  '' +"Start Date: " + getDateFormatted(prestemp[index].startdate.toString())+"End Date: "+getDateFormatted(prestemp[index].enddate.toString())+" "+
-                                      "\nDosage: " + prestemp[index].dosage.toString()
-                                      + "\nBrand Name: " + prestemp[index].branded_name + " " + "Generic Name: " + prestemp[index].generic_name
-                                      +"\nIntake Time: "+ prestemp[index].intake_time+ " "
-                                      +"\nSpecial Instruction: "+ prestemp[index].special_instruction,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18
-                                  )
-                              ),
+        body: ListView.builder(
+            itemCount: prestemp.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) =>Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Card(
+                child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.green,
+                      backgroundImage: AssetImage('assets/images/medicine.jpg'),
+                    ),
+                    title: Text("Brand Name: " + prestemp[index].branded_name ,
+                        style:TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
 
-                            ],
-                          ),
-                        ),
-                      ),
-                    ]
-                )
-            ),
-          );
-        },
-      ),
+                        )),
+                    subtitle:        Text("Prescribed by: Dr." ,
+                        style:TextStyle(
+                          color: Colors.grey,
+                        )),
+                    trailing: Icon(Icons.medication_outlined ),
+                    isThreeLine: true,
+                    dense: true,
+                    selected: true,
+
+
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsPatient()),
+                      );
+                    }
+
+                ),
+
+              ),
+            )
+        )
     );
   }
   String getDateFormatted (String date){

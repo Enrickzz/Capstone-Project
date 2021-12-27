@@ -244,6 +244,20 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
+                                            SizedBox(height: 16),
+                                            Text("Date Period",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                color:Color(0xFF363f93),
+                                              ),
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text("Put start date here" + ' - ' + 'Put end date here',
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
                                           ]
                                       ),
                                     ),

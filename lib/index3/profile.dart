@@ -26,6 +26,8 @@ import '../notifications.dart';
 import 'package:my_app/patient_view_support_system.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 import 'package:my_app/view_medical_prescription_as_patient.dart';
+import 'package:my_app/view_medical_prescription_as_patient_try.dart';
+
 
 
 
@@ -549,6 +551,8 @@ class _index3State extends State<index3>
                           title: Text("Doctors' Orders"),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap:(){
+
+
 
                           },
                         ),

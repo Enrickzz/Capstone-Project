@@ -12,21 +12,21 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/specific_medical_prescription_viewAsDoctor.dart';
+import 'package:my_app/specific_medical_prescription_viewAsPatient.dart';
 import '../fitness_app_theme.dart';
-import 'add_medication.dart';
-import 'add_medication_prescription.dart';
+import 'package:my_app/data_inputs/add_medication.dart';
+import 'package:my_app/data_inputs/add_medication_prescription.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class medication_prescription extends StatefulWidget {
+class medication_prescription_patientViewTry extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
-  medication_prescription({Key key, this.preslist, this.pointer}): super(key: key);
+  medication_prescription_patientViewTry({Key key, this.preslist, this.pointer}): super(key: key);
   @override
-  _medication_prescriptionState createState() => _medication_prescriptionState();
+  _medication_prescriptionPatientViewState createState() => _medication_prescriptionPatientViewState();
 }
 
-class _medication_prescriptionState extends State<medication_prescription> {
+class _medication_prescriptionPatientViewState extends State<medication_prescription_patientViewTry> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -130,36 +130,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_medication_prescription(thislist: prestemp),
-                    ),
-                    ),
-                  ).then((value) =>
-                      Future.delayed(const Duration(milliseconds: 1500), (){
-                        setState((){
-                          print("setstate medication prescription");
-                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                          if(value != null){
-                            prestemp = value[0];
-                          }
-                        });
-                      }));
-                },
-                child: Icon(
-                  Icons.add,
-                ),
-              )
-          ),
-        ],
+
       ),
         body: ListView.builder(
             itemCount: prestemp.length,
@@ -173,7 +144,8 @@ class _medication_prescriptionState extends State<medication_prescription> {
                       radius: 25,
                       backgroundColor: Colors.green,
                       foregroundColor: Colors.green,
-                      backgroundImage: AssetImage('assets/images/medicine.jpg'),
+                      backgroundImage: NetworkImage
+                        ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
                     ),
                     title: Text("Brand Name: " + prestemp[index].branded_name ,
                         style:TextStyle(
@@ -192,12 +164,12 @@ class _medication_prescriptionState extends State<medication_prescription> {
                     selected: true,
 
 
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor()),
-                      );
-                    }
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsPatient()),
+                    );
+                  }
 
                 ),
 
