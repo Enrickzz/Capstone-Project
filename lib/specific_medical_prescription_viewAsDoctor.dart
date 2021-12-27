@@ -157,7 +157,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 400,
+                        height: 330,
                         // height: 500, if may contact number and email
                         // margin: EdgeInsets.only(bottom: 50),
                         child: Stack(
@@ -258,6 +258,75 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
+                                          ]
+                                      ),
+                                    ),
+                                  ))
+                            ]
+                        )
+                    ),
+                    SizedBox(height: 10.0),
+                    Container(
+                        height: 150,
+                        // height: 500, if may contact number and email
+                        // margin: EdgeInsets.only(bottom: 50),
+                        child: Stack(
+                            children: [
+                              Positioned(
+                                  child: Material(
+                                    child: Center(
+                                      child: Container(
+                                          width: 340,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(20.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.5),
+                                                  blurRadius: 20.0)],
+                                          )
+                                      ),
+                                    ),
+                                  )),
+                              Positioned(
+                                  child: Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(18.0),
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Prescribed by",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                color:Color(0xFF363f93),
+                                              ),
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text("Dr." + "Put doctor name here",
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            SizedBox(height: 16),
+                                            Row(
+                                              children: [
+                                                Text("Date Prescribed",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text("Put date when medicine was prescribed",
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+
                                           ]
                                       ),
                                     ),

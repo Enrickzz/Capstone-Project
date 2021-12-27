@@ -13,10 +13,12 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/symptoms.dart';
-
 import '../fitness_app_theme.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
+
+import 'package:my_app/management_plan/food_plan/food_plan_doctor_view.dart';
+
 class management_plan extends StatefulWidget {
 
   @override
@@ -149,12 +151,12 @@ class _AppSignUpState extends State<management_plan> {
                     ),
                   ),
                   GestureDetector(
-                    // onTap:(){
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => heart_rate(hrlist: thisHRlist)),
-                    //   );
-                    // },
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => food_prescription_doctor_view()),
+                      );
+                    },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
                         height: 100,
@@ -200,7 +202,7 @@ class _AppSignUpState extends State<management_plan> {
                                         width: 10,
                                       ),
                                       Text(
-                                          'Food Consumption',
+                                          'Food Plan',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18
@@ -347,12 +349,12 @@ class _AppSignUpState extends State<management_plan> {
                     ),
                   ),
                   GestureDetector(
-                    onTap:(){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => respiratory_rate()),
-                      );
-                    },
+                    // onTap:(){
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => respiratory_rate()),
+                    //   );
+                    // },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
                         height: 100,

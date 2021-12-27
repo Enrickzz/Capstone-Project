@@ -13,20 +13,22 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/specific_medical_prescription_viewAsDoctor.dart';
-import '../fitness_app_theme.dart';
-import 'add_medication.dart';
-import 'add_medication_prescription.dart';
+import '../../fitness_app_theme.dart';
+import 'package:my_app/data_inputs/add_medication.dart';
+import 'package:my_app/data_inputs/add_medication_prescription.dart';
+import 'package:my_app/management_plan/food_plan/add_food_prescription.dart';
+import 'package:my_app/management_plan/food_plan/specific_food_plan_doctor_view.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class medication_prescription extends StatefulWidget {
+class food_prescription_doctor_view extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
-  medication_prescription({Key key, this.preslist, this.pointer}): super(key: key);
+  food_prescription_doctor_view({Key key, this.preslist, this.pointer}): super(key: key);
   @override
-  _medication_prescriptionState createState() => _medication_prescriptionState();
+  _food_prescriptionState createState() => _food_prescriptionState();
 }
 
-class _medication_prescriptionState extends State<medication_prescription> {
+class _food_prescriptionState extends State<food_prescription_doctor_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -119,65 +121,65 @@ class _medication_prescriptionState extends State<medication_prescription> {
     double defaultIconSize = 17;
 
     return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF2F3F8),
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-            color: Colors.black
-        ),
-        title: const Text('Medication Prescription', style: TextStyle(
-            color: Colors.black
-        )),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_medication_prescription(thislist: prestemp),
-                    ),
-                    ),
-                  ).then((value) =>
-                      Future.delayed(const Duration(milliseconds: 1500), (){
-                        setState((){
-                          print("setstate medication prescription");
-                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                          if(value != null){
-                            prestemp = value[0];
-                          }
-                        });
-                      }));
-                },
-                child: Icon(
-                  Icons.add,
-                ),
-              )
+        key: _scaffoldKey,
+        backgroundColor: const Color(0xFFF2F3F8),
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.black
           ),
-        ],
-      ),
+          title: const Text('Food Planner', style: TextStyle(
+              color: Colors.black
+          )),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          actions: [
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(context: context,
+                      isScrollControlled: true,
+                      builder: (context) => SingleChildScrollView(child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: add_food_prescription(thislist: prestemp),
+                      ),
+                      ),
+                    ).then((value) =>
+                        Future.delayed(const Duration(milliseconds: 1500), (){
+                          setState((){
+                            print("setstate medication prescription");
+                            print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                            if(value != null){
+                              prestemp = value[0];
+                            }
+                          });
+                        }));
+                  },
+                  child: Icon(
+                    Icons.add,
+                  ),
+                )
+            ),
+          ],
+        ),
         body: ListView.builder(
-            itemCount: prestemp.length,
+            itemCount: 1,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
               child: Card(
                 child: ListTile(
-                    leading: Icon(Icons.medication_outlined ),
-                    title: Text("Brand Name: " + prestemp[index].branded_name ,
+                    leading: Icon(Icons.restaurant ),
+                    title: Text("Purpose: " + "Change Meal" ,
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Prescribed by: Dr." ,
+                    subtitle:        Text("Planned by: Dr." ,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -191,11 +193,10 @@ class _medication_prescriptionState extends State<medication_prescription> {
                     selected: true,
 
 
-
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor()),
+                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsDoctor()),
                       );
                     }
 

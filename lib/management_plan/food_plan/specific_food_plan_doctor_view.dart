@@ -8,11 +8,11 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
-import 'additional_data_collection.dart';
+import 'package:my_app/additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 
-import 'dialogs/policy_dialog.dart';
-import 'fitness_app_theme.dart';
+import 'package:my_app/dialogs/policy_dialog.dart';
+import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/data_inputs/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
@@ -31,21 +31,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SpecificPrescriptionViewAsPatient(title: 'Flutter Demo Home Page'),
+      home: SpecificFoodPrescriptionViewAsDoctor(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class SpecificPrescriptionViewAsPatient extends StatefulWidget {
-  SpecificPrescriptionViewAsPatient({Key key, this.title}) : super(key: key);
+class SpecificFoodPrescriptionViewAsDoctor extends StatefulWidget {
+  SpecificFoodPrescriptionViewAsDoctor({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _SpecificPrescriptionViewAsPatientState createState() => _SpecificPrescriptionViewAsPatientState();
+  _SpecificFoodPrescriptionViewAsDoctorState createState() => _SpecificFoodPrescriptionViewAsDoctorState();
 }
 
-class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescriptionViewAsPatient> with SingleTickerProviderStateMixin {
+class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPrescriptionViewAsDoctor> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -77,7 +77,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Doctor Prescriptions'),
+          title: Text('Food Plan'),
         ),
         body:  Scrollbar(
           child: SingleChildScrollView(
@@ -95,7 +95,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Prescription Name",
+                              child: Text( "Food Plan",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -103,7 +103,55 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                   )
                               ),
                             ),
+                            InkWell(
+                                highlightColor: Colors.transparent,
+                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                onTap: () {
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: edit_medication_prescription(thislist: prestemp),
+                                    ),
+                                    ),
+                                  ).then((value) =>
+                                      Future.delayed(const Duration(milliseconds: 1500), (){
+                                        setState((){
+                                          print("setstate medication prescription");
+                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                                          if(value != null){
+                                            prestemp = value[0];
+                                          }
+                                        });
+                                      }));
+                                },
+                                // child: Padding(
+                                // padding: const EdgeInsets.only(left: 8),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text( "Edit",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color:Color(0xFF2633C5),
 
+                                        )
+                                    ),
+
+                                    // SizedBox(
+                                    //   height: 38,
+                                    //   width: 26,
+                                    //   // child: Icon(
+                                    //   //   Icons.arrow_forward,
+                                    //   //   color: FitnessAppTheme.darkText,
+                                    //   //   size: 18,
+                                    //   // ),
+                                    // ),
+                                  ],
+                                )
+                              // )
+                            )
                           ]
                       ),
                     ),
@@ -286,11 +334,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                             ]
                         )
                     ),
-
-
                   ],
-
-
                 ),
 
               ],

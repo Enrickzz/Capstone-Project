@@ -132,7 +132,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
         backgroundColor: Colors.white,
 
       ),
-        body: ListView.builder(
+        body:  ListView.builder(
             itemCount: prestemp.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
@@ -140,27 +140,27 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
               child: Card(
                 child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.green,
-                      backgroundImage: AssetImage('assets/images/medicine.jpg'),
-                    ),
+                    leading: Icon(Icons.medication_outlined ),
                     title: Text("Brand Name: " + prestemp[index].branded_name ,
                         style:TextStyle(
                           color: Colors.black,
-                          fontSize: 14.0,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold,
 
                         )),
                     subtitle:        Text("Prescribed by: Dr." ,
                         style:TextStyle(
                           color: Colors.grey,
+                          fontSize: 14.0,
                         )),
-                    trailing: Icon(Icons.medication_outlined ),
+                    trailing: Text("mm/dd/yyyy" ,
+                        style:TextStyle(
+                          color: Colors.grey,
+                        )),
                     isThreeLine: true,
                     dense: true,
                     selected: true,
+
 
 
                     onTap: (){
