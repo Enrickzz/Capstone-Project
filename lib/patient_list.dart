@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_app/doctor_add_patient.dart';
 import 'package:my_app/index3/doctor_view_patient_profile.dart';
+import 'package:my_app/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'main.dart';
+
+
 
 
 
@@ -28,6 +34,10 @@ class PatientList extends StatefulWidget {
   _PatientListState createState() => _PatientListState();
 }
 class _PatientListState extends State<PatientList>  {
+  final AuthService _auth = AuthService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+
   List names = ["Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
   "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"];
 
@@ -81,6 +91,22 @@ class _PatientListState extends State<PatientList>  {
                   ),
                 )
             ),
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () async{
+                    await _auth.signOut();
+                    print('signed out');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LogIn()),
+                    );
+                  },
+                  child: Icon(
+                    Icons.audiotrack,
+                  ),
+                )
+            ),
           ],
         ),
       body: ListView.builder(
@@ -128,7 +154,10 @@ class _PatientListState extends State<PatientList>  {
 
             ),
           )
+
       )
+
+
     );
 
 
