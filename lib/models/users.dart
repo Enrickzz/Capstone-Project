@@ -10,6 +10,23 @@ class Users {
   String password;
 
   Users({this.uid, this.firstname, this.lastname, this.email, this.password});
+
+  Users.fromJson(Map<String, dynamic> json, this.uid) {
+    firstname = json['firstname'];
+    lastname = json['lastname'];
+    email = json['email'];
+    password = json['password'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['firstname'] = this.firstname;
+    data['lastname'] = this.lastname;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    return data;
+  }
+
 }
 
 class Additional_Info {
@@ -68,6 +85,14 @@ class Additional_Info {
     disease = json['disease'].cast<String>();
     other_disease = json['other_disease'].cast<String>();
     family_disease = json['family_disease'].cast<String>();
+  }
+
+  Additional_Info.fromJson2(Map<String, dynamic> json) {
+    birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
+    gender = json['gender'];
+    height = double.parse(json['height']);
+    weight = double.parse(json['weight']);
+    weight_unit = json['weight_unit'];
   }
 
   Map<String, dynamic> toJson() {
