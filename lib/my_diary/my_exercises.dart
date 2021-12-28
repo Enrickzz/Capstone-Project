@@ -274,6 +274,7 @@ class _my_exercisesState extends State<my_exercises>
     final uid = user.uid;
     final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
     readprescription.once().then((DataSnapshot snapshot){
+      print(snapshot);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         myexerciselist.add(ExercisesTest.fromJson(jsonString));

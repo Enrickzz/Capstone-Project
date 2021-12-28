@@ -65,6 +65,7 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
+    usertype = "";
     isFirstTime();
     getUserType();
     return ChangeNotifierProvider(
@@ -115,15 +116,27 @@ class _LogInState extends State<LogIn> {
                               (route) => false,
                         );
                       }
-                    }
-                    else{
-                      print("should be doctor or support " + usertype);
+                    }else if(usertype == null){
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => AppSignIn()),
+                            (route) => false,
+                      );
+                    }else if(usertype=="Doctor" || usertype == "Family member / Caregiver"){
+                      print("IS DOCTOR? == " + usertype);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => PatientList()),
+                            (route) => false,
+                      );
+                    }else if(usertype== "Family member / Caregiver"){
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => PatientList()),
                             (route) => false,
                       );
                     }
+
 
                   });
                 });

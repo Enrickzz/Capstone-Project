@@ -252,7 +252,7 @@ class _index2State extends State<index2>
                                                   fontSize:16,
                                                   color:Colors.grey,
                                                 ),),
-                                              Text("Other info",
+                                              Text("Grams: " + result[index].getGrams() +"g",
                                                 style: TextStyle(
                                                   fontSize:16,
                                                   color:Colors.grey,
@@ -337,38 +337,9 @@ Future<List<Common>> fetchNutritionix(String thisquery) async {
 
   if(response.statusCode == 200){
     String data = response.body;
-    // print(data);
     final parsedJson = convert.jsonDecode(data);
     final food = nutritionixApi.fromJson(parsedJson);
     print("nutrients " + food.common[0].fullNutrients[0].value.toString());
-    // for(int i = 0; i < food.common.length; i++){
-    //   for(int j = 0; j < food.common[i].fullNutrients.length; j++){
-    //     if(food.common[i].fullNutrients[j].attrId == 208){ // getting calories
-    //       calories[i] = food.common[i].fullNutrients[j].value;
-    //     }
-    //   }
-    // }
-    //   for(int j = 0; j < food.common[0].fullNutrients.length; j++){
-    //     if(food.common[0].fullNutrients[j].attrId == 208){ // getting calories
-    //       calories[0] = food.common[0].fullNutrients[j].value;
-    //     }
-    //   }
-
-    // print("food " + food.serving_unit);
-    // print("food " + food.tag_name);
-    // print("food " + food.serving_qty.toString());
-    // print("food " + food.tag_id);
-    // var food_name = convert.jsonDecode(data)['food_name'];
-    // print(food_name);
-    // var calories = convert.jsonDecode(data)['nf_calories'];
-    // print(calories);
-
-    // Navigator.pushAndRemoveUntil(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => mainScreen(
-    //           nutritionixApi: food,
-    // )), (route) => false);
     return food.common;
   }
   else{

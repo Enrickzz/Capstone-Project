@@ -172,7 +172,16 @@ class _view_exrx_addedState extends State<view_exrx_added> {
                         ),
                         color: Colors.blue,
                         onPressed:() {
-                          Navigator.pop(context);
+                          final User user = auth.currentUser;
+                          final uid = user.uid;
+                          final readExers = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+                          //readExers.reference().child("exerciseId").child(widget.exercise.exerciseId.toString()).remove().then((value) => Navigator.pop(context));
+                          final a = readExers.child(""+widget.exercise.exerciseId.toString()).remove().then((value) => Navigator.pop(context));
+                          // a.once().then((DataSnapshot datasnapshot) {
+                          //   String temp = datasnapshot.value.toString();
+                          //   //temp = temp.replaceAll("[", "");
+                          //   print(temp.toString());
+                          // });
                         },
                       ),
                       // FlatButton(
