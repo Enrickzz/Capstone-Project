@@ -54,7 +54,8 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   String userUID = "";
-  Users user = new Users();
+  Users cuser = new Users();
+  Users doctor = new Users();
   Additional_Info info = new Additional_Info();
   String displayName = "";
   String email = "";
@@ -63,6 +64,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   String gender = "";
   String cvdCondition = "";
   String otherCondition = "";
+  List<String> connection = [];
 
 
   @override
@@ -227,7 +229,9 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                   InkWell(
                                       highlightColor: Colors.transparent,
                                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                      onTap: () {},
+                                      onTap: () {
+                                        addPatient();
+                                      },
                                       child: Row(
                                         children: <Widget>[
                                           Text("Add Patient",
@@ -386,24 +390,23 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 // ],)
 
   void getPatient() {
-    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
     final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     final readinfo = databaseReference.child('users/' + userUID + '/vitals/additional_info/');
     cvdCondition = "";
     otherCondition = "";
     readPatient.once().then((DataSnapshot snapshot){
       var temp = jsonDecode(jsonEncode(snapshot.value));
-      user = Users.fromJson(temp);
+      cuser = Users.fromJson(temp);
     });
     readinfo.once().then((DataSnapshot snapshot){
       var temp = jsonDecode(jsonEncode(snapshot.value));
       info = Additional_Info.fromJson3(temp);
     });
-    if(user.usertype == "Patient"){
-      displayName = user.firstname;
+    if(cuser.usertype == "Patient"){
+      displayName = cuser.firstname;
       displayName += " ";
-      displayName += user.lastname;
-      email = user.email;
+      displayName += cuser.lastname;
+      email = cuser.email;
       bday = "${info.birthday.month}/${info.birthday.day}/${info.birthday.year}";
       age = int.parse(getAge(info.birthday));
       gender = info.gender;
@@ -455,6 +458,36 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       }
     }
     return age.toString();
+  }
+
+  void addPatient() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+    final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+    connection.clear();
+    bool isPatient = false;
+    readDoctor.once().then((DataSnapshot snapshot){
+      var temp1 = jsonDecode(jsonEncode(snapshot.value));
+      doctor = Users.fromJson2(temp1);
+      for(int i = 0; i < doctor.connections.length; i++){
+        if(doctor.connections[i] == userUID){
+          print("same patient detected");
+          isPatient = true;
+        }
+        print("added a patient");
+        connection.add(doctor.connections[i]);
+      }
+      if(isPatient == false){
+        connection.add(userUID);
+        print("user added successfully");
+      }
+      readDoctor.update({"connections": connection});
+    });
+
+
+      // user.connections.add(userUID);
+    // readDoctor.set({connections: user.connections});
   }
 }
 

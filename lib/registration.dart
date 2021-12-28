@@ -29,6 +29,7 @@ class _AppSignUpState extends State<registration> {
   String password = '';
   String error = '';
   String confirmpassword = '';
+  List<String> connection = ["", ""];
   bool isFirstTime = true;
   bool checkboxValue = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -418,7 +419,7 @@ class _AppSignUpState extends State<registration> {
                                           MaterialPageRoute(builder: (context) => set_up()),
                                         );
                                         isFirstTime = true;
-                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "connections": connection});
                                       }
                                     }
                                     else{
@@ -427,7 +428,7 @@ class _AppSignUpState extends State<registration> {
                                         MaterialPageRoute(builder: (context) => PatientList()),
                                       );
                                       isFirstTime = false;
-                                      await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+                                      await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "connections": connection});
                                     }
                                     print("user registered Sucessfully!");
                                   } catch(e) {
