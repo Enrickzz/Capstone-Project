@@ -8,9 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
 
 
-
-
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,6 +31,7 @@ class PatientList extends StatefulWidget {
   _PatientListState createState() => _PatientListState();
 }
 class _PatientListState extends State<PatientList>  {
+
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
 

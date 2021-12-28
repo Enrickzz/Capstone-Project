@@ -76,7 +76,6 @@ class _index2State extends State<index2>
 
   void addAllListData() {
     const int count = 5;
-
     listViews.add(
       GridImages(
         titleTxt: 'Your program',
@@ -88,7 +87,6 @@ class _index2State extends State<index2>
         animationController: widget.animationController,
       ),
     );
-
   }
 
   Future<bool> getData() async {
@@ -315,6 +313,7 @@ class _index2State extends State<index2>
     );
   }
 }
+
 Future<List<Common>> fetchNutritionix(String thisquery) async {
   var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
   Map<String, String> headers = {

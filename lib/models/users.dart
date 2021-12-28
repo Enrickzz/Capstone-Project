@@ -558,4 +558,63 @@ class Respiratory_Rate {
     return data;
   }
 }
+class Notifications {
+  String message;
+  String title;
+  String priority;
+  DateTime notif_date;
+  DateTime notif_time;
+
+  Notifications({this.message,this.title,this.priority, this.notif_date, this.notif_time});
+
+  Notifications.fromJson(Map<String, dynamic> json) {
+    message = json["message"];
+    title = json["title"];
+    priority = json['priority'];
+    notif_date = DateFormat("MM/dd/yyyy").parse(json['notif_date']);
+    notif_time = DateFormat("hh:mm").parse(json['notif_time']);
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message'] = this.message;
+    data['title'] = this.title;
+    data['priority'] = this.priority;
+    data['notif_date'] = this.notif_date;
+    data['notif_time'] = this.notif_time;
+    return data;
+  }
+}
+
+class Recommendation {
+  String message;
+  String title;
+  String priority;
+  DateTime rec_date;
+  DateTime rec_time;
+  String category;
+
+  Recommendation({this.message,this.title,this.priority, this.rec_date, this.rec_time, this.category});
+
+  Recommendation.fromJson(Map<String, dynamic> json) {
+    message = json["message"];
+    title = json["title"];
+    priority = json['priority'];
+    rec_date = DateFormat("MM/dd/yyyy").parse(json['rec_date']);
+    rec_time = DateFormat("hh:mm").parse(json['rec_time']);
+    category = json["category"];
+
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message'] = this.message;
+    data['title'] = this.title;
+    data['priority'] = this.priority;
+    data['rec_date'] = this.rec_date;
+    data['rec_time'] = this.rec_time;
+    data['category'] = this.category;
+    return data;
+  }
+}
+
+
 

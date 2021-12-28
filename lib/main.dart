@@ -136,8 +136,6 @@ class _LogInState extends State<LogIn> {
                             (route) => false,
                       );
                     }
-
-
                   });
                 });
                 print(isFTime);
@@ -366,11 +364,15 @@ class _AppSignInState extends State<AppSignIn> {
                                     if(result == null){
                                       setState(() => error = 'Sign In failed: Invalid email or password.');
                                     } else{
-                                      setState(() => error = '');
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => mainScreen()),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(),
+                                          SizedBox(height: 20,),
+                                          Text("Loading")
+                                        ],
                                       );
+                                      setState(() => error = '');
                                     }
                                   }
                                 },

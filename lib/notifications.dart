@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/gestures.dart';
 
 import 'dialogs/policy_dialog.dart';
 import 'fitness_app_theme.dart';
+import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class notifications extends StatefulWidget {
@@ -27,20 +30,27 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
+  List<Notifications> notifsList = new List<Notifications>();
+  List<Recommendation> recommList = new List<Recommendation>();
   @override
   void initState() {
     super.initState();
-
+    getNotifs();
+    getRecomm();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
-  }
+    Future.delayed(const Duration(milliseconds: 2000), (){
+      setState(() {
+        print("Set State this");
+      });
+    });
 
+  }
   @override
   void dispose() {
     controller.dispose();
-
     super.dispose();
   }
 
@@ -89,21 +99,21 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                 child: ListView.separated(
                     physics: ClampingScrollPhysics(),
                     padding: EdgeInsets.all(8.0),
-                    itemCount: 15,
+                    itemCount: notifsList.length,
                     itemBuilder: (context, index) {
                       return ListTile(
                         leading: Container(
                           height: 50,
                           width: 50,
-                          decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/heart_icon.png'), fit: BoxFit.contain))
+                          decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+notifsList[index].priority+ '.png'), fit: BoxFit.contain))
                         ),
-                          title: Text('Notification Title', style: TextStyle(fontSize: 14.0)),
+                          title: Text(''+notifsList[index].title, style: TextStyle(fontSize: 14.0)),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', style: TextStyle(fontSize: 12.0)),
+                              Text(''+notifsList[index].message, style: TextStyle(fontSize: 12.0)),
                               SizedBox(height: 4),
-                              Text('12/27/2021 13:30', style: TextStyle(fontSize: 11.0)),
+                              Text(''+getDateFormatted(notifsList[index].notif_date.toString())+" "+getTimeFormatted(notifsList[index].notif_time.toString()), style: TextStyle(fontSize: 11.0)),
                             ],
                           ),
                           onTap: (){
@@ -124,21 +134,21 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
               child: ListView.separated(
                   physics: ClampingScrollPhysics(),
                   padding: EdgeInsets.all(8.0),
-                  itemCount: 10,
+                  itemCount: recommList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       leading: Container(
                           height: 50,
                           width: 50,
-                          decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/heart_icon.png'), fit: BoxFit.contain))
+                          decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+recommList[index].priority+ '.png'), fit: BoxFit.contain))
                       ),
-                      title: Text('Recommendation Title', style: TextStyle(fontSize: 14.0)),
+                      title: Text(''+recommList[index].title, style: TextStyle(fontSize: 14.0)),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', style: TextStyle(fontSize: 12.0)),
+                          Text(''+recommList[index].message, style: TextStyle(fontSize: 12.0)),
                           SizedBox(height: 4),
-                          Text('12/27/2021 13:30', style: TextStyle(fontSize: 11.0)),
+                          Text(''+getDateFormatted(recommList[index].rec_date.toString())+" "+getTimeFormatted(recommList[index].rec_time.toString()), style: TextStyle(fontSize: 11.0)),
                         ],
                       ),
                       onTap: (){
@@ -155,5 +165,39 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
         ],
       ),
     );
+  }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    print(date);
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
+  }
+  void getNotifs() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(Notifications.fromJson(jsonString));
+        print(notifsList);
+      });
+    });
+  }
+  void getRecomm() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(Recommendation.fromJson(jsonString));
+      });
+    });
   }
 }

@@ -43,6 +43,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
+  List<Notifications> notifsList = new List<Notifications>();
+  List<Recommendation> recommList = new List<Recommendation>();
 
   @override
   Widget build(BuildContext context) {
@@ -275,53 +277,10 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                   pressure_level = "high";
                                   print(pressure_level);
                                 }
-                                // String tempSystolicPressure = "";
-                                // String tempDiastolicPressure = "";
-                                // String tempBPDate = "";
-                                // String tempBPTime = "";
-                                // String tempBPLvl = "";
-                                //
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //   print("i value" + i.toString());
-                                //   print("i value modulu " + (i%4).toString());
-                                //   switch(i%5){
-                                //     case 0: {
-                                //       print("1st switch i = 0 " + splitFull.last);
-                                //       tempBPDate = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 1: {
-                                //       print("1st switch i = 1 " + splitFull.last);
-                                //       tempDiastolicPressure = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 2: {
-                                //       print("1st switch i = 1 " + splitFull.last);
-                                //       tempBPLvl = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 3: {
-                                //       print("1st switch i = 1 " + splitFull.last);
-                                //       tempBPTime = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 4: {
-                                //       print("1st switch i = 2 " + splitFull.last);
-                                //       tempSystolicPressure = splitFull.last;
-                                //       bloodPressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure, pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate),bp_time: timeformat.parse(tempBPTime));
-                                //       bp_list.add(bloodPressure);
-                                //     }
-                                //     break;
-                                //   }
-                                // }
                                 getBloodPressure();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = bp_list.length--;
-                                  print("count " + count.toString());
-                                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
+                                Future.delayed(const Duration(milliseconds: 1500), (){
+                                  // count = bp_list.length--;
+                                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + (bp_list.length--).toString());
                                   bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
                                   print("Added Blood Pressure Successfully! " + uid);
                                 });
@@ -331,17 +290,20 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + bp_list.length.toString());
+                              String message, title;
+                              int priority;
                               bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure,pressure_level: pressure_level, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time)));
                               for(var i=0;i<bp_list.length/2;i++){
                                 var temp = bp_list[i];
                                 bp_list[i] = bp_list[bp_list.length-1-i];
                                 bp_list[bp_list.length-1-i] = temp;
                               }
-                              if(double.parse(systolic_pressure) < 120 && double.parse(diastolic_pressure) < 80 ){
+                              if(double.parse(systolic_pressure) <= 120 && double.parse(diastolic_pressure) <= 80 ){
                                 print("YOU ARE NORMAL");
                                 Navigator.pop(context, bp_list);
-                              }else if(double.parse(systolic_pressure) >= 120 &&  double.parse(systolic_pressure) < 130 && double.parse(diastolic_pressure) < 80 ){
+                              }else if(double.parse(systolic_pressure) > 120 &&  double.parse(systolic_pressure) < 130 && double.parse(diastolic_pressure) < 80 ){
                                 print("YOUR BP IS ELEVATED!");
+                                addtoNotifs("Blood Pressure is elevated", "Elevated BP", "1");
                                 Navigator.pop(context, bp_list);
                                 // Navigator.push(
                                 //   context,
@@ -377,27 +339,22 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 // );
                               }else if(double.parse(systolic_pressure) >= 130 &&  double.parse(systolic_pressure) < 140 && double.parse(diastolic_pressure) >= 80 && double.parse(diastolic_pressure) <= 89 ){
                                 print("YOU ARE ON STAGE 1 HIGH BP");
-                                //Navigator.pop(context, bp_list);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => notifications()),
-                                  );
+                                addtoNotifs("Blood Pressure is on Stage 1 Alert Level", "STAGE 1 HIGH BP", "2");
+                                addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
+                                Navigator.pop(context, bp_list);
                               }else if(double.parse(systolic_pressure) >= 140 &&  double.parse(systolic_pressure) <= 180 && double.parse(diastolic_pressure) >= 90 && double.parse(diastolic_pressure) <= 119){
                                 print("YOU ARE ON STAGE 2 HIGH BP");
+                                addtoNotifs("Blood Pressure is on Stage 2 Alert Level", "Stage 2 High BP", "3");
+                                addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
                                 Navigator.pop(context, bp_list);
                               }else if(double.parse(systolic_pressure) > 180 && double.parse(diastolic_pressure) >= 120 ){
                                 print("YOU ARE HYPERTENSIVE");
+                                addtoNotifs("Blood Pressure has reached hypertension", "Hypertensive", "4");
+                                addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
                                 Navigator.pop(context, bp_list);
                               }
                               print("POP HERE ==========");
                             });
-
-
-                            // Navigator.pushReplacement(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => blood_pressure(bplist: bp_list)),
-                            // );
-
                           } catch(e) {
                             print("you got an error! $e");
                           }
@@ -413,7 +370,41 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
 
     );
   }
+  void addtoNotifs(String message, String title, String priority){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/notifications/');
+    getNotifs();
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        notifRef.set({"message": message, "title":title, "priority": priority, "notif_time": bp_time.toString(), "notif_date": bp_date.toString(), "category": "bloodpressure"});
+      }else{
+        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + (notifsList.length--).toString());
+        notifRef.set({"message": message, "title":title, "priority": priority, "notif_time": bp_time.toString(), "notif_date": bp_date.toString(), "category": "bloodpressure"});
+
+      }
+    });
+  }
+  void addtoRecommendation(String message, String title, String priority){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/recommendations/');
+    getRecomm();
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        notifRef.set({"message": message, "title":title, "priority": priority, "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bprecommend"});
+      }else{
+        // count = recommList.length--;
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
+        notifRef.set({"message": message, "title":title, "priority": priority, "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bprecommend"});
+
+      }
+    });
+  }
   void getBloodPressure() {
+    bp_list.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
     final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/');
@@ -421,6 +412,30 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         bp_list.add(Blood_Pressure.fromJson(jsonString));
+      });
+    });
+  }
+  void getNotifs() {
+    notifsList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(Notifications.fromJson(jsonString));
+      });
+    });
+  }
+  void getRecomm() {
+    recommList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(Recommendation.fromJson(jsonString));
       });
     });
   }
