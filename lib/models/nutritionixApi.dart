@@ -49,12 +49,15 @@ class Common {
         this.fullNutrients,
         this.locale});
 
+  String getGrams(){
+    return this.servingWeightGrams;
+  }
   double getCalories(){
-      for(int j = 0; j < this.fullNutrients.length; j++){
-        if(fullNutrients[j].attrId == 208){ // getting calories
-          return fullNutrients[j].value;
-        }
+    for(int j = 0; j < this.fullNutrients.length; j++){
+      if(fullNutrients[j].attrId == 208){ // getting calories
+        return fullNutrients[j].value;
       }
+    }
   }
 
 

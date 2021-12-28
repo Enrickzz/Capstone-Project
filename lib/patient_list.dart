@@ -37,6 +37,11 @@ class _PatientListState extends State<PatientList>  {
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  @override
+  void initState(){
+    super.initState();
+    getPatients();
+  }
 
   List names = ["Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
   "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"];
@@ -160,6 +165,10 @@ class _PatientListState extends State<PatientList>  {
 
     );
 
+
+  }
+
+  void getPatients() {
 
   }
 

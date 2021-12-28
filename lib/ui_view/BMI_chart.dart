@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -18,24 +21,37 @@ class BMI_Chart extends StatefulWidget {
   @override
   State<BMI_Chart> createState() => _BMI_ChartState();
 }
-String bmi = "0";
-String bmi_status = "error";
+
 class _BMI_ChartState extends State<BMI_Chart> {
+  Additional_Info AIobj;
+  String bmi = "0";
+  String bmi_status = "error";
   @override
   void initState(){
     super.initState();
-    BMIdata();
-    //print("outside bmi is " + bmi);
-    // getBMIdata().then((value) => {
-    //   bmi = value,
-    //   print("bmi is " + value)
-    // });
-
+    getBMIdata();
+    Future.delayed(const Duration(milliseconds: 2000), (){
+      setState(() {
+        print(AIobj);
+        double bmi_double = (AIobj.weight / (AIobj.height * AIobj.height) * 10000);
+        bmi = bmi_double.toStringAsFixed(2);
+        if (bmi_double < 18.5){
+          bmi_status = "You are underweight!";
+        }else if(bmi_double >= 18.5 && bmi_double <= 24.9){
+          bmi_status = "Your weight is normal!";
+        }else if(bmi_double >= 25 && bmi_double <= 29.9){
+          bmi_status = "You are overweight!";
+        }else if(bmi_double >= 30 && bmi_double <= 34.9){
+          bmi_status = "You are obese!";
+        }else if(bmi_double > 35){
+          bmi_status = "You are extremely obese!";
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context)  {
-    BMIdata();
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
@@ -183,171 +199,20 @@ class _BMI_ChartState extends State<BMI_Chart> {
     );
   }
 
-  // void calcBMI () async {
-  //   final FirebaseAuth auth = FirebaseAuth.instance;
-  //   final User user = auth.currentUser;
-  //   final uid = user.uid;
-  //   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  //   double height = 0;
-  //   double weight = 0;
-  //   try{
-  //     final bmiRef = databaseReference.child('users/' +uid+'/vitals/additional_info/').orderByKey();
-  //     bmiRef.once().then((DataSnapshot datasnapshot) {
-  //       print(datasnapshot.value);
-  //       print(datasnapshot.key);
-  //       String temp1 = datasnapshot.value.toString();
-  //       List<String> temp = temp1.split(',');
-  //       for(var i = 0; i < temp.length; i++){
-  //         //print(temp[i].replaceAll("{", "").replaceAll("}", ""));
-  //         String full = temp[i].replaceAll("{", "").replaceAll("}", "");
-  //         List<String> splitFull = full.split(" ");
-  //         if(i == 2){
-  //           height = double.parse(splitFull.last);
-  //         }
-  //         if(i == 3){
-  //           weight = double.parse(splitFull.last);
-  //         }
-  //         print(splitFull.last + " <<< end result");
-  //       }
-  //       double bmi_double = (weight / (height * height) * 10000);
-  //       bmi = bmi_double.toStringAsFixed(2);
-  //       print("bmi is " + bmi);
-  //     });
-  //   }catch(e) {
-  //     print("you got an error! $e");
-  //   }
-  // }
-
-  void BMIdata() async {
+  void getBMIdata() async{
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
-    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-    double height = 0;
-    double weight = 0;
-    String birthDateInString = "MM/DD/YYYY";
-    String genderIn="male";
-    //<---------- insert data to db  ----------->
-    // try{
-    //   final bmiRef = databaseReference.child('users/1vl6taoaSbNJN7Aeq1JR2id4l7y2/vitals/additional_info');
-    //   await bmiRef.set({"BMI": "24"});
-    //   print("HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!");
-    // }catch(e) {
-    //   print("you got an error! $e");
-    // }
-    // <----------- read data from db ----------->
-    try{
-      final bmiRef = databaseReference.child('users/' +uid+'/vitals/additional_info/').orderByKey();
-      final bmiInsert = databaseReference.child('users/' +uid+'/vitals/additional_info/');
-      List<additional_info> list = new List();
-      //DataSnapshot snap = await bmiRef.once();
+    final readBP = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+    readBP.once().then((DataSnapshot snapshot){
+      var temp = jsonDecode(jsonEncode(snapshot.value));
+      print(snapshot.value.toString());
+      Additional_Info a = Additional_Info.fromJson2(temp);
+      AIobj = a;
+      print(a.toString());
+      print("STATUS " + bmi_status);
 
-      bmiRef.once().then((DataSnapshot datasnapshot) {
-        // print(datasnapshot.value);
-        // print(datasnapshot.key);
-        String temp1 = datasnapshot.value.toString();
-        List<String> temp = temp1.split(',');
-        for(var i = 0; i < temp.length; i++){
-          //print(temp[i].replaceAll("{", "").replaceAll("}", ""));
-          String full = temp[i].replaceAll("{", "").replaceAll("}", "");
-          List<String> splitFull = full.split(" ");
-          //print("i is " + i.toString());
-          switch (i){
-            case 0: {
-              bmi = splitFull.last;
-              //print("bmi inside switch " + bmi);
-            }
-            break;
-            case 1: {
-              birthDateInString = splitFull.last;
-              //print("birthdate " + birthDateInString);
-            }
-            break;
-            case 2: {
-              genderIn = splitFull.last;
-              //print("genderIn " + genderIn);
-            }
-            break;
-            case 3: {
-              height = double.parse(splitFull.last);
-              //print("height " + height.toString());
-            }
-            break;
-            case 4: {
-              weight = double.parse(splitFull.last);
-              // print("weight " + weight.toString());
-            }
-            break;
-          }
-          // print(splitFull.last + " <<< end result");
-        }
-        double bmi_double = (weight / (height * height) * 10000);
-        bmi = bmi_double.toStringAsFixed(2);
-        //insert bmi to db
-        bmiInsert.set({"birthday": birthDateInString.toString(), "gender": genderIn.toString(), "weight": weight.toString(), "height":height.toString(),"BMI": bmi});
-        // print("bmi is " + bmi);
-
-        if (bmi_double < 18.5){
-          bmi_status = "You are underweight!";
-        }else if(bmi_double >= 18.5 && bmi_double <= 24.9){
-          bmi_status = "Your weight is normal!";
-        }else if(bmi_double >= 25 && bmi_double <= 29.9){
-          bmi_status = "You are overweight!";
-        }else if(bmi_double >= 30 && bmi_double <= 34.9){
-          bmi_status = "You are obese!";
-        }else if(bmi_double > 35){
-          bmi_status = "You are extremely obese!";
-        }
-      });
-      // bmiRef.once().then((DataSnapshot snapshot) {
-      //   print('Data : ${snapshot.value}');
-      //   setState(() {
-      //     bmi = snapshot.value;
-      //
-      //     double tempBMI = double.parse(bmi);
-      //
-      //     if (tempBMI < 18.5){
-      //       bmi_status = "You are underweight!";
-      //     }else if(tempBMI >= 18.5 && tempBMI <= 24.9){
-      //       bmi_status = "Your weight is normal!";
-      //     }else if(tempBMI >= 25 && tempBMI <= 29.9){
-      //       bmi_status = "You are overweight!";
-      //     }else if(tempBMI >= 30 && tempBMI <= 34.9){
-      //       bmi_status = "You are obese!";
-      //     }else if(tempBMI > 35){
-      //       bmi_status = "You are extremely obese!";
-      //     }
-      //
-      //
-      //   });
-      // });
-    }catch(e) {
-      print("you got an error! $e");
-    }
-
-    final List<BMIData> data = [
-      BMIData("BMI", 24, const Color.fromRGBO(235, 97, 143, 1), "aa"),
-
-    ];
+    });
   }
-}
-
-class additional_info {
-  additional_info(this.weight,this.height,this.birthday, this.gender);
-  final String weight;
-  final String height;
-  final String BMI ="0";
-  final String gender;
-  final String birthday;
-
-}
-
-
-class BMIData {
-  BMIData(this.xData, this.yData, this.color, [this.text]);
-  final String xData;
-  final num yData;
-  final Color color;
-  final String text;
-
 }
