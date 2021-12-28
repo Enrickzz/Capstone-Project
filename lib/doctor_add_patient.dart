@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
@@ -46,11 +49,20 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  DateFormat format = new DateFormat("MM/dd/yyyy");
 
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   String userUID = "";
   Users user = new Users();
+  Additional_Info info = new Additional_Info();
+  String displayName = "";
+  String email = "";
+  String bday = "";
+  int age = 0;
+  String gender = "";
+  String cvdCondition = "";
+  String otherCondition = "";
 
 
   @override
@@ -66,7 +78,6 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   @override
   void dispose() {
     controller.dispose();
-
     super.dispose();
   }
 
@@ -115,6 +126,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                 onChanged: (val) {
                                   userUID = val;
 
+
                                 },
                               ),
                             ),
@@ -129,7 +141,10 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                               ),
                               onPressed: () {
                                 print(userUID);
-                                getPatient(userUID);
+
+                                setState(() {
+                                    getPatient();
+                                });
                               },
                             ),
                           ]
@@ -167,7 +182,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text('DisplayName',
+                                    Text(displayName,
                                         style: TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
@@ -179,7 +194,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                         child: Row(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: <Widget>[
-                                              Text('email',
+                                              Text(email,
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     // color:Color(0xFF363f93),
@@ -263,7 +278,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                                     ),
                                                   ),
                                                   SizedBox(height: 8),
-                                                  Text('DisplayName',
+                                                  Text(displayName,
                                                     style: TextStyle(
                                                         fontSize:16,
                                                         fontWeight: FontWeight.bold
@@ -277,7 +292,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                                     ),
                                                   ),
                                                   SizedBox(height: 8),
-                                                  Text( 'mm/dd/yyyy',
+                                                  Text(bday,
                                                     style: TextStyle(
                                                         fontSize:16,
                                                         fontWeight: FontWeight.bold
@@ -291,7 +306,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                                     ),
                                                   ),
                                                   SizedBox(height: 8),
-                                                  Text( "X years old",
+                                                  Text( age.toString() + " years old",
                                                     style: TextStyle(
                                                         fontSize:16,
                                                         fontWeight: FontWeight.bold
@@ -305,7 +320,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                                     ),
                                                   ),
                                                   SizedBox(height: 8),
-                                                  Text('M/F/?',
+                                                  Text(gender,
                                                     style: TextStyle(
                                                         fontSize:16,
                                                         fontWeight: FontWeight.bold
@@ -319,7 +334,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                                     ),
                                                   ),
                                                   SizedBox(height: 8),
-                                                  Text("xxxxxxx",
+                                                  Text(cvdCondition,
                                                     style: TextStyle(
                                                         fontSize:16,
                                                         fontWeight: FontWeight.bold
@@ -333,7 +348,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                                     ),
                                                   ),
                                                   SizedBox(height: 8),
-                                                  Text("xxxxxxx",
+                                                  Text(otherCondition,
                                                     style: TextStyle(
                                                         fontSize:16,
                                                         fontWeight: FontWeight.bold
@@ -370,23 +385,76 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 //   )
 //
 // ],)
-  void getPatient(String uid) {
-    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-    final readUID = databaseReference.child('users/');
-    final readPatient = databaseReference.child('users/' + uid + '/personal_info/');
-    readUID.once().then((DataSnapshot snapshot){
-      var temp = snapshot.value;
-      print(temp);
-      for(int i = 0; i < temp.length; i++){
-        if(uid == temp[i]){
-          readPatient.once().then((DataSnapshot snapshot){
-            user = snapshot.value;
-            print(user.firstname + " " + user.lastname);
-          });
-        }
-      }
 
+  void getPatient() {
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+    final readinfo = databaseReference.child('users/' + userUID + '/vitals/additional_info/');
+    cvdCondition = "";
+    otherCondition = "";
+    readPatient.once().then((DataSnapshot snapshot){
+      var temp = jsonDecode(jsonEncode(snapshot.value));
+      user = Users.fromJson(temp);
     });
+    readinfo.once().then((DataSnapshot snapshot){
+      var temp = jsonDecode(jsonEncode(snapshot.value));
+      info = Additional_Info.fromJson3(temp);
+    });
+      displayName = user.firstname;
+      displayName += " ";
+      displayName += user.lastname;
+      email = user.email;
+      bday = "${info.birthday.month}/${info.birthday.day}/${info.birthday.year}";
+      age = int.parse(getAge(info.birthday));
+      gender = info.gender;
+      for(int i = 0; i < info.disease.length; i++){
+        if(i == info.disease.length - 1){
+          cvdCondition += info.disease[i];
+        }
+        else{
+          cvdCondition += info.disease[i] + ", ";
+        }
+
+      }
+      for(int i = 0; i < info.other_disease.length; i++){
+        if(i == info.other_disease.length - 1){
+          otherCondition += info.other_disease[i];
+        }
+        else{
+          otherCondition += info.other_disease[i] + ", ";
+        }
+
+      }
+      print(displayName);
+    }
+
+  String getAge (DateTime birthday) {
+    DateTime today = new DateTime.now();
+    String days1 = "";
+    String month1 = "";
+    String year1 = "";
+    int d = int.parse(DateFormat("dd").format(birthday));
+    int m = int.parse(DateFormat("MM").format(birthday));
+    int y = int.parse(DateFormat("yyyy").format(birthday));
+    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
+    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
+    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
+    int age = 0;
+    age = y1 - y;
+    print(age);
+
+    // dec < jan
+    if(m1 < m){
+      print("month --");
+      age--;
+    }
+    else if (m1 == m){
+      if(d1 < d){
+        print("day --");
+        age--;
+      }
+    }
+    return age.toString();
   }
 }
 

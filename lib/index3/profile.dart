@@ -658,6 +658,7 @@ class _index3State extends State<index3>
   String formatDate (String date) {
     return format.parse(date).toString();
   }
+
   String getAge (DateTime birthday) {
     DateTime today = new DateTime.now();
     String days1 = "";
@@ -714,7 +715,7 @@ class _index3State extends State<index3>
     readProfile.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
-        profile = Users.fromJson(temp, uid);
+        profile = Users.fromJson(temp);
       });
       DisplayName = profile.firstname + " " + profile.lastname;
       email = profile.email;

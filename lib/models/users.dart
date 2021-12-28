@@ -3,19 +3,22 @@ import 'package:intl/intl.dart';
 import 'package:my_app/models/exrxTEST.dart';
 
 class Users {
-  final String uid;
+  String uid;
   String firstname;
   String lastname;
   String email;
   String password;
+  String usertype;
 
-  Users({this.uid, this.firstname, this.lastname, this.email, this.password});
+  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype});
 
-  Users.fromJson(Map<String, dynamic> json, this.uid) {
+  Users.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
     firstname = json['firstname'];
     lastname = json['lastname'];
     email = json['email'];
     password = json['password'];
+    usertype = json['userType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -93,6 +96,13 @@ class Additional_Info {
     height = double.parse(json['height']);
     weight = double.parse(json['weight']);
     weight_unit = json['weight_unit'];
+  }
+
+  Additional_Info.fromJson3(Map<String, dynamic> json) {
+    birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
+    gender = json['gender'];
+    disease = json['disease'].cast<String>();
+    other_disease = json['other_disease'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {

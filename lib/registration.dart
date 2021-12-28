@@ -418,7 +418,7 @@ class _AppSignUpState extends State<registration> {
                                           MaterialPageRoute(builder: (context) => set_up()),
                                         );
                                         isFirstTime = true;
-                                        await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
                                       }
                                     }
                                     else{
@@ -427,7 +427,7 @@ class _AppSignUpState extends State<registration> {
                                         MaterialPageRoute(builder: (context) => PatientList()),
                                       );
                                       isFirstTime = false;
-                                      await usersRef.set({"firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+                                      await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
                                     }
                                     print("user registered Sucessfully!");
                                   } catch(e) {
