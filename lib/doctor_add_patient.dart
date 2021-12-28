@@ -245,7 +245,6 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                           ),
                           SizedBox(height: 10.0),
                           Container(
-                              height: 380,
                               child: Stack(
                                   children: [
                                     Positioned(
