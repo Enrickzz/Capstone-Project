@@ -13,6 +13,7 @@ import 'package:flutter/gestures.dart';
 
 import 'dialogs/policy_dialog.dart';
 import 'fitness_app_theme.dart';
+import 'models/users.dart';
 
 
 
@@ -48,6 +49,8 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
+  String userUID = "";
+  Users user = new Users();
 
 
   @override
@@ -110,6 +113,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                   contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
                                 ),
                                 onChanged: (val) {
+                                  userUID = val;
 
                                 },
                               ),
@@ -124,7 +128,8 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                 ),
                               ),
                               onPressed: () {
-
+                                print(userUID);
+                                getPatient(userUID);
                               },
                             ),
                           ]
@@ -365,5 +370,23 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 //   )
 //
 // ],)
+  void getPatient(String uid) {
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final readUID = databaseReference.child('users/');
+    final readPatient = databaseReference.child('users/' + uid + '/personal_info/');
+    readUID.once().then((DataSnapshot snapshot){
+      var temp = snapshot.value;
+      print(temp);
+      for(int i = 0; i < temp.length; i++){
+        if(uid == temp[i]){
+          readPatient.once().then((DataSnapshot snapshot){
+            user = snapshot.value;
+            print(user.firstname + " " + user.lastname);
+          });
+        }
+      }
 
+    });
+  }
 }
+
