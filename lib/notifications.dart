@@ -82,6 +82,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       body: TabBarView(
         controller: controller,
         children: [
+          //notifications
           Container(
             color: FitnessAppTheme.background,
               child: Scrollbar(
@@ -116,8 +117,40 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                 ),
               ),
           ),
+          //Recommendations
           Container(
             color: FitnessAppTheme.background,
+            child: Scrollbar(
+              child: ListView.separated(
+                  physics: ClampingScrollPhysics(),
+                  padding: EdgeInsets.all(8.0),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/heart_icon.png'), fit: BoxFit.contain))
+                      ),
+                      title: Text('Recommendation Title', style: TextStyle(fontSize: 14.0)),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', style: TextStyle(fontSize: 12.0)),
+                          SizedBox(height: 4),
+                          Text('12/27/2021 13:30', style: TextStyle(fontSize: 11.0)),
+                        ],
+                      ),
+                      onTap: (){
+
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  }
+              ),
+            ),
           ),
         ],
       ),

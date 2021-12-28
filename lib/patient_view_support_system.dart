@@ -133,7 +133,7 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 250,
+                        height: 230,
                         // height: 500, if may contact number and email
                         // margin: EdgeInsets.only(bottom: 50),
                         child: Stack(
