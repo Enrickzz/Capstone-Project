@@ -101,25 +101,38 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                     padding: EdgeInsets.all(8.0),
                     itemCount: notifsList.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+notifsList[index].priority+ '.png'), fit: BoxFit.contain))
-                        ),
-                          title: Text(''+notifsList[index].title, style: TextStyle(fontSize: 14.0)),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(''+notifsList[index].message, style: TextStyle(fontSize: 12.0)),
-                              SizedBox(height: 4),
-                              Text(''+getDateFormatted(notifsList[index].notif_date.toString())+" "+getTimeFormatted(notifsList[index].notif_time.toString()), style: TextStyle(fontSize: 11.0)),
-                            ],
-                          ),
-                          onTap: (){
+                      final notif = notifsList[index];
+                      return Dismissible(key: Key(notif.title),
+                          child: ListTile(
+                            leading: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+notifsList[index].priority+ '.png'), fit: BoxFit.contain))
+                            ),
+                            title: Text(''+notifsList[index].title, style: TextStyle(fontSize: 14.0)),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(''+notifsList[index].message, style: TextStyle(fontSize: 12.0)),
+                                SizedBox(height: 4),
+                                Text(''+getDateFormatted(notifsList[index].notif_date.toString())+" "+getTimeFormatted(notifsList[index].notif_time.toString()), style: TextStyle(fontSize: 11.0)),
+                              ],
+                            ),
+                            onTap: (){
 
-                          },
-                        );
+                            },
+                          ),
+                        onDismissed: (direction){
+                          setState(() {
+                            notifsList.removeAt(index);
+                          });
+
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('Notification dismissed')));
+                        },
+
+
+                      );
                     },
                     separatorBuilder: (context, index) {
                       return Divider();
@@ -136,25 +149,38 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                   padding: EdgeInsets.all(8.0),
                   itemCount: recommList.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+recommList[index].priority+ '.png'), fit: BoxFit.contain))
-                      ),
-                      title: Text(''+recommList[index].title, style: TextStyle(fontSize: 14.0)),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(''+recommList[index].message, style: TextStyle(fontSize: 12.0)),
-                          SizedBox(height: 4),
-                          Text(''+getDateFormatted(recommList[index].rec_date.toString())+" "+getTimeFormatted(recommList[index].rec_time.toString()), style: TextStyle(fontSize: 11.0)),
-                        ],
-                      ),
-                      onTap: (){
+                    final recomm = recommList[index];
+                    return Dismissible(
+                      child: ListTile(
+                        leading: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+recommList[index].priority+ '.png'), fit: BoxFit.contain))
+                        ),
+                        title: Text(''+recommList[index].title, style: TextStyle(fontSize: 14.0)),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(''+recommList[index].message, style: TextStyle(fontSize: 12.0)),
+                            SizedBox(height: 4),
+                            Text(''+getDateFormatted(recommList[index].rec_date.toString())+" "+getTimeFormatted(recommList[index].rec_time.toString()), style: TextStyle(fontSize: 11.0)),
+                          ],
+                        ),
+                        onTap: (){
 
+                        },
+                      ),
+                      key: Key(recomm.title),
+                      onDismissed: (direction){
+                        setState(() {
+                          recommList.removeAt(index);
+                        });
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text('Recommendaiton dismissed')));
                       },
                     );
+
                   },
                   separatorBuilder: (context, index) {
                     return Divider();
