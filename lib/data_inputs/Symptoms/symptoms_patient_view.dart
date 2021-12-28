@@ -10,6 +10,7 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
+import 'package:my_app/data_inputs/Symptoms/specific_symptom_patient_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
@@ -187,12 +188,12 @@ class _symptomsState extends State<symptoms> {
 
 
 
-                    // onTap: (){
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor()),
-                    //   );
-                    // }
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient()),
+                      );
+                    }
 
                 ),
 
