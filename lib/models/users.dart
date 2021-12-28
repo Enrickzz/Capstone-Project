@@ -115,6 +115,10 @@ class Additional_Info {
     disease = json['disease'].cast<String>();
     other_disease = json['other_disease'].cast<String>();
   }
+  Additional_Info.fromJson4(Map<String, dynamic> json) {
+    gender = json['gender'];
+    disease = json['disease'].cast<String>();
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

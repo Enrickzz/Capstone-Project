@@ -466,7 +466,6 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   void addPatient() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
     connection.clear();
     bool isPatient = false;
@@ -474,12 +473,11 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
       doctor = Users.fromJson2(temp1);
       for(int i = 0; i < doctor.connections.length; i++){
-        if(doctor.connections[i] != ""){
+        if(doctor.connections[i] != "NA"){
           if(doctor.connections[i] == userUID){
             print("same patient detected");
             isPatient = true;
           }
-          print("added a patient");
           connection.add(doctor.connections[i]);
         }
       }

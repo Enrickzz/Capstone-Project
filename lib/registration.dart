@@ -29,7 +29,7 @@ class _AppSignUpState extends State<registration> {
   String password = '';
   String error = '';
   String confirmpassword = '';
-  List<String> connection = ["", ""];
+  List<String> connection = ["NA", "NA"];
   bool isFirstTime = true;
   bool checkboxValue = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
