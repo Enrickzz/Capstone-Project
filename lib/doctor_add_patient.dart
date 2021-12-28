@@ -65,6 +65,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   String cvdCondition = "";
   String otherCondition = "";
   List<String> connection = [];
+  bool searchPatient = false;
 
 
   @override
@@ -127,6 +128,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                 ),
                                 onChanged: (val) {
                                   userUID = val;
+
 
 
                                 },
@@ -403,6 +405,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       info = Additional_Info.fromJson3(temp);
     });
     if(cuser.usertype == "Patient"){
+      searchPatient = true;
       displayName = cuser.firstname;
       displayName += " ";
       displayName += cuser.lastname;
