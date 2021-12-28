@@ -12,7 +12,7 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/symptoms.dart';
+import 'package:my_app/data_inputs/Symptoms/symptoms.dart';
 
 import '../fitness_app_theme.dart';
 import 'vitals/blood_cholesterol.dart';

@@ -11,7 +11,7 @@ import 'package:my_app/database.dart';
 import 'package:my_app/data_inputs/lab_results.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/symptoms.dart';
+import 'package:my_app/data_inputs/Symptoms/symptoms.dart';
 import 'package:my_app/data_inputs/medication.dart';
 import 'package:my_app/data_inputs/vitals.dart';
 import 'data_inputs/medication.dart';
