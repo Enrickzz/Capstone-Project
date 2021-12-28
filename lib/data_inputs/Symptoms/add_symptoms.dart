@@ -1,5 +1,9 @@
-import 'dart:convert';
 
+import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +16,7 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/checkbox_state.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms.dart';
+import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
 import '../../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
@@ -89,6 +93,13 @@ class _addSymptomsState extends State<add_symptoms> {
   ];
 
   bool otherSymptomsCheck = false;
+
+  User user;
+  var uid, fileName;
+  File file;
+
+
+
 
   String dropdownValue = 'Select Symptom';
   @override
@@ -368,6 +379,38 @@ class _addSymptomsState extends State<add_symptoms> {
                 height: 8,
               ),
             ),
+            SizedBox(height: 18.0),
+            GestureDetector(
+                child: Text(
+                  'Upload',
+                  style: TextStyle(color: Colors.black),
+                ),
+                onTap: () async {
+                  final result = await FilePicker.platform.pickFiles(
+                    allowMultiple: false,
+                    // type: FileType.custom,
+                    // allowedExtensions: ['jpg', 'png'],
+                  );
+                  if(result == null) return;
+                  final FirebaseAuth auth = FirebaseAuth.instance;
+                  final path = result.files.single.path;
+                  user = auth.currentUser;
+                  uid = user.uid;
+                  fileName = result.files.single.name;
+                  file = File(path);
+                  // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                  //   setState(() {
+                  //     trythis.clear();
+                  //     listAll("path");
+                  //     Future.delayed(const Duration(milliseconds: 1000), (){
+                  //       Navigator.pop(context, trythis);
+                  //     });
+                  //   });
+                  // });
+                  // fileName = uid + fileName + "_lab_result" + "counter";
+                  //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
+                }
+            ),
             GestureDetector(
               onTap: ()async{
                 await showDatePicker(
@@ -477,7 +520,7 @@ class _addSymptomsState extends State<add_symptoms> {
                             valueChooseSymptom = other_name;
                           }
                           final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
-                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true,"symptom_trigger": symptom_felt, "recurring": checkboxStatus});
+                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true,"symptom_trigger": symptom_felt, "recurring": checkboxStatus, "imgRef": fileName.toString()});
                           print("Added Symptom Successfully! " + uid);
 
                         }
@@ -536,7 +579,7 @@ class _addSymptomsState extends State<add_symptoms> {
                               valueChooseSymptom = other_name;
                             }
                             final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
-                            symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "symptom_trigger": symptom_felt, "recurring": checkboxStatus});
+                            symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "symptom_trigger": symptom_felt, "recurring": checkboxStatus, "imgRef": fileName.toString()});
                             print("Added Symptom Successfully! " + uid);
                           });
 

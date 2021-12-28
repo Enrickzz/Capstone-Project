@@ -12,7 +12,7 @@ import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms.dart';
+import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
 import 'add_medication.dart';
 import '../fitness_app_theme.dart';

@@ -16,7 +16,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms.dart';
+import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 // import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';

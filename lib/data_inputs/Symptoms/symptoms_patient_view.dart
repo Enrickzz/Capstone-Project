@@ -14,7 +14,7 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms.dart';
+import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
 import '../../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
@@ -157,75 +157,48 @@ class _symptomsState extends State<symptoms> {
         ],
       ),
       body: ListView.builder(
-        itemCount: listtemp.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                height: 140,
-                child: Stack(
-                    children: [
-                      Positioned (
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                            height: 120,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                    bottomRight: Radius.circular(20)
-                                ),
-                                gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.white.withOpacity(0.7),
-                                      Colors.white
-                                    ]
-                                ),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.grey.withOpacity(0.6),
-                                      offset: Offset(1.1, 1.1),
-                                      blurRadius: 10.0),
-                                ]
-                            )
-                        ),
-                      ),
-                      Positioned(
-                        top: 25,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            children: [
+            itemCount: listtemp.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) =>Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Card(
+                child: ListTile(
+                    leading: Icon(Icons.medication_outlined ),
+                    title: Text(listtemp[index].symptomName,
+                        style:TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
 
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                  '' + getDateFormatted(listtemp[index].symptomDate.toString()) + getTimeFormatted(listtemp[index].symptomTime.toString())+" \n" + "Name: " +listtemp[index].symptomName+
-                                      "\nI felt " + listtemp[index].symptomFelt.toString() + " \n" +
-                                      "The intensity was "+ listtemp[index].intensityLvl.toString()+ " \n",
-                                      // "trigger "+ listtemp[index].symptomTrigger + "recurring during: "+ listtemp[index].recurring[0] + " ," + listtemp[index].recurring[1] + " ," + listtemp[index].recurring[2] + " \n",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18
-                                  )
-                              ),
+                        )),
+                    subtitle:        Text("Intensity Level: " + listtemp[index].intensityLvl.toString(),
+                        style:TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14.0,
+                        )),
+                    trailing: Text("${listtemp[index].symptomDate.month}/${listtemp[index].symptomDate.day}/${listtemp[index].symptomDate.year}",
+                        style:TextStyle(
+                          color: Colors.grey,
+                        )),
+                    isThreeLine: true,
+                    dense: true,
+                    selected: true,
 
-                            ],
-                          ),
-                        ),
-                      ),
-                    ]
-                )
-            ),
-          );
-        },
-      ),
+
+
+                    // onTap: (){
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor()),
+                    //   );
+                    // }
+
+                ),
+
+              ),
+            )
+        )
 
     );
   }

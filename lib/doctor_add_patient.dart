@@ -232,7 +232,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                       highlightColor: Colors.transparent,
                                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
                                       onTap: () {
-                                        addPatient();
+                                        _showMyDialog();
                                       },
                                       child: Row(
                                         children: <Widget>[
@@ -474,12 +474,14 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
       doctor = Users.fromJson2(temp1);
       for(int i = 0; i < doctor.connections.length; i++){
-        if(doctor.connections[i] == userUID){
-          print("same patient detected");
-          isPatient = true;
+        if(doctor.connections[i] != ""){
+          if(doctor.connections[i] == userUID){
+            print("same patient detected");
+            isPatient = true;
+          }
+          print("added a patient");
+          connection.add(doctor.connections[i]);
         }
-        print("added a patient");
-        connection.add(doctor.connections[i]);
       }
       if(isPatient == false){
         connection.add(userUID);
@@ -491,6 +493,43 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 
       // user.connections.add(userUID);
     // readDoctor.set({connections: user.connections});
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Add Patient'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure this is the right patient?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                print('Patient Added');
+                Navigator.of(context).pop();
+                addPatient();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
