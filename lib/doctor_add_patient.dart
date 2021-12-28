@@ -400,6 +400,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       var temp = jsonDecode(jsonEncode(snapshot.value));
       info = Additional_Info.fromJson3(temp);
     });
+    if(user.usertype == "Patient"){
       displayName = user.firstname;
       displayName += " ";
       displayName += user.lastname;
@@ -423,9 +424,9 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
         else{
           otherCondition += info.other_disease[i] + ", ";
         }
-
       }
-      print(displayName);
+    }
+
     }
 
   String getAge (DateTime birthday) {
