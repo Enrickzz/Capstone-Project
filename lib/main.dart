@@ -9,6 +9,7 @@ import 'package:my_app/goal_weight.dart';
 import 'package:my_app/medical_history.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/notifications.dart';
+import 'package:my_app/profile/add_image.dart';
 import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
@@ -22,7 +23,6 @@ import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'discussion.dart';
 import 'package:my_app/discussion.dart';
 import 'fitness_app_theme.dart';
-import 'index3/add_image.dart';
 import 'my_diary/exercise_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/mainScreen.dart';
@@ -37,7 +37,6 @@ import 'package:my_app/management_plan/medication_prescription/specific_medical_
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
 import 'package:my_app/doctor_add_patient.dart';
 import 'package:my_app/patient_list.dart';
-import 'package:my_app/index3/doctor_view_patient_profile.dart';
 
 
 
