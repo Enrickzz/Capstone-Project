@@ -165,7 +165,12 @@ class _index3State extends State<view_patient_profile>
                                   BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
                                 ],
                               ),
-                              child: Icon(Icons.person_outlined, size: 50, color: Colors.blue,),
+                              child: ClipOval(
+                                child:Image.asset("assets/images/blank_person.png",
+                                    width: 70,
+                                    height: 70,
+                                    fit: BoxFit.cover),
+                              ),
                             ),
                           ),
                           Padding(
@@ -363,7 +368,7 @@ class _index3State extends State<view_patient_profile>
                         ),
                         SizedBox(height: 10.0),
                         Container(
-                            height: 200,
+                            height: 280,
                             // height: 500, if may contact number and email
                             // margin: EdgeInsets.only(bottom: 50),
                             child: Stack(
@@ -391,7 +396,7 @@ class _index3State extends State<view_patient_profile>
                                           child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text("Disease",
+                                                Text("CVD Condition/s",
                                                   style: TextStyle(
                                                     fontSize:14,
                                                     color:Color(0xFF363f93),
@@ -468,7 +473,7 @@ class _index3State extends State<view_patient_profile>
                         ),
                         SizedBox(height: 10.0),
                         Container(
-                            height: 200,
+                            height: 250,
                             // height: 500, if may contact number and email
                             // margin: EdgeInsets.only(bottom: 50),
                             child: Stack(
@@ -617,7 +622,7 @@ class _index3State extends State<view_patient_profile>
                                                 SizedBox(height: 16),
                                                 Row(
                                                   children: [
-                                                    Text("Smoking",
+                                                    Text("Cigarettes per day",
                                                       style: TextStyle(
                                                         fontSize:14,
                                                         color:Color(0xFF363f93),

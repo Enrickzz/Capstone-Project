@@ -175,7 +175,7 @@ class _AppSignUpState extends State<data_inputs> {
                         )
                     ),
                   ),
-  
+
                   GestureDetector(
                     onTap:(){
                       // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
