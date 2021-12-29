@@ -119,6 +119,21 @@ class Additional_Info {
     gender = json['gender'];
     disease = json['disease'].cast<String>();
   }
+  Additional_Info.fromJson5(Map<String, dynamic> json) {
+    birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
+    gender = json['gender'];
+    height = double.parse(json['height']);
+    weight = double.parse(json['weight']);
+    foodAller = json['foodAller'].cast<String>();
+    drugAller = json['drugAller'].cast<String>();
+    otherAller = json['otherAller'].cast<String>();
+    lifestyle = json['lifestyle'];
+    average_stick = json['average_stick'];
+    alcohol_freq = json['alcohol_freq'];
+    disease = json['disease'].cast<String>();
+    other_disease = json['other_disease'].cast<String>();
+    family_disease = json['family_disease'].cast<String>();
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

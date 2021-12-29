@@ -57,6 +57,18 @@ class _index3State extends State<index3>
   DateTime birthdate;
   final test = DateTime(1999, 5, 18); // for test
   Additional_Info info;
+  Additional_Info disease;
+  Additional_Info allergies;
+  Additional_Info other_info;
+  String disease_name = "";
+  String family_disease = "";
+  String other_disease = "";
+  String food_aller = "";
+  String drug_aller = "";
+  String other_aller = "";
+  String ave_sticks = "";
+  String alcohol_freq = "";
+  String lifestyle = "";
 
 
   @override
@@ -467,7 +479,7 @@ class _index3State extends State<index3>
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("put cvd diseases here",
+                                            Text(disease_name,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -485,7 +497,7 @@ class _index3State extends State<index3>
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("put other disease here",
+                                            Text(other_disease,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -499,7 +511,7 @@ class _index3State extends State<index3>
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("put family diseases here",
+                                            Text(family_disease,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -599,7 +611,7 @@ class _index3State extends State<index3>
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("put food allergies here",
+                                            Text(food_aller,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -617,7 +629,7 @@ class _index3State extends State<index3>
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("put drug allergies here",
+                                            Text(drug_aller,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -631,7 +643,7 @@ class _index3State extends State<index3>
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put other allergies here",
+                                            Text(other_aller,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -731,7 +743,7 @@ class _index3State extends State<index3>
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("put lifestyle here",
+                                            Text(lifestyle,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -749,7 +761,7 @@ class _index3State extends State<index3>
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("put how many sticks here",
+                                            Text(ave_sticks,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -763,7 +775,7 @@ class _index3State extends State<index3>
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("put alchol frequency here",
+                                            Text(alcohol_freq,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -992,9 +1004,97 @@ class _index3State extends State<index3>
     readInfo.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
-        info = Additional_Info.fromJson2(temp);
+        info = Additional_Info.fromJson5(temp);
       });
-      print(info.birthday);
+      ave_sticks = info.average_stick.toString();
+      alcohol_freq = info.alcohol_freq;
+      lifestyle = info.lifestyle;
+      /// disease name
+      if(info.disease[0] != "NA"){
+        for(int j = 0; j < info.disease.length; j++){
+          if(j == info.disease.length - 1){
+            disease_name += info.disease[j];
+          }
+          else{
+            disease_name += info.disease[j] + ", ";
+          }
+        }
+      }
+
+      /// family disease name
+      if(info.family_disease[0] != "NA"){
+        for(int j = 0; j < info.family_disease.length; j++){
+          if(j == info.family_disease.length - 1){
+            family_disease += info.family_disease[j];
+          }
+          else{
+            family_disease += info.family_disease[j] + ", ";
+          }
+        }
+      }
+
+      /// other disease name
+      if(info.other_disease[0] != "NA"){
+        for(int j = 0; j < info.other_disease.length; j++){
+          if(j == info.other_disease.length - 1){
+            other_disease += info.other_disease[j];
+          }
+          else{
+            other_disease += info.other_disease[j] + ", ";
+          }
+        }
+      }
+
+      /// food allergies
+      if(info.foodAller[0] != "NA"){
+        if(info.foodAller.length == 1){
+          food_aller += info.foodAller[0];
+        }
+        else{
+          for(int j = 0; j < info.foodAller.length; j++){
+            if(j == info.foodAller.length - 1){
+              food_aller += info.foodAller[j];
+            }
+            else{
+              food_aller += info.foodAller[j] + ", ";
+            }
+          }
+        }
+      }
+
+      /// drug allergies
+      if(info.drugAller[0] != "NA"){
+        if(info.drugAller.length == 1){
+          drug_aller += info.drugAller[0];
+        }
+        else{
+          for(int j = 0; j < info.drugAller.length; j++){
+            if(j == info.drugAller.length - 1){
+              drug_aller += info.drugAller[j];
+            }
+            else{
+              drug_aller += info.drugAller[j] + ", ";
+            }
+          }
+        }
+      }
+
+      /// other allergies
+      if(info.otherAller[0] != "NA"){
+        if(info.otherAller.length == 1){
+          other_aller += info.otherAller[0];
+        }
+        else{
+          for(int j = 0; j < info.otherAller.length; j++){
+            if(j == info.otherAller.length - 1){
+              other_aller += info.otherAller[j];
+            }
+            else{
+              other_aller += info.otherAller[j] + ", ";
+            }
+          }
+        }
+      }
     });
   }
 }

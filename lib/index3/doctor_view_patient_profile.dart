@@ -27,6 +27,7 @@ import 'package:my_app/patient_view_support_system.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 import 'package:my_app/view_medical_prescription_as_patient.dart';
 import 'package:my_app/management_plan_doctor_view.dart';
+import 'package:video_player/video_player.dart';
 
 
 
@@ -62,15 +63,31 @@ class _index3State extends State<view_patient_profile>
   double height = 0;
   String bday ="";
   Additional_Info info;
+  Additional_Info disease;
+  Additional_Info allergies;
+  Additional_Info other_info;
+  String disease_name = "";
+  String family_disease = "";
+  String other_disease = "";
+  String food_aller = "";
+  String drug_aller = "";
+  String other_aller = "";
+  String ave_sticks = "";
+  String alcohol_freq = "";
+  String lifestyle = "";
+
 
 
   @override
   void initState() {
     super.initState();
     info = new Additional_Info(bmi: 0, birthday: format.parse("01/01/0000"), gender: "Male", height: 0, weight: 0);
-
-    getProfile(widget.patientUID);
-    getInfo(widget.patientUID);
+    String patientuid = widget.patientUID;
+    getProfile(patientuid);
+    getInfo(patientuid);
+    // getDisease(patientuid);
+    // getAllergies(patientuid);
+    // getOtherInfo(patientuid);
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {});
     });
@@ -96,7 +113,7 @@ class _index3State extends State<view_patient_profile>
             iconTheme: IconThemeData(
                 color: Colors.black
             ),
-            title: const Text("Display Name's Profile", style: TextStyle(
+            title: Text(DisplayName + "'s Profile", style: TextStyle(
                 color: Colors.black
             )),
             centerTitle: true,
@@ -318,6 +335,7 @@ class _index3State extends State<view_patient_profile>
                         ),
                       ],
                     ),  // Personal Information
+
                     SizedBox(height: 30),
                     Column(
                       children: [
@@ -376,7 +394,7 @@ class _index3State extends State<view_patient_profile>
                                                   ),
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("Rheumatic Heart Disease",
+                                                Text(disease_name,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -394,7 +412,7 @@ class _index3State extends State<view_patient_profile>
                                                   ],
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("Diabetes",
+                                                Text(other_disease,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -408,112 +426,7 @@ class _index3State extends State<view_patient_profile>
                                                   ),
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("No",
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                              ]
-                                          ),
-                                        ),
-                                      ))
-                                ]
-                            )
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:<Widget>[
-                                Expanded(
-                                  child: Text( "Medical History",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color:Color(0xFF4A6572),
-                                      )
-                                  ),
-                                ),
-
-                              ]
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        Container(
-                            height: 200,
-                            // height: 500, if may contact number and email
-                            // margin: EdgeInsets.only(bottom: 50),
-                            child: Stack(
-                                children: [
-                                  Positioned(
-                                      child: Material(
-                                        child: Center(
-                                          child: Container(
-                                              width: 340,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(20.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.grey.withOpacity(0.5),
-                                                      blurRadius: 20.0)],
-                                              )
-                                          ),
-                                        ),
-                                      )),
-                                  Positioned(
-                                      child: Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18.0),
-                                          child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Disease",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text("put cvd diseases here",
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Row(
-                                                  children: [
-                                                    Text("Comorbidities",
-                                                      style: TextStyle(
-                                                        fontSize:14,
-                                                        color:Color(0xFF363f93),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text("put other disease here",
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Family History",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text("put family diseases here",
+                                                Text(family_disease,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -586,7 +499,7 @@ class _index3State extends State<view_patient_profile>
                                                   ),
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("put food allergies here",
+                                                Text(food_aller,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -604,7 +517,7 @@ class _index3State extends State<view_patient_profile>
                                                   ],
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("put drug allergies here",
+                                                Text(drug_aller,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -618,7 +531,7 @@ class _index3State extends State<view_patient_profile>
                                                   ),
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("Put other allergies here",
+                                                Text(other_aller,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -691,7 +604,7 @@ class _index3State extends State<view_patient_profile>
                                                   ),
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("put lifestyle here",
+                                                Text(lifestyle,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -709,7 +622,7 @@ class _index3State extends State<view_patient_profile>
                                                   ],
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("put how many sticks here",
+                                                Text(ave_sticks,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -723,7 +636,7 @@ class _index3State extends State<view_patient_profile>
                                                   ),
                                                 ),
                                                 SizedBox(height: 8),
-                                                Text("put alchol frequency here",
+                                                Text(alcohol_freq,
                                                   style: TextStyle(
                                                       fontSize:16,
                                                       fontWeight: FontWeight.bold
@@ -931,8 +844,101 @@ class _index3State extends State<view_patient_profile>
     readInfo.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
-        info = Additional_Info.fromJson2(temp);
+        info = Additional_Info.fromJson5(temp);
       });
+      ave_sticks = info.average_stick.toString();
+      alcohol_freq = info.alcohol_freq;
+      lifestyle = info.lifestyle;
+      /// disease name
+      if(info.disease[0] != "NA"){
+        for(int j = 0; j < info.disease.length; j++){
+          if(j == info.disease.length - 1){
+            disease_name += info.disease[j];
+          }
+          else{
+            disease_name += info.disease[j] + ", ";
+          }
+        }
+      }
+
+      /// family disease name
+      if(info.family_disease[0] != "NA"){
+        for(int j = 0; j < info.family_disease.length; j++){
+          if(j == info.family_disease.length - 1){
+            family_disease += info.family_disease[j];
+          }
+          else{
+            family_disease += info.family_disease[j] + ", ";
+          }
+        }
+      }
+
+      /// other disease name
+      if(info.other_disease[0] != "NA"){
+        for(int j = 0; j < info.other_disease.length; j++){
+          if(j == info.other_disease.length - 1){
+            other_disease += info.other_disease[j];
+          }
+          else{
+            other_disease += info.other_disease[j] + ", ";
+          }
+        }
+      }
+
+      /// food allergies
+      if(info.foodAller[0] != "NA"){
+        if(info.foodAller.length == 1){
+          food_aller += info.foodAller[0];
+        }
+        else{
+          for(int j = 0; j < info.foodAller.length; j++){
+            if(j == info.foodAller.length - 1){
+              food_aller += info.foodAller[j];
+            }
+            else{
+              food_aller += info.foodAller[j] + ", ";
+            }
+          }
+        }
+      }
+
+      /// drug allergies
+      if(info.drugAller[0] != "NA"){
+        if(info.drugAller.length == 1){
+          drug_aller += info.drugAller[0];
+        }
+        else{
+          for(int j = 0; j < info.drugAller.length; j++){
+            if(j == info.drugAller.length - 1){
+              drug_aller += info.drugAller[j];
+            }
+            else{
+              drug_aller += info.drugAller[j] + ", ";
+            }
+          }
+        }
+      }
+
+      /// other allergies
+      if(info.otherAller[0] != "NA"){
+        if(info.otherAller.length == 1){
+          other_aller += info.otherAller[0];
+        }
+        else{
+          for(int j = 0; j < info.otherAller.length; j++){
+            if(j == info.otherAller.length - 1){
+              other_aller += info.otherAller[j];
+            }
+            else{
+              other_aller += info.otherAller[j] + ", ";
+            }
+          }
+        }
+      }
+
+
+
     });
   }
+
 }

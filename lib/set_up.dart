@@ -58,8 +58,8 @@ class _set_upState extends State<set_up> {
   List <bool> isSelected = [true, false];
   String unitStatus = "lbs";
   String valueLifestyle;
-  int average_sticks;
-  List<String> disease_list = [];
+  int average_sticks = 0;
+  List<String> disease_list = ["NA", "NA"];
 
   List<String> listLifestyle = <String>[
     'Sedentary',
@@ -227,7 +227,7 @@ class _set_upState extends State<set_up> {
 
   /// medical history
   // for the list of all CVD
-  List<String> cvdChecboxStatus = [];
+  List<String> cvdChecboxStatus = ["NA", "NA"];
 
   final cvd_list ={
     CheckBoxState(title: 'Arrhythmia'),
@@ -251,7 +251,7 @@ class _set_upState extends State<set_up> {
   List<String> cvdOtherChecboxStatus = [];
 
   // for the list of other medical conditions
-  List<String> additionalConditionChecboxStatus = [];
+  List<String> additionalConditionChecboxStatus = ["NA", "NA"];
 
   final additional_list ={
     CheckBoxState(title: 'Chronic Obstructive Pulmonary Disease'),
@@ -274,7 +274,7 @@ class _set_upState extends State<set_up> {
   static List<String>additionalConditionList = [null];
 
   //for family history
-  List<String> familyConditionCheckboxStatus = [];
+  List<String> familyConditionCheckboxStatus = ["NA", "NA"];
 
   final family_condition_list ={
     CheckBoxState(title: 'Chronic Obstructive Pulmonary Disease'),
@@ -947,6 +947,81 @@ class _set_upState extends State<set_up> {
                 final uid = user.uid;
                 final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
                 final loginRef = databaseReference.child('users/' + uid + '/personal_info');
+                bool diseasecheck = false;
+                bool otherdiseasecheck = false;
+                bool familydiseasecheck = false;
+                var counter1 = 0;
+                var counter2 = 0;
+                var counter3 = 0;
+                if(cvdChecboxStatus.length != 2){
+                  while(!diseasecheck){
+                    if(cvdChecboxStatus[counter1] == "NA"){
+                      cvdChecboxStatus.removeAt(counter1);
+                      counter1 = 0;
+                    }
+                    else{
+                      counter1++;
+                    }
+                    if(counter1 == cvdChecboxStatus.length){
+                      diseasecheck = true;
+                    }
+                  }
+                }
+                if(additionalConditionChecboxStatus.length != 2){
+                  while(!otherdiseasecheck){
+                    if(additionalConditionChecboxStatus[counter2] == "NA"){
+                      additionalConditionChecboxStatus.removeAt(counter2);
+                      counter2 = 0;
+                    }
+                    else{
+                      counter2++;
+                    }
+                    if(counter2 == additionalConditionChecboxStatus.length){
+                      otherdiseasecheck = true;
+                    }
+                  }
+                }
+                if(familyConditionCheckboxStatus.length != 2){
+                  while(!familydiseasecheck){
+                    if(familyConditionCheckboxStatus[counter3] == "NA"){
+                      familyConditionCheckboxStatus.removeAt(counter3);
+                      counter3 = 0;
+                    }
+                    else{
+                      counter3++;
+                    }
+                    if(counter3 == familyConditionCheckboxStatus.length){
+                      familydiseasecheck = true;
+                    }
+                  }
+                }
+                if(foodList[0] == null){
+                  foodList.add("NA");
+                  foodList.add("NA");
+                }
+                if(foodList[0] == ""){
+                  foodList.remove(0);
+                  foodList.add("NA");
+                  foodList.add("NA");
+                }
+                if(drugList[0] == null){
+                  drugList.add("NA");
+                  drugList.add("NA");
+                }
+                if(drugList[0] == ""){
+                  drugList.remove(0);
+                  drugList.add("NA");
+                  drugList.add("NA");
+                }
+                if(otherList[0] == null){
+                  otherList.add("NA");
+                  otherList.add("NA");
+                }
+                if(otherList[0] == ""){
+                  otherList.remove(0);
+                  otherList.add("NA");
+                  otherList.add("NA");
+                }
                 usersRef.set({
                   "birthday": birthDateInString.toString(),
                   "gender": genderIn.toString(),
