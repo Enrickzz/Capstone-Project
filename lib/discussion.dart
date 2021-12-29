@@ -1,4 +1,5 @@
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -113,6 +114,31 @@ class _discussionState extends State<discussion>
                     )),
               )
           ),
+          actions: [
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(context: context,
+                        isScrollControlled: true,
+                        builder: (context) => SingleChildScrollView(child: Container(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          // child: add_medication(thislist: medtemp),
+                        ),
+                        ),
+                      ).then((value) =>
+                          Future.delayed(const Duration(milliseconds: 1500), (){
+                            setState((){
+                            });
+                          }));
+                    },
+                    child: Icon(
+                      Icons.add,
+                    )
+                )
+            ),
+          ],
         ),
         body:  Scrollbar(
           child: SingleChildScrollView(
@@ -177,6 +203,7 @@ class _discussionState extends State<discussion>
                       Navigator.push(
                           context,
                           MaterialPageRoute(
+                              builder: (context) => specific_post()
                           )
                       );
                     },
@@ -217,7 +244,7 @@ class _discussionState extends State<discussion>
                                             Container(
                                               width: MediaQuery.of(context).size.width * 0.65,
                                               child: Text(
-                                                "Painful Penis. What to do?",
+                                                "Painful Heart. What to do?",
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
@@ -231,7 +258,6 @@ class _discussionState extends State<discussion>
                                                   "Johnny Sins",
                                                   style: TextStyle(
                                                       fontSize: 12,
-                                                      color: Colors.grey.withOpacity(0.6)
                                                   ),
                                                 ),
                                                 SizedBox(width: 15),
@@ -239,7 +265,6 @@ class _discussionState extends State<discussion>
                                                   "12/29/2021 11:10",
                                                   style: TextStyle(
                                                       fontSize: 12,
-                                                      color: Colors.grey.withOpacity(0.6)
                                                   ),
                                                 )
                                               ],
@@ -258,7 +283,6 @@ class _discussionState extends State<discussion>
                                 child: Text(
                                   "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! asdasd asdasd asd asd asd asd asd asd asd asd asdasdad asd a..".substring(0,95) + "...",
                                   style: TextStyle(
-                                    color: Colors.grey.withOpacity(0.8),
                                     fontSize: 14,
                                   ),
                                 ),
