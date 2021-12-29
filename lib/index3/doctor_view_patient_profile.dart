@@ -544,7 +544,322 @@ class _index3State extends State<view_patient_profile>
                             )
                         ),
                       ],
-                    ),  // Health Information
+                    ),
+                    SizedBox(height: 30),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:<Widget>[
+                                Expanded(
+                                  child: Text( "Medical History",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color:Color(0xFF4A6572),
+                                      )
+                                  ),
+                                ),
+
+                              ]
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Container(
+                            height: 200,
+                            // height: 500, if may contact number and email
+                            // margin: EdgeInsets.only(bottom: 50),
+                            child: Stack(
+                                children: [
+                                  Positioned(
+                                      child: Material(
+                                        child: Center(
+                                          child: Container(
+                                              width: 340,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(20.0),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.5),
+                                                      blurRadius: 20.0)],
+                                              )
+                                          ),
+                                        ),
+                                      )),
+                                  Positioned(
+                                      child: Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(18.0),
+                                          child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Disease",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("put cvd diseases here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16),
+                                                Row(
+                                                  children: [
+                                                    Text("Comorbidities",
+                                                      style: TextStyle(
+                                                        fontSize:14,
+                                                        color:Color(0xFF363f93),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("put other disease here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16),
+                                                Text("Family History",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("put family diseases here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                              ]
+                                          ),
+                                        ),
+                                      ))
+                                ]
+                            )
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 30),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:<Widget>[
+                                Expanded(
+                                  child: Text( "Allergies",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color:Color(0xFF4A6572),
+                                      )
+                                  ),
+                                ),
+
+                              ]
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Container(
+                            height: 200,
+                            // height: 500, if may contact number and email
+                            // margin: EdgeInsets.only(bottom: 50),
+                            child: Stack(
+                                children: [
+                                  Positioned(
+                                      child: Material(
+                                        child: Center(
+                                          child: Container(
+                                              width: 340,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(20.0),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.5),
+                                                      blurRadius: 20.0)],
+                                              )
+                                          ),
+                                        ),
+                                      )),
+                                  Positioned(
+                                      child: Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(18.0),
+                                          child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Food Allergies",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("put food allergies here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16),
+                                                Row(
+                                                  children: [
+                                                    Text("Drug Allergies",
+                                                      style: TextStyle(
+                                                        fontSize:14,
+                                                        color:Color(0xFF363f93),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("put drug allergies here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16),
+                                                Text("Other Allergies",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("Put other allergies here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                              ]
+                                          ),
+                                        ),
+                                      ))
+                                ]
+                            )
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 30),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:<Widget>[
+                                Expanded(
+                                  child: Text( "Other Information",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color:Color(0xFF4A6572),
+                                      )
+                                  ),
+                                ),
+                             
+                              ]
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Container(
+                            height: 200,
+                            // height: 500, if may contact number and email
+                            // margin: EdgeInsets.only(bottom: 50),
+                            child: Stack(
+                                children: [
+                                  Positioned(
+                                      child: Material(
+                                        child: Center(
+                                          child: Container(
+                                              width: 340,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(20.0),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.5),
+                                                      blurRadius: 20.0)],
+                                              )
+                                          ),
+                                        ),
+                                      )),
+                                  Positioned(
+                                      child: Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(18.0),
+                                          child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Lifestyle",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("put lifestyle here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16),
+                                                Row(
+                                                  children: [
+                                                    Text("Smoking",
+                                                      style: TextStyle(
+                                                        fontSize:14,
+                                                        color:Color(0xFF363f93),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("put how many sticks here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16),
+                                                Text("Alcohol Drinking Frequency",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text("put alchol frequency here",
+                                                  style: TextStyle(
+                                                      fontSize:16,
+                                                      fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                              ]
+                                          ),
+                                        ),
+                                      ))
+                                ]
+                            )
+                        ),
+                      ],
+                    ),// Health Informati// Health Information
                     SizedBox(height: 30),
                     Container(
                         child: Card(
