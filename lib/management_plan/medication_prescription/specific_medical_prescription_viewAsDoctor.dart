@@ -8,12 +8,12 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
-import 'additional_data_collection.dart';
+import '../../additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 
-import 'dialogs/policy_dialog.dart';
-import 'fitness_app_theme.dart';
-import 'package:my_app/data_inputs/add_medication_prescription.dart';
+import '../../dialogs/policy_dialog.dart';
+import '../../fitness_app_theme.dart';
+import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
 

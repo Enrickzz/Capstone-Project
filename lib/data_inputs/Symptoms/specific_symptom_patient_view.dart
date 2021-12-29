@@ -13,7 +13,7 @@ import 'package:flutter/gestures.dart';
 
 import 'package:my_app/dialogs/policy_dialog.dart';
 import 'package:my_app/fitness_app_theme.dart';
-import 'package:my_app/data_inputs/add_medication_prescription.dart';
+import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
 

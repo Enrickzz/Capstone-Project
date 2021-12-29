@@ -24,8 +24,8 @@ import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/notifications.dart';
 import 'package:my_app/patient_view_support_system.dart';
-import 'package:my_app/data_inputs/medication_prescription.dart';
-import 'package:my_app/view_medical_prescription_as_patient.dart';
+import 'package:my_app/management_plan/medication_prescription/medication_prescription.dart';
+import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
 
 import 'package:video_player/video_player.dart';
 

@@ -12,10 +12,10 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/specific_medical_prescription_viewAsPatient.dart';
-import '../fitness_app_theme.dart';
+import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsPatient.dart';
+import '../../../fitness_app_theme.dart';
 import 'package:my_app/data_inputs/add_medication.dart';
-import 'package:my_app/data_inputs/add_medication_prescription.dart';
+import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class medication_prescription_patientView extends StatefulWidget {

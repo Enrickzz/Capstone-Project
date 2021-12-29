@@ -14,7 +14,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../fitness_app_theme.dart';
-import 'package:my_app/data_inputs/medication_prescription.dart';
+import 'package:my_app/management_plan/medication_prescription/medication_prescription.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 import 'package:my_app/management_plan/food_plan/food_plan_doctor_view.dart';

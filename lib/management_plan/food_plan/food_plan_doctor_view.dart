@@ -12,10 +12,10 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/specific_medical_prescription_viewAsDoctor.dart';
+import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsDoctor.dart';
 import '../../fitness_app_theme.dart';
 import 'package:my_app/data_inputs/add_medication.dart';
-import 'package:my_app/data_inputs/add_medication_prescription.dart';
+import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/management_plan/food_plan/add_food_prescription.dart';
 import 'package:my_app/management_plan/food_plan/specific_food_plan_doctor_view.dart';
 
