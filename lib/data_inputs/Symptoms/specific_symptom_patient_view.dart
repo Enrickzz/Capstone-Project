@@ -54,6 +54,9 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<Medication_Prescription> prestemp = [];
+  final double minScale = 1;
+  final double maxScale = 1.5;
+  bool hasImage = true;
 
 
   @override
@@ -199,6 +202,20 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ),
                                             ),
                                             SizedBox(height: 16),
+                                            Text("Symptom Area",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                color:Color(0xFF363f93),
+                                              ),
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text("Put here area of symptom",
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            SizedBox(height: 16),
                                             Row(
                                               children: [
                                                 Text("Recurring",
@@ -234,20 +251,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
-                                            SizedBox(height: 16),
-                                            Text("Symptom Area",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text("Put here area of symptom",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
+
 
 
                                           ]
@@ -256,6 +260,22 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                   ))
                             ]
                         )
+                    ),
+                    Visibility(
+                      visible: hasImage,
+                      child: InteractiveViewer(
+                        clipBehavior: Clip.none,
+                        minScale: minScale,
+                        maxScale: maxScale,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset('assets/images/body.PNG'
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(height: 10.0),
                     Container(

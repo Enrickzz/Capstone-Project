@@ -772,7 +772,7 @@ class _index3State extends State<view_patient_profile>
                                       )
                                   ),
                                 ),
-                             
+
                               ]
                           ),
                         ),
