@@ -13,22 +13,22 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-
-import '../fitness_app_theme.dart';
+import '../../fitness_app_theme.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
-import 'package:my_app/view_medical_prescription_as_patient.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 
-import 'management_plan/exercise_plan/exercise_plan_patient_view.dart';
-import 'management_plan/vitals_plan/vitals_plan_patient_view.dart';
-class management_plan_patient_view extends StatefulWidget {
+import 'package:my_app/management_plan/food_plan/food_plan_doctor_view.dart';
+import 'package:my_app/management_plan/exercise_plan/exercise_plan_doctor_view.dart';
+
+import 'vitals_plan/vitals_plan_doctor_view.dart';
+
+class management_plan extends StatefulWidget {
 
   @override
   _AppSignUpState createState() => _AppSignUpState();
 }
 
-class _AppSignUpState extends State<management_plan_patient_view> {
+class _AppSignUpState extends State<management_plan> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -63,7 +63,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text("My Management Plans", style: TextStyle(
+        title: const Text("Pateint's Management Plans", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -85,7 +85,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => medication_prescription_patientView()),
+                        MaterialPageRoute(builder: (context) => medication_prescription()),
                       );
                     },
                     child: Container(
@@ -139,7 +139,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                                         width: 10,
                                       ),
                                       Text(
-                                          'My Medication Prescription',
+                                          'Medication Prescription',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18
@@ -157,7 +157,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => food_prescription_patient_view()),
+                        MaterialPageRoute(builder: (context) => food_prescription_doctor_view()),
                       );
                     },
                     child: Container(
@@ -205,7 +205,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                                         width: 10,
                                       ),
                                       Text(
-                                          'My Food Plan',
+                                          'Food Plan',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18
@@ -223,7 +223,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => exercise_prescription_patient_view()),
+                        MaterialPageRoute(builder: (context) => exercise_prescription_doctor_view()),
                       );
                     },
                     child: Container(
@@ -355,7 +355,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => vitals_prescription_patient_view()),
+                        MaterialPageRoute(builder: (context) => vitals_prescription_doctor_view()),
                       );
                     },
                     child: Container(

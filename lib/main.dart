@@ -20,7 +20,9 @@ import 'package:provider/provider.dart';
 import 'allergies.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'discussion.dart';
+import 'package:my_app/discussion.dart';
 import 'fitness_app_theme.dart';
+import 'index3/add_image.dart';
 import 'my_diary/exercise_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/mainScreen.dart';
@@ -232,7 +234,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => discussion()),
+                      MaterialPageRoute(builder: (context) => addImage()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

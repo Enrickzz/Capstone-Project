@@ -20,13 +20,16 @@ import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../discussion.dart';
 import '../fitness_app_theme.dart';
 import '../main.dart';
 import '../notifications.dart';
 import 'package:my_app/patient_view_support_system.dart';
 import 'package:my_app/data_inputs/medication_prescription.dart';
 import 'package:my_app/view_medical_prescription_as_patient.dart';
-import 'package:my_app/management_plan_patient_view.dart';
+import 'package:my_app/management_plan/management_plan_patient_view.dart';
+
+import 'add_image.dart';
 
 
 
@@ -205,7 +208,20 @@ class _index3State extends State<index3>
                             BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
                           ],
                         ),
-                        child: Icon(Icons.person_outlined, size: 50, color: Colors.blue,),
+                        child: GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => addImage()),
+                              );
+                            },
+                          child: ClipOval(
+                              child:Image.asset("assets/images/blank_person.png",
+                                  width: 70,
+                                  height: 70,
+                                  fit: BoxFit.cover),
+                          ),
+                        ),
                       ),
                     ),
                     Padding(
@@ -842,6 +858,18 @@ class _index3State extends State<index3>
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => HealthTeam()),
+                            );
+
+                          },
+                        ),
+                        _buildDivider(),
+                        ListTile(
+                          title: Text("Doctors' Discussion Board"),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap:(){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => discussion()),
                             );
 
                           },
