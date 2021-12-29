@@ -31,6 +31,8 @@ import 'package:video_player/video_player.dart';
 
 import 'package:my_app/management_plan/management_plan_doctor_view.dart';
 
+import '../discussion.dart';
+
 
 
 
@@ -700,6 +702,18 @@ class _index3State extends State<view_patient_profile>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => management_plan()),
+                                  );
+
+                                },
+                              ),
+                              _buildDivider(),
+                              ListTile(
+                                title: Text("Doctors' Discussion Board"),
+                                trailing: Icon(Icons.keyboard_arrow_right),
+                                onTap:(){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => discussion()),
                                   );
 
                                 },
