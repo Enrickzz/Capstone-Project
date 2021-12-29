@@ -262,7 +262,7 @@ class _discussionState extends State<discussion>
                                                 ),
                                                 SizedBox(width: 15),
                                                 Text(
-                                                  "12/29/2021 11:10",
+                                                  "12/29/2021 11:09",
                                                   style: TextStyle(
                                                       fontSize: 12,
                                                   ),
@@ -281,7 +281,7 @@ class _discussionState extends State<discussion>
                               height: 50,
                               child: Center(
                                 child: Text(
-                                  "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! asdasd asdasd asd asd asd asd asd asd asd asd asdasdad asd a..".substring(0,95) + "...",
+                                  "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! 121321dsfsf sdfsd fsd f dsf sdf sdf asdasd asdasd asd asd asd asd asd asd asd asd asdasdad asd".substring(0,95) + "...",
                                   style: TextStyle(
                                     fontSize: 14,
                                   ),

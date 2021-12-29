@@ -65,7 +65,355 @@ class _specific_postState extends State<specific_post>
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
+          actions: [
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(context: context,
+                        isScrollControlled: true,
+                        builder: (context) => SingleChildScrollView(child: Container(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          // child: add_medication(thislist: medtemp),
+                        ),
+                        ),
+                      ).then((value) =>
+                          Future.delayed(const Duration(milliseconds: 1500), (){
+                            setState((){
+                            });
+                          }));
+                    },
+                    child: Icon(
+                      Icons.reply,
+                    )
+                )
+            ),
+          ],
         ),
+        body: Scrollbar(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(24, 28, 24, 0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [BoxShadow(
+                          color: Colors.black26.withOpacity(0.2),
+                          offset: Offset(0.0,6.0),
+                          blurRadius: 10.0,
+                          spreadRadius: 0.10
+                      )]
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: 60,
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    backgroundImage: AssetImage('assets/images/heart_icon.png'),
+                                    radius: 22,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Text(
+                                            "Johnny Sins",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 2.0),
+                                        Text(
+                                          "12/29/2021 11:09",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 15.0),
+                          child: Text(
+                            "Painful Heart. What to do?",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black.withOpacity(0.8),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Text(
+                            "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! 121321dsfsf sdfsd fsd f dsf sdf sdf asdasd asdasd asd asd asd asd asd asd asd asd asdasdad asd",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 24.0, top: 20.0, bottom: 10.0),
+                  child: Text(
+                    "Replies (5)",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Container(
+                          margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                            boxShadow: [BoxShadow(
+                                color: Colors.black26.withOpacity(0.2),
+                                offset: Offset(0.0,6.0),
+                                blurRadius: 10.0,
+                                spreadRadius: 0.10
+                            )],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  height: 60,
+                                  color: Colors.white,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          CircleAvatar(
+                                            backgroundImage: AssetImage('assets/images/heart_icon.png'),
+                                            radius: 18,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Container(
+                                                  child: Text(
+                                                    "Louis Borja",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 2.0),
+                                                Text(
+                                                  "12/29/2021 13:08",
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                                  child: Text(
+                                    "I am so gay! Please fuck me in the ass...",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                      ),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [BoxShadow(
+                              color: Colors.black26.withOpacity(0.2),
+                              offset: Offset(0.0,6.0),
+                              blurRadius: 10.0,
+                              spreadRadius: 0.10
+                          )],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: 60,
+                                color: Colors.white,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        CircleAvatar(
+                                          backgroundImage: AssetImage('assets/images/heart_icon.png'),
+                                          radius: 18,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Text(
+                                                  "Louis Borja",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 2.0),
+                                              Text(
+                                                "12/29/2021 13:08",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                                child: Text(
+                                  "I am so gay! Please fuck me in the ass... Suck my small dick like a fucking lollipop! Ouch! It hurts! My heart! I am getting a heart attack asdhiuahsdukasdhajkshda dead xD",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                    ),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [BoxShadow(
+                              color: Colors.black26.withOpacity(0.2),
+                              offset: Offset(0.0,6.0),
+                              blurRadius: 10.0,
+                              spreadRadius: 0.10
+                          )],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: 60,
+                                color: Colors.white,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        CircleAvatar(
+                                          backgroundImage: AssetImage('assets/images/heart_icon.png'),
+                                          radius: 18,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Text(
+                                                  "Louis Borja",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 2.0),
+                                              Text(
+                                                "12/29/2021 13:08",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                                child: Text(
+                                  "I am so gay! Please fuck me in the ass...",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                    ),
+                  ]
+                )
+              ],
+            ),
+          ),
+        ),
+
+
       ),
 
     );
