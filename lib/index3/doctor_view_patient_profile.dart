@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,8 +31,8 @@ import 'package:my_app/management_plan_doctor_view.dart';
 
 
 class view_patient_profile extends StatefulWidget {
-  const view_patient_profile({Key key, this.animationController}) : super(key: key);
-
+  const view_patient_profile({Key key, this.animationController, this.patientUID}) : super(key: key);
+  final String patientUID;
   final AnimationController animationController;
   @override
   _index3State createState() => _index3State();
@@ -47,6 +48,7 @@ class _index3State extends State<view_patient_profile>
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   double topBarOpacity = 0.0;
   Users profile = new Users();
   String DisplayName = " ";
@@ -66,135 +68,11 @@ class _index3State extends State<view_patient_profile>
   void initState() {
     super.initState();
     info = new Additional_Info(bmi: 0, birthday: format.parse("01/01/0000"), gender: "Male", height: 0, weight: 0);
-    final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-    // final userRef = databaseReference.child('users/' + uid +'/personal_info/');
-    // final infoRef = databaseReference.child('users/' + uid +'/vitals/additional_info/');
-    String tempFName = "";
-    String tempLName = "";
-    String tempEmail = "";
-    String tempPassword = "";
-    String tempBMI = "";
-    String tempBirthDay = "";
-    String tempGender = "";
-    String tempHeight = "";
-    String tempWeight = "";
-    // userRef.once().then((DataSnapshot datasnapshot) {
-    //   String temp1 = datasnapshot.value.toString();
-    //   print(temp1);
-    //   List<String> temp = temp1.split(',');
-    //
-    //   for(var i = 0; i < temp.length; i++){
-    //     String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i){
-    //       case 0: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempEmail = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempFName = splitFull.last;
-    //       }
-    //       break;
-    //       case 2: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //
-    //       }
-    //       break;
-    //       case 3: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempLName = splitFull.last;
-    //       }
-    //       break;
-    //       case 4: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempPassword = splitFull.last;
-    //         profile = new Users(uid: uid, firstname: tempFName,lastname: tempLName,email: tempEmail,password: tempPassword);
-    //         print("email " + profile.email);
-    //       }
-    //       break;
-    //     }
-    //   }
-    // });
-    // infoRef.once().then((DataSnapshot datasnapshot) {
-    //   String temp2 = datasnapshot.value.toString();
-    //   print(temp2);
-    //   List<String> templist = temp2.split(',');
-    //
-    //   for(var i = 0; i < templist.length; i++){
-    //     String full = templist[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i){
-    //       case 0: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempBMI = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempBirthDay = splitFull.last;
-    //         bday = tempBirthDay;
-    //       }
-    //       break;
-    //       case 2: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempGender = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempHeight = splitFull.last;
-    //       }
-    //       break;
-    //       case 4: {
-    //         print("i = " + i.toString() + splitFull.last);
-    //         tempWeight = splitFull.last;
-    //         info = new Additional_Info(bmi: double.parse(tempBMI), birthday: format.parse(tempBirthDay), gender: tempGender, height: double.parse(tempHeight), weight: double.parse(tempWeight));
-    //         print("THIS = " +info.toString());
-    //         print("BDAY = " + format.parse(tempBirthDay).toString());
-    //
-    //       }
-    //       break;
-    //     }
-    //   }
-    // });
-    // topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-    //     CurvedAnimation(
-    //         parent: widget.animationController,
-    //         curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    // addAllListData();
-    // scrollController.addListener(() {
-    //   if (scrollController.offset >= 24) {
-    //     if (topBarOpacity != 1.0) {
-    //       setState(() {
-    //         topBarOpacity = 1.0;
-    //       });
-    //     }
-    //   } else if (scrollController.offset <= 24 &&
-    //       scrollController.offset >= 0) {
-    //     if (topBarOpacity != scrollController.offset / 24) {
-    //       setState(() {
-    //         topBarOpacity = scrollController.offset / 24;
-    //       });
-    //     }
-    //   } else if (scrollController.offset <= 0) {
-    //     if (topBarOpacity != 0.0) {
-    //       setState(() {
-    //         topBarOpacity = 0.0;
-    //       });
-    //     }
-    //   }
-    // });
-    Future.delayed(const Duration(milliseconds: 1500), (){
-      setState(() {
-        DisplayName = profile.firstname + " " + profile.lastname;
-        email = profile.email;
-        print("display name " + DisplayName);
-        print("setstate");
-      });
+
+    getProfile(widget.patientUID);
+    getInfo(widget.patientUID);
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      setState(() {});
     });
   }
 
@@ -1037,5 +915,24 @@ class _index3State extends State<view_patient_profile>
 //   await Future<dynamic>.delayed(const Duration(milliseconds: 50));
 //   return true;
 // }
-
+  void getProfile(String uid) {
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        profile = Users.fromJson(temp);
+      });
+      DisplayName = profile.firstname + " " + profile.lastname;
+      email = profile.email;
+    });
+  }
+  void getInfo(String uid) {
+    final readInfo = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+    readInfo.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        info = Additional_Info.fromJson2(temp);
+      });
+    });
+  }
 }

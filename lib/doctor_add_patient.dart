@@ -55,6 +55,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   TabController controller;
   String userUID = "";
   Users cuser = new Users();
+  Users patient = new Users();
   Users doctor = new Users();
   Additional_Info info = new Additional_Info();
   String displayName = "";
@@ -64,7 +65,9 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   String gender = "";
   String cvdCondition = "";
   String otherCondition = "";
-  List<String> connection = [];
+  List<String> doc_connection = [];
+  List<String> patient_connection = [];
+
   bool searchPatient = false;
 
 
@@ -467,9 +470,12 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
     final User user = auth.currentUser;
     final uid = user.uid;
     final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
-    connection.clear();
+    final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+    doc_connection.clear();
     bool isPatient = false;
+    bool isDoctor = false;
     readDoctor.once().then((DataSnapshot snapshot){
+      /// read doctor connections
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
       doctor = Users.fromJson2(temp1);
       for(int i = 0; i < doctor.connections.length; i++){
@@ -478,14 +484,34 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
             print("same patient detected");
             isPatient = true;
           }
-          connection.add(doctor.connections[i]);
+          doc_connection.add(doctor.connections[i]);
         }
       }
+      /// read patient connections
+      readPatient.once().then((DataSnapshot snapshot){
+        var temp2 = jsonDecode(jsonEncode(snapshot.value));
+        patient = Users.fromJson2(temp2);
+        for(int i = 0; i < patient.connections.length; i++){
+          if(patient.connections[i] != "NA"){
+            if(patient.connections[i] == uid){
+              print("same doctor detected");
+              isDoctor = true;
+            }
+            patient_connection.add(patient.connections[i]);
+          }
+        }
+      });
+
       if(isPatient == false){
-        connection.add(userUID);
-        print("user added successfully");
+        doc_connection.add(userUID);
+        print("patient added successfully");
       }
-      readDoctor.update({"connections": connection});
+      if(isDoctor == false){
+        patient_connection.add(uid);
+        print("doctor added successfully");
+      }
+      readDoctor.update({"connections": doc_connection});
+      readPatient.update({"connections": patient_connection});
     });
 
 

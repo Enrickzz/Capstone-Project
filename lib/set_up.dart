@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/checkbox_state.dart';
@@ -29,7 +30,7 @@ class _set_upState extends State<set_up> {
   /// additional information
   bool isDateSelected= false;
   DateTime birthDate; // instance of DateTime
-  String birthDateInString = "MM/DD/YYYY";
+  String birthDateInString = "";
   String weight = "";
   String height = "";
   String genderIn="male";
