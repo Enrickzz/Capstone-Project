@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -40,7 +39,7 @@ class _addLabResultState extends State<add_lab_results> {
   var path;
   User user;
   var uid, fileName;
-  File file;
+  File file = new File("path");
   String thisURL;
   String lab_result_name = '';
   String lab_result_date = (new DateTime.now()).toString();
@@ -59,6 +58,7 @@ class _addLabResultState extends State<add_lab_results> {
   String thisIMG="";
   //added by borj
   String valueChooseLabResult;
+  String cacheFile="";
   List<String> listLabResult = <String>[
      '2D Echocardiogram', 'ALT&AST', 'Angiogram',
     'Bun&Creatinine', 'Chest X-ray', 'Complete Blood Count',
@@ -73,7 +73,7 @@ class _addLabResultState extends State<add_lab_results> {
   bool cbcCheck = false;
   bool bunCreaCheck = false;
   bool lipidProfileCheck = false;
-
+  bool pic = false;
   bool otherLabResultCheck = false;
   String international_normal_ratio=" ";
   String potassium=" ";
@@ -519,6 +519,26 @@ class _addLabResultState extends State<add_lab_results> {
                     ),
                   ),
                   SizedBox(height: 18.0),
+                  Visibility(visible: pic, child: SizedBox(height: 8.0)),
+                  Visibility(
+                    visible: pic,
+                    child: Container(
+                      child: Image.file(file),
+                      height:250,
+                      width: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          color: Colors.black
+                      ),
+
+                    )
+                  ),
+
                   GestureDetector(
                       child: Text(
                         'Upload',
@@ -537,6 +557,15 @@ class _addLabResultState extends State<add_lab_results> {
                         uid = user.uid;
                         fileName = result.files.single.name;
                         file = File(path);
+                        PlatformFile thisfile = result.files.first;
+                        cacheFile = thisfile.path;
+                        Future.delayed(const Duration(milliseconds: 1000), (){
+                          setState(() {
+                            print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
+                            pic = true;
+                          });
+                        });
+
                         // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
                         //   setState(() {
                         //     trythis.clear();
@@ -705,7 +734,9 @@ class _addLabResultState extends State<add_lab_results> {
 
 
   Future <String> downloadUrl(String imagename) async{
-    final ref = FirebaseStorage.instance.ref('test/$imagename');
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final ref = FirebaseStorage.instance.ref('test/' +uid +'/$imagename');
     String downloadurl = await ref.getDownloadURL();
     print ("THIS IS THE URL = "+ downloadurl);
     thisURL = downloadurl;

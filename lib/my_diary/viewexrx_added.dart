@@ -208,6 +208,7 @@ class _view_exrx_addedState extends State<view_exrx_added> {
                                 }
                             });
                           });
+                          Navigator.pop(context);
                           // a.once().then((DataSnapshot datasnapshot) {
                           //   String temp = datasnapshot.value.toString();
                           //   //temp = temp.replaceAll("[", "");
