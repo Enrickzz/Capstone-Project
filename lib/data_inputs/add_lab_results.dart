@@ -56,7 +56,7 @@ class _addLabResultState extends State<add_lab_results> {
   TimeOfDay time;
   var dateValue = TextEditingController();
   List<FirebaseFile> trythis =[];
-
+  String thisIMG="";
   //added by borj
   String valueChooseLabResult;
   List<String> listLabResult = <String>[
@@ -82,6 +82,8 @@ class _addLabResultState extends State<add_lab_results> {
   String creatinine_mgDl=" ";
   String ldl=" ";
   String hdl=" ";
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -720,5 +722,6 @@ class _addLabResultState extends State<add_lab_results> {
       });
     });
   }
+
 
 }

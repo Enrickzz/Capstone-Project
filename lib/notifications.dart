@@ -92,6 +92,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       body: TabBarView(
         controller: controller,
         children: [
+
           //notifications
           Container(
             color: FitnessAppTheme.background,
@@ -130,8 +131,6 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Notification dismissed')));
                         },
-
-
                       );
                     },
                     separatorBuilder: (context, index) {
@@ -180,7 +179,6 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                             .showSnackBar(SnackBar(content: Text('Recommendaiton dismissed')));
                       },
                     );
-
                   },
                   separatorBuilder: (context, index) {
                     return Divider();
