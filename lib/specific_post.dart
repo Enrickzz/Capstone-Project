@@ -1,3 +1,4 @@
+import 'package:my_app/reply_post.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
@@ -76,6 +77,7 @@ class _specific_postState extends State<specific_post>
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           // child: add_medication(thislist: medtemp),
+                          child: reply_post(),
                         ),
                         ),
                       ).then((value) =>
@@ -191,7 +193,7 @@ class _specific_postState extends State<specific_post>
                 Column(
                   children: [
                     Container(
-                          margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+                          margin: EdgeInsets.fromLTRB(24, 0, 24, 20),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10.0),
@@ -263,7 +265,7 @@ class _specific_postState extends State<specific_post>
                           )
                       ),
                     Container(
-                        margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+                        margin: EdgeInsets.fromLTRB(24, 0, 24, 20),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
@@ -335,7 +337,7 @@ class _specific_postState extends State<specific_post>
                         )
                     ),
                     Container(
-                        margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+                        margin: EdgeInsets.fromLTRB(24, 0, 24, 20),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),

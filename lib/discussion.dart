@@ -1,3 +1,4 @@
+import 'package:my_app/create_post.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -125,6 +126,7 @@ class _discussionState extends State<discussion>
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           // child: add_medication(thislist: medtemp),
+                          child: create_post(),
                         ),
                         ),
                       ).then((value) =>
