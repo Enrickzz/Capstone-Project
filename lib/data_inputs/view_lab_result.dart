@@ -134,8 +134,8 @@ class viewLabResult extends State<view_lab_result> {
                   Divider(),
                   Container(
                     child: Image.network('' + thisURL),
-                    height:190,
-                    width: 190,
+                    height:250,
+                    width: 200,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
@@ -163,28 +163,7 @@ class viewLabResult extends State<view_lab_result> {
                   Visibility(visible: serumElectrolytesCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: serumElectrolytesCheck,
-                    child: TextFormField(
-                      showCursor: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                            width:0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xFFF2F3F5),
-                        hintStyle: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize),
-                        hintText: "Potassium (mmol/L)",
-                      ),
-                      onChanged: (val){
-                        setState(() => potassium = val);
-                      },
-                    ),
+                    child: Text(""+widget.lr.potassium.toString()),
                   ),
                   Visibility(visible: cbcCheck, child: SizedBox(height: 8.0)),
                   Visibility(
@@ -194,112 +173,29 @@ class viewLabResult extends State<view_lab_result> {
                   Visibility(visible: bunCreaCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: bunCreaCheck,
-                    child: TextFormField(
-                      showCursor: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                            width:0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xFFF2F3F5),
-                        hintStyle: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize),
-                        hintText: "BUN mg/dL",
-                      ),
-                      onChanged: (val){
-                        setState(() => Bun_mgDl = val);
-                      },
-                    ),
+                    child: Text(""+widget.lr.Bun_mgDl),
                   ),
                   Visibility(visible: bunCreaCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: bunCreaCheck,
-                    child: TextFormField(
-                      showCursor: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                            width:0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xFFF2F3F5),
-                        hintStyle: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize),
-                        hintText: "Creatinine mg/dL",
-                      ),
-                      onChanged: (val){
-                        setState(() => creatinine_mgDl = val);
-                      },
-                    ),
+                    child: Text(""+ widget.lr.Bun_mgDl),
                   ),
                   Visibility(visible: lipidProfileCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: lipidProfileCheck,
-                    child: TextFormField(
-                      showCursor: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                            width:0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xFFF2F3F5),
-                        hintStyle: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize),
-                        hintText: "LDL Cholesterol mg/dL",
-                      ),
-                      onChanged: (val){
-                        setState(() => ldl = val);
-                      },
-                    ),
+                    child: Text(""+widget.lr.ldl + "mg/dL"),
                   ),
                   Visibility(visible: lipidProfileCheck, child: SizedBox(height: 8.0)),
                   Visibility(
                     visible: lipidProfileCheck,
-                    child: TextFormField(
-                      showCursor: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                            width:0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xFFF2F3F5),
-                        hintStyle: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: defaultFontSize),
-                        hintText: "HDL Cholesterol mg/dL",
-                      ),
-                      onChanged: (val){
-                        setState(() => hdl = val);
-                      },
-                    ),
+                    child: Text(""+widget.lr.hdl + "mg/dL"),
                   ),
 
                   SizedBox(height: 8.0),
                   Text("Note:\n"+widget.lr.labResult_note),
                   SizedBox(height: 8.0),
-                  Text("Date and Time: \n"+widget.lr.labResult_date.toString()+"\n"+widget.lr.labResult_time.toString()),
+                  Text("Date and Time: \n"+ getDateFormatted(widget.lr.labResult_date.toString()) +"at "
+                      + getTimeFormatted(widget.lr.labResult_time.toString())) ,
                   SizedBox(height: 18.0),
 
                 ]
@@ -354,6 +250,17 @@ class viewLabResult extends State<view_lab_result> {
         labResult_list.add(Lab_Result.fromJson(jsonString));
       });
     });
+  }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    print(date);
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
   }
   Future<List<FirebaseFile>> listOne (String path, String filename) async {
     final User user = auth.currentUser;

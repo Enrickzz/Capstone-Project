@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/models/users.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../fitness_app_theme.dart';
@@ -25,10 +27,11 @@ class _blood_pressureState extends State<cholesterol_chart> {
   @override
   void initState(){
     super.initState();
-    setState(() {
-      // print("SET STATE BP");
-      _getDefaultLineSeries();
-      //finalLine = getLine(finaList);
+    getChart();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+         print("SET STATE");
+      });
     });
   }
   @override
@@ -105,125 +108,26 @@ class _blood_pressureState extends State<cholesterol_chart> {
     );
   }
 }
-
-List<LineSeries<_ChartData, num>> _getDefaultLineSeries() {
+void getChart() {
+  finaList.clear();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final User user = auth.currentUser;
   final uid = user.uid;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-
-  //======================================================ADD DATA TO DB=================================================//
-  // final List<_ChartData> chartData = <_ChartData>[
-  //   _ChartData(1, 120, 70),
-  //   _ChartData(2, 120, 70),
-  //   _ChartData(3, 130, 90),
-  //   _ChartData(4, 120, 70),
-  //   _ChartData(5, 115, 85),
-  //   _ChartData(6, 122, 78),
-  //   _ChartData(7, 132, 80),
-  //   _ChartData(8, 120, 85),
-  //   _ChartData(9, 140, 90),
-  //   _ChartData(10, 120, 78),
-  //   _ChartData(11, 120, 84),
-  //   _ChartData(1, 120, 70),
-  //   _ChartData(2, 120, 70),
-  //   _ChartData(3, 130, 90),
-  //   _ChartData(4, 120, 70),
-  //   _ChartData(5, 115, 85),
-  //   _ChartData(6, 122, 78),
-  //   _ChartData(7, 132, 80),
-  //   _ChartData(8, 120, 85),
-  //   _ChartData(9, 140, 90),
-  //   _ChartData(10, 120, 78),
-  //   _ChartData(11, 120, 84),
-  //   _ChartData(1, 120, 70),
-  //   _ChartData(2, 120, 70),
-  //   _ChartData(3, 130, 90),
-  //   _ChartData(4, 120, 70),
-  //   _ChartData(5, 115, 85),
-  //   _ChartData(6, 122, 78),
-  //   _ChartData(7, 132, 80),
-  //   _ChartData(8, 120, 85),
-  //   _ChartData(9, 140, 90),
-  //   _ChartData(10, 120, 78),
-  //   _ChartData(11, 120, 84)
-  //
-  // ];
-  //
-  // try{
-  //   // final bmiRef = databaseReference.child('users/'+uid+'/vitals/health_records/blood_pressure');
-  //   for(var i = 1; i <= chartData.length && i <= 30; i++){
-  //     print(chartData.length.toString()+"<<<<<<<<<<<<<< LENGTH");
-  //     final bmiRef = databaseReference.child('users/'+uid+'/vitals/health_records/blood_pressure/'+"record_"+ i.toString());
-  //     bmiRef.set({"date": chartData[i-1].x, "systolic": chartData[i-1].y, "diastolic": chartData[i-1].y2});
-  //     print("CHECK DB PASOK!");
-  //   }
-  // }catch(e) {
-  //   print("you got an error! $e");
-  // }
-  //======================================================ADD DATA TO DB=================================================//
-
-
-  Future<void> getData() async{
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-    final bmiRef = databaseReference.child('users/' +uid+'/vitals/health_records/blood_cholesterol_list');
-    await bmiRef.once().then((DataSnapshot snapshot){
-      //print(snapshot.value);
-      String temp1 = snapshot.value.toString();
-      List<String> temp = temp1.split('},');
-      List<String> tempFull = new List();
-      double counter = 0;
-      for(var i = 0 ; i < temp.length; i++){
-        String full = temp[i].replaceAll("{", "").replaceAll("}", "");
-        tempFull.add(full);
-        //print(full+"<<<< 1 iteration");
-      }
-      for(var i= 0 ; i < tempFull.length; i++){
-        List<String> _1item = tempFull[i].split(",");
-        // print(_1item.length.toString() + "<<<<<<< 1item");
-        List<String> a = _1item[0].split(" ");
-        if(i==0){
-          //print(_1item[0].replaceAll(_1item[0],a[2]) +"\n\n");
-          // _1item[0] = _1item[0].replaceAll(_1item[0],a[2]);
-          _1item[4] = _1item[4].replaceAll("hdl_cholesterol: ", "");
-          _1item[3] = _1item[3].replaceAll("ldl_cholesterol: ", "");
-          _1item[0] = _1item[0].replaceAll("total_cholesterol: ", "");
-          _1item[2] = _1item[2].replaceAll("triglycerides: ", "");
-          _1item[0] = _1item[0].replaceAll("[", "");
-          _1item[4] = _1item[4].replaceAll("]", "");
-          // print("\n 1: " + _1item[0] + "\n2 =" + _1item[2]+ "\n3 =" + _1item[3]+ "\n4 =" + _1item[4]);
-          finaList.add(new _ChartData(counter,double.parse(_1item[0]),double.parse(_1item[2]),double.parse(_1item[3]),double.parse(_1item[4])));
-          counter++;
-          // print("counter == " +counter.toString());
-
-        }else{
-          //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
-          // _1item[0] = _1item[0].replaceAll(_1item[0],a[3]);
-          _1item[4] = _1item[4].replaceAll("hdl_cholesterol: ", "");
-          _1item[3] = _1item[3].replaceAll("ldl_cholesterol: ", "");
-          _1item[0] = _1item[0].replaceAll("total_cholesterol: ", "");
-          _1item[2] = _1item[2].replaceAll("triglycerides: ", "");
-          _1item[0] = _1item[0].replaceAll("[", "");
-          _1item[4] = _1item[4].replaceAll("]", "");
-          // print("\n 1: " + _1item[0] + "\n2 =" + _1item[2]+ "\n3 =" + _1item[3]+ "\n4 =" + _1item[4]);
-          finaList.add(new _ChartData(counter,double.parse(_1item[0]),double.parse(_1item[2]),double.parse(_1item[3]),double.parse(_1item[4])));
-          counter++;
-          // print("counter == " +counter.toString());
-
-        }
-        //print(_1item[0] + "\n" + _1item[1] +"\n"+_1item[2] + "\n====================================");
-      }
-      //print(finaList.length);
-      finalLine = getLine(finaList);
-      for(var i = 0; i < finaList.length;i++){
-        //print(finaList[i].x.toString() + " " + finaList[i].y.toString() + " " + finaList[i].y2.toString());
+  double counter = 0;
+  final readlabresult = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/');
+  readlabresult.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    temp.forEach((jsonString) {
+      Lab_Result res = Lab_Result.fromJson(jsonString);
+      if(res.ldl != " " && res.hdl != " "){
+        finaList.add(new _ChartData(counter,double.parse(res.ldl),double.parse(res.hdl)));
+        counter++;
+        print(res.ldl + res.hdl);
       }
     });
-  }
-  getData();
+  });
+  finalLine = getLine(finaList);
 }
 
 List<LineSeries<_ChartData, num>> getLine(List<_ChartData> thisList){
@@ -232,17 +136,9 @@ List<LineSeries<_ChartData, num>> getLine(List<_ChartData> thisList){
     LineSeries<_ChartData, num>(
       animationDuration: 2500,
       dataSource: thisList,
-      xValueMapper: (_ChartData bp, _) => bp.x,
-      yValueMapper: (_ChartData bp, _) => bp.y,
-      name: 'Total',
-      markerSettings: const MarkerSettings(isVisible: true),
-    ),
-    LineSeries<_ChartData, num>(
-      animationDuration: 2500,
-      dataSource: thisList,
       name: 'HDL',
       xValueMapper: (_ChartData sales, _) => sales.x,
-      yValueMapper: (_ChartData sales, _) => sales.y2,
+      yValueMapper: (_ChartData sales, _) => sales.hdl,
       markerSettings: const MarkerSettings(isVisible: true),
     ),
     LineSeries<_ChartData, num>(
@@ -250,24 +146,14 @@ List<LineSeries<_ChartData, num>> getLine(List<_ChartData> thisList){
       dataSource: thisList,
       name: 'LDL',
       xValueMapper: (_ChartData sales, _) => sales.x,
-      yValueMapper: (_ChartData sales, _) => sales.y1,
+      yValueMapper: (_ChartData sales, _) => sales.ldl,
       markerSettings: const MarkerSettings(isVisible: true),
     ),
-    LineSeries<_ChartData, num>(
-      animationDuration: 2500,
-      dataSource: thisList,
-      name: 'TRI',
-      xValueMapper: (_ChartData sales, _) => sales.x,
-      yValueMapper: (_ChartData sales, _) => sales.y3,
-      markerSettings: const MarkerSettings(isVisible: true),
-    )
   ];
 }
 class _ChartData {
-  _ChartData(this.x, this.y,this.y1,this.y3, this.y2);
+  _ChartData(this.x,this.ldl, this.hdl);
   final double x;
-  final double y;
-  final double y1;
-  final double y3;
-  final double y2;
+  final double ldl;
+  final double hdl;
 }

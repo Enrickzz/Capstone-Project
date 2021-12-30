@@ -1,15 +1,5 @@
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/my_diary/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/grid_images.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
-import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 import 'dart:convert' as convert;
 
@@ -29,6 +19,7 @@ class index2 extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
+
 class _index2State extends State<index2>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
@@ -152,9 +143,10 @@ class _index2State extends State<index2>
                             ),
                           ),
                           onPressed: () async{
-                              result = await fetchNutritionix(search);
-                              //result.getPhoto();
-                              //print("photo url: " + result.getPhoto());
+                            await fetchNutritionix(search).then((value) => setState((){
+                              result=value;
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            }));
                           },
                         ),
                       ]
@@ -338,14 +330,10 @@ Future<List<Common>> fetchNutritionix(String thisquery) async {
     String data = response.body;
     final parsedJson = convert.jsonDecode(data);
     final food = nutritionixApi.fromJson(parsedJson);
-    print("nutrients " + food.common[0].fullNutrients[0].value.toString());
+    print("NUTRITIONIX SEARCH = $thisquery SUCCESS");
     return food.common;
   }
   else{
     print("response status code is " + response.statusCode.toString());
   }
-  // final responseJson = json.decode(response.body);
-
-  //print('This is the API response: $responseJson');
-
 }
