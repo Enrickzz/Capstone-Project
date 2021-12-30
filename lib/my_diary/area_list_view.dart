@@ -76,6 +76,7 @@ class _AreaListViewState extends State<AreaListView>
                         animation: animation,
                         animationController: animationController,
                         thisExer: widget.exerlist[index],
+                        index: index,
                       );
                     },
                   ),
@@ -101,13 +102,15 @@ class AreaView extends StatelessWidget {
     this.imagepath,
     this.animationController,
     this.animation,
-    this.thisExer
+    this.thisExer,
+    this.index
   }) : super(key: key);
 
   final String imagepath;
   final AnimationController animationController;
   final Animation<double> animation;
   final ExercisesTest thisExer;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +153,7 @@ class AreaView extends StatelessWidget {
                       builder: (context) => SingleChildScrollView(child: Container(
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: view_exrx_added(exercise: thisExer),
+                        child: view_exrx_added(exercise: thisExer, index: index),
                       ),
                       ),
                     );

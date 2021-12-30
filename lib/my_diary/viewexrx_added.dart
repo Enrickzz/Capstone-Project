@@ -27,7 +27,8 @@ import 'package:video_player/video_player.dart';
 
 class view_exrx_added extends StatefulWidget {
   final ExercisesTest exercise;
-  view_exrx_added({this.exercise});
+  final int index;
+  view_exrx_added({this.exercise, this.index});
   @override
   _view_exrx_addedState createState() => _view_exrx_addedState();
 }
@@ -119,7 +120,6 @@ class _view_exrx_addedState extends State<view_exrx_added> {
                   SizedBox(height: 8),
                   Row(
                     children: [
-
                       Expanded(
                           child:Container(
                             width: 200,
@@ -172,11 +172,42 @@ class _view_exrx_addedState extends State<view_exrx_added> {
                         ),
                         color: Colors.blue,
                         onPressed:() {
+                          myexerciselist.clear();
                           final User user = auth.currentUser;
                           final uid = user.uid;
-                          final readExers = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+                          final readExers = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/'+widget.index.toString());
                           //readExers.reference().child("exerciseId").child(widget.exercise.exerciseId.toString()).remove().then((value) => Navigator.pop(context));
-                          final a = readExers.child(""+widget.exercise.exerciseId.toString()).remove().then((value) => Navigator.pop(context));
+                          readExers.remove().then((value) {
+                            final nextread = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+                              nextread.once().then((DataSnapshot datasnapshot) {
+                                final deleteread = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+                                deleteread.remove();
+                                if(datasnapshot != null){
+                                  int counter2 = 0;
+                                  print("THIS ONE");
+                                  print(datasnapshot);
+                                  List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+                                  temp.forEach((jsonString) {
+                                    ExercisesTest a = ExercisesTest.fromJson(jsonString);
+                                    final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + counter2.toString());
+                                    exerRef.set({
+                                      "exerciseId": a.exerciseId,
+                                      "exerciseName": a.exerciseName,
+                                      "apparatusAbbreviation": a.apparatusAbbreviation,
+                                      "apparatusName": a.apparatusName,
+                                      "largImg1": a.largImg1,
+                                      "instructionsExecution": a.instructionsExecution,
+                                      "instructionsPreparation": a.instructionsPreparation,
+                                      "uRL": a.uRL,
+                                      "videoSrc": a.videoSrc,
+                                    });
+                                    counter2++;
+                                    print("Added Body exercise Successfully! " + uid);
+                                    myexerciselist.add(a);
+                                  });
+                                }
+                            });
+                          });
                           // a.once().then((DataSnapshot datasnapshot) {
                           //   String temp = datasnapshot.value.toString();
                           //   //temp = temp.replaceAll("[", "");
@@ -184,70 +215,6 @@ class _view_exrx_addedState extends State<view_exrx_added> {
                           // });
                         },
                       ),
-                      // FlatButton(
-                      //   child: Text(
-                      //     'Add',
-                      //     style: TextStyle(color: Colors.white),
-                      //   ),
-                      //   color: Colors.blue,
-                      //   onPressed:() async {
-                      //     try{
-                      //       final User user = auth.currentUser;
-                      //       final uid = user.uid;
-                      //       final readExers = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
-                      //       readExers.once().then((DataSnapshot datasnapshot) {
-                      //         String temp1 = datasnapshot.value.toString();
-                      //         print("temp1 " + temp1);
-                      //         List<String> temp = temp1.split(',');
-                      //         if(datasnapshot.value == null){
-                      //           final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + 0.toString());
-                      //           exerRef.set({"exerciseId": widget.exercise.exerciseId,
-                      //             "exerciseName": widget.exercise.exerciseName,
-                      //             "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
-                      //             "apparatusName": widget.exercise.apparatusName,
-                      //             "largImg1": widget.exercise.largImg1,
-                      //             "instructionsExecution": widget.exercise.instructionsExecution,
-                      //             "instructionsPreparation": widget.exercise.instructionsExecution,
-                      //             "uRL": widget.exercise.uRL,
-                      //             "videoSrc": widget.exercise.videoSrc,
-                      //           });
-                      //           print("Added Body exercise Successfully! " + uid);
-                      //         }
-                      //         else{
-                      //           Future.delayed(const Duration(milliseconds: 1000), (){
-                      //             count = myexerciselist.length--;
-                      //             print("count " + count.toString());
-                      //             final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + count.toString());
-                      //             exerRef.set({"exerciseId": widget.exercise.exerciseId,
-                      //               "exerciseName": widget.exercise.exerciseName,
-                      //               "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
-                      //               "apparatusName": widget.exercise.apparatusName,
-                      //               "largImg1": widget.exercise.largImg1,
-                      //               "instructionsExecution": widget.exercise.instructionsExecution,
-                      //               "instructionsPreparation": widget.exercise.instructionsExecution,
-                      //               "uRL": widget.exercise.uRL,
-                      //               "videoSrc": widget.exercise.videoSrc,
-                      //             });
-                      //           });
-                      //         }
-                      //       });
-                      //       Future.delayed(const Duration(milliseconds: 1000), (){
-                      //         //myexerciselist.add(new myexerciselist(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time)));
-                      //         for(var i=0;i<myexerciselist.length/2;i++){
-                      //           var temp = myexerciselist[i];
-                      //           myexerciselist[i] = myexerciselist[myexerciselist.length-1-i];
-                      //           myexerciselist[myexerciselist.length-1-i] = temp;
-                      //         }
-                      //         print("POP HERE ==========");
-                      //         Navigator.pop(context, myexerciselist);
-                      //       });
-                      //
-                      //     } catch(e) {
-                      //       print("you got an error! $e");
-                      //     }
-                      //     // // Navigator.pop(context);
-                      //   },
-                      // )
                     ],
                   ),
 

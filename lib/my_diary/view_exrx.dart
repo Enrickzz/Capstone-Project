@@ -192,7 +192,8 @@ class _view_exrxState extends State<view_exrx> {
                               List<String> temp = temp1.split(',');
                               if(datasnapshot.value == null){
                                 final exerRef = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/' + 0.toString());
-                                exerRef.set({"exerciseId": widget.exercise.exerciseId,
+                                exerRef.set({
+                                  "exerciseId": widget.exercise.exerciseId,
                                   "exerciseName": widget.exercise.exerciseName,
                                   "apparatusAbbreviation": widget.exercise.apparatusAbbreviation,
                                   "apparatusName": widget.exercise.apparatusName,
