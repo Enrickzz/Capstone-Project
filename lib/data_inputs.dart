@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/management_plan/medication_prescription/medication_prescription.dart';
+import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/data_inputs/lab_results.dart';
 import 'package:my_app/mainScreen.dart';
@@ -20,7 +20,7 @@ import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 import 'package:my_app/data_inputs/supplement_prescription.dart';
-import 'package:my_app/management_plan/medication_prescription/medication_prescription.dart';
+import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 
 
 class data_inputs extends StatefulWidget {

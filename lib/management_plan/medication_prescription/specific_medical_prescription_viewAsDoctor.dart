@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,10 +39,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificPrescriptionViewAsDoctor extends StatefulWidget {
-  SpecificPrescriptionViewAsDoctor({Key key, this.title}) : super(key: key);
-
+  SpecificPrescriptionViewAsDoctor({Key key, this.title, this.userUID}) : super(key: key);
   final String title;
-
+  String userUID;
   @override
   _SpecificPrescriptionViewAsDoctorState createState() => _SpecificPrescriptionViewAsDoctorState();
 }
@@ -54,15 +55,29 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<Medication_Prescription> prestemp = [];
+  Medication_Prescription prescription = new Medication_Prescription();
+  String generic_name = "";
+  String dosage = "";
+  String frequency = "";
+  String special_instruction = "";
+  String startDate = "";
+  String endDate = "";
+  String prescribedBy = "";
+  String dateCreated = "";
 
 
   @override
   void initState() {
     super.initState();
-
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    getPrescription();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -192,7 +207,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put Generic Name Here",
+                                            Text(generic_name,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -210,7 +225,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put Dosage Here",
+                                            Text(dosage,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -224,7 +239,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put how many times a day here",
+                                            Text(frequency,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -238,7 +253,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put special instructions here",
+                                            Text(special_instruction,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -252,7 +267,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put start date here" + ' - ' + 'Put end date here',
+                                            Text(startDate + ' - ' + endDate,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -320,7 +335,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put date when medicine was prescribed",
+                                            Text(dateCreated,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -355,5 +370,25 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
 //   )
 //
 // ],)
-
+  void getPrescription() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    var userUID = widget.userUID;
+    final readprescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/');
+    readprescription.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        prescription = Medication_Prescription.fromJson(jsonString);
+        generic_name = prescription.generic_name;
+        dosage = prescription.dosage.toString();
+        frequency = prescription.intake_time;
+        special_instruction = prescription.special_instruction;
+        startDate = "${prescription.startdate.month}/${prescription.startdate.day}/${prescription.startdate.year}";
+        endDate = "${prescription.enddate.month}/${prescription.enddate.day}/${prescription.enddate.year}";
+        dateCreated = "${prescription.datecreated.month}/${prescription.datecreated.day}/${prescription.datecreated.year}";
+        // prescribedBy = prescription
+      });
+    });
+  }
 }
+

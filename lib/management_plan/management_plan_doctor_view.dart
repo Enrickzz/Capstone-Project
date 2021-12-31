@@ -14,7 +14,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../fitness_app_theme.dart';
-import 'package:my_app/management_plan/medication_prescription/medication_prescription.dart';
+import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 import 'package:my_app/management_plan/food_plan/food_plan_doctor_view.dart';
@@ -23,7 +23,8 @@ import 'package:my_app/management_plan/exercise_plan/exercise_plan_doctor_view.d
 import 'vitals_plan/vitals_plan_doctor_view.dart';
 
 class management_plan extends StatefulWidget {
-
+  String userUID;
+  management_plan({this.userUID});
   @override
   _AppSignUpState createState() => _AppSignUpState();
 }
@@ -31,28 +32,13 @@ class management_plan extends StatefulWidget {
 class _AppSignUpState extends State<management_plan> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  final AuthService _auth = AuthService();
-  final _formKey = GlobalKey<FormState>();
-  String firstname = '';
-  String lastname = '';
-  String email = '';
-  String password = '';
-  String error = '';
-
-  String initValue="Select your Birth Date";
-  bool isDateSelected= false;
-  DateTime birthDate; // instance of DateTime
-  String birthDateInString = "MM/DD/YYYY";
-  String weight = "";
-  String height = "";
-  String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
 
 
   @override
   Widget build(BuildContext context) {
-
-
+    String patientUID = widget.userUID;
+    print(patientUID);
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -63,7 +49,7 @@ class _AppSignUpState extends State<management_plan> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text("Pateint's Management Plans", style: TextStyle(
+        title: const Text("Patient's Management Plans", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -85,7 +71,7 @@ class _AppSignUpState extends State<management_plan> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => medication_prescription()),
+                        MaterialPageRoute(builder: (context) => medication_prescription(userUID: patientUID)),
                       );
                     },
                     child: Container(

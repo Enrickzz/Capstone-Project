@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/models/exrxTEST.dart';
-
+DateFormat format = DateFormat("MM/dd/yyyy");
 class Users {
   String uid;
   String firstname;
@@ -21,6 +21,7 @@ class Users {
     password = json['password'];
     usertype = json['userType'];
   }
+
   Users.fromJson2(Map<String, dynamic> json) {
     uid = json['uid'];
     firstname = json['firstname'];
@@ -30,6 +31,7 @@ class Users {
     usertype = json['userType'];
     connections = json['connections'].cast<String>();
   }
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -245,6 +247,7 @@ class Medication {
 }
 
 class Medication_Prescription{
+
   String generic_name;
   String branded_name;
   double dosage;
@@ -268,7 +271,7 @@ class Medication_Prescription{
     special_instruction = json['special_instruction'];
     prescription_unit = json['medical_prescription_unit'];
     prescribedBy = json['prescribedBy'];
-    datecreated = json['datecreated'];
+    datecreated = format.parse(json['datecreated']);
   }
 
   Map<String, dynamic> toJson() {
