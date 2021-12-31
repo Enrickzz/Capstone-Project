@@ -56,8 +56,10 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
   TabController controller;
   List<Medication_Prescription> prestemp = [];
   Medication_Prescription prescription = new Medication_Prescription();
+  Users doctor = new Users();
   String generic_name = "";
   String dosage = "";
+  String unit = "";
   String frequency = "";
   String special_instruction = "";
   String startDate = "";
@@ -225,7 +227,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(dosage,
+                                            Text(dosage + " " + unit,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -317,7 +319,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Dr." + "Put doctor name here",
+                                            Text("Dr." + prescribedBy,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -381,12 +383,20 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
         prescription = Medication_Prescription.fromJson(jsonString);
         generic_name = prescription.generic_name;
         dosage = prescription.dosage.toString();
+        unit = prescription.prescription_unit.toString();
         frequency = prescription.intake_time;
         special_instruction = prescription.special_instruction;
         startDate = "${prescription.startdate.month}/${prescription.startdate.day}/${prescription.startdate.year}";
         endDate = "${prescription.enddate.month}/${prescription.enddate.day}/${prescription.enddate.year}";
         dateCreated = "${prescription.datecreated.month}/${prescription.datecreated.day}/${prescription.datecreated.year}";
-        // prescribedBy = prescription
+        final readDoctorName = databaseReference.child('users/' + prescription.prescribedBy + '/personal_info/');
+        readDoctorName.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+          print(temp2);
+          doctor = Users.fromJson(temp2);
+          prescribedBy = doctor.lastname + " " + doctor.firstname;
+        });
+
       });
     });
   }
