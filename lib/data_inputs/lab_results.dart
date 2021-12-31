@@ -98,49 +98,54 @@ class _lab_resultsState extends State<lab_results> {
           ),
         ],
       ),
-      body: GridView.builder(
-        // Create a grid with 2 columns. If you change the scrollDirection to
-        // horizontal, this produces 2 rows.
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 190,
-              childAspectRatio: 1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10),
-        itemCount: labResult_list.length,
-        // Generate 100 widgets that display their index in the List.
-        itemBuilder: (context, index){
-            listOne("path", labResult_list[index].imgRef);
-          return Center(
-            child: GestureDetector(
-              onTap: () {
-                showModalBottomSheet(context: context,
-                  isScrollControlled: true,
-                  builder: (context) => SingleChildScrollView(child: Container(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: view_lab_result(lr: labResult_list[index]),
-                  ),
-                  ),
-                );
-              },
-              child:  Container(
-                  child: Image.network('' + trythis[index].url),
-                  height:190,
-                  width: 190,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                      color: Colors.black
-                  ),
-
+      body: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: GridView.builder(
+          // Create a grid with 2 columns. If you change the scrollDirection to
+          // horizontal, this produces 2 rows.
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 190,
+                childAspectRatio: 1,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10),
+          itemCount: labResult_list.length,
+          // Generate 100 widgets that display their index in the List.
+          itemBuilder: (context, index){
+              listOne("path", labResult_list[index].imgRef);
+            return Center(
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(context: context,
+                    isScrollControlled: true,
+                    builder: (context) => SingleChildScrollView(child: Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: view_lab_result(lr: labResult_list[index]),
+                    ),
+                    ),
+                  );
+                },
+                child:  Container(
+                    child: (Image.network('' + trythis[index].url) != null) ? Image.network('' + trythis[index].url, loadingBuilder: (context, child, loadingProgress) =>
+                    (loadingProgress == null) ? child : CircularProgressIndicator(),
+                      errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
+                    height:190,
+                    width: 190,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        color: Colors.black
+                    ),
                 ),
-            )
-          );
-        }
+
+              )
+            );
+          }
+        ),
       ),
 
     );

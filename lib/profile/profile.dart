@@ -199,7 +199,7 @@ class _index3State extends State<index3>
                     Container(
                       alignment: Alignment.topLeft,
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
                           border: Border.all(width: 2, color: Colors.white),
