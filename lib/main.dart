@@ -355,8 +355,9 @@ class _AppSignInState extends State<AppSignIn> {
                             SizedBox(height: 10.0),
                             Container(
                               child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(minimumSize: Size(220, 0)),
                                 child: Padding(
-                                  padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                                   child: Text('Sign In', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                                   ),
                                 ),
@@ -380,7 +381,7 @@ class _AppSignInState extends State<AppSignIn> {
                                 },
                               ),
                             ),
-                            SizedBox(height: 15.0),
+                            SizedBox(height: 8.0),
                             Container(
                               child: Column(
                                 children: <Widget>[
@@ -391,15 +392,15 @@ class _AppSignInState extends State<AppSignIn> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 15.0),
+                            SizedBox(height: 8.0),
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.blue,
                                 onPrimary: Colors.white,
-                                minimumSize: Size(double.infinity, 40),
+                                minimumSize: Size(220, 40),
                               ),
                                 icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
-                                label: Text("Sign up with Google"),
+                                label: Text("Sign in with Google"),
                                 onPressed: (){
                                 final provider = Provider.of<GoogleSignInProvider>(context, listen:false);
                                 provider.googleLogin();

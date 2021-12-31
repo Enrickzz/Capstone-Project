@@ -392,6 +392,7 @@ class _AppSignUpState extends State<registration> {
                             SizedBox(height: 18.0),
                             Container(
                               child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(minimumSize: Size(220, 0)),
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
                                   child: Text('Sign Up', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
