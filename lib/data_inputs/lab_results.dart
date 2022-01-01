@@ -47,7 +47,6 @@ class _lab_resultsState extends State<lab_results> {
       Future.delayed(const Duration(milliseconds: 2000), (){
         setState(() {
           print("SET STATE LAB ");
-          print("imgref = " + labResult_list[0].imgRef);
         });
       });
     });
@@ -172,7 +171,7 @@ class _lab_resultsState extends State<lab_results> {
       final name = ref.name;
       final file = FirebaseFile(ref: ref, name:name, url: url);
       trythis.add(file);
-      print("This file " + file.url);
+      // print("This file " + file.url);
       return MapEntry(index, file);
     })
         .values
@@ -193,7 +192,7 @@ class _lab_resultsState extends State<lab_results> {
       final name = ref.name;
       final file = FirebaseFile(ref: ref, name:name, url: url);
       trythis.add(file);
-      print("This file " + file.url);
+      // print("This file " + file.url);
       passThisFile = file.url.toString();
       return MapEntry(index, file);
     })
@@ -210,7 +209,7 @@ class _lab_resultsState extends State<lab_results> {
       final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+labResult_list[i].imgRef);
       downloadurl = await ref.getDownloadURL();
       labResult_list[i].imgRef = downloadurl;
-      print ("THIS IS THE URL = "+ downloadurl);
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
     }
     //String downloadurl = await ref.getDownloadURL();
     return downloadurl;

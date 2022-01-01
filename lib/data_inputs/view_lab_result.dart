@@ -90,7 +90,7 @@ class viewLabResult extends State<view_lab_result> {
     // print("SET STATE LAB");
     print(widget.lr);
     print(widget.imgurl);
-    downloadUrl( widget.lr.imgRef.toString());
+    // downloadUrl( widget.lr.imgRef.toString());
     setPage(widget.lr.labResult_name);
     Future.delayed(const Duration(milliseconds: 1200), (){
       setState(() {
@@ -222,7 +222,7 @@ class viewLabResult extends State<view_lab_result> {
       final name = ref.name;
       final file = FirebaseFile(ref: ref, name:name, url: url);
       trythis.add(file);
-      print("This file " + file.url);
+      //print("This file " + file.url);
       return MapEntry(index, file);
     })
         .values
