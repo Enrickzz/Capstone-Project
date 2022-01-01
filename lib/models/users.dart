@@ -624,7 +624,6 @@ class Recommendation {
     rec_date = DateFormat("MM/dd/yyyy").parse(json['rec_date']);
     rec_time = DateFormat("hh:mm").parse(json['rec_time']);
     category = json["category"];
-
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -638,5 +637,38 @@ class Recommendation {
   }
 }
 
+class FoodPlan {
+  String purpose;
+  String food;
+  double quantity_food;
+  String consumption_time;
+  String important_notes;
+  String prescribedBy;
+  DateTime dateCreated;
+
+  FoodPlan({this.purpose, this.food, this.quantity_food, this.consumption_time, this.important_notes, this.prescribedBy, this.dateCreated});
+
+  FoodPlan.fromJson(Map<String, dynamic> json) {
+    purpose = json["purpose"];
+    food = json["food"];
+    quantity_food = double.parse(json['quantity_food']);
+    consumption_time = json['consumption_time'];
+    important_notes = json['important_notes'];
+    prescribedBy = json['prescribedBy'];
+    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['purpose'] = this.purpose;
+    data['food'] = this.food;
+    data['quantity_food'] = this.quantity_food;
+    data['consumption_time'] = this.consumption_time;
+    data['important_notes'] = this.important_notes;
+    data['prescribedBy'] = this.prescribedBy;
+    data['dateCreated'] = this.dateCreated;
+    return data;
+  }
+
+}
 
 

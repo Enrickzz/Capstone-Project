@@ -143,7 +143,7 @@ class _AppSignUpState extends State<management_plan> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => food_prescription_doctor_view()),
+                        MaterialPageRoute(builder: (context) => food_prescription_doctor_view(userUID: patientUID)),
                       );
                     },
                     child: Container(

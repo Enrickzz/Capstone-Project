@@ -17,8 +17,9 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_food_prescription extends StatefulWidget {
-  final List<Medication_Prescription> thislist;
-  add_food_prescription({this.thislist});
+  final List<FoodPlan> thislist;
+  final String userUID;
+  add_food_prescription({this.thislist, this.userUID});
   @override
   _addFoodPrescriptionState createState() => _addFoodPrescriptionState();
 }
@@ -27,83 +28,75 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  DateTime prescriptionDate;
-  bool isDateSelected= false;
   DateFormat format = new DateFormat("MM/dd/yyyy");
-  DateFormat timeformat = new DateFormat("hh:mm");
-  var startDate = TextEditingController();
-  var endDate = TextEditingController();
-  String generic_name = "";
-  String branded_name = "";
-  String startdate = "";
-  String enddate = "";
-  double dosage = 0;
-  String intake_time = "";
-  String special_instruction = "";
-  String prescription_unit = "mL";
-  int count = 0;
-  List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
+  int count = 1;
+  // List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
+  List<FoodPlan> foodplan_list = new List<FoodPlan>();
+  String purpose = "";
+  String food = "";
+  String quantity_food = "0";
+  String consumption_time = "";
+  String important_notes = "";
+  String prescribedBy = "";
+  DateTime now =  DateTime.now();
   String valueChooseInterval;
+
   List<String> listItemSymptoms = <String>[
     '1', '2', '3','4'
   ];
-  double _currentSliderValue = 1;
   List <bool> isSelected = [true, false, false, false, false];
-  int quantity = 1;
-
-  DateTimeRange dateRange;
 
   // added by borj
   List<String> listFoodTime = <String>[
     'Breakfast', 'Lunch','Merienda', 'Dinner'
-
   ];
   String valueChooseFoodTime;
 
 
-  String getFrom(){
-    if(dateRange == null){
-      return 'From';
-    }
-    else{
-      return DateFormat('MM/dd/yyyy').format(dateRange.start);
+  // String getFrom(){
+  //   if(dateRange == null){
+  //     return 'From';
+  //   }
+  //   else{
+  //     return DateFormat('MM/dd/yyyy').format(dateRange.start);
+  //
+  //   }
+  // }
+  //
+  // String getUntil(){
+  //   if(dateRange == null){
+  //     return 'Until';
+  //   }
+  //   else{
+  //     return DateFormat('MM/dd/yyyy').format(dateRange.end);
+  //
+  //   }
+  // }
 
-    }
-  }
+  // Future pickDateRange(BuildContext context) async{
+  //   final initialDateRange = DateTimeRange(
+  //     start: DateTime.now(),
+  //     end: DateTime.now().add(Duration(hours:24 * 3)),
+  //   );
+  //
+  //   final newDateRange = await showDateRangePicker(
+  //     context: context,
+  //     firstDate: DateTime(DateTime.now().year - 5),
+  //     lastDate: DateTime(DateTime.now().year + 5),
+  //     initialDateRange: dateRange ?? initialDateRange,
+  //   );
+  //
+  //   if(newDateRange == null) return;
+  //
+  //   setState(() => {
+  //     dateRange = newDateRange,
+  //     startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
+  //     enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
+  //
+  //   });
+  //   print("date Range " + dateRange.toString());
+  // }
 
-  String getUntil(){
-    if(dateRange == null){
-      return 'Until';
-    }
-    else{
-      return DateFormat('MM/dd/yyyy').format(dateRange.end);
-
-    }
-  }
-
-  Future pickDateRange(BuildContext context) async{
-    final initialDateRange = DateTimeRange(
-      start: DateTime.now(),
-      end: DateTime.now().add(Duration(hours:24 * 3)),
-    );
-
-    final newDateRange = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(DateTime.now().year - 5),
-      lastDate: DateTime(DateTime.now().year + 5),
-      initialDateRange: dateRange ?? initialDateRange,
-    );
-
-    if(newDateRange == null) return;
-
-    setState(() => {
-      dateRange = newDateRange,
-      startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
-      enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
-
-    });
-    print("date Range " + dateRange.toString());
-  }
   @override
   Widget build(BuildContext context) {
 
@@ -152,9 +145,9 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                           fontSize: defaultFontSize),
                       hintText: "Purpose",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Generic Name' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Purpose' : null,
                     onChanged: (val){
-                      setState(() => generic_name = val);
+                      setState(() => purpose = val);
                     },
                   ),
                   SizedBox(height: 8),
@@ -176,9 +169,9 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                           fontSize: defaultFontSize),
                       hintText: "Food",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Generic Name' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Food' : null,
                     onChanged: (val){
-                      setState(() => generic_name = val);
+                      setState(() => food = val);
                     },
                   ),
 
@@ -202,9 +195,9 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                           fontSize: defaultFontSize),
                       hintText: "Quantity of food (grams)",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Brand Name' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Quantity of food' : null,
                     onChanged: (val){
-                      setState(() => branded_name = val);
+                      setState(() => quantity_food = val);
                     },
                   ),
                   SizedBox(height: 8.0),
@@ -229,7 +222,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                     value: valueChooseFoodTime,
                     onChanged: (newValue){
                       setState(() {
-
+                        valueChooseFoodTime = newValue;
                       });
 
                     },
@@ -262,9 +255,9 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                           fontSize: defaultFontSize),
                       hintText: "Important Notes/Assessments",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Special Instructions' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Important Notes' : null,
                     onChanged: (val){
-                      setState(() => special_instruction = val);
+                      setState(() => important_notes = val);
                     },
                   ),
                   SizedBox(height: 24.0),
@@ -291,94 +284,38 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-                            readPrescription.once().then((DataSnapshot datasnapshot) {
+                            String userUID = widget.userUID;
+                            consumption_time = valueChooseFoodTime;
+                            final readFoodPlan = databaseReference.child('users/' + userUID + '/foodplan/');
+                            readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              Medication_Prescription prescription;
+                              print(temp1);
                               if(datasnapshot.value == null){
-                                final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + 0.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit, "prescribedBy": uid});
-                                print("Added Medication Prescription Successfully! " + uid);
+                                final foodplanRef = databaseReference.child('users/' + userUID + '/foodplan/' + count.toString());
+                                foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "quantity_food": quantity_food.toString(), "consumption_time": consumption_time.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                print("Added Food Plan Successfully! " + uid);
                               }
                               else{
-                                // String tempGenericName = "";
-                                // String tempBrandedName = "";
-                                // String tempIntakeTime = "";
-                                // String tempSpecialInstruction = "";
-                                // String tempStartDate = "";
-                                // String tempEndDate = "";
-                                // String tempPrescriptionUnit = "";
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //   switch(i%7){
-                                //     case 0: {
-                                //       tempPrescriptionUnit = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 1: {
-                                //       tempEndDate = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 2: {
-                                //       tempIntakeTime = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 3: {
-                                //       tempBrandedName = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 4: {
-                                //       tempSpecialInstruction = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 5: {
-                                //       tempGenericName = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 6: {
-                                //       tempStartDate = splitFull.last;
-                                //       prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-                                //       prescription_list.add(prescription);
-                                //     }
-                                //     break;
-                                //   }
-                                // }
-                                //
-                                // print("count " + count.toString());
-                                //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-                                // symptoms_list.add(symptom);
-                                // print("symptom list  " + symptoms_list.toString());
-                                getMedicalPrescription();
+                                getFoodPlan();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = prescription_list.length--;
-                                  final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + count.toString());
-                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit, "prescribedBy": uid});
-                                  print("Added Medication Prescription Successfully! " + uid);
+                                  count = foodplan_list.length--;
+                                  final foodplanRef = databaseReference.child('users/' + userUID + '/foodplan/' + count.toString());
+                                  foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "quantity_food": quantity_food.toString(), "consumption_time": consumption_time.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                  print("Added Food Plan Successfully! " + uid);
                                 });
-
                               }
-
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + prescription_list.length.toString());
-                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid));
-                              for(var i=0;i<prescription_list.length/2;i++){
-                                var temp = prescription_list[i];
-                                prescription_list[i] = prescription_list[prescription_list.length-1-i];
-                                prescription_list[prescription_list.length-1-i] = temp;
+                              print("MEDICATION LENGTH: " + foodplan_list.length.toString());
+                              foodplan_list.add(new FoodPlan(purpose: purpose, food: food,quantity_food: double.parse(quantity_food), consumption_time: consumption_time, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
+                              for(var i=0;i<foodplan_list.length/2;i++){
+                                var temp = foodplan_list[i];
+                                foodplan_list[i] = foodplan_list[foodplan_list.length-1-i];
+                                foodplan_list[foodplan_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, [prescription_list, 1]);
+                              Navigator.pop(context, [foodplan_list, 1]);
                             });
-
                           } catch(e) {
                             print("you got an error! $e");
                           }
@@ -394,14 +331,17 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
 
     );
   }
-  void getMedicalPrescription() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+  void getFoodPlan() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readprescription = databaseReference.child('users/' + userUID + '/foodplan/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print("temp");
+      print(temp);
       temp.forEach((jsonString) {
-        prescription_list.add(Medication_Prescription.fromJson(jsonString));
+        foodplan_list.add(FoodPlan.fromJson(jsonString));
       });
     });
   }

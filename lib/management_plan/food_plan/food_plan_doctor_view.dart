@@ -21,9 +21,9 @@ import 'package:my_app/management_plan/food_plan/specific_food_plan_doctor_view.
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class food_prescription_doctor_view extends StatefulWidget {
-  final List<Medication_Prescription> preslist;
-  final int pointer;
-  food_prescription_doctor_view({Key key, this.preslist, this.pointer}): super(key: key);
+  final List<FoodPlan> foodplist;
+  final String userUID;
+  food_prescription_doctor_view({Key key, this.foodplist, this.userUID}): super(key: key);
   @override
   _food_prescriptionState createState() => _food_prescriptionState();
 }
@@ -34,77 +34,20 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Medication_Prescription> prestemp = [];
+  List<FoodPlan> foodPtemp = [];
+  String purpose = "";
+  String dateCreated = "";
+  Users doctor = new Users();
   DateFormat format = new DateFormat("MM/dd/yyyy");
+  bool isPatient = false;
 
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    prestemp.clear();
-    // final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-    // String tempGenericName = "";
-    // String tempBrandedName = "";
-    // String tempIntakeTime = "";
-    // String tempSpecialInstruction = "";
-    // String tempStartDate = "";
-    // String tempEndDate = "";
-    // String tempPrescriptionUnit = "";
-    // readPrescription.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Medication_Prescription prescription;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //       switch(i%7){
-    //         case 0: {
-    //           tempPrescriptionUnit = splitFull.last;
-    //         }
-    //         break;
-    //         case 1: {
-    //           tempEndDate = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 2: {
-    //           tempIntakeTime = splitFull.last;
-    //         }
-    //         break;
-    //         case 3: {
-    //           tempBrandedName = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 4: {
-    //           tempSpecialInstruction = splitFull.last;
-    //         }
-    //         break;
-    //         case 5: {
-    //           tempGenericName = splitFull.last;
-    //         }
-    //         break;
-    //         case 6: {
-    //           tempStartDate = splitFull.last;
-    //           prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-    //           prestemp.add(prescription);
-    //         }
-    //         break;
-    //       }
-    //
-    //   }
-    //   for(var i=0;i<prestemp.length/2;i++){
-    //     var temp = prestemp[i];
-    //     prestemp[i] = prestemp[prestemp.length-1-i];
-    //     prestemp[prestemp.length-1-i] = temp;
-    //   }
-    // });
-    getMedicalPrescription();
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    foodPtemp.clear();
+    getFoodPlan();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -142,16 +85,16 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                       builder: (context) => SingleChildScrollView(child: Container(
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: add_food_prescription(thislist: prestemp),
+                        child: add_food_prescription(thislist: foodPtemp, userUID: widget.userUID),
                       ),
                       ),
                     ).then((value) =>
                         Future.delayed(const Duration(milliseconds: 1500), (){
                           setState((){
-                            print("setstate medication prescription");
+                            print("setstate food plan");
                             print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                             if(value != null){
-                              prestemp = value[0];
+                              foodPtemp = value[0];
                             }
                           });
                         }));
@@ -164,7 +107,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
           ],
         ),
         body: ListView.builder(
-            itemCount: 1,
+            itemCount: foodPtemp.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
               width: MediaQuery.of(context).size.width,
@@ -172,19 +115,19 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
               child: Card(
                 child: ListTile(
                     leading: Icon(Icons.restaurant ),
-                    title: Text("Purpose: " + "Change Meal" ,
+                    title: Text("Purpose: " + foodPtemp[index].purpose,
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr." ,
+                    subtitle:        Text("Planned by: Dr." + getDoctor(index),
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
                         )),
-                    trailing: Text("mm/dd/yyyy" ,
+                    trailing: Text("${foodPtemp[index].dateCreated.month}/${foodPtemp[index].dateCreated.day}/${foodPtemp[index].dateCreated.year}",
                         style:TextStyle(
                           color: Colors.grey,
                         )),
@@ -221,15 +164,41 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
       return "$hours:$min";
     }
   }
-  void getMedicalPrescription() {
+  void getFoodPlan() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+    String userUID = widget.userUID;
+    /// read connection
+    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
+    readConnection.once().then((DataSnapshot datasnapshot){
+      List<String> connections = datasnapshot.value;
+      if(connections != null){
+        for(int i = 0; i < connections.length; i++){
+          if(connections[i] == userUID){
+            isPatient = true;
+          }
+        }
+      }
+    });
+    final readprescription = databaseReference.child('users/' + userUID + '/foodplan/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print(temp);
       temp.forEach((jsonString) {
-        prestemp.add(Medication_Prescription.fromJson(jsonString));
+        foodPtemp.add(FoodPlan.fromJson(jsonString));
       });
     });
+  }
+  String getDoctor(int index){
+    final readDoctor = databaseReference.child('users/' +
+        foodPtemp[index].prescribedBy
+        + '/personal_info/');
+    readDoctor.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        doctor = Users.fromJson(temp);
+      }
+    });
+    return doctor.lastname;
   }
 }
