@@ -43,9 +43,12 @@ class _lab_resultsState extends State<lab_results> {
     listAll("path");
     getLabResult();
     Future.delayed(const Duration(milliseconds: 1500), (){
-      setState(() {
-        print("SET STATE LAB ");
-        print("LENGTH = " + labResult_list.length.toString());
+      downloadUrls();
+      Future.delayed(const Duration(milliseconds: 2000), (){
+        setState(() {
+          print("SET STATE LAB ");
+          print("imgref = " + labResult_list[0].imgRef);
+        });
       });
     });
   }
@@ -111,7 +114,7 @@ class _lab_resultsState extends State<lab_results> {
           itemCount: labResult_list.length,
           // Generate 100 widgets that display their index in the List.
           itemBuilder: (context, index){
-              listOne("path", labResult_list[index].imgRef);
+              //listOne("path", labResult_list[index].imgRef);
             return Center(
               child: GestureDetector(
                 onTap: () {
@@ -126,7 +129,7 @@ class _lab_resultsState extends State<lab_results> {
                   );
                 },
                 child:  Container(
-                    child: (Image.network('' + trythis[index].url) != null) ? Image.network('' + trythis[index].url, loadingBuilder: (context, child, loadingProgress) =>
+                    child: (Image.network('' + labResult_list[index].imgRef) != null) ? Image.network('' + labResult_list[index].imgRef, loadingBuilder: (context, child, loadingProgress) =>
                     (loadingProgress == null) ? child : CircularProgressIndicator(),
                       errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
                     height:190,
@@ -196,6 +199,21 @@ class _lab_resultsState extends State<lab_results> {
     })
         .values
         .toList();
+  }
+
+
+  Future <String> downloadUrls() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String downloadurl;
+    for(var i = 0 ; i < labResult_list.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+labResult_list[i].imgRef);
+      downloadurl = await ref.getDownloadURL();
+      labResult_list[i].imgRef = downloadurl;
+      print ("THIS IS THE URL = "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    return downloadurl;
   }
   void getLabResult() {
     final User user = auth.currentUser;

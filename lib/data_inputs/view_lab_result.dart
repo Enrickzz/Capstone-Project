@@ -133,9 +133,11 @@ class viewLabResult extends State<view_lab_result> {
                   SizedBox(height: 8.0),
                   Divider(),
                   Container(
-                    child: Image.network('' + thisURL),
-                    height:250,
-                    width: 200,
+                    child: (Image.network('' + widget.lr.imgRef) != null) ? Image.network('' +widget.lr.imgRef, loadingBuilder: (context, child, loadingProgress) =>
+                    (loadingProgress == null) ? child : CircularProgressIndicator(),
+                      errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
+                    height:190,
+                    width: 190,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
@@ -145,7 +147,6 @@ class viewLabResult extends State<view_lab_result> {
                         ),
                         color: Colors.black
                     ),
-
                   ),
                   SizedBox(height: 8),
                   Text("Lab Result Type: \n"+widget.lr.labResult_name),
