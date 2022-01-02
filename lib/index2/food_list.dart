@@ -157,7 +157,7 @@ class _index2TestState extends State<food_list>
               )
           ),
         ),
-        backgroundColor: Color(0xFF21BFBD),
+        backgroundColor: Colors.blue,
         body: ListView(
           children: <Widget>[
 

@@ -67,7 +67,8 @@ class TitleView extends StatelessWidget {
                               onTap: (){
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => ExerciseScreen(animationController: animationController)),
+                                  MaterialPageRoute(
+                                      builder: (context) => ExerciseScreen(animationController: animationController)),
                                 );
                               },
                             ),
