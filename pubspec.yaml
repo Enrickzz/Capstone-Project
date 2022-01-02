@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
 
 
+
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -45,6 +47,8 @@ dependencies:
   flutter_login_facebook: ^1.2.0
   flutter_facebook_auth: ^3.5.6
   flutter_markdown: ^0.4.1
+  basic_utils: ^3.9.4
+
 
   syncfusion_flutter_charts: ^19.1.54
 #  shared_preferences: ^2.0.9
@@ -66,6 +70,8 @@ dev_dependencies:
     sdk: flutter
 
 
+
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -85,6 +91,8 @@ flutter:
     - assets/images/
     - assets/fitness_app/
     - assets/
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -108,6 +116,10 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+  fonts:
+    - family: Montserrat
+    - fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

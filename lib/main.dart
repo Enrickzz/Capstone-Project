@@ -23,6 +23,7 @@ import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'discussion.dart';
 import 'package:my_app/discussion.dart';
 import 'fitness_app_theme.dart';
+import 'food/food_list.dart';
 import 'my_diary/exercise_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/mainScreen.dart';
@@ -233,7 +234,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => discussion()),
+                      MaterialPageRoute(builder: (context) => food_list_test()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),
