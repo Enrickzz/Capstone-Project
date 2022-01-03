@@ -26,7 +26,8 @@ import 'add_exercise_prescription.dart';
 class exercise_prescription_doctor_view extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
-  exercise_prescription_doctor_view({Key key, this.preslist, this.pointer}): super(key: key);
+  String userUID;
+  exercise_prescription_doctor_view({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
   @override
   _exercise_prescriptionState createState() => _exercise_prescriptionState();
 }
@@ -37,77 +38,19 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Medication_Prescription> prestemp = [];
+  List<ExPlan> extemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
+  String purpose = "";
+  String dateCreated = "";
+  Users doctor = new Users();
 
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    prestemp.clear();
-    // final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-    // String tempGenericName = "";
-    // String tempBrandedName = "";
-    // String tempIntakeTime = "";
-    // String tempSpecialInstruction = "";
-    // String tempStartDate = "";
-    // String tempEndDate = "";
-    // String tempPrescriptionUnit = "";
-    // readPrescription.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Medication_Prescription prescription;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //       switch(i%7){
-    //         case 0: {
-    //           tempPrescriptionUnit = splitFull.last;
-    //         }
-    //         break;
-    //         case 1: {
-    //           tempEndDate = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 2: {
-    //           tempIntakeTime = splitFull.last;
-    //         }
-    //         break;
-    //         case 3: {
-    //           tempBrandedName = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 4: {
-    //           tempSpecialInstruction = splitFull.last;
-    //         }
-    //         break;
-    //         case 5: {
-    //           tempGenericName = splitFull.last;
-    //         }
-    //         break;
-    //         case 6: {
-    //           tempStartDate = splitFull.last;
-    //           prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-    //           prestemp.add(prescription);
-    //         }
-    //         break;
-    //       }
-    //
-    //   }
-    //   for(var i=0;i<prestemp.length/2;i++){
-    //     var temp = prestemp[i];
-    //     prestemp[i] = prestemp[prestemp.length-1-i];
-    //     prestemp[prestemp.length-1-i] = temp;
-    //   }
-    // });
-    getMedicalPrescription();
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    extemp.clear();
+    getExercise();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -145,7 +88,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                       builder: (context) => SingleChildScrollView(child: Container(
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: add_exercise_prescription(thislist: prestemp),
+                        child: add_exercise_prescription(thislist: extemp, userUID: widget.userUID),
                       ),
                       ),
                     ).then((value) =>
@@ -154,7 +97,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                             print("setstate medication prescription");
                             print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                             if(value != null){
-                              prestemp = value[0];
+                              extemp = value[0];
                             }
                           });
                         }));
@@ -167,7 +110,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
           ],
         ),
         body: ListView.builder(
-            itemCount: 1,
+            itemCount: extemp.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
               width: MediaQuery.of(context).size.width,
@@ -175,19 +118,19 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
               child: Card(
                 child: ListTile(
                     leading: Icon(Icons.fitness_center ),
-                    title: Text("Purpose: " + "Add to Routine" ,
+                    title: Text("Purpose: " + extemp[index].purpose ,
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr." ,
+                    subtitle:        Text("Planned by: Dr." + getDoctor(index),
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
                         )),
-                    trailing: Text("mm/dd/yyyy" ,
+                    trailing: Text("${extemp[index].dateCreated.month}/${extemp[index].dateCreated.day}/${extemp[index].dateCreated.year}" ,
                         style:TextStyle(
                           color: Colors.grey,
                         )),
@@ -199,7 +142,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificExercisePrescriptionViewAsDoctor()),
+                        MaterialPageRoute(builder: (context) => SpecificExercisePrescriptionViewAsDoctor(userUID: widget.userUID, index: index)),
                       );
                     }
 
@@ -224,15 +167,31 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
       return "$hours:$min";
     }
   }
-  void getMedicalPrescription() {
+  void getExercise() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
-    readprescription.once().then((DataSnapshot snapshot){
+    String userUID = widget.userUID;
+    print("get exercise");
+    final readExPlan = databaseReference.child('users/' + userUID + '/exercise_prescription/');
+    readExPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print(temp);
       temp.forEach((jsonString) {
-        prestemp.add(Medication_Prescription.fromJson(jsonString));
+        extemp.add(ExPlan.fromJson(jsonString));
       });
     });
+  }
+  /// get doctor name
+  String getDoctor(int index){
+    final readDoctor = databaseReference.child('users/' +
+        extemp[index].prescribedBy
+        + '/personal_info/');
+    readDoctor.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        doctor = Users.fromJson(temp);
+      }
+    });
+    return doctor.lastname;
   }
 }

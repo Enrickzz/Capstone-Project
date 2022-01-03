@@ -39,14 +39,6 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
   String important_notes = "";
   String prescribedBy = "";
   DateTime now =  DateTime.now();
-  String valueChooseInterval;
-
-  List<String> listItemSymptoms = <String>[
-    '1', '2', '3','4'
-  ];
-  List <bool> isSelected = [true, false, false, false, false];
-
-  // added by borj
   List<String> listFoodTime = <String>[
     'Breakfast', 'Lunch','Merienda', 'Dinner'
   ];
@@ -335,8 +327,8 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readprescription = databaseReference.child('users/' + userUID + '/foodplan/');
-    readprescription.once().then((DataSnapshot snapshot){
+    final readFood = databaseReference.child('users/' + userUID + '/foodplan/');
+    readFood.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       print("temp");
       print(temp);

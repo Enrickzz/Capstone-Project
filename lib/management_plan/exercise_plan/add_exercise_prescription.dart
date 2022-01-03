@@ -17,8 +17,9 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_exercise_prescription extends StatefulWidget {
-  final List<Medication_Prescription> thislist;
-  add_exercise_prescription({this.thislist});
+  final List<ExPlan> thislist;
+  String userUID;
+  add_exercise_prescription({this.thislist, this.userUID});
   @override
   _addExercisePrescriptionState createState() => _addExercisePrescriptionState();
 }
@@ -27,39 +28,19 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  DateTime prescriptionDate;
-  bool isDateSelected= false;
   DateFormat format = new DateFormat("MM/dd/yyyy");
-  DateFormat timeformat = new DateFormat("hh:mm");
-  var startDate = TextEditingController();
-  var endDate = TextEditingController();
-  String generic_name = "";
-  String branded_name = "";
-  String startdate = "";
-  String enddate = "";
-  double dosage = 0;
-  String intake_time = "";
-  String special_instruction = "";
-  String prescription_unit = "mL";
-  int count = 0;
-  List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
-  String valueChooseInterval;
-  List<String> listItemSymptoms = <String>[
-    '1', '2', '3','4'
-  ];
-  double _currentSliderValue = 1;
-  List <bool> isSelected = [true, false, false, false, false];
-  int quantity = 1;
-
+  int count = 1;
+  List<ExPlan> exercise_list = new List<ExPlan>();
+  int frequency = 1;
   DateTimeRange dateRange;
-
-  // added by borj
-  List<String> listFoodTime = <String>[
-    'Breakfast', 'Lunch','Merienda', 'Dinner'
-
-  ];
-  String valueChooseFoodTime;
-
+  String startdate;
+  String enddate;
+  String purpose = "";
+  String type = "";
+  String intensity = "";
+  String important_notes = "";
+  String prescribedBy = "";
+  DateTime now =  DateTime.now();
 
   String getFrom(){
     if(dateRange == null){
@@ -152,9 +133,9 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           fontSize: defaultFontSize),
                       hintText: "Purpose of plan",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Generic Name' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Purpose Field' : null,
                     onChanged: (val){
-                      setState(() => generic_name = val);
+                      setState(() => purpose = val);
                     },
                   ),
                   SizedBox(height: 8),
@@ -176,9 +157,9 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           fontSize: defaultFontSize),
                       hintText: "Type of workout",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Generic Name' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Type of Workout' : null,
                     onChanged: (val){
-                      setState(() => generic_name = val);
+                      setState(() => type = val);
                     },
                   ),
 
@@ -201,9 +182,9 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           fontSize: defaultFontSize),
                       hintText: "Intensity of workout",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Brand Name' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Intensity of workout' : null,
                     onChanged: (val){
-                      setState(() => branded_name = val);
+                      setState(() => intensity = val);
                     },
                   ),
                   SizedBox(height: 8.0),
@@ -225,10 +206,10 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                             children: [
                               Radio(
                                 value: 1,
-                                groupValue: quantity,
+                                groupValue: frequency,
                                 onChanged: (value){
                                   setState(() {
-                                    this.quantity = value;
+                                    this.frequency = value;
                                   });
                                 },
                               ),
@@ -240,10 +221,10 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                             children: [
                               Radio(
                                 value: 2,
-                                groupValue: quantity,
+                                groupValue: frequency,
                                 onChanged: (value){
                                   setState(() {
-                                    this.quantity = value;
+                                    this.frequency = value;
                                   });
                                 },
                               ),
@@ -255,10 +236,10 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                             children: [
                               Radio(
                                 value: 3,
-                                groupValue: quantity,
+                                groupValue: frequency,
                                 onChanged: (value){
                                   setState(() {
-                                    this.quantity = value;
+                                    this.frequency = value;
                                   });
                                 },
                               ),
@@ -270,10 +251,10 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                             children: [
                               Radio(
                                 value: 4,
-                                groupValue: quantity,
+                                groupValue: frequency,
                                 onChanged: (value){
                                   setState(() {
-                                    this.quantity = value;
+                                    this.frequency = value;
                                   });
                                 },
                               ),
@@ -306,9 +287,9 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           fontSize: defaultFontSize),
                       hintText: "Important Notes/Assessments",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Special Instructions' : null,
+                    validator: (val) => val.isEmpty ? 'Enter Important Notes' : null,
                     onChanged: (val){
-                      setState(() => special_instruction = val);
+                      setState(() => important_notes = val);
                     },
                   ),
                   SizedBox(height: 24.0),
@@ -335,92 +316,36 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-                            readPrescription.once().then((DataSnapshot datasnapshot) {
+                            String userUID = widget.userUID;
+                            final readFoodPlan = databaseReference.child('users/' + userUID + '/exercise_prescription/');
+                            readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              Medication_Prescription prescription;
+                              print(temp1);
                               if(datasnapshot.value == null){
-                                final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + 0.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit, "prescribedBy": uid});
-                                print("Added Medication Prescription Successfully! " + uid);
+                                final foodplanRef = databaseReference.child('users/' + userUID + '/exercise_prescription/' + count.toString());
+                                foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency.toString(), "intensity": intensity.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                print("Added Food Plan Successfully! " + uid);
                               }
                               else{
-                                // String tempGenericName = "";
-                                // String tempBrandedName = "";
-                                // String tempIntakeTime = "";
-                                // String tempSpecialInstruction = "";
-                                // String tempStartDate = "";
-                                // String tempEndDate = "";
-                                // String tempPrescriptionUnit = "";
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //   switch(i%7){
-                                //     case 0: {
-                                //       tempPrescriptionUnit = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 1: {
-                                //       tempEndDate = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 2: {
-                                //       tempIntakeTime = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 3: {
-                                //       tempBrandedName = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 4: {
-                                //       tempSpecialInstruction = splitFull.last;
-                                //
-                                //     }
-                                //     break;
-                                //     case 5: {
-                                //       tempGenericName = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 6: {
-                                //       tempStartDate = splitFull.last;
-                                //       prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-                                //       prescription_list.add(prescription);
-                                //     }
-                                //     break;
-                                //   }
-                                // }
-                                //
-                                // print("count " + count.toString());
-                                //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-                                // symptoms_list.add(symptom);
-                                // print("symptom list  " + symptoms_list.toString());
-                                getMedicalPrescription();
+                                getExercise();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = prescription_list.length--;
-                                  final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/' + count.toString());
-                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction, "medical_prescription_unit": prescription_unit, "prescribedBy": uid});
-                                  print("Added Medication Prescription Successfully! " + uid);
+                                  count = exercise_list.length--;
+                                  final foodplanRef = databaseReference.child('users/' + userUID + '/exercise_prescription/' + count.toString());
+                                  foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency.toString(), "intensity": intensity.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                  print("Added Exercise Plan Successfully! " + uid);
                                 });
-
                               }
-
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + prescription_list.length.toString());
-                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid));
-                              for(var i=0;i<prescription_list.length/2;i++){
-                                var temp = prescription_list[i];
-                                prescription_list[i] = prescription_list[prescription_list.length-1-i];
-                                prescription_list[prescription_list.length-1-i] = temp;
+                              print("MEDICATION LENGTH: " + exercise_list.length.toString());
+                              exercise_list.add(new ExPlan(purpose: purpose, type: type,frequency: frequency, intensity: intensity, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
+                              for(var i=0;i<exercise_list.length/2;i++){
+                                var temp = exercise_list[i];
+                                exercise_list[i] = exercise_list[exercise_list.length-1-i];
+                                exercise_list[exercise_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, [prescription_list, 1]);
+                              Navigator.pop(context, [exercise_list, 1]);
                             });
 
                           } catch(e) {
@@ -438,14 +363,17 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
 
     );
   }
-  void getMedicalPrescription() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+  void getExercise() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readprescription = databaseReference.child('users/' + userUID + '/exercise_prescription/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print("temp");
+      print(temp);
       temp.forEach((jsonString) {
-        prescription_list.add(Medication_Prescription.fromJson(jsonString));
+        exercise_list.add(ExPlan.fromJson(jsonString));
       });
     });
   }

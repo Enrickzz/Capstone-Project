@@ -38,9 +38,9 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
   String purpose = "";
   String dateCreated = "";
   Users doctor = new Users();
+  List<String> doctor_names = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   bool isPatient = false;
-  List<String> connections = [];
 
   @override
   void initState() {
@@ -123,7 +123,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr." + getDoctor(index),
+                    subtitle:        Text("Planned by: Dr." + doctor_names[index],
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -186,26 +186,36 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
     //     });
     //   }
     // });
-    final readprescription = databaseReference.child('users/' + userUID + '/foodplan/');
-    readprescription.once().then((DataSnapshot snapshot){
+    final readFoodPlan = databaseReference.child('users/' + userUID + '/foodplan/');
+    readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print(temp);
       temp.forEach((jsonString) {
         foodPtemp.add(FoodPlan.fromJson(jsonString));
       });
-    });
-  }
-  /// get doctor name
-  String getDoctor(int index){
-    final readDoctor = databaseReference.child('users/' +
-        foodPtemp[index].prescribedBy
-        + '/personal_info/');
-    readDoctor.once().then((DataSnapshot snapshot){
-      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      if(temp != null){
-        doctor = Users.fromJson(temp);
+      for(int i = 0; i < foodPtemp.length; i++){
+        final readDoctor = databaseReference.child('users/' + foodPtemp[i].prescribedBy + '/personal_info/');
+        readDoctor.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          if(temp != null){
+            doctor = Users.fromJson(temp);
+            doctor_names.add(doctor.lastname);
+            print("lastname doctor " + doctor.lastname);
+            print("length " + doctor_names.length.toString());
+          }
+        });
       }
     });
-    return doctor.lastname;
   }
+  // /// get doctor name
+  // String getDoctor(int index){
+  //   final readDoctor = databaseReference.child('users/' + foodPtemp[index].prescribedBy + '/personal_info/');
+  //   readDoctor.once().then((DataSnapshot snapshot){
+  //     Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+  //     if(temp != null){
+  //       doctor = Users.fromJson(temp);
+  //     }
+  //   });
+  //   print("doctor last name " + doctor.lastname);
+  //   return doctor.lastname;
+  // }
 }
