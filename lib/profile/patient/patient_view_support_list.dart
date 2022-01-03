@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_app/doctor_add_patient.dart';
-import 'package:my_app/profile/doctor_view_patient_profile.dart';
+import 'package:my_app/patient_list/doctor_add_patient.dart';
+import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:my_app/main.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/profile/patient_view_support_system.dart';
+import 'package:my_app/profile/patient/patient_view_support_system.dart';
 
 
 

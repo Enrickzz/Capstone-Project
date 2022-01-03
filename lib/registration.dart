@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
-import 'package:my_app/patient_list.dart';
+import 'package:my_app/patient_list/doctor_patient_list.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'additional_data_collection.dart';

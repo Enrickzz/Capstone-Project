@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/dashboards_as_doctor.dart';
+import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -24,7 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/notifications.dart';
-import 'package:my_app/profile/patient_view_support_system.dart';
+import 'package:my_app/profile/patient/patient_view_support_system.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
 
@@ -32,7 +33,7 @@ import 'package:video_player/video_player.dart';
 
 import 'package:my_app/management_plan/management_plan_doctor_view.dart';
 
-import '../discussion_board/discussion.dart';
+import '../../discussion_board/discussion.dart';
 
 
 
@@ -701,6 +702,18 @@ class _index3State extends State<view_patient_profile>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => discussion()),
+                                  );
+
+                                },
+                              ),
+                              _buildDivider(),
+                              ListTile(
+                                title: Text("Data Inputs (Temporary)"),
+                                trailing: Icon(Icons.keyboard_arrow_right),
+                                onTap:(){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => data_inputs_doctor_view()),
                                   );
 
                                 },
