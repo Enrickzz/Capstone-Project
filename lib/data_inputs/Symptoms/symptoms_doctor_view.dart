@@ -10,6 +10,7 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
+import 'package:my_app/data_inputs/Symptoms/view_specific_symptom_doctor_view.dart';
 import 'package:my_app/data_inputs/Symptoms/view_specific_symptom_patient_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -19,15 +20,15 @@ import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
 import '../../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class symptoms extends StatefulWidget {
+class symptoms_doctor_view extends StatefulWidget {
   final List<Symptom> symptomlist1;
-  symptoms({Key key, this.symptomlist1})
+  symptoms_doctor_view({Key key, this.symptomlist1})
       : super(key: key);
   @override
   _symptomsState createState() => _symptomsState();
 }
 
-class _symptomsState extends State<symptoms> {
+class _symptomsState extends State<symptoms_doctor_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -118,46 +119,20 @@ class _symptomsState extends State<symptoms> {
     double defaultIconSize = 17;
 
     return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF2F3F8),
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-            color: Colors.black
-        ),
-        title: const Text('Symptoms', style: TextStyle(
-            color: Colors.black
-        )),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: add_symptoms(thislist: listtemp),
-                    ),
-                    ),
-                  ).then((value) => setState((){
-                    print("setstate symptoms");
-                    if(value != null){
-                      listtemp = value;
-                    }
-                    print("SYMP LENGTH AFTER SETSTATE  =="  + listtemp.length.toString() );
-                  }));
-                },
-                child: Icon(
-                  Icons.add,
-                ),
-              )
+        key: _scaffoldKey,
+        backgroundColor: const Color(0xFFF2F3F8),
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.black
           ),
-        ],
-      ),
-      body: ListView.builder(
+          title: const Text('Symptoms', style: TextStyle(
+              color: Colors.black
+          )),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+
+        ),
+        body: ListView.builder(
             itemCount: listtemp.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
@@ -191,7 +166,7 @@ class _symptomsState extends State<symptoms> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient()),
+                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsDoctor()),
                       );
                     }
 

@@ -153,7 +153,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
                           color: Colors.grey,
                           fontSize: 14.0,
                         )),
-                    trailing: Text("mm/dd/yyyy" ,
+                    trailing: Text("${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}",
                         style:TextStyle(
                           color: Colors.grey,
                         )),

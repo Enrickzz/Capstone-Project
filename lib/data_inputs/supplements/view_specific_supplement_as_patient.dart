@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,11 +10,11 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
-import 'package:my_app/additional_data_collection.dart';
+import '../../additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 
-import 'package:my_app/dialogs/policy_dialog.dart';
-import 'package:my_app/fitness_app_theme.dart';
+import '../../dialogs/policy_dialog.dart';
+import '../../fitness_app_theme.dart';
 import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
@@ -31,21 +33,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SpecificSymptomViewAsPatient(title: 'Flutter Demo Home Page'),
+      home: SpecificSupplementViewAsPatient(),
     );
   }
 }
 
-class SpecificSymptomViewAsPatient extends StatefulWidget {
-  SpecificSymptomViewAsPatient({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class SpecificSupplementViewAsPatient extends StatefulWidget {
+  SpecificSupplementViewAsPatient({Key key}) : super(key: key);
+  // final String title;
+  // String userUID;
   @override
-  _SpecificSymptomViewAsPatientState createState() => _SpecificSymptomViewAsPatientState();
+  _SpecificSupplementViewAsPatientState createState() => _SpecificSupplementViewAsPatientState();
 }
 
-class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPatient> with SingleTickerProviderStateMixin {
+class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementViewAsPatient> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -54,18 +55,31 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<Medication_Prescription> prestemp = [];
-  final double minScale = 1;
-  final double maxScale = 1.5;
-  bool hasImage = true;
+  Medication_Prescription prescription = new Medication_Prescription();
+  Users doctor = new Users();
+  String generic_name = "";
+  String dosage = "";
+  String unit = "";
+  String frequency = "";
+  String special_instruction = "";
+  String startDate = "";
+  String endDate = "";
+  String prescribedBy = "";
+  String dateCreated = "";
 
 
   @override
   void initState() {
     super.initState();
-
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    // getPrescription();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -80,7 +94,37 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('My Symptom'),
+          actions: [
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    _showMyDialogDelete();
+                    // showModalBottomSheet(context: context,
+                    //   isScrollControlled: true,
+                    //   builder: (context) => SingleChildScrollView(child: Container(
+                    //     padding: EdgeInsets.only(
+                    //         bottom: MediaQuery.of(context).viewInsets.bottom),
+                    //     child: add_supplement_prescription(thislist: supptemp),
+                    //   ),
+                    //   ),
+                    // ).then((value) =>
+                    //     Future.delayed(const Duration(milliseconds: 1500), (){
+                    //       setState((){
+                    //         print("setstate supplement prescription");
+                    //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                    //         if(value != null){
+                    //           supptemp = value[0];
+                    //         }
+                    //       });
+                    //     }));
+                  },
+                  child: Icon(
+                    Icons.delete,
+                  ),
+                )
+            ),
+          ],
         ),
         body:  Scrollbar(
           child: SingleChildScrollView(
@@ -98,7 +142,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Symptom Name here",
+                              child: Text( "Supplement Name",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -110,30 +154,30 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                 highlightColor: Colors.transparent,
                                 borderRadius: BorderRadius.all(Radius.circular(4.0)),
                                 onTap: () {
-                                  showModalBottomSheet(context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => SingleChildScrollView(child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_medication_prescription(thislist: prestemp),
-                                    ),
-                                    ),
-                                  ).then((value) =>
-                                      Future.delayed(const Duration(milliseconds: 1500), (){
-                                        setState((){
-                                          print("setstate medication prescription");
-                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                          if(value != null){
-                                            prestemp = value[0];
-                                          }
-                                        });
-                                      }));
+                                  // showModalBottomSheet(context: context,
+                                  //   isScrollControlled: true,
+                                  //   builder: (context) => SingleChildScrollView(child: Container(
+                                  //     padding: EdgeInsets.only(
+                                  //         bottom: MediaQuery.of(context).viewInsets.bottom),
+                                  //     child: edit_medication_prescription(thislist: prestemp),
+                                  //   ),
+                                  //   ),
+                                  // ).then((value) =>
+                                  //     Future.delayed(const Duration(milliseconds: 1500), (){
+                                  //       setState((){
+                                  //         print("setstate medication prescription");
+                                  //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                                  //         if(value != null){
+                                  //           prestemp = value[0];
+                                  //         }
+                                  //       });
+                                  //     }));
                                 },
                                 // child: Padding(
                                 // padding: const EdgeInsets.only(left: 8),
                                 child: Row(
                                   children: <Widget>[
-                                    Text( "Delete",
+                                    Text( "Edit",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.normal,
@@ -141,6 +185,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
 
                                         )
                                     ),
+
 
                                     // SizedBox(
                                     //   height: 38,
@@ -160,7 +205,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 350,
+                        height: 200,
                         // height: 500, if may contact number and email
                         // margin: EdgeInsets.only(bottom: 50),
                         child: Stack(
@@ -188,28 +233,32 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                       child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text("Intensity Level",
+                                            Row(
+                                              children: [
+                                                Text("Dosage",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text(dosage + " " + unit,
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            SizedBox(height: 16),
+                                            Text("How many times a day?",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 color:Color(0xFF363f93),
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put Intensity level here",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Symptom Area",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text("Put here area of symptom",
+                                            Text(frequency,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -218,7 +267,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                Text("Recurring",
+                                                Text("Date Prescribed",
                                                   style: TextStyle(
                                                     fontSize:14,
                                                     color:Color(0xFF363f93),
@@ -227,114 +276,21 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put here morning, afternoon, evening",
+                                            Text(dateCreated,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Symptom Trigger",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text("Put here symptom trigger",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-
-
-
                                           ]
+
                                       ),
                                     ),
                                   ))
                             ]
                         )
                     ),
-                    Visibility(
-                      visible: hasImage,
-                      child: InteractiveViewer(
-                        clipBehavior: Clip.none,
-                        minScale: minScale,
-                        maxScale: maxScale,
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset('assets/images/body.PNG'
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 100,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
 
-
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Symptom manifested on",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text("Put date and time here",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
-                    ),
                   ],
                 ),
 
@@ -346,6 +302,44 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
 
 
   }
+
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to delete this record?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 // Widget buildCopy() => Row(children: [
 //   TextField(controller: controller),
 //   IconButton(
@@ -356,5 +350,33 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
 //   )
 //
 // ],)
-
+//   void getPrescription() {
+//     // final User user = auth.currentUser;
+//     // final uid = user.uid;
+//     var userUID = widget.userUID;
+//     final readprescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/');
+//     readprescription.once().then((DataSnapshot snapshot){
+//       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+//       temp.forEach((jsonString) {
+//         prescription = Medication_Prescription.fromJson(jsonString);
+//         generic_name = prescription.generic_name;
+//         dosage = prescription.dosage.toString();
+//         unit = prescription.prescription_unit.toString();
+//         frequency = prescription.intake_time;
+//         special_instruction = prescription.special_instruction;
+//         startDate = "${prescription.startdate.month}/${prescription.startdate.day}/${prescription.startdate.year}";
+//         endDate = "${prescription.enddate.month}/${prescription.enddate.day}/${prescription.enddate.year}";
+//         dateCreated = "${prescription.datecreated.month}/${prescription.datecreated.day}/${prescription.datecreated.year}";
+//         final readDoctorName = databaseReference.child('users/' + prescription.prescribedBy + '/personal_info/');
+//         readDoctorName.once().then((DataSnapshot snapshot){
+//           Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+//           print(temp2);
+//           doctor = Users.fromJson(temp2);
+//           prescribedBy = doctor.lastname + " " + doctor.firstname;
+//         });
+//
+//       });
+//     });
+//   }
 }
+

@@ -15,7 +15,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../laboratory_results/lab_results.dart';
-import '../../medicine_intake/medication.dart';
+import '../../medicine_intake/medication_patient_view.dart';
 import 'o2_saturation.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 

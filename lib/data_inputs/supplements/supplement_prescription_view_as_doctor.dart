@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/data_inputs/supplements/view_specific_supplement_as_doctor.dart';
+import 'package:my_app/data_inputs/supplements/view_specific_supplement_as_patient.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
@@ -19,15 +21,15 @@ import 'add_supplement_prescription.dart';
 
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class supplement_prescription extends StatefulWidget {
+class supplement_prescription_view_as_doctor extends StatefulWidget {
   final List<Supplement_Prescription> preslist;
   final int pointer;
-  supplement_prescription({Key key, this.preslist, this.pointer}): super(key: key);
+  supplement_prescription_view_as_doctor({Key key, this.preslist, this.pointer}): super(key: key);
   @override
-  _supplement_prescriptionState createState() => _supplement_prescriptionState();
+  _supplement_prescription_view_as_doctorState createState() => _supplement_prescription_view_as_doctorState();
 }
 
-class _supplement_prescriptionState extends State<supplement_prescription> {
+class _supplement_prescription_view_as_doctorState extends State<supplement_prescription_view_as_doctor> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -128,7 +130,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
             color: Colors.black
         ),
         title: const Text('Supplements & Other Medicines', style: TextStyle(
-            color: Colors.black,
+          color: Colors.black,
           fontSize: 16,
         )),
         centerTitle: true,
@@ -136,103 +138,121 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
         actions: [
           Padding(
               padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_supplement_prescription(thislist: supptemp),
-                    ),
-                    ),
-                  ).then((value) =>
-                      Future.delayed(const Duration(milliseconds: 1500), (){
-                        setState((){
-                          print("setstate supplement prescription");
-                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                          if(value != null){
-                            supptemp = value[0];
-                          }
-                        });
-                      }));
-                },
-                child: Icon(
-                  Icons.add,
-                ),
-              )
+
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: supptemp.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                height: 140,
-                child: Stack(
-                    children: [
-                      Positioned (
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                            height: 120,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                    bottomRight: Radius.circular(20)
-                                ),
-                                gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.white.withOpacity(0.7),
-                                      Colors.white
-                                    ]
-                                ),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.grey.withOpacity(0.6),
-                                      offset: Offset(1.1, 1.1),
-                                      blurRadius: 10.0),
-                                ]
-                            )
-                        ),
-                      ),
-                      Positioned(
-                        top: 25,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                  '' + "Supplement Name: " + supptemp[index].supplement_name + " "
-                                      +"\nDosage: "+ supptemp[index].dosage.toString()+ " "
-                                      +"\nunit: "+ supptemp[index].prescription_unit+ " "
-                                      +"\nIntake Time: "+ supptemp[index].intake_time+ " ",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18
-                                  )
-                              ),
+          itemCount: supptemp.length,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) =>Container(
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+            child: Card(
+              child: ListTile(
+                  leading: Icon(Icons.medication_outlined ),
+                  title: Text(supptemp[index].supplement_name ,
+                      style:TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
 
-                            ],
-                          ),
-                        ),
-                      ),
-                    ]
-                )
+                      )),
+                  subtitle:        Text(supptemp[index].dosage.toString() + supptemp[index].prescription_unit,
+                      style:TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14.0,
+                      )),
+                  trailing: Text("mm/dd/yyyy",
+                      style:TextStyle(
+                        color: Colors.grey,
+                      )),
+                  isThreeLine: true,
+                  dense: true,
+                  selected: true,
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SpecificSupplementViewAsDoctor()),
+                    );
+                  }
+
+              ),
+
             ),
-          );
-        },
+          )
       ),
+      // body: ListView.builder(
+      //   itemCount: supptemp.length,
+      //   itemBuilder: (context, index) {
+      //     return GestureDetector(
+      //       child: Container(
+      //           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      //           height: 140,
+      //           child: Stack(
+      //               children: [
+      //                 Positioned (
+      //                   bottom: 0,
+      //                   left: 0,
+      //                   right: 0,
+      //                   child: Container(
+      //                       height: 120,
+      //                       decoration: BoxDecoration(
+      //                           borderRadius: BorderRadius.only(
+      //                               bottomLeft: Radius.circular(20),
+      //                               topLeft: Radius.circular(20),
+      //                               topRight: Radius.circular(20),
+      //                               bottomRight: Radius.circular(20)
+      //                           ),
+      //                           gradient: LinearGradient(
+      //                               begin: Alignment.bottomCenter,
+      //                               end: Alignment.topCenter,
+      //                               colors: [
+      //                                 Colors.white.withOpacity(0.7),
+      //                                 Colors.white
+      //                               ]
+      //                           ),
+      //                           boxShadow: <BoxShadow>[
+      //                             BoxShadow(
+      //                                 color: FitnessAppTheme.grey.withOpacity(0.6),
+      //                                 offset: Offset(1.1, 1.1),
+      //                                 blurRadius: 10.0),
+      //                           ]
+      //                       )
+      //                   ),
+      //                 ),
+      //                 Positioned(
+      //                   top: 25,
+      //                   child: Padding(
+      //                     padding: const EdgeInsets.all(10),
+      //                     child: Row(
+      //                       children: [
+      //                         SizedBox(
+      //                           width: 10,
+      //                         ),
+      //                         Text(
+      //                             '' + "Supplement Name: " + supptemp[index].supplement_name + " "
+      //                                 +"\nDosage: "+ supptemp[index].dosage.toString()+ " "
+      //                                 +"\nunit: "+ supptemp[index].prescription_unit+ " "
+      //                                 +"\nTake "+ supptemp[index].intake_time+ " times a day"
+      //                                 +"\nDate: "+ "mm/dd/yyyy"+ " ",
+      //
+      //                             style: TextStyle(
+      //                                 color: Colors.black,
+      //                                 fontSize: 18
+      //                             )
+      //                         ),
+      //
+      //                       ],
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ]
+      //           )
+      //       ),
+      //     );
+      //   },
+      // ),
     );
   }
   String getDateFormatted (String date){

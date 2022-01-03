@@ -13,7 +13,7 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
-import 'medication.dart';
+import 'medication_patient_view.dart';
 import '../../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_medication extends StatefulWidget {
@@ -366,7 +366,7 @@ class _addMedicationState extends State<add_medication> {
                               Medication medicine;
                               if(datasnapshot.value == null){
                                 final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + 0.toString());
-                                medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
+                                medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                                 print("Added medication Successfully! " + uid);
                               }
                               else{
@@ -428,7 +428,7 @@ class _addMedicationState extends State<add_medication> {
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = medication_list.length;
                                   final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
-                                  medicationRef.set({"medicine_name": medicine_name.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
+                                  medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                                   print("Added Symptom Successfully! " + uid);
                                 });
 
@@ -437,7 +437,7 @@ class _addMedicationState extends State<add_medication> {
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + medication_list.length.toString());
-                              medication_list.add(new Medication(medicine_name: medicine_name, medicine_type: medicine_type, medicine_dosage: medicine_dosage, medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time)));
+                              medication_list.add(new Medication(medicine_name: valueChooseMedicineSupplement, medicine_type: medicine_type, medicine_dosage: medicine_dosage, medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time)));
                               for(var i=0;i<medication_list.length/2;i++){
                                 var temp = medication_list[i];
                                 medication_list[i] = medication_list[medication_list.length-1-i];
