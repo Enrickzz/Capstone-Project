@@ -32,7 +32,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:my_app/lab_results_test_borj.dart';
 import 'package:my_app/medical_history.dart';
-import 'package:my_app/patient_view_support_system.dart';
+import 'package:my_app/profile/patient_view_support_system.dart';
 import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsDoctor.dart';
 import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsPatient.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';

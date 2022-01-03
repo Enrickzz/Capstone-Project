@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/discussion_board/discussion_patient_view.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/profile/patient_view_support_list.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
@@ -25,7 +26,7 @@ import '../discussion_board/discussion.dart';
 import '../fitness_app_theme.dart';
 import '../main.dart';
 import '../notifications.dart';
-import 'package:my_app/patient_view_support_system.dart';
+import 'package:my_app/profile/patient_view_support_system.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
 import 'package:my_app/management_plan/management_plan_patient_view.dart';
@@ -858,7 +859,7 @@ class _index3State extends State<index3>
                           onTap:(){
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => HealthTeam()),
+                              MaterialPageRoute(builder: (context) => SupportSystemList()),
                             );
 
                           },
