@@ -5,8 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
-import 'package:my_app/data_inputs/vitals/body_temperature/body_temperature.dart';
-import 'package:my_app/data_inputs/vitals/oxygen_saturation/o2_saturation.dart';
+import 'package:my_app/data_inputs/vitals/body_temperature/body_temperature_patient_view.dart';
+import 'package:my_app/data_inputs/vitals/oxygen_saturation/o2_saturation_patient_view.dart';
 import 'package:my_app/data_inputs/vitals/respiratory_rate/respiratory_rate_patient_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -17,8 +17,8 @@ import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../fitness_app_theme.dart';
 import 'blood_cholesterol/blood_cholesterol.dart';
 import 'blood_glucose/blood_glucose_patient_view.dart';
-import 'blood_pressure/blood_pressure.dart';
-import 'heart_rate/heart_rate.dart';
+import 'blood_pressure/blood_pressure_patient_view.dart';
+import 'heart_rate/heart_rate_patient_view.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class vitals extends StatefulWidget {
 

@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure.dart';
+import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
@@ -16,7 +16,7 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../laboratory_results/lab_results.dart';
 import '../../medicine_intake/medication_patient_view.dart';
-import 'body_temperature.dart';
+import 'body_temperature_patient_view.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_body_temperature extends StatefulWidget {

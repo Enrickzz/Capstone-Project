@@ -9,7 +9,7 @@ import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/vitals/blood_glucose/blood_glucose_patient_view.dart';
-import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure.dart';
+import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
