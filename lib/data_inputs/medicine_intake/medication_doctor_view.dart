@@ -9,6 +9,7 @@ import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
+import 'package:my_app/data_inputs/medicine_intake/view_specific_medicine_doctor_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
@@ -153,10 +154,10 @@ class _medicationState extends State<medication_intake_doctor_view> {
                   dense: true,
                   selected: true,
                   onTap: (){
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SpecificMedicineIntakeViewAsDoctor()),
+                    );
                   }
 
               ),

@@ -124,6 +124,32 @@ class _o2_saturationState extends State<o2_saturation> {
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
+          GestureDetector(
+            onTap: () {
+              _showMyDialogDelete();
+              // showModalBottomSheet(context: context,
+              //   isScrollControlled: true,
+              //   builder: (context) => SingleChildScrollView(child: Container(
+              //     padding: EdgeInsets.only(
+              //         bottom: MediaQuery.of(context).viewInsets.bottom),
+              //     child: add_blood_pressure(thislist: bptemp),
+              //   ),
+              //   ),
+              // ).then((value) => setState((){
+              //   print("setstate blood_pressure");
+              //   if(value != null){
+              //     bptemp = value;
+              //     _selected = List<bool>.generate(bptemp.length, (int index) => false);
+              //
+              //   }
+              // }));
+            },
+            child: Icon(
+              Icons.delete,
+            ),
+          ),
+          SizedBox(width: 10),
+
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
@@ -333,5 +359,40 @@ class _o2_saturationState extends State<o2_saturation> {
         oxygentemp.add(Oxygen_Saturation.fromJson(jsonString));
       });
     });
+  }
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to delete these record/s?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
