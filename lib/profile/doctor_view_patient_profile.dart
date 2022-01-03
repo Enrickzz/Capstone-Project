@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/dashboards_as_doctor.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -724,7 +725,10 @@ class _index3State extends State<view_patient_profile>
                           ),
                         ),
                         onPressed: () async {
-
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => dashboards_as_doctor()),
+                          );
                         },
                       ),
                     ),
