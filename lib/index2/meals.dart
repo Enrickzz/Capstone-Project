@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/exrxTEST.dart';
+import 'package:my_app/my_diary/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
@@ -19,11 +20,11 @@ import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../fitness_app_theme.dart';
-import '../main.dart';
-import '../notifications.dart';
-import 'my_diary/meals_list_view.dart';
-import 'my_diary/water_view.dart';
+import '../../fitness_app_theme.dart';
+import '../../main.dart';
+import '../../notifications.dart';
+import '../my_diary/meals_list_view.dart';
+import '../my_diary/water_view.dart';
 
 class meals extends StatefulWidget {
   const meals({Key key, this.animationController}) : super(key: key);
@@ -94,6 +95,7 @@ class _mealsState extends State<meals>
       TitleView(
         titleTxt: 'Meals today',
         subTxt: 'Add more',
+        redirect: 2,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -110,6 +112,19 @@ class _mealsState extends State<meals>
                 curve: Interval((1 / count) * 3, 1.0,
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      TitleView(
+        titleTxt: 'Recommended meals',
+        subTxt: 'See more',
+        redirect: 3,
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
       ),
     );
   }

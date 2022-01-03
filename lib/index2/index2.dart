@@ -1,3 +1,4 @@
+import 'package:basic_utils/basic_utils.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/grid_images.dart';
 import 'package:my_app/models/nutritionixApi.dart';
@@ -8,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
+import 'detailsPage.dart';
 
 class index2 extends StatefulWidget {
   const index2({Key key, this.animationController}) : super(key: key);
@@ -155,110 +157,98 @@ class _index2State extends State<index2>
           ),
         ),
         body: ListView.builder(
-          padding: EdgeInsets.fromLTRB(0, 25, 0, 90),
+          padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
           itemCount: result.length,
           itemBuilder: (context, index){
-            return Container(
-              child: Column(
-                children: [
-                  SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: Column(
-                      children: [
-                        Container(
-                            height: 230,
-                            child: Stack(
-                                children: [
-                                  Positioned(
-                                      top: 35,
-                                      left: 5,
-                                      child: Material(
+            return SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: InkWell(
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DetailsPage(heroTag:(""+result[index].photo.thumb).toString(), foodName: StringUtils.capitalize(result[index].foodName),
+                          calories: result[index].getCalories().round().toString() )
+                  ));
+                },
+                child: Column(
+                  children: [
+                    Container(
+                        height: 150,
+                        child: Stack(
+                            children: [
+                              Positioned(
+                                  top: 25,
+                                  left: 25,
+                                  child: Material(
+                                    child: Container(
+                                        height: 110.0,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                blurRadius: 20.0)],
+                                        )
+                                    ),
 
-                                        child: Container(
-                                            height: 180.0,
-                                            width: 340,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.circular(5.0),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.grey.withOpacity(0.5),
-                                                    blurRadius: 20.0)],
+                                  )),
+                              Positioned(
+                                  top: 10,
+                                  left: 30,
+                                  child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: Colors.grey.withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                                      child: Container(
+                                        height: 110,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                                fit:BoxFit.cover,
+                                                image: NetworkImage(""+result[index].photo.thumb)
                                             )
                                         ),
-
-                                      )),
-                                  Positioned(
-                                      top: 0,
-                                      left: 13,
-                                      child: Card(
-                                          elevation: 10.0,
-                                          shadowColor: Colors.grey.withOpacity(0.5),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(15.0),
-                                          ),
-                                          child: Container(
-                                            height: 200,
-                                            width: 150,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10.0),
-                                                image: DecorationImage(
-                                                    fit:BoxFit.cover,
-                                                    image: NetworkImage(""+result[index].photo.thumb)
-                                                )
-                                            ),
-                                          )
                                       )
-                                  ),
-                                  Positioned(
-                                      top:45,
-                                      left: 175,
-                                      child: Container(
-                                        height: 150,
-                                        width: 160,
-                                        child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(result[index].foodName,
-                                                style: TextStyle(
-                                                    fontSize:18,
-                                                    color:Color(0xFF363f93),
-                                                    fontWeight: FontWeight.bold
-                                                ),),
-                                              Text("Lunch",
-                                                style: TextStyle(
-                                                    fontSize:16,
-                                                    color:Colors.grey,
-                                                    fontWeight: FontWeight.bold
-                                                ),),
-                                              Divider(color: Colors.blue),
-                                              Text("Calories: " + result[index].getCalories().round().toString() + " kcal",
-                                                style: TextStyle(
-                                                  fontSize:16,
-                                                  color:Colors.grey,
-                                                ),),
-                                              Text("Sugar: " + result[index].getSugar().toString()==null?result[index].getSugar().toString():'Sugar: 0',
-                                                style: TextStyle(
-                                                  fontSize:16,
-                                                  color:Colors.grey,
-                                                ),),
-                                              Text("Grams: " + result[index].getGrams() +"g",
-                                                style: TextStyle(
-                                                  fontSize:16,
-                                                  color:Colors.grey,
-                                                ),),
-                                            ]
-                                        ),
-                                      ))
-                                ]
-                            )
-                        ),
-                      ],
+                                  )
+                              ),
+                              Positioned(
+                                  top:35,
+                                  left: 165,
+                                  child: Container(
+                                    height: 150,
+                                    width: 150,
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(StringUtils.capitalize(result[index].foodName),
+                                            style: TextStyle(
+                                                fontSize:16,
+                                                fontWeight: FontWeight.bold
+                                            ),),
+                                          Divider(color: Colors.blue),
+                                          Text("Calories: " + result[index].getCalories().round().toString() + " kcal",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          Text("Grams: " + result[index].getGrams() +"g",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                        ]
+                                    ),
+                                  ))
+                            ]
+                        )
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-
             );
           },
         ) ,

@@ -1,10 +1,15 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/index2/food_list.dart';
+import 'package:my_app/index2/index2.dart';
+import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 import 'package:my_app/my_diary/exercise_screen.dart';
+import 'package:my_app/my_diary/my_exercises.dart';
 
 class TitleView extends StatelessWidget {
   final String titleTxt;
   final String subTxt;
+  final int redirect;
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -12,6 +17,7 @@ class TitleView extends StatelessWidget {
       {Key key,
       this.titleTxt: "",
       this.subTxt: "",
+      this.redirect,
       this.animationController,
       this.animation, Map Function() onTap})
       : super(key: key);
@@ -65,11 +71,28 @@ class TitleView extends StatelessWidget {
                                 ),
                               ),
                               onTap: (){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ExerciseScreen(animationController: animationController)),
-                                );
+
+                                if (redirect == 1) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ExerciseScreen(animationController: animationController)),
+                                  );
+                                } else if (redirect == 2) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => index2(animationController: animationController)),
+                                  );
+                                }
+                                else if (redirect == 3) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => food_prescription_patient_view()),
+                                  );
+                                }
+
                               },
                             ),
                             SizedBox(

@@ -39,7 +39,7 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 import 'package:my_app/doctor_add_patient.dart';
 import 'package:my_app/patient_list.dart';
 
-import 'my_meals.dart';
+import 'index2/my_meals.dart';
 
 
 
