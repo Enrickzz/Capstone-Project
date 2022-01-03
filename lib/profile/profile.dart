@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/discussion_board/discussion_patient_view.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -869,7 +870,7 @@ class _index3State extends State<index3>
                           onTap:(){
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => discussion()),
+                              MaterialPageRoute(builder: (context) => discussion_patient_view()),
                             );
 
                           },

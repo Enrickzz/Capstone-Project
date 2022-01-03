@@ -1,4 +1,5 @@
 import 'package:my_app/discussion_board/create_post.dart';
+import 'package:my_app/discussion_board/specific_post_patient_view.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -21,15 +22,15 @@ import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
 
-class discussion extends StatefulWidget {
+class discussion_patient_view extends StatefulWidget {
   @override
-  _discussionState createState() => _discussionState();
+  _discussionPatientViewState createState() => _discussionPatientViewState();
 }
 
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
-class _discussionState extends State<discussion>
+class _discussionPatientViewState extends State<discussion_patient_view>
     with TickerProviderStateMixin {
 
   String search="";
@@ -115,32 +116,7 @@ class _discussionState extends State<discussion>
                     )),
               )
           ),
-          actions: [
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(context: context,
-                        isScrollControlled: true,
-                        builder: (context) => SingleChildScrollView(child: Container(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          // child: add_medication(thislist: medtemp),
-                          child: create_post(),
-                        ),
-                        ),
-                      ).then((value) =>
-                          Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
-                          }));
-                    },
-                    child: Icon(
-                      Icons.add,
-                    )
-                )
-            ),
-          ],
+
         ),
         body:  Scrollbar(
           child: SingleChildScrollView(
@@ -204,133 +180,132 @@ class _discussionState extends State<discussion>
                   child: Column(
                     children: <Widget>[
                       ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => specific_post()
-                                    )
-                                );
-                              },
-                              child: Container(
-                                height: 180,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    boxShadow: [BoxShadow(
-                                        color: Colors.black26.withOpacity(0.05),
-                                        offset: Offset(0.0,6.0),
-                                        blurRadius: 10.0,
-                                        spreadRadius: 0.10
-                                    )]
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(15.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Container(
-                                        height: 70,
-                                        child: Row(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => specific_post_patient_view()
+                                      )
+                                  );
+                                },
+                                child: Container(
+                                  height: 180,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [BoxShadow(
+                                          color: Colors.black26.withOpacity(0.05),
+                                          offset: Offset(0.0,6.0),
+                                          blurRadius: 10.0,
+                                          spreadRadius: 0.10
+                                      )]
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(15.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Container(
+                                          height: 70,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Row(
+                                                children: <Widget>[
+                                                  CircleAvatar(
+                                                    backgroundImage: AssetImage('assets/images/heart_icon.png'),
+                                                    radius: 22,
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: <Widget>[
+                                                        Container(
+                                                          width: MediaQuery.of(context).size.width * 0.65,
+                                                          child: Text(
+                                                            "Painful Heart. What to do?",
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 2.0),
+                                                        Row(
+                                                          children: <Widget>[
+                                                            Text(
+                                                              'Dr.' + "Johnny Sins",
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 15),
+                                                            Text(
+                                                              "12/29/2021 11:09",
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                              ),
+                                                            )
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+
+                                          child: Center(
+                                            child: Text(
+                                              "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! 121321 asd asd asd asd asd asddddddddddddd   sd asd asda d asd a das da ad asd asd asd asd asd asd asd as das dasd asd a dasd asd  asd asdasdad asd",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 3,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Row(
                                               children: <Widget>[
-                                                CircleAvatar(
-                                                  backgroundImage: AssetImage('assets/images/heart_icon.png'),
-                                                  radius: 22,
+                                                Icon(
+                                                  Icons.reply,
+                                                  size: 14,
                                                 ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 8.0),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: <Widget>[
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width * 0.65,
-                                                        child: Text(
-                                                          "Painful Heart. What to do?",
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 2.0),
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Text(
-                                                            'Dr.' + "Johnny Sins",
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                            ),
-                                                          ),
-
-                                                          SizedBox(width: 15),
-                                                          Text(
-                                                            "12/29/2021 11:09",
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                            ),
-                                                          )
-                                                        ],
-                                                      )
-                                                    ],
+                                                SizedBox(width: 4.0),
+                                                Text(
+                                                  "4 replies",
+                                                  style: TextStyle(
+                                                    fontSize: 12,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                      Container(
-
-                                        child: Center(
-                                          child: Text(
-                                            "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! 121321 asd asd asd asd asd asddddddddddddd   sd asd asda d asd a das da ad asd asd asd asd asd asd asd as das dasd asd a dasd asd  asd asdasdad asd",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 3,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.reply,
-                                                size: 14,
-                                              ),
-                                              SizedBox(width: 4.0),
-                                              Text(
-                                                "4 replies",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
+                            );
+                          }
                       ),
                     ],
                   ),

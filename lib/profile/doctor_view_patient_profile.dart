@@ -668,21 +668,7 @@ class _index3State extends State<view_patient_profile>
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           child: Column(
                             children: <Widget>[
-                              ListTile(
-                                title: Text("Personal Information"),
-                                trailing: Icon(Icons.keyboard_arrow_right),
-                                onTap:(){
 
-                                },
-                              ),
-                              _buildDivider(),
-                              ListTile(
-                                title: Text("Medical History"),
-                                trailing: Icon(Icons.keyboard_arrow_right),
-                                onTap:(){
-
-                                },
-                              ),
                               _buildDivider(),
                               // ListTile(
                               //   title: Text("Doctors' Prescriptions"),
