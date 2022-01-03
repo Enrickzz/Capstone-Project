@@ -40,6 +40,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
   Users doctor = new Users();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   bool isPatient = false;
+  List<String> connections = [];
 
   @override
   void initState() {
@@ -139,7 +140,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsDoctor()),
+                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsDoctor(userUID: widget.userUID, index: index)),
                       );
                     }
 
@@ -168,18 +169,23 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
     final User user = auth.currentUser;
     final uid = user.uid;
     String userUID = widget.userUID;
-    /// read connection
-    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
-    readConnection.once().then((DataSnapshot datasnapshot){
-      List<String> connections = datasnapshot.value;
-      if(connections != null){
-        for(int i = 0; i < connections.length; i++){
-          if(connections[i] == userUID){
-            isPatient = true;
-          }
-        }
-      }
-    });
+    // /// read connection
+    // final readConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
+    // readConnection.once().then((DataSnapshot datasnapshot){
+    //   List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+    //   temp.forEach((jsonString) {
+    //     connections.add(jsonString);
+    //   });
+    //   for(int i = 0; i < connections.length; i++){
+    //     final readprescription = databaseReference.child('users/' + connections[i] + '/foodplan/');
+    //     readprescription.once().then((DataSnapshot snapshot) {
+    //       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    //         temp.forEach((jsonString) {
+    //           foodPtemp.add(FoodPlan.fromJson(jsonString));
+    //         });
+    //     });
+    //   }
+    // });
     final readprescription = databaseReference.child('users/' + userUID + '/foodplan/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -189,6 +195,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
       });
     });
   }
+  /// get doctor name
   String getDoctor(int index){
     final readDoctor = databaseReference.child('users/' +
         foodPtemp[index].prescribedBy

@@ -39,9 +39,10 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificPrescriptionViewAsDoctor extends StatefulWidget {
-  SpecificPrescriptionViewAsDoctor({Key key, this.title, this.userUID}) : super(key: key);
+  SpecificPrescriptionViewAsDoctor({Key key, this.title, this.userUID, this.index}) : super(key: key);
   final String title;
   String userUID;
+  int index;
   @override
   _SpecificPrescriptionViewAsDoctorState createState() => _SpecificPrescriptionViewAsDoctorState();
 }
@@ -377,27 +378,27 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
     // final uid = user.uid;
     var userUID = widget.userUID;
     final readprescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/');
+    int index = widget.index;
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        prescription = Medication_Prescription.fromJson(jsonString);
-        generic_name = prescription.generic_name;
-        dosage = prescription.dosage.toString();
-        unit = prescription.prescription_unit.toString();
-        frequency = prescription.intake_time;
-        special_instruction = prescription.special_instruction;
-        startDate = "${prescription.startdate.month}/${prescription.startdate.day}/${prescription.startdate.year}";
-        endDate = "${prescription.enddate.month}/${prescription.enddate.day}/${prescription.enddate.year}";
-        dateCreated = "${prescription.datecreated.month}/${prescription.datecreated.day}/${prescription.datecreated.year}";
-        final readDoctorName = databaseReference.child('users/' + prescription.prescribedBy + '/personal_info/');
-        readDoctorName.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-          print(temp2);
-          doctor = Users.fromJson(temp2);
-          prescribedBy = doctor.lastname + " " + doctor.firstname;
-        });
-
+        prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
+      final readDoctorName = databaseReference.child('users/' + prestemp[index].prescribedBy + '/personal_info/');
+      readDoctorName.once().then((DataSnapshot snapshot){
+        Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        print(temp2);
+        doctor = Users.fromJson(temp2);
+        prescribedBy = doctor.lastname + " " + doctor.firstname;
+      });
+        generic_name = prestemp[index].generic_name;
+        dosage = prestemp[index].dosage.toString();
+        unit = prestemp[index].prescription_unit.toString();
+        frequency = prestemp[index].intake_time;
+        special_instruction = prestemp[index].special_instruction;
+        startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
+        endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
+        dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
     });
   }
 }
