@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,10 +39,10 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificVitalsPrescriptionViewAsPatient extends StatefulWidget {
-  SpecificVitalsPrescriptionViewAsPatient({Key key, this.title}) : super(key: key);
+  SpecificVitalsPrescriptionViewAsPatient({Key key, this.title, this.index}) : super(key: key);
 
   final String title;
-
+  int index;
   @override
   _SpecificVitalsPrescriptionViewAsPatientState createState() => _SpecificVitalsPrescriptionViewAsPatientState();
 }
@@ -53,16 +55,29 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Medication_Prescription> prestemp = [];
+  List<Vitals> templist = [];
+  Users doctor = new Users();
+  String purpose = "";
+  String type = "";
+  String frequency = "";
+  String important_notes = "";
+  String prescribedBy = "";
+  String dateCreated = "";
 
 
   @override
   void initState() {
     super.initState();
-
+    templist.clear();
+    getFoodplan();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -144,7 +159,7 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put purpose here",
+                                            Text(purpose,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -162,7 +177,7 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put which vital here",
+                                            Text(type,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -176,7 +191,7 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Record " + "X" + " times a day.",
+                                            Text("Record " + frequency + " times a day.",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -190,7 +205,7 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put important notes/assessments here",
+                                            Text(important_notes,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -241,7 +256,7 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Dr." + "Put doctor name here",
+                                            Text("Dr." + prescribedBy,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -259,7 +274,7 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put date when medicine was prescribed",
+                                            Text(dateCreated,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -294,5 +309,28 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
 //   )
 //
 // ],)
-
+  void getFoodplan() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readVitals = databaseReference.child('users/' + uid + '/vitals_plan/');
+    int index = widget.index;
+    readVitals.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        templist.add(Vitals.fromJson(jsonString));
+      });
+      final readDoctorName = databaseReference.child('users/' + templist[index].prescribedBy + '/personal_info/');
+      readDoctorName.once().then((DataSnapshot snapshot){
+        Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        print(temp2);
+        doctor = Users.fromJson(temp2);
+        prescribedBy = doctor.lastname + " " + doctor.firstname;
+      });
+      purpose = templist[index].purpose;
+      type = templist[index].type;
+      frequency = templist[index].frequency.toString();
+      important_notes = templist[index].important_notes ;
+      dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
+    });
+  }
 }

@@ -76,6 +76,11 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
     controller.addListener(() {
       setState(() {});
     });
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
+    });
   }
 
   @override

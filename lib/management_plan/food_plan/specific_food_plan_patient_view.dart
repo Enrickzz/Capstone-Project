@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,10 +39,10 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificFoodPrescriptionViewAsPatient extends StatefulWidget {
-  SpecificFoodPrescriptionViewAsPatient({Key key, this.title}) : super(key: key);
+  SpecificFoodPrescriptionViewAsPatient({Key key, this.title, this.index}) : super(key: key);
 
   final String title;
-
+  int index;
   @override
   _SpecificFoodPrescriptionViewAsDoctorState createState() => _SpecificFoodPrescriptionViewAsDoctorState();
 }
@@ -53,16 +55,28 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Medication_Prescription> prestemp = [];
-
+  List<FoodPlan> templist = [];
+  Users doctor = new Users();
+  String purpose = "";
+  String food = "";
+  String consumption_time = "";
+  String important_notes = "";
+  String prescribedBy = "";
+  String dateCreated = "";
 
   @override
   void initState() {
     super.initState();
-
+    templist.clear();
+    getFoodplan();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -144,7 +158,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put purpose here",
+                                            Text(purpose,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -162,7 +176,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put food here",
+                                            Text(food,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -176,7 +190,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put which meal time/s",
+                                            Text(consumption_time,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -190,7 +204,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put important notes/assessments here",
+                                            Text(important_notes,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -241,7 +255,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Dr." + "Put doctor name here",
+                                            Text("Dr." + prescribedBy,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -259,7 +273,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put date when medicine was prescribed",
+                                            Text(dateCreated,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -295,4 +309,28 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
 //
 // ],)
 
+  void getFoodplan() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodPlan = databaseReference.child('users/' + uid + '/foodplan/');
+    int index = widget.index;
+    readFoodPlan.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        templist.add(FoodPlan.fromJson(jsonString));
+      });
+      final readDoctorName = databaseReference.child('users/' + templist[index].prescribedBy + '/personal_info/');
+      readDoctorName.once().then((DataSnapshot snapshot){
+        Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        print(temp2);
+        doctor = Users.fromJson(temp2);
+        prescribedBy = doctor.lastname + " " + doctor.firstname;
+      });
+      purpose = templist[index].purpose;
+      food = templist[index].food;
+      consumption_time = templist[index].consumption_time ;
+      important_notes = templist[index].important_notes ;
+      dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
+    });
+  }
 }

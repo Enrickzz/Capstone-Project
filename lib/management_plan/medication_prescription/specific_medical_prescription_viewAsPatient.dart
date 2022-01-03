@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,10 +39,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificPrescriptionViewAsPatient extends StatefulWidget {
-  SpecificPrescriptionViewAsPatient({Key key, this.title}) : super(key: key);
-
+  SpecificPrescriptionViewAsPatient({Key key, this.title, this.index}) : super(key: key);
   final String title;
-
+  int index;
   @override
   _SpecificPrescriptionViewAsPatientState createState() => _SpecificPrescriptionViewAsPatientState();
 }
@@ -54,6 +55,17 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<Medication_Prescription> prestemp = [];
+  Medication_Prescription prescription = new Medication_Prescription();
+  Users doctor = new Users();
+  String generic_name = "";
+  String dosage = "";
+  String unit = "";
+  String frequency = "";
+  String special_instruction = "";
+  String startDate = "";
+  String endDate = "";
+  String prescribedBy = "";
+  String dateCreated = "";
 
 
   @override
@@ -63,6 +75,12 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    getPrescription();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -144,7 +162,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put Generic Name Here",
+                                            Text(generic_name,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -162,7 +180,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put Dosage Here",
+                                            Text(dosage + " " + unit,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -176,7 +194,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put how many times a day here",
+                                            Text(frequency,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -190,7 +208,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put special instructions here",
+                                            Text(special_instruction,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -204,7 +222,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put start date here" + ' - ' + 'Put end date here',
+                                            Text(startDate + ' - ' + endDate,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -254,7 +272,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Dr." + "Put doctor name here",
+                                            Text("Dr." + prescribedBy,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -272,7 +290,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put date when medicine was prescribed",
+                                            Text(dateCreated,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -311,5 +329,31 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
 //   )
 //
 // ],)
-
+  void getPrescription() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+    int index = widget.index;
+    readprescription.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        prestemp.add(Medication_Prescription.fromJson(jsonString));
+      });
+      final readDoctorName = databaseReference.child('users/' + prestemp[index].prescribedBy + '/personal_info/');
+      readDoctorName.once().then((DataSnapshot snapshot){
+        Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        print(temp2);
+        doctor = Users.fromJson(temp2);
+        prescribedBy = doctor.lastname + " " + doctor.firstname;
+      });
+      generic_name = prestemp[index].generic_name;
+      dosage = prestemp[index].dosage.toString();
+      unit = prestemp[index].prescription_unit.toString();
+      frequency = prestemp[index].intake_time;
+      special_instruction = prestemp[index].special_instruction;
+      startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
+      endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
+      dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
+    });
+  }
 }

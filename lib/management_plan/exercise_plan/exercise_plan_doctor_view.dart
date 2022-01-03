@@ -43,6 +43,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
   String purpose = "";
   String dateCreated = "";
   Users doctor = new Users();
+  List<String> doctor_names = [];
 
   @override
   void initState() {
@@ -125,7 +126,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr." + getDoctor(index),
+                    subtitle:        Text("Planned by: Dr." + doctor_names[index],
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -175,23 +176,19 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
     final readExPlan = databaseReference.child('users/' + userUID + '/exercise_prescription/');
     readExPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print(temp);
       temp.forEach((jsonString) {
         extemp.add(ExPlan.fromJson(jsonString));
       });
-    });
-  }
-  /// get doctor name
-  String getDoctor(int index){
-    final readDoctor = databaseReference.child('users/' +
-        extemp[index].prescribedBy
-        + '/personal_info/');
-    readDoctor.once().then((DataSnapshot snapshot){
-      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      if(temp != null){
-        doctor = Users.fromJson(temp);
+      for(int i = 0; i < extemp.length; i++){
+        final readDoctor = databaseReference.child('users/' + extemp[i].prescribedBy + '/personal_info/');
+        readDoctor.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          if(temp != null){
+            doctor = Users.fromJson(temp);
+            doctor_names.add(doctor.lastname);
+          }
+        });
       }
     });
-    return doctor.lastname;
   }
 }

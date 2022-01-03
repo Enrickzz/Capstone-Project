@@ -199,8 +199,6 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
           if(temp != null){
             doctor = Users.fromJson(temp);
             doctor_names.add(doctor.lastname);
-            print("lastname doctor " + doctor.lastname);
-            print("length " + doctor_names.length.toString());
           }
         });
       }

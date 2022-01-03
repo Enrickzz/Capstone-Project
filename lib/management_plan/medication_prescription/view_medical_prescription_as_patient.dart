@@ -34,6 +34,8 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Medication_Prescription> prestemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
+  Users doctor = new Users();
+  List<String> doctor_names = [];
 
   @override
   void initState() {
@@ -41,67 +43,6 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
     final User user = auth.currentUser;
     final uid = user.uid;
     prestemp.clear();
-    // final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-    // String tempGenericName = "";
-    // String tempBrandedName = "";
-    // String tempIntakeTime = "";
-    // String tempSpecialInstruction = "";
-    // String tempStartDate = "";
-    // String tempEndDate = "";
-    // String tempPrescriptionUnit = "";
-    // readPrescription.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Medication_Prescription prescription;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //       switch(i%7){
-    //         case 0: {
-    //           tempPrescriptionUnit = splitFull.last;
-    //         }
-    //         break;
-    //         case 1: {
-    //           tempEndDate = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 2: {
-    //           tempIntakeTime = splitFull.last;
-    //         }
-    //         break;
-    //         case 3: {
-    //           tempBrandedName = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 4: {
-    //           tempSpecialInstruction = splitFull.last;
-    //         }
-    //         break;
-    //         case 5: {
-    //           tempGenericName = splitFull.last;
-    //         }
-    //         break;
-    //         case 6: {
-    //           tempStartDate = splitFull.last;
-    //           prescription = new Medication_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-    //           prestemp.add(prescription);
-    //         }
-    //         break;
-    //       }
-    //
-    //   }
-    //   for(var i=0;i<prestemp.length/2;i++){
-    //     var temp = prestemp[i];
-    //     prestemp[i] = prestemp[prestemp.length-1-i];
-    //     prestemp[prestemp.length-1-i] = temp;
-    //   }
-    // });
     getMedicalPrescription();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
@@ -148,7 +89,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Prescribed by: Dr." ,
+                    subtitle:        Text("Prescribed by: Dr." + doctor_names[index],
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -166,7 +107,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsPatient()),
+                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsPatient(index: index)),
                       );
                     }
 
@@ -200,6 +141,16 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
       temp.forEach((jsonString) {
         prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
+      for(int i = 0; i < prestemp.length; i++){
+        final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
+        readDoctor.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          if(temp != null){
+            doctor = Users.fromJson(temp);
+            doctor_names.add(doctor.lastname);
+          }
+        });
+      }
     });
   }
 }

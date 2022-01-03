@@ -74,6 +74,11 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
     controller.addListener(() {
       setState(() {});
     });
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
+    });
   }
 
   @override

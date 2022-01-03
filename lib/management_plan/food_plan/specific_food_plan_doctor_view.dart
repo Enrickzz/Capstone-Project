@@ -73,6 +73,11 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
     controller.addListener(() {
       setState(() {});
     });
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
+    });
   }
 
   @override

@@ -43,6 +43,7 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
   String purpose = "";
   String dateCreated = "";
   Users doctor = new Users();
+  List<String> doctor_names = [];
 
 
   @override
@@ -126,7 +127,7 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr." + getDoctor(index),
+                    subtitle:        Text("Planned by: Dr." + doctor_names[index],
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -178,19 +179,17 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
       temp.forEach((jsonString) {
         vitalstemp.add(Vitals.fromJson(jsonString));
       });
-    });
-  }
-  /// get doctor name
-  String getDoctor(int index){
-    final readDoctor = databaseReference.child('users/' +
-        vitalstemp[index].prescribedBy
-        + '/personal_info/');
-    readDoctor.once().then((DataSnapshot snapshot){
-      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      if(temp != null){
-        doctor = Users.fromJson(temp);
+      for(int i = 0; i < vitalstemp.length; i++){
+        final readDoctor = databaseReference.child('users/' + vitalstemp[i].prescribedBy + '/personal_info/');
+        readDoctor.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          if(temp != null){
+            doctor = Users.fromJson(temp);
+            doctor_names.add(doctor.lastname);
+          }
+        });
       }
     });
-    return doctor.lastname;
   }
+
 }

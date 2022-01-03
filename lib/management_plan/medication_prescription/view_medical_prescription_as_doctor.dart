@@ -37,7 +37,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   int count = 1;
   Users doctor = new Users();
-  String doctor_name = "";
+  List<String> doctor_names = [];
 
   @override
   void initState() {
@@ -118,7 +118,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Prescribed by: Dr." + getDoctor(index),
+                    subtitle:        Text("Prescribed by: Dr." + doctor_names[index],
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -168,20 +168,18 @@ class _medication_prescriptionState extends State<medication_prescription> {
       temp.forEach((jsonString) {
         prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
-    });
-  }
-
-  String getDoctor(int index){
-    final readDoctor = databaseReference.child('users/' +
-        prestemp[index].prescribedBy
-        + '/personal_info/');
-    readDoctor.once().then((DataSnapshot snapshot){
-      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      if(temp != null){
-        doctor = Users.fromJson(temp);
-        doctor_name = doctor.lastname;
+      for(int i = 0; i < prestemp.length; i++){
+        final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
+        readDoctor.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          if(temp != null){
+            doctor = Users.fromJson(temp);
+            doctor_names.add(doctor.lastname);
+            print("lastname doctor " + doctor.lastname);
+            print("length " + doctor_names.length.toString());
+          }
+        });
       }
     });
-    return doctor_name;
   }
 }
