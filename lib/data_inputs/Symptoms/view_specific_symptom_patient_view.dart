@@ -17,6 +17,8 @@ import 'package:my_app/management_plan/medication_prescription/add_medication_pr
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
 
+import 'edit_symptoms.dart';
+
 
 
 
@@ -53,7 +55,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Medication_Prescription> prestemp = [];
+  List<Symptom> prestemp = [];
   final double minScale = 1;
   final double maxScale = 1.5;
   bool hasImage = true;
@@ -146,7 +148,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                     builder: (context) => SingleChildScrollView(child: Container(
                                       padding: EdgeInsets.only(
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_medication_prescription(thislist: prestemp),
+                                      child: edit_symptoms(thislist: prestemp),
                                     ),
                                     ),
                                   ).then((value) =>
