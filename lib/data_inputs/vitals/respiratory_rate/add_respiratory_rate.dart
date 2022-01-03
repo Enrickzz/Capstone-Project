@@ -8,15 +8,15 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/vitals/blood_pressure.dart';
-import 'package:my_app/data_inputs/vitals/respiratory_rate.dart';
+import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure.dart';
+import 'package:my_app/data_inputs/vitals/respiratory_rate/respiratory_rate.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../lab_results.dart';
-import '../medication.dart';
+import '../../laboratory_results/lab_results.dart';
+import '../../medicine_intake/medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_respiratory_rate extends StatefulWidget {

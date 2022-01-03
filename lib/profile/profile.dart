@@ -864,18 +864,18 @@ class _index3State extends State<index3>
 
                           },
                         ),
-                        _buildDivider(),
-                        ListTile(
-                          title: Text("Doctors' Discussion Board"),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap:(){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => discussion_patient_view()),
-                            );
-
-                          },
-                        ),
+                        // _buildDivider(),
+                        // ListTile(
+                        //   title: Text("Doctors' Discussion Board"),
+                        //   trailing: Icon(Icons.keyboard_arrow_right),
+                        //   onTap:(){
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(builder: (context) => discussion_patient_view()),
+                        //     );
+                        //
+                        //   },
+                        // ),
                       ],
                     ),
                   ),

@@ -12,9 +12,9 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import '../fitness_app_theme.dart';
-import 'add_medication.dart';
-import '../management_plan/medication_prescription/add_medication_prescription.dart';
+import '../../fitness_app_theme.dart';
+import '../medicine_intake/add_medication.dart';
+import '../../management_plan/medication_prescription/add_medication_prescription.dart';
 import 'add_supplement_prescription.dart';
 
 

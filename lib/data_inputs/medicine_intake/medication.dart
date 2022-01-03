@@ -11,88 +11,88 @@ import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
-import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../fitness_app_theme.dart';
-import 'add_blood_glucose.dart';
-import 'add_blood_pressure.dart';
-import '../add_lab_results.dart';
-import '../add_medication.dart';
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class blood_glucose extends StatefulWidget {
-  final List<Blood_Glucose> bglist;
-  blood_glucose({Key key, this.bglist}): super(key: key);
+import 'add_medication.dart';
+import '../../fitness_app_theme.dart';
+import '../../models/users.dart';
+//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
+class medication extends StatefulWidget {
+  final List<Medication> medlist;
+  medication({Key key, this.medlist}): super(key: key);
   @override
-  _blood_glucoseState createState() => _blood_glucoseState();
+  _medicationState createState() => _medicationState();
 }
 
-class _blood_glucoseState extends State<blood_glucose> {
+class _medicationState extends State<medication> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Blood_Glucose> bgtemp = [];
+  TimeOfDay time;
+  List<Medication> medtemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
 
   @override
   void initState() {
     super.initState();
-      bgtemp.clear();
-      getBloodGlucose();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
-    // String tempGlucose = "";
-    // String tempStatus = "";
-    // String tempGlucoseStatus = "";
-    // String tempGlucoseDate = "";
-    // String tempGlucoseTime = "";
-    // readMedication.once().then((DataSnapshot datasnapshot) {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
+    String tempMedicineName = "";
+    String tempMedicineType = "";
+    String tempMedicineDate = "";
+    double tempMedicineDosage = 0;
+    String tempMedicineTime = "";
+    medtemp.clear();
+    getMedication();
 
+    // readMedication.once().then((DataSnapshot datasnapshot) {
+    //   medtemp.clear();
     //   String temp1 = datasnapshot.value.toString();
-    //   print("temp1 " + temp1);
+    //   print(temp1);
     //   List<String> temp = temp1.split(',');
-    //   Blood_Glucose bloodGlucose;
+    //   Medication medicine;
     //   for(var i = 0; i < temp.length; i++) {
     //     String full = temp[i].replaceAll("{", "")
     //         .replaceAll("}", "")
     //         .replaceAll("[", "")
     //         .replaceAll("]", "");
     //     List<String> splitFull = full.split(" ");
-    //     switch(i%5){
-    //       case 0: {
-    //         tempGlucose = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         tempGlucoseTime = splitFull.last;
-    //       }
-    //       break;
-    //       case 2: {
-    //         tempStatus = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         tempGlucoseStatus = splitFull.last;
-    //       }
-    //       break;
-    //       case 4: {
-    //         tempGlucoseDate = splitFull.last;
-    //         bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), bloodGlucose_unit: tempStatus, bloodGlucose_status: tempGlucoseStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
-    //         bgtemp.add(bloodGlucose);
-    //       }
-    //       break;
-    //     }
     //
+    //       switch(i%5){
+    //         case 0: {
+    //           tempMedicineType = splitFull.last;
+    //         }
+    //         break;
+    //         case 1: {
+    //           tempMedicineDosage = double.parse(splitFull.last);
+    //         }
+    //         break;
+    //         case 2: {
+    //           tempMedicineDate = splitFull.last;
+    //
+    //         }
+    //         break;
+    //         case 3: {
+    //           tempMedicineName = splitFull.last;
+    //
+    //         }
+    //         break;
+    //         case 4: {
+    //           tempMedicineTime = splitFull.last;
+    //           medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate), medicine_time: timeformat.parse(tempMedicineTime));
+    //           medtemp.add(medicine);
+    //         }
+    //         break;
+    //       }
     //   }
-    //   for(var i=0;i<bgtemp.length/2;i++){
-    //     var temp = bgtemp[i];
-    //     bgtemp[i] = bgtemp[bgtemp.length-1-i];
-    //     bgtemp[bgtemp.length-1-i] = temp;
+    //   for(var i=0;i<medtemp.length/2;i++){
+    //     var temp = medtemp[i];
+    //     medtemp[i] = medtemp[medtemp.length-1-i];
+    //     medtemp[medtemp.length-1-i] = temp;
     //   }
     // });
     Future.delayed(const Duration(milliseconds: 1500), (){
@@ -105,6 +105,7 @@ class _blood_glucoseState extends State<blood_glucose> {
   @override
   Widget build(BuildContext context) {
 
+
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -116,7 +117,7 @@ class _blood_glucoseState extends State<blood_glucose> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Blood Glucose Level', style: TextStyle(
+        title: const Text('Medication Intake', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -131,26 +132,30 @@ class _blood_glucoseState extends State<blood_glucose> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_blood_glucose(thislist: bgtemp),
+                      child: add_medication(thislist: medtemp),
                     ),
                     ),
-                  ).then((value) => setState((){
-                    print("setstate symptoms");
-                    if(value != null){
-                      bgtemp = value;
-                    }
-                    print("BGTEMP LENGTH AFTER SETSTATE  =="  + bgtemp.length.toString() );
-                  }));
+                  ).then((value) =>
+                    Future.delayed(const Duration(milliseconds: 1500), (){
+                      setState((){
+                        print("setstate medicines");
+                        if(value != null){
+                          medtemp = value;
+                        }
+                        print("medetmp.length == " +medtemp.length.toString());
+                      });
+                    }));
+
                 },
                 child: Icon(
                   Icons.add,
-                ),
+                )
               )
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: bgtemp.length,
+        itemCount: medtemp.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
@@ -194,19 +199,20 @@ class _blood_glucoseState extends State<blood_glucose> {
                           padding: const EdgeInsets.all(10),
                           child: Row(
                             children: [
-
                               SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                  '' + getDateFormatted(bgtemp[index].bloodGlucose_date.toString())+getTimeFormatted(bgtemp[index].bloodGlucose_time.toString())+" \n"
-                                      +"Status: "+bgtemp[index].bloodGlucose_status+
-                                      "\nBlood Glucose: " + bgtemp[index].glucose.toString() + " mg/dL",
+                                  '' + getDateFormatted(medtemp[index].medicine_date.toString()) + getTimeFormatted(medtemp[index].medicine_time.toString())+" "
+                                      + "\nMedicine: " + medtemp[index].medicine_name + " "
+                                      +"\nDosage "+ medtemp[index].medicine_dosage.toString()+ " "
+                                      +"\nType: "+ medtemp[index].medicine_type,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
                                   )
                               ),
+
                             ],
                           ),
                         ),
@@ -217,6 +223,7 @@ class _blood_glucoseState extends State<blood_glucose> {
           );
         },
       ),
+
 
     );
   }
@@ -234,14 +241,14 @@ class _blood_glucoseState extends State<blood_glucose> {
       return "$hours:$min";
     }
   }
-  void getBloodGlucose() {
+  void getMedication() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readBC = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/');
-    readBC.once().then((DataSnapshot snapshot){
+    final readmedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/');
+    readmedication.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        bgtemp.add(Blood_Glucose.fromJson(jsonString));
+        medtemp.add(Medication.fromJson(jsonString));
       });
     });
   }

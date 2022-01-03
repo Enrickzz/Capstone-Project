@@ -15,11 +15,11 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../fitness_app_theme.dart';
-import 'add_blood_pressure.dart';
+import '../../../fitness_app_theme.dart';
+import '../blood_pressure/add_blood_pressure.dart';
 import 'add_heart_rate.dart';
-import '../add_lab_results.dart';
-import '../add_medication.dart';
+import '../../laboratory_results/add_lab_results.dart';
+import '../../medicine_intake/add_medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class heart_rate extends StatefulWidget {

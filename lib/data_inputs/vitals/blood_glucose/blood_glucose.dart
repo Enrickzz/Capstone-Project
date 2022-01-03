@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,85 +14,87 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../fitness_app_theme.dart';
-import 'add_blood_cholesterol.dart';
-import 'add_blood_pressure.dart';
-import 'add_o2_saturation.dart';
-import '../add_lab_results.dart';
-import '../add_medication.dart';
+import '../../../fitness_app_theme.dart';
+import 'add_blood_glucose.dart';
+import '../blood_pressure/add_blood_pressure.dart';
+import '../../laboratory_results/add_lab_results.dart';
+import '../../medicine_intake/add_medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class blood_cholesterol extends StatefulWidget {
-  final List<Blood_Cholesterol> bclist;
-  blood_cholesterol({Key key, this.bclist}): super(key: key);
+class blood_glucose extends StatefulWidget {
+  final List<Blood_Glucose> bglist;
+  blood_glucose({Key key, this.bglist}): super(key: key);
   @override
-  _blood_cholesterolState createState() => _blood_cholesterolState();
+  _blood_glucoseState createState() => _blood_glucoseState();
 }
 
-class _blood_cholesterolState extends State<blood_cholesterol> {
+class _blood_glucoseState extends State<blood_glucose> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Blood_Cholesterol> bctemp = [];
+  List<Blood_Glucose> bgtemp = [];
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
 
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readCholesterol = databaseReference.child('users/' + uid + '/vitals/health_records/blood_cholesterol_list');
-    String tempTotalCholesterol = "";
-    String tempLdlCholesterol = "";
-    String tempHdlCholesterol = "";
-    String tempTriglycerides = "";
-    String tempCholesterolDate;
-    DateFormat format = new DateFormat("MM/dd/yyyy");
-    readCholesterol.once().then((DataSnapshot datasnapshot) {
-      bctemp.clear();
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Blood_Cholesterol cholesterol;
-      for(var i = 0; i < temp.length; i++) {
-        String full = temp[i].replaceAll("{", "")
-            .replaceAll("}", "")
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-        switch(i%5){
-          case 0: {
-            tempTotalCholesterol = splitFull.last;
-          }
-          break;
-          case 1: {
-            tempCholesterolDate = splitFull.last;
-          }
-          break;
-          case 2: {
-            tempTriglycerides = splitFull.last;
-          }
-          break;
-          case 3: {
-            tempLdlCholesterol = splitFull.last;
-          }
-          break;
-          case 4: {
-            tempHdlCholesterol = splitFull.last;
-            cholesterol = new Blood_Cholesterol(total_cholesterol: double.parse(tempTotalCholesterol), ldl_cholesterol: double.parse(tempLdlCholesterol), hdl_cholesterol: double.parse(tempHdlCholesterol),triglycerides: double.parse(tempTriglycerides), cholesterol_date: format.parse(tempCholesterolDate));
-            bctemp.add(cholesterol);
-          }
-          break;
-        }
+      bgtemp.clear();
+      getBloodGlucose();
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    // final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
+    // String tempGlucose = "";
+    // String tempStatus = "";
+    // String tempGlucoseStatus = "";
+    // String tempGlucoseDate = "";
+    // String tempGlucoseTime = "";
+    // readMedication.once().then((DataSnapshot datasnapshot) {
 
-      }
-      for(var i=0;i<bctemp.length/2;i++){
-        var temp = bctemp[i];
-        bctemp[i] = bctemp[bctemp.length-1-i];
-        bctemp[bctemp.length-1-i] = temp;
-      }
-    });
-    bctemp = widget.bclist;
+    //   String temp1 = datasnapshot.value.toString();
+    //   print("temp1 " + temp1);
+    //   List<String> temp = temp1.split(',');
+    //   Blood_Glucose bloodGlucose;
+    //   for(var i = 0; i < temp.length; i++) {
+    //     String full = temp[i].replaceAll("{", "")
+    //         .replaceAll("}", "")
+    //         .replaceAll("[", "")
+    //         .replaceAll("]", "");
+    //     List<String> splitFull = full.split(" ");
+    //     switch(i%5){
+    //       case 0: {
+    //         tempGlucose = splitFull.last;
+    //       }
+    //       break;
+    //       case 1: {
+    //         tempGlucoseTime = splitFull.last;
+    //       }
+    //       break;
+    //       case 2: {
+    //         tempStatus = splitFull.last;
+    //       }
+    //       break;
+    //       case 3: {
+    //         tempGlucoseStatus = splitFull.last;
+    //       }
+    //       break;
+    //       case 4: {
+    //         tempGlucoseDate = splitFull.last;
+    //         bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), bloodGlucose_unit: tempStatus, bloodGlucose_status: tempGlucoseStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
+    //         bgtemp.add(bloodGlucose);
+    //       }
+    //       break;
+    //     }
+    //
+    //   }
+    //   for(var i=0;i<bgtemp.length/2;i++){
+    //     var temp = bgtemp[i];
+    //     bgtemp[i] = bgtemp[bgtemp.length-1-i];
+    //     bgtemp[bgtemp.length-1-i] = temp;
+    //   }
+    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -112,7 +116,7 @@ class _blood_cholesterolState extends State<blood_cholesterol> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Blood Cholesterol Level', style: TextStyle(
+        title: const Text('Blood Glucose Level', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -127,15 +131,15 @@ class _blood_cholesterolState extends State<blood_cholesterol> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_blood_cholesterol(cholList: bctemp),
+                      child: add_blood_glucose(thislist: bgtemp),
                     ),
                     ),
                   ).then((value) => setState((){
                     print("setstate symptoms");
                     if(value != null){
-                      bctemp = value;
+                      bgtemp = value;
                     }
-                    print("BCTEMP LENGTH AFTER SETSTATE  =="  + bctemp.length.toString() );
+                    print("BGTEMP LENGTH AFTER SETSTATE  =="  + bgtemp.length.toString() );
                   }));
                 },
                 child: Icon(
@@ -146,7 +150,7 @@ class _blood_cholesterolState extends State<blood_cholesterol> {
         ],
       ),
       body: ListView.builder(
-        itemCount: bctemp.length,
+        itemCount: bgtemp.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
@@ -195,17 +199,14 @@ class _blood_cholesterolState extends State<blood_cholesterol> {
                                 width: 10,
                               ),
                               Text(
-                                  '' + bctemp[index].getDate.toString()+" \n"
-                                      + "TOTAL: " +bctemp[index].getTotalCholesterol.toString()+ " mmol/l"+
-                                      "\nHDL: " + bctemp[index].gethdlCholesterol.toString() + " mmol/l"+ " \n"
-                                      "LDL: "+ bctemp[index].getldlCholesterol.toString()+  " mmol/l"+" \n" +
-                                      "TRI: "+ bctemp[index].getTriglycerides.toString()+ " mmol/l",
+                                  '' + getDateFormatted(bgtemp[index].bloodGlucose_date.toString())+getTimeFormatted(bgtemp[index].bloodGlucose_time.toString())+" \n"
+                                      +"Status: "+bgtemp[index].bloodGlucose_status+
+                                      "\nBlood Glucose: " + bgtemp[index].glucose.toString() + " mg/dL",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
                                   )
                               ),
-
                             ],
                           ),
                         ),
@@ -218,5 +219,30 @@ class _blood_cholesterolState extends State<blood_cholesterol> {
       ),
 
     );
+  }
+  String getDateFormatted (String date){
+    print(date);
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    print(date);
+    if(date != null){
+      var dateTime = DateTime.parse(date);
+      var hours = dateTime.hour.toString().padLeft(2, "0");
+      var min = dateTime.minute.toString().padLeft(2, "0");
+      return "$hours:$min";
+    }
+  }
+  void getBloodGlucose() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBC = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/');
+    readBC.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        bgtemp.add(Blood_Glucose.fromJson(jsonString));
+      });
+    });
   }
 }

@@ -14,7 +14,7 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
 import 'medication.dart';
-import '../models/users.dart';
+import '../../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_medication extends StatefulWidget {
   final List<Medication> thislist;
@@ -253,7 +253,7 @@ class _addMedicationState extends State<add_medication> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: hint_unit + "  <<<<< tama? ",
+                      hintText: hint_unit,
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Medicine Dosage' : null,
                     onChanged: (val){

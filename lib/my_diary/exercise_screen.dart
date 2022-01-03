@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:my_app/data_inputs/vitals/add_blood_pressure.dart';
+import 'package:my_app/data_inputs/vitals/blood_pressure/add_blood_pressure.dart';
 import 'package:my_app/models/ExRxApi.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/models/users.dart';

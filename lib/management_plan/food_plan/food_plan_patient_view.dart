@@ -14,7 +14,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsDoctor.dart';
 import '../../fitness_app_theme.dart';
-import 'package:my_app/data_inputs/add_medication.dart';
+import 'package:my_app/data_inputs/medicine_intake/add_medication.dart';
 import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/management_plan/food_plan/add_food_prescription.dart';
 import 'package:my_app/management_plan/food_plan/specific_food_plan_patient_view.dart';

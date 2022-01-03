@@ -5,20 +5,20 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
-import 'package:my_app/data_inputs/vitals/body_temperature.dart';
-import 'package:my_app/data_inputs/vitals/o2_saturation.dart';
-import 'package:my_app/data_inputs/vitals/respiratory_rate.dart';
+import 'package:my_app/data_inputs/vitals/body_temperature/body_temperature.dart';
+import 'package:my_app/data_inputs/vitals/oxygen_saturation/o2_saturation.dart';
+import 'package:my_app/data_inputs/vitals/respiratory_rate/respiratory_rate.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
-import '../fitness_app_theme.dart';
-import 'vitals/blood_cholesterol.dart';
-import 'vitals/blood_glucose.dart';
-import 'vitals/blood_pressure.dart';
-import 'vitals/heart_rate.dart';
+import '../../fitness_app_theme.dart';
+import 'blood_cholesterol/blood_cholesterol.dart';
+import 'blood_glucose/blood_glucose.dart';
+import 'blood_pressure/blood_pressure.dart';
+import 'heart_rate/heart_rate.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class vitals extends StatefulWidget {
 
@@ -486,72 +486,72 @@ class _AppSignUpState extends State<vitals> {
                         )
                     ),
                   ),
-                  GestureDetector(
-                    onTap:(){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => blood_cholesterol(bclist: bclist)),
-                      );
-                    },
-                    child: Container(
-                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 100,
-                        child: Stack(
-                            children: [
-                              Positioned.fill(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset('assets/images/bloodcholesterol.jpg',
-                                      fit: BoxFit.cover
-                                  ),
-                                ),
-                              ),
-                              Positioned (
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: Container(
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20)
-                                        ),
-                                        gradient: LinearGradient(
-                                            begin: Alignment.bottomCenter,
-                                            end: Alignment.topCenter,
-                                            colors: [
-                                              Colors.black.withOpacity(0.7),
-                                              Colors.transparent
-                                            ]
-                                        )
-                                    )
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                          'Blood Cholesterol Level',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18
-                                          )
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]
-                        )
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap:(){
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => blood_cholesterol(bclist: bclist)),
+                  //     );
+                  //   },
+                  //   child: Container(
+                  //       margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                  //       height: 100,
+                  //       child: Stack(
+                  //           children: [
+                  //             Positioned.fill(
+                  //               child: ClipRRect(
+                  //                 borderRadius: BorderRadius.circular(20),
+                  //                 child: Image.asset('assets/images/bloodcholesterol.jpg',
+                  //                     fit: BoxFit.cover
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             Positioned (
+                  //               bottom: 0,
+                  //               left: 0,
+                  //               right: 0,
+                  //               child: Container(
+                  //                   height: 80,
+                  //                   decoration: BoxDecoration(
+                  //                       borderRadius: BorderRadius.only(
+                  //                           bottomLeft: Radius.circular(20),
+                  //                           bottomRight: Radius.circular(20)
+                  //                       ),
+                  //                       gradient: LinearGradient(
+                  //                           begin: Alignment.bottomCenter,
+                  //                           end: Alignment.topCenter,
+                  //                           colors: [
+                  //                             Colors.black.withOpacity(0.7),
+                  //                             Colors.transparent
+                  //                           ]
+                  //                       )
+                  //                   )
+                  //               ),
+                  //             ),
+                  //             Positioned(
+                  //               bottom: 0,
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(10),
+                  //                 child: Row(
+                  //                   children: [
+                  //                     SizedBox(
+                  //                       width: 10,
+                  //                     ),
+                  //                     Text(
+                  //                         'Blood Cholesterol Level',
+                  //                         style: TextStyle(
+                  //                             color: Colors.white,
+                  //                             fontSize: 18
+                  //                         )
+                  //                     )
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ]
+                  //       )
+                  //   ),
+                  // ),
                 ],
               ),
             ],

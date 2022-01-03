@@ -19,7 +19,7 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
 import 'lab_results.dart';
-import 'medication.dart';
+import '../medicine_intake/medication.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 

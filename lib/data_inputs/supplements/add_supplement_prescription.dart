@@ -9,12 +9,12 @@ import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/data_inputs/supplement_prescription.dart';
+import 'package:my_app/data_inputs/supplements/supplement_prescription.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import '../management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
+import '../../management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 import 'supplement_prescription.dart';
 
 

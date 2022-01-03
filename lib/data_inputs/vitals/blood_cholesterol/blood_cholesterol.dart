@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -11,90 +9,88 @@ import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-
-import 'add_medication.dart';
-import '../fitness_app_theme.dart';
-import '../models/users.dart';
+import '../../../fitness_app_theme.dart';
+import 'add_blood_cholesterol.dart';
+import '../blood_pressure/add_blood_pressure.dart';
+import '../oxygen_saturation/add_o2_saturation.dart';
+import '../../laboratory_results/add_lab_results.dart';
+import '../../medicine_intake/add_medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class medication extends StatefulWidget {
-  final List<Medication> medlist;
-  medication({Key key, this.medlist}): super(key: key);
+
+class blood_cholesterol extends StatefulWidget {
+  final List<Blood_Cholesterol> bclist;
+  blood_cholesterol({Key key, this.bclist}): super(key: key);
   @override
-  _medicationState createState() => _medicationState();
+  _blood_cholesterolState createState() => _blood_cholesterolState();
 }
 
-class _medicationState extends State<medication> {
+class _blood_cholesterolState extends State<blood_cholesterol> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  TimeOfDay time;
-  List<Medication> medtemp = [];
-  DateFormat format = new DateFormat("MM/dd/yyyy");
-  DateFormat timeformat = new DateFormat("hh:mm");
+  List<Blood_Cholesterol> bctemp = [];
 
   @override
   void initState() {
     super.initState();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
-    String tempMedicineName = "";
-    String tempMedicineType = "";
-    String tempMedicineDate = "";
-    double tempMedicineDosage = 0;
-    String tempMedicineTime = "";
-    medtemp.clear();
-    getMedication();
+    final readCholesterol = databaseReference.child('users/' + uid + '/vitals/health_records/blood_cholesterol_list');
+    String tempTotalCholesterol = "";
+    String tempLdlCholesterol = "";
+    String tempHdlCholesterol = "";
+    String tempTriglycerides = "";
+    String tempCholesterolDate;
+    DateFormat format = new DateFormat("MM/dd/yyyy");
+    readCholesterol.once().then((DataSnapshot datasnapshot) {
+      bctemp.clear();
+      String temp1 = datasnapshot.value.toString();
+      List<String> temp = temp1.split(',');
+      Blood_Cholesterol cholesterol;
+      for(var i = 0; i < temp.length; i++) {
+        String full = temp[i].replaceAll("{", "")
+            .replaceAll("}", "")
+            .replaceAll("[", "")
+            .replaceAll("]", "");
+        List<String> splitFull = full.split(" ");
+        switch(i%5){
+          case 0: {
+            tempTotalCholesterol = splitFull.last;
+          }
+          break;
+          case 1: {
+            tempCholesterolDate = splitFull.last;
+          }
+          break;
+          case 2: {
+            tempTriglycerides = splitFull.last;
+          }
+          break;
+          case 3: {
+            tempLdlCholesterol = splitFull.last;
+          }
+          break;
+          case 4: {
+            tempHdlCholesterol = splitFull.last;
+            cholesterol = new Blood_Cholesterol(total_cholesterol: double.parse(tempTotalCholesterol), ldl_cholesterol: double.parse(tempLdlCholesterol), hdl_cholesterol: double.parse(tempHdlCholesterol),triglycerides: double.parse(tempTriglycerides), cholesterol_date: format.parse(tempCholesterolDate));
+            bctemp.add(cholesterol);
+          }
+          break;
+        }
 
-    // readMedication.once().then((DataSnapshot datasnapshot) {
-    //   medtemp.clear();
-    //   String temp1 = datasnapshot.value.toString();
-    //   print(temp1);
-    //   List<String> temp = temp1.split(',');
-    //   Medication medicine;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //
-    //       switch(i%5){
-    //         case 0: {
-    //           tempMedicineType = splitFull.last;
-    //         }
-    //         break;
-    //         case 1: {
-    //           tempMedicineDosage = double.parse(splitFull.last);
-    //         }
-    //         break;
-    //         case 2: {
-    //           tempMedicineDate = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 3: {
-    //           tempMedicineName = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 4: {
-    //           tempMedicineTime = splitFull.last;
-    //           medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate), medicine_time: timeformat.parse(tempMedicineTime));
-    //           medtemp.add(medicine);
-    //         }
-    //         break;
-    //       }
-    //   }
-    //   for(var i=0;i<medtemp.length/2;i++){
-    //     var temp = medtemp[i];
-    //     medtemp[i] = medtemp[medtemp.length-1-i];
-    //     medtemp[medtemp.length-1-i] = temp;
-    //   }
-    // });
+      }
+      for(var i=0;i<bctemp.length/2;i++){
+        var temp = bctemp[i];
+        bctemp[i] = bctemp[bctemp.length-1-i];
+        bctemp[bctemp.length-1-i] = temp;
+      }
+    });
+    bctemp = widget.bclist;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -104,7 +100,6 @@ class _medicationState extends State<medication> {
 
   @override
   Widget build(BuildContext context) {
-
 
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
@@ -117,7 +112,7 @@ class _medicationState extends State<medication> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Medication Intake', style: TextStyle(
+        title: const Text('Blood Cholesterol Level', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -132,30 +127,26 @@ class _medicationState extends State<medication> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_medication(thislist: medtemp),
+                      child: add_blood_cholesterol(cholList: bctemp),
                     ),
                     ),
-                  ).then((value) =>
-                    Future.delayed(const Duration(milliseconds: 1500), (){
-                      setState((){
-                        print("setstate medicines");
-                        if(value != null){
-                          medtemp = value;
-                        }
-                        print("medetmp.length == " +medtemp.length.toString());
-                      });
-                    }));
-
+                  ).then((value) => setState((){
+                    print("setstate symptoms");
+                    if(value != null){
+                      bctemp = value;
+                    }
+                    print("BCTEMP LENGTH AFTER SETSTATE  =="  + bctemp.length.toString() );
+                  }));
                 },
                 child: Icon(
                   Icons.add,
-                )
+                ),
               )
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: medtemp.length,
+        itemCount: bctemp.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             child: Container(
@@ -199,14 +190,16 @@ class _medicationState extends State<medication> {
                           padding: const EdgeInsets.all(10),
                           child: Row(
                             children: [
+
                               SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                  '' + getDateFormatted(medtemp[index].medicine_date.toString()) + getTimeFormatted(medtemp[index].medicine_time.toString())+" "
-                                      + "\nMedicine: " + medtemp[index].medicine_name + " "
-                                      +"\nDosage "+ medtemp[index].medicine_dosage.toString()+ " "
-                                      +"\nType: "+ medtemp[index].medicine_type,
+                                  '' + bctemp[index].getDate.toString()+" \n"
+                                      + "TOTAL: " +bctemp[index].getTotalCholesterol.toString()+ " mmol/l"+
+                                      "\nHDL: " + bctemp[index].gethdlCholesterol.toString() + " mmol/l"+ " \n"
+                                      "LDL: "+ bctemp[index].getldlCholesterol.toString()+  " mmol/l"+" \n" +
+                                      "TRI: "+ bctemp[index].getTriglycerides.toString()+ " mmol/l",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18
@@ -224,32 +217,6 @@ class _medicationState extends State<medication> {
         },
       ),
 
-
     );
-  }
-  String getDateFormatted (String date){
-    print(date);
-    var dateTime = DateTime.parse(date);
-    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
-  }
-  String getTimeFormatted (String date){
-    print(date);
-    if(date != null){
-      var dateTime = DateTime.parse(date);
-      var hours = dateTime.hour.toString().padLeft(2, "0");
-      var min = dateTime.minute.toString().padLeft(2, "0");
-      return "$hours:$min";
-    }
-  }
-  void getMedication() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readmedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/');
-    readmedication.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        medtemp.add(Medication.fromJson(jsonString));
-      });
-    });
   }
 }
