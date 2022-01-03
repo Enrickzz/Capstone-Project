@@ -31,7 +31,7 @@ import 'package:video_player/video_player.dart';
 
 import 'package:my_app/management_plan/management_plan_doctor_view.dart';
 
-import '../discussion.dart';
+import '../discussion_board/discussion.dart';
 
 
 

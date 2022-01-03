@@ -1,4 +1,4 @@
-import 'package:my_app/reply_post.dart';
+import 'package:my_app/discussion_board/reply_post.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
@@ -18,7 +18,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import '../fitness_app_theme.dart';
+import '../../fitness_app_theme.dart';
 
 class specific_post extends StatefulWidget {
   @override

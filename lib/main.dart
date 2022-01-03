@@ -20,8 +20,8 @@ import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'allergies.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
-import 'discussion.dart';
-import 'package:my_app/discussion.dart';
+import 'discussion_board/discussion.dart';
+import 'package:my_app/discussion_board/discussion.dart';
 import 'fitness_app_theme.dart';
 import 'food/food_list.dart';
 import 'my_diary/exercise_screen.dart';
@@ -38,6 +38,8 @@ import 'package:my_app/management_plan/medication_prescription/specific_medical_
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
 import 'package:my_app/doctor_add_patient.dart';
 import 'package:my_app/patient_list.dart';
+
+import 'my_meals.dart';
 
 
 
@@ -234,7 +236,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => food_list_test()),
+                      MaterialPageRoute(builder: (context) => my_meals()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

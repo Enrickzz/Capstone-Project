@@ -1,6 +1,6 @@
-import 'package:my_app/create_post.dart';
+import 'package:my_app/discussion_board/create_post.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/specific_post.dart';
+import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -19,7 +19,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import '../fitness_app_theme.dart';
+import '../../fitness_app_theme.dart';
 
 class discussion extends StatefulWidget {
   @override

@@ -20,7 +20,7 @@ import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../discussion.dart';
+import '../discussion_board/discussion.dart';
 import '../fitness_app_theme.dart';
 import '../main.dart';
 import '../notifications.dart';
