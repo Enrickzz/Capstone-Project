@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_doctor_view.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 import 'package:my_app/database.dart';
-import 'package:my_app/data_inputs/laboratory_results/lab_results.dart';
+import 'package:my_app/data_inputs/laboratory_results/lab_results_patient_view.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';

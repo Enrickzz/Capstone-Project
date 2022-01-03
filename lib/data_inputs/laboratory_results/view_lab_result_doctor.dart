@@ -19,7 +19,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
-import 'lab_results.dart';
+import 'lab_results_patient_view.dart';
 import '../medicine_intake/medication_patient_view.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -27,15 +27,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 
-class view_lab_result extends StatefulWidget {
+class view_lab_result_doctor_view extends StatefulWidget {
   final Lab_Result lr;
   final String imgurl;
-  view_lab_result({Key key, this.lr, this.imgurl});
+  view_lab_result_doctor_view({Key key, this.lr, this.imgurl});
   @override
-  viewLabResult createState() => viewLabResult();
+  viewLabResultDoctorView createState() => viewLabResultDoctorView();
 }
 final _formKey = GlobalKey<FormState>();
-class viewLabResult extends State<view_lab_result> {
+class viewLabResultDoctorView extends State<view_lab_result_doctor_view> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   var path;

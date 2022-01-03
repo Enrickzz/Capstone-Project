@@ -9,7 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
-import 'package:my_app/data_inputs/laboratory_results/view_lab_result.dart';
+import 'package:my_app/data_inputs/laboratory_results/view_lab_result_doctor.dart';
+import 'package:my_app/data_inputs/laboratory_results/view_lab_result_patient.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
@@ -20,14 +21,14 @@ import 'add_lab_results.dart';
 import '../medicine_intake/add_medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class lab_results extends StatefulWidget {
+class lab_results_doctor_view extends StatefulWidget {
   final List<FirebaseFile> files;
-  lab_results({Key key, this.files});
+  lab_results_doctor_view({Key key, this.files});
   @override
   _lab_resultsState createState() => _lab_resultsState();
 }
 
-class _lab_resultsState extends State<lab_results> {
+class _lab_resultsState extends State<lab_results_doctor_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -72,33 +73,7 @@ class _lab_resultsState extends State<lab_results> {
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_lab_results(files: trythis),
-                    ),
-                    ),
-                  ).then((value) => setState((){
-                    print("setstate lab\n\n" + value.toString());
 
-                    if(value != null){
-                      trythis = value;
-                    }
-                  }));
-                },
-                child: Icon(
-                  Icons.add,
-                ),
-              )
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
@@ -110,43 +85,43 @@ class _lab_resultsState extends State<lab_results> {
                 childAspectRatio: 1,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10),
-          itemCount: labResult_list.length,
-          // Generate 100 widgets that display their index in the List.
-          itemBuilder: (context, index){
+            itemCount: labResult_list.length,
+            // Generate 100 widgets that display their index in the List.
+            itemBuilder: (context, index){
               //listOne("path", labResult_list[index].imgRef);
-            return Center(
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: view_lab_result(lr: labResult_list[index]),
-                    ),
-                    ),
-                  );
-                },
-                child:  Container(
-                    child: (Image.network('' + labResult_list[index].imgRef) != null) ? Image.network('' + labResult_list[index].imgRef, loadingBuilder: (context, child, loadingProgress) =>
-                    (loadingProgress == null) ? child : CircularProgressIndicator(),
-                      errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
-                    height:190,
-                    width: 190,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
+              return Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(context: context,
+                        isScrollControlled: true,
+                        builder: (context) => SingleChildScrollView(child: Container(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: view_lab_result_doctor_view(lr: labResult_list[index]),
                         ),
-                        color: Colors.black
+                        ),
+                      );
+                    },
+                    child:  Container(
+                      child: (Image.network('' + labResult_list[index].imgRef) != null) ? Image.network('' + labResult_list[index].imgRef, loadingBuilder: (context, child, loadingProgress) =>
+                      (loadingProgress == null) ? child : CircularProgressIndicator(),
+                        errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
+                      height:190,
+                      width: 190,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          color: Colors.black
+                      ),
                     ),
-                ),
 
-              )
-            );
-          }
+                  )
+              );
+            }
         ),
       ),
 
