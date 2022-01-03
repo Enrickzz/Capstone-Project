@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +39,16 @@ class _blood_glucoseState extends State<blood_glucose> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
 
+  int _currentSortColumn = 0;
+  bool _isSortAsc = true;
+  List<bool> _selected = [];
+
   @override
   void initState() {
     super.initState();
       bgtemp.clear();
-      getBloodGlucose();
+    _selected.clear();
+    getBloodGlucose();
     // final User user = auth.currentUser;
     // final uid = user.uid;
     // final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
@@ -97,6 +103,8 @@ class _blood_glucoseState extends State<blood_glucose> {
     // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        _selected = List<bool>.generate(bgtemp.length, (int index) => false);
+
         print("setstate");
       });
     });
@@ -122,6 +130,31 @@ class _blood_glucoseState extends State<blood_glucose> {
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
+          GestureDetector(
+            onTap: () {
+              _showMyDialogDelete();
+              // showModalBottomSheet(context: context,
+              //   isScrollControlled: true,
+              //   builder: (context) => SingleChildScrollView(child: Container(
+              //     padding: EdgeInsets.only(
+              //         bottom: MediaQuery.of(context).viewInsets.bottom),
+              //     child: add_blood_pressure(thislist: bptemp),
+              //   ),
+              //   ),
+              // ).then((value) => setState((){
+              //   print("setstate blood_pressure");
+              //   if(value != null){
+              //     bptemp = value;
+              //     _selected = List<bool>.generate(bptemp.length, (int index) => false);
+              //
+              //   }
+              // }));
+            },
+            child: Icon(
+              Icons.delete,
+            ),
+          ),
+          SizedBox(width: 10),
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
@@ -138,6 +171,8 @@ class _blood_glucoseState extends State<blood_glucose> {
                     print("setstate symptoms");
                     if(value != null){
                       bgtemp = value;
+                      _selected = List<bool>.generate(bgtemp.length, (int index) => false);
+
                     }
                     print("BGTEMP LENGTH AFTER SETSTATE  =="  + bgtemp.length.toString() );
                   }));
@@ -149,73 +184,16 @@ class _blood_glucoseState extends State<blood_glucose> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: bgtemp.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                height: 140,
-                child: Stack(
-                    children: [
-                      Positioned (
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                            height: 120,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                    bottomRight: Radius.circular(20)
-                                ),
-                                gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.white.withOpacity(0.7),
-                                      Colors.white
-                                    ]
-                                ),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.grey.withOpacity(0.6),
-                                      offset: Offset(1.1, 1.1),
-                                      blurRadius: 10.0),
-                                ]
-                            )
-                        ),
-                      ),
-                      Positioned(
-                        top: 25,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            children: [
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Scrollbar(
+          child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: _createDataTable()
 
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                  '' + getDateFormatted(bgtemp[index].bloodGlucose_date.toString())+getTimeFormatted(bgtemp[index].bloodGlucose_time.toString())+" \n"
-                                      +"Status: "+bgtemp[index].bloodGlucose_status+
-                                      "\nBlood Glucose: " + bgtemp[index].glucose.toString() + " mg/dL",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18
-                                  )
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ]
-                )
-            ),
-          );
-        },
+          ),
+        ),
+
       ),
 
     );
@@ -244,5 +222,139 @@ class _blood_glucoseState extends State<blood_glucose> {
         bgtemp.add(Blood_Glucose.fromJson(jsonString));
       });
     });
+  }
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to delete these record/s?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Color getMyColor(String indication) {
+    if(indication == 'normal'){
+      return Colors.green;
+    }
+    else if(indication == 'low'){
+      return Colors.blue;
+
+    }
+    else
+      return Colors.red;
+
+  }
+
+  DataTable _createDataTable() {
+    return DataTable(
+      columns: _createColumns(),
+      rows: _createRows(),
+      sortColumnIndex: _currentSortColumn,
+      sortAscending: _isSortAsc,
+      dividerThickness: 5,
+      dataRowHeight: 80,
+      showBottomBorder: true,
+      headingTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white
+      ),
+      headingRowColor: MaterialStateProperty.resolveWith(
+              (states) => Colors.lightBlue
+      ),
+    );
+  }
+
+  List<DataColumn> _createColumns() {
+    return [
+      DataColumn(
+        label: Text('Date'),
+        onSort: (columnIndex, _) {
+          setState(() {
+            _currentSortColumn = columnIndex;
+            if (_isSortAsc) {
+              bgtemp.sort((a, b) => b.bloodGlucose_date.compareTo(a.bloodGlucose_date));
+            } else {
+              bgtemp.sort((a, b) => a.bloodGlucose_date.compareTo(b.bloodGlucose_date));
+            }
+            _isSortAsc = !_isSortAsc;
+          });
+        },
+      ),
+
+
+
+      DataColumn(label: Text('Time')),
+      DataColumn(label: Text('Blood Glucose')),
+      DataColumn(label: Text('last meal')),
+      DataColumn(label: Text('Implication'))
+
+    ];
+
+  }
+
+  // List<DataRow> _createRows() {
+  //
+  //   return bptemp
+  //       .mapIndexed((index,bp) => DataRow(cells: [
+  //
+  //           DataCell(Text(getDateFormatted(bp.getDate.toString()))),
+  //           DataCell(Text(getTimeFormatted(bp.getTime.toString()))),
+  //           DataCell(Text(bp.getSys_pres +'/'+ bp.getDia_pres, style: TextStyle(),)),
+  //           DataCell(Text(bp.getLvl_pres, style: TextStyle(color: getMyColor(bp.getLvl_pres)),))
+  //
+  //
+  //   ],
+  //       selected:  _selected[index],
+  //       onSelectChanged: (bool selected){
+  //         setState(() {
+  //           _selected[index] = selected;
+  //         });
+  //       }
+  //
+  //   )).toList();
+  // }
+  List<DataRow> _createRows() {
+    return bgtemp
+        .mapIndexed((index, bp) => DataRow(
+        cells: [
+          DataCell(Text(getDateFormatted(bp.bloodGlucose_date.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bloodGlucose_time.toString()))),
+          DataCell(Text(bp.glucose.toString() +' mg/dL', style: TextStyle(),)),
+          DataCell(Text(bp.lastMeal.toString() + ' hr/s ago' , style: TextStyle(),)),
+          DataCell(Text(bp.bloodGlucose_status, style: TextStyle(color: getMyColor(bp.bloodGlucose_status)),))
+        ],
+        selected: _selected[index],
+        onSelectChanged: (bool selected) {
+          setState(() {
+            _selected[index] = selected;
+          });
+        }))
+        .toList();
   }
 }

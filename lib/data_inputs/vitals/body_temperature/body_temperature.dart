@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -40,10 +41,15 @@ class _body_temperatureState extends State<body_temperature> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
 
+  int _currentSortColumn = 0;
+  bool _isSortAsc = true;
+  List<bool> _selected = [];
+
   @override
   void initState() {
     super.initState();
     bttemp.clear();
+    _selected.clear();
     getBodyTemp();
     // final User user = auth.currentUser;
     // final uid = user.uid;
@@ -98,6 +104,8 @@ class _body_temperatureState extends State<body_temperature> {
     // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        _selected = List<bool>.generate(bttemp.length, (int index) => false);
+
         print("setstate");
       });
     });
@@ -164,6 +172,8 @@ class _body_temperatureState extends State<body_temperature> {
                     print("setstate symptoms");
                     if(value != null){
                       bttemp = value;
+                      _selected = List<bool>.generate(bttemp.length, (int index) => false);
+
                     }
                     print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
                   }));;
@@ -175,102 +185,113 @@ class _body_temperatureState extends State<body_temperature> {
           ),
         ],
       ),
-      body: ListView.builder(
-    itemCount: bttemp.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          child: Container(
-              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              height: 140,
-              child: Stack(
-                  children: [
-                    Positioned (
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                          height: 120,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20)
-                              ),
-                              gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    Colors.white.withOpacity(0.7),
-                                    Colors.white
-                                  ]
-                              ),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: FitnessAppTheme.grey.withOpacity(0.6),
-                                    offset: Offset(1.1, 1.1),
-                                    blurRadius: 10.0),
-                              ]
-                          )
-                      ),
-                    ),
-                    Positioned(
-                      top: 25,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Scrollbar(
+          child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: _createDataTable()
 
-                            SizedBox(
-                              width: 10,
-                            ),
-                            FlatButton(
-                              child: Text(
-                                'Edit',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              color: Colors.black,
-                              onPressed: () {
-                                showModalBottomSheet(context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) => SingleChildScrollView(child: Container(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                                    child: edit_body_temperature(bt: bttemp[index], pointer: index,),
-                                  ),
-                                  ),
-                                ).then((value) => setState((){
-                                  print("setstate symptoms");
-                                  if(value != null){
-                                    bttemp = value;
-                                  }
-                                  print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
-                                }));;
-                              },
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                                '' + getDateFormatted(bttemp[index].bt_date.toString()) + getTimeFormatted(bttemp[index].bt_time.toString())+" "
-                                    +"\nTemperature: "+ bttemp[index].temperature.toString() + " " + bttemp[index].unit+ " ",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18
-                                )
-                            ),
-
-
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]
-              )
           ),
-        );
-      },
-    ),
+        ),
+
+      ),
+    //   body: ListView.builder(
+    // itemCount: bttemp.length,
+    //   itemBuilder: (context, index) {
+    //     return GestureDetector(
+    //       child: Container(
+    //           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+    //           height: 140,
+    //           child: Stack(
+    //               children: [
+    //                 Positioned (
+    //                   bottom: 0,
+    //                   left: 0,
+    //                   right: 0,
+    //                   child: Container(
+    //                       height: 120,
+    //                       decoration: BoxDecoration(
+    //                           borderRadius: BorderRadius.only(
+    //                               bottomLeft: Radius.circular(20),
+    //                               topLeft: Radius.circular(20),
+    //                               topRight: Radius.circular(20),
+    //                               bottomRight: Radius.circular(20)
+    //                           ),
+    //                           gradient: LinearGradient(
+    //                               begin: Alignment.bottomCenter,
+    //                               end: Alignment.topCenter,
+    //                               colors: [
+    //                                 Colors.white.withOpacity(0.7),
+    //                                 Colors.white
+    //                               ]
+    //                           ),
+    //                           boxShadow: <BoxShadow>[
+    //                             BoxShadow(
+    //                                 color: FitnessAppTheme.grey.withOpacity(0.6),
+    //                                 offset: Offset(1.1, 1.1),
+    //                                 blurRadius: 10.0),
+    //                           ]
+    //                       )
+    //                   ),
+    //                 ),
+    //                 Positioned(
+    //                   top: 25,
+    //                   child: Padding(
+    //                     padding: const EdgeInsets.all(10),
+    //                     child: Row(
+    //                       children: [
+    //
+    //                         SizedBox(
+    //                           width: 10,
+    //                         ),
+    //                         FlatButton(
+    //                           child: Text(
+    //                             'Edit',
+    //                             style: TextStyle(color: Colors.white),
+    //                           ),
+    //                           color: Colors.black,
+    //                           onPressed: () {
+    //                             showModalBottomSheet(context: context,
+    //                               isScrollControlled: true,
+    //                               builder: (context) => SingleChildScrollView(child: Container(
+    //                                 padding: EdgeInsets.only(
+    //                                     bottom: MediaQuery.of(context).viewInsets.bottom),
+    //                                 child: edit_body_temperature(bt: bttemp[index], pointer: index,),
+    //                               ),
+    //                               ),
+    //                             ).then((value) => setState((){
+    //                               print("setstate symptoms");
+    //                               if(value != null){
+    //                                 bttemp = value;
+    //                               }
+    //                               print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
+    //                             }));;
+    //                           },
+    //                         ),
+    //                         SizedBox(
+    //                           width: 10,
+    //                         ),
+    //                         Text(
+    //                             '' + getDateFormatted(bttemp[index].bt_date.toString()) + getTimeFormatted(bttemp[index].bt_time.toString())+" "
+    //                                 +"\nTemperature: "+ bttemp[index].temperature.toString() + " " + bttemp[index].unit+ " ",
+    //                             style: TextStyle(
+    //                                 color: Colors.black,
+    //                                 fontSize: 18
+    //                             )
+    //                         ),
+    //
+    //
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ]
+    //           )
+    //       ),
+    //     );
+    //   },
+    // ),
 
     );
   }
@@ -295,6 +316,82 @@ class _body_temperatureState extends State<body_temperature> {
       });
 
     });
+  }
+  Color getMyColor(String indication) {
+    if(indication == 'normal'){
+      return Colors.green;
+    }
+    else if(indication == 'low'){
+      return Colors.blue;
+
+    }
+    else
+      return Colors.red;
+
+  }
+
+  DataTable _createDataTable() {
+    return DataTable(
+      columns: _createColumns(),
+      rows: _createRows(),
+      sortColumnIndex: _currentSortColumn,
+      sortAscending: _isSortAsc,
+      dividerThickness: 5,
+      dataRowHeight: 80,
+      showBottomBorder: true,
+      headingTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white
+      ),
+      headingRowColor: MaterialStateProperty.resolveWith(
+              (states) => Colors.lightBlue
+      ),
+    );
+  }
+
+  List<DataColumn> _createColumns() {
+    return [
+      DataColumn(
+        label: Text('Date'),
+        onSort: (columnIndex, _) {
+          setState(() {
+            _currentSortColumn = columnIndex;
+            if (_isSortAsc) {
+              bttemp.sort((a, b) => b.bt_date.compareTo(a.bt_date));
+            } else {
+              bttemp.sort((a, b) => a.bt_date.compareTo(b.bt_date));
+            }
+            _isSortAsc = !_isSortAsc;
+          });
+        },
+      ),
+
+
+
+      DataColumn(label: Text('Time')),
+      DataColumn(label: Text('Blood Temperature')),
+      // DataColumn(label: Text('Implication'))
+
+    ];
+
+  }
+
+  List<DataRow> _createRows() {
+    return bttemp
+        .mapIndexed((index, bp) => DataRow(
+        cells: [
+          DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
+          DataCell(Text(bp.temperature.toString() +'°C', style: TextStyle(),)),
+          // DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),))
+        ],
+        selected: _selected[index],
+        onSelectChanged: (bool selected) {
+          setState(() {
+            _selected[index] = selected;
+          });
+        }))
+        .toList();
   }
   Future<void> _showMyDialogDelete() async {
     return showDialog<void>(

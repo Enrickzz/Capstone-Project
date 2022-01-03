@@ -533,16 +533,16 @@ class Blood_Cholesterol {
 
 class Blood_Glucose {
   double glucose = 0;
-  String bloodGlucose_unit = "";
+  int lastMeal = 0;
   String bloodGlucose_status = "";
   DateTime bloodGlucose_date;
   DateTime bloodGlucose_time;
 
-  Blood_Glucose({this.glucose, this.bloodGlucose_unit, this.bloodGlucose_status, this.bloodGlucose_date, this.bloodGlucose_time});
+  Blood_Glucose({this.glucose, this.lastMeal, this.bloodGlucose_status, this.bloodGlucose_date, this.bloodGlucose_time});
 
   Blood_Glucose.fromJson(Map<String, dynamic> json) {
     glucose = double.parse(json['glucose']);
-    bloodGlucose_unit = json['unit_status'];
+    lastMeal = int.parse(json['lastMeal']);
     bloodGlucose_status = json['glucose_status'];
     bloodGlucose_date = DateFormat("MM/dd/yyyy").parse(json['bloodGlucose_date']);
     bloodGlucose_time = DateFormat("hh:mm").parse(json['bloodGlucose_time']);
@@ -551,7 +551,7 @@ class Blood_Glucose {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['glucose'] = this.glucose;
-    data['unit_status'] = this.bloodGlucose_unit;
+    data['lastMeal'] = this.lastMeal;
     data['glucose_status'] = this.bloodGlucose_status;
     data['bloodGlucose_date'] = this.bloodGlucose_date;
     data['bloodGlucose_time'] = this.bloodGlucose_time;
