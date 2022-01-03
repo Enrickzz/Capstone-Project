@@ -303,7 +303,7 @@ class _body_temperatureState extends State<body_temperature> {
     if(indication == 'normal'){
       return Colors.green;
     }
-    else if(indication == 'low'){
+    else if(indication == 'low grade fever'){
       return Colors.blue;
 
     }
@@ -352,7 +352,7 @@ class _body_temperatureState extends State<body_temperature> {
 
       DataColumn(label: Text('Time')),
       DataColumn(label: Text('body Temperature')),
-      // DataColumn(label: Text('Implication'))
+      DataColumn(label: Text('Implication'))
 
     ];
 
@@ -365,7 +365,7 @@ class _body_temperatureState extends State<body_temperature> {
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
-          // DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),))
+          DataCell(Text(bp.indication, style: TextStyle(color: getMyColor(bp.indication)),))
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
