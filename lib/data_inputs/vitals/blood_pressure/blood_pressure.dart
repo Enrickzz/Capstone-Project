@@ -144,6 +144,7 @@ class _blood_pressureState extends State<blood_pressure> {
         actions: [
           GestureDetector(
             onTap: () {
+              _showMyDialogDelete();
               // showModalBottomSheet(context: context,
               //   isScrollControlled: true,
               //   builder: (context) => SingleChildScrollView(child: Container(
@@ -203,10 +204,6 @@ class _blood_pressureState extends State<blood_pressure> {
 
              ),
            ),
-
-
-
-
 
          ),
 
@@ -468,6 +465,41 @@ class _blood_pressureState extends State<blood_pressure> {
         bptemp.add(Blood_Pressure.fromJson(jsonString));
       });
     });
+  }
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to delete these record/s?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
 
