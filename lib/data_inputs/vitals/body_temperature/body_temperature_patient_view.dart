@@ -41,9 +41,13 @@ class _body_temperatureState extends State<body_temperature> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
 
+
   int _currentSortColumn = 0;
   bool _isSortAsc = true;
   List<bool> _selected = [];
+  /// body temp status (normal, low, high)
+  List<String> status = [];
+
 
   @override
   void initState() {
@@ -51,57 +55,6 @@ class _body_temperatureState extends State<body_temperature> {
     bttemp.clear();
     _selected.clear();
     getBodyTemp();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list');
-    // String tempUnit = "";
-    // String tempTemperature = "";
-    // String tempTemperatureDate = "";
-    // String tempTemperatureTime = "";
-    //
-    //
-    // readTemperature.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Body_Temperature bodyTemperature;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i%4){
-    //       case 0: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempUnit = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperatureDate = splitFull.last;
-    //       }
-    //       break;
-    //       case 2: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperature = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperatureTime = splitFull.last;
-    //         bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
-    //         bttemp.add(bodyTemperature);
-    //       }
-    //       break;
-    //     }
-    //   }
-    //   for(var i=0;i<bttemp.length/2;i++){
-    //     var temp = bttemp[i];
-    //     bttemp[i] = bttemp[bttemp.length-1-i];
-    //     bttemp[bttemp.length-1-i] = temp;
-    //   }
-    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         _selected = List<bool>.generate(bttemp.length, (int index) => false);
@@ -314,9 +267,38 @@ class _body_temperatureState extends State<body_temperature> {
       temp.forEach((jsonString) {
         bttemp.add(Body_Temperature.fromJson(jsonString));
       });
-
     });
   }
+
+  int getAge (DateTime birthday) {
+    DateTime today = new DateTime.now();
+    String days1 = "";
+    String month1 = "";
+    String year1 = "";
+    int d = int.parse(DateFormat("dd").format(birthday));
+    int m = int.parse(DateFormat("MM").format(birthday));
+    int y = int.parse(DateFormat("yyyy").format(birthday));
+    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
+    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
+    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
+    int age = 0;
+    age = y1 - y;
+    print(age);
+
+    // dec < jan
+    if(m1 < m){
+      print("month --");
+      age--;
+    }
+    else if (m1 == m){
+      if(d1 < d){
+        print("day --");
+        age--;
+      }
+    }
+    return age;
+  }
+
   Color getMyColor(String indication) {
     if(indication == 'normal'){
       return Colors.green;
@@ -369,7 +351,7 @@ class _body_temperatureState extends State<body_temperature> {
 
 
       DataColumn(label: Text('Time')),
-      DataColumn(label: Text('Blood Temperature')),
+      DataColumn(label: Text('body Temperature')),
       // DataColumn(label: Text('Implication'))
 
     ];
@@ -382,7 +364,7 @@ class _body_temperatureState extends State<body_temperature> {
         cells: [
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(bp.temperature.toString() +'°C', style: TextStyle(),)),
+          DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
           // DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),))
         ],
         selected: _selected[index],

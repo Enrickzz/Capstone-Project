@@ -56,17 +56,6 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
   TabController controller;
   List<Medication_Prescription> prestemp = [];
   Medication_Prescription prescription = new Medication_Prescription();
-  // Users doctor = new Users();
-  // String generic_name = "";
-  // String dosage = "";
-  // String unit = "";
-  // String frequency = "";
-  // String special_instruction = "";
-  // String startDate = "";
-  // String endDate = "";
-  // String prescribedBy = "";
-  // String dateCreated = "";
-
 
   @override
   void initState() {

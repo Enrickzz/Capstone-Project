@@ -37,9 +37,11 @@ class _add_body_temperatureState extends State<add_body_temperature> {
   String temperature_date = (new DateTime.now()).toString();
   DateTime temperatureDate;
   String temperature_time;
+  String indication = "";
   bool isDateSelected= false;
-  int count = 0;
+  int count = 1;
   List<Body_Temperature> body_temp_list = new List<Body_Temperature>();
+  Additional_Info info = new Additional_Info();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
@@ -266,15 +268,15 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                             readTemperature.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-
-                              Body_Temperature body_temperature;
 
 
                               if(datasnapshot.value == null){
-                                final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + 0.toString());
-                                temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString()});
-                                print("Added Body Temperature Successfully! " + uid);
+                                final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
+                                getIndication();
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toStringAsFixed(1), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString(), "indication": indication.toString()});
+                                  print("Added Body Temperature Successfully! " + uid);
+                                });
                               }
                               else{
                                 // String tempUnit = "";
@@ -310,11 +312,12 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                 //   }
                                 // }
                                 getBodyTemp();
+                                getIndication();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = body_temp_list.length--;
                                   print("count " + count.toString());
                                   final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                                  temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toString(), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString()});
+                                  temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toStringAsFixed(1), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString(), "indication": indication.toString()});
                                   print("Added Body Temperature Successfully! " + uid);
                                 });
 
@@ -324,7 +327,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
 
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("SYMPTOMS LENGTH: " + body_temp_list.length.toString());
-                              body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time)));
+                              body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time), indication: indication));
                               for(var i=0;i<body_temp_list.length/2;i++){
                                 var temp = body_temp_list[i];
                                 body_temp_list[i] = body_temp_list[body_temp_list.length-1-i];
@@ -346,7 +349,6 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                 ]
             )
         )
-
     );
   }
   void getBodyTemp() {
@@ -359,5 +361,84 @@ class _add_body_temperatureState extends State<add_body_temperature> {
         body_temp_list.add(Body_Temperature.fromJson(jsonString));
       });
     });
+  }
+  void getIndication() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readAddInfo = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+    int age;
+    readAddInfo.once().then((DataSnapshot snapshot) {
+      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+      print("temp2");
+      print(temp2);
+      info = Additional_Info.fromJson2(temp2);
+      age = getAge(info.birthday);
+
+      if(unit == "Fahrenheit"){
+        temperature = (temperature - 32) * 5/9;
+        unit = "Celsius";
+      }
+      /// NORMAL
+      double highest = 0;
+      /// infant 0 - 10
+      if(age <= 10 && age >= 0){
+        if(temperature >= 35.5 && temperature <= 37.5){
+          indication = "normal";
+        }
+        highest = 37.5;
+      }
+      /// 11 - 65
+      if(age <= 65 && age >= 11){
+        if(temperature >= 36.4 && temperature <= 37.6){
+          indication = "normal";
+        }
+        highest = 37.6;
+      }
+      /// 65 above
+      if(age > 65){
+        if(temperature >= 35.8 && temperature <= 36.9){
+          indication = "normal";
+        }
+        highest = 36.9;
+      }
+      /// LOW GRADE FEVER
+      if(temperature >= highest && temperature <= 38){
+        indication = "low grade fever";
+      }
+      /// HIGH GRADE FEVER
+      if(temperature > 38){
+        indication = "high grade fever";
+      }
+
+    });
+  }
+  
+  int getAge (DateTime birthday) {
+    DateTime today = new DateTime.now();
+    String days1 = "";
+    String month1 = "";
+    String year1 = "";
+    int d = int.parse(DateFormat("dd").format(birthday));
+    int m = int.parse(DateFormat("MM").format(birthday));
+    int y = int.parse(DateFormat("yyyy").format(birthday));
+    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
+    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
+    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
+    int age = 0;
+    age = y1 - y;
+    print(age);
+
+    // dec < jan
+    if(m1 < m){
+      print("month --");
+      age--;
+    }
+    else if (m1 == m){
+      if(d1 < d){
+        print("day --");
+        age--;
+      }
+    }
+    return age;
   }
 }

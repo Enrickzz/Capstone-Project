@@ -42,60 +42,8 @@ class _medicationState extends State<medication> {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
-    String tempMedicineName = "";
-    String tempMedicineType = "";
-    String tempMedicineDate = "";
-    double tempMedicineDosage = 0;
-    String tempMedicineTime = "";
     medtemp.clear();
     getMedication();
-
-    // readMedication.once().then((DataSnapshot datasnapshot) {
-    //   medtemp.clear();
-    //   String temp1 = datasnapshot.value.toString();
-    //   print(temp1);
-    //   List<String> temp = temp1.split(',');
-    //   Medication medicine;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //
-    //       switch(i%5){
-    //         case 0: {
-    //           tempMedicineType = splitFull.last;
-    //         }
-    //         break;
-    //         case 1: {
-    //           tempMedicineDosage = double.parse(splitFull.last);
-    //         }
-    //         break;
-    //         case 2: {
-    //           tempMedicineDate = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 3: {
-    //           tempMedicineName = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 4: {
-    //           tempMedicineTime = splitFull.last;
-    //           medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate), medicine_time: timeformat.parse(tempMedicineTime));
-    //           medtemp.add(medicine);
-    //         }
-    //         break;
-    //       }
-    //   }
-    //   for(var i=0;i<medtemp.length/2;i++){
-    //     var temp = medtemp[i];
-    //     medtemp[i] = medtemp[medtemp.length-1-i];
-    //     medtemp[medtemp.length-1-i] = temp;
-    //   }
-    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -171,12 +119,12 @@ class _medicationState extends State<medication> {
                         fontWeight: FontWeight.bold,
 
                       )),
-                  subtitle:        Text("hh:mm" ,
+                  subtitle:        Text("${medtemp[index].medicine_time.hour.toString().padLeft(2, '0')}:${medtemp[index].medicine_time.minute.toString().padLeft(2, '0')}" ,
                       style:TextStyle(
                         color: Colors.grey,
                         fontSize: 14.0,
                       )),
-                  trailing: Text("${medtemp[index].medicine_date.month}/${medtemp[index].medicine_date.day}/${medtemp[index].medicine_date.year}",
+                  trailing: Text("${medtemp[index].medicine_date.month.toString().padLeft(2, '0')}/${medtemp[index].medicine_date.day.toString().padLeft(2, '0')}/${medtemp[index].medicine_date.year}",
                       style:TextStyle(
                         color: Colors.grey,
                       )),
@@ -288,6 +236,8 @@ class _medicationState extends State<medication> {
     final readmedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/');
     readmedication.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print("TEMP  ");
+      print(temp);
       temp.forEach((jsonString) {
         medtemp.add(Medication.fromJson(jsonString));
       });

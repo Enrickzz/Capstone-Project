@@ -228,11 +228,11 @@ class Medication {
   Medication({this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date, this.medicine_time});
 
   Medication.fromJson(Map<String, dynamic> json) {
-    medicine_name = json['symptom_name'];
-    medicine_type = json['intensity_lvl'];
-    medicine_dosage = double.parse(json['symptom_felt']);
-    medicine_date = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
-    medicine_time = DateFormat("hh:mm").parse(json['symptom_time']);
+    medicine_name = json['medicine_name'];
+    medicine_type = json['medicine_type'];
+    medicine_dosage = double.parse(json['medicine_dosage']);
+    medicine_date = DateFormat("MM/dd/yyyy").parse(json['medicine_date']);
+    medicine_time = DateFormat("hh:mm").parse(json['medicine_time']);
   }
 
   Map<String, dynamic> toJson() {
@@ -443,14 +443,16 @@ class Body_Temperature {
   double temperature;
   DateTime bt_date;
   DateTime bt_time;
+  String indication;
 
-  Body_Temperature({this.unit, this.temperature,this.bt_date, this.bt_time});
+  Body_Temperature({this.unit, this.temperature,this.bt_date, this.bt_time, this.indication});
 
   Body_Temperature.fromJson(Map<String, dynamic> json) {
     unit = json['unit'];
     temperature = double.parse(json['temperature']);
     bt_date = DateFormat("MM/dd/yyyy").parse(json['bt_date']);
     bt_time = DateFormat("hh:mm").parse(json['bt_time']);
+    indication = json['indication'];
   }
 
   Map<String, dynamic> toJson() {
@@ -459,6 +461,7 @@ class Body_Temperature {
     data['temperature'] = this.temperature;
     data['bt_date'] = this.bt_date;
     data['bt_time'] = this.bt_time;
+    data['indication'] = this.indication;
     return data;
   }
 

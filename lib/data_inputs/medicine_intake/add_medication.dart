@@ -37,7 +37,7 @@ class _addMedicationState extends State<add_medication> {
   String medicine_date = (new DateTime.now()).toString();
   String medicine_time;
   bool isDateSelected= false;
-  int count = 0;
+  int count = 1;
   int picked = 0;
   List<Medication> medication_list = new List<Medication>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
@@ -365,7 +365,8 @@ class _addMedicationState extends State<add_medication> {
                               List<String> temp = temp1.split(',');
                               Medication medicine;
                               if(datasnapshot.value == null){
-                                final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + 0.toString());
+                                print("COUNT  " + count.toString());
+                                final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
                                 medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                                 print("Added medication Successfully! " + uid);
                               }
@@ -426,7 +427,7 @@ class _addMedicationState extends State<add_medication> {
                             //
                                 // print("symptom list  " + symptoms_list.toString());
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = medication_list.length;
+                                  count = medication_list.length--;
                                   final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
                                   medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                                   print("Added Symptom Successfully! " + uid);
