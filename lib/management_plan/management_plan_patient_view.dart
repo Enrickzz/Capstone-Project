@@ -119,13 +119,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                                               Colors.black.withOpacity(0.7),
                                               Colors.transparent
                                             ]
-                                        ),
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                              color: FitnessAppTheme.grey.withOpacity(0.6),
-                                              offset: Offset(1.1, 1.1),
-                                              blurRadius: 10.0),
-                                        ]
+                                        )
                                     )
                                 ),
                               ),
