@@ -275,7 +275,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(recurring.toString(),
+                                              Text(recurring.toString(),
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
