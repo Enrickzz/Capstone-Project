@@ -124,9 +124,19 @@ class Exercise_screen_state extends State<ExerciseScreen>
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text('ExRx Exercises', style: TextStyle(
-              color: Colors.black
-          )),
+          title: Row(
+            children: [
+              SizedBox(width: 36),
+              Image.asset(
+                  "assets/images/exrx.png",
+                  width: 90
+              ),
+              SizedBox(width: 8),
+              const Text('Exercises', style: TextStyle(
+                  color: Colors.black
+              )),
+            ],
+          ),
           centerTitle: true,
           backgroundColor: Colors.white,
           bottom: PreferredSize(

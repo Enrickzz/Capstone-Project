@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/dashboards_as_doctor.dart';
+import 'package:my_app/training/dashboards_as_doctor.dart';
 import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';

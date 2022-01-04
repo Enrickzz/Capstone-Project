@@ -90,7 +90,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 100,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -162,7 +162,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 100,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -228,7 +228,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 100,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -294,13 +294,13 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     // },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 100,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset('assets/images/activity.png',
+                                  child: Image.asset('assets/images/activity.jpg',
                                       fit: BoxFit.cover
                                   ),
                                 ),
@@ -360,7 +360,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 100,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(

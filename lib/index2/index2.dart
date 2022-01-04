@@ -101,9 +101,19 @@ class _index2State extends State<index2>
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text('Nutritionix Meals', style: TextStyle(
-              color: Colors.black
-          )),
+          title: Row(
+            children: [
+              SizedBox(width: 36),
+              Image.asset(
+                "assets/images/nutritionix.png",
+                width: 100
+              ),
+              SizedBox(width: 8),
+              const Text('Meals', style: TextStyle(
+                  color: Colors.black
+              )),
+            ],
+          ),
           centerTitle: true,
           backgroundColor: Colors.white,
           bottom: PreferredSize(

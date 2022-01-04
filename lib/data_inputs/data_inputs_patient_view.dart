@@ -107,7 +107,7 @@ class _AppSignUpState extends State<data_inputs> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -123,7 +123,7 @@ class _AppSignUpState extends State<data_inputs> {
                                 left: 0,
                                 right: 0,
                                 child: Container(
-                                    height: 120,
+                                    height: 80,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(
                                             bottomLeft: Radius.circular(20),
@@ -191,7 +191,7 @@ class _AppSignUpState extends State<data_inputs> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -207,7 +207,7 @@ class _AppSignUpState extends State<data_inputs> {
                                 left: 0,
                                 right: 0,
                                 child: Container(
-                                    height: 120,
+                                    height: 80,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(
                                             bottomLeft: Radius.circular(20),
@@ -275,7 +275,7 @@ class _AppSignUpState extends State<data_inputs> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -291,7 +291,7 @@ class _AppSignUpState extends State<data_inputs> {
                                 left: 0,
                                 right: 0,
                                 child: Container(
-                                    height: 120,
+                                    height: 80,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(
                                             bottomLeft: Radius.circular(20),
@@ -356,7 +356,7 @@ class _AppSignUpState extends State<data_inputs> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -372,7 +372,7 @@ class _AppSignUpState extends State<data_inputs> {
                                 left: 0,
                                 right: 0,
                                 child: Container(
-                                    height: 120,
+                                    height: 80,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(
                                             bottomLeft: Radius.circular(20),
@@ -436,7 +436,7 @@ class _AppSignUpState extends State<data_inputs> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -452,7 +452,7 @@ class _AppSignUpState extends State<data_inputs> {
                                 left: 0,
                                 right: 0,
                                 child: Container(
-                                    height: 120,
+                                    height: 80,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(
                                             bottomLeft: Radius.circular(20),

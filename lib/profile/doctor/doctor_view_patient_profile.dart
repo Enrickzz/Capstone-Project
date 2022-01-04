@@ -5,9 +5,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/dashboards_as_doctor.dart';
+import 'package:my_app/bottom_navigation_view/bottom_bar_view.dart';
+import 'package:my_app/training/dashboards_as_doctor.dart';
 import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
+import 'package:my_app/index2/meals.dart';
+import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/my_diary/my_exercises.dart';
+import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
@@ -50,6 +55,11 @@ class view_patient_profile extends StatefulWidget {
 class _index3State extends State<view_patient_profile>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
+  AnimationController animationController;
+  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  Widget tabBody = Container(
+    color: FitnessAppTheme.background,
+  );
 
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
@@ -88,6 +98,15 @@ class _index3State extends State<view_patient_profile>
 
   @override
   void initState() {
+    tabIconsList.forEach((TabIconData tab) {
+      tab.isSelected = false;
+    });
+    tabIconsList[0].isSelected = true;
+
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
+    tabBody = dashboards_as_doctor(animationController: animationController);
+
     super.initState();
     info = new Additional_Info(bmi: 0, birthday: format.parse("01/01/0000"), gender: "Male", height: 0, weight: 0);
     String patientuid = widget.userUID;
@@ -99,6 +118,12 @@ class _index3State extends State<view_patient_profile>
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    animationController?.dispose();
+    super.dispose();
   }
 
 
@@ -740,17 +765,25 @@ class _index3State extends State<view_patient_profile>
                         onPressed: () async {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => dashboards_as_doctor()),
+                            MaterialPageRoute(builder: (context) => dashboards_as_doctor(animationController: animationController)),
                           );
+
                         },
                       ),
                     ),
-
+                    Visibility(
+                      visible: false,
+                        child: tabBody),
+                    Visibility(
+                      visible: false,
+                        child: bottomBar()),
                   ]
+
               ),
 
 
             ),
+
           ),
 
         )
@@ -850,10 +883,70 @@ class _index3State extends State<view_patient_profile>
 
   }
 
-// Future<bool> getData() async {
-//   await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-//   return true;
-// }
+  Future<bool> getData() async {
+    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    return true;
+  }
+
+  Widget bottomBar() {
+    return Column(
+      children: <Widget>[
+        const Expanded(
+          child: SizedBox(),
+        ),
+        BottomBarView(
+          tabIconsList: tabIconsList,
+          addClick: () {},
+          changeIndex: (int index) {
+            if (index == 0) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      dashboards_as_doctor(animationController: animationController);
+                });
+              });
+            } else if (index == 1) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      my_exercises(animationController: animationController);
+                });
+              });
+            }else if(index ==2){
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                  // food_list(animationController: animationController);
+                  meals(animationController: animationController);
+                });
+              });
+            }else if(index ==3){
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      index3(animationController: animationController);
+                });
+              });
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+
   void getProfile(String uid) {
     final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
     readProfile.once().then((DataSnapshot snapshot){
@@ -967,4 +1060,16 @@ class _index3State extends State<view_patient_profile>
     });
   }
 
+}
+
+class HexColor extends Color {
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
 }

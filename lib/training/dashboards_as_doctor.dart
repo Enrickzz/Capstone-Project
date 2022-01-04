@@ -4,7 +4,6 @@ import 'package:my_app/my_diary/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/fitbit_connect.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/running_view.dart';
@@ -13,19 +12,19 @@ import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../fitness_app_theme.dart';
-import '../main.dart';
-import '../notifications.dart';
+import '../../fitness_app_theme.dart';
+import '../../main.dart';
+import '../../notifications.dart';
 
-class Dashboards extends StatefulWidget {
-  const Dashboards({Key key, this.animationController}) : super(key: key);
+class dashboards_as_doctor extends StatefulWidget {
+  const dashboards_as_doctor({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _DashboardsState createState() => _DashboardsState();
+  _dashboards_as_doctorState createState() => _dashboards_as_doctorState();
 }
 
-class _DashboardsState extends State<Dashboards>
+class _dashboards_as_doctorState extends State<dashboards_as_doctor>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -164,17 +163,7 @@ class _DashboardsState extends State<Dashboards>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
-                Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      fitbit_connect(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+            Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );
@@ -186,7 +175,7 @@ class _DashboardsState extends State<Dashboards>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
-                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );
@@ -218,11 +207,20 @@ class _DashboardsState extends State<Dashboards>
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.black
+          ),
+          title: Text("Patient's Dashboard", style: TextStyle(
+              color: Colors.black
+          )),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+        ),
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[
             getMainListViewUI(),
-            getAppBarUI(),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )
