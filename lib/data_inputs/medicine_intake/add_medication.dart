@@ -33,7 +33,7 @@ class _addMedicationState extends State<add_medication> {
   double medicine_dosage = 0;
   double hint_dosage = 0;
   String hint_unit = "";
-  String unit = "";
+  String medicine_unit = "mL";
   DateTime medicineDate;
   String medicine_date = (new DateTime.now()).toString();
   String medicine_time;
@@ -129,21 +129,20 @@ class _addMedicationState extends State<add_medication> {
                           if(medical_name[i].name == newValue){
                             hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
                             medicine_dosage = double.parse(medical_name[i].dosage);
-                            unit =  medical_name[i].unit;
+                            medicine_unit = medical_name[i].unit.toString();
                           }
                           else if (medical_name[i].name == newValue){
                             hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
                             medicine_dosage = double.parse(medical_name[i].dosage);
-                            unit =  medical_name[i].unit;
 
+                            medicine_unit = medical_name[i].unit.toString();
                           }
                         }
                         for(int i = 0; i < medical_name.length; i++){
                           if(medical_name[i].name == newValue){
                             hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
                             medicine_dosage = double.parse(medical_name[i].dosage);
-                            unit =  medical_name[i].unit;
-
+                            medicine_unit = medical_name[i].unit.toString();
                           }
                         }
                       });
@@ -280,7 +279,7 @@ class _addMedicationState extends State<add_medication> {
                         children: <Widget> [
                           Padding (
                               padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(unit, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))
+                              child: Text(medicine_unit, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))
                           ),
 
                         ],
@@ -393,89 +392,32 @@ class _addMedicationState extends State<add_medication> {
                             final uid = user.uid;
                             final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
                             readMedication.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              Medication medicine;
                               if(datasnapshot.value == null){
-                                print("COUNT  " + count.toString());
                                 final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
-                                medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
+                                medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(),"medicine_unit": medicine_unit.toString(),  "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                                 print("Added medication Successfully! " + uid);
                               }
                               else{
                                 getMedication();
-                            //     double tempMedicineDosage = 0;
-                            //     String tempMedicineName = "";
-                            //     DateTime tempMedicineDate;
-                            //     DateTime tempMedicineTime;
-                            //     String tempMedicineType = "";
-                            //     for(var i = 0; i < temp.length; i++){
-                            //       String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                            //       List<String> splitFull = full.split(" ");
-                            //         print("i value" + i.toString());
-                            //         print("i value modulu " + (i%4).toString());
-                            //         switch(i%5){
-                            //           case 0: {
-                            //             print("2nd switch intensity lvl " + splitFull.last);
-                            //             tempMedicineType = splitFull.last;
-                            //
-                            //           }
-                            //           break;
-                            //           case 1: {
-                            //             print("2nd switch symptom name " + splitFull.last);
-                            //             tempMedicineDosage = double.parse(splitFull.last);
-                            //
-                            //           }
-                            //           break;
-                            //           case 2: {
-                            //             print("2nd switch symptom date " + splitFull.last);
-                            //             tempMedicineDate = format.parse(splitFull.last);
-                            //
-                            //           }
-                            //           break;
-                            //           case 3: {
-                            //             print("2nd switch symptom date " + splitFull.last);
-                            //             tempMedicineName = splitFull.last;
-                            //
-                            //
-                            //           }
-                            //           break;
-                            //           case 4: {
-                            //             print("2nd switch symptom felt " + splitFull.last);
-                            //             tempMedicineTime = timeformat.parse(splitFull.last);
-                            //             medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: tempMedicineDate, medicine_time: tempMedicineTime);
-                            //             medication_list.add(medicine);
-                            //           }
-                            //           break;
-                            //         }
-                            //
-                            //
-                            //     }
-
-                            //     print("count " + count.toString());
-                            //     //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
-                            //
-                            //     // symptoms_list.add(symptom);
-                            //
-                                // print("symptom list  " + symptoms_list.toString());
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = medication_list.length--;
                                   final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
-                                  medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
+                                  medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(),"medicine_unit": medicine_unit.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                                   print("Added Symptom Successfully! " + uid);
                                 });
-
                               }
-
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + medication_list.length.toString());
-                              medication_list.add(new Medication(medicine_name: valueChooseMedicineSupplement, medicine_type: medicine_type, medicine_dosage: medicine_dosage, medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time)));
+                              medication_list.add(new Medication(medicine_name: valueChooseMedicineSupplement, medicine_type: medicine_type, medicine_unit: medicine_unit, medicine_dosage: medicine_dosage, medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time)));
+
                               for(var i=0;i<medication_list.length/2;i++){
                                 var temp = medication_list[i];
                                 medication_list[i] = medication_list[medication_list.length-1-i];
                                 medication_list[medication_list.length-1-i] = temp;
+                              }
+                              for(var i = 0; i < medication_list.length; i++){
+                                print(medication_list[i].medicine_name);
                               }
                               print("POP HERE ==========");
                               Navigator.pop(context, medication_list);

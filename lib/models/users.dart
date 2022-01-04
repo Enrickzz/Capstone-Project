@@ -170,6 +170,7 @@ class Symptom {
   bool symptomIsActive;
   String symptomTrigger;
   List<String> recurring;
+  String imgRef;
 
   Symptom(
       {this.symptomName,
@@ -179,7 +180,8 @@ class Symptom {
         this.symptomTime,
         this.symptomIsActive,
         this.symptomTrigger,
-        this.recurring});
+        this.recurring,
+        this.imgRef});
 
   Symptom.fromJson(Map<String, dynamic> json) {
     symptomName = json['symptom_name'];
@@ -190,6 +192,7 @@ class Symptom {
     symptomIsActive = json['symptom_isActive'];
     symptomTrigger = json['symptom_trigger'];
     recurring = json['recurring'].cast<String>();
+    imgRef = json['imgRef'];
   }
 
   Symptom.fromJson2(Map<String, dynamic> json) {
@@ -211,6 +214,7 @@ class Symptom {
     data['symptom_isActive'] = this.symptomIsActive;
     data['symptom_trigger'] = this.symptomTrigger;
     data['recurring'] = this.recurring;
+    data['imgRef'] = this.imgRef;
     return data;
   }
 }
@@ -219,17 +223,19 @@ class Medication {
   String medicine_name;
   double medicine_dosage;
   String medicine_type;
+  String medicine_unit;
   DateTime medicine_date;
   DateTime medicine_time;
   bool medicine_isActive;
 
 
 
-  Medication({this.medicine_name, this.medicine_type, this.medicine_dosage, this.medicine_date, this.medicine_time});
+  Medication({this.medicine_name, this.medicine_type,this.medicine_unit, this.medicine_dosage, this.medicine_date, this.medicine_time});
 
   Medication.fromJson(Map<String, dynamic> json) {
     medicine_name = json['medicine_name'];
     medicine_type = json['medicine_type'];
+    medicine_unit = json['medicine_unit'];
     medicine_dosage = double.parse(json['medicine_dosage']);
     medicine_date = DateFormat("MM/dd/yyyy").parse(json['medicine_date']);
     medicine_time = DateFormat("hh:mm").parse(json['medicine_time']);
@@ -239,6 +245,7 @@ class Medication {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['medicine_name'] = this.medicine_name;
     data['medicine_type'] = this.medicine_type;
+    data['medicine_unit'] = this.medicine_unit;
     data['medicine_dosage'] = this.medicine_dosage;
     data['medicine_date'] = this.medicine_date;
     data['medicine_time'] = this.medicine_time;

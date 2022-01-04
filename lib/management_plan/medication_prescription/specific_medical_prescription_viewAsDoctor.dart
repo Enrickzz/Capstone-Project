@@ -67,6 +67,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
   String endDate = "";
   String prescribedBy = "";
   String dateCreated = "";
+  bool prescribedDoctor = false;
 
 
   @override
@@ -374,8 +375,8 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
 //
 // ],)
   void getPrescription() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
+    final User user = auth.currentUser;
+    final uid = user.uid;
     var userUID = widget.userUID;
     final readprescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/');
     int index = widget.index;
@@ -387,18 +388,20 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
       final readDoctorName = databaseReference.child('users/' + prestemp[index].prescribedBy + '/personal_info/');
       readDoctorName.once().then((DataSnapshot snapshot){
         Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-        print(temp2);
         doctor = Users.fromJson(temp2);
         prescribedBy = doctor.lastname + " " + doctor.firstname;
       });
-        generic_name = prestemp[index].generic_name;
-        dosage = prestemp[index].dosage.toString();
-        unit = prestemp[index].prescription_unit.toString();
-        frequency = prestemp[index].intake_time;
-        special_instruction = prestemp[index].special_instruction;
-        startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
-        endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
-        dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
+      if(prestemp[index].prescribedBy == uid){
+        prescribedDoctor = true;
+      }
+      generic_name = prestemp[index].generic_name;
+      dosage = prestemp[index].dosage.toString();
+      unit = prestemp[index].prescription_unit.toString();
+      frequency = prestemp[index].intake_time;
+      special_instruction = prestemp[index].special_instruction;
+      startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
+      endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
+      dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
     });
   }
 }

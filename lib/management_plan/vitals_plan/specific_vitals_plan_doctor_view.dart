@@ -63,7 +63,7 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
   String important_notes = "";
   String prescribedBy = "";
   String dateCreated = "";
-
+  bool prescribedDoctor = false;
 
   @override
   void initState() {
@@ -358,8 +358,8 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
 //
 // ],)
   void getFoodplan() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
+    final User user = auth.currentUser;
+    final uid = user.uid;
     var userUID = widget.userUID;
     final readVitals = databaseReference.child('users/' + userUID + '/vitals_plan/');
     int index = widget.index;
@@ -371,10 +371,12 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
       final readDoctorName = databaseReference.child('users/' + templist[index].prescribedBy + '/personal_info/');
       readDoctorName.once().then((DataSnapshot snapshot){
         Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-        print(temp2);
         doctor = Users.fromJson(temp2);
         prescribedBy = doctor.lastname + " " + doctor.firstname;
       });
+      if(templist[index].prescribedBy == uid){
+        prescribedDoctor = true;
+      }
       purpose = templist[index].purpose;
       type = templist[index].type;
       frequency = templist[index].frequency.toString();

@@ -65,7 +65,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
   String important_notes = "";
   String prescribedBy = "";
   String dateCreated = "";
-
+  bool prescribedDoctor = false;
 
   @override
   void initState() {
@@ -378,8 +378,8 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
 //
 // ],)
   void getExplan() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
+    final User user = auth.currentUser;
+    final uid = user.uid;
     var userUID = widget.userUID;
     final readExPlan = databaseReference.child('users/' + userUID + '/exercise_prescription/');
     int index = widget.index;
@@ -395,6 +395,9 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
         doctor = Users.fromJson(temp2);
         prescribedBy = doctor.lastname + " " + doctor.firstname;
       });
+      if(templist[index].prescribedBy == uid){
+        prescribedDoctor = true;
+      }
       purpose = templist[index].purpose;
       type = templist[index].type;
       frequency = templist[index].frequency.toString();

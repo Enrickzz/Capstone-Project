@@ -91,7 +91,7 @@ class _medicationState extends State<medication> {
                         if(value != null){
                           medtemp = value;
                         }
-                        print("medetmp.length == " +medtemp.length.toString());
+                        print("medetmp.length == " + medtemp.length.toString());
                       });
                     }));
 

@@ -62,6 +62,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
   String medicine_type = "";
   String medicine_date = "";
   String medicine_time = "";
+  String medicine_unit = "";
 
   @override
   void initState() {
@@ -159,7 +160,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text( medicine_dosage + " + unit",
+                                            Text( medicine_dosage + " + " + medicine_unit,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -291,8 +292,9 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
         // });
       });
       medicine_name = listtemp[index].medicine_name;
-      medicine_dosage = listtemp[index].medicine_dosage.toString();
       medicine_type = listtemp[index].medicine_type;
+      medicine_unit = listtemp[index].medicine_unit;
+      medicine_dosage = listtemp[index].medicine_dosage.toString();
       medicine_date = "${listtemp[index].medicine_date.month.toString().padLeft(2, "0")}/${listtemp[index].medicine_date.day.toString().padLeft(2, "0")}/${listtemp[index].medicine_date.year}";
       medicine_time = "${listtemp[index].medicine_time.hour.toString().padLeft(2, "0")}:${listtemp[index].medicine_time.minute.toString().padLeft(2, "0")}";
     });

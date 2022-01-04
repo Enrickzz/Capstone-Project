@@ -664,7 +664,7 @@ class _addSymptomsState extends State<add_symptoms> {
                           valueChooseSymptom = other_name;
                         }
                         print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
-                        symptoms_list.add(new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl, symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date), symptomTime: timeformat.parse(symptom_time), symptomIsActive: true, recurring: checkboxStatus, symptomTrigger: symptom_felt));
+                        symptoms_list.add(new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl, symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date), symptomTime: timeformat.parse(symptom_time), symptomIsActive: true, recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: fileName));
                         for(var i=0;i<symptoms_list.length/2;i++){
                           var temp = symptoms_list[i];
                           symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
