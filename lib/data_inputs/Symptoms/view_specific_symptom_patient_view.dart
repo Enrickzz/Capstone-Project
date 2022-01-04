@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,10 +58,17 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<Symptom> prestemp = [];
+  Symptom symptom = new Symptom();
   final double minScale = 1;
   final double maxScale = 1.5;
   bool hasImage = true;
-
+  String symptom_name = "";
+  String intensityLvl = "";
+  String symptom_felt = "";
+  String symptom_date = "";
+  String symptom_time = "";
+  String symptom_trigger = "";
+  List<String> recurring = [];
 
   @override
   void initState() {
@@ -68,6 +77,12 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    getSymptom();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -131,7 +146,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Symptom Name here",
+                              child: Text( symptom_name,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -228,7 +243,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put Intensity level here",
+                                            Text(intensityLvl,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -242,7 +257,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put here area of symptom",
+                                            Text(symptom_felt,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -260,7 +275,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put here morning, afternoon, evening",
+                                            Text(recurring.toString(),
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -278,7 +293,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put here symptom trigger",
+                                            Text(symptom_trigger,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -354,7 +369,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put date and time here",
+                                            Text(symptom_date + " " + symptom_time,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -425,5 +440,25 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
 //   )
 //
 // ],)
-
+  void getSymptom() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    // var userUID = widget.userUID;
+    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
+    readsupplement.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        symptom = Symptom.fromJson(jsonString);
+      });
+      symptom_name = symptom.symptomName;
+      intensityLvl = symptom.intensityLvl.toString();
+      symptom_felt = symptom.symptomFelt;
+      symptom_trigger = symptom.symptomTrigger;
+      symptom_date = "${symptom.symptomDate.month.toString().padLeft(2,"0")}/${symptom.symptomDate.day.toString().padLeft(2,"0")}/${symptom.symptomDate.year}";
+      symptom_time = "${symptom.symptomTime.hour.toString().padLeft(2,"0")}:${symptom.symptomTime.minute.toString().padLeft(2,"0")}";
+      for(int i = 0; i < symptom.recurring.length; i++){
+        recurring.add(symptom.recurring[i]);
+      }
+    });
+  }
 }

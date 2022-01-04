@@ -299,14 +299,17 @@ class Supplement_Prescription{
   double dosage;
   // String special_instruction;
   String prescription_unit;
+  DateTime dateCreated;
 
-  Supplement_Prescription({this.supplement_name, this.intake_time,this.dosage, this.prescription_unit});
+
+  Supplement_Prescription({this.supplement_name, this.intake_time,this.dosage, this.prescription_unit, this.dateCreated});
 
   Supplement_Prescription.fromJson(Map<String, dynamic> json) {
     supplement_name = json['supplement_name'];
     intake_time = json['intake_time'];
     dosage = double.parse(json['supp_dosage']);
     prescription_unit = json['medical_prescription_unit'];
+    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
   }
 
   Map<String, dynamic> toJson() {
@@ -315,6 +318,7 @@ class Supplement_Prescription{
     data['startDate'] = this.intake_time;
     data['supp_dosage'] = this.dosage;
     data['medical_prescription_unit'] = this.prescription_unit;
+    data['dateCreated'] = this.dateCreated;
     return data;
   }
 

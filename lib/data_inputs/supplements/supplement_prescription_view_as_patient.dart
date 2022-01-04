@@ -186,7 +186,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                       color: Colors.grey,
                       fontSize: 14.0,
                     )),
-                trailing: Text("mm/dd/yyyy",
+                trailing: Text("${supptemp[index].dateCreated.month.toString().padLeft(2, "0")}/${supptemp[index].dateCreated.day.toString().padLeft(2, "0")}/${supptemp[index].dateCreated.year}",
                     style:TextStyle(
                       color: Colors.grey,
                     )),
