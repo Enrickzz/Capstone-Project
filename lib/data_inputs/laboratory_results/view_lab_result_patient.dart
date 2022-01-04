@@ -84,6 +84,10 @@ class viewLabResult extends State<view_lab_result> {
   String ldl=" ";
   String hdl=" ";
   String thisIMG="";
+
+  final ButtonStyle style =
+  ElevatedButton.styleFrom(textStyle: const TextStyle(fontFamily:'Montserrat',fontSize: 20));
+
   @override
   void initState(){
 
@@ -198,9 +202,27 @@ class viewLabResult extends State<view_lab_result> {
                   Text("Date and Time: \n"+ getDateFormatted(widget.lr.labResult_date.toString()) +"at "
                       + getTimeFormatted(widget.lr.labResult_time.toString())) ,
                   SizedBox(height: 18.0),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const SizedBox(height: 30),
+                      ElevatedButton(
+                        style: style,
+                        onPressed: () {
+                          _showMyDialog();
+
+
+                        },
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  ),
+
 
                 ]
-            )
+
+            ),
+
         )
     );
   }
@@ -344,5 +366,40 @@ class viewLabResult extends State<view_lab_result> {
       bunCreaCheck = false;
       lipidProfileCheck = false;
     }
+  }
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete Record'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Do you want to delete this record?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Lab result deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

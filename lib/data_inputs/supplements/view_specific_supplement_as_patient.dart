@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_app/data_inputs/supplements/edit_supplements.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
@@ -154,24 +155,24 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
                                 highlightColor: Colors.transparent,
                                 borderRadius: BorderRadius.all(Radius.circular(4.0)),
                                 onTap: () {
-                                  // showModalBottomSheet(context: context,
-                                  //   isScrollControlled: true,
-                                  //   builder: (context) => SingleChildScrollView(child: Container(
-                                  //     padding: EdgeInsets.only(
-                                  //         bottom: MediaQuery.of(context).viewInsets.bottom),
-                                  //     child: edit_medication_prescription(thislist: prestemp),
-                                  //   ),
-                                  //   ),
-                                  // ).then((value) =>
-                                  //     Future.delayed(const Duration(milliseconds: 1500), (){
-                                  //       setState((){
-                                  //         print("setstate medication prescription");
-                                  //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                  //         if(value != null){
-                                  //           prestemp = value[0];
-                                  //         }
-                                  //       });
-                                  //     }));
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: edit_supplement_prescription(),
+                                    ),
+                                    ),
+                                  ).then((value) =>
+                                      Future.delayed(const Duration(milliseconds: 1500), (){
+                                        setState((){
+                                          print("setstate medication prescription");
+                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                                          if(value != null){
+                                            // prestemp = value[0];
+                                          }
+                                        });
+                                      }));
                                 },
                                 // child: Padding(
                                 // padding: const EdgeInsets.only(left: 8),

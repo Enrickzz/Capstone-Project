@@ -571,7 +571,7 @@ class _editSymptomsState extends State<edit_symptoms> {
                       ),
                       FlatButton(
                         child: Text(
-                          'Save',
+                          'Edit',
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
