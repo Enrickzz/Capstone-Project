@@ -40,8 +40,8 @@ import '../../discussion_board/discussion.dart';
 
 
 class view_patient_profile extends StatefulWidget {
-  const view_patient_profile({Key key, this.animationController, this.patientUID}) : super(key: key);
-  final String patientUID;
+  const view_patient_profile({Key key, this.animationController, this.userUID}) : super(key: key);
+  final String userUID;
   final AnimationController animationController;
   @override
   _index3State createState() => _index3State();
@@ -90,7 +90,7 @@ class _index3State extends State<view_patient_profile>
   void initState() {
     super.initState();
     info = new Additional_Info(bmi: 0, birthday: format.parse("01/01/0000"), gender: "Male", height: 0, weight: 0);
-    String patientuid = widget.patientUID;
+    String patientuid = widget.userUID;
     getProfile(patientuid);
     getInfo(patientuid);
     // getDisease(patientuid);
@@ -689,7 +689,7 @@ class _index3State extends State<view_patient_profile>
                                 onTap:(){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => management_plan(userUID: widget.patientUID)),
+                                    MaterialPageRoute(builder: (context) => management_plan(userUID: widget.userUID)),
                                   );
 
                                 },
@@ -713,7 +713,7 @@ class _index3State extends State<view_patient_profile>
                                 onTap:(){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => data_inputs_doctor_view()),
+                                    MaterialPageRoute(builder: (context) => data_inputs_doctor_view(userUID: widget.userUID)),
                                   );
 
                                 },

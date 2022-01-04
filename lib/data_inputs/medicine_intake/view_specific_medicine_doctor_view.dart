@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificMedicineIntakeViewAsDoctor extends StatefulWidget {
-  SpecificMedicineIntakeViewAsDoctor({Key key}) : super(key: key);
+  SpecificMedicineIntakeViewAsDoctor({Key key, this.userUID}) : super(key: key);
   // final String title;
-  // String userUID;
+  String userUID;
   @override
   _SpecificSupplementViewAsDoctorState createState() => _SpecificSupplementViewAsDoctorState();
 }
@@ -54,8 +54,13 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Medication_Prescription> prestemp = [];
-  Medication_Prescription prescription = new Medication_Prescription();
+  List<Medication> listtemp = [];
+  Medication medication = new Medication();
+  String medicine_name = "";
+  String medicine_dosage = "";
+  String medicine_type = "";
+  String medicine_date = "";
+  String medicine_time = "";
 
   @override
   void initState() {
@@ -64,7 +69,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
     controller.addListener(() {
       setState(() {});
     });
-    // getPrescription();
+    getMedicineIntake();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -100,7 +105,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Medicine/Supplement Name",
+                              child: Text( medicine_name,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -153,7 +158,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text( "dosage + unit",
+                                            Text( medicine_dosage + " + unit",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -171,7 +176,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text('hh:mm',
+                                            Text(medicine_time,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -191,7 +196,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text('mm/dd/yyyy',
+                                            Text(medicine_date,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -266,33 +271,30 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
 //   )
 //
 // ],)
-//   void getPrescription() {
-//     // final User user = auth.currentUser;
-//     // final uid = user.uid;
-//     var userUID = widget.userUID;
-//     final readprescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/');
-//     readprescription.once().then((DataSnapshot snapshot){
-//       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-//       temp.forEach((jsonString) {
-//         prescription = Medication_Prescription.fromJson(jsonString);
-//         generic_name = prescription.generic_name;
-//         dosage = prescription.dosage.toString();
-//         unit = prescription.prescription_unit.toString();
-//         frequency = prescription.intake_time;
-//         special_instruction = prescription.special_instruction;
-//         startDate = "${prescription.startdate.month}/${prescription.startdate.day}/${prescription.startdate.year}";
-//         endDate = "${prescription.enddate.month}/${prescription.enddate.day}/${prescription.enddate.year}";
-//         dateCreated = "${prescription.datecreated.month}/${prescription.datecreated.day}/${prescription.datecreated.year}";
-//         final readDoctorName = databaseReference.child('users/' + prescription.prescribedBy + '/personal_info/');
-//         readDoctorName.once().then((DataSnapshot snapshot){
-//           Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-//           print(temp2);
-//           doctor = Users.fromJson(temp2);
-//           prescribedBy = doctor.lastname + " " + doctor.firstname;
-//         });
-//
-//       });
-//     });
-//   }
+  void getMedicineIntake() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    var userUID = widget.userUID;
+    final readintake = databaseReference.child('users/' + userUID + '/vitals/health_records/medications_list/');
+    readintake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        medication = Medication.fromJson(jsonString);
+        medicine_name = medication.medicine_name;
+        medicine_dosage = medication.medicine_dosage.toString();
+        medicine_type = medication.medicine_type;
+        medicine_date = "${medication.medicine_date.month.toString().padLeft(2, "0")}/${medication.medicine_date.day.toString().padLeft(2, "0")}/${medication.medicine_date.year}";
+        medicine_time = "${medication.medicine_time.hour.toString().padLeft(2, "0")}:${medication.medicine_time.minute.toString().padLeft(2, "0")}";
+        // final readDoctorName = databaseReference.child('users/' + medication.prescribedBy + '/personal_info/');
+        // readDoctorName.once().then((DataSnapshot snapshot){
+        //   Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        //   print(temp2);
+        //   doctor = Users.fromJson(temp2);
+        //   prescribedBy = doctor.lastname + " " + doctor.firstname;
+        // });
+
+      });
+    });
+  }
 }
 

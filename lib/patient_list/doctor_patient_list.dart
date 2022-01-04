@@ -162,7 +162,7 @@ class _PatientListState extends State<PatientList>  {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => view_patient_profile(patientUID: uidlist[index])),
+                      MaterialPageRoute(builder: (context) => view_patient_profile(userUID: uidlist[index])),
                     );
 
 

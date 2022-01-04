@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,8 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 
 
 class data_inputs_doctor_view extends StatefulWidget {
+  String userUID;
+  data_inputs_doctor_view({Key key, this.userUID}) : super(key: key);
   @override
   _AppSignUpState createState() => _AppSignUpState();
 }
@@ -36,35 +40,30 @@ class data_inputs_doctor_view extends StatefulWidget {
 class _AppSignUpState extends State<data_inputs_doctor_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  final AuthService _auth = AuthService();
-  String firstname = '';
-  String lastname = '';
-  String email = '';
-  String password = '';
-  String error = '';
-  String initValue="Select your Birth Date";
-  bool isDateSelected= false;
-  DateTime birthDate; // instance of DateTime
-  String birthDateInString = "MM/DD/YYYY";
-  String weight = "";
-  String height = "";
-  String genderIn="male";
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Symptom> thislist = new List<Symptom>();
   List<Medication> thismedlist = new List<Medication>();
   List<Medication_Prescription> prescriptionList = new List<Medication_Prescription>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
-
+  Users patient = new Users();
+  String displayname = "";
   //added by borj
   List<Supplement_Prescription> supplementList = new List<Supplement_Prescription>();
 
   @override
   void initState(){
     super.initState();
+
     setState(() {
       print("SET STATE data input");
       //convertFutureListToListSymptom();
       // convertFutureListToListMedication();
+    });
+    getUser();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -82,7 +81,10 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text("'s Data Inputs", style: TextStyle(
+        title: const Text(
+          ///di ko mapagana
+            // patient.lastname +
+                "'s Data Inputs", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -188,7 +190,7 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
                       // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => supplement_prescription_view_as_doctor(preslist: supplementList)),
+                        MaterialPageRoute(builder: (context) => supplement_prescription_view_as_doctor(preslist: supplementList, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -272,7 +274,7 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
                       // thismedlist.add(new Medication(medicine_name: "tempMedicineName", medicine_type: "tempMedicineType", medicine_dosage: 2, medicine_date: format.parse("11/21/2020")));
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => medication_intake_doctor_view(medlist: thismedlist)),
+                        MaterialPageRoute(builder: (context) => medication_intake_doctor_view(medlist: thismedlist, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -350,10 +352,9 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
                   ),
                   GestureDetector(
                     onTap:(){
-                      getSymptoms;
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => symptoms_doctor_view(symptomlist1: thislist)),
+                        MaterialPageRoute(builder: (context) => symptoms_doctor_view(symptomlist1: thislist, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -524,180 +525,16 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
       ),
     );
   }
-
-  Future<List<Symptom>> getSymptoms () async {
-    List<Symptom> symptomsList = new List<Symptom>();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final symptomsRef = databaseReference.child('users/' + uid +'/symptoms_list/');
-    int tempIntesityLvl = 0;
-    String tempSymptomName = "";
-    String tempSymptomDate = "";
-    String tempSymptomFelt = "";
-    await symptomsRef.once().then((DataSnapshot datasnapshot){
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Symptom symptom;
-
-      for(var i = 0; i < temp.length; i++){
-        String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-        if(i < 4){
-          switch(i){
-            case 0: {
-              tempIntesityLvl = int.parse(splitFull.last);
-            }
-            break;
-            case 1: {
-              tempSymptomName = splitFull.last;
-            }
-            break;
-            case 2: {
-              tempSymptomDate = splitFull.last;
-            }
-            break;
-            case 3: {
-              tempSymptomFelt = splitFull.last;
-              // symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date:format.parse(tempSymptomDate));
-              symptomsList.add(symptom);
-            }
-            break;
-          }
-        }
-        else{
-          switch(i%4){
-            case 0: {
-              tempIntesityLvl = int.parse(splitFull.last);
-            }
-            break;
-            case 1: {
-              tempSymptomName = splitFull.last;
-            }
-            break;
-            case 2: {
-              tempSymptomDate = splitFull.last;
-
-            }
-            break;
-            case 3: {
-              tempSymptomFelt = splitFull.last;
-              // symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate));
-              symptomsList.add(symptom);
-
-            }
-            break;
-          }
-        }
-      }
-      for(var i=0;i<symptomsList.length/2;i++){
-        var temp = symptomsList[i];
-        symptomsList[i] = symptomsList[symptomsList.length-1-i];
-        symptomsList[symptomsList.length-1-i] = temp;
-      }
+  void getUser(){
+    var userUID = widget.userUID;
+    final readintake = databaseReference.child('users/' + userUID + '/personal_info/');
+    readintake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        patient = Users.fromJson(jsonString);
+        displayname = patient.firstname + " " + patient.lastname;
+      });
     });
-    return symptomsList;
-  }
-
-  Future<List<Medication>> getMedication() async {
-    List<Medication> medication_list = new List<Medication>();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
-    String tempMedicineName = "";
-    String tempMedicineType = "";
-    String tempMedicineDate = "";
-    double tempMedicineDosage = 0;
-    await readMedication.once().then((DataSnapshot datasnapshot) {
-      String temp1 = datasnapshot.value.toString();
-      List<String> temp = temp1.split(',');
-      Medication medicine;
-      for(var i = 0; i < temp.length; i++) {
-        String full = temp[i].replaceAll("{", "")
-            .replaceAll("}", "")
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        List<String> splitFull = full.split(" ");
-        if(i < 4){
-          print("i value" + i.toString());
-          switch(i){
-            case 0: {
-              print("1st switch i = 0 " + splitFull.last);
-              // tempMedicineDosage = double.parse(splitFull.last);
-              tempMedicineType = splitFull.last;
-
-            }
-            break;
-            case 1: {
-              print("1st switch i = 1 " + splitFull.last);
-              tempMedicineDosage = double.parse(splitFull.last);
-
-            }
-            break;
-            case 2: {
-              print("1st switch i = 2 " + splitFull.last);
-              tempMedicineDate = splitFull.last;
-            }
-            break;
-            case 3: {
-              print("1st switch i = 3 " + splitFull.last);
-              tempMedicineName = splitFull.last;
-              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
-              medication_list.add(medicine);
-            }
-            break;
-          }
-        }
-        else{
-          print("i value" + i.toString());
-          print("i value modulu " + (i%4).toString());
-          switch(i%4){
-            case 0: {
-              print("2nd switch intensity lvl " + splitFull.last);
-
-              tempMedicineType = splitFull.last;
-              // tempMedicineDosage = 0;
-            }
-            break;
-            case 1: {
-              print("2nd switch symptom name " + splitFull.last);
-              tempMedicineDosage = double.parse(splitFull.last);
-
-            }
-            break;
-            case 2: {
-              print("2nd switch symptom date " + splitFull.last);
-              tempMedicineDate = splitFull.last;
-
-            }
-            break;
-            case 3: {
-              print("2nd switch symptom felt " + splitFull.last);
-              tempMedicineName = splitFull.last;
-              medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
-              medication_list.add(medicine);
-            }
-            break;
-          }
-        }
-      }
-      for(var i=0;i<medication_list.length/2;i++){
-        var temp = medication_list[i];
-        medication_list[i] = medication_list[medication_list.length-1-i];
-        medication_list[medication_list.length-1-i] = temp;
-      }
-
-    });
-    return medication_list;
-  }
-  void convertFutureListToListSymptom() async {
-    Future<List> _futureOfList = getSymptoms();
-    List list = await _futureOfList ;
-    thislist = list;
-  }
-  void convertFutureListToListMedication() async {
-    Future<List> _futureOfList = getMedication();
-    List list = await _futureOfList ;
-    thismedlist = list;
   }
 
 }

@@ -21,7 +21,8 @@ import '../../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class medication_intake_doctor_view extends StatefulWidget {
   final List<Medication> medlist;
-  medication_intake_doctor_view({Key key, this.medlist}): super(key: key);
+  String userUID;
+  medication_intake_doctor_view({Key key, this.medlist, this.userUID}): super(key: key);
   @override
   _medicationState createState() => _medicationState();
 }
@@ -39,14 +40,6 @@ class _medicationState extends State<medication_intake_doctor_view> {
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
-    String tempMedicineName = "";
-    String tempMedicineType = "";
-    String tempMedicineDate = "";
-    double tempMedicineDosage = 0;
-    String tempMedicineTime = "";
     medtemp.clear();
     getMedication();
     Future.delayed(const Duration(milliseconds: 1500), (){
@@ -94,7 +87,7 @@ class _medicationState extends State<medication_intake_doctor_view> {
                         fontWeight: FontWeight.bold,
 
                       )),
-                  subtitle:        Text("hh:mm" ,
+                  subtitle:        Text("${medtemp[index].medicine_time.hour.toString().padLeft(2,"0")}:${medtemp[index].medicine_time.minute.toString().padLeft(2,"0")}" ,
                       style:TextStyle(
                         color: Colors.grey,
                         fontSize: 14.0,
@@ -109,7 +102,7 @@ class _medicationState extends State<medication_intake_doctor_view> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SpecificMedicineIntakeViewAsDoctor()),
+                      MaterialPageRoute(builder: (context) => SpecificMedicineIntakeViewAsDoctor(userUID: widget.userUID)),
                     );
                   }
 
@@ -206,9 +199,10 @@ class _medicationState extends State<medication_intake_doctor_view> {
     }
   }
   void getMedication() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readmedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readmedication = databaseReference.child('users/' + userUID + '/vitals/health_records/medications_list/');
     readmedication.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

@@ -22,8 +22,8 @@ import '../../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class symptoms_doctor_view extends StatefulWidget {
   final List<Symptom> symptomlist1;
-  symptoms_doctor_view({Key key, this.symptomlist1})
-      : super(key: key);
+  String userUID;
+  symptoms_doctor_view({Key key, this.symptomlist1, this.userUID}) : super(key: key);
   @override
   _symptomsState createState() => _symptomsState();
 }
@@ -45,64 +45,6 @@ class _symptomsState extends State<symptoms_doctor_view> {
     super.initState();
     listtemp.clear();
     getSymptoms();
-
-
-    // symptomsRef.once().then((DataSnapshot datasnapshot){
-    //   listtemp.clear();
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Symptom symptom;
-    //
-    //   for(var i = 0; i < temp.length; i++){
-    //     String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //       switch(i%6){
-    //         case 0: {
-    //           print("1st switch intensity lvl " + splitFull.last);
-    //           tempIntesityLvl = int.parse(splitFull.last);
-    //         }
-    //         break;
-    //         case 1: {
-    //           print("1st switch symptom name " + splitFull.last);
-    //           tempSymptomName = splitFull.last;
-    //         }
-    //         break;
-    //         case 2: {
-    //           print("1st switch symptom date " + splitFull.last);
-    //           tempSymptomDate = splitFull.last;
-    //
-    //         }
-    //         break;
-    //         case 3: {
-    //           print("1st switch symptom time " + splitFull.last);
-    //
-    //
-    //         }
-    //         break;
-    //         case 4: {
-    //           print("1st switch is active " + splitFull.last);
-    //           tempSymptomTime = splitFull.last;
-    //         }
-    //         break;
-    //         case 5: {
-    //           print("1st switch symptom felt " + splitFull.last);
-    //           tempSymptomFelt = splitFull.last;
-    //           // symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: format.parse(tempSymptomDate), symptom_time: timeformat.parse(tempSymptomTime), symptom_isActive: tempIsActive);
-    //           listtemp.add(symptom);
-    //         }
-    //         break;
-    //       }
-    //
-    //   }
-    //   for(var i=0;i<listtemp.length/2;i++){
-    //     var temp = listtemp[i];
-    //     listtemp[i] = listtemp[listtemp.length-1-i];
-    //     listtemp[listtemp.length-1-i] = temp;
-    //   }
-    // });
-
-    print(listtemp.toString());
-
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         print("setstate");
@@ -166,7 +108,7 @@ class _symptomsState extends State<symptoms_doctor_view> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsDoctor()),
+                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsDoctor(userUID: widget.userUID)),
                       );
                     }
 
@@ -189,9 +131,10 @@ class _symptomsState extends State<symptoms_doctor_view> {
     return "$hours:$min";
   }
   List<Symptom> getSymptoms() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readsymptom = databaseReference.child('users/' + userUID + '/vitals/health_records/symptoms_list/');
     List<Symptom> symptoms = [];
     symptoms.clear();
     readsymptom.once().then((DataSnapshot snapshot){
@@ -206,12 +149,10 @@ class _symptomsState extends State<symptoms_doctor_view> {
           symptoms.add(Symptom.fromJson(jsonString));
           listtemp.add(Symptom.fromJson(jsonString));
         }
-
         //print(symptoms[0].symptomName);
         //print("symptoms length " + symptoms.length.toString());
       });
     });
-
     return symptoms;
   }
 }

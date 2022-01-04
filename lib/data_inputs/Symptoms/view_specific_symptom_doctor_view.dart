@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,10 +39,10 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificSymptomViewAsDoctor extends StatefulWidget {
-  SpecificSymptomViewAsDoctor({Key key, this.title}) : super(key: key);
+  SpecificSymptomViewAsDoctor({Key key, this.title, this.userUID}) : super(key: key);
 
   final String title;
-
+  String userUID;
   @override
   _SpecificSymptomViewAsDoctorState createState() => _SpecificSymptomViewAsDoctorState();
 }
@@ -53,19 +55,32 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Medication_Prescription> prestemp = [];
   final double minScale = 1;
   final double maxScale = 1.5;
   bool hasImage = true;
 
+  List<Symptom> listtemp = [];
+  Symptom symptom = new Symptom();
+  String symptomName = "";
+  String intensityLvl = "";
+  String symptomFelt = "";
+  String symptomDate = "";
+  String symptomTime = "";
+  String symptomTrigger = "";
+  List<String> recurring = [];
 
   @override
   void initState() {
     super.initState();
-
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    getMedicineIntake();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -99,7 +114,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Symptom Name here",
+                              child: Text(symptomName,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -148,7 +163,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put Intensity level here",
+                                            Text(intensityLvl,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -162,7 +177,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put here area of symptom",
+                                            Text(symptomFelt,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -180,7 +195,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put here morning, afternoon, evening",
+                                            Text(recurring.toString(),
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -198,7 +213,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put here symptom trigger",
+                                            Text(symptomTrigger,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -274,7 +289,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Put date and time here",
+                                            Text(symptomDate + " " + symptomTime,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -309,5 +324,34 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
 //   )
 //
 // ],)
-
+  void getMedicineIntake() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    var userUID = widget.userUID;
+    final readsymptom = databaseReference.child('users/' + userUID + '/vitals/health_records/symptoms_list/');
+    readsymptom.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        symptom = Symptom.fromJson(jsonString);
+        symptomName = symptom.symptomName;
+        intensityLvl = symptom.intensityLvl.toString();
+        symptomFelt = symptom.symptomFelt;
+        symptomDate = "${symptom.symptomDate.month.toString().padLeft(2, "0")}/${symptom.symptomDate.day.toString().padLeft(2, "0")}/${symptom.symptomDate.year}";
+        symptomTime = "${symptom.symptomTime.hour.toString().padLeft(2, "0")}:${symptom.symptomTime.minute.toString().padLeft(2, "0")}";
+        symptomTrigger = symptom.symptomTrigger;
+        if(symptom.recurring != null){
+          for(int i = 0; i < symptom.recurring.length; i++){
+            recurring.add(symptom.recurring[i]);
+          }
+        }
+        // final readDoctorName = databaseReference.child('users/' + medication.prescribedBy + '/personal_info/');
+        // readDoctorName.once().then((DataSnapshot snapshot){
+        //   Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        //   print(temp2);
+        //   doctor = Users.fromJson(temp2);
+        //   prescribedBy = doctor.lastname + " " + doctor.firstname;
+        // });
+      });
+    });
+  }
 }

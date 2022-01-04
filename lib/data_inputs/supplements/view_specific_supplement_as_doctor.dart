@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificSupplementViewAsDoctor extends StatefulWidget {
-  SpecificSupplementViewAsDoctor({Key key}) : super(key: key);
+  SpecificSupplementViewAsDoctor({Key key, this.userUID}) : super(key: key);
   // final String title;
-  // String userUID;
+  String userUID;
   @override
   _SpecificSupplementViewAsDoctorState createState() => _SpecificSupplementViewAsDoctorState();
 }
@@ -55,16 +55,12 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificSupplementViewA
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<Medication_Prescription> prestemp = [];
-  Medication_Prescription prescription = new Medication_Prescription();
+  Supplement_Prescription supplement = new Supplement_Prescription();
   Users doctor = new Users();
-  String generic_name = "";
+  String supplement_name = "";
+  String intake_time = "";
   String dosage = "";
-  String unit = "";
-  String frequency = "";
-  String special_instruction = "";
-  String startDate = "";
-  String endDate = "";
-  String prescribedBy = "";
+  String prescription_unit = "";
   String dateCreated = "";
 
 
@@ -75,7 +71,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificSupplementViewA
     controller.addListener(() {
       setState(() {});
     });
-    // getPrescription();
+    getSupplement();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -111,7 +107,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificSupplementViewA
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Supplement Name",
+                              child: Text( supplement_name,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -163,7 +159,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificSupplementViewA
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(dosage + " " + unit,
+                                            Text(dosage + " ",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -177,7 +173,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificSupplementViewA
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(frequency,
+                                            Text(intake_time,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -231,33 +227,29 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificSupplementViewA
 //   )
 //
 // ],)
-//   void getPrescription() {
-//     // final User user = auth.currentUser;
-//     // final uid = user.uid;
-//     var userUID = widget.userUID;
-//     final readprescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/');
-//     readprescription.once().then((DataSnapshot snapshot){
-//       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-//       temp.forEach((jsonString) {
-//         prescription = Medication_Prescription.fromJson(jsonString);
-//         generic_name = prescription.generic_name;
-//         dosage = prescription.dosage.toString();
-//         unit = prescription.prescription_unit.toString();
-//         frequency = prescription.intake_time;
-//         special_instruction = prescription.special_instruction;
-//         startDate = "${prescription.startdate.month}/${prescription.startdate.day}/${prescription.startdate.year}";
-//         endDate = "${prescription.enddate.month}/${prescription.enddate.day}/${prescription.enddate.year}";
-//         dateCreated = "${prescription.datecreated.month}/${prescription.datecreated.day}/${prescription.datecreated.year}";
-//         final readDoctorName = databaseReference.child('users/' + prescription.prescribedBy + '/personal_info/');
-//         readDoctorName.once().then((DataSnapshot snapshot){
-//           Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-//           print(temp2);
-//           doctor = Users.fromJson(temp2);
-//           prescribedBy = doctor.lastname + " " + doctor.firstname;
-//         });
-//
-//       });
-//     });
-//   }
+  void getSupplement() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    var userUID = widget.userUID;
+    final readsupplement = databaseReference.child('users/' + userUID + '/vitals/health_records/supplement_prescription_list/');
+    readsupplement.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        supplement = Supplement_Prescription.fromJson(jsonString);
+        supplement_name = supplement.supplement_name;
+        intake_time = supplement.intake_time;
+        dosage = supplement.dosage.toString();
+        prescription_unit = supplement.prescription_unit;
+        dateCreated = "${supplement.dateCreated.month}/${supplement.dateCreated.day}/${supplement.dateCreated.year}";
+        // final readDoctorName = databaseReference.child('users/' + supplement.prescribedBy + '/personal_info/');
+        // readDoctorName.once().then((DataSnapshot snapshot){
+        //   Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        //   print(temp2);
+        //   doctor = Users.fromJson(temp2);
+        //   prescribedBy = doctor.lastname + " " + doctor.firstname;
+        // });
+      });
+    });
+  }
 }
 

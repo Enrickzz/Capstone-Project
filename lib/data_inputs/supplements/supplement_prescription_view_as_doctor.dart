@@ -24,7 +24,8 @@ import 'add_supplement_prescription.dart';
 class supplement_prescription_view_as_doctor extends StatefulWidget {
   final List<Supplement_Prescription> preslist;
   final int pointer;
-  supplement_prescription_view_as_doctor({Key key, this.preslist, this.pointer}): super(key: key);
+  String userUID;
+  supplement_prescription_view_as_doctor({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
   @override
   _supplement_prescription_view_as_doctorState createState() => _supplement_prescription_view_as_doctorState();
 }
@@ -43,70 +44,6 @@ class _supplement_prescription_view_as_doctorState extends State<supplement_pres
     super.initState();
     supptemp.clear();
     getSupplementPrescription();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-    // String tempGenericName = "";
-    // String tempBrandedName = "";
-    // String tempIntakeTime = "";
-    // String tempSpecialInstruction = "";
-    // String tempStartDate = "";
-    // String tempEndDate = "";
-    // String tempPrescriptionUnit = "";
-    //
-    // readPrescription.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Supplement_Prescription prescription;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i%7){
-    //       case 0: {
-    //         tempPrescriptionUnit = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         tempEndDate = splitFull.last;
-    //
-    //       }
-    //       break;
-    //       case 2: {
-    //         tempIntakeTime = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         tempBrandedName = splitFull.last;
-    //
-    //       }
-    //       break;
-    //       case 4: {
-    //         tempSpecialInstruction = splitFull.last;
-    //       }
-    //       break;
-    //       case 5: {
-    //         tempGenericName = splitFull.last;
-    //       }
-    //       break;
-    //       case 6: {
-    //         tempStartDate = splitFull.last;
-    //         prescription = new Supplement_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-    //         prestemp.add(prescription);
-    //       }
-    //       break;
-    //     }
-    //
-    //   }
-    //   for(var i=0;i<prestemp.length/2;i++){
-    //     var temp = prestemp[i];
-    //     prestemp[i] = prestemp[prestemp.length-1-i];
-    //     prestemp[prestemp.length-1-i] = temp;
-    //   }
-    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -163,7 +100,7 @@ class _supplement_prescription_view_as_doctorState extends State<supplement_pres
                         color: Colors.grey,
                         fontSize: 14.0,
                       )),
-                  trailing: Text("mm/dd/yyyy",
+                  trailing: Text("${supptemp[index].dateCreated.month.toString().padLeft(2,"0")}/${supptemp[index].dateCreated.day.toString().padLeft(2,"0")}/${supptemp[index].dateCreated.year}",
                       style:TextStyle(
                         color: Colors.grey,
                       )),
@@ -173,7 +110,7 @@ class _supplement_prescription_view_as_doctorState extends State<supplement_pres
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SpecificSupplementViewAsDoctor()),
+                      MaterialPageRoute(builder: (context) => SpecificSupplementViewAsDoctor(userUID: widget.userUID)),
                     );
                   }
 
@@ -270,9 +207,10 @@ class _supplement_prescription_view_as_doctorState extends State<supplement_pres
     }
   }
   void getSupplementPrescription() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readsupplement = databaseReference.child('users/' + userUID + '/vitals/health_records/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

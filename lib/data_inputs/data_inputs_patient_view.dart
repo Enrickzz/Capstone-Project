@@ -25,6 +25,8 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 
 
 class data_inputs extends StatefulWidget {
+  String userUID;
+  data_inputs({Key key, this.userUID}) : super(key: key);
   @override
   _AppSignUpState createState() => _AppSignUpState();
 }

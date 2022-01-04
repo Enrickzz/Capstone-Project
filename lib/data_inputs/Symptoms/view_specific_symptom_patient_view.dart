@@ -449,16 +449,19 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         symptom = Symptom.fromJson(jsonString);
+        symptom_name = symptom.symptomName;
+        intensityLvl = symptom.intensityLvl.toString();
+        symptom_felt = symptom.symptomFelt;
+        symptom_trigger = symptom.symptomTrigger;
+        symptom_date = "${symptom.symptomDate.month.toString().padLeft(2,"0")}/${symptom.symptomDate.day.toString().padLeft(2,"0")}/${symptom.symptomDate.year}";
+        symptom_time = "${symptom.symptomTime.hour.toString().padLeft(2,"0")}:${symptom.symptomTime.minute.toString().padLeft(2,"0")}";
+        if(symptom.recurring != null){
+          for(int i = 0; i < symptom.recurring.length; i++){
+            recurring.add(symptom.recurring[i]);
+          }
+        }
       });
-      symptom_name = symptom.symptomName;
-      intensityLvl = symptom.intensityLvl.toString();
-      symptom_felt = symptom.symptomFelt;
-      symptom_trigger = symptom.symptomTrigger;
-      symptom_date = "${symptom.symptomDate.month.toString().padLeft(2,"0")}/${symptom.symptomDate.day.toString().padLeft(2,"0")}/${symptom.symptomDate.year}";
-      symptom_time = "${symptom.symptomTime.hour.toString().padLeft(2,"0")}:${symptom.symptomTime.minute.toString().padLeft(2,"0")}";
-      for(int i = 0; i < symptom.recurring.length; i++){
-        recurring.add(symptom.recurring[i]);
-      }
+
     });
   }
 }
