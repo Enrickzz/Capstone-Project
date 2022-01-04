@@ -46,7 +46,7 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
   List<Medication_Prescription> prescriptionList = new List<Medication_Prescription>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   Users patient = new Users();
-  String displayname = "";
+  String displayname = " ";
   //added by borj
   List<Supplement_Prescription> supplementList = new List<Supplement_Prescription>();
 
@@ -81,10 +81,7 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text(
-          ///di ko mapagana
-            // patient.lastname +
-                "'s Data Inputs", style: TextStyle(
+        title:  Text("Patient's Data Inputs", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,

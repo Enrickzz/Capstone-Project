@@ -112,7 +112,7 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
           ],
         ),
         body: ListView.builder(
-            itemCount: 1,
+            itemCount: vitalstemp.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
               width: MediaQuery.of(context).size.width,

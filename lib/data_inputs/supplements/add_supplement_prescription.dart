@@ -45,7 +45,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
   String intake_time = "";
   double supp_dosage = 0;
   String special_instruction = "";
-  String prescription_unit = "";
+  String prescription_unit = "mL";
   int count = 1;
   List<Supplement_Prescription> supplement_list = new List<Supplement_Prescription>();
   String valueChooseInterval;

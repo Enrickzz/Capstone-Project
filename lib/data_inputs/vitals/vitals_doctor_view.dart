@@ -72,7 +72,7 @@ class _AppSignUpState extends State<vitals_doctor_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text("'s Recorded Vitals", style: TextStyle(
+        title: const Text("Patient's Recorded Vitals", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,

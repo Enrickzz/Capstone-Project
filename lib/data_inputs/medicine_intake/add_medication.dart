@@ -33,6 +33,7 @@ class _addMedicationState extends State<add_medication> {
   double medicine_dosage = 0;
   double hint_dosage = 0;
   String hint_unit = "";
+  String unit = "";
   DateTime medicineDate;
   String medicine_date = (new DateTime.now()).toString();
   String medicine_time;
@@ -46,6 +47,8 @@ class _addMedicationState extends State<add_medication> {
   List<Medication_Prescription> medical_list = [];
   List<Supplement_Prescription> supplement_list = [];
   List<listMeds> medical_name = [];
+  List <bool> isSelected = [false];
+
 
   var dateValue = TextEditingController();
   String valueChooseMedicineSupplement;
@@ -126,16 +129,21 @@ class _addMedicationState extends State<add_medication> {
                           if(medical_name[i].name == newValue){
                             hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
                             medicine_dosage = double.parse(medical_name[i].dosage);
+                            unit =  medical_name[i].unit;
                           }
                           else if (medical_name[i].name == newValue){
                             hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
                             medicine_dosage = double.parse(medical_name[i].dosage);
+                            unit =  medical_name[i].unit;
+
                           }
                         }
                         for(int i = 0; i < medical_name.length; i++){
                           if(medical_name[i].name == newValue){
                             hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
                             medicine_dosage = double.parse(medical_name[i].dosage);
+                            unit =  medical_name[i].unit;
+
                           }
                         }
                       });
@@ -236,30 +244,55 @@ class _addMedicationState extends State<add_medication> {
             //   ],
             // ),
                   SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child:TextFormField(
+                            showCursor: true,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(
+                                  width:0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3F5),
+                              hintStyle: TextStyle(
+                                  color: Color(0xFF666666),
+                                  fontFamily: defaultFontFamily,
+                                  fontSize: defaultFontSize),
+                              hintText: hint_unit,
+                            ),
+                            validator: (val) => val.isEmpty ? 'Enter Medicine Dosage' : null,
+                            onChanged: (val){
+                              setState(() => medicine_dosage = double.parse(val));
+                            },
+                          ),
                       ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: hint_unit,
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Medicine Dosage' : null,
-                    onChanged: (val){
-                      setState(() => medicine_dosage = double.parse(val));
-                    },
+                      SizedBox(width: 8.0),
+                      ToggleButtons(
+                        isSelected: isSelected,
+                        borderRadius: BorderRadius.circular(10),
+                        highlightColor: Colors.blue,
+                        children: <Widget> [
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(unit, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))
+                          ),
+
+                        ],
+                        // onPressed:(){
+                        //
+                        // },
+                      ),
+
+
+                    ],
                   ),
+
                   SizedBox(height: 8.0),
                   GestureDetector(
                     onTap: ()async{
