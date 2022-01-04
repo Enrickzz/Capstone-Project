@@ -41,10 +41,10 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificSymptomViewAsPatient extends StatefulWidget {
-  SpecificSymptomViewAsPatient({Key key, this.title}) : super(key: key);
+  SpecificSymptomViewAsPatient({Key key, this.title, this.index}) : super(key: key);
 
   final String title;
-
+  int index;
   @override
   _SpecificSymptomViewAsPatientState createState() => _SpecificSymptomViewAsPatientState();
 }
@@ -57,8 +57,8 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Symptom> prestemp = [];
-  Symptom symptom = new Symptom();
+  List<Symptom> listtemp = [];
+  // Symptom listtemp = new Symptom();
   final double minScale = 1;
   final double maxScale = 1.5;
   bool hasImage = true;
@@ -163,7 +163,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                     builder: (context) => SingleChildScrollView(child: Container(
                                       padding: EdgeInsets.only(
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_symptoms(thislist: prestemp),
+                                      child: edit_symptoms(thislist: listtemp),
                                     ),
                                     ),
                                   ).then((value) =>
@@ -172,7 +172,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                           print("setstate medication prescription");
                                           print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                                           if(value != null){
-                                            prestemp = value[0];
+                                            listtemp = value[0];
                                           }
                                         });
                                       }));
@@ -444,24 +444,24 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
     final User user = auth.currentUser;
     final uid = user.uid;
     // var userUID = widget.userUID;
+    int index = widget.index;
     final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        symptom = Symptom.fromJson(jsonString);
-        symptom_name = symptom.symptomName;
-        intensityLvl = symptom.intensityLvl.toString();
-        symptom_felt = symptom.symptomFelt;
-        symptom_trigger = symptom.symptomTrigger;
-        symptom_date = "${symptom.symptomDate.month.toString().padLeft(2,"0")}/${symptom.symptomDate.day.toString().padLeft(2,"0")}/${symptom.symptomDate.year}";
-        symptom_time = "${symptom.symptomTime.hour.toString().padLeft(2,"0")}:${symptom.symptomTime.minute.toString().padLeft(2,"0")}";
-        if(symptom.recurring != null){
-          for(int i = 0; i < symptom.recurring.length; i++){
-            recurring.add(symptom.recurring[i]);
-          }
-        }
+        listtemp.add(Symptom.fromJson(jsonString));
       });
-
+      symptom_name = listtemp[index].symptomName;
+      intensityLvl = listtemp[index].intensityLvl.toString();
+      symptom_felt = listtemp[index].symptomFelt;
+      symptom_trigger = listtemp[index].symptomTrigger;
+      symptom_date = "${listtemp[index].symptomDate.month.toString().padLeft(2,"0")}/${listtemp[index].symptomDate.day.toString().padLeft(2,"0")}/${listtemp[index].symptomDate.year}";
+      symptom_time = "${listtemp[index].symptomTime.hour.toString().padLeft(2,"0")}:${listtemp[index].symptomTime.minute.toString().padLeft(2,"0")}";
+      if(listtemp[index].recurring != null){
+        for(int i = 0; i < listtemp[index].recurring.length; i++){
+          recurring.add(listtemp[index].recurring[i]);
+        }
+      }
     });
   }
 }

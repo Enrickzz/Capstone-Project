@@ -40,9 +40,10 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificSupplementViewAsPatient extends StatefulWidget {
-  SpecificSupplementViewAsPatient({Key key}) : super(key: key);
+  SpecificSupplementViewAsPatient({Key key, this.index}) : super(key: key);
   // final String title;
   // String userUID;
+  int index;
   @override
   _SpecificSupplementViewAsPatientState createState() => _SpecificSupplementViewAsPatientState();
 }
@@ -56,7 +57,6 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<Supplement_Prescription> listtemp = [];
-  Supplement_Prescription supplement = new Supplement_Prescription();
   String supplement_name = "";
   String dosage = "";
   String unit = "";
@@ -350,16 +350,12 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
     final User user = auth.currentUser;
     final uid = user.uid;
     // var userUID = widget.userUID;
+    int index = widget.index;
     final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        supplement = Supplement_Prescription.fromJson(jsonString);
-        supplement_name = supplement.supplement_name;
-        dosage = supplement.dosage.toStringAsFixed(2);
-        unit = supplement.prescription_unit.toString();
-        frequency = supplement.intake_time;
-        dateCreated = "${supplement.dateCreated.month}/${supplement.dateCreated.day}/${supplement.dateCreated.year}";
+        listtemp.add(Supplement_Prescription.fromJson(jsonString));
         // final readDoctorName = databaseReference.child('users/' + supplement.prescribedBy + '/personal_info/');
         // readDoctorName.once().then((DataSnapshot snapshot){
         //   Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
@@ -367,8 +363,13 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
         //   doctor = Users.fromJson(temp2);
         //   prescribedBy = doctor.lastname + " " + doctor.firstname;
         // });
-
       });
+      supplement_name = listtemp[index].supplement_name;
+      dosage = listtemp[index].dosage.toStringAsFixed(2);
+      unit = listtemp[index].prescription_unit.toString();
+      frequency = listtemp[index].intake_time;
+      dateCreated = "${listtemp[index].dateCreated.month}/${listtemp[index].dateCreated.day}/${listtemp[index].dateCreated.year}";
+
     });
   }
 }

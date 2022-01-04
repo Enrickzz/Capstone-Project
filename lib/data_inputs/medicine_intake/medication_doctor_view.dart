@@ -102,7 +102,7 @@ class _medicationState extends State<medication_intake_doctor_view> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SpecificMedicineIntakeViewAsDoctor(userUID: widget.userUID)),
+                      MaterialPageRoute(builder: (context) => SpecificMedicineIntakeViewAsDoctor(userUID: widget.userUID, index: index)),
                     );
                   }
 

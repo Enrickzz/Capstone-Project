@@ -196,7 +196,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                 onTap: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SpecificSupplementViewAsPatient()),
+                    MaterialPageRoute(builder: (context) => SpecificSupplementViewAsPatient(index: index)),
                   );
                 }
 

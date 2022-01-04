@@ -191,7 +191,7 @@ class _symptomsState extends State<symptoms> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient()),
+                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient(index: index)),
                       );
                     }
 

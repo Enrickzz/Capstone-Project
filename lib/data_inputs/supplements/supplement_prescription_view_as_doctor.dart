@@ -110,7 +110,7 @@ class _supplement_prescription_view_as_doctorState extends State<supplement_pres
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SpecificSupplementViewAsDoctor(userUID: widget.userUID)),
+                      MaterialPageRoute(builder: (context) => SpecificSupplementViewAsDoctor(userUID: widget.userUID, index: index)),
                     );
                   }
 

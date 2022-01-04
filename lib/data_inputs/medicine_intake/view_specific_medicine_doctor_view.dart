@@ -39,9 +39,10 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificMedicineIntakeViewAsDoctor extends StatefulWidget {
-  SpecificMedicineIntakeViewAsDoctor({Key key, this.userUID}) : super(key: key);
+  SpecificMedicineIntakeViewAsDoctor({Key key, this.userUID, this.index}) : super(key: key);
   // final String title;
   String userUID;
+  int index;
   @override
   _SpecificSupplementViewAsDoctorState createState() => _SpecificSupplementViewAsDoctorState();
 }
@@ -276,15 +277,11 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
     // final uid = user.uid;
     var userUID = widget.userUID;
     final readintake = databaseReference.child('users/' + userUID + '/vitals/health_records/medications_list/');
+    int index = widget.index;
     readintake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        medication = Medication.fromJson(jsonString);
-        medicine_name = medication.medicine_name;
-        medicine_dosage = medication.medicine_dosage.toString();
-        medicine_type = medication.medicine_type;
-        medicine_date = "${medication.medicine_date.month.toString().padLeft(2, "0")}/${medication.medicine_date.day.toString().padLeft(2, "0")}/${medication.medicine_date.year}";
-        medicine_time = "${medication.medicine_time.hour.toString().padLeft(2, "0")}:${medication.medicine_time.minute.toString().padLeft(2, "0")}";
+        listtemp.add(Medication.fromJson(jsonString));
         // final readDoctorName = databaseReference.child('users/' + medication.prescribedBy + '/personal_info/');
         // readDoctorName.once().then((DataSnapshot snapshot){
         //   Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
@@ -292,8 +289,12 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
         //   doctor = Users.fromJson(temp2);
         //   prescribedBy = doctor.lastname + " " + doctor.firstname;
         // });
-
       });
+      medicine_name = listtemp[index].medicine_name;
+      medicine_dosage = listtemp[index].medicine_dosage.toString();
+      medicine_type = listtemp[index].medicine_type;
+      medicine_date = "${listtemp[index].medicine_date.month.toString().padLeft(2, "0")}/${listtemp[index].medicine_date.day.toString().padLeft(2, "0")}/${listtemp[index].medicine_date.year}";
+      medicine_time = "${listtemp[index].medicine_time.hour.toString().padLeft(2, "0")}:${listtemp[index].medicine_time.minute.toString().padLeft(2, "0")}";
     });
   }
 }

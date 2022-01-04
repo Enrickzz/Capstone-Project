@@ -39,10 +39,11 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificSymptomViewAsDoctor extends StatefulWidget {
-  SpecificSymptomViewAsDoctor({Key key, this.title, this.userUID}) : super(key: key);
+  SpecificSymptomViewAsDoctor({Key key, this.title, this.userUID, this.index}) : super(key: key);
 
   final String title;
   String userUID;
+  int index;
   @override
   _SpecificSymptomViewAsDoctorState createState() => _SpecificSymptomViewAsDoctorState();
 }
@@ -60,7 +61,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
   bool hasImage = true;
 
   List<Symptom> listtemp = [];
-  Symptom symptom = new Symptom();
+  // Symptom listtemp = new Symptom();
   String symptomName = "";
   String intensityLvl = "";
   String symptomFelt = "";
@@ -329,21 +330,11 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
     // final uid = user.uid;
     var userUID = widget.userUID;
     final readsymptom = databaseReference.child('users/' + userUID + '/vitals/health_records/symptoms_list/');
+    int index = widget.index;
     readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        symptom = Symptom.fromJson(jsonString);
-        symptomName = symptom.symptomName;
-        intensityLvl = symptom.intensityLvl.toString();
-        symptomFelt = symptom.symptomFelt;
-        symptomDate = "${symptom.symptomDate.month.toString().padLeft(2, "0")}/${symptom.symptomDate.day.toString().padLeft(2, "0")}/${symptom.symptomDate.year}";
-        symptomTime = "${symptom.symptomTime.hour.toString().padLeft(2, "0")}:${symptom.symptomTime.minute.toString().padLeft(2, "0")}";
-        symptomTrigger = symptom.symptomTrigger;
-        if(symptom.recurring != null){
-          for(int i = 0; i < symptom.recurring.length; i++){
-            recurring.add(symptom.recurring[i]);
-          }
-        }
+        listtemp.add(Symptom.fromJson(jsonString));
         // final readDoctorName = databaseReference.child('users/' + medication.prescribedBy + '/personal_info/');
         // readDoctorName.once().then((DataSnapshot snapshot){
         //   Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
@@ -352,6 +343,17 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
         //   prescribedBy = doctor.lastname + " " + doctor.firstname;
         // });
       });
+      symptomName = listtemp[index].symptomName;
+      intensityLvl = listtemp[index].intensityLvl.toString();
+      symptomFelt = listtemp[index].symptomFelt;
+      symptomDate = "${listtemp[index].symptomDate.month.toString().padLeft(2, "0")}/${listtemp[index].symptomDate.day.toString().padLeft(2, "0")}/${listtemp[index].symptomDate.year}";
+      symptomTime = "${listtemp[index].symptomTime.hour.toString().padLeft(2, "0")}:${listtemp[index].symptomTime.minute.toString().padLeft(2, "0")}";
+      symptomTrigger = listtemp[index].symptomTrigger;
+      if(listtemp[index].recurring != null){
+        for(int i = 0; i < listtemp[index].recurring.length; i++){
+          recurring.add(listtemp[index].recurring[i]);
+        }
+      }
     });
   }
 }

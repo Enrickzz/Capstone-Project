@@ -108,7 +108,7 @@ class _symptomsState extends State<symptoms_doctor_view> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsDoctor(userUID: widget.userUID)),
+                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsDoctor(userUID: widget.userUID, index: index)),
                       );
                     }
 
