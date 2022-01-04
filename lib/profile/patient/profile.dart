@@ -294,121 +294,108 @@ class _index3State extends State<index3>
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 380,
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Complete Name",
-                                              style: TextStyle(
-                                                  fontSize:14,
-                                                  color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(DisplayName,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Birthday",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text( info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Age",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(getAge(info.birthday) + " years old",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Gender",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(info.gender,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Weight",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(info.weight.toString() + " kg",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Height",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(info.height.toString() + " cm",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
+                      width: 340,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: [BoxShadow(
+                              color: Colors.black26.withOpacity(0.2),
+                              offset: Offset(0.0,6.0),
+                              blurRadius: 10.0,
+                              spreadRadius: 0.10
+                          )]
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Complete Name",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(DisplayName,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text("Birthday",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text( info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text("Age",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(getAge(info.birthday) + " years old",
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text("Gender",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(info.gender,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text("Weight",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(info.weight.toString() + " kg",
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text("Height",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(info.height.toString() + " cm",
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),  // Personal Information
@@ -462,85 +449,70 @@ class _index3State extends State<index3>
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 280,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("CVD Condition/s",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(disease_name,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Comorbidities",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(other_disease,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Family History",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(family_disease,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
+                      width: 340,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: [BoxShadow(
+                              color: Colors.black26.withOpacity(0.2),
+                              offset: Offset(0.0,6.0),
+                              blurRadius: 10.0,
+                              spreadRadius: 0.10
+                          )]
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("CVD Condition/s",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(disease_name,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Text("Comorbidities",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Text(other_disease == "" ? 'N/A' : other_disease,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text("Family History",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(family_disease == "" ? 'N/A' : family_disease,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -564,7 +536,9 @@ class _index3State extends State<index3>
                             InkWell(
                                 highlightColor: Colors.transparent,
                                 borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                onTap: () {},
+                                onTap: () {
+
+                                },
                                 // child: Padding(
                                 // padding: const EdgeInsets.only(left: 8),
                                 child: Row(
@@ -594,85 +568,70 @@ class _index3State extends State<index3>
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 250,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Food Allergies",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(food_aller,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Drug Allergies",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(drug_aller,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Other Allergies",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(other_aller,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
+                      width: 340,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: [BoxShadow(
+                              color: Colors.black26.withOpacity(0.2),
+                              offset: Offset(0.0,6.0),
+                              blurRadius: 10.0,
+                              spreadRadius: 0.10
+                          )]
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Food Allergies",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(food_aller == "" ? 'N/A' : food_aller,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Text("Drug Allergies",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Text(drug_aller == "" ? 'N/A' : drug_aller,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text("Other Allergies",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(other_aller == "" ? 'N/A' : other_aller,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -725,87 +684,75 @@ class _index3State extends State<index3>
                       ),
                     ),
                     SizedBox(height: 10.0),
+
                     Container(
-                        height: 200,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Lifestyle",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(lifestyle,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Cigarettes per day",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(ave_sticks,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Alcohol Drinking Frequency",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(alcohol_freq,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
+                      width: 340,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: [BoxShadow(
+                              color: Colors.black26.withOpacity(0.2),
+                              offset: Offset(0.0,6.0),
+                              blurRadius: 10.0,
+                              spreadRadius: 0.10
+                          )]
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Lifestyle",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(lifestyle,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Text("Cigarettes per day",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Text(ave_sticks,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text("Alcohol Drinking Frequency",
+                              style: TextStyle(
+                                fontSize:14,
+                                color:Color(0xFF363f93),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(alcohol_freq,
+                              style: TextStyle(
+                                  fontSize:16,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
+
+
                   ],
                 ),// Health Information
                 SizedBox(height: 30),
