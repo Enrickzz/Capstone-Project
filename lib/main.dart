@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/goal_weight.dart';
 import 'package:my_app/medical_history.dart';
 import 'package:my_app/models/tabIcon_data.dart';
-import 'package:my_app/notifications.dart';
+import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/profile/patient/add_image.dart';
 import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/reviews/add_restaurant_review.dart';

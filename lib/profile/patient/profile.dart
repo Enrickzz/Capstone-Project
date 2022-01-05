@@ -25,7 +25,7 @@ import 'package:flutter/material.dart';
 import '../../discussion_board/discussion.dart';
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
-import '../../notifications.dart';
+import '../../notifications/notifications._patients.dart';
 import 'package:my_app/profile/patient/patient_view_support_system.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';

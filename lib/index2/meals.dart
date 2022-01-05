@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
-import '../../notifications.dart';
+import '../notifications/notifications._patients.dart';
 import '../my_diary/meals_list_view.dart';
 import '../my_diary/water_view.dart';
 
