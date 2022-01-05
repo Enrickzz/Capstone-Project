@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:my_app/patient_list/doctor_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/widgets/navigation_drawer_widget.dart';
 
 import '../main.dart';
 import '../models/users.dart';
@@ -51,8 +53,32 @@ class _PatientListState extends State<PatientList>  {
 
   List diseases=[];
 
+  //for drawer
+  var imagesVisible = true;
+  var cardContent = [];
+
+
   @override
   void initState(){
+    var ran = Random();
+
+    for (var i = 0; i < 5; i++) {
+      var heading = '\$${(ran.nextInt(20) + 15).toString()}00 per month';
+      var subheading =
+          '${(ran.nextInt(3) + 1).toString()} bed, ${(ran.nextInt(2) + 1).toString()} bath, ${(ran.nextInt(10) + 7).toString()}00 sqft';
+      var cardImage = NetworkImage(
+          'https://source.unsplash.com/random/800x600?house&' +
+              ran.nextInt(100).toString());
+      var supportingText =
+          'Beautiful home, recently refurbished with modern appliances...';
+      var cardData = {
+        'heading': heading,
+        'subheading': subheading,
+        'cardImage': cardImage,
+        'supportingText': supportingText,
+      };
+      cardContent.add(cardData);
+    }
     super.initState();
     print("ASDASDASDASDAS");
     if(widget.nameslist != null){
@@ -67,6 +93,7 @@ class _PatientListState extends State<PatientList>  {
     }
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {});
+
     });
   }
 
@@ -82,58 +109,59 @@ class _PatientListState extends State<PatientList>  {
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
-          actions: [
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
-                    );
-
-
-                    // showModalBottomSheet(context: context,
-                    //   isScrollControlled: true,
-                    //   builder: (context) => SingleChildScrollView(child: Container(
-                    //     padding: EdgeInsets.only(
-                    //         bottom: MediaQuery.of(context).viewInsets.bottom),
-                    //     child: add_medication_prescription(thislist: prestemp),
-                    //   ),
-                    //   ),
-                    // ).then((value) =>
-                    //     Future.delayed(const Duration(milliseconds: 1500), (){
-                    //       setState((){
-                    //         print("setstate medication prescription");
-                    //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                    //         if(value != null){
-                    //           prestemp = value[0];
-                    //         }
-                    //       });
-                    //     }));
-                  },
-                  child: Icon(
-                    Icons.add,
-                  ),
-                )
-            ),
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () async{
-                    await _auth.signOut();
-                    print('signed out');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LogIn()),
-                    );
-                  },
-                  child: Icon(
-                    Icons.audiotrack,
-                  ),
-                )
-            ),
-          ],
+          // actions: [
+          //   Padding(
+          //       padding: EdgeInsets.only(right: 20.0),
+          //       child: GestureDetector(
+          //         onTap: () {
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
+          //           );
+          //
+          //
+          //           // showModalBottomSheet(context: context,
+          //           //   isScrollControlled: true,
+          //           //   builder: (context) => SingleChildScrollView(child: Container(
+          //           //     padding: EdgeInsets.only(
+          //           //         bottom: MediaQuery.of(context).viewInsets.bottom),
+          //           //     child: add_medication_prescription(thislist: prestemp),
+          //           //   ),
+          //           //   ),
+          //           // ).then((value) =>
+          //           //     Future.delayed(const Duration(milliseconds: 1500), (){
+          //           //       setState((){
+          //           //         print("setstate medication prescription");
+          //           //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+          //           //         if(value != null){
+          //           //           prestemp = value[0];
+          //           //         }
+          //           //       });
+          //           //     }));
+          //         },
+          //         child: Icon(
+          //           Icons.add,
+          //         ),
+          //       )
+          //   ),
+          //
+          //   Padding(
+          //       padding: EdgeInsets.only(right: 20.0),
+          //       child: GestureDetector(
+          //         onTap: () async{
+          //           await _auth.signOut();
+          //           print('signed out');
+          //           Navigator.pushReplacement(
+          //             context,
+          //             MaterialPageRoute(builder: (context) => LogIn()),
+          //           );
+          //         },
+          //         child: Icon(
+          //           Icons.audiotrack,
+          //         ),
+          //       )
+          //   ),
+          // ],
         ),
       body: ListView.builder(
           itemCount: names.length,
@@ -181,7 +209,8 @@ class _PatientListState extends State<PatientList>  {
             ),
           )
 
-      )
+      ),
+        drawer: _buildDrawer(context)
 
 
     );
@@ -238,6 +267,80 @@ class _PatientListState extends State<PatientList>  {
 
     });
 
+  }
+  Drawer _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+           UserAccountsDrawerHeader(
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(
+                  'https://images.unsplash.com/photo-1485290334039-a3c69043e517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYyOTU3NDE0MQ&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=300'),
+            ),
+            accountEmail: Text('jane.doe@example.com',style: TextStyle(fontSize: 12.0)),
+            accountName: Text(
+              'Jane Doe',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            decoration: BoxDecoration(
+              color: Colors.black87,
+            ),
+
+          ),
+          ListTile(
+            leading: const Icon(Icons.notifications),
+            title: const Text(
+              'Notifications',
+              style: TextStyle(fontSize: 24.0),
+            ),
+            onTap: () {
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute<void>(
+              //     builder: (BuildContext context) =>  PatientList(
+              //       title: 'Houses',
+              //     ),
+              //   ),
+              // );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.add),
+            title: const Text(
+              'Add Patients',
+              style: TextStyle(fontSize: 24.0),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
+              );
+            },
+          ),
+
+          const Divider(
+            height: 10,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text(
+              'Sign Out',
+              style: TextStyle(fontSize: 24.0),
+            ),
+            onTap: () async{
+              await _auth.signOut();
+              print('signed out');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LogIn()),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
 }
