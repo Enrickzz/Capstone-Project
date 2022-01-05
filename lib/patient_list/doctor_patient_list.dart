@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:my_app/patient_list/doctor_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
@@ -27,8 +28,9 @@ class MyApp extends StatelessWidget {
 }
 
 class PatientList extends StatefulWidget {
-  PatientList({Key key, this.title}) : super(key: key);
-
+  PatientList({Key key, this.title, this.nameslist, this.diseaselist}) : super(key: key);
+  final List nameslist;
+  final List diseaselist;
   final String title;
 
   @override
@@ -42,21 +44,23 @@ class _PatientListState extends State<PatientList>  {
   Users doctor = new Users();
 
   List<String> uidlist = [];
+  List<Users> userlist=[];
+  List<Additional_Info> userAddInfo =[];
+  List names = [];
 
-  List names = [
-  //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
-  // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
-  ];
-
-  List diseases = [
-    // "Bradycardia", "Cardiomyopathy", 'Heart Failure', "Coronary Heart Disease",
-    // "Bradycardia", "Cardiomyopathy", 'Heart Failure', "Coronary Heart Disease", 'Heart Failure', "Coronary Heart Disease"
-  ];
+  List diseases=[];
 
   @override
   void initState(){
     super.initState();
-    getPatients();
+    print("ASDASDASDASDAS");
+    if(widget.nameslist != null){
+      names = widget.nameslist;
+      diseases = widget.diseaselist;
+      print("ASDASDASD");
+    }else{
+      getPatients();
+    }
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {});
     });
@@ -81,7 +85,7 @@ class _PatientListState extends State<PatientList>  {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DoctorAddPatient()),
+                      MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases)),
                     );
 
 
@@ -198,9 +202,11 @@ class _PatientListState extends State<PatientList>  {
           var temp1 = jsonDecode(jsonEncode(snapshot.value));
           print(temp1);
           Users patient = Users.fromJson(temp1);
+          //userlist.add(Users.fromJson(temp1));
           readInfo.once().then((DataSnapshot snapshot){
             var temp2 = jsonDecode(jsonEncode(snapshot.value));
             print(temp2);
+            //userAddInfo.add(Additional_Info.fromJson(temp2));
             String disease_name = "";
             Additional_Info info = Additional_Info.fromJson4(temp2);
             print(info.disease.length);
@@ -223,6 +229,9 @@ class _PatientListState extends State<PatientList>  {
 
         });
       }
+    });
+    setState(() {
+
     });
 
   }

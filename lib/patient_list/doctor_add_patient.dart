@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/patient_list/doctor_patient_list.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';
@@ -36,8 +37,10 @@ class MyApp extends StatelessWidget {
 }
 
 class DoctorAddPatient extends StatefulWidget {
-  DoctorAddPatient({Key key, this.title}) : super(key: key);
+  DoctorAddPatient({Key key, this.title, this.nameslist, this.diseaseList}) : super(key: key);
 
+  final List nameslist;
+  final List diseaseList;
   final String title;
 
   @override
@@ -70,11 +73,14 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 
   bool searchPatient = false;
 
+  List namestemp;
+  List diseasetemp;
 
   @override
   void initState() {
     super.initState();
-
+    namestemp = widget.nameslist;
+    diseasetemp = widget.diseaseList;
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -131,9 +137,6 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                 ),
                                 onChanged: (val) {
                                   userUID = val;
-
-
-
                                 },
                               ),
                             ),
@@ -148,10 +151,12 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                               ),
                               onPressed: () {
                                 print(userUID);
-
-                                setState(() {
-                                    getPatient();
+                                getPatient();
+                                Future.delayed(const Duration(milliseconds: 2000), (){
+                                  setState(() {
+                                  });
                                 });
+
                               },
                             ),
                           ]
@@ -394,16 +399,16 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 //
 // ],)
 
-  void getPatient() {
+  void getPatient() async{
     final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     final readinfo = databaseReference.child('users/' + userUID + '/vitals/additional_info/');
     cvdCondition = "";
     otherCondition = "";
-    readPatient.once().then((DataSnapshot snapshot){
+    await readPatient.once().then((DataSnapshot snapshot){
       var temp = jsonDecode(jsonEncode(snapshot.value));
       cuser = Users.fromJson(temp);
     });
-    readinfo.once().then((DataSnapshot snapshot){
+    await readinfo.once().then((DataSnapshot snapshot){
       var temp = jsonDecode(jsonEncode(snapshot.value));
       info = Additional_Info.fromJson3(temp);
     });
@@ -434,6 +439,9 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
         }
       }
     }
+    setState(() {
+
+    });
 
     }
 
@@ -512,6 +520,9 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       }
       readDoctor.update({"connections": doc_connection});
       readPatient.update({"connections": patient_connection});
+      
+      namestemp.add(displayName);
+      diseasetemp.add(cvdCondition);
     });
 
 
@@ -539,8 +550,14 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
               child: Text('Confirm'),
               onPressed: () {
                 print('Patient Added');
-                Navigator.of(context).pop();
                 addPatient();
+
+                Future.delayed(const Duration(milliseconds: 2000), (){
+                  print(namestemp.length);
+                  print('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => PatientList(nameslist: namestemp,diseaselist: diseasetemp)));
+                });
 
               },
             ),
