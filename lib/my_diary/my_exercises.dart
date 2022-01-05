@@ -139,7 +139,7 @@ class _my_exercisesState extends State<my_exercises>
         body: Stack(
           children: <Widget>[
             getMainListViewUI(),
-            getAppBarUI(),
+            // getAppBarUI(),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )
@@ -159,9 +159,9 @@ class _my_exercisesState extends State<my_exercises>
           return ListView.builder(
             controller: scrollController,
             padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
+              // top: AppBar().preferredSize.height +
+              //     MediaQuery.of(context).padding.top +
+              //     24,
               bottom: 62 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,

@@ -75,10 +75,10 @@ class _BottomBarViewState extends State<BottomBarView>
                             ),
                             Expanded(
                               child: TabIcons(
-                                  tabIconData: widget.tabIconsList[1],
+                                  tabIconData: widget.tabIconsList[4],
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
-                                        widget.tabIconsList[1]);
+                                        widget.tabIconsList[4]);
                                     widget.changeIndex(1);
                                   }),
                             ),
@@ -92,10 +92,10 @@ class _BottomBarViewState extends State<BottomBarView>
                             ),
                             Expanded(
                               child: TabIcons(
-                                  tabIconData: widget.tabIconsList[2],
+                                  tabIconData: widget.tabIconsList[5],
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
-                                        widget.tabIconsList[2]);
+                                        widget.tabIconsList[5]);
                                     widget.changeIndex(2);
                                   }),
                             ),

@@ -88,18 +88,374 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
       body: TabBarView(
         controller: controller,
         children: [
-          Container(
-            color: FitnessAppTheme.background,
-          ),
-          Container(
-            color: FitnessAppTheme.background,
-          ),
-          Container(
-            color: FitnessAppTheme.background,
-          ),
-          Container(
-            color: FitnessAppTheme.background,
-          ),
+          ListView.builder(
+            padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
+            itemCount: 5,
+            itemBuilder: (context, index){
+              return SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: InkWell(
+                  onTap: (){
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 150,
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    top: 25,
+                                    left: 25,
+                                    child: Material(
+                                      child: Container(
+                                          height: 110.0,
+                                          width: 300,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(5.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.5),
+                                                  blurRadius: 20.0)],
+                                          )
+                                      ),
+
+                                    )),
+                                Positioned(
+                                    top: 10,
+                                    left: 30,
+                                    child: Card(
+                                        elevation: 10.0,
+                                        shadowColor: Colors.grey.withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                        ),
+                                        child: Container(
+                                          height: 110,
+                                          width: 120,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              image: DecorationImage(
+                                                  fit:BoxFit.cover,
+                                                  image: NetworkImage("https://th.bing.com/th/id/OIP.IwbWGr7qz8VmxzhHYNsh4QHaFA?pid=ImgDet&rs=1")
+                                              )
+                                          ),
+                                        )
+                                    )
+                                ),
+                                Positioned(
+                                    top:35,
+                                    left: 165,
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("hatdog",
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),),
+                                            Divider(color: Colors.blue),
+                                            Text("Calories: 56 kcal",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                // color:Colors.grey,
+                                              ),),
+                                            Text("Grams: g",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                // color:Colors.grey,
+                                              ),),
+                                          ]
+                                      ),
+                                    ))
+                              ]
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ) ,
+          ListView.builder(
+            padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
+            itemCount: 5,
+            itemBuilder: (context, index){
+              return SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: InkWell(
+                  onTap: (){
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 150,
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    top: 25,
+                                    left: 25,
+                                    child: Material(
+                                      child: Container(
+                                          height: 110.0,
+                                          width: 300,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(5.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.5),
+                                                  blurRadius: 20.0)],
+                                          )
+                                      ),
+
+                                    )),
+                                Positioned(
+                                    top: 10,
+                                    left: 30,
+                                    child: Card(
+                                        elevation: 10.0,
+                                        shadowColor: Colors.grey.withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                        ),
+                                        child: Container(
+                                          height: 110,
+                                          width: 120,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              image: DecorationImage(
+                                                  fit:BoxFit.cover,
+                                                  image: NetworkImage("https://th.bing.com/th/id/OIP.IwbWGr7qz8VmxzhHYNsh4QHaFA?pid=ImgDet&rs=1")
+                                              )
+                                          ),
+                                        )
+                                    )
+                                ),
+                                Positioned(
+                                    top:35,
+                                    left: 165,
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("hatdog",
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),),
+                                            Divider(color: Colors.blue),
+                                            Text("Calories: 56 kcal",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                // color:Colors.grey,
+                                              ),),
+                                            Text("Grams: g",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                // color:Colors.grey,
+                                              ),),
+                                          ]
+                                      ),
+                                    ))
+                              ]
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ) ,
+          ListView.builder(
+            padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
+            itemCount: 5,
+            itemBuilder: (context, index){
+              return SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: InkWell(
+                  onTap: (){
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 150,
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    top: 25,
+                                    left: 25,
+                                    child: Material(
+                                      child: Container(
+                                          height: 110.0,
+                                          width: 300,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(5.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.5),
+                                                  blurRadius: 20.0)],
+                                          )
+                                      ),
+
+                                    )),
+                                Positioned(
+                                    top: 10,
+                                    left: 30,
+                                    child: Card(
+                                        elevation: 10.0,
+                                        shadowColor: Colors.grey.withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                        ),
+                                        child: Container(
+                                          height: 110,
+                                          width: 120,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              image: DecorationImage(
+                                                  fit:BoxFit.cover,
+                                                  image: NetworkImage("https://th.bing.com/th/id/OIP.IwbWGr7qz8VmxzhHYNsh4QHaFA?pid=ImgDet&rs=1")
+                                              )
+                                          ),
+                                        )
+                                    )
+                                ),
+                                Positioned(
+                                    top:35,
+                                    left: 165,
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("hatdog",
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),),
+                                            Divider(color: Colors.blue),
+                                            Text("Calories: 56 kcal",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                // color:Colors.grey,
+                                              ),),
+                                            Text("Grams: g",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                // color:Colors.grey,
+                                              ),),
+                                          ]
+                                      ),
+                                    ))
+                              ]
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ) ,
+          ListView.builder(
+            padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
+            itemCount: 5,
+            itemBuilder: (context, index){
+              return SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: InkWell(
+                  onTap: (){
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 150,
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    top: 25,
+                                    left: 25,
+                                    child: Material(
+                                      child: Container(
+                                          height: 110.0,
+                                          width: 300,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(5.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.5),
+                                                  blurRadius: 20.0)],
+                                          )
+                                      ),
+
+                                    )),
+                                Positioned(
+                                    top: 10,
+                                    left: 30,
+                                    child: Card(
+                                        elevation: 10.0,
+                                        shadowColor: Colors.grey.withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                        ),
+                                        child: Container(
+                                          height: 110,
+                                          width: 120,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              image: DecorationImage(
+                                                  fit:BoxFit.cover,
+                                                  image: NetworkImage("https://th.bing.com/th/id/OIP.IwbWGr7qz8VmxzhHYNsh4QHaFA?pid=ImgDet&rs=1")
+                                              )
+                                          ),
+                                        )
+                                    )
+                                ),
+                                Positioned(
+                                    top:35,
+                                    left: 165,
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("hatdog",
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),),
+                                            Divider(color: Colors.blue),
+                                            Text("Calories: 56 kcal",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                // color:Colors.grey,
+                                              ),),
+                                            Text("Grams: g",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                // color:Colors.grey,
+                                              ),),
+                                          ]
+                                      ),
+                                    ))
+                              ]
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ) ,
         ],
       ),
     );

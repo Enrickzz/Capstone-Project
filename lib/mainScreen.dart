@@ -12,6 +12,7 @@ import 'fitness_app_theme.dart';
 import 'index2/index2.dart';
 import 'index2/food_list.dart';
 import 'index2/meals.dart';
+import 'meals_exercises.dart';
 import 'my_diary/exercise_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/storage_service.dart';
@@ -161,7 +162,8 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
                 }
                 setState(() {
                   tabBody =
-                      my_exercises(animationController: animationController);
+                      // my_exercises(animationController: animationController);
+                  meals_exercises(animationController: animationController);
                 });
               });
             }else if(index ==2){

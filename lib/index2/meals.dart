@@ -143,7 +143,7 @@ class _mealsState extends State<meals>
         body: Stack(
           children: <Widget>[
             getMainListViewUI(),
-            getAppBarUI(),
+            // getAppBarUI(),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )
@@ -163,9 +163,9 @@ class _mealsState extends State<meals>
           return ListView.builder(
             controller: scrollController,
             padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
+              // top: AppBar().preferredSize.height +
+              //     MediaQuery.of(context).padding.top +
+              //     24,
               bottom: 62 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
