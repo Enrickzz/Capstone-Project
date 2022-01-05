@@ -21,18 +21,19 @@ import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:my_app/widgets/rating.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 
-class create_post extends StatefulWidget {
+class add_facility_review extends StatefulWidget {
   final List<FirebaseFile> files;
-  create_post({Key key, this.files});
+  add_facility_review({Key key, this.files});
   @override
   _create_postState createState() => _create_postState();
 }
 final _formKey = GlobalKey<FormState>();
-class _create_postState extends State<create_post> {
+class _create_postState extends State<add_facility_review> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   var path;
@@ -50,6 +51,11 @@ class _create_postState extends State<create_post> {
   bool pic = false;
   String cacheFile="";
   File file = new File("path");
+
+  //for rating
+  int _rating = 0;
+  bool isSwitched = false;
+
 
 
   @override
@@ -76,39 +82,12 @@ class _create_postState extends State<create_post> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Create Post',
+                    'Facility Review/Recommendation',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
-                  SizedBox(height: 8),
-
-                  TextFormField(
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Title",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Title' : null,
-                    onChanged: (val){
-                      title = val;
-                      // setState(() => lab_result_name = val);
-                    },
-                  ),
-                  SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
                     keyboardType: TextInputType.multiline,
@@ -132,6 +111,42 @@ class _create_postState extends State<create_post> {
                     onChanged: (val){
                       setState(() => description = val);
                     },
+                  ),
+                  SizedBox(height: 8.0),
+                  SwitchListTile(
+                    title: Text('Recommend', style: TextStyle(fontSize: 22.0)),
+                    subtitle: Text('I would like to recommend this place to other CVD patients.', style: TextStyle(fontSize: 12.0)),
+                    secondary: Icon(Icons.thumb_up_alt_sharp, size: 34.0, color: Colors.green),
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    value: isSwitched,
+                    onChanged: (value){
+                      setState(() {
+                        isSwitched = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text("Rating", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                      SizedBox(width: 14,),
+                      Rating((rating){
+                        setState(() {
+                          _rating = rating;
+                        });
+
+                      }),
+                    ],
+
+                  ),
+
+                  SizedBox(
+                    height: 44,
+                    child: _rating != null && _rating >0
+                        ? Text("I give this place a rating of $_rating star/s",
+                        style: TextStyle(fontSize: 18))
+                        :SizedBox.shrink(),
+
                   ),
                   SizedBox(height: 18.0),
                   SizedBox(height: 18.0),
@@ -262,13 +277,13 @@ class _create_postState extends State<create_post> {
         )
     );
   }
-   Future <List<String>>_getDownloadLinks(List<Reference> refs) {
+  Future <List<String>>_getDownloadLinks(List<Reference> refs) {
     return Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
   }
 
-   Future<List<FirebaseFile>> listAll (String path) async {
-     final User user = auth.currentUser;
-     final uid = user.uid;
+  Future<List<FirebaseFile>> listAll (String path) async {
+    final User user = auth.currentUser;
+    final uid = user.uid;
     final ref = FirebaseStorage.instance.ref('test/' + uid + "/");
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);

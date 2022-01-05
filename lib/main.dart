@@ -11,6 +11,8 @@ import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/notifications.dart';
 import 'package:my_app/profile/patient/add_image.dart';
 import 'package:my_app/provider/google_sign_in.dart';
+import 'package:my_app/reviews/add_restaurant_review.dart';
+import 'package:my_app/reviews/specific_restaurant_reviews.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:my_app/training/dashboards.dart';
@@ -233,10 +235,11 @@ class _AppSignInState extends State<AppSignIn> {
               margin: EdgeInsets.only(top: 80.0),
               alignment: Alignment.center,
               child: GestureDetector(
+
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => my_meals()),
+                      MaterialPageRoute(builder: (context) => restaurant_reviews()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

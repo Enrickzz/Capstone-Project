@@ -50,6 +50,7 @@ dependencies:
   basic_utils: ^3.9.4
 
 
+
   syncfusion_flutter_charts: ^19.1.54
 #  shared_preferences: ^2.0.9
   gender_picker: ^1.1.0
