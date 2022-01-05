@@ -9,9 +9,10 @@ class Users {
   String email;
   String password;
   String usertype;
+  String specialty;
   List<String> connections;
 
-  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.connections});
+  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections});
 
   Users.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -20,6 +21,7 @@ class Users {
     email = json['email'];
     password = json['password'];
     usertype = json['userType'];
+    specialty = json['specialty'];
   }
 
   Users.fromJson2(Map<String, dynamic> json) {

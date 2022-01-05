@@ -44,7 +44,7 @@ class _reply_postState extends State<reply_post> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   String doctor_name = "";
-  String specialty = 'doctor';
+  String specialty = "";
   DateTime now =  DateTime.now();
   DateTime date;
   DateTime time;
@@ -256,6 +256,7 @@ class _reply_postState extends State<reply_post> {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(createsnapshot.value));
                               doctor = Users.fromJson(temp);
                               doctor_name = doctor.firstname + " " + doctor.lastname;
+                              specialty = doctor.specialty;
                               readReply.once().then((DataSnapshot replysnapshot) {
                                 String temp1 = replysnapshot.value.toString();
                                 print("temp1");

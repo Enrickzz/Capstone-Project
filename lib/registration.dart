@@ -493,7 +493,7 @@ class _AppSignUpState extends State<registration> {
                                         MaterialPageRoute(builder: (context) => PatientList()),
                                       );
                                       isFirstTime = false;
-                                      await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "connections": connection});
+                                      await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "connections": connection, "specialty": valueChooseDoctorKind});
                                     }
                                     print("user registered Sucessfully!");
                                   } catch(e) {
