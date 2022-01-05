@@ -41,8 +41,8 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificSymptomViewAsPatient extends StatefulWidget {
-  SpecificSymptomViewAsPatient({Key key, this.title, this.index}) : super(key: key);
-
+  SpecificSymptomViewAsPatient({Key key, this.title, this.index, this.thissymp}) : super(key: key);
+  final Symptom thissymp;
   final String title;
   int index;
   @override
@@ -69,6 +69,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   String symptom_time = "";
   String symptom_trigger = "";
   List<String> recurring = [""];
+  Symptom thisSymptom;
 
   @override
   void initState() {
@@ -78,7 +79,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
     controller.addListener(() {
       setState(() {});
     });
-    getSymptom();
+    thisSymptom = widget.thissymp;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -146,7 +147,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( symptom_name,
+                              child: Text( thisSymptom.symptomName,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -243,7 +244,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(intensityLvl,
+                                            Text(thisSymptom.intensityLvl.toString(),
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -257,7 +258,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(symptom_felt,
+                                            Text(thisSymptom.symptomFelt,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -276,8 +277,8 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                             ),
                                             SizedBox(height: 8),
 
-                                            if (symptom_trigger.toString() != "") ...[
-                                              Text(symptom_trigger,
+                                            if (thisSymptom.symptomTrigger.toString() != "") ...[
+                                              Text(thisSymptom.symptomTrigger,
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     fontWeight: FontWeight.bold
@@ -296,7 +297,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
 
                                             Row(
                                               children: [
-                                                if (recurring[0].toString() != "") ...[
+                                                if (thisSymptom.recurring[0].toString() != "") ...[
                                                 Text("Recurring",
                                                   style: TextStyle(
                                                     fontSize:14,
@@ -307,8 +308,8 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            if (recurring[0].toString() != "") ...[
-                                              Text(recurring.toString(),
+                                            if (thisSymptom.recurring[0].toString() != "") ...[
+                                              Text(thisSymptom.recurring.toString(),
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     fontWeight: FontWeight.bold
@@ -337,8 +338,9 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                           aspectRatio: 1,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.asset('assets/images/body.PNG'
-                            ),
+                            child: (Image.network('' + thisSymptom.imgRef) != null) ? Image.network('' + thisSymptom.imgRef, loadingBuilder: (context, child, loadingProgress) =>
+                            (loadingProgress == null) ? child : CircularProgressIndicator(),
+                              errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
                           ),
                         ),
                       ),
@@ -387,7 +389,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(symptom_date + " " + symptom_time,
+                                            Text(thisSymptom.symptomDate.toString() + " " + thisSymptom.symptomTime.toString(),
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold

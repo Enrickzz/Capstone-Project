@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -45,6 +46,16 @@ class _symptomsState extends State<symptoms> {
     listtemp.clear();
     getSymptoms();
 
+    Future.delayed(const Duration(milliseconds: 2000), (){
+      downloadUrls();
+      Future.delayed(const Duration(milliseconds: 2000), (){
+        setState(() {
+          print("setstate");
+          //print(getDateFormatted(listtemp[0].symptomDate.toString()));
+          print("LIST TEMP " +listtemp.length.toString());
+        });
+      });
+    });
 
     // symptomsRef.once().then((DataSnapshot datasnapshot){
     //   listtemp.clear();
@@ -100,15 +111,9 @@ class _symptomsState extends State<symptoms> {
     //   }
     // });
 
-    print(listtemp.toString());
+    // print(listtemp.toString());
 
-    Future.delayed(const Duration(milliseconds: 2000), (){
-      setState(() {
-        print("setstate");
-        //print(getDateFormatted(listtemp[0].symptomDate.toString()));
-        print("LIST TEMP " +listtemp.length.toString());
-      });
-    });
+
   }
 
   @override
@@ -144,6 +149,7 @@ class _symptomsState extends State<symptoms> {
                     ),
                   ).then((value) => setState((){
                     print("setstate symptoms");
+                    listtemp= value;
                     if(value != null){
                       listtemp = value;
                     }
@@ -191,7 +197,7 @@ class _symptomsState extends State<symptoms> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient(index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient(thissymp: listtemp[index],)),
                       );
                     }
 
@@ -238,5 +244,18 @@ class _symptomsState extends State<symptoms> {
     });
 
     return symptoms;
+  }
+  Future <String> downloadUrls() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String downloadurl;
+    for(var i = 0 ; i < listtemp.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+listtemp[i].imgRef.toString());
+      downloadurl = await ref.getDownloadURL();
+      listtemp[i].imgRef = downloadurl;
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    return downloadurl;
   }
 }

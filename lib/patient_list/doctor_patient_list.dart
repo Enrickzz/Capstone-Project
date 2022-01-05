@@ -55,10 +55,12 @@ class _PatientListState extends State<PatientList>  {
   void initState(){
     super.initState();
     print("ASDASDASDASDAS");
-    if(widget.nameslist.isNotEmpty){
-      names = widget.nameslist;
-      diseases = widget.diseaselist;
-      uidlist = widget.uidList;
+    if(widget.nameslist != null){
+      if(widget.nameslist.isNotEmpty){
+        names = widget.nameslist;
+        diseases = widget.diseaselist;
+        uidlist = widget.uidList;
+      }
       print("ASDASDASD");
     }else{
       getPatients();

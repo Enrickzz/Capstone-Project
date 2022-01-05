@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -99,18 +100,17 @@ class _addSymptomsState extends State<add_symptoms> {
   String cacheFile="";
   File file = new File("path");
 
-
-
-
-
   User user;
   var uid, fileName;
   // File file;
 
-
-
-
   String dropdownValue = 'Select Symptom';
+  @override
+  void initState(){
+    super.initState();
+    symptoms_list=widget.thislist;
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -596,7 +596,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
                         }
                         else{
-                          getSymptoms();
+                          //getSymptoms();
                           // int tempIntesityLvl = 0;
                           // String tempSymptomName = "";
                           // DateTime tempSymptomDate;
@@ -670,8 +670,11 @@ class _addSymptomsState extends State<add_symptoms> {
                           symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
                           symptoms_list[symptoms_list.length-1-i] = temp;
                         }
-                        print("POP HERE ==========");
-                        Navigator.pop(context, symptoms_list);
+                        FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                          Future.delayed(const Duration(milliseconds: 1000), (){
+                            Navigator.pop(context, symptoms_list);
+                          });
+                        });
                       });
                     } catch(e) {
                       print("you got an error! $e");
