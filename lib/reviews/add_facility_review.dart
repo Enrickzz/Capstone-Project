@@ -170,51 +170,51 @@ class _create_postState extends State<add_facility_review> {
                       )
                   ),
 
-                  SizedBox(height: 18.0),
-
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      FlatButton(
-                        textColor: Colors.white,
-                        height: 60.0,
-                        color: Colors.cyan,
-                        onPressed: () async{
-                          final result = await FilePicker.platform.pickFiles(
-                            allowMultiple: false,
-                            // type: FileType.custom,
-                            // allowedExtensions: ['jpg', 'png'],
-                          );
-                          if(result == null) return;
-                          final FirebaseAuth auth = FirebaseAuth.instance;
-                          final path = result.files.single.path;
-                          user = auth.currentUser;
-                          uid = user.uid;
-                          fileName = result.files.single.name;
-                          file = File(path);
-                          PlatformFile thisfile = result.files.first;
-                          cacheFile = thisfile.path;
-                          Future.delayed(const Duration(milliseconds: 1000), (){
-                            setState(() {
-                              print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
-                              pic = true;
-                            });
-                          });
-
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                            ),
-                            Text('UPLOAD', )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  // SizedBox(height: 18.0),
+                  //
+                  // Column(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: <Widget>[
+                  //     FlatButton(
+                  //       textColor: Colors.white,
+                  //       height: 60.0,
+                  //       color: Colors.cyan,
+                  //       onPressed: () async{
+                  //         final result = await FilePicker.platform.pickFiles(
+                  //           allowMultiple: false,
+                  //           // type: FileType.custom,
+                  //           // allowedExtensions: ['jpg', 'png'],
+                  //         );
+                  //         if(result == null) return;
+                  //         final FirebaseAuth auth = FirebaseAuth.instance;
+                  //         final path = result.files.single.path;
+                  //         user = auth.currentUser;
+                  //         uid = user.uid;
+                  //         fileName = result.files.single.name;
+                  //         file = File(path);
+                  //         PlatformFile thisfile = result.files.first;
+                  //         cacheFile = thisfile.path;
+                  //         Future.delayed(const Duration(milliseconds: 1000), (){
+                  //           setState(() {
+                  //             print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
+                  //             pic = true;
+                  //           });
+                  //         });
+                  //
+                  //       },
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Padding(
+                  //             padding: const EdgeInsets.all(8.0),
+                  //             child: Icon(Icons.camera_alt_rounded, color: Colors.white,),
+                  //           ),
+                  //           Text('UPLOAD', )
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   // GestureDetector(
                   //     child: Text(
                   //       'Upload',

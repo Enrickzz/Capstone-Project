@@ -1,4 +1,5 @@
 import 'package:my_app/discussion_board/create_post.dart';
+import 'package:my_app/reviews/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -176,14 +177,22 @@ class _discussionState extends State<restaurant_reviews>
                             return Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
                               child: GestureDetector(
-                                // onTap: () {
-                                //   Navigator.push(
-                                //       context,
-                                //       MaterialPageRoute(
-                                //           builder: (context) => specific_post()
-                                //       )
-                                //   );
-                                // },
+                                onTap: () {
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      // child: add_medication(thislist: medtemp),
+                                      child: info_restaurant(),
+                                    ),
+                                    ),
+                                  ).then((value) =>
+                                      Future.delayed(const Duration(milliseconds: 1500), (){
+                                        setState((){
+                                        });
+                                      }));
+                                },
                                 child: Container(
                                   height: 180,
                                   decoration: BoxDecoration(
