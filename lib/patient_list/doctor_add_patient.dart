@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
 }
 
 class DoctorAddPatient extends StatefulWidget {
-  DoctorAddPatient({Key key, this.title, this.nameslist, this.diseaseList}) : super(key: key);
-
+  DoctorAddPatient({Key key, this.title, this.nameslist, this.diseaseList, this.uidList}) : super(key: key);
+  final List<String> uidList;
   final List nameslist;
   final List diseaseList;
   final String title;
@@ -75,12 +75,14 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 
   List namestemp;
   List diseasetemp;
+  List<String> uidtemp;
 
   @override
   void initState() {
     super.initState();
     namestemp = widget.nameslist;
     diseasetemp = widget.diseaseList;
+    uidtemp = widget.uidList;
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -523,6 +525,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       
       namestemp.add(displayName);
       diseasetemp.add(cvdCondition);
+      uidtemp.add(userUID);
     });
 
 
@@ -556,7 +559,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                   print(namestemp.length);
                   print('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => PatientList(nameslist: namestemp,diseaselist: diseasetemp)));
+                      MaterialPageRoute(builder: (context) => PatientList(nameslist: namestemp,diseaselist: diseasetemp, uidList: uidtemp,)));
                 });
 
               },

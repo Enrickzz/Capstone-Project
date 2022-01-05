@@ -28,9 +28,10 @@ class MyApp extends StatelessWidget {
 }
 
 class PatientList extends StatefulWidget {
-  PatientList({Key key, this.title, this.nameslist, this.diseaselist}) : super(key: key);
+  PatientList({Key key, this.title, this.nameslist, this.diseaselist, this.uidList}) : super(key: key);
   final List nameslist;
   final List diseaselist;
+  final List<String> uidList;
   final String title;
 
   @override
@@ -54,9 +55,10 @@ class _PatientListState extends State<PatientList>  {
   void initState(){
     super.initState();
     print("ASDASDASDASDAS");
-    if(widget.nameslist != null){
+    if(widget.nameslist.isNotEmpty){
       names = widget.nameslist;
       diseases = widget.diseaselist;
+      uidlist = widget.uidList;
       print("ASDASDASD");
     }else{
       getPatients();
@@ -85,7 +87,7 @@ class _PatientListState extends State<PatientList>  {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases)),
+                      MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
                     );
 
 
