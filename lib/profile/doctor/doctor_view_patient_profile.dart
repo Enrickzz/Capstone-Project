@@ -668,7 +668,7 @@ class _index3State extends State<view_patient_profile>
                                 onTap:(){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => discussion()),
+                                    MaterialPageRoute(builder: (context) => discussion(userUID: widget.userUID)),
                                   );
 
                                 },

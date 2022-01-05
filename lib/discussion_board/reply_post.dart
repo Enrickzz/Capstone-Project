@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
+import 'package:my_app/models/discussionModel.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
@@ -27,7 +28,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class reply_post extends StatefulWidget {
   final List<FirebaseFile> files;
-  reply_post({Key key, this.files});
+  String userUID;
+  int index;
+  reply_post({Key key, this.files, this.userUID, this.index}): super(key: key);
   @override
   _reply_postState createState() => _reply_postState();
 }
@@ -35,16 +38,28 @@ final _formKey = GlobalKey<FormState>();
 class _reply_postState extends State<reply_post> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  Discussion discussion = new Discussion();
+  List<Replies> reply_list = new List<Replies>();
+  Users doctor = new Users();
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
+  String doctor_name = "";
+  String specialty = 'doctor';
+  DateTime now =  DateTime.now();
+  DateTime date;
+  DateTime time;
+  String dateString = "";
+  String timeString = "";
+  String replyBody = '';
+  int count = 1;
+
   var path;
   User user;
   var uid, fileName;
   // File file;
   String thisURL;
-  String reply = '';
-
   List<FirebaseFile> trythis =[];
   String thisIMG="";
-
   //for upload image
   bool pic = false;
   String cacheFile="";
@@ -57,6 +72,9 @@ class _reply_postState extends State<reply_post> {
     double defaultFontSize = 14;
     double defaultIconSize = 17;
     final Storage storage = Storage();
+    dateString = "${now.month}/${now.day}/${now.year}";
+    timeString = "${now.hour}:${now.minute}";
+
 
     return Container(
         key: _formKey,
@@ -103,7 +121,7 @@ class _reply_postState extends State<reply_post> {
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Reply' : null,
                     onChanged: (val){
-                      setState(() => reply = val);
+                      setState(() => replyBody = val);
                     },
                   ),
                   SizedBox(height: 18.0),
@@ -223,7 +241,72 @@ class _reply_postState extends State<reply_post> {
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
-                        onPressed:() {
+                        onPressed:() async {
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            String userUID = widget.userUID;
+                            int index = widget.index;
+                            print(index);
+                            Replies reply = new Replies();
+                            final readReply = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() +'/replies/');
+                            final readCreator = databaseReference.child('users/' + uid + '/personal_info/');
+                            final readDiscussion = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString());
+                            readCreator.once().then((DataSnapshot createsnapshot){
+                              Map<String, dynamic> temp = jsonDecode(jsonEncode(createsnapshot.value));
+                              doctor = Users.fromJson(temp);
+                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                              readReply.once().then((DataSnapshot replysnapshot) {
+                                String temp1 = replysnapshot.value.toString();
+                                print("temp1");
+                                print(temp1);
+                                if(replysnapshot.value == null){
+                                  final replyRef = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() + "/replies/" + count.toString());
+                                  reply = new Replies(createdBy: doctor_name, specialty: specialty, replyDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}", replyTime: "${now.hour.toString().padLeft(2,"0")}:${now.minute.toString().padLeft(2,"0")}", replyBody: replyBody);
+                                  replyRef.update(reply.toJson());
+                                  readDiscussion.once().then((DataSnapshot discussionsnapshot) {
+                                    Map<String, dynamic> temp2 = jsonDecode(jsonEncode(discussionsnapshot.value));
+                                    discussion = Discussion.fromJson(temp2);
+                                    readDiscussion.update({"noOfReplies": discussion.noOfReplies+1});
+                                    print("no of replies added 1 successfully");
+                                  });
+                                  // replyRef.set({"createdBy": doctor_name, "specialty": specialty, "replyDate": "${now.month}/${now.day}/${now.year}", "replyTime": "${now.hour}:${now.minute}", "replyBody": replyBody});
+                                  print("Added Discussion Board Reply Successfully! " + userUID);
+                                }
+                                else{
+                                  getReply();
+                                  Future.delayed(const Duration(milliseconds: 1000), (){
+                                    count = reply_list.length--;
+                                    final replyRef = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() +'/replies/' + count.toString());
+                                    reply = new Replies(createdBy: doctor_name, specialty: specialty, replyDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}", replyTime: "${now.hour.toString().padLeft(2,"0")}:${now.minute.toString().padLeft(2,"0")}", replyBody: replyBody);
+                                    replyRef.update(reply.toJson());
+                                    readDiscussion.once().then((DataSnapshot discussionsnapshot) {
+                                      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(discussionsnapshot.value));
+                                      discussion = Discussion.fromJson(temp2);
+                                      readDiscussion.update({"noOfReplies": discussion.noOfReplies+1});
+                                      print("no of replies added 1 successfully");
+                                    });
+                                    print("Added Discussion Board Reply Successfully! " + userUID);
+                                  });
+
+                                }
+
+                              });
+                            });
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              reply_list.add(new Replies(createdBy: doctor_name, specialty: specialty, replyDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}", replyTime: "${now.hour.toString().padLeft(2,"0")}:${now.minute.toString().padLeft(2,"0")}", replyBody: replyBody));
+                              // for(var i=0;i<reply_list.length/2;i++){
+                              //   var temp = reply_list[i];
+                              //   reply_list[i] = reply_list[reply_list.length-1-i];
+                              //   reply_list[reply_list.length-1-i] = temp;
+                              // }
+                              print("POP HERE ==========");
+                              Navigator.pop(context, [reply_list, 1]);
+                            });
+
+                          } catch(e) {
+                            print("you got an error! $e");
+                          }
                           // Navigator.pop(context);
                         },
                       )
@@ -271,5 +354,20 @@ class _reply_postState extends State<reply_post> {
     return downloadurl;
   }
 
+  void getReply() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    int index = widget.index;
+    final readreply = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() +'/replies/');
+    readreply.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print("temp");
+      print(temp);
+      temp.forEach((jsonString) {
+        reply_list.add(Replies.fromJson(jsonString));
+      });
+    });
+  }
 
 }

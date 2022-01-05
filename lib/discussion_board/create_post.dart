@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
+import 'package:my_app/models/discussionModel.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
@@ -27,7 +28,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class create_post extends StatefulWidget {
   final List<FirebaseFile> files;
-  create_post({Key key, this.files});
+  String userUID;
+  create_post({Key key, this.files, this.userUID}): super(key: key);
   @override
   _create_postState createState() => _create_postState();
 }
@@ -35,16 +37,21 @@ final _formKey = GlobalKey<FormState>();
 class _create_postState extends State<create_post> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  var path;
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
   User user;
+  Users doctor = new Users();
+  int count = 1;
+  DateTime now =  DateTime.now();
   var uid, fileName;
-  // File file;
   String thisURL;
   String title = '';
   String description = '';
+  List<Discussion> discussion_list = new List<Discussion>();
+
 
   List<FirebaseFile> trythis =[];
-  String thisIMG="";
+  // String thisIMG="";
 
   //for upload image
   bool pic = false;
@@ -52,9 +59,10 @@ class _create_postState extends State<create_post> {
   File file = new File("path");
 
 
+
   @override
   Widget build(BuildContext context) {
-    // trythis.clear();
+
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -250,7 +258,55 @@ class _create_postState extends State<create_post> {
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.green,
-                        onPressed:() {
+                        onPressed:() async {
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            String userUID = widget.userUID;
+                            print(userUID);
+                            final readDiscussion = databaseReference.child('users/' + userUID + '/discussion/');
+                            final readCreator = databaseReference.child('users/' + uid + '/personal_info/');
+                            String createdBy = "";
+                            readCreator.once().then((DataSnapshot snapshot){
+                              Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+                              doctor = Users.fromJson(temp);
+                              createdBy = doctor.firstname + " " + doctor.lastname;
+                              readDiscussion.once().then((DataSnapshot datasnapshot) {
+                                String temp1 = datasnapshot.value.toString();
+                                print("temp1 " + temp1);
+                                if(datasnapshot.value == null){
+                                  final discussionRef = databaseReference.child('users/' + userUID + '/discussion/' + count.toString());
+                                  discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0, "imgRef": fileName});
+                                  print("Added to Discussion Board Successfully! " + userUID);
+                                }
+                                else{
+                                  getDiscussion();
+                                  Future.delayed(const Duration(milliseconds: 1000), (){
+                                    print(count);
+                                    count = discussion_list.length--;
+                                    final discussionRef = databaseReference.child('users/' + userUID + '/discussion/' + count.toString());
+                                    discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0, "imgRef": fileName});
+                                    print("Added to Discussion Board Successfully! " + userUID);
+                                  });
+
+                                }
+
+                              });
+                            });
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              discussion_list.add(new Discussion(title: title, createdBy: createdBy, discussionDate: now, discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName));
+                              // for(var i=0;i<discussion_list.length/2;i++){
+                              //   var temp = discussion_list[i];
+                              //   discussion_list[i] = discussion_list[discussion_list.length-1-i];
+                              //   discussion_list[discussion_list.length-1-i] = temp;
+                              // }
+                              print("POP HERE ==========");
+                              Navigator.pop(context, [discussion_list, 1]);
+                            });
+
+                          } catch(e) {
+                            print("you got an error! $e");
+                          }
                           // Navigator.pop(context);
                         },
                       )
@@ -297,6 +353,22 @@ class _create_postState extends State<create_post> {
     thisURL = downloadurl;
     return downloadurl;
   }
-
+  void getDiscussion() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
+    readdiscussion.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        discussion_list.add(Discussion.fromJson(jsonString));
+      });
+    });
+  }
 
 }
+
+
+
+
+

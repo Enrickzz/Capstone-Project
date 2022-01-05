@@ -1,4 +1,10 @@
+import 'dart:convert';
+
+import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/discussion_board/create_post.dart';
+import 'package:my_app/models/discussionModel.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -22,6 +28,8 @@ import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
 
 class discussion extends StatefulWidget {
+  String userUID;
+  discussion({Key key, this.userUID}): super(key: key);
   @override
   _discussionState createState() => _discussionState();
 }
@@ -29,19 +37,34 @@ class discussion extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
-class _discussionState extends State<discussion>
-    with TickerProviderStateMixin {
+class _discussionState extends State<discussion> with TickerProviderStateMixin {
 
   String search="";
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
-
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
+  DateFormat format = new DateFormat("MM/dd/yyyy");
+  DateFormat timeformat = new DateFormat("hh:mm");
+  Users doctor = new Users();
+  int count = 1;
+  DateTime now =  DateTime.now();
+  String title = '';
+  String description = '';
+  List<Discussion> discussion_list = new List<Discussion>();
 
   double topBarOpacity = 0.0;
   @override
   void initState() {
     super.initState();
+    discussion_list.clear();
+    getDiscussion();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
+    });
+
   }
 
 
@@ -126,7 +149,7 @@ class _discussionState extends State<discussion>
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           // child: add_medication(thislist: medtemp),
-                          child: create_post(),
+                          child: create_post(userUID: widget.userUID),
                         ),
                         ),
                       ).then((value) =>
@@ -206,7 +229,7 @@ class _discussionState extends State<discussion>
                       ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 4,
+                        itemCount: discussion_list.length,
                         itemBuilder: (context, index) {
                           return Container(
                             margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
@@ -215,7 +238,7 @@ class _discussionState extends State<discussion>
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => specific_post()
+                                        builder: (context) => specific_post(userUID: widget.userUID, index: index)
                                     )
                                 );
                               },
@@ -256,7 +279,7 @@ class _discussionState extends State<discussion>
                                                       Container(
                                                         width: MediaQuery.of(context).size.width * 0.65,
                                                         child: Text(
-                                                          "Painful Heart. What to do?",
+                                                          discussion_list[index].title,
                                                           style: TextStyle(
                                                             fontSize: 16,
                                                             fontWeight: FontWeight.bold,
@@ -267,7 +290,7 @@ class _discussionState extends State<discussion>
                                                       Row(
                                                         children: <Widget>[
                                                           Text(
-                                                            'Dr.' + "Johnny Sins",
+                                                            'Dr.' + discussion_list[index].createdBy,
                                                             style: TextStyle(
                                                                 fontSize: 12,
                                                             ),
@@ -275,7 +298,8 @@ class _discussionState extends State<discussion>
 
                                                           SizedBox(width: 15),
                                                           Text(
-                                                            "12/29/2021 11:09",
+                                                            "${discussion_list[index].discussionDate.month.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.day.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.year} " +
+                                                                "${discussion_list[index].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[index].discussionTime.minute.toString().padLeft(2,"0")}",
                                                             style: TextStyle(
                                                                 fontSize: 12,
                                                             ),
@@ -294,7 +318,7 @@ class _discussionState extends State<discussion>
 
                                         child: Center(
                                           child: Text(
-                                            "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! 121321 asd asd asd asd asd asddddddddddddd   sd asd asda d asd a das da ad asd asd asd asd asd asd asd as das dasd asd a dasd asd  asd asdasdad asd",
+                                            discussion_list[index].discussionBody,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -315,7 +339,7 @@ class _discussionState extends State<discussion>
                                               ),
                                               SizedBox(width: 4.0),
                                               Text(
-                                                "4 replies",
+                                                discussion_list[index].noOfReplies.toString() + " replies",
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                 ),
@@ -344,5 +368,16 @@ class _discussionState extends State<discussion>
 
     );
   }
-
+  void getDiscussion() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
+    readdiscussion.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        discussion_list.add(Discussion.fromJson(jsonString));
+      });
+    });
+  }
 }

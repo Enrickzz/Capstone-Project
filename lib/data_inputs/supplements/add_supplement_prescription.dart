@@ -688,7 +688,6 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + supplement_list.length.toString());
                               supplement_list.add(new Supplement_Prescription(supplement_name: supplement_name, intake_time: quantity.toString(),dosage: supp_dosage, prescription_unit: prescription_unit, dateCreated: now));
                               for(var i=0;i<supplement_list.length/2;i++){
                                 var temp = supplement_list[i];

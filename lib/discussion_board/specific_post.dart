@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/discussion_board/reply_post.dart';
+import 'package:my_app/models/discussionModel.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
@@ -21,6 +25,9 @@ import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
 
 class specific_post extends StatefulWidget {
+  String userUID;
+  int index;
+  specific_post({Key key, this.userUID, this.index}): super(key: key);
   @override
   _specific_postState createState() => _specific_postState();
 }
@@ -32,13 +39,30 @@ class _specific_postState extends State<specific_post>
 
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
-
-  final AuthService _auth = AuthService();
-
   double topBarOpacity = 0.0;
+
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final AuthService _auth = AuthService();
+  List<Discussion> discussion_list = new List<Discussion>();
+  List<Replies> reply_list = new List<Replies>();
+  String title = "";
+  String date = "";
+  String time = "";
+  String doctor_name = "";
+  String body = "";
+  String noOfReply = "";
+
   @override
   void initState() {
     super.initState();
+    discussion_list.clear();
+    getDiscussion();
+    getReplies();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
+    });
   }
 
 
@@ -77,7 +101,7 @@ class _specific_postState extends State<specific_post>
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           // child: add_medication(thislist: medtemp),
-                          child: reply_post(),
+                          child: reply_post(userUID: widget.userUID, index: widget.index),
                         ),
                         ),
                       ).then((value) =>
@@ -135,7 +159,7 @@ class _specific_postState extends State<specific_post>
                                       children: <Widget>[
                                         Container(
                                           child: Text(
-                                            'Dr.'+"Johnny Sins",
+                                            'Dr.'+ doctor_name,
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -145,7 +169,7 @@ class _specific_postState extends State<specific_post>
 
                                         SizedBox(height: 2.0),
                                         Text(
-                                          "12/29/2021 11:09",
+                                          date + " " + time,
                                           style: TextStyle(
                                             fontSize: 12,
                                           ),
@@ -161,7 +185,7 @@ class _specific_postState extends State<specific_post>
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 15.0),
                           child: Text(
-                            "Painful Heart. What to do?",
+                            title,
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.black.withOpacity(0.8),
@@ -170,7 +194,7 @@ class _specific_postState extends State<specific_post>
                           ),
                         ),
                         Text(
-                            "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! 121321dsfsf sdfsd fsd f dsf sdf sdf asdasd asdasd asd asd asd asd asd asd asd asd asdasdad asd la bla bla tite masakit aray ko!!!! 121321ds la bla bla tite masakit aray ko!!!! la bla bla tite masakit aray ko!!!! 121321ds la bla bla tite masakit aray ko!!!! 121321ds 121321ds",
+                          body,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -183,7 +207,7 @@ class _specific_postState extends State<specific_post>
                 Padding(
                   padding: EdgeInsets.only(left: 24.0, top: 20.0, bottom: 10.0),
                   child: Text(
-                    "Replies (4)",
+                    "Replies (" + noOfReply + ")",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -198,7 +222,8 @@ class _specific_postState extends State<specific_post>
                       ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 4,
+                        itemCount: reply_list.length,
+                        // discussion_list[widget.index].noOfReplies,
                         itemBuilder: (context, index) {
                           return Container(
                               margin: EdgeInsets.fromLTRB(24, 0, 24, 20),
@@ -237,7 +262,7 @@ class _specific_postState extends State<specific_post>
                                                   children: <Widget>[
                                                     Container(
                                                       child: Text(
-                                                        "Louis Borja",
+                                                        reply_list[index].createdBy,
                                                         style: TextStyle(
                                                           fontSize: 16,
                                                           fontWeight: FontWeight.bold,
@@ -247,7 +272,7 @@ class _specific_postState extends State<specific_post>
                                                     SizedBox(height: 2.0),
                                                     Container(
                                                       child: Text(
-                                                        "Doctor/Support System/Patient",
+                                                        reply_list[index].specialty,
                                                         style: TextStyle(
                                                           fontSize: 14,
                                                         ),
@@ -255,7 +280,7 @@ class _specific_postState extends State<specific_post>
                                                     ),
                                                     SizedBox(height: 2.0),
                                                     Text(
-                                                      "12/29/2021 13:08",
+                                                      reply_list[index].replyDate + " " + reply_list[index].replyTime,
                                                       style: TextStyle(
                                                         fontSize: 12,
                                                       ),
@@ -271,7 +296,7 @@ class _specific_postState extends State<specific_post>
                                     Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 2.0),
                                       child: Text(
-                                        "I am so gay! Please fuck me in the ass... Suck my small dick like a fucking lollipop! Ouch! It hurts! My heart! I am getting a heart attack asdhiuahsdukasdhajkshda dead xD",
+                                        reply_list[index].replyBody,
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),
@@ -295,6 +320,39 @@ class _specific_postState extends State<specific_post>
       ),
 
     );
+  }
+
+  void getDiscussion() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    int index = widget.index;
+    final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
+    readdiscussion.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        discussion_list.add(Discussion.fromJson(jsonString));
+      });
+      title = discussion_list[index].title;
+      doctor_name = discussion_list[index].createdBy;
+      date = "${discussion_list[index].discussionDate.month.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.day.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.year}";
+      time = "${discussion_list[index].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[index].discussionTime.minute.toString().padLeft(2,"0")}";
+      body = discussion_list[index].discussionBody;
+      noOfReply = discussion_list[index].noOfReplies.toString();
+    });
+  }
+  void getReplies() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    int index = widget.index;
+    final readReplies = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() +'/replies/');
+    readReplies.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        reply_list.add(Replies.fromJson(jsonString));
+      });
+    });
   }
 
 }
