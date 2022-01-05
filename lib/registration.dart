@@ -35,12 +35,31 @@ class _AppSignUpState extends State<registration> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool _isHidden = true;
   bool _isCHidden = true;
+  bool isDoctor = false;
 
 
   //added by borj
   String valueChooseUserStatus;
   List<String> listUserStatus = <String>[
     'Patient', 'Doctor', 'Family member / Caregiver'
+  ];
+  String valueChooseDoctorKind;
+  List<String> listDoctorKind = <String>[
+    'Cardiologist', 'Allergists/Immunologist',
+    'Anesthesiologist', 'Colon and Rectal Surgeon',
+    'Critical Care Medicine Specialist',
+    'Dermatologist','Endocrinologist',
+    'Emergency Medicine Specialist',
+    'Family Physician','Gastroenterologist',
+    'Geriatric Medicine Specialist',
+    'Hematologist','Hospice and Palliative Medicine Specialist',
+    'Infectious Disease Specialist',
+    'Internist','Medical Geneticist',
+    'Nephrologist','Neurologist','Obstetrician/Gynecologist',
+    'Oncologist','Ophthalmologist','Osteopath','Otolaryngologist',
+    'Pathologist','Pediatrician','Physiatrist','Plastic Surgeon','Podiatrist'
+    'Preventive Medicine Specialist','Psychiatrist','Pulmonologist','Radiologist',
+    'Rheumatologist','Urologist'
   ];
 
 
@@ -306,6 +325,12 @@ class _AppSignUpState extends State<registration> {
                                 setState(() {
                                   valueChooseUserStatus = newValue;
                                   print(valueChooseUserStatus);
+                                  if(valueChooseUserStatus == "Doctor"){
+                                    isDoctor = true;
+                                  }
+                                  else{
+                                    isDoctor = false;
+                                  }
                                 });
                               },
                               items: listUserStatus.map((valueItem){
@@ -315,6 +340,45 @@ class _AppSignUpState extends State<registration> {
                                 );
                               },
                               ).toList(),
+                            ),
+                            SizedBox(height: 8.0),
+                            Visibility(
+                              visible: isDoctor,
+                              child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      width:0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: Color(0xFFF2F3F5),
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFF666666),
+                                      fontFamily: defaultFontFamily,
+                                      fontSize: defaultFontSize),
+                                  hintText: "My Specialization is: *",
+                                ),
+                                isExpanded: true,
+                                value: valueChooseDoctorKind,
+                                onChanged: (newValue){
+                                  setState(() {
+                                    valueChooseDoctorKind = newValue;
+                                    print(valueChooseDoctorKind);
+
+
+                                  });
+                                },
+                                items: listDoctorKind.map((valueItem2){
+                                  return DropdownMenuItem(
+                                      value: valueItem2,
+                                      child: Text(valueItem2)
+                                  );
+                                },
+                                ).toList(),
+                              ),
                             ),
                             SizedBox(height: 5.0),
                             FormField<bool>(

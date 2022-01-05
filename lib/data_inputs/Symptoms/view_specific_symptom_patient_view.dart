@@ -266,6 +266,36 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
+                                                Text("Recurring Symptom Trigger",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+
+                                            if (symptom_trigger.toString() != "") ...[
+                                              Text(symptom_trigger,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ]else ...[
+                                              Text("The recurring symptom has no trigger.",
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ],
+                                            SizedBox(height: 16),
+
+
+                                            Row(
+                                              children: [
                                                 if (recurring[0].toString() != "") ...[
                                                 Text("Recurring",
                                                   style: TextStyle(
@@ -286,27 +316,10 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ),
                                               ],
                                             SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                if (symptom_trigger.toString() != "") ...[
-                                                  Text("Symptom Trigger",
-                                                    style: TextStyle(
-                                                      fontSize:14,
-                                                      color:Color(0xFF363f93),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ],
-                                            ),
+
                                             SizedBox(height: 8),
-                                            if (symptom_trigger.toString() != "") ...[
-                                              Text(symptom_trigger,
-                                                style: TextStyle(
-                                                    fontSize:16,
-                                                    fontWeight: FontWeight.bold
-                                                ),
-                                              ),
-                                            ],
+
+
                                           ],
                                       ),
                                     ),
