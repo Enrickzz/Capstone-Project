@@ -68,7 +68,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
   String symptomDate = "";
   String symptomTime = "";
   String symptomTrigger = "";
-  List<String> recurring = [];
+  List<String> recurring = [""];
 
   @override
   void initState() {
@@ -187,7 +187,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                Text("Recurring",
+                                                Text("Recurring Symptom Trigger",
                                                   style: TextStyle(
                                                     fontSize:14,
                                                     color:Color(0xFF363f93),
@@ -196,30 +196,44 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(recurring.toString(),
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
+                                            if (symptomTrigger.toString() != "") ...[
+                                              Text(symptomTrigger,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
                                               ),
-                                            ),
+                                            ]else ...[
+                                              Text("The recurring symptom has no trigger.",
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ],
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                Text("Symptom Trigger",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
+                                                if (recurring[0].toString() != "") ...[
+                                                  Text("Recurring",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
                                                   ),
-                                                ),
+                                                ],
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(symptomTrigger,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
+                                            if (recurring[0].toString() != "") ...[
+                                              Text(recurring.toString(),
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
                                               ),
-                                            ),
+                                            ],
+
 
 
 
