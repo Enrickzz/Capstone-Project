@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
 import '../main.dart';
-import '../notifications.dart';
+import '../notifications/notifications._patients.dart';
 import 'exercise_screen.dart';
 
 class my_exercises extends StatefulWidget {

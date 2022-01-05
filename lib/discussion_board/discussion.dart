@@ -315,16 +315,16 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
                                         ),
                                       ),
                                       Container(
+                                        width: 300,
 
-                                        child: Center(
-                                          child: Text(
-                                            discussion_list[index].discussionBody,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 3,
+                                        child: Text(
+                                          discussion_list[index].discussionBody,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontSize: 14,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 3,
                                         ),
                                       ),
                                       SizedBox(height: 5),

@@ -266,16 +266,16 @@ class _discussionPatientViewState extends State<discussion_patient_view>
                                           ),
                                         ),
                                         Container(
+                                          width: 300,
 
-                                          child: Center(
-                                            child: Text(
-                                              "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! 121321 asd asd asd asd asd asddddddddddddd   sd asd asda d asd a das da ad asd asd asd asd asd asd asd as das dasd asd a dasd asd  asd asdasdad asd",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 3,
+                                          child: Text(
+                                            'wwewewewewewewewewewewewewew',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontSize: 14,
                                             ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
                                           ),
                                         ),
                                         SizedBox(height: 5),

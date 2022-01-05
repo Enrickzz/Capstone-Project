@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:my_app/notifications/notifications_doctor.dart';
 import 'package:my_app/patient_list/doctor_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
@@ -295,14 +296,10 @@ class _PatientListState extends State<PatientList>  {
               style: TextStyle(fontSize: 24.0),
             ),
             onTap: () {
-              // Navigator.pushReplacement(
-              //   context,
-              //   MaterialPageRoute<void>(
-              //     builder: (BuildContext context) =>  PatientList(
-              //       title: 'Houses',
-              //     ),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => notifications_doctor()),
+              );
             },
           ),
           ListTile(

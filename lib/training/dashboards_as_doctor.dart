@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
-import '../../notifications.dart';
+import '../notifications/notifications._patients.dart';
 
 class dashboards_as_doctor extends StatefulWidget {
   const dashboards_as_doctor({Key key, this.animationController}) : super(key: key);

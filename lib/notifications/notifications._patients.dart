@@ -8,12 +8,12 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
-import 'additional_data_collection.dart';
+import '../additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 
-import 'dialogs/policy_dialog.dart';
-import 'fitness_app_theme.dart';
-import 'models/users.dart';
+import '../dialogs/policy_dialog.dart';
+import '../fitness_app_theme.dart';
+import '../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class notifications extends StatefulWidget {
