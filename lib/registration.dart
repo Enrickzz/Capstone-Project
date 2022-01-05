@@ -43,7 +43,7 @@ class _AppSignUpState extends State<registration> {
   List<String> listUserStatus = <String>[
     'Patient', 'Doctor', 'Family member / Caregiver'
   ];
-  String valueChooseDoctorKind;
+  String valueChooseDoctorKind = "Cardiologist";
   List<String> listDoctorKind = <String>[
     'Cardiologist', 'Allergists/Immunologist',
     'Anesthesiologist', 'Colon and Rectal Surgeon',
