@@ -68,7 +68,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   String symptom_date = "";
   String symptom_time = "";
   String symptom_trigger = "";
-  List<String> recurring = [];
+  List<String> recurring = [""];
 
   @override
   void initState() {
@@ -266,6 +266,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
+                                                if (recurring[0].toString() != "") ...[
                                                 Text("Recurring",
                                                   style: TextStyle(
                                                     fontSize:14,
@@ -273,36 +274,40 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                                   ),
                                                 ),
                                               ],
-                                            ),
-                                            SizedBox(height: 8),
-                                              Text(recurring.toString(),
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Symptom Trigger",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(symptom_trigger,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
+                                            if (recurring[0].toString() != "") ...[
+                                              Text(recurring.toString(),
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
                                               ),
+                                              ],
+                                            SizedBox(height: 16),
+                                            Row(
+                                              children: [
+                                                if (symptom_trigger.toString() != "") ...[
+                                                  Text("Symptom Trigger",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ],
                                             ),
-
-
-
-                                          ]
+                                            SizedBox(height: 8),
+                                            if (symptom_trigger.toString() != "") ...[
+                                              Text(symptom_trigger,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ],
+                                          ],
                                       ),
                                     ),
                                   ))
@@ -451,6 +456,11 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
       temp.forEach((jsonString) {
         listtemp.add(Symptom.fromJson(jsonString));
       });
+      // for(var i=0;i<listtemp.length/2;i++){
+      //   var temp = listtemp[i];
+      //   listtemp[i] = listtemp[listtemp.length-1-i];
+      //   listtemp[listtemp.length-1-i] = temp;
+      // }
       symptom_name = listtemp[index].symptomName;
       intensityLvl = listtemp[index].intensityLvl.toString();
       symptom_felt = listtemp[index].symptomFelt;
@@ -461,6 +471,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
         for(int i = 0; i < listtemp[index].recurring.length; i++){
           recurring.add(listtemp[index].recurring[i]);
         }
+        recurring.removeAt(0);
       }
     });
   }

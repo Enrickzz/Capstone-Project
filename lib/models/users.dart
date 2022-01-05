@@ -191,7 +191,9 @@ class Symptom {
     symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
     symptomIsActive = json['symptom_isActive'];
     symptomTrigger = json['symptom_trigger'];
-    recurring = json['recurring'].cast<String>();
+    if(json['recurring'] != null){
+      recurring = json['recurring'].cast<String>();
+    }
     imgRef = json['imgRef'];
   }
 
