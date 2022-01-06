@@ -178,11 +178,23 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                                 fontSize:14,
                                                 // color:Colors.grey,
                                               ),),
-                                            Text("Grams: g",
+                                            SizedBox(height: 1,),
+                                            Text("Weight:" + breakfast_list[index].weight.toString() + "g",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
                                               ),),
+                                            SizedBox(height: 5,),
+
+
+                                            Text("Date:" + breakfast_list[index].intakeDate,
+                                              style: TextStyle(
+                                                fontSize:12,
+                                                // color:Colors.grey,
+                                              ),
+
+                                            ),
+
                                           ]
                                       ),
                                     ))
@@ -270,11 +282,22 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                                 fontSize:14,
                                                 // color:Colors.grey,
                                               ),),
-                                            Text("Grams: g",
+                                            SizedBox(height: 1,),
+                                            Text("Weight:" + lunch_list[index].weight.toString() + "g",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
                                               ),),
+                                            SizedBox(height: 5,),
+
+
+                                            Text("Date:" + lunch_list[index].intakeDate,
+                                              style: TextStyle(
+                                                fontSize:12,
+                                                // color:Colors.grey,
+                                              ),
+
+                                            ),
                                           ]
                                       ),
                                     ))
@@ -362,11 +385,22 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                                 fontSize:14,
                                                 // color:Colors.grey,
                                               ),),
-                                            Text("Grams: g",
+                                            SizedBox(height: 1,),
+                                            Text("Weight:" + dinner_list[index].weight.toString() + "g",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
                                               ),),
+                                            SizedBox(height: 5,),
+
+
+                                            Text("Date:" + dinner_list[index].intakeDate,
+                                              style: TextStyle(
+                                                fontSize:12,
+                                                // color:Colors.grey,
+                                              ),
+
+                                            ),
                                           ]
                                       ),
                                     ))
@@ -454,11 +488,22 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                                 fontSize:14,
                                                 // color:Colors.grey,
                                               ),),
-                                            Text("Grams: g",
+                                            SizedBox(height: 1,),
+                                            Text("Weight:" + snack_list[index].weight.toString() + "g",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
                                               ),),
+                                            SizedBox(height: 5,),
+
+
+                                            Text("Date:" + snack_list[index].intakeDate,
+                                              style: TextStyle(
+                                                fontSize:12,
+                                                // color:Colors.grey,
+                                              ),
+
+                                            ),
                                           ]
                                       ),
                                     ))
