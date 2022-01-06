@@ -69,7 +69,7 @@ class change_waterIntakeState extends State<change_water_intake_goal> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Water Intake Goal',
+                    'Daily Water Intake Goal',
                     textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
@@ -95,9 +95,9 @@ class change_waterIntakeState extends State<change_water_intake_goal> {
                                 color: Color(0xFF666666),
                                 fontFamily: defaultFontFamily,
                                 fontSize: defaultFontSize),
-                            hintText: "Water Intake",
+                            hintText: "Water Intake Goals",
                           ),
-                          validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
+                          validator: (val) => val.isEmpty ? 'Enter Water Intake Goal' : null,
                           onChanged: (val){
                             setState(() => temperature = double.parse(val));
                           },
@@ -123,19 +123,19 @@ class change_waterIntakeState extends State<change_water_intake_goal> {
                             for (int index = 0; index < isSelected.length; index++){
                               if (index == newIndex) {
                                 isSelected[index] = true;
-                                print("Celsius (°C)");
+                                print("Milliliter (ml)");
                               } else {
                                 isSelected[index] = false;
-                                print("Fahrenheit (°F)");
+                                print("Ounce (oz)");
                               }
                             }
                             if(newIndex == 0){
-                              print("Celsius (°C)");
-                              unit = "Celsius";
+                              print("Milliliter (ml)");
+                              unit = "Milliliter";
                             }
                             if(newIndex == 1){
-                              print("Fahrenheit (°F)");
-                              unit = "Fahrenheit";
+                              print("Ounce (oz)");
+                              unit = "Ounce";
 
                             }
                           });
@@ -143,80 +143,10 @@ class change_waterIntakeState extends State<change_water_intake_goal> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8.0),
-                  GestureDetector(
-                    onTap: ()async{
-                      await showDatePicker(
-                        context: context,
-                        initialDate: new DateTime.now(),
-                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
-                        lastDate: new DateTime.now(),
-                      ).then((value){
-                        if(value != null && value != temperatureDate){
-                          setState(() {
-                            temperatureDate = value;
-                            isDateSelected = true;
-                            temperature_date = "${temperatureDate.month}/${temperatureDate.day}/${temperatureDate.year}";
-                          });
-                          dateValue.text = temperature_date + "\r";
-                        }
-                      });
+                  SizedBox(height: 12.0),
 
-                      final initialTime = TimeOfDay(hour:12, minute: 0);
-                      await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay(
-                            hour: TimeOfDay.now().hour,
-                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
-                                .toInt()),
-                      ).then((value){
-                        if(value != null && value != time){
-                          setState(() {
-                            time = value;
-                            final hours = time.hour.toString().padLeft(2,'0');
-                            final min = time.minute.toString().padLeft(2,'0');
-                            temperature_time = "$hours:$min";
-                            dateValue.text += "$hours:$min";
-                            print("data value " + dateValue.text);
-                          });
-                        }
-                      });
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: dateValue,
-                        showCursor: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: "Date and Time",
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color(0xFF666666),
-                            size: defaultIconSize,
-                          ),
-                        ),
-                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
-                        onChanged: (val){
 
-                          print(dateValue);
-                          setState((){
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+
                   SizedBox(height: 24.0),
                   // DropdownButton(
                   //   hint: Text("Select items:"),
@@ -254,91 +184,13 @@ class change_waterIntakeState extends State<change_water_intake_goal> {
                       ),
                       FlatButton(
                         child: Text(
-                          'Save',
+                          'Proceed',
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
-                        onPressed:() async {
-                          try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
-                            final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-                            readTemperature.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
+                        onPressed:()  {
+                          _showMyDialogDelete();
 
-
-                              if(datasnapshot.value == null){
-                                final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                                getIndication();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toStringAsFixed(1), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString(), "indication": indication.toString()});
-                                  print("Added Body Temperature Successfully! " + uid);
-                                });
-                              }
-                              else{
-                                // String tempUnit = "";
-                                // String tempTemperature = "";
-                                // String tempTemperatureDate = "";
-                                // String tempTemperatureTime = "";
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //   switch(i%4){
-                                //     case 0: {
-                                //       print("i value" + i.toString() + splitFull.last);
-                                //       tempUnit = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 1: {
-                                //       print("i value" + i.toString() + splitFull.last);
-                                //       tempTemperatureDate = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 2: {
-                                //       print("i value" + i.toString() + splitFull.last);
-                                //       tempTemperature = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 3: {
-                                //       print("i value" + i.toString() + splitFull.last);
-                                //       tempTemperatureTime = splitFull.last;
-                                //       body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
-                                //       body_temp_list.add(body_temperature);
-                                //     }
-                                //     break;
-                                //   }
-                                // }
-                                getBodyTemp();
-                                getIndication();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = body_temp_list.length--;
-                                  print("count " + count.toString());
-                                  final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                                  temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toStringAsFixed(1), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString(), "indication": indication.toString()});
-                                  print("Added Body Temperature Successfully! " + uid);
-                                });
-
-                              }
-
-                            });
-
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("SYMPTOMS LENGTH: " + body_temp_list.length.toString());
-                              body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time), indication: indication));
-                              for(var i=0;i<body_temp_list.length/2;i++){
-                                var temp = body_temp_list[i];
-                                body_temp_list[i] = body_temp_list[body_temp_list.length-1-i];
-                                body_temp_list[body_temp_list.length-1-i] = temp;
-                              }
-                              print("POP HERE ==========");
-                              Navigator.pop(context, body_temp_list);
-                            });
-
-                          } catch(e) {
-                            print("you got an error! $e");
-                          }
-                          // Navigator.pop(context);
                         },
                       )
                     ],
@@ -438,5 +290,43 @@ class change_waterIntakeState extends State<change_water_intake_goal> {
       }
     }
     return age;
+  }
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('New Water Intake Goal'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text("Water is essential to good health and helps prevent dehydration. While water needs vary from person to person, we often need at laest 1893 ml or 64 oz of water a day.",
+                  style: TextStyle(fontSize: 16, ),
+                  textAlign: TextAlign.justify,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Save'),
+              onPressed: () {
+                print('Save');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

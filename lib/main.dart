@@ -11,8 +11,10 @@ import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/profile/patient/add_image.dart';
 import 'package:my_app/provider/google_sign_in.dart';
-import 'package:my_app/reviews/add_restaurant_review.dart';
-import 'package:my_app/reviews/specific_restaurant_reviews.dart';
+import 'package:my_app/reviews/drugstore/specific_drugstore_review.dart';
+import 'package:my_app/reviews/facility/specific_facility_review.dart';
+import 'package:my_app/reviews/restaurant/add_restaurant_review.dart';
+import 'package:my_app/reviews/restaurant/specific_restaurant_reviews.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:my_app/training/dashboards.dart';
@@ -240,7 +242,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => water_intake()),
+                      MaterialPageRoute(builder: (context) => drugstore_reviews()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

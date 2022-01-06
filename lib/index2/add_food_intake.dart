@@ -165,7 +165,7 @@ class _addFoodIntakeState extends State<add_food_intake> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "I ate this today for:",
+                      hintText: "I ate this for:",
                     ),
                     isExpanded: true,
                     value: valueChooseFoodTime,

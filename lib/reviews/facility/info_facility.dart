@@ -17,7 +17,8 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/reviews/specific_restaurant_reviews.dart';
+import 'package:my_app/reviews/facility/specific_facility_review.dart';
+import 'package:my_app/reviews/restaurant/specific_restaurant_reviews.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
@@ -28,14 +29,14 @@ import 'package:my_app/widgets/rating.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 
-class info_restaurant extends StatefulWidget {
+class info_facility extends StatefulWidget {
   final List<FirebaseFile> files;
-  info_restaurant({Key key, this.files});
+  info_facility({Key key, this.files});
   @override
   _create_postState createState() => _create_postState();
 }
 final _formKey = GlobalKey<FormState>();
-class _create_postState extends State<info_restaurant> {
+class _create_postState extends State<info_facility> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   var path;
@@ -87,7 +88,7 @@ class _create_postState extends State<info_restaurant> {
                 children: <Widget>[
 
                   Text(
-                    'Name of Restaurant',
+                    'Name of Facility',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                   ),
                   SizedBox(height: 8.0),
@@ -326,7 +327,7 @@ class _create_postState extends State<info_restaurant> {
                           onPressed:() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => restaurant_reviews()),
+                              MaterialPageRoute(builder: (context) => facility_reviews()),
                             );
                           },
                         ),

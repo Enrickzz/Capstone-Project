@@ -101,7 +101,7 @@ class _waterIntakeState extends State<water_intake> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: change_water_intake_goal(),
+                      child: add_water_intake(),
                     ),
                     ),
                   ).then((value) => setState((){

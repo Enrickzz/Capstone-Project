@@ -1,5 +1,6 @@
 import 'package:my_app/discussion_board/create_post.dart';
-import 'package:my_app/reviews/info_restaurant.dart';
+import 'package:my_app/reviews/drugstore/add_drugstore_review.dart';
+import 'package:my_app/reviews/drugstore/info_drugstore.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -20,11 +21,11 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import '../../fitness_app_theme.dart';
-import 'add_restaurant_review.dart';
+import '../../../fitness_app_theme.dart';
+import '../restaurant/add_restaurant_review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class restaurant_reviews extends StatefulWidget {
+class drugstore_reviews extends StatefulWidget {
   @override
   _discussionState createState() => _discussionState();
 }
@@ -32,7 +33,7 @@ class restaurant_reviews extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
-class _discussionState extends State<restaurant_reviews>
+class _discussionState extends State<drugstore_reviews>
     with TickerProviderStateMixin {
 
   String search="";
@@ -75,7 +76,7 @@ class _discussionState extends State<restaurant_reviews>
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text('Restaurant Reviews', style: TextStyle(
+          title: const Text('Drugstore Reviews', style: TextStyle(
               color: Colors.black
           )),
           centerTitle: true,
@@ -92,7 +93,7 @@ class _discussionState extends State<restaurant_reviews>
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           // child: add_medication(thislist: medtemp),
-                          child: add_restaurant_review(),
+                          child: add_drugstore_review(),
                         ),
                         ),
                       ).then((value) =>
@@ -184,7 +185,7 @@ class _discussionState extends State<restaurant_reviews>
                                       padding: EdgeInsets.only(
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
                                       // child: add_medication(thislist: medtemp),
-                                      child: info_restaurant(),
+                                      child: info_drugstore(),
                                     ),
                                     ),
                                   ).then((value) =>
@@ -248,34 +249,34 @@ class _discussionState extends State<restaurant_reviews>
                                                         //   ),
                                                         // ),
                                                         RatingBar(
-                                                            initialRating: 3,
-                                                            direction: Axis.horizontal,
-                                                            allowHalfRating: true,
-                                                            itemCount: 5,
-                                                            ignoreGestures: true,
-                                                            itemSize: 15.0,
-                                                            onRatingUpdate: (rating) {
-                                                              print(rating);
-                                                            },
-                                                            ratingWidget: RatingWidget(
-                                                                full: Icon(Icons.star, color: Colors.orange),
-                                                                half: Icon(
-                                                                  Icons.star_half,
-                                                                  color: Colors.orange,
-                                                                ),
-                                                                empty: Icon(
-                                                                  Icons.star_outline,
-                                                                  color: Colors.orange,
-                                                                )),
-                                                            ),
+                                                          initialRating: 3,
+                                                          direction: Axis.horizontal,
+                                                          allowHalfRating: true,
+                                                          itemCount: 5,
+                                                          ignoreGestures: true,
+                                                          itemSize: 15.0,
+                                                          onRatingUpdate: (rating) {
+                                                            print(rating);
+                                                          },
+                                                          ratingWidget: RatingWidget(
+                                                              full: Icon(Icons.star, color: Colors.orange),
+                                                              half: Icon(
+                                                                Icons.star_half,
+                                                                color: Colors.orange,
+                                                              ),
+                                                              empty: Icon(
+                                                                Icons.star_outline,
+                                                                color: Colors.orange,
+                                                              )),
+                                                        ),
                                                         SizedBox(height: 2.0),
                                                         Row(
                                                           children: <Widget>[
                                                             Text(
                                                               "Louis Borja",
                                                               style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.bold
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.bold
                                                               ),
                                                             ),
 
