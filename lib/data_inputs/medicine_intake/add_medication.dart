@@ -334,6 +334,7 @@ class _addMedicationState extends State<add_medication> {
                     child: AbsorbPointer(
                       child: TextFormField(
                         controller: dateValue,
+                        keyboardType: TextInputType.number,
                         showCursor: false,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(

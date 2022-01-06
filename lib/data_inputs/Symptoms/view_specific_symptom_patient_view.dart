@@ -328,6 +328,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                             ]
                         )
                     ),
+                    SizedBox(height: 10.0),
                     Visibility(
                       visible: hasImage,
                       child: InteractiveViewer(
@@ -347,7 +348,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 100,
+                        height: 150,
                         // height: 500, if may contact number and email
                         // margin: EdgeInsets.only(bottom: 50),
                         child: Stack(

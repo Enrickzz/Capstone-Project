@@ -240,6 +240,7 @@ class _addLabResultState extends State<add_lab_results> {
                   Visibility(
                     visible: ptCheck,
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       showCursor: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -266,6 +267,7 @@ class _addLabResultState extends State<add_lab_results> {
                   Visibility(
                     visible: serumElectrolytesCheck,
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       showCursor: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -292,6 +294,8 @@ class _addLabResultState extends State<add_lab_results> {
                   Visibility(
                     visible: cbcCheck,
                     child: TextFormField(
+
+                      keyboardType: TextInputType.number,
                       showCursor: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -318,6 +322,8 @@ class _addLabResultState extends State<add_lab_results> {
                   Visibility(
                     visible: bunCreaCheck,
                     child: TextFormField(
+
+                      keyboardType: TextInputType.number,
                       showCursor: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -344,6 +350,7 @@ class _addLabResultState extends State<add_lab_results> {
                   Visibility(
                     visible: bunCreaCheck,
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       showCursor: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -370,6 +377,7 @@ class _addLabResultState extends State<add_lab_results> {
                   Visibility(
                     visible: lipidProfileCheck,
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       showCursor: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -396,6 +404,7 @@ class _addLabResultState extends State<add_lab_results> {
                   Visibility(
                     visible: lipidProfileCheck,
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       showCursor: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -421,6 +430,7 @@ class _addLabResultState extends State<add_lab_results> {
 
                   SizedBox(height: 8.0),
                   TextFormField(
+                    
                     showCursor: true,
                     keyboardType: TextInputType.multiline,
                     maxLines: 3,
