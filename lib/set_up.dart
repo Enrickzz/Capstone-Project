@@ -709,7 +709,7 @@ class _set_upState extends State<set_up> {
                                 color: Color(0xFF666666),
                                 fontFamily: defaultFontFamily,
                                 fontSize: defaultFontSize),
-                            hintText: "Water Intake Goals",
+                            hintText: "Daily Water Intake Goals",
                           ),
                           validator: (val) => val.isEmpty ? 'Enter Water Intake Goal' : null,
                           onChanged: (val){
@@ -725,11 +725,11 @@ class _set_upState extends State<set_up> {
                         children: <Widget> [
                           Padding (
                               padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Milliliter (ml)')
+                              child: Text('ml')
                           ),
                           Padding (
                               padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Ounce (oz)')
+                              child: Text('oz')
                           ),
                         ],
                         onPressed:(int newIndex){
