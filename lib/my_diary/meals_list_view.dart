@@ -1,8 +1,14 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/models/meals_list_data.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/registration.dart';
+import 'package:my_app/services/auth.dart';
 import '../main.dart';
 import '../index2/my_meals.dart';
 
@@ -17,17 +23,74 @@ class MealsListView extends StatefulWidget {
   @override
   _MealsListViewState createState() => _MealsListViewState();
 }
+final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+final FirebaseAuth auth = FirebaseAuth.instance;
+List<FoodIntake> breakfast_list = [];
+List<FoodIntake> lunch_list = [];
+List<FoodIntake> dinner_list = [];
+List<FoodIntake> snack_list = [];
+List<String> bfood_list = [];
 
 class _MealsListViewState extends State<MealsListView>
     with TickerProviderStateMixin {
   AnimationController animationController;
   List<MealsListData> mealsListData = MealsListData.tabIconsList;
 
+
   @override
   void initState() {
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
+    animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
     super.initState();
+    int total_bcalories = 0;
+    int total_lcalories = 0;
+    int total_dcalories = 0;
+    int total_scalories = 0;
+    List<String> bmeal = [];
+    List<String> lmeal = [];
+    List<String> dmeal = [];
+    List<String> smeal = [];
+    getBFoodIntake();
+    getLFoodIntake();
+    getDFoodIntake();
+    getSFoodIntake();
+
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      print("list");
+      for(int i = 0; i < breakfast_list.length; i++){
+        total_bcalories += breakfast_list[i].calories;
+        bmeal.add(breakfast_list[i].foodName);
+      }
+      for(int i = 0; i < lunch_list.length; i++){
+        total_lcalories += lunch_list[i].calories;
+        lmeal.add(lunch_list[i].foodName);
+      }
+      for(int i = 0; i < dinner_list.length; i++){
+        total_dcalories += dinner_list[i].calories;
+        dmeal.add(dinner_list[i].foodName);
+      }
+      for(int i = 0; i < snack_list.length; i++){
+        total_scalories += snack_list[i].calories;
+        smeal.add(snack_list[i].foodName);
+      }
+      mealsListData[0].kacl = total_bcalories;
+      mealsListData[1].kacl = total_lcalories;
+      mealsListData[2].kacl = total_dcalories;
+      mealsListData[3].kacl = total_scalories;
+      mealsListData[0].meals = bmeal;
+      mealsListData[1].meals = lmeal;
+      mealsListData[2].meals = dmeal;
+      mealsListData[3].meals = smeal;
+      print("HEREE");
+      print(bmeal);
+      print(lmeal);
+      print(dmeal);
+      print(smeal);
+
+      setState(() {
+        print("setstate");
+      });
+    });
+
   }
 
   Future<bool> getData() async {
@@ -83,6 +146,7 @@ class _MealsListViewState extends State<MealsListView>
       },
     );
   }
+
 }
 
 class MealsView extends StatelessWidget {
@@ -269,4 +333,83 @@ class MealsView extends StatelessWidget {
       },
     );
   }
+}
+DateTime today = DateTime.now();
+String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+void getBFoodIntake() {
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
+  readFoodIntake.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    List<FoodIntake> intake = [];
+    if(temp != null){
+      temp.forEach((jsonString) {
+        intake.add(FoodIntake.fromJson(jsonString));
+      });
+      for(int i = 0; i < intake.length; i++){
+        if(intake[i].intakeDate == now){
+          breakfast_list.add(intake[i]);
+        }
+      }
+    }
+  });
+}
+void getLFoodIntake() {
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
+  readFoodIntake.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    List<FoodIntake> intake = [];
+    if(temp != null){
+      temp.forEach((jsonString) {
+        intake.add(FoodIntake.fromJson(jsonString));
+      });
+      for(int i = 0; i < intake.length; i++){
+        if(intake[i].intakeDate == now){
+          lunch_list.add(intake[i]);
+        }
+      }
+    }
+  });
+}
+void getDFoodIntake() {
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
+  readFoodIntake.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    List<FoodIntake> intake = [];
+    if(temp != null){
+      temp.forEach((jsonString) {
+        intake.add(FoodIntake.fromJson(jsonString));
+      });
+      for(int i = 0; i < intake.length; i++){
+        if(intake[i].intakeDate == now){
+          dinner_list.add(intake[i]);
+        }
+      }
+    }
+  });
+}
+void getSFoodIntake() {
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
+  readFoodIntake.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    List<FoodIntake> intake = [];
+    if(temp != null){
+      temp.forEach((jsonString) {
+        intake.add(FoodIntake.fromJson(jsonString));
+      });
+      for(int i = 0; i < intake.length; i++){
+        if(intake[i].intakeDate == now){
+          snack_list.add(intake[i]);
+        }
+      }
+
+    }
+  });
 }

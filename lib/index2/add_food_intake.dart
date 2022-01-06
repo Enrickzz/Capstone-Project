@@ -345,7 +345,7 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                   img: widget.heroTag,
                                   foodName: widget.foodName,
                                   weight: double.parse(widget.weight),
-                                  calories: double.parse(widget.calories),
+                                  calories: int.parse(widget.calories),
                                   cholesterol: double.parse(widget.cholesterol),
                                   total_fat: double.parse(widget.total_fat),
                                   sugar: double.parse(widget.sugar),

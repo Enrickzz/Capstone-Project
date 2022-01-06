@@ -1,3 +1,11 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/nutritionixApi.dart';
+
+
+
 class MealsListData {
   MealsListData({
     this.imagePath = '',
@@ -15,11 +23,19 @@ class MealsListData {
   List<String> meals;
   int kacl;
 
+  // Future.delayed(const Duration(milliseconds: 1500), (){
+  // setState(() {
+  // for(int i = 0; i < breakfast_list.length; i++){
+  // bfood_list.add(breakfast_list[i].foodName);
+  // }
+  // print("setstate");
+  // });
+  // });
   static List<MealsListData> tabIconsList = <MealsListData>[
     MealsListData(
       imagePath: 'assets/fitness_app/breakfast.png',
       titleTxt: 'Breakfast',
-      kacl: 525,
+      kacl: 400,
       meals: <String>['Bread,', 'Peanut butter,', 'Apple'],
       startColor: '#FA7D82',
       endColor: '#FFB295',
@@ -50,3 +66,5 @@ class MealsListData {
     ),
   ];
 }
+
+

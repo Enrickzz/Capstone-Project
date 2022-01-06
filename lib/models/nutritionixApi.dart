@@ -183,7 +183,7 @@ class FoodIntake {
   String img;
   String foodName;
   double weight;
-  double calories;
+  int calories;
   double cholesterol;
   double total_fat;
   double sugar;
@@ -201,7 +201,7 @@ class FoodIntake {
     img = json['img'];
     foodName = json['foodName'];
     weight = double.parse(json['weight'].toString());
-    calories = double.parse(json['calories'].toString());
+    calories = int.parse(json['calories'].toString());
     cholesterol = double.parse(json['cholesterol'].toString());
     total_fat = double.parse(json['total_fat'].toString());
     sugar = double.parse(json['sugar'].toString());
