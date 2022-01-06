@@ -125,6 +125,9 @@ class _create_postState extends State<info_restaurant> {
                         itemCount: 5,
                         ignoreGestures: true,
                         itemSize: 26,
+                        onRatingUpdate: (rating) {
+                          print(rating);
+                        },
                         ratingWidget: RatingWidget(
                             full: Icon(Icons.star, color: Colors.orange),
                             half: Icon(

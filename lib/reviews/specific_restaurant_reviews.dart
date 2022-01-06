@@ -253,7 +253,10 @@ class _discussionState extends State<restaurant_reviews>
                                                             allowHalfRating: true,
                                                             itemCount: 5,
                                                             ignoreGestures: true,
-                                                             itemSize: 15.0,
+                                                            itemSize: 15.0,
+                                                            onRatingUpdate: (rating) {
+                                                              print(rating);
+                                                            },
                                                             ratingWidget: RatingWidget(
                                                                 full: Icon(Icons.star, color: Colors.orange),
                                                                 half: Icon(
