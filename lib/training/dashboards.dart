@@ -1,10 +1,13 @@
+import 'package:my_app/my_diary/water_view.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
+import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
 import 'package:my_app/ui_view/fitbit_connect.dart';
+import 'package:my_app/ui_view/glass_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/running_view.dart';
@@ -177,6 +180,59 @@ class _DashboardsState extends State<Dashboards>
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
+    );
+
+    listViews.add(
+      TitleView(
+        titleTxt: 'Body measurement',
+        subTxt: 'Today',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      BodyMeasurementView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+    listViews.add(
+      TitleView(
+        titleTxt: 'Water',
+        subTxt: 'Aqua SmartBottle',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      WaterView(
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController,
+                curve: Interval((1 / count) * 7, 1.0,
+                    curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController,
+      ),
+    );
+    listViews.add(
+      GlassView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 8, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController),
     );
 
     listViews.add(
