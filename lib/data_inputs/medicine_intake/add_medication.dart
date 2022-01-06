@@ -459,7 +459,7 @@ class _addMedicationState extends State<add_medication> {
   void getPrescriptionGName() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
       int gcount = 0;
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -474,7 +474,7 @@ class _addMedicationState extends State<add_medication> {
   void getPrescriptionBName() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
       int bcount = 0;
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -493,7 +493,7 @@ class _addMedicationState extends State<add_medication> {
   void getSupplementName() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
+    final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       int suppcount = 0;
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
