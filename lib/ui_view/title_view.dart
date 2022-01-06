@@ -1,5 +1,6 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
 import 'package:my_app/index2/food_list.dart';
 import 'package:my_app/index2/index2.dart';
 import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
@@ -90,6 +91,13 @@ class TitleView extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => food_prescription_patient_view()),
+                                  );
+                                }
+                                else if (redirect == 4) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => weight_list_patient_view()),
                                   );
                                 }
 

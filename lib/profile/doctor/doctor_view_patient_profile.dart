@@ -6,7 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/bottom_navigation_view/bottom_bar_view.dart';
-import 'package:my_app/training/dashboards_as_doctor.dart';
+import 'package:my_app/dashboards/dashboards_as_doctor.dart';
 import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
 import 'package:my_app/index2/meals.dart';
 import 'package:my_app/models/tabIcon_data.dart';

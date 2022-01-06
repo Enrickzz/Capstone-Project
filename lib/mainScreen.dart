@@ -5,14 +5,14 @@ import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/my_diary/my_exercises.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/training/dashboards.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
+import 'dashboards/dashboards.dart';
 import 'fitness_app_theme.dart';
 import 'index2/index2.dart';
 import 'index2/food_list.dart';
 import 'index2/meals.dart';
-import 'meals_exercises.dart';
+import 'goal_tab/goals.dart';
 import 'my_diary/exercise_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/storage_service.dart';
@@ -163,7 +163,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
                 setState(() {
                   tabBody =
                       // my_exercises(animationController: animationController);
-                  meals_exercises(animationController: animationController);
+                  goals(animationController: animationController);
                 });
               });
             }else if(index ==2){

@@ -580,7 +580,7 @@ class _set_upState extends State<set_up> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "My Goal is to _________ Weight ",
+                      hintText: "My goal is to _________ weight ",
                     ),
                     isExpanded: true,
                     value: valueChooseWeightGoal,
@@ -629,7 +629,7 @@ class _set_upState extends State<set_up> {
                                   color: Color(0xFF666666),
                                   fontFamily: defaultFontFamily,
                                   fontSize: defaultFontSize),
-                              hintText: "My Target Weight is: ",
+                              hintText: "My target weight is: ",
                             ),
                             validator: (val) => val.isEmpty ? 'Enter Weight Goal' : null,
                             onChanged: (val){
@@ -649,7 +649,7 @@ class _set_upState extends State<set_up> {
                             ),
                             Padding (
                                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child: Text('ibs')
+                                child: Text('lbs')
                             ),
                           ],
                           onPressed:(int newIndex){
@@ -660,7 +660,7 @@ class _set_upState extends State<set_up> {
                                   print("Kilograms (kg)");
                                 } else {
                                   isSelected[index] = false;
-                                  print("Pounds (ibs)");
+                                  print("Pounds (lbs)");
                                 }
                               }
                               if(newIndex == 0){
@@ -668,7 +668,7 @@ class _set_upState extends State<set_up> {
                                 weight_unit = "Kilograms";
                               }
                               if(newIndex == 1){
-                                print("Pounds (ibs)");
+                                print("Pounds (lbs)");
                                 weight_unit = "Pounds";
 
                               }

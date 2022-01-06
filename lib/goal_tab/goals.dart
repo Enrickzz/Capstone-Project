@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/goal_tab/weight/my_weight.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/my_diary/my_exercises.dart';
 import 'package:my_app/notifications/notifications._patients.dart';
@@ -19,22 +20,22 @@ import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../fitness_app_theme.dart';
-import '../main.dart';
-import '../my_diary/exercise_screen.dart';
-import 'bottom_navigation_view/bottom_bar_view.dart';
-import 'index2/meals.dart';
-import 'index2/my_meals.dart';
+import '../../fitness_app_theme.dart';
+import '../../main.dart';
+import '../../my_diary/exercise_screen.dart';
+import '../bottom_navigation_view/bottom_bar_view.dart';
+import '../index2/meals.dart';
+import '../index2/my_meals.dart';
 
-class meals_exercises extends StatefulWidget {
-  const meals_exercises({Key key, this.animationController}) : super(key: key);
+class goals extends StatefulWidget {
+  const goals({Key key, this.animationController}) : super(key: key);
   final AnimationController animationController;
 
   @override
-  _meals_exercisesState createState() => _meals_exercisesState();
+  _goalsState createState() => _goalsState();
 }
 
-class _meals_exercisesState extends State<meals_exercises>
+class _goalsState extends State<goals>
     with TickerProviderStateMixin {
 
   AnimationController animationController;
@@ -49,7 +50,7 @@ class _meals_exercisesState extends State<meals_exercises>
     color: FitnessAppTheme.background,
   );
 
-  final List<String> tabs = ['My Meals', 'My Exercises'];
+  final List<String> tabs = ['My Meals', 'My Exercises', 'My Weight', 'My Water', 'My Sleep', 'My Stress' ];
   TabController controller;
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
 
@@ -59,7 +60,7 @@ class _meals_exercisesState extends State<meals_exercises>
   void initState() {
     super.initState();
 
-    controller = TabController(length: 2, vsync: this);
+    controller = TabController(length: 6, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
@@ -162,6 +163,7 @@ class _meals_exercisesState extends State<meals_exercises>
           indicatorColor: Colors.grey,
           labelColor: Colors.black,
           unselectedLabelColor: Colors.grey,
+          isScrollable: true,
           tabs:<Widget>[
             Tab(
               text: 'My Meals', icon: Image.asset('assets/fitness_app/meals.png',
@@ -173,6 +175,26 @@ class _meals_exercisesState extends State<meals_exercises>
                 width: 24,
                 height:24)
             ),
+            Tab(
+              text: 'My Weight', icon: Image.asset('assets/fitness_app/meals.png',
+              width: 24,
+              height:24,),
+            ),
+            Tab(
+              text: 'My Water', icon: Image.asset('assets/fitness_app/meals.png',
+              width: 24,
+              height:24,),
+            ),
+            Tab(
+              text: 'My Sleep', icon: Image.asset('assets/fitness_app/meals.png',
+              width: 24,
+              height:24,),
+            ),
+            Tab(
+              text: 'My Stress', icon: Image.asset('assets/fitness_app/meals.png',
+              width: 24,
+              height:24,),
+            ),
           ],
         ),
       ),
@@ -180,7 +202,11 @@ class _meals_exercisesState extends State<meals_exercises>
         controller: controller,
         children: [
           tabBody = meals(animationController: animationController),
-          tabBody = my_exercises(animationController: animationController)
+          tabBody = my_exercises(animationController: animationController),
+          tabBody = my_weight(animationController: animationController),
+          tabBody = meals(animationController: animationController),
+          tabBody = meals(animationController: animationController),
+          tabBody = meals(animationController: animationController),
         ],
       ),
     );

@@ -19,7 +19,7 @@ import 'package:my_app/reviews/restaurant/add_restaurant_review.dart';
 import 'package:my_app/reviews/restaurant/specific_restaurant_reviews.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/storage_service.dart';
-import 'package:my_app/training/dashboards.dart';
+import 'package:../my_app/dashboards/dashboards.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/set_up.dart';
 import 'package:provider/provider.dart';
