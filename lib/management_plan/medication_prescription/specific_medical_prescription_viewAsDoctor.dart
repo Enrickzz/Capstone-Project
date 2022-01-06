@@ -67,6 +67,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
   String endDate = "";
   String prescribedBy = "";
   String dateCreated = "";
+  String brand_name ="";
   bool prescribedDoctor = false;
 
 
@@ -151,7 +152,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children:<Widget>[
                               Expanded(
-                                child: Text( "Prescription Name",
+                                child: Text( "Prescribed Medicine",
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -214,7 +215,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 330,
+                        height: 400,
                         // height: 500, if may contact number and email
                         // margin: EdgeInsets.only(bottom: 50),
                         child: Stack(
@@ -242,6 +243,20 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                       child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
+                                            Text("Brand Name",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                color:Color(0xFF363f93),
+                                              ),
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text(brand_name,
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            SizedBox(height: 8),
                                             Text("Generic Name",
                                               style: TextStyle(
                                                 fontSize:14,
@@ -432,6 +447,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
       if(prestemp[index].prescribedBy == uid){
         prescribedDoctor = true;
       }
+      brand_name = prestemp[index].branded_name;
       generic_name = prestemp[index].generic_name;
       dosage = prestemp[index].dosage.toString();
       unit = prestemp[index].prescription_unit.toString();

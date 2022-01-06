@@ -93,6 +93,40 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
     return Scaffold(
         appBar: AppBar(
           title: Text('Vitals Recording Plan'),
+          actions: [
+            Visibility(
+              visible: prescribedDoctor,
+              child: Padding(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      _showMyDialogDelete();
+                      // showModalBottomSheet(context: context,
+                      //   isScrollControlled: true,
+                      //   builder: (context) => SingleChildScrollView(child: Container(
+                      //     padding: EdgeInsets.only(
+                      //         bottom: MediaQuery.of(context).viewInsets.bottom),
+                      //     child: add_supplement_prescription(thislist: supptemp),
+                      //   ),
+                      //   ),
+                      // ).then((value) =>
+                      //     Future.delayed(const Duration(milliseconds: 1500), (){
+                      //       setState((){
+                      //         print("setstate supplement prescription");
+                      //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                      //         if(value != null){
+                      //           supptemp = value[0];
+                      //         }
+                      //       });
+                      //     }));
+                    },
+                    child: Icon(
+                      Icons.delete,
+                    ),
+                  )
+              ),
+            ),
+          ],
         ),
         body:  Scrollbar(
           child: SingleChildScrollView(
@@ -104,75 +138,78 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
 
                 Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:<Widget>[
-                            Expanded(
-                              child: Text( "Vitals Recording Plan",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color:Color(0xFF4A6572),
-                                  )
+                    Visibility(
+                      visible: prescribedDoctor,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:<Widget>[
+                              Expanded(
+                                child: Text( "Vitals Recording Plan",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color:Color(0xFF4A6572),
+                                    )
+                                ),
                               ),
-                            ),
-                            InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                onTap: () {
-                                  showModalBottomSheet(context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => SingleChildScrollView(child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      // child: edit_medication_prescription(thislist: templist),
-                                    ),
-                                    ),
-                                  ).then((value) =>
-                                      Future.delayed(const Duration(milliseconds: 1500), (){
-                                        setState((){
-                                          print("setstate medication prescription");
-                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                          if(value != null){
-                                            templist = value[0];
-                                          }
-                                        });
-                                      }));
-                                },
-                                // child: Padding(
-                                // padding: const EdgeInsets.only(left: 8),
-                                child: Row(
-                                  children: <Widget>[
-                                    Text( "Edit",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                          color:Color(0xFF2633C5),
+                              InkWell(
+                                  highlightColor: Colors.transparent,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: edit_medication_prescription(thislist: templist),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                            print("setstate medication prescription");
+                                            print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                                            if(value != null){
+                                              templist = value[0];
+                                            }
+                                          });
+                                        }));
+                                  },
+                                  // child: Padding(
+                                  // padding: const EdgeInsets.only(left: 8),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text( "Edit",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color:Color(0xFF2633C5),
 
-                                        )
-                                    ),
+                                          )
+                                      ),
 
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
-                                  ],
-                                )
-                              // )
-                            )
-                          ]
+                                      // SizedBox(
+                                      //   height: 38,
+                                      //   width: 26,
+                                      //   // child: Icon(
+                                      //   //   Icons.arrow_forward,
+                                      //   //   color: FitnessAppTheme.darkText,
+                                      //   //   size: 18,
+                                      //   // ),
+                                      // ),
+                                    ],
+                                  )
+                                // )
+                              )
+                            ]
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 300,
+                        height: 400,
                         // height: 500, if may contact number and email
                         // margin: EdgeInsets.only(bottom: 50),
                         child: Stack(
@@ -383,6 +420,41 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
       important_notes = templist[index].important_notes ;
       dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     });
+  }
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to delete this record?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

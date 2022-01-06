@@ -675,7 +675,7 @@ class _index3State extends State<view_patient_profile>
                               ),
                               _buildDivider(),
                               ListTile(
-                                title: Text("Data Inputs (Temporary)"),
+                                title: Text("Data Inputs"),
                                 trailing: Icon(Icons.keyboard_arrow_right),
                                 onTap:(){
                                   Navigator.push(

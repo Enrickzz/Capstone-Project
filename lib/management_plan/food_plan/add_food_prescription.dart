@@ -40,7 +40,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
   String prescribedBy = "";
   DateTime now =  DateTime.now();
   List<String> listFoodTime = <String>[
-    'Breakfast', 'Lunch','Merienda', 'Dinner'
+    'Breakfast', 'Lunch','Dinner', 'Snacks'
   ];
   String valueChooseFoodTime;
 
