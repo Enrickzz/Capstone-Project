@@ -482,6 +482,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
     final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
     final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     doc_connection.clear();
+    patient_connection.clear();
     bool isPatient = false;
     bool isDoctor = false;
     readDoctor.once().then((DataSnapshot snapshot){
@@ -500,6 +501,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       /// read patient connections
       readPatient.once().then((DataSnapshot snapshot){
         var temp2 = jsonDecode(jsonEncode(snapshot.value));
+        print(temp2);
         patient = Users.fromJson2(temp2);
         for(int i = 0; i < patient.connections.length; i++){
           if(patient.connections[i] != "NA"){
@@ -507,22 +509,25 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
               print("same doctor detected");
               isDoctor = true;
             }
+            print("PATIENT CONNECTIONS " + patient.connections[i]);
             patient_connection.add(patient.connections[i]);
           }
         }
+        if(isDoctor == false){
+          patient_connection.add(uid);
+          print("doctor added successfully");
+        }
+        readPatient.update({"connections": patient_connection});
       });
 
       if(isPatient == false){
         doc_connection.add(userUID);
         print("patient added successfully");
       }
-      if(isDoctor == false){
-        patient_connection.add(uid);
-        print("doctor added successfully");
-      }
+
+      print(patient_connection);
       readDoctor.update({"connections": doc_connection});
-      readPatient.update({"connections": patient_connection});
-      
+
       namestemp.add(displayName);
       diseasetemp.add(cvdCondition);
       uidtemp.add(userUID);
