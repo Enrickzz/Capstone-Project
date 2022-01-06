@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/my_diary/my_exercises.dart';
+import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/my_diary/area_list_view.dart';
@@ -20,7 +21,6 @@ import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
 import '../main.dart';
-import '../notifications.dart';
 import '../my_diary/exercise_screen.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'index2/meals.dart';
