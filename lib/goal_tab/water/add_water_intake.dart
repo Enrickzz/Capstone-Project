@@ -29,7 +29,7 @@ class add_waterIntakeState extends State<add_water_intake> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
   double temperature = 0;
-  String unit = 'Celsius';
+  String unit = 'Milimeter';
   String valueChoose;
   List degrees = ["Celsius", "Fahrenheit"];
   String temperature_date = (new DateTime.now()).toString();
@@ -123,19 +123,19 @@ class add_waterIntakeState extends State<add_water_intake> {
                             for (int index = 0; index < isSelected.length; index++){
                               if (index == newIndex) {
                                 isSelected[index] = true;
-                                print("Celsius (°C)");
+                                print('Milliliter (ml)');
                               } else {
                                 isSelected[index] = false;
-                                print("Fahrenheit (°F)");
+                                print("Ounce (oz)");
                               }
                             }
                             if(newIndex == 0){
-                              print("Celsius (°C)");
-                              unit = "Celsius";
+                              print('Milliliter (ml)');
+                              unit = "Milliliter";
                             }
                             if(newIndex == 1){
-                              print("Fahrenheit (°F)");
-                              unit = "Fahrenheit";
+                              print("Ounce (oz)");
+                              unit = "Ounce";
 
                             }
                           });

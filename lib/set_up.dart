@@ -297,6 +297,19 @@ class _set_upState extends State<set_up> {
   List<String> familyConditionOthersChecboxStatus= [];
   static List<String> familyConditionList = [null];
 
+  //weight goals
+  bool goalSelected = false;
+  String valueChooseWeightGoal;
+  List<String> listWeightGoal = <String>[
+    'Lose', 'Gain', 'Maintain',
+
+  ];
+  String weight_unit = 'Kilograms';
+
+  //water intake goals
+
+  String water_unit = 'Milliliter';
+
 
 
   @override
@@ -544,30 +557,64 @@ class _set_upState extends State<set_up> {
                   SizedBox(
                     height: 8,
                   ),
-                  SwitchListTile(
-                    title: Text('My Weight Goals', style: TextStyle(fontSize: 14.0)),
-                    subtitle: Text('I want to set my weight goals', style: TextStyle(fontSize: 12.0)),
-                    secondary: Icon(Icons.accessibility_new_outlined, size: 34.0, color: Colors.green),
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    value: isSwitched,
-                    onChanged: (value){
-                      setState(() {
-                        isSwitched = value;
-
-                      });
-                    },
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Weight Goals",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(
                     height: 8,
                   ),
-                  SizedBox(height: 8.0),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width:0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "My Goal is to _________ Weight ",
+                    ),
+                    isExpanded: true,
+                    value: valueChooseWeightGoal,
+                    onChanged: (newValue){
+                      setState(() {
+                        valueChooseWeightGoal = newValue;
+                        goalSelected= true;
+
+
+
+                      });
+
+                    },
+                    items: listWeightGoal.map((valueItem){
+                      return DropdownMenuItem(
+                        value: valueItem,
+                        child: Text(valueItem),
+                      );
+                    },
+                    ).toList(),
+                  ),
+
+                  SizedBox(
+                    height: 8,
+                  ),
+
                   Visibility(
-                    visible: isSwitched,
+                    visible: goalSelected,
                     child: Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             showCursor: true,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -582,17 +629,11 @@ class _set_upState extends State<set_up> {
                                   color: Color(0xFF666666),
                                   fontFamily: defaultFontFamily,
                                   fontSize: defaultFontSize),
-                              hintText: "What is my weight goal? *",
-                              prefixIcon: Icon(
-                                Icons.add_reaction_outlined,
-                                color: Color(0xFF666666),
-                                size: 22,
-                              ),
+                              hintText: "My Target Weight is: ",
                             ),
-                            validator: (val) => val.isEmpty ? 'My weight goal is' : null,
+                            validator: (val) => val.isEmpty ? 'Enter Weight Goal' : null,
                             onChanged: (val){
-                              setState(() => goal = val);
-
+                              // setState(() => temperature = double.parse(val));
                             },
                           ),
                         ),
@@ -604,11 +645,11 @@ class _set_upState extends State<set_up> {
                           children: <Widget> [
                             Padding (
                                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child: Text('lbs')
+                                child: Text('kg')
                             ),
                             Padding (
                                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child: Text('kg')
+                                child: Text('ibs')
                             ),
                           ],
                           onPressed:(int newIndex){
@@ -616,26 +657,20 @@ class _set_upState extends State<set_up> {
                               for (int index = 0; index < isSelected.length; index++){
                                 if (index == newIndex) {
                                   isSelected[index] = true;
-                                  print("mmol/L");
+                                  print("Kilograms (kg)");
                                 } else {
                                   isSelected[index] = false;
-                                  print("mg/dL");
+                                  print("Pounds (ibs)");
                                 }
                               }
-                              // if(newIndex == 0 && unitStatus != "mmol/L"){
                               if(newIndex == 0){
-                                print("lbs");
-                                unitStatus = "lbs";
-                                // unitValue.text = glucose.toStringAsFixed(2);
-                                // print(glucose.toStringAsFixed(2));
+                                print("Kilograms (kg)");
+                                weight_unit = "Kilograms";
                               }
-                              // if(newIndex == 1 && unitStatus != "mg/dL"){
                               if(newIndex == 1){
-                                print("kg");
-                                unitStatus = "kg";
-                                // glucose = glucose / 18;
-                                // unitValue.text = glucose.toStringAsFixed(2);
-                                // print(glucose.toStringAsFixed(2));
+                                print("Pounds (ibs)");
+                                weight_unit = "Pounds";
+
                               }
                             });
                           },
@@ -643,6 +678,90 @@ class _set_upState extends State<set_up> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Water Intake Goals",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          showCursor: true,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Water Intake Goals",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter Water Intake Goal' : null,
+                          onChanged: (val){
+                            // setState(() => temperature = double.parse(val));
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 8,),
+                      ToggleButtons(
+                        isSelected: isSelected,
+                        highlightColor: Colors.blue,
+                        borderRadius: BorderRadius.circular(10),
+                        children: <Widget> [
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Milliliter (ml)')
+                          ),
+                          Padding (
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Ounce (oz)')
+                          ),
+                        ],
+                        onPressed:(int newIndex){
+                          setState(() {
+                            for (int index = 0; index < isSelected.length; index++){
+                              if (index == newIndex) {
+                                isSelected[index] = true;
+                                print("Milliliter (ml)");
+                              } else {
+                                isSelected[index] = false;
+                                print("Ounce (oz)");
+                              }
+                            }
+                            if(newIndex == 0){
+                              print("Milliliter (ml)");
+                              water_unit = "Milliliter";
+                            }
+                            if(newIndex == 1){
+                              print("Ounce (oz)");
+                              water_unit = "Ounce";
+
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+
+
+
+
+
                   SizedBox(
                     height: 8,
                   ),

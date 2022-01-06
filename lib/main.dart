@@ -244,7 +244,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => water_intake()),
+                      MaterialPageRoute(builder: (context) => set_up()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

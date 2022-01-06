@@ -29,7 +29,7 @@ class change_waterIntakeState extends State<change_water_intake_goal> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
   double temperature = 0;
-  String unit = 'Celsius';
+  String unit = 'Milliliter';
   String valueChoose;
   List degrees = ["Celsius", "Fahrenheit"];
   String temperature_date = (new DateTime.now()).toString();
