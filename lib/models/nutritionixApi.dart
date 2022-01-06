@@ -59,11 +59,46 @@ class Common {
       }
     }
   }
-
-
   double getSugar(){
     for(int j = 0; j < this.fullNutrients.length; j++){
-      if(fullNutrients[j].attrId == 539){ // getting calories
+      if(fullNutrients[j].attrId == 269){ // getting sugar
+        return fullNutrients[j].value;
+      }
+
+    }
+  }
+
+  double getCholesterol(){
+    for(int j = 0; j < this.fullNutrients.length; j++){
+      if(fullNutrients[j].attrId == 601){ // getting sugar
+        return fullNutrients[j].value;
+      }
+    }
+  }
+  double getTotalFat(){
+    for(int j = 0; j < this.fullNutrients.length; j++){
+      if(fullNutrients[j].attrId == 204){ // getting sugar
+        return fullNutrients[j].value;
+      }
+    }
+  }
+  double getProtein(){
+    for(int j = 0; j < this.fullNutrients.length; j++){
+      if(fullNutrients[j].attrId == 203){ // getting sugar
+        return fullNutrients[j].value;
+      }
+    }
+  }
+  double getPotassium(){
+    for(int j = 0; j < this.fullNutrients.length; j++){
+      if(fullNutrients[j].attrId == 306){ // getting sugar
+        return fullNutrients[j].value;
+      }
+    }
+  }
+  double getSodium(){
+    for(int j = 0; j < this.fullNutrients.length; j++){
+      if(fullNutrients[j].attrId == 307){ // getting sugar
         return fullNutrients[j].value;
       }
     }

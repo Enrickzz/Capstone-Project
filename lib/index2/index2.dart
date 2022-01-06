@@ -175,8 +175,17 @@ class _index2State extends State<index2>
               child: InkWell(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => DetailsPage(heroTag:(""+result[index].photo.thumb).toString(), foodName: StringUtils.capitalize(result[index].foodName),
-                          calories: result[index].getCalories().round().toString() )
+                      builder: (context) => DetailsPage(heroTag:(""+result[index].photo.thumb).toString(),
+                          foodName: StringUtils.capitalize(result[index].foodName),
+                          weight: result[index].getGrams().toString(),
+                          calories: result[index].getCalories().round().toString(),
+                          cholesterol: result[index].getCholesterol().round().toString(),
+                          total_fat: result[index].getTotalFat().round().toString(),
+                          sugar: result[index].getSugar().round().toString(),
+                          protein: result[index].getProtein().round().toString(),
+                          potassium: result[index].getPotassium().round().toString(),
+                          sodium: result[index].getSodium().round().toString(),
+                        )
                   ));
                 },
                 child: Column(
@@ -329,6 +338,7 @@ Future<List<Common>> fetchNutritionix(String thisquery) async {
   if(response.statusCode == 200){
     String data = response.body;
     final parsedJson = convert.jsonDecode(data);
+    print(parsedJson);
     final food = nutritionixApi.fromJson(parsedJson);
     print("NUTRITIONIX SEARCH = $thisquery SUCCESS");
     return food.common;

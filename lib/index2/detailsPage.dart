@@ -11,8 +11,28 @@ class DetailsPage extends StatefulWidget {
 
   final heroTag;
   final foodName;
+  final weight;
   final calories;
-  DetailsPage({this.heroTag, this.foodName, this.calories});
+  final cholesterol;
+  final total_fat;
+  final sugar;
+  final protein;
+  final potassium;
+  final sodium;
+
+
+  DetailsPage({
+    this.heroTag,
+    this.foodName,
+    this.weight,
+    this.calories,
+    this.cholesterol,
+    this.total_fat,
+    this.sugar,
+    this.protein,
+    this.potassium,
+    this.sodium
+  });
 
 
 
@@ -110,21 +130,21 @@ class _DetailsPageState extends State<DetailsPage> {
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
-                          _buildInforCard('WEIGHT', '300','g'),
+                          _buildInforCard('WEIGHT', widget.weight,'g'),
                           SizedBox(width: 10.0,),
                           _buildInforCard('CALORIES', widget.calories,'kcal'),
                           SizedBox(width: 10.0,),
-                          _buildInforCard('CHOLESTEROL', '100','mg'),
+                          _buildInforCard('CHOLESTEROL', widget.cholesterol,'mg'),
                           SizedBox(width: 10.0,),
-                          _buildInforCard('TOTAL FAT', '122','g'),
+                          _buildInforCard('TOTAL FAT', widget.total_fat,'g'),
                           SizedBox(width: 10.0,),
-                          _buildInforCard('SUGAR', '100','g'),
+                          _buildInforCard('SUGAR', widget.sugar,'g'),
                           SizedBox(width: 10.0,),
-                          _buildInforCard('PROTEIN', '125','g'),
+                          _buildInforCard('PROTEIN', widget.protein,'g'),
                           SizedBox(width: 10.0,),
-                          _buildInforCard('POTASSIUM', '130','g'),
+                          _buildInforCard('POTASSIUM', widget.potassium,'g'),
                           SizedBox(width: 10.0,),
-                          _buildInforCard('SODIUM', '122','g'),
+                          _buildInforCard('SODIUM', widget.sodium,'g'),
                           SizedBox(width: 10.0,),
 
 
