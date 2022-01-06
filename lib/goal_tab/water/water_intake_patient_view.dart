@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/goal_tab/water/add_water_intake.dart';
+import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
@@ -100,7 +101,7 @@ class _waterIntakeState extends State<water_intake> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_water_intake(),
+                      child: change_water_intake_goal(),
                     ),
                     ),
                   ).then((value) => setState((){

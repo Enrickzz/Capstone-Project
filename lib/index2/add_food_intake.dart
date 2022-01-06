@@ -36,6 +36,14 @@ class _addFoodIntakeState extends State<add_food_intake> {
   String valueFoodUnit;
   List<String> listFoodUnit =['Grams'];
 
+  var dateValue = TextEditingController();
+  String intake_date = (new DateTime.now()).toString();
+  DateTime foodIntakeDate;
+  bool isDateSelected= false;
+
+
+
+
 
 
 
@@ -176,6 +184,60 @@ class _addFoodIntakeState extends State<add_food_intake> {
                     ).toList(),
                   ),
 
+                  GestureDetector(
+                    onTap: ()async{
+                      await showDatePicker(
+                        context: context,
+                        initialDate: new DateTime.now(),
+                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
+                        lastDate: new DateTime.now(),
+                      ).then((value){
+                        if(value != null && value != foodIntakeDate){
+                          setState(() {
+                            foodIntakeDate = value;
+                            isDateSelected = true;
+                            intake_date = "${foodIntakeDate.month}/${foodIntakeDate.day}/${foodIntakeDate.year}";
+                          });
+                          dateValue.text = intake_date + "\r";
+                        }
+                      });
+
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateValue,
+                        showCursor: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "Date",
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                        onChanged: (val){
+
+                          print(dateValue);
+                          setState((){
+                          });
+                        },
+                      ),
+                    ),
+                  ),
 
 
                   SizedBox(height: 24.0),
