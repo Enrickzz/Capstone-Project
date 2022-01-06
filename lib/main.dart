@@ -26,6 +26,7 @@ import 'discussion_board/discussion.dart';
 import 'package:my_app/discussion_board/discussion.dart';
 import 'fitness_app_theme.dart';
 import 'food/food_list.dart';
+import 'goal_tab/water/water_intake_patient_view.dart';
 import 'my_diary/exercise_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/mainScreen.dart';
@@ -239,7 +240,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => restaurant_reviews()),
+                      MaterialPageRoute(builder: (context) => water_intake()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

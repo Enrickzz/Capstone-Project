@@ -11,26 +11,23 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
+import 'package:my_app/goal_tab/water/add_water_intake.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../../fitness_app_theme.dart';
-import '../blood_pressure/add_blood_pressure.dart';
-import '../../laboratory_results/add_lab_results.dart';
-import '../../medicine_intake/add_medication.dart';
-import 'add_body_temperature.dart';
-import 'edit_body_temperature.dart';
+
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class body_temperature_doctor_view extends StatefulWidget {
+class water_intake_doctor_view extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  body_temperature_doctor_view({Key key, this.btlist}): super(key: key);
+  water_intake_doctor_view({Key key, this.btlist}): super(key: key);
   @override
-  _body_temperatureDoctorState createState() => _body_temperatureDoctorState();
+  _waterIntakeDoctorState createState() => _waterIntakeDoctorState();
 }
 
-class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
+class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -41,74 +38,27 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
 
+
   int _currentSortColumn = 0;
   bool _isSortAsc = true;
   List<bool> _selected = [];
+  /// body temp status (normal, low, high)
+  List<String> status = [];
+
 
   @override
   void initState() {
     super.initState();
-    bttemp.clear();
-    _selected.clear();
-    getBodyTemp();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list');
-    // String tempUnit = "";
-    // String tempTemperature = "";
-    // String tempTemperatureDate = "";
-    // String tempTemperatureTime = "";
+    // bttemp.clear();
+    // _selected.clear();
+    // getBodyTemp();
+    // Future.delayed(const Duration(milliseconds: 1500), (){
+    //   setState(() {
+    //     _selected = List<bool>.generate(bttemp.length, (int index) => false);
     //
-    //
-    // readTemperature.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Body_Temperature bodyTemperature;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i%4){
-    //       case 0: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempUnit = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperatureDate = splitFull.last;
-    //       }
-    //       break;
-    //       case 2: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperature = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperatureTime = splitFull.last;
-    //         bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
-    //         bttemp.add(bodyTemperature);
-    //       }
-    //       break;
-    //     }
-    //   }
-    //   for(var i=0;i<bttemp.length/2;i++){
-    //     var temp = bttemp[i];
-    //     bttemp[i] = bttemp[bttemp.length-1-i];
-    //     bttemp[bttemp.length-1-i] = temp;
-    //   }
+    //     print("setstate");
+    //   });
     // });
-    Future.delayed(const Duration(milliseconds: 1500), (){
-      setState(() {
-        _selected = List<bool>.generate(bttemp.length, (int index) => false);
-
-        print("setstate");
-      });
-    });
   }
 
   @override
@@ -125,7 +75,7 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Body Temperature', style: TextStyle(
+        title: const Text('Water Intake', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -157,18 +107,47 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
   }
-  void getBodyTemp() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-    readBT.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        bttemp.add(Body_Temperature.fromJson(jsonString));
-      });
+  // void getBodyTemp() {
+  //   final User user = auth.currentUser;
+  //   final uid = user.uid;
+  //   final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
+  //   readBT.once().then((DataSnapshot snapshot){
+  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+  //     temp.forEach((jsonString) {
+  //       bttemp.add(Body_Temperature.fromJson(jsonString));
+  //     });
+  //   });
+  // }
 
-    });
+  int getAge (DateTime birthday) {
+    DateTime today = new DateTime.now();
+    String days1 = "";
+    String month1 = "";
+    String year1 = "";
+    int d = int.parse(DateFormat("dd").format(birthday));
+    int m = int.parse(DateFormat("MM").format(birthday));
+    int y = int.parse(DateFormat("yyyy").format(birthday));
+    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
+    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
+    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
+    int age = 0;
+    age = y1 - y;
+    print(age);
+
+    // dec < jan
+    if(m1 < m){
+      print("month --");
+      age--;
+    }
+    else if (m1 == m){
+      if(d1 < d){
+        print("day --");
+        age--;
+      }
+    }
+    return age;
   }
+
   Color getMyColor(String indication) {
     if(indication == 'normal'){
       return Colors.green;
@@ -220,9 +199,8 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
 
 
 
-      DataColumn(label:  Icon(Icons.access_time, color: Colors.white,),),
-      DataColumn(label:  Icon(Icons.device_thermostat , color: Colors.white,),),
-      DataColumn(label: Text('Implication'))
+      DataColumn(label: Text('Time')),
+      DataColumn(label: Text('Water Intake')),
 
     ];
 
@@ -234,8 +212,7 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
         cells: [
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(bp.temperature.toString() +'°C', style: TextStyle(),)),
-          DataCell(Text(bp.indication, style: TextStyle(color: getMyColor(bp.indication)),))
+          DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {

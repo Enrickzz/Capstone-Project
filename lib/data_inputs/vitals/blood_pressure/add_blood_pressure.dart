@@ -140,9 +140,9 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                     onTap: ()async{
                       await showDatePicker(
                           context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(1900),
-                          lastDate: new DateTime(2100)
+                        initialDate: new DateTime.now(),
+                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
+                        lastDate: new DateTime.now(),
                       ).then((value){
                         if(value != null && value != bpDate){
                           setState(() {

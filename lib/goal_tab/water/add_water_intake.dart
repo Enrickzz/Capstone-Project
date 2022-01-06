@@ -14,19 +14,17 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../laboratory_results/lab_results_patient_view.dart';
-import '../../medicine_intake/medication_patient_view.dart';
-import 'body_temperature_patient_view.dart';
+
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class add_body_temperature extends StatefulWidget {
-  final List<Body_Temperature> btlist;
-  add_body_temperature({this.btlist});
+class add_water_intake extends StatefulWidget {
+  // final List<Body_Temperature> btlist;
+  // add_water_intake({this.btlist});
   @override
-  _add_body_temperatureState createState() => _add_body_temperatureState();
+  add_waterIntakeState createState() => add_waterIntakeState();
 }
 final _formKey = GlobalKey<FormState>();
-class _add_body_temperatureState extends State<add_body_temperature> {
+class add_waterIntakeState extends State<add_water_intake> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
@@ -71,7 +69,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Add Body Temperature',
+                    'Log Water Intake',
                     textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
@@ -97,7 +95,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                                 color: Color(0xFF666666),
                                 fontFamily: defaultFontFamily,
                                 fontSize: defaultFontSize),
-                            hintText: "Temperature",
+                            hintText: "Water Intake",
                           ),
                           validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
                           onChanged: (val){
@@ -113,11 +111,11 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                         children: <Widget> [
                           Padding (
                               padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Celsius (°C)')
+                              child: Text('Milliliter (ml)')
                           ),
                           Padding (
                               padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Fahrenheit (°F)')
+                              child: Text('Ounce (oz)')
                           ),
                         ],
                         onPressed:(int newIndex){
@@ -150,9 +148,9 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                     onTap: ()async{
                       await showDatePicker(
                           context: context,
-                        initialDate: new DateTime.now(),
-                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
-                        lastDate: new DateTime.now(),
+                          initialDate: new DateTime.now(),
+                          firstDate: new DateTime.now().subtract(Duration(days: 30)),
+                          lastDate: new DateTime.now(),
                       ).then((value){
                         if(value != null && value != temperatureDate){
                           setState(() {
@@ -412,7 +410,7 @@ class _add_body_temperatureState extends State<add_body_temperature> {
 
     });
   }
-  
+
   int getAge (DateTime birthday) {
     DateTime today = new DateTime.now();
     String days1 = "";

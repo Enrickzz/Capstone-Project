@@ -449,9 +449,9 @@ class _addLabResultState extends State<add_lab_results> {
                     onTap: ()async{
                       await showDatePicker(
                           context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(1900),
-                          lastDate: new DateTime(2100)
+                        initialDate: new DateTime.now(),
+                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
+                        lastDate: new DateTime.now(),
                       ).then((value){
                         if(value != null && value != labResultDate){
                           setState(() {

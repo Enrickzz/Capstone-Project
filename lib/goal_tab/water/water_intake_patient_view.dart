@@ -11,26 +11,23 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
+import 'package:my_app/goal_tab/water/add_water_intake.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../../fitness_app_theme.dart';
-import '../blood_pressure/add_blood_pressure.dart';
-import '../../laboratory_results/add_lab_results.dart';
-import '../../medicine_intake/add_medication.dart';
-import 'add_body_temperature.dart';
-import 'edit_body_temperature.dart';
+
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class body_temperature extends StatefulWidget {
+class water_intake extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  body_temperature({Key key, this.btlist}): super(key: key);
+  water_intake({Key key, this.btlist}): super(key: key);
   @override
-  _body_temperatureState createState() => _body_temperatureState();
+  _waterIntakeState createState() => _waterIntakeState();
 }
 
-class _body_temperatureState extends State<body_temperature> {
+class _waterIntakeState extends State<water_intake> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -52,16 +49,16 @@ class _body_temperatureState extends State<body_temperature> {
   @override
   void initState() {
     super.initState();
-    bttemp.clear();
-    _selected.clear();
-    getBodyTemp();
-    Future.delayed(const Duration(milliseconds: 1500), (){
-      setState(() {
-        _selected = List<bool>.generate(bttemp.length, (int index) => false);
-
-        print("setstate");
-      });
-    });
+    // bttemp.clear();
+    // _selected.clear();
+    // getBodyTemp();
+    // Future.delayed(const Duration(milliseconds: 1500), (){
+    //   setState(() {
+    //     _selected = List<bool>.generate(bttemp.length, (int index) => false);
+    //
+    //     print("setstate");
+    //   });
+    // });
   }
 
   @override
@@ -78,7 +75,7 @@ class _body_temperatureState extends State<body_temperature> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Body Temperature', style: TextStyle(
+        title: const Text('Water Intake', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -87,22 +84,7 @@ class _body_temperatureState extends State<body_temperature> {
           GestureDetector(
             onTap: () {
               _showMyDialogDelete();
-              // showModalBottomSheet(context: context,
-              //   isScrollControlled: true,
-              //   builder: (context) => SingleChildScrollView(child: Container(
-              //     padding: EdgeInsets.only(
-              //         bottom: MediaQuery.of(context).viewInsets.bottom),
-              //     child: add_blood_pressure(thislist: bptemp),
-              //   ),
-              //   ),
-              // ).then((value) => setState((){
-              //   print("setstate blood_pressure");
-              //   if(value != null){
-              //     bptemp = value;
-              //     _selected = List<bool>.generate(bptemp.length, (int index) => false);
-              //
-              //   }
-              // }));
+
             },
             child: Icon(
               Icons.delete,
@@ -118,7 +100,7 @@ class _body_temperatureState extends State<body_temperature> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_body_temperature(btlist: bttemp),
+                      child: add_water_intake(),
                     ),
                     ),
                   ).then((value) => setState((){
@@ -149,102 +131,7 @@ class _body_temperatureState extends State<body_temperature> {
         ),
 
       ),
-    //   body: ListView.builder(
-    // itemCount: bttemp.length,
-    //   itemBuilder: (context, index) {
-    //     return GestureDetector(
-    //       child: Container(
-    //           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-    //           height: 140,
-    //           child: Stack(
-    //               children: [
-    //                 Positioned (
-    //                   bottom: 0,
-    //                   left: 0,
-    //                   right: 0,
-    //                   child: Container(
-    //                       height: 120,
-    //                       decoration: BoxDecoration(
-    //                           borderRadius: BorderRadius.only(
-    //                               bottomLeft: Radius.circular(20),
-    //                               topLeft: Radius.circular(20),
-    //                               topRight: Radius.circular(20),
-    //                               bottomRight: Radius.circular(20)
-    //                           ),
-    //                           gradient: LinearGradient(
-    //                               begin: Alignment.bottomCenter,
-    //                               end: Alignment.topCenter,
-    //                               colors: [
-    //                                 Colors.white.withOpacity(0.7),
-    //                                 Colors.white
-    //                               ]
-    //                           ),
-    //                           boxShadow: <BoxShadow>[
-    //                             BoxShadow(
-    //                                 color: FitnessAppTheme.grey.withOpacity(0.6),
-    //                                 offset: Offset(1.1, 1.1),
-    //                                 blurRadius: 10.0),
-    //                           ]
-    //                       )
-    //                   ),
-    //                 ),
-    //                 Positioned(
-    //                   top: 25,
-    //                   child: Padding(
-    //                     padding: const EdgeInsets.all(10),
-    //                     child: Row(
-    //                       children: [
-    //
-    //                         SizedBox(
-    //                           width: 10,
-    //                         ),
-    //                         FlatButton(
-    //                           child: Text(
-    //                             'Edit',
-    //                             style: TextStyle(color: Colors.white),
-    //                           ),
-    //                           color: Colors.black,
-    //                           onPressed: () {
-    //                             showModalBottomSheet(context: context,
-    //                               isScrollControlled: true,
-    //                               builder: (context) => SingleChildScrollView(child: Container(
-    //                                 padding: EdgeInsets.only(
-    //                                     bottom: MediaQuery.of(context).viewInsets.bottom),
-    //                                 child: edit_body_temperature(bt: bttemp[index], pointer: index,),
-    //                               ),
-    //                               ),
-    //                             ).then((value) => setState((){
-    //                               print("setstate symptoms");
-    //                               if(value != null){
-    //                                 bttemp = value;
-    //                               }
-    //                               print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
-    //                             }));;
-    //                           },
-    //                         ),
-    //                         SizedBox(
-    //                           width: 10,
-    //                         ),
-    //                         Text(
-    //                             '' + getDateFormatted(bttemp[index].bt_date.toString()) + getTimeFormatted(bttemp[index].bt_time.toString())+" "
-    //                                 +"\nTemperature: "+ bttemp[index].temperature.toString() + " " + bttemp[index].unit+ " ",
-    //                             style: TextStyle(
-    //                                 color: Colors.black,
-    //                                 fontSize: 18
-    //                             )
-    //                         ),
-    //
-    //
-    //                       ],
-    //                     ),
-    //                   ),
-    //                 ),
-    //               ]
-    //           )
-    //       ),
-    //     );
-    //   },
-    // ),
+
 
     );
   }
@@ -258,17 +145,17 @@ class _body_temperatureState extends State<body_temperature> {
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
   }
-  void getBodyTemp() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-    readBT.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        bttemp.add(Body_Temperature.fromJson(jsonString));
-      });
-    });
-  }
+  // void getBodyTemp() {
+  //   final User user = auth.currentUser;
+  //   final uid = user.uid;
+  //   final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
+  //   readBT.once().then((DataSnapshot snapshot){
+  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+  //     temp.forEach((jsonString) {
+  //       bttemp.add(Body_Temperature.fromJson(jsonString));
+  //     });
+  //   });
+  // }
 
   int getAge (DateTime birthday) {
     DateTime today = new DateTime.now();
@@ -350,9 +237,8 @@ class _body_temperatureState extends State<body_temperature> {
 
 
 
-      DataColumn(label:  Icon(Icons.access_time, color: Colors.white,),),
-      DataColumn(label:  Icon(Icons.device_thermostat , color: Colors.white,),),
-      DataColumn(label: Text('Implication'))
+      DataColumn(label: Text('Time')),
+      DataColumn(label: Text('Water Intake')),
 
     ];
 
@@ -365,7 +251,6 @@ class _body_temperatureState extends State<body_temperature> {
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
-          DataCell(Text(bp.indication, style: TextStyle(color: getMyColor(bp.indication)),))
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {

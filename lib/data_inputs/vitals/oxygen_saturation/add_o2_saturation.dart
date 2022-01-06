@@ -103,9 +103,9 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                     onTap: ()async{
                       await showDatePicker(
                           context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime(1900),
-                          lastDate: new DateTime(2100)
+                        initialDate: new DateTime.now(),
+                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
+                        lastDate: new DateTime.now(),
                       ).then((value){
                         if(value != null && value != oxygenDate){
                           setState(() {
