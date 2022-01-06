@@ -29,9 +29,13 @@ class _addFoodIntakeState extends State<add_food_intake> {
 
   // added by borj
   List<String> listFoodTime = <String>[
-    'Breakfast', 'Lunch','Merienda', 'Dinner'
+    'Breakfast', 'Lunch','Dinner', 'Snacks'
   ];
   String valueChooseFoodTime;
+
+  String valueFoodUnit;
+  List<String> listFoodUnit =['Grams'];
+
 
 
 
@@ -64,7 +68,77 @@ class _addFoodIntakeState extends State<add_food_intake> {
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          showCursor: true,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Serving Size",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
+                          onChanged: (val){
+                            // setState(() => temperature = double.parse(val));
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 20,),
+                      Text(
+                        '###' + ' cal',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
 
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width:0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "Food Unit: ",
+                    ),
+                    isExpanded: true,
+                    value: valueFoodUnit,
+                    onChanged: (newValue){
+                      setState(() {
+                        // valueFoodUnit = newValue;
+
+                      });
+                    },
+                    items: listFoodUnit.map((valueItem){
+                      return DropdownMenuItem(
+                          value: valueItem,
+                          child: Text(valueItem)
+                      );
+                    },
+                    ).toList(),
+                  ),
 
 
                   SizedBox(height: 8.0),
