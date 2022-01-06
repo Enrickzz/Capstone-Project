@@ -351,7 +351,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
     final uid = user.uid;
     // var userUID = widget.userUID;
     int index = widget.index;
-    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
+    final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

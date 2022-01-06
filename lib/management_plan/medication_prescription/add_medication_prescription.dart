@@ -673,13 +673,13 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                             /// PATIENT
                             var userUID = widget.userUID;
                             datecreated = format.format(now);
-                            final readPrescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list');
+                            final readPrescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list');
                             readPrescription.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
                               Medication_Prescription prescription;
                               if(datasnapshot.value == null){
-                                final prescriptionRef = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/' + count.toString());
+                                final prescriptionRef = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/' + count.toString());
                                 prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString()});
                                 print("if Added Medication Prescription Successfully! " + userUID);
                               }
@@ -687,7 +687,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 getMedicalPrescription();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = prescription_list.length--;
-                                  final prescriptionRef = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/' + count.toString());
+                                  final prescriptionRef = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/' + count.toString());
                                   prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString()});
                                   print("else Added Medication Prescription Successfully! " + userUID);
                                 });
@@ -724,7 +724,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   }
   void getMedicalPrescription() {
     var userUID = widget.userUID;
-    final readprescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/');
+    final readprescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

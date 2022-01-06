@@ -664,14 +664,14 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list');
+                            final readPrescription = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list');
                             readPrescription.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
                               List<String> temp = temp1.split(',');
                               Medication_Prescription prescription;
                               if(datasnapshot.value == null){
-                                final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + count.toString());
+                                final prescriptionRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + count.toString());
                                 prescriptionRef.set({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit, "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                 print("Added Supplement Prescription Successfully! " + uid);
                               }
@@ -679,7 +679,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                                 getSupplementPrescription();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = supplement_list.length--;
-                                  final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + count.toString());
+                                  final prescriptionRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + count.toString());
                                   prescriptionRef.set({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit, "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                   print("Added Supplement Prescription Successfully! " + uid);
                                 });
@@ -716,7 +716,7 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
   void getSupplementPrescription() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
+    final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

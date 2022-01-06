@@ -278,12 +278,12 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                             final uid = user.uid;
                             String userUID = widget.userUID;
                             consumption_time = valueChooseFoodTime;
-                            final readFoodPlan = databaseReference.child('users/' + userUID + '/foodplan/');
+                            final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print(temp1);
                               if(datasnapshot.value == null){
-                                final foodplanRef = databaseReference.child('users/' + userUID + '/foodplan/' + count.toString());
+                                final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
                                 foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "quantity_food": quantity_food.toString(), "consumption_time": consumption_time.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                 print("Added Food Plan Successfully! " + uid);
                               }
@@ -291,7 +291,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                                 getFoodPlan();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = foodplan_list.length--;
-                                  final foodplanRef = databaseReference.child('users/' + userUID + '/foodplan/' + count.toString());
+                                  final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
                                   foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "quantity_food": quantity_food.toString(), "consumption_time": consumption_time.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                   print("Added Food Plan Successfully! " + uid);
                                 });
@@ -327,7 +327,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readFood = databaseReference.child('users/' + userUID + '/foodplan/');
+    final readFood = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
     readFood.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       print("temp");

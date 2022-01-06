@@ -306,12 +306,12 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
-                            final readFoodPlan = databaseReference.child('users/' + userUID + '/vitals_plan/');
+                            final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print(temp1);
                               if(datasnapshot.value == null){
-                                final vitalsRef = databaseReference.child('users/' + userUID + '/vitals_plan/' + count.toString());
+                                final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
                                 vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                 print("Added Vitals Plan Successfully! " + uid);
                               }
@@ -319,7 +319,7 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                                 getVitals();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = vitals_list.length--;
-                                  final vitalsRef = databaseReference.child('users/' + userUID + '/vitals_plan/' + count.toString());
+                                  final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
                                   vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                   print("Added Food Plan Successfully! " + uid);
                                 });
@@ -355,7 +355,7 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readVitals = databaseReference.child('users/' + userUID + '/vitals_plan/');
+    final readVitals = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
     readVitals.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       print("temp");

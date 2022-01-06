@@ -295,7 +295,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
   void getSupplementPrescription() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/');
+    final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

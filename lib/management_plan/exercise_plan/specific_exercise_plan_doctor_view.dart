@@ -418,7 +418,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
     final User user = auth.currentUser;
     final uid = user.uid;
     var userUID = widget.userUID;
-    final readExPlan = databaseReference.child('users/' + userUID + '/exercise_prescription/');
+    final readExPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
     int index = widget.index;
     readExPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));

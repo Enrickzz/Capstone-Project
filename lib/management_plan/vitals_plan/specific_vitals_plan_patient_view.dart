@@ -312,7 +312,7 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
   void getFoodplan() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readVitals = databaseReference.child('users/' + uid + '/vitals_plan/');
+    final readVitals = databaseReference.child('users/' + uid + '/management_plan/vitals_plan/');
     int index = widget.index;
     readVitals.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));

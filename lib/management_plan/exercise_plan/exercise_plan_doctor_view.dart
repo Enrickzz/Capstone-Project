@@ -173,7 +173,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
     final uid = user.uid;
     String userUID = widget.userUID;
     print("get exercise");
-    final readExPlan = databaseReference.child('users/' + userUID + '/exercise_prescription/');
+    final readExPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
     readExPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

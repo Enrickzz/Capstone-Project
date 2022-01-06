@@ -332,7 +332,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
   void getPrescription() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list/');
+    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
     int index = widget.index;
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));

@@ -312,7 +312,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   void getFoodplan() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readFoodPlan = databaseReference.child('users/' + uid + '/foodplan/');
+    final readFoodPlan = databaseReference.child('users/' + uid + '/management_plan/foodplan/');
     int index = widget.index;
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));

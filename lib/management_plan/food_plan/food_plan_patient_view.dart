@@ -136,7 +136,7 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
   void getFoodPlan() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readFoodPlan = databaseReference.child('users/' + uid + '/foodplan/');
+    final readFoodPlan = databaseReference.child('users/' + uid + '/management_plan/foodplan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

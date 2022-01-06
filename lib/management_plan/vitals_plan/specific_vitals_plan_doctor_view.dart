@@ -361,7 +361,7 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
     final User user = auth.currentUser;
     final uid = user.uid;
     var userUID = widget.userUID;
-    final readVitals = databaseReference.child('users/' + userUID + '/vitals_plan/');
+    final readVitals = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
     int index = widget.index;
     readVitals.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));

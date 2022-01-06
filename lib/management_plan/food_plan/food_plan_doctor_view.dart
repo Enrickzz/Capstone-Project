@@ -186,7 +186,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
     //     });
     //   }
     // });
-    final readFoodPlan = databaseReference.child('users/' + userUID + '/foodplan/');
+    final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

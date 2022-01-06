@@ -317,12 +317,12 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
-                            final readFoodPlan = databaseReference.child('users/' + userUID + '/exercise_prescription/');
+                            final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print(temp1);
                               if(datasnapshot.value == null){
-                                final foodplanRef = databaseReference.child('users/' + userUID + '/exercise_prescription/' + count.toString());
+                                final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
                                 foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency.toString(), "intensity": intensity.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                 print("Added Food Plan Successfully! " + uid);
                               }
@@ -330,7 +330,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                                 getExercise();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = exercise_list.length--;
-                                  final foodplanRef = databaseReference.child('users/' + userUID + '/exercise_prescription/' + count.toString());
+                                  final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
                                   foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency.toString(), "intensity": intensity.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                   print("Added Exercise Plan Successfully! " + uid);
                                 });
@@ -367,7 +367,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readprescription = databaseReference.child('users/' + userUID + '/exercise_prescription/');
+    final readprescription = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       print("temp");

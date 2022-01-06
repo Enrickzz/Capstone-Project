@@ -162,7 +162,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     var userUID = widget.userUID;
-    final readprescription = databaseReference.child('users/' + userUID + '/vitals/health_records/medication_prescription_list/');
+    final readprescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
