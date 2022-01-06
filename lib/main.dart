@@ -5,6 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_app/goal_tab/sleep/sleep_list_patient_view.dart';
+import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
 import 'package:my_app/goal_weight.dart';
 import 'package:my_app/medical_history.dart';
 import 'package:my_app/models/tabIcon_data.dart';
@@ -242,7 +244,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => drugstore_reviews()),
+                      MaterialPageRoute(builder: (context) => water_intake()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

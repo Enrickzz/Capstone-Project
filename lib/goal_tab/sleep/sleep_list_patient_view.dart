@@ -11,7 +11,6 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
-import 'package:my_app/goal_tab/sleep/change_sleep_goal.dart';
 import 'package:my_app/goal_tab/water/add_water_intake.dart';
 import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
 import 'package:my_app/mainScreen.dart';
@@ -22,14 +21,14 @@ import '../../../fitness_app_theme.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class water_intake extends StatefulWidget {
+class sleep_patient_view extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  water_intake({Key key, this.btlist}): super(key: key);
+  sleep_patient_view({Key key, this.btlist}): super(key: key);
   @override
-  _waterIntakeState createState() => _waterIntakeState();
+  _sleepState createState() => _sleepState();
 }
 
-class _waterIntakeState extends State<water_intake> {
+class _sleepState extends State<sleep_patient_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -77,7 +76,7 @@ class _waterIntakeState extends State<water_intake> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Water Intake', style: TextStyle(
+        title: const Text('Sleep Record', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -93,33 +92,7 @@ class _waterIntakeState extends State<water_intake> {
             ),
           ),
           SizedBox(width: 10),
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_water_intake(),
-                    ),
-                    ),
-                  ).then((value) => setState((){
-                    print("setstate symptoms");
-                    if(value != null){
-                      bttemp = value;
-                      _selected = List<bool>.generate(bttemp.length, (int index) => false);
-
-                    }
-                    print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
-                  }));;
-                },
-                child: Icon(
-                  Icons.add,
-                ),
-              )
-          ),
+        
         ],
       ),
       body: SingleChildScrollView(
@@ -239,8 +212,12 @@ class _waterIntakeState extends State<water_intake> {
 
 
 
-      DataColumn(label: Text('Time')),
-      DataColumn(label: Text('Water Intake')),
+      DataColumn(label: Text('Duration')),
+      DataColumn(label: Text('Times Awake')),
+      DataColumn(label: Text('Times Restless')),
+      DataColumn(label: Text('Mins awake/restless')),
+
+
 
     ];
 
@@ -251,6 +228,8 @@ class _waterIntakeState extends State<water_intake> {
         .mapIndexed((index, bp) => DataRow(
         cells: [
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
         ],

@@ -11,9 +11,8 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
-import 'package:my_app/goal_tab/sleep/change_sleep_goal.dart';
 import 'package:my_app/goal_tab/water/add_water_intake.dart';
-import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
+import 'package:my_app/goal_tab/weight/add_weight_record.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
@@ -22,14 +21,14 @@ import '../../../fitness_app_theme.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class water_intake extends StatefulWidget {
+class weight_list_patient_view extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  water_intake({Key key, this.btlist}): super(key: key);
+  weight_list_patient_view({Key key, this.btlist}): super(key: key);
   @override
-  _waterIntakeState createState() => _waterIntakeState();
+  _weightPatienttate createState() => _weightPatienttate();
 }
 
-class _waterIntakeState extends State<water_intake> {
+class _weightPatienttate extends State<weight_list_patient_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -77,12 +76,13 @@ class _waterIntakeState extends State<water_intake> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Water Intake', style: TextStyle(
+        title: const Text('My Weight', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
+
           GestureDetector(
             onTap: () {
               _showMyDialogDelete();
@@ -93,6 +93,16 @@ class _waterIntakeState extends State<water_intake> {
             ),
           ),
           SizedBox(width: 10),
+          //
+          // GestureDetector(
+          //   onTap: () {
+          //     _showMyDialogDelete();
+          //
+          //   },
+          //   child: Icon(
+          //     Icons.perm_device_information_sharp ,
+          //   ),
+          // ),
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
@@ -102,7 +112,7 @@ class _waterIntakeState extends State<water_intake> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_water_intake(),
+                      child: add_weight_record(),
                     ),
                     ),
                   ).then((value) => setState((){
@@ -121,6 +131,7 @@ class _waterIntakeState extends State<water_intake> {
               )
           ),
         ],
+
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -188,16 +199,24 @@ class _waterIntakeState extends State<water_intake> {
     return age;
   }
 
-  Color getMyColor(String indication) {
-    if(indication == 'normal'){
-      return Colors.green;
-    }
-    else if(indication == 'low grade fever'){
+  Color getMyColor(double bmi) {
+    if(bmi < 18.5){
       return Colors.blue;
+      //underweight
+    }
+    else if(bmi >= 18.5 && bmi <= 24.9){
+      return Colors.green;
+      //normal
+
+    }
+    else if(bmi >= 25 && bmi <= 29.9){
+      return Colors.deepOrange;
+      //overweight
 
     }
     else
       return Colors.red;
+    //obese
 
   }
 
@@ -240,7 +259,12 @@ class _waterIntakeState extends State<water_intake> {
 
 
       DataColumn(label: Text('Time')),
-      DataColumn(label: Text('Water Intake')),
+      DataColumn(label: Text('Weight')),
+      DataColumn(label: InkWell(onTap: (){
+        showLegend();
+
+      },child: Text('BMI'))),
+
 
     ];
 
@@ -252,7 +276,8 @@ class _waterIntakeState extends State<water_intake> {
         cells: [
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
+          DataCell(Text(bp.temperature.toStringAsFixed(1) +'kg', style: TextStyle(),)), //weight
+          DataCell(Text(bp.temperature.toStringAsFixed(1), style: TextStyle(color: getMyColor(bp.temperature)),)), //bmi
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
@@ -288,6 +313,80 @@ class _waterIntakeState extends State<water_intake> {
             ),
             TextButton(
               child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showLegend() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('BMi Legend'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.blue,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Underweight')
+                  ],
+                ),
+                SizedBox(height: 5,),
+
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.green,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Normal')
+                  ],
+                ),
+                SizedBox(height: 5,),
+
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.orangeAccent,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Overweight')
+                  ],
+                ),
+                SizedBox(height: 5,),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.red,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Obese')
+                  ],
+                )
+
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+
+            TextButton(
+              child: Text('Got it'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
