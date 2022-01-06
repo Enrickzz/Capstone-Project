@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';
@@ -25,15 +28,27 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
   final _formKey = GlobalKey<FormState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+  List<FoodIntake> breakfast_list = [];
+  List<FoodIntake> lunch_list = [];
+  List<FoodIntake> dinner_list = [];
+  List<FoodIntake> snack_list = [];
   TabController controller;
 
   @override
   void initState() {
     super.initState();
-
+    getBFoodIntake();
+    getLFoodIntake();
+    getDFoodIntake();
+    getSFoodIntake();
     controller = TabController(length: 4, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 
@@ -90,7 +105,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
         children: [
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
-            itemCount: 5,
+            itemCount: breakfast_list.length,
             itemBuilder: (context, index){
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -137,7 +152,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                               borderRadius: BorderRadius.circular(10.0),
                                               image: DecorationImage(
                                                   fit:BoxFit.cover,
-                                                  image: NetworkImage("https://th.bing.com/th/id/OIP.IwbWGr7qz8VmxzhHYNsh4QHaFA?pid=ImgDet&rs=1")
+                                                  image: NetworkImage(breakfast_list[index].img)
                                               )
                                           ),
                                         )
@@ -152,13 +167,13 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                       child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text("hatdog",
+                                            Text(breakfast_list[index].foodName,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
                                               ),),
                                             Divider(color: Colors.blue),
-                                            Text("Calories: 56 kcal",
+                                            Text("Calories:" + breakfast_list[index].calories.toString() + " kcal",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
@@ -182,7 +197,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
           ) ,
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
-            itemCount: 5,
+            itemCount: lunch_list.length,
             itemBuilder: (context, index){
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -229,7 +244,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                               borderRadius: BorderRadius.circular(10.0),
                                               image: DecorationImage(
                                                   fit:BoxFit.cover,
-                                                  image: NetworkImage("https://th.bing.com/th/id/OIP.IwbWGr7qz8VmxzhHYNsh4QHaFA?pid=ImgDet&rs=1")
+                                                  image: NetworkImage(lunch_list[index].img)
                                               )
                                           ),
                                         )
@@ -244,13 +259,13 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                       child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text("hatdog",
+                                            Text(lunch_list[index].foodName,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
                                               ),),
                                             Divider(color: Colors.blue),
-                                            Text("Calories: 56 kcal",
+                                            Text("Calories: " + lunch_list[index].calories.toString() +" kcal",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
@@ -274,7 +289,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
           ) ,
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
-            itemCount: 5,
+            itemCount: dinner_list.length,
             itemBuilder: (context, index){
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -321,7 +336,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                               borderRadius: BorderRadius.circular(10.0),
                                               image: DecorationImage(
                                                   fit:BoxFit.cover,
-                                                  image: NetworkImage("https://th.bing.com/th/id/OIP.IwbWGr7qz8VmxzhHYNsh4QHaFA?pid=ImgDet&rs=1")
+                                                  image: NetworkImage(dinner_list[index].img)
                                               )
                                           ),
                                         )
@@ -336,13 +351,13 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                       child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text("hatdog",
+                                            Text(dinner_list[index].foodName,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
                                               ),),
                                             Divider(color: Colors.blue),
-                                            Text("Calories: 56 kcal",
+                                            Text("Calories:"+ dinner_list[index].calories.toString()+" kcal",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
@@ -366,7 +381,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
           ) ,
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
-            itemCount: 5,
+            itemCount: snack_list.length,
             itemBuilder: (context, index){
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -413,7 +428,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                               borderRadius: BorderRadius.circular(10.0),
                                               image: DecorationImage(
                                                   fit:BoxFit.cover,
-                                                  image: NetworkImage("https://th.bing.com/th/id/OIP.IwbWGr7qz8VmxzhHYNsh4QHaFA?pid=ImgDet&rs=1")
+                                                  image: NetworkImage(snack_list[index].img)
                                               )
                                           ),
                                         )
@@ -428,13 +443,13 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                       child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text("hatdog",
+                                            Text(snack_list[index].foodName,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
                                               ),),
                                             Divider(color: Colors.blue),
-                                            Text("Calories: 56 kcal",
+                                            Text("Calories: "+snack_list[index].calories.toString()+" kcal",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
@@ -459,5 +474,57 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
         ],
       ),
     );
+  }
+  void getBFoodIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          breakfast_list.add(FoodIntake.fromJson(jsonString));
+        });
+      }
+    });
+  }
+  void getLFoodIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          lunch_list.add(FoodIntake.fromJson(jsonString));
+        });
+      }
+    });
+  }
+  void getDFoodIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          dinner_list.add(FoodIntake.fromJson(jsonString));
+        });
+      }
+    });
+  }
+  void getSFoodIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          snack_list.add(FoodIntake.fromJson(jsonString));
+        });
+      }
+    });
   }
 }

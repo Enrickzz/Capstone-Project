@@ -178,3 +178,58 @@ class FullNutrients {
     return data;
   }
 }
+
+class FoodIntake {
+  String img;
+  String foodName;
+  double weight;
+  double calories;
+  double cholesterol;
+  double total_fat;
+  double sugar;
+  double protein;
+  double potassium;
+  double sodium;
+  double serving_size;
+  String food_unit;
+  String mealtype;
+  String intakeDate;
+
+  FoodIntake({this.img, this.foodName, this.weight, this.calories, this.cholesterol, this.total_fat, this.sugar, this.protein, this.potassium, this.sodium, this.serving_size, this.food_unit, this.mealtype, this.intakeDate});
+
+  FoodIntake.fromJson(Map<String, dynamic> json) {
+    img = json['img'];
+    foodName = json['foodName'];
+    weight = double.parse(json['weight'].toString());
+    calories = double.parse(json['calories'].toString());
+    cholesterol = double.parse(json['cholesterol'].toString());
+    total_fat = double.parse(json['total_fat'].toString());
+    sugar = double.parse(json['sugar'].toString());
+    protein = double.parse(json['protein'].toString());
+    potassium = double.parse(json['potassium'].toString());
+    sodium = double.parse(json['sodium'].toString());
+    serving_size = double.parse(json['serving_size'].toString());
+    food_unit = json['food_unit'];
+    mealtype = json['mealtype'];
+    intakeDate = json['intakeDate'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['img'] = this.img;
+    data['foodName'] = this.foodName;
+    data['weight'] = this.weight;
+    data['calories'] = this.calories;
+    data['cholesterol'] = this.cholesterol;
+    data['total_fat'] = this.total_fat;
+    data['sugar'] = this.sugar;
+    data['protein'] = this.protein;
+    data['potassium'] = this.potassium;
+    data['sodium'] = this.sodium;
+    data['serving_size'] = this.serving_size;
+    data['food_unit'] = this.food_unit;
+    data['mealtype'] = this.mealtype;
+    data['intakeDate'] = this.intakeDate;
+    return data;
+  }
+}

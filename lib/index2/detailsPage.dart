@@ -171,7 +171,17 @@ class _DetailsPageState extends State<DetailsPage> {
                                   builder: (context) => SingleChildScrollView(child: Container(
                                     padding: EdgeInsets.only(
                                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                                    child: add_food_intake(),
+                                    child: add_food_intake(
+                                      heroTag: widget.heroTag,
+                                      foodName: widget.foodName,
+                                      weight: widget.weight,
+                                      calories: widget.calories,
+                                      cholesterol: widget.cholesterol,
+                                      total_fat: widget.total_fat,
+                                      sugar: widget.sugar,
+                                      protein: widget.protein,
+                                      potassium: widget.potassium,
+                                      sodium: widget.sodium,),
                                   ),
                                   ),
                                 ).then((value) =>
