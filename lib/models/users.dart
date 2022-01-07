@@ -145,14 +145,14 @@ class Physical_Parameters {
   Physical_Parameters.fromJson(Map<String, dynamic> json) {
     height = double.parse(json['height']);
     weight = double.parse(json['weight']);
-    bmi = double.parse(json['bmi']);
+    bmi = double.parse(json['BMI']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['height'] = this.height;
     data['weight'] = this.weight;
-    data['bmi'] = this.bmi;
+    data['BMI'] = this.bmi;
     return data;
   }
 

@@ -1064,6 +1064,16 @@ class _set_upState extends State<set_up> {
             getOtherDisease();
 
             try{
+              double bmi = double.parse(weight) / (double.parse(height) * double.parse(height));
+              print("BMIII" + bmi.toString());
+              if(weight_unit == "Pounds"){
+                weight_goal = (double.parse(weight_goal) * 0.45359237).toStringAsFixed(1);
+                weight_unit = "Kilograms";
+              }
+              if(water_unit == "Ounce"){
+                water_goal = (double.parse(water_goal) * 29.5735).toStringAsFixed(1);
+                water_unit = "Milliliter";
+              }
               Future.delayed(const Duration(milliseconds: 1000), () {
                 final User user = auth.currentUser;
                 final uid = user.uid;
@@ -1162,37 +1172,28 @@ class _set_upState extends State<set_up> {
                   "other_disease": additionalConditionChecboxStatus,
                   "family_disease": familyConditionCheckboxStatus
                 });
-                double bmi = double.parse(weight) / (double.parse(height) * double.parse(height));
                 physicalRef.set({
                   "BMI": bmi.toStringAsFixed(1),
                   "height":height.toString(),
                   "weight": weight.toString(),
                 });
                 loginRef.update({"isFirstTime": false});
-                if(weight_unit == "Pounds"){
-                  weight_goal = (double.parse(weight_goal) * 0.45359237).toStringAsFixed(1);
-                  weight_unit = "Kilograms";
-                }
                 weightRef.set({
                   "objective": valueChooseWeightGoal,
                   "weight_goal": weight_goal,
                   "weight_unit": weight_unit,
-                  "dateCreated": DateFormat("MM/dd/yyyy").parse(now.toString()),
+                  "dateCreated": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
                 });
-                if(water_unit == "Ounce"){
-                  water_goal = (double.parse(water_goal) * 29.5735).toStringAsFixed(1);
-                  water_unit = "Milliliter";
-                }
                 waterRef.set({
                   "water_goal": water_goal,
                   "water_unit": water_unit,
-                  "dateCreated": DateFormat("MM/dd/yyyy").parse(now.toString()),
+                  "dateCreated": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
                 });
                 sleepRef.set({
-                  "bed_time" : DateTime(now.month,now.day, now.year,0,0),
-                  "wakeup_time": DateTime(now.month,now.day, now.year,8,0),
-                  "duration": 480,
-                  "dateCreated": DateFormat("MM/dd/yyyy").parse(now.toString()),
+                  "bed_time" : "00:00",
+                  "wakeup_time": "08:00",
+                  "duration": "480",
+                  "dateCreated": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
                 });
                 print("Completed " + uid);
               });

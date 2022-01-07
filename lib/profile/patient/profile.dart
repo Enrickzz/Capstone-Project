@@ -982,7 +982,9 @@ class _index3State extends State<index3>
     final readParam = databaseReference.child('users/' + uid + '/physical_parameters/');
     readParam.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      param = Physical_Parameters.fromJson(temp);
+      temp.forEach((key, jsonString) {
+        param = Physical_Parameters.fromJson(temp);
+      });
     });
     readInfo.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
