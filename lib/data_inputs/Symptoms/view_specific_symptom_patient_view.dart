@@ -82,6 +82,11 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
     thisSymptom = widget.thissymp;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+
+        if(thisSymptom.recurring.toString() == null){
+          print("HIIIIIIIIIIIIIIIIIIIIII");
+          thisSymptom.recurring[0] = "";
+        }
         print("setstate");
       });
     });
@@ -277,7 +282,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                             ),
                                             SizedBox(height: 8),
 
-                                            if (thisSymptom.symptomTrigger.toString() != "") ...[
+                                            if (thisSymptom.symptomTrigger != null && thisSymptom.symptomTrigger.isNotEmpty) ...[
                                               Text(thisSymptom.symptomTrigger,
                                                 style: TextStyle(
                                                     fontSize:16,
@@ -297,7 +302,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
 
                                             Row(
                                               children: [
-                                                if (thisSymptom.recurring[0].toString() != "") ...[
+                                                if (thisSymptom.recurring != null) ...[
                                                 Text("Recurring",
                                                   style: TextStyle(
                                                     fontSize:14,
@@ -308,7 +313,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            if (thisSymptom.recurring[0].toString() != "") ...[
+                                            if (thisSymptom.recurring != null) ...[
                                               Text(thisSymptom.recurring.toString(),
                                                 style: TextStyle(
                                                     fontSize:16,
@@ -339,7 +344,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                           aspectRatio: 1,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: (Image.network('' + thisSymptom.imgRef) != null) ? Image.network('' + thisSymptom.imgRef, loadingBuilder: (context, child, loadingProgress) =>
+                            child: (Image.network(thisSymptom.imgRef) != null) ? Image.network('' + thisSymptom.imgRef, loadingBuilder: (context, child, loadingProgress) =>
                             (loadingProgress == null) ? child : CircularProgressIndicator(),
                               errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
                           ),
