@@ -194,7 +194,7 @@ class _goalsState extends State<goals>
               height:24,),
             ),
             Tab(
-              text: 'My Stress', icon: Image.asset('assets/fitness_app/tab_1.png',
+              text: 'My Stress', icon: Image.asset('assets/fitness_app/stress.png',
               width: 24,
               height:24,),
             ),

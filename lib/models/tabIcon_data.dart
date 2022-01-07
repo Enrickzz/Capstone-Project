@@ -59,5 +59,12 @@ class TabIconData {
       isSelected: true,
       animationController: null,
     ),
+    TabIconData(
+      imagePath: 'assets/fitness_app/goals.png',
+      selectedImagePath: 'assets/fitness_app/goals2.png',
+      index: 6,
+      isSelected: true,
+      animationController: null,
+    ),
   ];
 }

@@ -208,9 +208,9 @@ class ihealth_connect extends StatelessWidget {
                       SizedBox(height: 16,),
                       Center(
                         child: ElevatedButton(
-                          child: Text("Connect to Spotify"),
+                          child: Text("Connect to iHealth"),
                           style: ElevatedButton.styleFrom(
-                            primary: Color.fromRGBO(0,42,58,1),
+                            primary: Color.fromRGBO(246,115,0,1),
                             onPrimary: Colors.white,
                             minimumSize: Size(160, 40),
                           ),

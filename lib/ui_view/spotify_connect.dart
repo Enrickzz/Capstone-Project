@@ -210,7 +210,7 @@ class spotify_connect extends StatelessWidget {
                         child: ElevatedButton(
                           child: Text("Connect to Spotify"),
                           style: ElevatedButton.styleFrom(
-                            primary: Color.fromRGBO(0,42,58,1),
+                            primary: Color.fromRGBO(30,215,96,1),
                             onPrimary: Colors.white,
                             minimumSize: Size(160, 40),
                           ),
