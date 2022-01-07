@@ -764,6 +764,11 @@ class Weight_Goal {
     weight_unit = json['weight_unit'];
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
   }
+  Weight_Goal.fromJson2(Map<String, dynamic> json) {
+    objective = json["objective"];
+    weight_goal = json["weight_goal"];
+    weight_unit = json['weight_unit'];
+  }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['objective'] = this.objective;
@@ -773,6 +778,35 @@ class Weight_Goal {
     return data;
   }
 
+}
+class Weight {
+  double weight;
+  double bmi;
+  DateTime timeCreated;
+  DateTime dateCreated;
+
+  Weight({
+    this.weight,
+    this.bmi,
+    this.timeCreated,
+    this.dateCreated
+  });
+
+  Weight.fromJson(Map<String, dynamic> json) {
+    weight = double.parse(json["weight"]);
+    bmi = double.parse(json["bmi"]);
+    timeCreated = DateFormat("hh:mm").parse(json['timeCreated']);
+    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['weight'] = this.weight;
+    data['bmi'] = this.bmi;
+    data['timeCreated'] = this.timeCreated;
+    data['dateCreated'] = this.dateCreated;
+    return data;
+  }
 }
 
 class Water_Goal {
@@ -798,6 +832,23 @@ class Water_Goal {
     return data;
   }
 }
+
+class WaterIntake {
+  int water_intake;
+  DateTime dateCreated;
+
+  WaterIntake.fromJson(Map<String, dynamic> json) {
+    water_intake = json["water_intake"];
+    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['water_intake'] = this.water_intake;
+    data['dateCreated'] = this.dateCreated;
+    return data;
+  }
+}
+
 class Sleep_Goal {
   DateTime bed_time;
   DateTime wakeup_time;

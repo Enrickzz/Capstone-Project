@@ -28,17 +28,21 @@ class add_weightState extends State<add_weight_record> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  double temperature = 0;
-  String unit = 'Celsius';
+  double current_weight = 0;
+  double bmi = 0;
+  String unit = 'Kilograms';
   String valueChoose;
   List degrees = ["Celsius", "Fahrenheit"];
-  String temperature_date = (new DateTime.now()).toString();
-  DateTime temperatureDate;
-  String temperature_time;
+  String weight_date = (new DateTime.now()).toString();
+  DateTime weightDate;
+  String weight_time;
   String indication = "";
   bool isDateSelected= false;
   int count = 1;
-  List<Body_Temperature> body_temp_list = new List<Body_Temperature>();
+  Weight_Goal weight_goal = new Weight_Goal();
+  List<Weight> weights = new List<Weight>();
+  bool isCongratulation = false;
+  Physical_Parameters pp = new Physical_Parameters();
   Additional_Info info = new Additional_Info();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -99,7 +103,7 @@ class add_weightState extends State<add_weight_record> {
                           ),
                           validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
                           onChanged: (val){
-                            setState(() => temperature = double.parse(val));
+                            setState(() => current_weight = double.parse(val));
                           },
                         ),
                       ),
@@ -131,7 +135,7 @@ class add_weightState extends State<add_weight_record> {
                             }
                             if(newIndex == 0){
                               print("Kilograms (kg)");
-                              unit = "Pounds";
+                              unit = "Kilograms";
                             }
                             if(newIndex == 1){
                               print("Fahrenheit (ibs)");
@@ -152,13 +156,13 @@ class add_weightState extends State<add_weight_record> {
                         firstDate: new DateTime.now().subtract(Duration(days: 30)),
                         lastDate: new DateTime.now(),
                       ).then((value){
-                        if(value != null && value != temperatureDate){
+                        if(value != null && value != weightDate){
                           setState(() {
-                            temperatureDate = value;
+                            weightDate = value;
                             isDateSelected = true;
-                            temperature_date = "${temperatureDate.month}/${temperatureDate.day}/${temperatureDate.year}";
+                            weight_date = "${weightDate.month}/${weightDate.day}/${weightDate.year}";
                           });
-                          dateValue.text = temperature_date + "\r";
+                          dateValue.text = weight_date + "\r";
                         }
                       });
 
@@ -175,7 +179,7 @@ class add_weightState extends State<add_weight_record> {
                             time = value;
                             final hours = time.hour.toString().padLeft(2,'0');
                             final min = time.minute.toString().padLeft(2,'0');
-                            temperature_time = "$hours:$min";
+                            weight_time = "$hours:$min";
                             dateValue.text += "$hours:$min";
                             print("data value " + dateValue.text);
                           });
@@ -259,9 +263,82 @@ class add_weightState extends State<add_weight_record> {
                         ),
                         color: Colors.blue,
                         onPressed: (){
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
+                            final readheight = databaseReference.child('users/' + uid + '/physical_parameters/');
+                            final readWeightGoal = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+                            if(unit == "Pounds"){
+                              current_weight *= 0.453592;
+                            }
+                            readWeight.once().then((DataSnapshot datasnapshot) {
+                              readheight.once().then((DataSnapshot snapshot) {
+                                Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+                                pp = Physical_Parameters.fromJson(temp);
+                                bmi = current_weight / ((pp.height * 0.01) * (pp.height * 0.01));
 
-                       // kapag na meet yung weight goal
-                          _showCongratulations();
+                              if(datasnapshot.value == null){
+                                final weightRef = databaseReference.child('users/' + uid + '/goal/weight/' + count.toString());
+                                weightRef.set({"weight": current_weight.toStringAsFixed(1),"bmi": bmi.toStringAsFixed(1) , "dateCreated": weight_date,"timeCreated": weight_time});
+                                print("Added Weight Successfully! " + uid);
+                              }
+                              else{
+                                getWeight();
+                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                  count = weights.length--;
+                                  final weightRef = databaseReference.child('users/' + uid + '/goal/weight/' + count.toString());
+                                  weightRef.set({"weight": current_weight.toStringAsFixed(1),"bmi": bmi.toStringAsFixed(1) , "dateCreated": weight_date,"timeCreated": weight_time});
+                                  print("Added Weight Successfully! " + uid);
+                                });
+                              }
+                                readWeightGoal.once().then((DataSnapshot weightgoalsnapshot) {
+                                  Map<String, dynamic> temp3 = jsonDecode(jsonEncode(weightgoalsnapshot.value));
+                                  print(temp3);
+                                  weight_goal = Weight_Goal.fromJson2(temp3);
+                                  print(weight_goal.weight_goal);
+                                  if(weight_goal.objective == "Gain"){
+                                    if(current_weight >= double.parse(weight_goal.weight_goal)){
+                                      isCongratulation = true;
+                                    }
+                                  }
+                                  if(weight_goal.objective == "Lose"){
+                                    if(current_weight <= double.parse(weight_goal.weight_goal)){
+                                      isCongratulation = true;
+                                    }
+                                  }
+                                  if(weight_goal.objective == "Maintain"){
+                                    if(current_weight == double.parse(weight_goal.weight_goal)){
+                                      isCongratulation = true;
+                                    }
+                                  }
+                                });
+                              });
+                            });
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              print("weights LENGTH: " + weights.length.toString());
+                              weights.add(new Weight(weight: current_weight, bmi: bmi, timeCreated: timeformat.parse(weight_time), dateCreated: format.parse(weight_date)));
+                              for(var i=0;i<weights.length/2;i++){
+                                var temp = weights[i];
+                                weights[i] = weights[weights.length-1-i];
+                                weights[weights.length-1-i] = temp;
+                              }
+                              print("POP HERE ==========");
+                              Navigator.pop(context, weights);
+                            });
+
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              print("isCongratulation");
+                              print(isCongratulation);
+                              if(isCongratulation){
+                                _showCongratulations();
+                              }
+                            });
+
+                          } catch(e) {
+                            print("you got an error! $e");
+                          }
+
                         },
                         // onPressed:() async {
                         //   try{
@@ -354,96 +431,29 @@ class add_weightState extends State<add_weight_record> {
         )
     );
   }
-  void getBodyTemp() {
+  void getWeightGoal() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-    readBT.once().then((DataSnapshot snapshot){
+    final readWeightGoal = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+    readWeightGoal.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        body_temp_list.add(Body_Temperature.fromJson(jsonString));
+        weight_goal = Weight_Goal.fromJson(jsonString);
       });
     });
   }
-  void getIndication() {
+  void getWeight() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readAddInfo = databaseReference.child('users/' + uid + '/vitals/additional_info/');
-    int age;
-    readAddInfo.once().then((DataSnapshot snapshot) {
-      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-      print("temp2");
-      print(temp2);
-      info = Additional_Info.fromJson2(temp2);
-      age = getAge(info.birthday);
-
-      if(unit == "Fahrenheit"){
-        temperature = (temperature - 32) * 5/9;
-        unit = "Celsius";
-      }
-      /// NORMAL
-      double highest = 0;
-      /// infant 0 - 10
-      if(age <= 10 && age >= 0){
-        if(temperature >= 35.5 && temperature <= 37.5){
-          indication = "normal";
-        }
-        highest = 37.5;
-      }
-      /// 11 - 65
-      if(age <= 65 && age >= 11){
-        if(temperature >= 36.4 && temperature <= 37.6){
-          indication = "normal";
-        }
-        highest = 37.6;
-      }
-      /// 65 above
-      if(age > 65){
-        if(temperature >= 35.8 && temperature <= 36.9){
-          indication = "normal";
-        }
-        highest = 36.9;
-      }
-      /// LOW GRADE FEVER
-      if(temperature >= highest && temperature <= 38){
-        indication = "low grade fever";
-      }
-      /// HIGH GRADE FEVER
-      if(temperature > 38){
-        indication = "high grade fever";
-      }
-
+    final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
+    readWeight.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        weights.add(Weight.fromJson(jsonString));
+      });
     });
   }
 
-  int getAge (DateTime birthday) {
-    DateTime today = new DateTime.now();
-    String days1 = "";
-    String month1 = "";
-    String year1 = "";
-    int d = int.parse(DateFormat("dd").format(birthday));
-    int m = int.parse(DateFormat("MM").format(birthday));
-    int y = int.parse(DateFormat("yyyy").format(birthday));
-    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
-    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
-    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
-    int age = 0;
-    age = y1 - y;
-    print(age);
-
-    // dec < jan
-    if(m1 < m){
-      print("month --");
-      age--;
-    }
-    else if (m1 == m){
-      if(d1 < d){
-        print("day --");
-        age--;
-      }
-    }
-    return age;
-  }
 
   Future<void> _showCongratulations() async {
     return showDialog<void>(
