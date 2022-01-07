@@ -53,54 +53,88 @@ class Common {
     return this.servingWeightGrams;
   }
   double getCalories(){
+    bool gotNutrients = false;
     for(int j = 0; j < this.fullNutrients.length; j++){
       if(fullNutrients[j].attrId == 208){ // getting calories
+        gotNutrients = true;
         return fullNutrients[j].value;
       }
     }
+    if(!gotNutrients){
+      return 0;
+    }
   }
   double getSugar(){
+    bool gotNutrients = false;
     for(int j = 0; j < this.fullNutrients.length; j++){
       if(fullNutrients[j].attrId == 269){ // getting sugar
+        gotNutrients = true;
         return fullNutrients[j].value;
       }
-
+    }
+    if(!gotNutrients){
+      return 0;
     }
   }
 
   double getCholesterol(){
+    bool gotNutrients = false;
     for(int j = 0; j < this.fullNutrients.length; j++){
       if(fullNutrients[j].attrId == 601){ // getting sugar
+        gotNutrients = true;
         return fullNutrients[j].value;
       }
+    }
+    if(!gotNutrients){
+      return 0;
     }
   }
   double getTotalFat(){
+    bool gotNutrients = false;
     for(int j = 0; j < this.fullNutrients.length; j++){
       if(fullNutrients[j].attrId == 204){ // getting sugar
+        gotNutrients = true;
         return fullNutrients[j].value;
       }
+    }
+    if(!gotNutrients){
+      return 0;
     }
   }
   double getProtein(){
+    bool gotNutrients = false;
     for(int j = 0; j < this.fullNutrients.length; j++){
       if(fullNutrients[j].attrId == 203){ // getting sugar
+        gotNutrients = true;
         return fullNutrients[j].value;
       }
+    }
+    if(!gotNutrients){
+      return 0;
     }
   }
   double getPotassium(){
+    bool gotNutrients = false;
     for(int j = 0; j < this.fullNutrients.length; j++){
       if(fullNutrients[j].attrId == 306){ // getting sugar
+        gotNutrients = true;
         return fullNutrients[j].value;
       }
     }
+    if(!gotNutrients){
+      return 0;
+    }
   }
   double getSodium(){
+    bool gotNutrients = false;
     for(int j = 0; j < this.fullNutrients.length; j++){
       if(fullNutrients[j].attrId == 307){ // getting sugar
+        gotNutrients = true;
         return fullNutrients[j].value;
       }
+    }
+    if(!gotNutrients){
+      return 0;
     }
   }
   // String photoToString(){

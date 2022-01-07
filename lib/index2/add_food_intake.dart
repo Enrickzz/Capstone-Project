@@ -297,17 +297,47 @@ class _addFoodIntakeState extends State<add_food_intake> {
                               print(temp1);
                               if(datasnapshot.value == null){
                                 final foodintakeRef = databaseReference.child('users/' + uid + '/intake/food_intake/'+ valueChooseFoodTime+ "/" + count.toString());
+                                double total_calories = 0;
+                                double total_cholesterol = 0;
+                                double total_tfat = 0;
+                                double total_sugar = 0;
+                                double total_protein = 0;
+                                double total_potassium = 0;
+                                double total_sodium = 0;
+                                /// total calories
+                                total_calories = double.parse(widget.calories) / double.parse(widget.weight);
+                                total_calories *= double.parse(serving_size);
+                                /// total cholesterol
+                                total_cholesterol = double.parse(widget.cholesterol) / double.parse(widget.weight);
+                                total_cholesterol *= double.parse(serving_size);
+                                /// total fat
+                                total_tfat = double.parse(widget.total_fat) / double.parse(widget.weight);
+                                total_tfat *= double.parse(serving_size);
+                                /// total sugar
+                                total_sugar = double.parse(widget.sugar) / double.parse(widget.weight);
+                                total_sugar *= double.parse(serving_size);
+                                /// total protein
+                                total_protein = double.parse(widget.protein) / double.parse(widget.weight);
+                                total_protein *= double.parse(serving_size);
+                                /// total potassium
+                                total_potassium = double.parse(widget.potassium) / double.parse(widget.weight);
+                                total_potassium *= double.parse(serving_size);
+                                /// total sodium
+                                total_sodium = double.parse(widget.sodium) / double.parse(widget.weight);
+                                total_sodium *= double.parse(serving_size);
+
+
                                 foodintakeRef.set({
                                   "img": widget.heroTag,
                                   "foodName": widget.foodName,
                                   "weight": widget.weight.toString(),
-                                  "calories": widget.calories.toString(),
-                                  "cholesterol": widget.cholesterol.toString(),
-                                  "total_fat": widget.total_fat.toString(),
-                                  "sugar": widget.sugar.toString(),
-                                  "protein": widget.protein.toString(),
-                                  "potassium": widget.potassium.toString(),
-                                  "sodium": widget.sodium.toString(),
+                                  "calories": total_calories.toStringAsFixed(0),
+                                  "cholesterol": total_cholesterol.toStringAsFixed(1),
+                                  "total_fat": total_tfat.toStringAsFixed(1),
+                                  "sugar": total_sugar.toStringAsFixed(1),
+                                  "protein": total_protein.toStringAsFixed(1),
+                                  "potassium": total_potassium.toStringAsFixed(1),
+                                  "sodium": total_sodium.toStringAsFixed(1),
                                   "serving_size": serving_size,
                                   "food_unit": valueFoodUnit,
                                   "mealtype": valueChooseFoodTime,
@@ -320,11 +350,14 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = foodintake_list.length--;
                                   final foodintakeRef = databaseReference.child('users/' + uid + '/intake/food_intake/'+ valueChooseFoodTime+ "/" + count.toString());
+                                  double total_calories = 0;
+                                  total_calories = double.parse(widget.calories) / double.parse(widget.weight);
+                                  total_calories *= double.parse(serving_size);
                                   foodintakeRef.set({
                                     "img": widget.heroTag,
                                     "foodName": widget.foodName,
                                     "weight": widget.weight.toString(),
-                                    "calories": widget.calories.toString(),
+                                    "calories": total_calories.toStringAsFixed(0),
                                     "cholesterol": widget.cholesterol.toString(),
                                     "total_fat": widget.total_fat.toString(),
                                     "sugar": widget.sugar.toString(),
@@ -383,8 +416,8 @@ class _addFoodIntakeState extends State<add_food_intake> {
   void getFoodIntake() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readsupplement = databaseReference.child('users/' + uid + '/intake/food_intake/'+ valueChooseFoodTime+ "/");
-    readsupplement.once().then((DataSnapshot snapshot){
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/'+ valueChooseFoodTime+ "/");
+    readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       print("this is temp");
       print(temp);

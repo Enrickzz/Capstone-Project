@@ -45,7 +45,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
     controller.addListener(() {
       setState(() {});
     });
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
         print("setstate");
       });
