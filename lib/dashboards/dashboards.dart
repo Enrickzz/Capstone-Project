@@ -10,7 +10,9 @@ import 'package:my_app/ui_view/fitbit_connect.dart';
 import 'package:my_app/ui_view/glass_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
+import 'package:my_app/ui_view/ihealth_connect.dart';
 import 'package:my_app/ui_view/running_view.dart';
+import 'package:my_app/ui_view/spotify_connect.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
@@ -181,6 +183,25 @@ class _DashboardsState extends State<Dashboards>
         animationController: widget.animationController,
       ),
     );
+    listViews.add(
+      ihealth_connect(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+    listViews.add(
+      spotify_connect(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
 
     listViews.add(
       TitleView(
