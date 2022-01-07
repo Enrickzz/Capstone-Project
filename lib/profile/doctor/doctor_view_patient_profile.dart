@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:basic_utils/basic_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
@@ -321,7 +322,7 @@ class _index3State extends State<view_patient_profile>
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text(info.gender,
+                                Text(StringUtils.capitalize(info.gender),
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold

@@ -109,100 +109,109 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
             itemBuilder: (context, index){
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: InkWell(
-                  onTap: (){
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 150,
-                          child: Stack(
-                              children: [
-                                Positioned(
-                                    top: 25,
-                                    left: 25,
-                                    child: Material(
-                                      child: Container(
-                                          height: 110.0,
-                                          width: 300,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-
-                                    )),
-                                Positioned(
-                                    top: 10,
-                                    left: 30,
-                                    child: Card(
-                                        elevation: 10.0,
-                                        shadowColor: Colors.grey.withOpacity(0.5),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
-                                        ),
-                                        child: Container(
-                                          height: 110,
-                                          width: 120,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                  fit:BoxFit.cover,
-                                                  image: NetworkImage(breakfast_list[index].img)
-                                              )
-                                          ),
-                                        )
-                                    )
-                                ),
-                                Positioned(
-                                    top:35,
-                                    left: 165,
+                child: Column(
+                  children: [
+                    Container(
+                        height: 150,
+                        child: Stack(
+                            children: [
+                              Positioned(
+                                  top: 25,
+                                  left: 25,
+                                  child: Material(
                                     child: Container(
-                                      height: 150,
-                                      width: 150,
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(breakfast_list[index].foodName,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),),
-                                            Divider(color: Colors.blue),
-                                            Text("Calories:" + breakfast_list[index].calories.toString() + " kcal",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                // color:Colors.grey,
-                                              ),),
-                                            SizedBox(height: 1,),
-                                            Text("Weight:" + breakfast_list[index].serving_size.toString() + "g",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                // color:Colors.grey,
-                                              ),),
-                                            SizedBox(height: 5,),
+                                        height: 110.0,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                blurRadius: 20.0)],
+                                        )
+                                    ),
 
-
-                                            Text("Date:" + breakfast_list[index].intakeDate,
-                                              style: TextStyle(
-                                                fontSize:12,
-                                                // color:Colors.grey,
-                                              ),
-
-                                            ),
-
-                                          ]
+                                  )),
+                              Positioned(
+                                  top: 10,
+                                  left: 30,
+                                  child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: Colors.grey.withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
                                       ),
-                                    ))
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                                      child: Container(
+                                        height: 110,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                                fit:BoxFit.cover,
+                                                image: NetworkImage(breakfast_list[index].img)
+                                            )
+                                        ),
+                                      )
+                                  )
+                              ),
+                              Positioned(
+                                  top:35,
+                                  left: 165,
+                                  child: Container(
+                                    height: 150,
+                                    width: 150,
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(breakfast_list[index].foodName,
+                                            style: TextStyle(
+                                                fontSize:16,
+                                                fontWeight: FontWeight.bold
+                                            ),),
+                                          Divider(color: Colors.blue),
+                                          Text("Calories:" + breakfast_list[index].calories.toString() + " kcal",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          SizedBox(height: 1,),
+                                          Text("Weight:" + breakfast_list[index].serving_size.toString() + "g",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          SizedBox(height: 5,),
+
+
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Date: " + breakfast_list[index].intakeDate,
+                                                style: TextStyle(
+                                                  fontSize:12,
+                                                  // color:Colors.grey,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete();
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
+                                        ]
+                                    ),
+                                  ))
+                            ]
+                        )
+                    ),
+                  ],
                 ),
               );
             },
@@ -213,99 +222,108 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
             itemBuilder: (context, index){
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: InkWell(
-                  onTap: (){
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 150,
-                          child: Stack(
-                              children: [
-                                Positioned(
-                                    top: 25,
-                                    left: 25,
-                                    child: Material(
-                                      child: Container(
-                                          height: 110.0,
-                                          width: 300,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-
-                                    )),
-                                Positioned(
-                                    top: 10,
-                                    left: 30,
-                                    child: Card(
-                                        elevation: 10.0,
-                                        shadowColor: Colors.grey.withOpacity(0.5),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
-                                        ),
-                                        child: Container(
-                                          height: 110,
-                                          width: 120,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                  fit:BoxFit.cover,
-                                                  image: NetworkImage(lunch_list[index].img)
-                                              )
-                                          ),
-                                        )
-                                    )
-                                ),
-                                Positioned(
-                                    top:35,
-                                    left: 165,
+                child: Column(
+                  children: [
+                    Container(
+                        height: 150,
+                        child: Stack(
+                            children: [
+                              Positioned(
+                                  top: 25,
+                                  left: 25,
+                                  child: Material(
                                     child: Container(
-                                      height: 150,
-                                      width: 150,
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(lunch_list[index].foodName,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),),
-                                            Divider(color: Colors.blue),
-                                            Text("Calories: " + lunch_list[index].calories.toString() +" kcal",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                // color:Colors.grey,
-                                              ),),
-                                            SizedBox(height: 1,),
-                                            Text("Weight:" + lunch_list[index].serving_size.toString() + "g",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                // color:Colors.grey,
-                                              ),),
-                                            SizedBox(height: 5,),
+                                        height: 110.0,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                blurRadius: 20.0)],
+                                        )
+                                    ),
 
-
-                                            Text("Date:" + lunch_list[index].intakeDate,
-                                              style: TextStyle(
-                                                fontSize:12,
-                                                // color:Colors.grey,
-                                              ),
-
-                                            ),
-                                          ]
+                                  )),
+                              Positioned(
+                                  top: 10,
+                                  left: 30,
+                                  child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: Colors.grey.withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
                                       ),
-                                    ))
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                                      child: Container(
+                                        height: 110,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                                fit:BoxFit.cover,
+                                                image: NetworkImage(lunch_list[index].img)
+                                            )
+                                        ),
+                                      )
+                                  )
+                              ),
+                              Positioned(
+                                  top:35,
+                                  left: 165,
+                                  child: Container(
+                                    height: 150,
+                                    width: 150,
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(lunch_list[index].foodName,
+                                            style: TextStyle(
+                                                fontSize:16,
+                                                fontWeight: FontWeight.bold
+                                            ),),
+                                          Divider(color: Colors.blue),
+                                          Text("Calories: " + lunch_list[index].calories.toString() +" kcal",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          SizedBox(height: 1,),
+                                          Text("Weight:" + lunch_list[index].serving_size.toString() + "g",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          SizedBox(height: 5,),
+
+
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Date: " + lunch_list[index].intakeDate,
+                                                style: TextStyle(
+                                                  fontSize:12,
+                                                  // color:Colors.grey,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete();
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ]
+                                    ),
+                                  ))
+                            ]
+                        )
+                    ),
+                  ],
                 ),
               );
             },
@@ -316,99 +334,107 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
             itemBuilder: (context, index){
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: InkWell(
-                  onTap: (){
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 150,
-                          child: Stack(
-                              children: [
-                                Positioned(
-                                    top: 25,
-                                    left: 25,
-                                    child: Material(
-                                      child: Container(
-                                          height: 110.0,
-                                          width: 300,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-
-                                    )),
-                                Positioned(
-                                    top: 10,
-                                    left: 30,
-                                    child: Card(
-                                        elevation: 10.0,
-                                        shadowColor: Colors.grey.withOpacity(0.5),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
-                                        ),
-                                        child: Container(
-                                          height: 110,
-                                          width: 120,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                  fit:BoxFit.cover,
-                                                  image: NetworkImage(dinner_list[index].img)
-                                              )
-                                          ),
-                                        )
-                                    )
-                                ),
-                                Positioned(
-                                    top:35,
-                                    left: 165,
+                child: Column(
+                  children: [
+                    Container(
+                        height: 150,
+                        child: Stack(
+                            children: [
+                              Positioned(
+                                  top: 25,
+                                  left: 25,
+                                  child: Material(
                                     child: Container(
-                                      height: 150,
-                                      width: 150,
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(dinner_list[index].foodName,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),),
-                                            Divider(color: Colors.blue),
-                                            Text("Calories:"+ dinner_list[index].calories.toString()+" kcal",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                // color:Colors.grey,
-                                              ),),
-                                            SizedBox(height: 1,),
-                                            Text("Weight:" + dinner_list[index].serving_size.toString() + "g",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                // color:Colors.grey,
-                                              ),),
-                                            SizedBox(height: 5,),
+                                        height: 110.0,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                blurRadius: 20.0)],
+                                        )
+                                    ),
 
-
-                                            Text("Date:" + dinner_list[index].intakeDate,
-                                              style: TextStyle(
-                                                fontSize:12,
-                                                // color:Colors.grey,
-                                              ),
-
-                                            ),
-                                          ]
+                                  )),
+                              Positioned(
+                                  top: 10,
+                                  left: 30,
+                                  child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: Colors.grey.withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
                                       ),
-                                    ))
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                                      child: Container(
+                                        height: 110,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                                fit:BoxFit.cover,
+                                                image: NetworkImage(dinner_list[index].img)
+                                            )
+                                        ),
+                                      )
+                                  )
+                              ),
+                              Positioned(
+                                  top:35,
+                                  left: 165,
+                                  child: Container(
+                                    height: 150,
+                                    width: 150,
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(dinner_list[index].foodName,
+                                            style: TextStyle(
+                                                fontSize:16,
+                                                fontWeight: FontWeight.bold
+                                            ),),
+                                          Divider(color: Colors.blue),
+                                          Text("Calories:"+ dinner_list[index].calories.toString()+" kcal",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          SizedBox(height: 1,),
+                                          Text("Weight:" + dinner_list[index].serving_size.toString() + "g",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          SizedBox(height: 5,),
+
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Date: " + dinner_list[index].intakeDate,
+                                                style: TextStyle(
+                                                  fontSize:12,
+                                                  // color:Colors.grey,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete();
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ]
+                                    ),
+                                  ))
+                            ]
+                        )
+                    ),
+                  ],
                 ),
               );
             },
@@ -419,99 +445,107 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
             itemBuilder: (context, index){
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: InkWell(
-                  onTap: (){
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 150,
-                          child: Stack(
-                              children: [
-                                Positioned(
-                                    top: 25,
-                                    left: 25,
-                                    child: Material(
-                                      child: Container(
-                                          height: 110.0,
-                                          width: 300,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-
-                                    )),
-                                Positioned(
-                                    top: 10,
-                                    left: 30,
-                                    child: Card(
-                                        elevation: 10.0,
-                                        shadowColor: Colors.grey.withOpacity(0.5),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
-                                        ),
-                                        child: Container(
-                                          height: 110,
-                                          width: 120,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                  fit:BoxFit.cover,
-                                                  image: NetworkImage(snack_list[index].img)
-                                              )
-                                          ),
-                                        )
-                                    )
-                                ),
-                                Positioned(
-                                    top:35,
-                                    left: 165,
+                child: Column(
+                  children: [
+                    Container(
+                        height: 150,
+                        child: Stack(
+                            children: [
+                              Positioned(
+                                  top: 25,
+                                  left: 25,
+                                  child: Material(
                                     child: Container(
-                                      height: 150,
-                                      width: 150,
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(snack_list[index].foodName,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),),
-                                            Divider(color: Colors.blue),
-                                            Text("Calories: "+snack_list[index].calories.toString()+" kcal",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                // color:Colors.grey,
-                                              ),),
-                                            SizedBox(height: 1,),
-                                            Text("Weight:" + snack_list[index].serving_size.toString() + "g",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                // color:Colors.grey,
-                                              ),),
-                                            SizedBox(height: 5,),
+                                        height: 110.0,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                blurRadius: 20.0)],
+                                        )
+                                    ),
 
-
-                                            Text("Date:" + snack_list[index].intakeDate,
-                                              style: TextStyle(
-                                                fontSize:12,
-                                                // color:Colors.grey,
-                                              ),
-
-                                            ),
-                                          ]
+                                  )),
+                              Positioned(
+                                  top: 10,
+                                  left: 30,
+                                  child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: Colors.grey.withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
                                       ),
-                                    ))
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                                      child: Container(
+                                        height: 110,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                                fit:BoxFit.cover,
+                                                image: NetworkImage(snack_list[index].img)
+                                            )
+                                        ),
+                                      )
+                                  )
+                              ),
+                              Positioned(
+                                  top:35,
+                                  left: 165,
+                                  child: Container(
+                                    height: 150,
+                                    width: 150,
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(snack_list[index].foodName,
+                                            style: TextStyle(
+                                                fontSize:16,
+                                                fontWeight: FontWeight.bold
+                                            ),),
+                                          Divider(color: Colors.blue),
+                                          Text("Calories: "+snack_list[index].calories.toString()+" kcal",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          SizedBox(height: 1,),
+                                          Text("Weight:" + snack_list[index].serving_size.toString() + "g",
+                                            style: TextStyle(
+                                              fontSize:14,
+                                              // color:Colors.grey,
+                                            ),),
+                                          SizedBox(height: 5,),
+
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Date: " + snack_list[index].intakeDate,
+                                                style: TextStyle(
+                                                  fontSize:12,
+                                                  // color:Colors.grey,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete();
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ]
+                                    ),
+                                  ))
+                            ]
+                        )
+                    ),
+                  ],
                 ),
               );
             },
@@ -571,5 +605,41 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
         });
       }
     });
+  }
+
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to delete these record/s?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
