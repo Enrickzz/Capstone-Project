@@ -30,15 +30,15 @@ import '../../notifications/notifications._patients.dart';
 import '../../my_diary/meals_list_view.dart';
 import '../../my_diary/water_view.dart';
 
-class my_sleep extends StatefulWidget {
-  const my_sleep({Key key, this.animationController}) : super(key: key);
+class my_stress extends StatefulWidget {
+  const my_stress({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _my_sleepState createState() => _my_sleepState();
+  _my_stressState createState() => _my_stressState();
 }
 
-class _my_sleepState extends State<my_sleep>
+class _my_stressState extends State<my_stress>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -92,62 +92,6 @@ class _my_sleepState extends State<my_sleep>
             parent: widget.animationController,
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      calorie_intake(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: 'Time Asleep',
-        subTxt: 'See more',
-        redirect: 6,
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      time_asleep(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: 'Sleep Quality',
-        subTxt: 'Learn More',
-        redirect: 7,
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      sleep_quality(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );

@@ -28,6 +28,7 @@ import '../../my_diary/exercise_screen.dart';
 import '../bottom_navigation_view/bottom_bar_view.dart';
 import '../index2/meals.dart';
 import '../index2/my_meals.dart';
+import 'my_stress.dart';
 
 class goals extends StatefulWidget {
   const goals({Key key, this.animationController}) : super(key: key);
@@ -208,7 +209,7 @@ class _goalsState extends State<goals>
           tabBody = my_weight(animationController: animationController),
           tabBody = my_water(animationController: animationController),
           tabBody = my_sleep(animationController: animationController),
-          tabBody = meals(animationController: animationController),
+          tabBody = my_stress(animationController: animationController),
         ],
       ),
     );
