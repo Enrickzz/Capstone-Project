@@ -179,7 +179,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                                 // color:Colors.grey,
                                               ),),
                                             SizedBox(height: 1,),
-                                            Text("Weight:" + breakfast_list[index].weight.toString() + "g",
+                                            Text("Weight:" + breakfast_list[index].serving_size.toString() + "g",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
@@ -283,7 +283,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                                 // color:Colors.grey,
                                               ),),
                                             SizedBox(height: 1,),
-                                            Text("Weight:" + lunch_list[index].weight.toString() + "g",
+                                            Text("Weight:" + lunch_list[index].serving_size.toString() + "g",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
@@ -386,7 +386,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                                 // color:Colors.grey,
                                               ),),
                                             SizedBox(height: 1,),
-                                            Text("Weight:" + dinner_list[index].weight.toString() + "g",
+                                            Text("Weight:" + dinner_list[index].serving_size.toString() + "g",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,
@@ -489,7 +489,7 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
                                                 // color:Colors.grey,
                                               ),),
                                             SizedBox(height: 1,),
-                                            Text("Weight:" + snack_list[index].weight.toString() + "g",
+                                            Text("Weight:" + snack_list[index].serving_size.toString() + "g",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 // color:Colors.grey,

@@ -67,6 +67,9 @@ class _addFoodIntakeState extends State<add_food_intake> {
   DateTime foodIntakeDate;
   bool isDateSelected= false;
 
+  bool unitSelected = false;
+  double print_calories = 0;
+
 
 
 
@@ -127,15 +130,20 @@ class _addFoodIntakeState extends State<add_food_intake> {
                           validator: (val) => val.isEmpty ? 'Enter Serving Size' : null,
                           onChanged: (val){
                             serving_size = val;
+                            print_calories = double.parse(widget.calories) / double.parse(widget.weight);
+                            print_calories *= double.parse(serving_size);
                             // setState(() => temperature = double.parse(val));
                           },
                         ),
                       ),
                       SizedBox(width: 20,),
-                      Text(
-                        '###' + ' cal',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                      Visibility(
+                        visible: unitSelected,
+                        child: Text(
+                          print_calories.toStringAsFixed(1) + ' cal',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                        ),
                       ),
                     ],
                   ),
@@ -162,6 +170,8 @@ class _addFoodIntakeState extends State<add_food_intake> {
                     value: valueFoodUnit,
                     onChanged: (newValue){
                       setState(() {
+                        unitSelected = true;
+
                         // valueFoodUnit = newValue;
 
                       });
