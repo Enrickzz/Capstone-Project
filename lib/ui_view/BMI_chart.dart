@@ -142,20 +142,20 @@ class _BMI_ChartState extends State<BMI_Chart> {
                             Padding(
                               padding: const EdgeInsets.only(left: 4),
                               child: Icon(
-                                Icons.timer,
+                                Icons.accessibility_new_rounded,
                                 color: FitnessAppTheme.nearlyBlack,
-                                size: 16,
+                                size: 20,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
                               child: const Text(
-                                'Goal: ',
+                                'My Body Mass Index',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: FitnessAppTheme.fontName,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 14,
+                                  fontSize: 18,
                                   letterSpacing: 0.0,
                                   color: FitnessAppTheme.nearlyBlack,
                                 ),
@@ -164,27 +164,7 @@ class _BMI_ChartState extends State<BMI_Chart> {
                             Expanded(
                               child: SizedBox(),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: HexColor("#808080"),
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.nearlyBlack
-                                          .withOpacity(0.4),
-                                      offset: Offset(8.0, 8.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Icon(
-                                  Icons.arrow_right,
-                                  color: FitnessAppTheme.nearlyWhite,
-                                  size: 44,
-                                ),
-                              ),
-                            )
+
                           ],
                         ),
                       )

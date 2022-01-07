@@ -344,9 +344,9 @@ class _set_upState extends State<set_up> {
                   onTap: ()async{
                     final datePick= await showDatePicker(
                         context: context,
-                        initialDate: new DateTime.now(),
+                        initialDate: DateTime(1990, 1),
                         firstDate: new DateTime(1900),
-                        lastDate: new DateTime(2100)
+                        lastDate: new DateTime.now()
                     );
                     if(datePick!=null && datePick!=birthDate){
                       setState(() {

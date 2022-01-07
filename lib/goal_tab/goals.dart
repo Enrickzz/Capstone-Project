@@ -176,22 +176,22 @@ class _goalsState extends State<goals>
                 height:24)
             ),
             Tab(
-              text: 'My Weight', icon: Image.asset('assets/fitness_app/meals.png',
+              text: 'My Weight', icon: Image.asset('assets/fitness_app/weight.png',
               width: 24,
               height:24,),
             ),
             Tab(
-              text: 'My Water', icon: Image.asset('assets/fitness_app/meals.png',
+              text: 'My Water', icon: Image.asset('assets/fitness_app/water.png',
               width: 24,
               height:24,),
             ),
             Tab(
-              text: 'My Sleep', icon: Image.asset('assets/fitness_app/meals.png',
+              text: 'My Sleep', icon: Image.asset('assets/fitness_app/sleep.png',
               width: 24,
               height:24,),
             ),
             Tab(
-              text: 'My Stress', icon: Image.asset('assets/fitness_app/meals.png',
+              text: 'My Stress', icon: Image.asset('assets/fitness_app/tab_1.png',
               width: 24,
               height:24,),
             ),

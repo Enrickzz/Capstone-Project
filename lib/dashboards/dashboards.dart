@@ -127,15 +127,7 @@ class _DashboardsState extends State<Dashboards>
         animationController: widget.animationController,
       ),
     );
-    listViews.add(
-      BMI_Chart(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
+
     listViews.add(
       calorie_intake(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(

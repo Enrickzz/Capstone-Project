@@ -94,6 +94,15 @@ class _my_weightState extends State<my_weight>
     );
 
     listViews.add(
+      BMI_Chart(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+    listViews.add(
       TitleView(
         titleTxt: 'Weight Progress',
         subTxt: 'Log Weight',
@@ -105,6 +114,7 @@ class _my_weightState extends State<my_weight>
         animationController: widget.animationController,
       ),
     );
+
 
     listViews.add(
       weight_progress(
