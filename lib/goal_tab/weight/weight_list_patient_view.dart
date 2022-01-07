@@ -34,7 +34,9 @@ class _weightPatienttate extends State<weight_list_patient_view> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isDateSelected= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Body_Temperature> bttemp = [];
+  List<Weight> weights = [];
+  Physical_Parameters pp = new Physical_Parameters();
+  List<double> bmi = [];
   List<File> _image = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -50,16 +52,16 @@ class _weightPatienttate extends State<weight_list_patient_view> {
   @override
   void initState() {
     super.initState();
-    // bttemp.clear();
-    // _selected.clear();
-    // getBodyTemp();
-    // Future.delayed(const Duration(milliseconds: 1500), (){
-    //   setState(() {
-    //     _selected = List<bool>.generate(bttemp.length, (int index) => false);
-    //
-    //     print("setstate");
-    //   });
-    // });
+    weights.clear();
+    getWeight();
+    // getBMIList();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        _selected = List<bool>.generate(weights.length, (int index) => false);
+
+        print("setstate");
+      });
+    });
   }
 
   @override
@@ -116,13 +118,12 @@ class _weightPatienttate extends State<weight_list_patient_view> {
                     ),
                     ),
                   ).then((value) => setState((){
-                    print("setstate symptoms");
                     if(value != null){
-                      bttemp = value;
-                      _selected = List<bool>.generate(bttemp.length, (int index) => false);
+                      weights = value;
+                      _selected = List<bool>.generate(weights.length, (int index) => false);
 
                     }
-                    print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
+                    print("SYMP LENGTH AFTER SETSTATE  =="  + weights.length.toString() );
                   }));;
                 },
                 child: Icon(
@@ -158,16 +159,41 @@ class _weightPatienttate extends State<weight_list_patient_view> {
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
   }
-  // void getBodyTemp() {
+  void getWeight() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
+    readWeight.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        weights.add(Weight.fromJson(jsonString));
+      });
+    });
+  }
+  // void getBMIList(){
   //   final User user = auth.currentUser;
   //   final uid = user.uid;
-  //   final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-  //   readBT.once().then((DataSnapshot snapshot){
+  //   final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
+  //   final readheight = databaseReference.child('users/' + uid + '/physical_parameters/');
+  //   readheight.once().then((DataSnapshot snapshot){
   //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+  //     print(temp);
   //     temp.forEach((jsonString) {
-  //       bttemp.add(Body_Temperature.fromJson(jsonString));
+  //       pp = Physical_Parameters.fromJson(jsonString);
+  //     });
+  //     readWeight.once().then((DataSnapshot snapshot){
+  //       List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
+  //       temp1.forEach((jsonString) {
+  //         weights.add(Weight.fromJson(jsonString));
+  //       });
+  //       for(int i = 0; i < weights.length; i++){
+  //         double temp = 0;
+  //         temp = weights[i].weight / ((pp.height * 0.01) * (pp.height * 0.01));
+  //         bmi.add(temp);
+  //       }
   //     });
   //   });
+  //
   // }
 
   int getAge (DateTime birthday) {
@@ -247,9 +273,9 @@ class _weightPatienttate extends State<weight_list_patient_view> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              bttemp.sort((a, b) => b.bt_date.compareTo(a.bt_date));
+              weights.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
             } else {
-              bttemp.sort((a, b) => a.bt_date.compareTo(b.bt_date));
+              weights.sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
             }
             _isSortAsc = !_isSortAsc;
           });
@@ -271,13 +297,13 @@ class _weightPatienttate extends State<weight_list_patient_view> {
   }
 
   List<DataRow> _createRows() {
-    return bttemp
+    return weights
         .mapIndexed((index, bp) => DataRow(
         cells: [
-          DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(bp.temperature.toStringAsFixed(1) +'kg', style: TextStyle(),)), //weight
-          DataCell(Text(bp.temperature.toStringAsFixed(1), style: TextStyle(color: getMyColor(bp.temperature)),)), //bmi
+          DataCell(Text(getDateFormatted(bp.dateCreated.toString()))),
+          DataCell(Text(getTimeFormatted(bp.timeCreated.toString()))),
+          DataCell(Text(bp.weight.toStringAsFixed(1) +'kg', style: TextStyle(),)), //weight
+          DataCell(Text(bp.bmi.toStringAsFixed(1))), //bmi
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
