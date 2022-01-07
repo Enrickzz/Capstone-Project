@@ -50,15 +50,9 @@ class Users {
 class Additional_Info {
   DateTime birthday = new DateTime.now();
   String gender;
-  double height;
-  double weight;
-  double bmi;
   List<String> foodAller;
   List<String> drugAller;
   List<String> otherAller;
-  double weight_goal;
-  String weight_unit;
-  DateTime goalDate;
   String lifestyle;
   int average_stick;
   String alcohol_freq;
@@ -69,15 +63,9 @@ class Additional_Info {
   Additional_Info({
     this.birthday,
     this.gender,
-    this.height,
-    this.weight,
-    this.bmi,
     this.foodAller,
     this.drugAller,
     this.otherAller,
-    this.weight_goal,
-    this.weight_unit,
-    this.goalDate,
     this.lifestyle,
     this.average_stick,
     this.alcohol_freq,
@@ -88,15 +76,9 @@ class Additional_Info {
   Additional_Info.fromJson(Map<String, dynamic> json) {
     birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
     gender = json['gender'];
-    height = double.parse(json['height']);
-    weight = double.parse(json['weight']);
-    bmi = double.parse(json['bmi']);
     foodAller = json['foodAller'].cast<String>();
     drugAller = json['drugAller'].cast<String>();
     otherAller = json['otherAller'].cast<String>();
-    weight_goal = double.parse(json['weight_goal']);
-    weight_unit = json['weight_unit'];
-    goalDate = DateFormat("MM/dd/yyyy").parse(json['goalDate']);
     lifestyle = json['lifestyle'];
     average_stick = int.parse(json['average_stick']);
     alcohol_freq = json['alcohol_freq'];
@@ -108,9 +90,6 @@ class Additional_Info {
   Additional_Info.fromJson2(Map<String, dynamic> json) {
     birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
     gender = json['gender'];
-    height = double.parse(json['height']);
-    weight = double.parse(json['weight']);
-    weight_unit = json['weight_unit'];
   }
 
   Additional_Info.fromJson3(Map<String, dynamic> json) {
@@ -126,8 +105,6 @@ class Additional_Info {
   Additional_Info.fromJson5(Map<String, dynamic> json) {
     birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
     gender = json['gender'];
-    height = double.parse(json['height']);
-    weight = double.parse(json['weight']);
     foodAller = json['foodAller'].cast<String>();
     drugAller = json['drugAller'].cast<String>();
     otherAller = json['otherAller'].cast<String>();
@@ -143,15 +120,9 @@ class Additional_Info {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['birthday'] = this.birthday;
     data['gender'] = this.gender;
-    data['height'] = this.height;
-    data['weight'] = this.weight;
-    data['bmi'] = this.bmi;
     data['foodAller'] = this.foodAller;
     data['drugAller'] = this.drugAller;
     data['otherAller'] = this.otherAller;
-    data['weight_goal'] = this.weight_goal;
-    data['weight_unit'] = this.weight_unit;
-    data['goalDate'] = this.goalDate;
     data['lifestyle'] = this.lifestyle;
     data['average_stick'] = this.average_stick;
     data['alcohol_freq'] = this.alcohol_freq;
@@ -160,6 +131,31 @@ class Additional_Info {
     data['family_disease'] = this.family_disease;
     return data;
   }
+
+}
+class Physical_Parameters {
+  double height;
+  double weight;
+  double bmi;
+  Physical_Parameters({
+    this.height,
+    this.weight,
+    this.bmi
+  });
+  Physical_Parameters.fromJson(Map<String, dynamic> json) {
+    height = double.parse(json['height']);
+    weight = double.parse(json['weight']);
+    bmi = double.parse(json['bmi']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['height'] = this.height;
+    data['weight'] = this.weight;
+    data['bmi'] = this.bmi;
+    return data;
+  }
+
 
 }
 
@@ -746,6 +742,87 @@ class Vitals {
     data['frequency'] = this.frequency;
     data['important_notes'] = this.important_notes;
     data['prescribedBy'] = this.prescribedBy;
+    data['dateCreated'] = this.dateCreated;
+    return data;
+  }
+}
+class Weight_Goal {
+  String objective;
+  String weight_goal;
+  String weight_unit;
+  DateTime dateCreated;
+
+  Weight_Goal({
+   this.objective,
+    this.weight_goal,
+    this.weight_unit,
+    this.dateCreated
+  });
+  Weight_Goal.fromJson(Map<String, dynamic> json) {
+    objective = json["objective"];
+    weight_goal = json["weight_goal"];
+    weight_unit = json['weight_unit'];
+    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['objective'] = this.objective;
+    data['weight_goal'] = this.weight_goal;
+    data['weight_unit'] = this.weight_unit;
+    data['dateCreated'] = this.dateCreated;
+    return data;
+  }
+
+}
+
+class Water_Goal {
+  String water_goal;
+  String water_unit;
+  DateTime dateCreated;
+
+  Water_Goal({
+    this.water_goal,
+    this.water_unit,
+    this.dateCreated
+  });
+  Water_Goal.fromJson(Map<String, dynamic> json) {
+    water_goal = json["water_goal"];
+    water_unit = json['water_unit'];
+    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['water_goal'] = this.water_goal;
+    data['water_unit'] = this.water_unit;
+    data['dateCreated'] = this.dateCreated;
+    return data;
+  }
+}
+class Sleep_Goal {
+  DateTime bed_time;
+  DateTime wakeup_time;
+  int duration;
+  DateTime dateCreated;
+
+  Sleep_Goal({
+    this.bed_time,
+    this.wakeup_time,
+    this.duration,
+    this.dateCreated
+  });
+
+  Sleep_Goal.fromJson(Map<String, dynamic> json) {
+    bed_time = json["bed_time"];
+    wakeup_time = json['wakeup_time'];
+    duration = json['duration'];
+    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['bed_time'] = this.bed_time;
+    data['wakeup_time'] = this.wakeup_time;
+    data['duration'] = this.duration;
     data['dateCreated'] = this.dateCreated;
     return data;
   }

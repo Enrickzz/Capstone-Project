@@ -26,7 +26,7 @@ class _set_upState extends State<set_up> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String error = '';
   int currentStep = 0;
-
+  DateTime now = new DateTime.now();
   /// additional information
   bool isDateSelected= false;
   DateTime birthDate; // instance of DateTime
@@ -51,12 +51,14 @@ class _set_upState extends State<set_up> {
   bool isSwitchedSmoker = false;
   bool isSwitchedDrinker = false;
 
-  String goal = '';
+  String weight_goal = '';
+  String water_goal = '';
   DateTime prescriptionDate;
   var goalDate = TextEditingController();
   String goaldate = "";
   List <bool> isSelected = [true, false];
-  String unitStatus = "lbs";
+  List <bool> isSelectedWater = [true, false];
+  String unitStatus = "kg";
   String valueLifestyle;
   int average_sticks = 0;
   List<String> disease_list = ["NA", "NA"];
@@ -299,10 +301,9 @@ class _set_upState extends State<set_up> {
 
   //weight goals
   bool goalSelected = false;
-  String valueChooseWeightGoal;
+  String valueChooseWeightGoal; // lose gain maintain
   List<String> listWeightGoal = <String>[
     'Lose', 'Gain', 'Maintain',
-
   ];
   String weight_unit = 'Kilograms';
 
@@ -633,6 +634,7 @@ class _set_upState extends State<set_up> {
                             ),
                             validator: (val) => val.isEmpty ? 'Enter Weight Goal' : null,
                             onChanged: (val){
+                               weight_goal = val;
                               // setState(() => temperature = double.parse(val));
                             },
                           ),
@@ -713,13 +715,14 @@ class _set_upState extends State<set_up> {
                           ),
                           validator: (val) => val.isEmpty ? 'Enter Water Intake Goal' : null,
                           onChanged: (val){
+                            water_goal = val;
                             // setState(() => temperature = double.parse(val));
                           },
                         ),
                       ),
                       SizedBox(width: 8,),
                       ToggleButtons(
-                        isSelected: isSelected,
+                        isSelected: isSelectedWater,
                         highlightColor: Colors.blue,
                         borderRadius: BorderRadius.circular(10),
                         children: <Widget> [
@@ -734,12 +737,12 @@ class _set_upState extends State<set_up> {
                         ],
                         onPressed:(int newIndex){
                           setState(() {
-                            for (int index = 0; index < isSelected.length; index++){
+                            for (int index = 0; index < isSelectedWater.length; index++){
                               if (index == newIndex) {
-                                isSelected[index] = true;
+                                isSelectedWater[index] = true;
                                 print("Milliliter (ml)");
                               } else {
-                                isSelected[index] = false;
+                                isSelectedWater[index] = false;
                                 print("Ounce (oz)");
                               }
                             }
@@ -1064,8 +1067,13 @@ class _set_upState extends State<set_up> {
               Future.delayed(const Duration(milliseconds: 1000), () {
                 final User user = auth.currentUser;
                 final uid = user.uid;
-                final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info');
-                final loginRef = databaseReference.child('users/' + uid + '/personal_info');
+                final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+                final loginRef = databaseReference.child('users/' + uid + '/personal_info/');
+                final physicalRef = databaseReference.child('users/' + uid + '/physical_parameters/');
+                final weightRef = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+                final waterRef = databaseReference.child('users/' + uid + '/goal/water_goal/');
+                final sleepRef = databaseReference.child('users/' + uid + '/goal/sleep_goal/');
+                final stressRef = databaseReference.child('users/' + uid + '/goal/stress_goal/');
                 bool diseasecheck = false;
                 bool otherdiseasecheck = false;
                 bool familydiseasecheck = false;
@@ -1144,15 +1152,9 @@ class _set_upState extends State<set_up> {
                 usersRef.set({
                   "birthday": birthDateInString.toString(),
                   "gender": genderIn.toString(),
-                  "height":height.toString(),
-                  "weight": weight.toString(),
-                  "BMI": "0",
                   "foodAller": foodList,
                   "drugAller": drugList,
                   "otherAller": otherList,
-                  "weight_goal": goal,
-                  "weight_unit": unitStatus,
-                  "goalDate": goaldate,
                   "lifestyle": valueLifestyle,
                   "average_stick": average_sticks,
                   "alcohol_freq": valueAlcohol,
@@ -1160,7 +1162,38 @@ class _set_upState extends State<set_up> {
                   "other_disease": additionalConditionChecboxStatus,
                   "family_disease": familyConditionCheckboxStatus
                 });
+                double bmi = double.parse(weight) / (double.parse(height) * double.parse(height));
+                physicalRef.set({
+                  "BMI": bmi.toStringAsFixed(1),
+                  "height":height.toString(),
+                  "weight": weight.toString(),
+                });
                 loginRef.update({"isFirstTime": false});
+                if(weight_unit == "Pounds"){
+                  weight_goal = (double.parse(weight_goal) * 0.45359237).toStringAsFixed(1);
+                  weight_unit = "Kilograms";
+                }
+                weightRef.set({
+                  "objective": valueChooseWeightGoal,
+                  "weight_goal": weight_goal,
+                  "weight_unit": weight_unit,
+                  "dateCreated": DateFormat("MM/dd/yyyy").parse(now.toString()),
+                });
+                if(water_unit == "Ounce"){
+                  water_goal = (double.parse(water_goal) * 29.5735).toStringAsFixed(1);
+                  water_unit = "Milliliter";
+                }
+                waterRef.set({
+                  "water_goal": water_goal,
+                  "water_unit": water_unit,
+                  "dateCreated": DateFormat("MM/dd/yyyy").parse(now.toString()),
+                });
+                sleepRef.set({
+                  "bed_time" : DateTime(now.month,now.day, now.year,0,0),
+                  "wakeup_time": DateTime(now.month,now.day, now.year,8,0),
+                  "duration": 480,
+                  "dateCreated": DateFormat("MM/dd/yyyy").parse(now.toString()),
+                });
                 print("Completed " + uid);
               });
 

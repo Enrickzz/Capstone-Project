@@ -80,6 +80,7 @@ class _index3State extends State<view_patient_profile>
   double weight = 0;
   double height = 0;
   String bday ="";
+  Physical_Parameters param;
   Additional_Info info;
   Additional_Info disease;
   Additional_Info allergies;
@@ -108,7 +109,7 @@ class _index3State extends State<view_patient_profile>
     tabBody = dashboards_as_doctor(animationController: animationController);
 
     super.initState();
-    info = new Additional_Info(bmi: 0, birthday: format.parse("01/01/0000"), gender: "Male", height: 0, weight: 0);
+    info = new Additional_Info(birthday: format.parse("01/01/0000"), gender: "Male");
     String patientuid = widget.userUID;
     getProfile(patientuid);
     getInfo(patientuid);
@@ -334,7 +335,7 @@ class _index3State extends State<view_patient_profile>
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text(info.weight.toString() + " kg",
+                                Text(param.weight.toString() + " kg",
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
@@ -348,7 +349,7 @@ class _index3State extends State<view_patient_profile>
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text(info.height.toString() + " cm",
+                                Text(param.height.toString() + " cm",
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
@@ -902,6 +903,11 @@ class _index3State extends State<view_patient_profile>
   }
   void getInfo(String uid) {
     final readInfo = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+    final readParam = databaseReference.child('users/' + uid + '/physical_parameters/');
+    readParam.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      param = Physical_Parameters.fromJson(temp);
+    });
     readInfo.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
@@ -996,9 +1002,6 @@ class _index3State extends State<view_patient_profile>
           }
         }
       }
-
-
-
     });
   }
 

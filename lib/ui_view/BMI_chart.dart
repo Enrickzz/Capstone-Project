@@ -23,7 +23,7 @@ class BMI_Chart extends StatefulWidget {
 }
 
 class _BMI_ChartState extends State<BMI_Chart> {
-  Additional_Info AIobj;
+  Physical_Parameters AIobj;
   String bmi = "0";
   String bmi_status = "error";
   @override
@@ -204,11 +204,11 @@ class _BMI_ChartState extends State<BMI_Chart> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+    final readBP = databaseReference.child('users/' + uid + '/physical_parameters/');
     readBP.once().then((DataSnapshot snapshot){
       var temp = jsonDecode(jsonEncode(snapshot.value));
       print(snapshot.value.toString());
-      Additional_Info a = Additional_Info.fromJson2(temp);
+      Physical_Parameters a = Physical_Parameters.fromJson(temp);
       AIobj = a;
       print(a.toString());
       print("STATUS " + bmi_status);

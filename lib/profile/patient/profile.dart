@@ -61,6 +61,7 @@ class _index3State extends State<index3>
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateTime birthdate;
   final test = DateTime(1999, 5, 18); // for test
+  Physical_Parameters param;
   Additional_Info info;
   Additional_Info disease;
   Additional_Info allergies;
@@ -79,7 +80,7 @@ class _index3State extends State<index3>
   @override
   void initState() {
     super.initState();
-    info = new Additional_Info(bmi: 0, birthday: format.parse("01/01/0000"), gender: "Male", height: 0, weight: 0);
+    info = new Additional_Info(birthday: format.parse("01/01/0000"), gender: "Male");
     getProfile();
     getInfo();
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -373,7 +374,7 @@ class _index3State extends State<index3>
                               ),
                             ),
                             SizedBox(height: 8),
-                            Text(info.weight.toString() + " kg",
+                            Text(param.weight.toString() + " kg",
                               style: TextStyle(
                                   fontSize:16,
                                   fontWeight: FontWeight.bold
@@ -387,7 +388,7 @@ class _index3State extends State<index3>
                               ),
                             ),
                             SizedBox(height: 8),
-                            Text(info.height.toString() + " cm",
+                            Text(param.height.toString() + " cm",
                               style: TextStyle(
                                   fontSize:16,
                                   fontWeight: FontWeight.bold
@@ -978,6 +979,11 @@ class _index3State extends State<index3>
     final User user = auth.currentUser;
     final uid = user.uid;
     final readInfo = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+    final readParam = databaseReference.child('users/' + uid + '/physical_parameters/');
+    readParam.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      param = Physical_Parameters.fromJson(temp);
+    });
     readInfo.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
