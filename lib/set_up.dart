@@ -1064,7 +1064,7 @@ class _set_upState extends State<set_up> {
             getOtherDisease();
 
             try{
-              double bmi = double.parse(weight) / (double.parse(height) * double.parse(height));
+              double bmi = double.parse(weight) / ((double.parse(height)* 0.01) * (double.parse(height)* 0.01));
               print("BMIII" + bmi.toString());
               if(weight_unit == "Pounds"){
                 weight_goal = (double.parse(weight_goal) * 0.45359237).toStringAsFixed(1);
