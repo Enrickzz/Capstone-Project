@@ -69,7 +69,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                       padding: const EdgeInsets.only(
                                           left: 4, bottom: 3),
                                       child: Text(
-                                        '2100',
+                                        '1893',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -100,7 +100,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                   padding: const EdgeInsets.only(
                                       left: 4, top: 2, bottom: 14),
                                   child: Text(
-                                    'of daily goal 3.5L',
+                                    'of your daily goal 1893 ml',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -180,7 +180,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                         ),
                                         Flexible(
                                           child: Text(
-                                            'Your bottle is empty, refill it!.',
+                                            'You have reached your daily water intake goal!',
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                               fontFamily:
@@ -201,65 +201,65 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        width: 34,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: FitnessAppTheme.nearlyWhite,
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.nearlyDarkBlue
-                                          .withOpacity(0.4),
-                                      offset: const Offset(4.0, 4.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.add,
-                                  color: FitnessAppTheme.nearlyDarkBlue,
-                                  size: 24,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 28,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: FitnessAppTheme.nearlyWhite,
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.nearlyDarkBlue
-                                          .withOpacity(0.4),
-                                      offset: const Offset(4.0, 4.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.remove,
-                                  color: FitnessAppTheme.nearlyDarkBlue,
-                                  size: 24,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // SizedBox(
+                      //   width: 34,
+                      //   child: Column(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: <Widget>[
+                      //       Container(
+                      //         decoration: BoxDecoration(
+                      //           color: FitnessAppTheme.nearlyWhite,
+                      //           shape: BoxShape.circle,
+                      //           boxShadow: <BoxShadow>[
+                      //             BoxShadow(
+                      //                 color: FitnessAppTheme.nearlyDarkBlue
+                      //                     .withOpacity(0.4),
+                      //                 offset: const Offset(4.0, 4.0),
+                      //                 blurRadius: 8.0),
+                      //           ],
+                      //         ),
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(6.0),
+                      //           child: Icon(
+                      //             Icons.add,
+                      //             color: FitnessAppTheme.nearlyDarkBlue,
+                      //             size: 24,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       const SizedBox(
+                      //         height: 28,
+                      //       ),
+                      //       Container(
+                      //         decoration: BoxDecoration(
+                      //           color: FitnessAppTheme.nearlyWhite,
+                      //           shape: BoxShape.circle,
+                      //           boxShadow: <BoxShadow>[
+                      //             BoxShadow(
+                      //                 color: FitnessAppTheme.nearlyDarkBlue
+                      //                     .withOpacity(0.4),
+                      //                 offset: const Offset(4.0, 4.0),
+                      //                 blurRadius: 8.0),
+                      //           ],
+                      //         ),
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(6.0),
+                      //           child: Icon(
+                      //             Icons.remove,
+                      //             color: FitnessAppTheme.nearlyDarkBlue,
+                      //             size: 24,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding:
                             const EdgeInsets.only(left: 16, right: 8, top: 16),
                         child: Container(
-                          width: 60,
+                          width: 80,
                           height: 160,
                           decoration: BoxDecoration(
                             color: HexColor('#E8EDFE'),
@@ -276,7 +276,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                             ],
                           ),
                           child: WaveView(
-                            percentageValue: 60.0,
+                            percentageValue: 100.0,
                           ),
                         ),
                       )

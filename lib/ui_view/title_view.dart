@@ -1,5 +1,7 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/goal_tab/sleep/sleep_list_patient_view.dart';
+import 'package:my_app/goal_tab/water/water_intake_patient_view.dart';
 import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
 import 'package:my_app/index2/food_list.dart';
 import 'package:my_app/index2/index2.dart';
@@ -98,6 +100,20 @@ class TitleView extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => weight_list_patient_view()),
+                                  );
+                                }
+                                else if (redirect == 5) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => water_intake()),
+                                  );
+                                }
+                                else if (redirect == 6) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => sleep_patient_view()),
                                   );
                                 }
 

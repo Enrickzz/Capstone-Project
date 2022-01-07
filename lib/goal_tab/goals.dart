@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/goal_tab/sleep/my_sleep.dart';
+import 'package:my_app/goal_tab/water/my_water.dart';
 import 'package:my_app/goal_tab/weight/my_weight.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/my_diary/my_exercises.dart';
@@ -204,8 +206,8 @@ class _goalsState extends State<goals>
           tabBody = meals(animationController: animationController),
           tabBody = my_exercises(animationController: animationController),
           tabBody = my_weight(animationController: animationController),
-          tabBody = meals(animationController: animationController),
-          tabBody = meals(animationController: animationController),
+          tabBody = my_water(animationController: animationController),
+          tabBody = my_sleep(animationController: animationController),
           tabBody = meals(animationController: animationController),
         ],
       ),
