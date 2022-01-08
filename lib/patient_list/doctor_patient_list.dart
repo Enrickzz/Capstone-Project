@@ -45,7 +45,7 @@ class _PatientListState extends State<PatientList>  {
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  Users doctor = new Users();
+  Users doctor = new Users(email: "", firstname: "", lastname: "");
 
   List<String> uidlist = [];
   List<Users> userlist=[];
@@ -57,7 +57,7 @@ class _PatientListState extends State<PatientList>  {
   //for drawer
   var imagesVisible = true;
   var cardContent = [];
-
+  bool isLoading = true;
 
   @override
   void initState(){
@@ -92,8 +92,10 @@ class _PatientListState extends State<PatientList>  {
     }else{
       getPatients();
     }
-    Future.delayed(const Duration(milliseconds: 1000), (){
-      setState(() {});
+    Future.delayed(const Duration(milliseconds: 2000), (){
+      setState(() {
+
+      });
 
     });
   }
@@ -164,7 +166,10 @@ class _PatientListState extends State<PatientList>  {
           //   ),
           // ],
         ),
-      body: ListView.builder(
+      body: isLoading
+          ? Center(
+        child: CircularProgressIndicator(),
+      ): new ListView.builder(
           itemCount: names.length,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) =>Container(
@@ -291,11 +296,11 @@ class _PatientListState extends State<PatientList>  {
     );
   }
 
-  void getPatients() {
+  void getPatients() async {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
-    readDoctor.once().then((DataSnapshot snapshot){
+    await readDoctor.once().then((DataSnapshot snapshot){
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
       doctor = Users.fromJson2(temp1);
       for(int i = 0; i < doctor.connections.length; i++){
@@ -337,6 +342,8 @@ class _PatientListState extends State<PatientList>  {
       }
     });
     setState(() {
+      isLoading = false;
+      print("FIXED");
     });
   }
 
