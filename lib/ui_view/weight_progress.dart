@@ -25,6 +25,7 @@ class _weight_progressState extends State<weight_progress> {
   Weight_Goal weight_goal = new Weight_Goal();
   double weight_to_meet_goal = 0;
   double weight_difference = 0;
+  String goalCheck ="";
 
   @override
   void initState() {
@@ -171,23 +172,48 @@ class _weight_progressState extends State<weight_progress> {
                               )
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 4, bottom: 16, top: 0),
-                            child: Text(
-                              weight_goal.objective + ' since ' +
-                                  "${weight_goal.dateCreated.month.toString().padLeft(2,"0")}/"+
-                                  "${weight_goal.dateCreated.day.toString().padLeft(2,"0")}/"+
-                                  "${weight_goal.dateCreated.year}"
-                              ,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: FitnessAppTheme.fontName,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                  color: FitnessAppTheme.darkText),
+                          if (goalCheck == "Lose") ...[
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 4, bottom: 16, top: 0),
+                              child: Text(
+                                'lost since ' +
+                                    "${weight_goal.dateCreated.month.toString().padLeft(2,"0")}/"+
+                                    "${weight_goal.dateCreated.day.toString().padLeft(2,"0")}/"+
+                                    "${weight_goal.dateCreated.year}"
+                                ,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                    color: FitnessAppTheme.darkText),
+                              ),
                             ),
-                          ),
+
+                          ]else if(goalCheck == "Gain")...[
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 4, bottom: 16, top: 0),
+                              child: Text(
+                                'gained since ' +
+                                    "${weight_goal.dateCreated.month.toString().padLeft(2,"0")}/"+
+                                    "${weight_goal.dateCreated.day.toString().padLeft(2,"0")}/"+
+                                    "${weight_goal.dateCreated.year}"
+                                ,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                    color: FitnessAppTheme.darkText),
+                              ),
+                            ),
+
+                          ]else ...[
+
+                          ],
+
                         ],
                       ),
                     ),
@@ -333,38 +359,44 @@ class _weight_progressState extends State<weight_progress> {
     readWeightGoal.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       weight_goal = Weight_Goal.fromJson(temp);
+
+      goalCheck = weight_goal.objective;
       if(weight_goal.objective == "Gain"){
         /// 0 siya if si C < SW
         weight_to_meet_goal = weight_goal.target_weight - weight_goal.current_weight;
-        weight_difference = weight_goal.weight - weight_goal.current_weight;
+        weight_difference =  weight_goal.current_weight - weight_goal.weight ;
         print(weight_difference);
-        if(weight_to_meet_goal < 0){
+        if(weight_to_meet_goal <= 0){
           weight_to_meet_goal = 0;
         }
-        if(weight_goal.current_weight < weight_goal.weight){
+        if(weight_goal.current_weight <= weight_goal.weight){
           weight_difference = 0;
         }
       }
       if(weight_goal.objective == "Lose"){
         /// 0 siya if si C > SW
-        weight_to_meet_goal = weight_goal.target_weight - weight_goal.current_weight;
+        weight_to_meet_goal = weight_goal.current_weight - weight_goal.target_weight;
         weight_difference = weight_goal.weight - weight_goal.current_weight;
-        if(weight_to_meet_goal < 0){
+        if(weight_to_meet_goal <= 0){
           weight_to_meet_goal = 0;
         }
-        if(weight_goal.current_weight > weight_goal.weight){
+        if(weight_goal.current_weight >= weight_goal.weight){
           weight_difference = 0;
         }
       }
       if(weight_goal.objective == "Maintain"){
-        weight_to_meet_goal = weight_goal.target_weight - weight_goal.current_weight;
-        weight_difference = weight_goal.weight - weight_goal.current_weight;
-        if(weight_to_meet_goal < 0){
+        weight_difference = 0;
+        if(weight_goal.target_weight > weight_goal.current_weight){
+          weight_to_meet_goal = weight_goal.target_weight - weight_goal.current_weight;
+
+        }
+        else if(weight_goal.target_weight < weight_goal.current_weight){
+          weight_to_meet_goal =  weight_goal.current_weight - weight_goal.target_weight;
+        }
+        else{
           weight_to_meet_goal = 0;
         }
-        if(weight_difference < 0){
-          weight_difference *= -1;
-        }
+
       }
 
     });
