@@ -21,15 +21,16 @@ class weight_progress extends StatefulWidget {
 class _weight_progressState extends State<weight_progress> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  List<Weight> weight_list = [];
-  Weight weight = new Weight();
+
+  Weight_Goal weight_goal = new Weight_Goal();
+  double weight_to_meet_goal = 0;
+  double weight_difference = 0;
 
   @override
   void initState() {
     super.initState();
-    getWeight();
-    // getLatestWeight();
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    getLatestWeight();
+    Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
         print("setstate");
       });
@@ -85,7 +86,7 @@ class _weight_progressState extends State<weight_progress> {
                                     padding: const EdgeInsets.only(
                                         left: 4, bottom: 3),
                                     child: Text(
-                                      '100.8',
+                                      weight_difference.toStringAsFixed(1),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -124,7 +125,7 @@ class _weight_progressState extends State<weight_progress> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          '5',
+                                          weight_to_meet_goal.toStringAsFixed(1),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: FitnessAppTheme.fontName,
@@ -174,7 +175,11 @@ class _weight_progressState extends State<weight_progress> {
                             padding: const EdgeInsets.only(
                                 left: 4, bottom: 16, top: 0),
                             child: Text(
-                              'lost kg since 1/7',
+                              weight_goal.objective + ' kg since ' +
+                                  "${weight_goal.dateCreated.month.toString().padLeft(2,"0")}/"+
+                                  "${weight_goal.dateCreated.day.toString().padLeft(2,"0")}/"+
+                                  "${weight_goal.dateCreated.year}"
+                              ,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: FitnessAppTheme.fontName,
@@ -208,7 +213,7 @@ class _weight_progressState extends State<weight_progress> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '85 kg',
+                                  weight_goal.current_weight.toString() + ' kg',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,
@@ -245,7 +250,7 @@ class _weight_progressState extends State<weight_progress> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '90 kg',
+                                      weight_goal.target_weight.toString() + ' kg',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -321,16 +326,49 @@ class _weight_progressState extends State<weight_progress> {
       },
     );
   }
-  void getWeight () {
+  void getLatestWeight () {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
-    readWeight.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        weight_list.add(Weight.fromJson(jsonString));
-      });
+    final readWeightGoal = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+    readWeightGoal.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      weight_goal = Weight_Goal.fromJson(temp);
+      if(weight_goal.objective == "Gain"){
+        /// 0 siya if si C < SW
+        weight_to_meet_goal = weight_goal.target_weight - weight_goal.current_weight;
+        weight_difference = weight_goal.weight - weight_goal.current_weight;
+        print(weight_difference);
+        if(weight_to_meet_goal < 0){
+          weight_to_meet_goal = 0;
+        }
+        if(weight_goal.current_weight < weight_goal.weight){
+          weight_difference = 0;
+        }
+      }
+      if(weight_goal.objective == "Lose"){
+        /// 0 siya if si C > SW
+        weight_to_meet_goal = weight_goal.target_weight - weight_goal.current_weight;
+        weight_difference = weight_goal.weight - weight_goal.current_weight;
+        if(weight_to_meet_goal < 0){
+          weight_to_meet_goal = 0;
+        }
+        if(weight_goal.current_weight > weight_goal.weight){
+          weight_difference = 0;
+        }
+      }
+      if(weight_goal.objective == "Maintain"){
+        weight_to_meet_goal = weight_goal.target_weight - weight_goal.current_weight;
+        weight_difference = weight_goal.weight - weight_goal.current_weight;
+        if(weight_to_meet_goal < 0){
+          weight_to_meet_goal = 0;
+        }
+        if(weight_difference < 0){
+          weight_difference *= -1;
+        }
+      }
+
     });
   }
 
 }
+

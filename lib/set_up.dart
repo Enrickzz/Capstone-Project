@@ -1182,6 +1182,7 @@ class _set_upState extends State<set_up> {
                   "objective": valueChooseWeightGoal,
                   "target_weight": weight_goal.toString(),
                   "current_weight": weight.toString(),
+                  "weight": weight.toString(),
                   "weight_unit": weight_unit,
                   "dateCreated": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
                 });

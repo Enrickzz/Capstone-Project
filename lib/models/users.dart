@@ -750,6 +750,7 @@ class Weight_Goal {
   String objective;
   double target_weight;
   double current_weight;
+  double weight;
   String weight_unit;
   DateTime dateCreated;
 
@@ -757,6 +758,7 @@ class Weight_Goal {
    this.objective,
     this.target_weight,
     this.current_weight,
+    this.weight,
     this.weight_unit,
     this.dateCreated
   });
@@ -764,6 +766,7 @@ class Weight_Goal {
     objective = json["objective"];
     target_weight = double.parse(json["target_weight"]);
     current_weight = double.parse(json["current_weight"]);
+    weight = double.parse(json["weight"]);
     weight_unit = json['weight_unit'];
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
   }
@@ -771,6 +774,7 @@ class Weight_Goal {
     objective = json["objective"];
     target_weight = double.parse(json["target_weight"]);
     current_weight = double.parse(json["current_weight"]);
+    weight = double.parse(json["weight"]);
     weight_unit = json['weight_unit'];
   }
   Map<String, dynamic> toJson() {
