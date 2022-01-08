@@ -26,6 +26,7 @@ class _weight_progressState extends State<weight_progress> {
   double weight_to_meet_goal = 0;
   double weight_difference = 0;
   String goalCheck ="";
+  bool maintain_current_weight_is_lower = true;
 
   @override
   void initState() {
@@ -79,41 +80,45 @@ class _weight_progressState extends State<weight_progress> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 4, bottom: 3),
-                                    child: Text(
-                                      weight_difference.toStringAsFixed(1),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: FitnessAppTheme.fontName,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 30,
-                                        color: FitnessAppTheme.nearlyDarkBlue,
+                              if(goalCheck != "Maintain") ...[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 4, bottom: 3),
+                                      child: Text(
+                                        weight_difference.toStringAsFixed(1),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: FitnessAppTheme.fontName,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 30,
+                                          color: FitnessAppTheme.nearlyDarkBlue,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8, bottom: 8),
-                                    child: Text(
-                                      'kg',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: FitnessAppTheme.fontName,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18,
-                                        letterSpacing: -0.2,
-                                        color: FitnessAppTheme.nearlyDarkBlue,
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8, bottom: 8),
+                                      child: Text(
+                                        'kg',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: FitnessAppTheme.fontName,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                          letterSpacing: -0.2,
+                                          color: FitnessAppTheme.nearlyDarkBlue,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                ),
+
+                              ],
+
 
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -155,16 +160,49 @@ class _weight_progressState extends State<weight_progress> {
                                         top: 1, bottom: 1),
                                     child: Row(
                                       children: [
-                                        Text(
-                                          'to go to meet your goal!',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: FitnessAppTheme.fontName,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                            letterSpacing: 0.0,
+                                        if(goalCheck != "Maintain") ...[
+                                          Text(
+                                            'to go to meet your goal!',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: FitnessAppTheme.fontName,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                              letterSpacing: 0.0,
+                                            ),
                                           ),
-                                        ),
+                                        ]else ...[
+
+                                          if(maintain_current_weight_is_lower) ...[
+                                            Text(
+                                              'is needed to be be gained to maintain your weight goal!!',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: FitnessAppTheme.fontName,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 12,
+                                                letterSpacing: 0.0,
+                                              ),
+                                            ),
+
+                                          ]
+                                          else ...[
+                                            Text(
+                                              'is needed to be be lost to maintain your weight goal!!',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: FitnessAppTheme.fontName,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 12,
+                                                letterSpacing: 0.0,
+                                              ),
+                                            ),
+                                          ]
+
+
+
+                                        ]
+
                                       ],
                                     ),
                                   ),
@@ -392,6 +430,8 @@ class _weight_progressState extends State<weight_progress> {
         }
         else if(weight_goal.target_weight < weight_goal.current_weight){
           weight_to_meet_goal =  weight_goal.current_weight - weight_goal.target_weight;
+          maintain_current_weight_is_lower = false;
+
         }
         else{
           weight_to_meet_goal = 0;
