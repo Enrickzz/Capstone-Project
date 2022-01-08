@@ -305,6 +305,7 @@ class change_weightGoalState extends State<change_weight_goal> {
                   print("you got an error! $e");
                 }
                 Navigator.of(context).pop();
+                Navigator.of(context).pop();
               },
             ),
             TextButton(

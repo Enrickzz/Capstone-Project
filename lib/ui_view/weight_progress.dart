@@ -175,7 +175,7 @@ class _weight_progressState extends State<weight_progress> {
                             padding: const EdgeInsets.only(
                                 left: 4, bottom: 16, top: 0),
                             child: Text(
-                              weight_goal.objective + ' kg since ' +
+                              weight_goal.objective + ' since ' +
                                   "${weight_goal.dateCreated.month.toString().padLeft(2,"0")}/"+
                                   "${weight_goal.dateCreated.day.toString().padLeft(2,"0")}/"+
                                   "${weight_goal.dateCreated.year}"
