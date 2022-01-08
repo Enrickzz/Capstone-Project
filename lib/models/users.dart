@@ -748,31 +748,35 @@ class Vitals {
 }
 class Weight_Goal {
   String objective;
-  String weight_goal;
+  double target_weight;
+  double current_weight;
   String weight_unit;
   DateTime dateCreated;
 
   Weight_Goal({
    this.objective,
-    this.weight_goal,
+    this.target_weight,
+    this.current_weight,
     this.weight_unit,
     this.dateCreated
   });
   Weight_Goal.fromJson(Map<String, dynamic> json) {
     objective = json["objective"];
-    weight_goal = json["weight_goal"];
+    target_weight = double.parse(json["target_weight"]);
+    current_weight = double.parse(json["current_weight"]);
     weight_unit = json['weight_unit'];
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
   }
   Weight_Goal.fromJson2(Map<String, dynamic> json) {
     objective = json["objective"];
-    weight_goal = json["weight_goal"];
+    target_weight = double.parse(json["target_weight"]);
+    current_weight = double.parse(json["current_weight"]);
     weight_unit = json['weight_unit'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['objective'] = this.objective;
-    data['weight_goal'] = this.weight_goal;
+    data['weight_goal'] = this.target_weight;
     data['weight_unit'] = this.weight_unit;
     data['dateCreated'] = this.dateCreated;
     return data;

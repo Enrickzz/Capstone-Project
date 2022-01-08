@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/goal_tab/weight/change_weight_goal.dart';
+import 'package:my_app/models/users.dart';
 
-class weight_progress extends StatelessWidget {
+class weight_progress extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -10,15 +15,37 @@ class weight_progress extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<weight_progress> createState() => _weight_progressState();
+}
+
+class _weight_progressState extends State<weight_progress> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  List<Weight> weight_list = [];
+  Weight weight = new Weight();
+
+  @override
+  void initState() {
+    super.initState();
+    getWeight();
+    // getLatestWeight();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -58,7 +85,7 @@ class weight_progress extends StatelessWidget {
                                     padding: const EdgeInsets.only(
                                         left: 4, bottom: 3),
                                     child: Text(
-                                      '20.8',
+                                      '100.8',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -294,4 +321,16 @@ class weight_progress extends StatelessWidget {
       },
     );
   }
+  void getWeight () {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
+    readWeight.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        weight_list.add(Weight.fromJson(jsonString));
+      });
+    });
+  }
+
 }

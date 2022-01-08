@@ -292,37 +292,55 @@ class add_weightState extends State<add_weight_record> {
                                   print("Added Weight Successfully! " + uid);
                                 });
                               }
-                                readWeightGoal.once().then((DataSnapshot weightgoalsnapshot) {
-                                  Map<String, dynamic> temp3 = jsonDecode(jsonEncode(weightgoalsnapshot.value));
-                                  print(temp3);
-                                  weight_goal = Weight_Goal.fromJson2(temp3);
-                                  print(weight_goal.weight_goal);
-                                  if(weight_goal.objective == "Gain"){
-                                    if(current_weight >= double.parse(weight_goal.weight_goal)){
-                                      isCongratulation = true;
-                                    }
-                                  }
-                                  if(weight_goal.objective == "Lose"){
-                                    if(current_weight <= double.parse(weight_goal.weight_goal)){
-                                      isCongratulation = true;
-                                    }
-                                  }
-                                  if(weight_goal.objective == "Maintain"){
-                                    if(current_weight == double.parse(weight_goal.weight_goal)){
-                                      isCongratulation = true;
-                                    }
-                                  }
-                                });
+
                               });
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("weights LENGTH: " + weights.length.toString());
                               weights.add(new Weight(weight: current_weight, bmi: bmi, timeCreated: timeformat.parse(weight_time), dateCreated: format.parse(weight_date)));
-                              for(var i=0;i<weights.length/2;i++){
-                                var temp = weights[i];
-                                weights[i] = weights[weights.length-1-i];
-                                weights[weights.length-1-i] = temp;
-                              }
+                              readWeightGoal.once().then((DataSnapshot weightgoalsnapshot) {
+                                Map<String, dynamic> temp3 = jsonDecode(jsonEncode(weightgoalsnapshot.value));
+                                weight_goal = Weight_Goal.fromJson2(temp3);
+                                final weightgoalRef = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+                                final weighPPRef = databaseReference.child('users/' + uid + '/physical_parameters/');
+                                if(weight_goal.objective == "Gain"){
+                                  if(current_weight >= weight_goal.target_weight){
+                                    isCongratulation = true;
+                                  }
+                                }
+                                if(weight_goal.objective == "Lose"){
+                                  if(current_weight <= weight_goal.target_weight){
+                                    isCongratulation = true;
+                                  }
+                                }
+                                if(weight_goal.objective == "Maintain"){
+                                  if(current_weight == weight_goal.target_weight){
+                                    isCongratulation = true;
+                                  }
+                                }
+                                /// getting the latest weight
+                                var latestDate;
+                                List<Weight> timesortweights = [];
+                                weights.sort((a,b) => a.dateCreated.compareTo(b.dateCreated));
+                                print("dates ");
+
+                                if(weights[weights.length-1].dateCreated == weights[weights.length-2].dateCreated){
+                                  latestDate = weights[weights.length-1].dateCreated;
+                                  for(int i = 0; i < weights.length; i++){
+                                    if(weights[i].dateCreated == latestDate){
+                                      timesortweights.add(weights[i]);
+                                    }
+                                  }
+                                  timesortweights.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
+                                  weightgoalRef.update({"current_weight": timesortweights[timesortweights.length-1].weight.toStringAsFixed(1)});
+                                  weighPPRef.update({"weight": timesortweights[timesortweights.length-1].weight.toStringAsFixed(1)});
+                                }
+                                else{
+                                  timesortweights = weights;
+                                  weightgoalRef.update({"current_weight": timesortweights[timesortweights.length-1].weight.toStringAsFixed(1)});
+                                  weighPPRef.update({"weight": timesortweights[timesortweights.length-1].weight.toStringAsFixed(1)});
+                                }
+                              });
                               print("POP HERE ==========");
                               Navigator.pop(context, weights);
                             });
@@ -340,88 +358,6 @@ class add_weightState extends State<add_weight_record> {
                           }
 
                         },
-                        // onPressed:() async {
-                        //   try{
-                        //     final User user = auth.currentUser;
-                        //     final uid = user.uid;
-                        //     final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-                        //     readTemperature.once().then((DataSnapshot datasnapshot) {
-                        //       String temp1 = datasnapshot.value.toString();
-                        //       print("temp1 " + temp1);
-                        //
-                        //
-                        //       if(datasnapshot.value == null){
-                        //         final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                        //         getIndication();
-                        //         Future.delayed(const Duration(milliseconds: 1000), (){
-                        //           temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toStringAsFixed(1), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString(), "indication": indication.toString()});
-                        //           print("Added Body Temperature Successfully! " + uid);
-                        //         });
-                        //       }
-                        //       else{
-                        //         // String tempUnit = "";
-                        //         // String tempTemperature = "";
-                        //         // String tempTemperatureDate = "";
-                        //         // String tempTemperatureTime = "";
-                        //         // for(var i = 0; i < temp.length; i++){
-                        //         //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                        //         //   List<String> splitFull = full.split(" ");
-                        //         //   switch(i%4){
-                        //         //     case 0: {
-                        //         //       print("i value" + i.toString() + splitFull.last);
-                        //         //       tempUnit = splitFull.last;
-                        //         //     }
-                        //         //     break;
-                        //         //     case 1: {
-                        //         //       print("i value" + i.toString() + splitFull.last);
-                        //         //       tempTemperatureDate = splitFull.last;
-                        //         //     }
-                        //         //     break;
-                        //         //     case 2: {
-                        //         //       print("i value" + i.toString() + splitFull.last);
-                        //         //       tempTemperature = splitFull.last;
-                        //         //     }
-                        //         //     break;
-                        //         //     case 3: {
-                        //         //       print("i value" + i.toString() + splitFull.last);
-                        //         //       tempTemperatureTime = splitFull.last;
-                        //         //       body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
-                        //         //       body_temp_list.add(body_temperature);
-                        //         //     }
-                        //         //     break;
-                        //         //   }
-                        //         // }
-                        //         getBodyTemp();
-                        //         getIndication();
-                        //         Future.delayed(const Duration(milliseconds: 1000), (){
-                        //           count = body_temp_list.length--;
-                        //           print("count " + count.toString());
-                        //           final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                        //           temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toStringAsFixed(1), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString(), "indication": indication.toString()});
-                        //           print("Added Body Temperature Successfully! " + uid);
-                        //         });
-                        //
-                        //       }
-                        //
-                        //     });
-                        //
-                        //     Future.delayed(const Duration(milliseconds: 1000), (){
-                        //       print("SYMPTOMS LENGTH: " + body_temp_list.length.toString());
-                        //       body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time), indication: indication));
-                        //       for(var i=0;i<body_temp_list.length/2;i++){
-                        //         var temp = body_temp_list[i];
-                        //         body_temp_list[i] = body_temp_list[body_temp_list.length-1-i];
-                        //         body_temp_list[body_temp_list.length-1-i] = temp;
-                        //       }
-                        //       print("POP HERE ==========");
-                        //       Navigator.pop(context, body_temp_list);
-                        //     });
-                        //
-                        //   } catch(e) {
-                        //     print("you got an error! $e");
-                        //   }
-                        //   // Navigator.pop(context);
-                        // },
                       )
                     ],
                   ),
