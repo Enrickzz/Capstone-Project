@@ -97,7 +97,7 @@ class _index3State extends State<view_patient_profile>
   String ave_sticks = "";
   String alcohol_freq = "";
   String lifestyle = "";
-
+  bool isLoading = true;
 
 
   @override
@@ -119,8 +119,10 @@ class _index3State extends State<view_patient_profile>
     // getDisease(patientuid);
     // getAllergies(patientuid);
     // getOtherInfo(patientuid);
-    Future.delayed(const Duration(milliseconds: 1000), (){
-      setState(() {});
+    Future.delayed(const Duration(milliseconds: 3000), (){
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 
@@ -272,7 +274,10 @@ class _index3State extends State<view_patient_profile>
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(18.0),
-                            child: Column(
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            ): new Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text("Complete Name",
@@ -401,7 +406,10 @@ class _index3State extends State<view_patient_profile>
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(18.0),
-                            child: Column(
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            ): new Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text("CVD Condition/s",
@@ -491,7 +499,10 @@ class _index3State extends State<view_patient_profile>
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(18.0),
-                            child: Column(
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            ): new Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text("Food Allergies",
@@ -581,7 +592,10 @@ class _index3State extends State<view_patient_profile>
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(18.0),
-                            child: Column(
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            ): new Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text("Lifestyle",
