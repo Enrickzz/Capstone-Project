@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:my_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:my_app/dashboards/dashboards_as_doctor.dart';
 import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
+import 'package:my_app/goal_tab/goals.dart';
+import 'package:my_app/goal_tab/goals_doctor_view.dart';
 import 'package:my_app/index2/meals.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
@@ -710,6 +712,23 @@ class _index3State extends State<view_patient_profile>
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => dashboards_as_doctor(animationController: animationController)),
+                          );
+
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Container(
+                      child: ElevatedButton(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          child: Text('View Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                        ),
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => goals_doctor_view(animationController: animationController)),
                           );
 
                         },
