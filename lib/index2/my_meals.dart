@@ -37,6 +37,10 @@ class _my_mealsState extends State<my_meals> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    breakfast_list.clear();
+    lunch_list.clear();
+    dinner_list.clear();
+    snack_list.clear();
     getBFoodIntake();
     getLFoodIntake();
     getDFoodIntake();

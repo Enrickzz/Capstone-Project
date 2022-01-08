@@ -29,7 +29,6 @@ List<FoodIntake> breakfast_list = [];
 List<FoodIntake> lunch_list = [];
 List<FoodIntake> dinner_list = [];
 List<FoodIntake> snack_list = [];
-List<String> bfood_list = [];
 
 class _MealsListViewState extends State<MealsListView>
     with TickerProviderStateMixin {
@@ -49,13 +48,20 @@ class _MealsListViewState extends State<MealsListView>
     List<String> lmeal = [];
     List<String> dmeal = [];
     List<String> smeal = [];
+    breakfast_list.clear();
+    lunch_list.clear();
+    dinner_list.clear();
+    snack_list.clear();
     getBFoodIntake();
     getLFoodIntake();
     getDFoodIntake();
     getSFoodIntake();
 
     Future.delayed(const Duration(milliseconds: 1000), (){
-      print("list");
+      bmeal.clear();
+      lmeal.clear();
+      dmeal.clear();
+      smeal.clear();
       for(int i = 0; i < breakfast_list.length; i++){
         total_bcalories += breakfast_list[i].calories;
         bmeal.add(breakfast_list[i].foodName);
@@ -72,6 +78,7 @@ class _MealsListViewState extends State<MealsListView>
         total_scalories += snack_list[i].calories;
         smeal.add(snack_list[i].foodName);
       }
+
       mealsListData[0].kacl = total_bcalories;
       mealsListData[1].kacl = total_lcalories;
       mealsListData[2].kacl = total_dcalories;
@@ -80,11 +87,7 @@ class _MealsListViewState extends State<MealsListView>
       mealsListData[1].meals = lmeal;
       mealsListData[2].meals = dmeal;
       mealsListData[3].meals = smeal;
-      print("HEREE");
-      print(bmeal);
-      print(lmeal);
-      print(dmeal);
-      print(smeal);
+
 
       setState(() {
         print("setstate");
