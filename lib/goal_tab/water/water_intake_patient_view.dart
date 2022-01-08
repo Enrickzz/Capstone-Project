@@ -35,7 +35,8 @@ class _waterIntakeState extends State<water_intake> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isDateSelected= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Body_Temperature> bttemp = [];
+  List<WaterIntake> waterintake_list = [];
+  Physical_Parameters pp = new Physical_Parameters();
   List<File> _image = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -51,16 +52,16 @@ class _waterIntakeState extends State<water_intake> {
   @override
   void initState() {
     super.initState();
-    // bttemp.clear();
-    // _selected.clear();
-    // getBodyTemp();
-    // Future.delayed(const Duration(milliseconds: 1500), (){
-    //   setState(() {
-    //     _selected = List<bool>.generate(bttemp.length, (int index) => false);
-    //
-    //     print("setstate");
-    //   });
-    // });
+    waterintake_list.clear();
+    getWaterIntake();
+    // getBMIList();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        _selected = List<bool>.generate(waterintake_list.length, (int index) => false);
+
+        print("setstate");
+      });
+    });
   }
 
   @override
@@ -108,11 +109,11 @@ class _waterIntakeState extends State<water_intake> {
                   ).then((value) => setState((){
                     print("setstate symptoms");
                     if(value != null){
-                      bttemp = value;
-                      _selected = List<bool>.generate(bttemp.length, (int index) => false);
+                      waterintake_list = value;
+                      _selected = List<bool>.generate(waterintake_list.length, (int index) => false);
 
                     }
-                    print("SYMP LENGTH AFTER SETSTATE  =="  + bttemp.length.toString() );
+                    print("SYMP LENGTH AFTER SETSTATE  =="  + waterintake_list.length.toString() );
                   }));;
                 },
                 child: Icon(
@@ -147,17 +148,17 @@ class _waterIntakeState extends State<water_intake> {
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
   }
-  // void getBodyTemp() {
-  //   final User user = auth.currentUser;
-  //   final uid = user.uid;
-  //   final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-  //   readBT.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       bttemp.add(Body_Temperature.fromJson(jsonString));
-  //     });
-  //   });
-  // }
+  void getWaterIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
+    readWaterIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        waterintake_list.add(WaterIntake.fromJson(jsonString));
+      });
+    });
+  }
 
   int getAge (DateTime birthday) {
     DateTime today = new DateTime.now();
@@ -228,9 +229,9 @@ class _waterIntakeState extends State<water_intake> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              bttemp.sort((a, b) => b.bt_date.compareTo(a.bt_date));
+              waterintake_list.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
             } else {
-              bttemp.sort((a, b) => a.bt_date.compareTo(b.bt_date));
+              waterintake_list.sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
             }
             _isSortAsc = !_isSortAsc;
           });
@@ -247,12 +248,12 @@ class _waterIntakeState extends State<water_intake> {
   }
 
   List<DataRow> _createRows() {
-    return bttemp
+    return waterintake_list
         .mapIndexed((index, bp) => DataRow(
         cells: [
-          DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
+          DataCell(Text(getDateFormatted(bp.dateCreated.toString()))),
+          DataCell(Text(getTimeFormatted(bp.timeCreated.toString()))),
+          DataCell(Text(bp.water_intake.toString() +'mL', style: TextStyle(),)),
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {

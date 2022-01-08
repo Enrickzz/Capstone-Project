@@ -36,7 +36,6 @@ class _weightPatienttate extends State<weight_list_patient_view> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Weight> weights = [];
   Physical_Parameters pp = new Physical_Parameters();
-  List<double> bmi = [];
   List<File> _image = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -58,7 +57,6 @@ class _weightPatienttate extends State<weight_list_patient_view> {
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         _selected = List<bool>.generate(weights.length, (int index) => false);
-
         print("setstate");
       });
     });
@@ -170,31 +168,6 @@ class _weightPatienttate extends State<weight_list_patient_view> {
       });
     });
   }
-  // void getBMIList(){
-  //   final User user = auth.currentUser;
-  //   final uid = user.uid;
-  //   final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
-  //   final readheight = databaseReference.child('users/' + uid + '/physical_parameters/');
-  //   readheight.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     print(temp);
-  //     temp.forEach((jsonString) {
-  //       pp = Physical_Parameters.fromJson(jsonString);
-  //     });
-  //     readWeight.once().then((DataSnapshot snapshot){
-  //       List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
-  //       temp1.forEach((jsonString) {
-  //         weights.add(Weight.fromJson(jsonString));
-  //       });
-  //       for(int i = 0; i < weights.length; i++){
-  //         double temp = 0;
-  //         temp = weights[i].weight / ((pp.height * 0.01) * (pp.height * 0.01));
-  //         bmi.add(temp);
-  //       }
-  //     });
-  //   });
-  //
-  // }
 
   int getAge (DateTime birthday) {
     DateTime today = new DateTime.now();
@@ -303,7 +276,7 @@ class _weightPatienttate extends State<weight_list_patient_view> {
           DataCell(Text(getDateFormatted(bp.dateCreated.toString()))),
           DataCell(Text(getTimeFormatted(bp.timeCreated.toString()))),
           DataCell(Text(bp.weight.toStringAsFixed(1) +'kg', style: TextStyle(),)), //weight
-          DataCell(Text(bp.bmi.toStringAsFixed(1))), //bmi
+          DataCell(Text(bp.bmi.toStringAsFixed(1), style: TextStyle(color: getMyColor(bp.bmi)))), //bmi
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {

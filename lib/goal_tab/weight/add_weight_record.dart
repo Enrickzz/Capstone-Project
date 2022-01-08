@@ -39,9 +39,9 @@ class add_weightState extends State<add_weight_record> {
   String indication = "";
   bool isDateSelected= false;
   int count = 1;
+  bool isCongratulation = false;
   Weight_Goal weight_goal = new Weight_Goal();
   List<Weight> weights = new List<Weight>();
-  bool isCongratulation = false;
   Physical_Parameters pp = new Physical_Parameters();
   Additional_Info info = new Additional_Info();
   DateFormat format = new DateFormat("MM/dd/yyyy");

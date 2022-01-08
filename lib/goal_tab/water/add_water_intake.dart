@@ -10,6 +10,7 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
 import 'package:my_app/database.dart';
+import 'package:my_app/goal_tab/water/water_intake_patient_view.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
@@ -28,17 +29,19 @@ class add_waterIntakeState extends State<add_water_intake> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  double temperature = 0;
+  int water_intake = 0;
   String unit = 'Milimeter';
   String valueChoose;
   List degrees = ["Celsius", "Fahrenheit"];
-  String temperature_date = (new DateTime.now()).toString();
-  DateTime temperatureDate;
-  String temperature_time;
+  String waterintake_date = (new DateTime.now()).toString();
+  DateTime waterintakeDate;
+  String waterintake_time;
   String indication = "";
   bool isDateSelected= false;
   int count = 1;
-  List<Body_Temperature> body_temp_list = new List<Body_Temperature>();
+  Water_Goal water_goal = new Water_Goal();
+  List<WaterIntake> waterintake_list = new List<WaterIntake>();
+  Physical_Parameters pp = new Physical_Parameters();
   Additional_Info info = new Additional_Info();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -97,9 +100,9 @@ class add_waterIntakeState extends State<add_water_intake> {
                                 fontSize: defaultFontSize),
                             hintText: "Water Intake",
                           ),
-                          validator: (val) => val.isEmpty ? 'Enter Temperature' : null,
+                          validator: (val) => val.isEmpty ? 'Enter Water Intake' : null,
                           onChanged: (val){
-                            setState(() => temperature = double.parse(val));
+                            setState(() => water_intake = int.parse(val));
                           },
                         ),
                       ),
@@ -132,11 +135,12 @@ class add_waterIntakeState extends State<add_water_intake> {
                             if(newIndex == 0){
                               print('Milliliter (ml)');
                               unit = "Milliliter";
+                              print(unit);
                             }
                             if(newIndex == 1){
                               print("Ounce (oz)");
                               unit = "Ounce";
-
+                              print(unit);
                             }
                           });
                         },
@@ -152,13 +156,13 @@ class add_waterIntakeState extends State<add_water_intake> {
                           firstDate: new DateTime.now().subtract(Duration(days: 30)),
                           lastDate: new DateTime.now(),
                       ).then((value){
-                        if(value != null && value != temperatureDate){
+                        if(value != null && value != waterintakeDate){
                           setState(() {
-                            temperatureDate = value;
+                            waterintakeDate = value;
                             isDateSelected = true;
-                            temperature_date = "${temperatureDate.month}/${temperatureDate.day}/${temperatureDate.year}";
+                            waterintake_date = "${waterintakeDate.month}/${waterintakeDate.day}/${waterintakeDate.year}";
                           });
-                          dateValue.text = temperature_date + "\r";
+                          dateValue.text = waterintake_date + "\r";
                         }
                       });
 
@@ -175,7 +179,7 @@ class add_waterIntakeState extends State<add_water_intake> {
                             time = value;
                             final hours = time.hour.toString().padLeft(2,'0');
                             final min = time.minute.toString().padLeft(2,'0');
-                            temperature_time = "$hours:$min";
+                            waterintake_time = "$hours:$min";
                             dateValue.text += "$hours:$min";
                             print("data value " + dateValue.text);
                           });
@@ -262,77 +266,44 @@ class add_waterIntakeState extends State<add_water_intake> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-                            readTemperature.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-
-
-                              if(datasnapshot.value == null){
-                                final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                                getIndication();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toStringAsFixed(1), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString(), "indication": indication.toString()});
-                                  print("Added Body Temperature Successfully! " + uid);
+                            final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
+                            final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
+                            if(unit == "Ounce"){
+                              String temp = "";
+                              temp = (water_intake * 29.5735).toStringAsFixed(0);
+                              water_intake = int.parse(temp);
+                            }
+                            readWaterIntake.once().then((DataSnapshot datasnapshot) {
+                                if(datasnapshot.value == null){
+                                  final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
+                                  waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
+                                  print("Added Water Intake Successfully! " + uid);
+                                }
+                                else{
+                                  getWaterIntake();
+                                  Future.delayed(const Duration(milliseconds: 1000), (){
+                                    count = waterintake_list.length--;
+                                    final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
+                                    waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
+                                    print("Added Water Intake Successfully! " + uid);
+                                  });
+                                }
+                                readWaterGoal.once().then((DataSnapshot weightgoalsnapshot) {
+                                  Map<String, dynamic> temp3 = jsonDecode(jsonEncode(weightgoalsnapshot.value));
+                                  print(temp3);
+                                  water_goal = Water_Goal.fromJson(temp3);
                                 });
-                              }
-                              else{
-                                // String tempUnit = "";
-                                // String tempTemperature = "";
-                                // String tempTemperatureDate = "";
-                                // String tempTemperatureTime = "";
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //   switch(i%4){
-                                //     case 0: {
-                                //       print("i value" + i.toString() + splitFull.last);
-                                //       tempUnit = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 1: {
-                                //       print("i value" + i.toString() + splitFull.last);
-                                //       tempTemperatureDate = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 2: {
-                                //       print("i value" + i.toString() + splitFull.last);
-                                //       tempTemperature = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 3: {
-                                //       print("i value" + i.toString() + splitFull.last);
-                                //       tempTemperatureTime = splitFull.last;
-                                //       body_temperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
-                                //       body_temp_list.add(body_temperature);
-                                //     }
-                                //     break;
-                                //   }
-                                // }
-                                getBodyTemp();
-                                getIndication();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = body_temp_list.length--;
-                                  print("count " + count.toString());
-                                  final temperatureRef = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/' + count.toString());
-                                  temperatureRef.set({"unit": unit.toString(), "temperature": temperature.toStringAsFixed(1), "bt_date": temperature_date.toString(), "bt_time": temperature_time.toString(), "indication": indication.toString()});
-                                  print("Added Body Temperature Successfully! " + uid);
-                                });
-
-                              }
 
                             });
-
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("SYMPTOMS LENGTH: " + body_temp_list.length.toString());
-                              body_temp_list.add(new Body_Temperature(unit: unit, temperature: temperature,bt_date: format.parse(temperature_date), bt_time: timeformat.parse(temperature_time), indication: indication));
-                              for(var i=0;i<body_temp_list.length/2;i++){
-                                var temp = body_temp_list[i];
-                                body_temp_list[i] = body_temp_list[body_temp_list.length-1-i];
-                                body_temp_list[body_temp_list.length-1-i] = temp;
+                              waterintake_list.add(new WaterIntake(water_intake: water_intake, timeCreated: timeformat.parse(waterintake_time), dateCreated: format.parse(waterintake_date)));
+                              for(var i=0;i<waterintake_list.length/2;i++){
+                                var temp = waterintake_list[i];
+                                waterintake_list[i] = waterintake_list[waterintake_list.length-1-i];
+                                waterintake_list[waterintake_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, body_temp_list);
+                              Navigator.pop(context, waterintake_list);
                             });
 
                           } catch(e) {
@@ -349,67 +320,67 @@ class add_waterIntakeState extends State<add_water_intake> {
         )
     );
   }
-  void getBodyTemp() {
+  void getWaterIntake() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-    readBT.once().then((DataSnapshot snapshot){
+    final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
+    readWaterIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        body_temp_list.add(Body_Temperature.fromJson(jsonString));
+        waterintake_list.add(WaterIntake.fromJson(jsonString));
       });
     });
   }
-  void getIndication() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readAddInfo = databaseReference.child('users/' + uid + '/vitals/additional_info/');
-    int age;
-    readAddInfo.once().then((DataSnapshot snapshot) {
-      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-      print("temp2");
-      print(temp2);
-      info = Additional_Info.fromJson2(temp2);
-      age = getAge(info.birthday);
-
-      if(unit == "Fahrenheit"){
-        temperature = (temperature - 32) * 5/9;
-        unit = "Celsius";
-      }
-      /// NORMAL
-      double highest = 0;
-      /// infant 0 - 10
-      if(age <= 10 && age >= 0){
-        if(temperature >= 35.5 && temperature <= 37.5){
-          indication = "normal";
-        }
-        highest = 37.5;
-      }
-      /// 11 - 65
-      if(age <= 65 && age >= 11){
-        if(temperature >= 36.4 && temperature <= 37.6){
-          indication = "normal";
-        }
-        highest = 37.6;
-      }
-      /// 65 above
-      if(age > 65){
-        if(temperature >= 35.8 && temperature <= 36.9){
-          indication = "normal";
-        }
-        highest = 36.9;
-      }
-      /// LOW GRADE FEVER
-      if(temperature >= highest && temperature <= 38){
-        indication = "low grade fever";
-      }
-      /// HIGH GRADE FEVER
-      if(temperature > 38){
-        indication = "high grade fever";
-      }
-
-    });
-  }
+  // void getIndication() {
+  //   final User user = auth.currentUser;
+  //   final uid = user.uid;
+  //   final readAddInfo = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+  //   int age;
+  //   readAddInfo.once().then((DataSnapshot snapshot) {
+  //     Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+  //     print("temp2");
+  //     print(temp2);
+  //     info = Additional_Info.fromJson2(temp2);
+  //     age = getAge(info.birthday);
+  //
+  //     if(unit == "Fahrenheit"){
+  //       temperature = (temperature - 32) * 5/9;
+  //       unit = "Celsius";
+  //     }
+  //     /// NORMAL
+  //     double highest = 0;
+  //     /// infant 0 - 10
+  //     if(age <= 10 && age >= 0){
+  //       if(temperature >= 35.5 && temperature <= 37.5){
+  //         indication = "normal";
+  //       }
+  //       highest = 37.5;
+  //     }
+  //     /// 11 - 65
+  //     if(age <= 65 && age >= 11){
+  //       if(temperature >= 36.4 && temperature <= 37.6){
+  //         indication = "normal";
+  //       }
+  //       highest = 37.6;
+  //     }
+  //     /// 65 above
+  //     if(age > 65){
+  //       if(temperature >= 35.8 && temperature <= 36.9){
+  //         indication = "normal";
+  //       }
+  //       highest = 36.9;
+  //     }
+  //     /// LOW GRADE FEVER
+  //     if(temperature >= highest && temperature <= 38){
+  //       indication = "low grade fever";
+  //     }
+  //     /// HIGH GRADE FEVER
+  //     if(temperature > 38){
+  //       indication = "high grade fever";
+  //     }
+  //
+  //   });
+  // }
 
   int getAge (DateTime birthday) {
     DateTime today = new DateTime.now();

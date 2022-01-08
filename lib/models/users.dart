@@ -822,6 +822,7 @@ class Water_Goal {
   Water_Goal.fromJson(Map<String, dynamic> json) {
     water_goal = json["water_goal"];
     water_unit = json['water_unit'];
+
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
   }
   Map<String, dynamic> toJson() {
@@ -835,15 +836,22 @@ class Water_Goal {
 
 class WaterIntake {
   int water_intake;
+  DateTime timeCreated;
   DateTime dateCreated;
-
+  WaterIntake({
+  this.water_intake,
+  this.timeCreated,
+  this.dateCreated,
+  });
   WaterIntake.fromJson(Map<String, dynamic> json) {
-    water_intake = json["water_intake"];
+    water_intake = int.parse(json["water_intake"]);
+    timeCreated = DateFormat("hh:mm").parse(json['timeCreated']);
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['water_intake'] = this.water_intake;
+    data['timeCreated'] = this.timeCreated;
     data['dateCreated'] = this.dateCreated;
     return data;
   }
