@@ -28,31 +28,22 @@ class change_weightGoalState extends State<change_weight_goal> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  double temperature = 0;
-  String unit = 'kilograms';
-  String valueChoose;
-  List degrees = ["Celsius", "Fahrenheit"];
-  String temperature_date = (new DateTime.now()).toString();
-  DateTime temperatureDate;
-  String temperature_time;
-  String indication = "";
+  String unit = "Kilograms";
+  double target_weight = 0;
   bool isDateSelected= false;
   int count = 1;
-  List<Body_Temperature> body_temp_list = new List<Body_Temperature>();
-  Additional_Info info = new Additional_Info();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
-  TimeOfDay time;
-  var dateValue = TextEditingController();
   List <bool> isSelected = [true, false];
-
   //weight goal
   bool goalSelected = false;
   String valueChooseWeightGoal;
   List<String> listWeightGoal = <String>[
     'Lose', 'Gain', 'Maintain',
-
   ];
+  DateTime now = new DateTime.now();
+  Weight_Goal weight_goal = new Weight_Goal();
+  Physical_Parameters pp = new Physical_Parameters();
 
 
   @override
@@ -113,9 +104,6 @@ class change_weightGoalState extends State<change_weight_goal> {
                       setState(() {
                         valueChooseWeightGoal = newValue;
                         goalSelected= true;
-
-
-
                       });
 
                     },
@@ -155,7 +143,7 @@ class change_weightGoalState extends State<change_weight_goal> {
                             ),
                             validator: (val) => val.isEmpty ? 'Enter Water Intake Goal' : null,
                             onChanged: (val){
-                              setState(() => temperature = double.parse(val));
+                              setState(() => target_weight = double.parse(val));
                             },
                           ),
                         ),
@@ -258,96 +246,8 @@ class change_weightGoalState extends State<change_weight_goal> {
         )
     );
   }
-  void getBodyTemp() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-    readBT.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        body_temp_list.add(Body_Temperature.fromJson(jsonString));
-      });
-    });
-  }
-  void getIndication() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readAddInfo = databaseReference.child('users/' + uid + '/vitals/additional_info/');
-    int age;
-    readAddInfo.once().then((DataSnapshot snapshot) {
-      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-      print("temp2");
-      print(temp2);
-      info = Additional_Info.fromJson2(temp2);
-      age = getAge(info.birthday);
 
-      if(unit == "Fahrenheit"){
-        temperature = (temperature - 32) * 5/9;
-        unit = "Celsius";
-      }
-      /// NORMAL
-      double highest = 0;
-      /// infant 0 - 10
-      if(age <= 10 && age >= 0){
-        if(temperature >= 35.5 && temperature <= 37.5){
-          indication = "normal";
-        }
-        highest = 37.5;
-      }
-      /// 11 - 65
-      if(age <= 65 && age >= 11){
-        if(temperature >= 36.4 && temperature <= 37.6){
-          indication = "normal";
-        }
-        highest = 37.6;
-      }
-      /// 65 above
-      if(age > 65){
-        if(temperature >= 35.8 && temperature <= 36.9){
-          indication = "normal";
-        }
-        highest = 36.9;
-      }
-      /// LOW GRADE FEVER
-      if(temperature >= highest && temperature <= 38){
-        indication = "low grade fever";
-      }
-      /// HIGH GRADE FEVER
-      if(temperature > 38){
-        indication = "high grade fever";
-      }
 
-    });
-  }
-
-  int getAge (DateTime birthday) {
-    DateTime today = new DateTime.now();
-    String days1 = "";
-    String month1 = "";
-    String year1 = "";
-    int d = int.parse(DateFormat("dd").format(birthday));
-    int m = int.parse(DateFormat("MM").format(birthday));
-    int y = int.parse(DateFormat("yyyy").format(birthday));
-    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
-    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
-    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
-    int age = 0;
-    age = y1 - y;
-    print(age);
-
-    // dec < jan
-    if(m1 < m){
-      print("month --");
-      age--;
-    }
-    else if (m1 == m){
-      if(d1 < d){
-        print("day --");
-        age--;
-      }
-    }
-    return age;
-  }
   Future<void> _showMyNewWeigtGoal() async {
     return showDialog<void>(
       context: context,
@@ -370,9 +270,41 @@ class change_weightGoalState extends State<change_weight_goal> {
             TextButton(
               child: Text('Set'),
               onPressed: () {
-                print('Save');
-                Navigator.of(context).pop();
+                try{
+                  final User user = auth.currentUser;
+                  final uid = user.uid;
+                  final readWeightGoal = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+                  final readPPWeight = databaseReference.child('users/' + uid + '/physical_parameters/');
+                  if(unit == "Pounds"){
+                    target_weight *= 0.453592;
+                  }
+                  readWeightGoal.once().then((DataSnapshot datasnapshot) {
+                    readPPWeight.once().then((DataSnapshot snapshot) {
+                      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+                      print(temp);
+                      pp = Physical_Parameters.fromJson(temp);
+                      final weightgoalRef = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+                      weightgoalRef.update({
+                        "objective": valueChooseWeightGoal,
+                        "target_weight": target_weight.toString(),
+                        "current_weight": pp.weight.toString(),
+                        "weight": pp.weight.toString(),
+                        "dateCreated": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
+                      });
+                      print("Updated Weight Goal Successfully! " + uid);
+                    });
+                  });
+                  Future.delayed(const Duration(milliseconds: 1000), (){
+                    print("POP HERE ==========");
+                    Navigator.pop(context, weight_goal);
 
+                  });
+
+
+                } catch(e) {
+                  print("you got an error! $e");
+                }
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
@@ -385,5 +317,17 @@ class change_weightGoalState extends State<change_weight_goal> {
         );
       },
     );
+  }
+
+  void getWeightGoal() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readWeightGoal = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+    readWeightGoal.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        weight_goal = Weight_Goal.fromJson(jsonString);
+      });
+    });
   }
 }
