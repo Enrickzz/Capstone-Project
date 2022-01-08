@@ -1,3 +1,4 @@
+import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
 import 'package:my_app/ui_view/wave_view.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
@@ -108,6 +109,31 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                       fontSize: 14,
                                       letterSpacing: 0.0,
                                       color: FitnessAppTheme.darkText,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 4),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) => SingleChildScrollView(child: Container(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                                          child: change_water_intake_goal(),
+                                        ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Edit Goal',
+                                      style: TextStyle(
+                                        fontFamily: FitnessAppTheme.fontName,
+                                        fontSize: 16,
+                                        color: FitnessAppTheme.nearlyDarkBlue,
+                                      ),
                                     ),
                                   ),
                                 ),
