@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificSymptomViewAsDoctor extends StatefulWidget {
-  SpecificSymptomViewAsDoctor({Key key, this.title, this.userUID, this.index}) : super(key: key);
-
+  SpecificSymptomViewAsDoctor({Key key, this.title, this.userUID, this.index, this.thissymp}) : super(key: key);
+  final Symptom thissymp;
   final String title;
   String userUID;
   int index;

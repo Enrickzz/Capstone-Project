@@ -26,11 +26,12 @@ class _BMI_ChartState extends State<BMI_Chart> {
   Physical_Parameters AIobj;
   String bmi = "0";
   String bmi_status = "error";
+  bool isLoading = true;
   @override
   void initState(){
     super.initState();
     getBMIdata();
-    Future.delayed(const Duration(milliseconds: 2000), (){
+    Future.delayed(const Duration(milliseconds: 3000), (){
       setState(() {
         print(AIobj);
         double bmi_double = (AIobj.weight / (AIobj.height * AIobj.height) * 10000);
@@ -46,6 +47,7 @@ class _BMI_ChartState extends State<BMI_Chart> {
         }else if(bmi_double > 35){
           bmi_status = "You are extremely obese!";
         }
+        isLoading = false;
       });
     });
   }
@@ -91,7 +93,12 @@ class _BMI_ChartState extends State<BMI_Chart> {
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
 
-                        child: SfRadialGauge(
+                        child: isLoading
+                            ? Center(
+                          heightFactor: 5,
+                          child: CircularProgressIndicator(
+                          ),
+                        ): new SfRadialGauge(
                             enableLoadingAnimation: true, animationDuration: 3000,
                             axes: <RadialAxis>[
                               RadialAxis(minimum: 10, maximum: 50,

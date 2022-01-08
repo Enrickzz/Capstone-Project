@@ -39,7 +39,7 @@ class _symptomsState extends State<symptoms> {
   List<Symptom> listtemp=[];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
-
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -163,7 +163,10 @@ class _symptomsState extends State<symptoms> {
           ),
         ],
       ),
-      body: ListView.builder(
+      body: isLoading
+          ? Center(
+        child: CircularProgressIndicator(),
+      ): new ListView.builder(
             itemCount: listtemp.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
@@ -229,6 +232,7 @@ class _symptomsState extends State<symptoms> {
     readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       //print("this is temp : "+temp.toString());
+      print("pasok here");
       temp.forEach((jsonString) {
         if(!jsonString.toString().contains("recurring")){
           symptoms.add(Symptom.fromJson2(jsonString));
@@ -257,6 +261,9 @@ class _symptomsState extends State<symptoms> {
       print ("THIS IS THE URL = at index $i "+ downloadurl);
     }
     //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+      isLoading = false;
+    });
     return downloadurl;
   }
 }

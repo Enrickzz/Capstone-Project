@@ -76,7 +76,7 @@ class _index3State extends State<index3>
   String ave_sticks = "";
   String alcohol_freq = "";
   String lifestyle = "";
-
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -111,8 +111,9 @@ class _index3State extends State<index3>
         }
       }
     });
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
+        isLoading = false;
         print("setstate");
       });
     });
@@ -131,7 +132,7 @@ class _index3State extends State<index3>
     double defaultFontSize = 14;
     double defaultIconSize = 17;
 
-    return Container(
+    return  Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
         appBar: AppBar(
@@ -190,7 +191,10 @@ class _index3State extends State<index3>
             ),
           ],
         ),
-        body: Scrollbar(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new Scrollbar(
           child: SingleChildScrollView(
             padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
             child: Column(

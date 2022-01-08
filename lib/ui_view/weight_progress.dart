@@ -26,13 +26,14 @@ class _weight_progressState extends State<weight_progress> {
   double weight_to_meet_goal = 0;
   double weight_difference = 0;
   String goalCheck ="";
-
+  bool isLoading= true;
   @override
   void initState() {
     super.initState();
     getLatestWeight();
-    Future.delayed(const Duration(milliseconds: 1000), (){
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
+        isLoading = false;
         print("setstate");
       });
     });
@@ -66,7 +67,10 @@ class _weight_progressState extends State<weight_progress> {
                         blurRadius: 10.0),
                   ],
                 ),
-                child: Column(
+                child: isLoading
+                    ? Center(
+                  child: CircularProgressIndicator(),
+                ): new Column(
                   children: <Widget>[
                     Padding(
                       padding:
@@ -172,11 +176,16 @@ class _weight_progressState extends State<weight_progress> {
                               )
                             ],
                           ),
+
+
                           if (goalCheck == "Lose") ...[
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 4, bottom: 16, top: 0),
-                              child: Text(
+                              child: isLoading
+                                  ? Center(
+                                child: CircularProgressIndicator(),
+                              ): new Text(
                                 'lost since ' +
                                     "${weight_goal.dateCreated.month.toString().padLeft(2,"0")}/"+
                                     "${weight_goal.dateCreated.day.toString().padLeft(2,"0")}/"+
@@ -195,7 +204,10 @@ class _weight_progressState extends State<weight_progress> {
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 4, bottom: 16, top: 0),
-                              child: Text(
+                              child: isLoading
+                                  ? Center(
+                                child: CircularProgressIndicator(),
+                              ): new Text(
                                 'gained since ' +
                                     "${weight_goal.dateCreated.month.toString().padLeft(2,"0")}/"+
                                     "${weight_goal.dateCreated.day.toString().padLeft(2,"0")}/"+

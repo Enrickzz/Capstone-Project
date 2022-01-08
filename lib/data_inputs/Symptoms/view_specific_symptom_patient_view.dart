@@ -80,6 +80,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
       setState(() {});
     });
     thisSymptom = widget.thissymp;
+    print(thisSymptom.imgRef + " < <<<<<<<<");
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
 
