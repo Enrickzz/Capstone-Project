@@ -16,7 +16,6 @@ import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/water_intake_chart.dart';
 import 'package:my_app/ui_view/weight_progress.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
@@ -85,7 +84,7 @@ class _my_waterState extends State<my_water>
     const int count = 9;
 
     listViews.add(
-      water_intake_chart(
+      calorie_intake(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

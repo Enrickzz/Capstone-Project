@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/my_diary/my_exercises.dart';
+import 'package:my_app/places.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -174,7 +175,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
                 setState(() {
                   tabBody =
                       // food_list(animationController: animationController);
-                      meals(animationController: animationController);
+                      places();
                 });
               });
             }else if(index ==3){
