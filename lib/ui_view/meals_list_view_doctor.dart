@@ -12,8 +12,8 @@ import 'package:my_app/models/nutritionixApi.dart';
 import '../main.dart';
 import '../goal_tab/meals/meals_list.dart';
 
-class MealsListView extends StatefulWidget {
-  const MealsListView(
+class MealsListViewDoctor extends StatefulWidget {
+  const MealsListViewDoctor(
       {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
       : super(key: key);
 
@@ -21,7 +21,7 @@ class MealsListView extends StatefulWidget {
   final Animation<double> mainScreenAnimation;
 
   @override
-  _MealsListViewState createState() => _MealsListViewState();
+  _MealsListViewDoctorState createState() => _MealsListViewDoctorState();
 }
 final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -30,7 +30,7 @@ List<FoodIntake> lunch_list = [];
 List<FoodIntake> dinner_list = [];
 List<FoodIntake> snack_list = [];
 
-class _MealsListViewState extends State<MealsListView>
+class _MealsListViewDoctorState extends State<MealsListViewDoctor>
     with TickerProviderStateMixin {
   AnimationController animationController;
   List<MealsListData> mealsListData = MealsListData.tabIconsList;
@@ -248,8 +248,7 @@ class MealsView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              mealsListData.kacl != 0
-                                  ? Row(
+                                  Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: <Widget>[
@@ -281,35 +280,6 @@ class MealsView extends StatelessWidget {
                                         ),
                                       ],
                                     )
-                                  : InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => nutritionix_meals(animationController: animationController)),
-                                        );
-                                      },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          color: FitnessAppTheme.nearlyWhite,
-                                          shape: BoxShape.circle,
-                                          boxShadow: <BoxShadow>[
-                                            BoxShadow(
-                                                color: FitnessAppTheme.nearlyBlack
-                                                    .withOpacity(0.4),
-                                                offset: Offset(8.0, 8.0),
-                                                blurRadius: 8.0),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(6.0),
-                                          child: Icon(
-                                            Icons.add,
-                                            color: HexColor(mealsListData.endColor),
-                                            size: 24,),
-                                        ),
-                                      ),
-                                  ),
                             ],
                           ),
                         ),
