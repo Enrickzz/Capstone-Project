@@ -297,10 +297,7 @@ class change_weightGoalState extends State<change_weight_goal> {
                   Future.delayed(const Duration(milliseconds: 1000), (){
                     print("POP HERE ==========");
                     Navigator.pop(context, weight_goal);
-
                   });
-
-
                 } catch(e) {
                   print("you got an error! $e");
                 }

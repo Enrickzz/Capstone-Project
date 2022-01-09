@@ -818,7 +818,8 @@ class Weight {
 }
 
 class Water_Goal {
-  String water_goal;
+  double water_goal;
+  double current_water;
   String water_unit;
   DateTime dateCreated;
 
@@ -828,9 +829,8 @@ class Water_Goal {
     this.dateCreated
   });
   Water_Goal.fromJson(Map<String, dynamic> json) {
-    water_goal = json["water_goal"];
+    water_goal = double.parse(json["water_goal"]);
     water_unit = json['water_unit'];
-
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
   }
   Map<String, dynamic> toJson() {

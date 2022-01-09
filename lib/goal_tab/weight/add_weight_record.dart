@@ -322,7 +322,6 @@ class add_weightState extends State<add_weight_record> {
                                 var latestDate;
                                 List<Weight> timesortweights = [];
                                 weights.sort((a,b) => a.dateCreated.compareTo(b.dateCreated));
-                                print("dates ");
 
                                 if(weights[weights.length-1].dateCreated == weights[weights.length-2].dateCreated){
                                   latestDate = weights[weights.length-1].dateCreated;

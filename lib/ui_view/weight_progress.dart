@@ -21,7 +21,6 @@ class weight_progress extends StatefulWidget {
 class _weight_progressState extends State<weight_progress> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-
   Weight_Goal weight_goal = new Weight_Goal();
   double weight_to_meet_goal = 0;
   double weight_difference = 0;

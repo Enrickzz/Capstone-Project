@@ -160,7 +160,7 @@ class add_waterIntakeState extends State<add_water_intake> {
                           setState(() {
                             waterintakeDate = value;
                             isDateSelected = true;
-                            waterintake_date = "${waterintakeDate.month}/${waterintakeDate.day}/${waterintakeDate.year}";
+                            waterintake_date = "${waterintakeDate.month.toString().padLeft(2,"0")}/${waterintakeDate.day.toString().padLeft(2,"0")}/${waterintakeDate.year}";
                           });
                           dateValue.text = waterintake_date + "\r";
                         }

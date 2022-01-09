@@ -1080,7 +1080,8 @@ class _set_upState extends State<set_up> {
                 final usersRef = databaseReference.child('users/' + uid + '/vitals/additional_info/');
                 final loginRef = databaseReference.child('users/' + uid + '/personal_info/');
                 final physicalRef = databaseReference.child('users/' + uid + '/physical_parameters/');
-                final weightRef = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+                final weightGoalRef = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+                final weightRef = databaseReference.child('users/' + uid + '/goal/weight/');
                 final waterRef = databaseReference.child('users/' + uid + '/goal/water_goal/');
                 final sleepRef = databaseReference.child('users/' + uid + '/goal/sleep_goal/');
                 final stressRef = databaseReference.child('users/' + uid + '/goal/stress_goal/');
@@ -1178,12 +1179,18 @@ class _set_upState extends State<set_up> {
                   "weight": weight.toString(),
                 });
                 loginRef.update({"isFirstTime": false});
-                weightRef.set({
+                weightGoalRef.set({
                   "objective": valueChooseWeightGoal,
                   "target_weight": weight_goal.toString(),
                   "current_weight": weight.toString(),
                   "weight": weight.toString(),
                   "weight_unit": weight_unit,
+                  "dateCreated": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
+                });
+                weightRef.set({
+                  "weight": weight.toString(),
+                  "bmi": bmi.toStringAsFixed(1),
+                  "timeCreated": "${now.hour.toString().padLeft(2, "0")}:${now.minute.toString().padLeft(2,"0")}",
                   "dateCreated": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
                 });
                 waterRef.set({

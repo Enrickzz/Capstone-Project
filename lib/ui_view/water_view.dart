@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/ui_view/wave_view.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
@@ -17,6 +22,27 @@ class WaterView extends StatefulWidget {
 }
 
 class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  Water_Goal water_goal = new Water_Goal();
+  List<WaterIntake> waterintake_list = [];
+  double total_water = 0;
+  double waterintake_goal = 0;
+  double waterpercentage = 0;
+  String lastDrink = "00:00";
+
+  @override
+  void initState() {
+    super.initState();
+    getWaterGoal();
+    Future.delayed(const Duration(milliseconds: 2000), (){
+      setState(() {
+        print("setstate");
+      });
+    });
+  }
+
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
@@ -70,7 +96,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                       padding: const EdgeInsets.only(
                                           left: 4, bottom: 3),
                                       child: Text(
-                                        '1893',
+                                        total_water.toStringAsFixed(0),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -101,7 +127,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                   padding: const EdgeInsets.only(
                                       left: 4, top: 2, bottom: 14),
                                   child: Text(
-                                    'of your daily goal 1893 ml',
+                                    'of your daily goal '+waterintake_goal.toStringAsFixed(0)+' ml',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -175,7 +201,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Last drink 8:26 AM',
+                                          'Last drink '+lastDrink,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily:
@@ -302,7 +328,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                             ],
                           ),
                           child: WaveView(
-                            percentageValue: 100.0,
+                            percentageValue: waterpercentage,
                           ),
                         ),
                       )
@@ -315,5 +341,51 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
         );
       },
     );
+  }
+  void getWaterGoal () {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
+    final readWater = databaseReference.child('users/' + uid + '/goal/water_intake/');
+    DateTime now = DateTime.now();
+    String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
+    readWaterGoal.once().then((DataSnapshot snapshot){
+      readWater.once().then((DataSnapshot datasnapshot) {
+        Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+        water_goal = Water_Goal.fromJson(temp);
+        waterintake_goal = water_goal.water_goal;
+        List<dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
+        temp2.forEach((jsonString) {
+          waterintake_list.add(WaterIntake.fromJson(jsonString));
+        });
+        for(int i=0; i < waterintake_list.length; i++){
+          String datecreated = "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}";
+          if(datenow == datecreated){
+            total_water += waterintake_list[i].water_intake;
+          }
+        }
+        waterpercentage = double.parse((total_water/ waterintake_goal * 100).toStringAsFixed(1));
+        /// getting the latest water
+        var latestDate;
+        List<WaterIntake> timesortwater = [];
+        waterintake_list.sort((a,b) => a.dateCreated.compareTo(b.dateCreated));
+
+        if(waterintake_list[waterintake_list.length-1].dateCreated == waterintake_list[waterintake_list.length-2].dateCreated){
+          latestDate = waterintake_list[waterintake_list.length-1].dateCreated;
+          for(int i = 0; i < waterintake_list.length; i++){
+            if(waterintake_list[i].dateCreated == latestDate){
+              timesortwater.add(waterintake_list[i]);
+            }
+          }
+          timesortwater.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
+          lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+          readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+        }
+        else{
+          timesortwater = waterintake_list;
+          readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+        }
+      });
+    });
   }
 }

@@ -20,7 +20,6 @@ import 'package:my_app/ui_view/weight_progress.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
-
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
