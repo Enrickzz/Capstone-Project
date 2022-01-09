@@ -7,10 +7,9 @@ import 'package:my_app/models/meals_list_data.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/nutritionixApi.dart';
-import 'package:my_app/registration.dart';
-import 'package:my_app/services/auth.dart';
+
 import '../main.dart';
-import '../index2/my_meals.dart';
+import '../goal_tab/meals/meals_list.dart';
 
 class MealsListView extends StatefulWidget {
   const MealsListView(
@@ -171,7 +170,7 @@ class MealsView extends StatelessWidget {
           child: InkWell(
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => my_meals()
+                  builder: (context) => meals_list()
               ));
             },
             child: Transform(

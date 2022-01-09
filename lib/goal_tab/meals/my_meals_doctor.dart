@@ -2,39 +2,24 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:my_app/models/exrxTEST.dart';
-import 'package:my_app/my_diary/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/my_diary/area_list_view.dart';
-import 'package:my_app/ui_view/body_measurement.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glass_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
-import '../../main.dart';
-import '../notifications/notifications._patients.dart';
-import '../my_diary/meals_list_view.dart';
-import '../my_diary/water_view.dart';
+import '../../notifications/notifications._patients.dart';
+import '../../ui_view/meals_list_view.dart';
 
-class meals extends StatefulWidget {
-  const meals({Key key, this.animationController}) : super(key: key);
+class my_meals_doctor extends StatefulWidget {
+  const my_meals_doctor({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _mealsState createState() => _mealsState();
+  _my_meals_doctorState createState() => _my_meals_doctorState();
 }
 
-class _mealsState extends State<meals>
+class _my_meals_doctorState extends State<my_meals_doctor>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -94,8 +79,8 @@ class _mealsState extends State<meals>
     listViews.add(
       TitleView(
         titleTxt: 'Meals today',
-        subTxt: 'Add more',
-        redirect: 2,
+        subTxt: 'View Log',
+        // redirect: 2,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

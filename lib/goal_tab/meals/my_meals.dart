@@ -2,43 +2,24 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:my_app/models/exrxTEST.dart';
-import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/body_measurement.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/fitbit_connect.dart';
-import 'package:my_app/ui_view/glass_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
-import 'package:my_app/ui_view/sleep_quality.dart';
-import 'package:my_app/ui_view/time_asleep.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/weight_progress.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
-import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
-import '../ui_view/meals_list_view.dart';
-import '../ui_view/water_view.dart';
+import '../../ui_view/meals_list_view.dart';
 
-class my_stress extends StatefulWidget {
-  const my_stress({Key key, this.animationController}) : super(key: key);
+class my_meals extends StatefulWidget {
+  const my_meals({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _my_stressState createState() => _my_stressState();
+  _my_mealsState createState() => _my_mealsState();
 }
 
-class _my_stressState extends State<my_stress>
+class _my_mealsState extends State<my_meals>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -87,7 +68,43 @@ class _my_stressState extends State<my_stress>
     const int count = 9;
 
     listViews.add(
-      fitbit_connect(
+      DietView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+    listViews.add(
+      TitleView(
+        titleTxt: 'Meals today',
+        subTxt: 'Log Meals',
+        redirect: 2,
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      MealsListView(
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController,
+                curve: Interval((1 / count) * 3, 1.0,
+                    curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      TitleView(
+        titleTxt: 'Recommended meals',
+        subTxt: 'See more',
+        redirect: 3,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

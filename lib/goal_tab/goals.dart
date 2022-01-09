@@ -6,11 +6,11 @@ import 'package:my_app/goal_tab/sleep/my_sleep.dart';
 import 'package:my_app/goal_tab/water/my_water.dart';
 import 'package:my_app/goal_tab/weight/my_weight.dart';
 import 'package:my_app/models/exrxTEST.dart';
-import 'package:my_app/my_diary/my_exercises.dart';
+import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/my_diary/area_list_view.dart';
+import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
@@ -24,10 +24,10 @@ import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
-import '../../my_diary/exercise_screen.dart';
+import 'exercises/exercise_screen.dart';
 import '../bottom_navigation_view/bottom_bar_view.dart';
-import '../index2/meals.dart';
-import '../index2/my_meals.dart';
+import '../goal_tab/meals/my_meals.dart';
+import '../goal_tab/meals/meals_list.dart';
 import 'my_stress.dart';
 
 class goals extends StatefulWidget {
@@ -103,7 +103,7 @@ class _goalsState extends State<goals>
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = meals(animationController: animationController);
+    tabBody = my_meals(animationController: animationController);
 
     super.initState();
   }
@@ -204,7 +204,7 @@ class _goalsState extends State<goals>
       body: TabBarView(
         controller: controller,
         children: [
-          tabBody = meals(animationController: animationController),
+          tabBody = my_meals(animationController: animationController),
           tabBody = my_exercises(animationController: animationController),
           tabBody = my_weight(animationController: animationController),
           tabBody = my_water(animationController: animationController),

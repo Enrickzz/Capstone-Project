@@ -241,7 +241,7 @@ class _PatientListState extends State<PatientList>  {
               style: TextStyle(fontSize: 16.0),
             ),
             decoration: BoxDecoration(
-              color: Colors.black87,
+              color: Colors.blue,
             ),
 
           ),
@@ -249,7 +249,7 @@ class _PatientListState extends State<PatientList>  {
             leading: const Icon(Icons.notifications),
             title: const Text(
               'Notifications',
-              style: TextStyle(fontSize: 24.0),
+              style: TextStyle(fontSize: 18.0),
             ),
             onTap: () {
               Navigator.push(
@@ -262,7 +262,7 @@ class _PatientListState extends State<PatientList>  {
             leading: const Icon(Icons.add),
             title: const Text(
               'Add Patients',
-              style: TextStyle(fontSize: 24.0),
+              style: TextStyle(fontSize: 18.0),
             ),
             onTap: () {
               Navigator.push(
@@ -280,7 +280,7 @@ class _PatientListState extends State<PatientList>  {
             leading: const Icon(Icons.logout),
             title: const Text(
               'Sign Out',
-              style: TextStyle(fontSize: 24.0),
+              style: TextStyle(fontSize: 18.0),
             ),
             onTap: () async{
               await _auth.signOut();

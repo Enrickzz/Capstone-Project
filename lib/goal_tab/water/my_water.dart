@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/exrxTEST.dart';
-import 'package:my_app/my_diary/my_exercises.dart';
+import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/my_diary/area_list_view.dart';
+import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
@@ -24,8 +24,8 @@ import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
-import '../../my_diary/meals_list_view.dart';
-import '../../my_diary/water_view.dart';
+import '../../ui_view/meals_list_view.dart';
+import '../../ui_view/water_view.dart';
 
 class my_water extends StatefulWidget {
   const my_water({Key key, this.animationController}) : super(key: key);

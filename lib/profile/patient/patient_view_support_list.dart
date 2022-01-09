@@ -114,10 +114,6 @@ class _SupportSystemListState extends State<SupportSystemList>  {
                   ),
                 )
             ),
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-
-            ),
           ],
         ),
         body: ListView.builder(

@@ -5,11 +5,10 @@ import 'package:my_app/goal_tab/water/water_intake_doctor_view.dart';
 import 'package:my_app/goal_tab/water/water_intake_patient_view.dart';
 import 'package:my_app/goal_tab/weight/weight_list_doctor_view.dart';
 import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
-import 'package:my_app/index2/food_list.dart';
-import 'package:my_app/index2/index2.dart';
+import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
 import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
-import 'package:my_app/my_diary/exercise_screen.dart';
-import 'package:my_app/my_diary/my_exercises.dart';
+import 'package:my_app/goal_tab/exercises/exercise_screen.dart';
+import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 
 class TitleView extends StatelessWidget {
   final String titleTxt;
@@ -87,7 +86,7 @@ class TitleView extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => index2(animationController: animationController)),
+                                        builder: (context) => nutritionix_meals(animationController: animationController)),
                                   );
                                 }
                                 else if (redirect == 3) {
@@ -132,6 +131,20 @@ class TitleView extends StatelessWidget {
                                         builder: (context) => water_intake_doctor_view()),
                                   );
                                 }
+                                // else if (redirect == 9) {
+                                //   Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => water_intake_doctor_view()),
+                                //   );
+                                // }
+                                // else if (redirect == 10) {
+                                //   Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => water_intake_doctor_view()),
+                                //   );
+                                // }
                               },
                             ),
                             SizedBox(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/exrxTEST.dart';
-import 'package:my_app/my_diary/view_exrx.dart';
-import 'package:my_app/my_diary/viewexrx_added.dart';
+import 'package:my_app/goal_tab/exercises/view_exrx.dart';
+import 'package:my_app/goal_tab/exercises/viewexrx_added.dart';
 
 import '../fitness_app_theme.dart';
 

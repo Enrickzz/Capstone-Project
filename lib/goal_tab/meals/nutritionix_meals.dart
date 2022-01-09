@@ -8,21 +8,21 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import '../fitness_app_theme.dart';
+import '../../fitness_app_theme.dart';
 import 'detailsPage.dart';
 
-class index2 extends StatefulWidget {
-  const index2({Key key, this.animationController}) : super(key: key);
+class nutritionix_meals extends StatefulWidget {
+  const nutritionix_meals({Key key, this.animationController}) : super(key: key);
   final AnimationController animationController;
   @override
-  _index2State createState() => _index2State();
+  _nutritionix_mealsState createState() => _nutritionix_mealsState();
 }
 
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
 
-class _index2State extends State<index2>
+class _nutritionix_mealsState extends State<nutritionix_meals>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 

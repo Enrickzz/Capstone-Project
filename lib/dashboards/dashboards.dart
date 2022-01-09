@@ -1,7 +1,7 @@
-import 'package:my_app/my_diary/water_view.dart';
+import 'package:my_app/ui_view/water_view.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/my_diary/area_list_view.dart';
+import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';

@@ -9,25 +9,14 @@ import 'package:intl/intl.dart';
 import 'package:my_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:my_app/dashboards/dashboards_as_doctor.dart';
 import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
-import 'package:my_app/goal_tab/goals.dart';
 import 'package:my_app/goal_tab/goals_doctor_view.dart';
-import 'package:my_app/index2/meals.dart';
+import 'package:my_app/goal_tab/meals/my_meals.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/my_diary/my_exercises.dart';
+import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/my_diary/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/grid_images.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
-import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import 'package:my_app/fitness_app_theme.dart';
@@ -718,7 +707,7 @@ class _index3State extends State<view_patient_profile>
                     Container(
                       child: ElevatedButton(
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Text('View Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ),
@@ -727,15 +716,14 @@ class _index3State extends State<view_patient_profile>
                             context,
                             MaterialPageRoute(builder: (context) => dashboards_as_doctor(animationController: animationController)),
                           );
-
                         },
                       ),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 8),
                     Container(
                       child: ElevatedButton(
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Text('View Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ),
@@ -903,7 +891,7 @@ class _index3State extends State<view_patient_profile>
                 setState(() {
                   tabBody =
                   // food_list(animationController: animationController);
-                  meals(animationController: animationController);
+                  my_meals(animationController: animationController);
                 });
               });
             }else if(index ==3){

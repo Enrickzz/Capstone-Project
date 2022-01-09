@@ -4,7 +4,7 @@ import 'package:my_app/reviews/drugstore/info_drugstore.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/my_diary/area_list_view.dart';
+import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/diet_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';

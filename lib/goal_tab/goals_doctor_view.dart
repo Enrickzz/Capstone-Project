@@ -2,34 +2,19 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/goal_tab/meals/my_meals_doctor.dart';
 import 'package:my_app/goal_tab/sleep/my_sleep.dart';
-import 'package:my_app/goal_tab/water/my_water.dart';
 import 'package:my_app/goal_tab/water/my_water_doctor.dart';
-import 'package:my_app/goal_tab/weight/my_weight.dart';
 import 'package:my_app/goal_tab/weight/my_weight_doctor.dart';
-import 'package:my_app/models/exrxTEST.dart';
-import 'package:my_app/my_diary/my_exercises.dart';
+import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/my_diary/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/cholesterol_chart.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
-import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
-import '../../main.dart';
-import '../../my_diary/exercise_screen.dart';
-import '../bottom_navigation_view/bottom_bar_view.dart';
-import '../index2/meals.dart';
-import '../index2/my_meals.dart';
+import '../goal_tab/meals/my_meals.dart';
+import 'exercises/my_exercises_doctor.dart';
+import 'meals/my_meals.dart';
 import 'my_stress.dart';
 
 class goals_doctor_view extends StatefulWidget {
@@ -105,7 +90,7 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = meals(animationController: animationController);
+    tabBody = my_meals(animationController: animationController);
 
     super.initState();
   }
@@ -206,8 +191,8 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
       body: TabBarView(
         controller: controller,
         children: [
-          tabBody = meals(animationController: animationController),
-          tabBody = my_exercises(animationController: animationController),
+          tabBody = my_meals_doctor(animationController: animationController),
+          tabBody = my_exercises_doctor(animationController: animationController),
           tabBody = my_weight_doctor(animationController: animationController),
           tabBody = my_water_doctor(animationController: animationController),
           tabBody = my_sleep(animationController: animationController),
