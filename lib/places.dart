@@ -33,7 +33,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   final List<String> tabs = ['Drugstores', 'Hospitals', 'Recreational Centers', 'Restaurants'];
 
   TabController controller;
-  List<Results> places=[];
+  List<Results> drugstores=[], hospitals=[], restaurants=[], recreations=[];
   @override
   void initState() {
     super.initState();
@@ -111,7 +111,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         children: [
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: places.length,
+            itemCount: drugstores.length,
             itemBuilder: (context, index){
               return Container(
                 width: MediaQuery.of(context).size.width,
@@ -120,7 +120,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   child: ListTile(
                       title: Padding(
                         padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text(""+places[index].name,
+                        child: Text(""+drugstores[index].name,
                             style:TextStyle(
                               color: Colors.black,
                               fontSize: 14.0,
@@ -178,7 +178,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                 SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    ''+places[index].formattedAddress,
+                                    ''+drugstores[index].formattedAddress,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
@@ -219,7 +219,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Container(
                           height: 70.0,
                           width: 70.0,// Image radius
-                          child: _displayMedia(places[index].photos.photoReference)
+                          child: _displayMedia(drugstores[index].photos.photoReference)
                           // Image.network("https://aiscracker.com/wp-content/uploads/2008/12/sogoBldg.jpg")
                           
                           // (Image.network('' + places[index].photos.photoReference) != null) ? Image.network('' +places[index].photos.photoReference, loadingBuilder: (context, child, loadingProgress) =>
@@ -254,7 +254,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
           ) ,
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: 3,
+            itemCount: hospitals.length,
             itemBuilder: (context, index){
               return Container(
                 width: MediaQuery.of(context).size.width,
@@ -263,7 +263,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   child: ListTile(
                       title: Padding(
                         padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text("Hotel Sogo De La Salle University",
+                        child: Text(""+hospitals[index].name,
                             style:TextStyle(
                               color: Colors.black,
                               fontSize: 14.0,
@@ -321,7 +321,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                 SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '2401 Taft Ave, Malate, Manila, 1004 Metro Manila ',
+                                    ''+hospitals[index].formattedAddress,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
@@ -362,7 +362,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Container(
                           height: 70.0,
                           width: 70.0,// Image radius
-                          child: Image.network('https://aiscracker.com/wp-content/uploads/2008/12/sogoBldg.jpg', fit: BoxFit.cover),
+                          child: _displayMedia(hospitals[index].photos.photoReference)
                         ),
                       ),
                       isThreeLine: false,
@@ -392,7 +392,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
           ) ,
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: 3,
+            itemCount: recreations.length,
             itemBuilder: (context, index){
               return Container(
                 width: MediaQuery.of(context).size.width,
@@ -401,7 +401,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   child: ListTile(
                       title: Padding(
                         padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text("Hotel Sogo De La Salle University",
+                        child: Text(recreations[index].name,
                             style:TextStyle(
                               color: Colors.black,
                               fontSize: 14.0,
@@ -459,7 +459,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                 SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '2401 Taft Ave, Malate, Manila, 1004 Metro Manila ',
+                                    recreations[index].formattedAddress,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
@@ -500,7 +500,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Container(
                           height: 70.0,
                           width: 70.0,// Image radius
-                          child: Image.network('https://aiscracker.com/wp-content/uploads/2008/12/sogoBldg.jpg', fit: BoxFit.cover),
+                          child: _displayMedia(recreations[index].photos.photoReference)
                         ),
                       ),
                       isThreeLine: false,
@@ -530,7 +530,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
           ) ,
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: 3,
+            itemCount: restaurants.length,
             itemBuilder: (context, index){
               return Container(
                 width: MediaQuery.of(context).size.width,
@@ -539,7 +539,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   child: ListTile(
                       title: Padding(
                         padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text("Hotel Sogo De La Salle University",
+                        child: Text(restaurants[index].name,
                             style:TextStyle(
                               color: Colors.black,
                               fontSize: 14.0,
@@ -597,7 +597,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                 SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '2401 Taft Ave, Malate, Manila, 1004 Metro Manila ',
+                                    restaurants[index].formattedAddress,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
@@ -638,7 +638,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Container(
                           height: 70.0,
                           width: 70.0,// Image radius
-                          child: Image.network('https://aiscracker.com/wp-content/uploads/2008/12/sogoBldg.jpg', fit: BoxFit.cover),
+                          child: _displayMedia(restaurants[index].photos.photoReference)
                         ),
                       ),
                       isThreeLine: false,
@@ -676,40 +676,60 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     final uid = user.uid;
     String a;
     String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
-    String loc = "16.041739161613133, 120.32275975901386",
+    String loc = "16.03599037979812, 120.33470282456094",
         radius ="1000",
-        type="restaurant",
-        query1= "Nazareth";
+        type="drugstore",
+        query1= "Drugstore";
 
-    // var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=$query1&key=$key&location=$loc&radius=$radius&type=$type"));
-    var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=$type"));
-    //print (response.body);
+    var drugstorres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=$query1&key=$key&location=$loc&radius=$radius&type=$type"));
+    var hospitalres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=hospital"));
+    var recreationres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=court&key=$key&location=$loc&radius=$radius&type=recreation"));
+    var restaurantsres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=restaurant"));
+
     List<Results> gplaces=[];
-    gplaces = GooglePlaces.fromJson(jsonDecode(response.body)).results;
-    places = gplaces;
-    for(var i = 0 ; i < places.length; i++){
-      // if(places[i].photos != null){
-      //   for (var j = 0 ; j < places[i].photos.length; j ++){
-      //     String ref = places[i].photos[j].photoReference;
-      //     places[i].photos[j].photoReference = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
-      //         ref+
-      //         "&sensor=false&maxheight=300&maxwidth=300&key=$key";
-      //   }
-      // }
-      if(places[i].photos != "photoref"){
+    gplaces = GooglePlaces.fromJson(jsonDecode(drugstorres.body)).results;
+    drugstores = gplaces;
+    hospitals = GooglePlaces.fromJson(jsonDecode(hospitalres.body)).results;
+    recreations = GooglePlaces.fromJson(jsonDecode(recreationres.body)).results;
+    restaurants = GooglePlaces.fromJson(jsonDecode(restaurantsres.body)).results;
+
+    for(var i = 0 ; i < drugstores.length; i++){
+      if(drugstores[i].photos != "photoref"){
         String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
-            places[i].photos.photoReference+
-                    "&sensor=false&maxheight=300&maxwidth=300&key=$key";
-        places[i].photos.photoReference = replace;
-
-        print(places[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
-
+            drugstores[i].photos.photoReference+
+            "&sensor=false&maxheight=300&maxwidth=300&key=$key";
+        drugstores[i].photos.photoReference = replace;
+        // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
       }
-
     }
-    print("LENGTH OF PLACES "+gplaces.length.toString()+"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+    for(var i = 0 ; i < hospitals.length; i++){
+      if(hospitals[i].photos != "photoref"){
+        String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
+            hospitals[i].photos.photoReference+
+            "&sensor=false&maxheight=300&maxwidth=300&key=$key";
+        hospitals[i].photos.photoReference = replace;
+        // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
+      }
+    }
+    for(var i = 0 ; i < recreations.length; i++){
+      if(recreations[i].photos != "photoref"){
+        String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
+            recreations[i].photos.photoReference+
+            "&sensor=false&maxheight=300&maxwidth=300&key=$key";
+        recreations[i].photos.photoReference = replace;
+        // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
+      }
+    }
+    for(var i = 0 ; i < restaurants.length; i++){
+      if(restaurants[i].photos != "photoref"){
+        String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
+            restaurants[i].photos.photoReference+
+            "&sensor=false&maxheight=300&maxwidth=300&key=$key";
+        restaurants[i].photos.photoReference = replace;
+        // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
+      }
+    }
     setState(() {
-
       print("NAGSETSTATE SA CALL NG SHIT");
     });
     return gplaces;
