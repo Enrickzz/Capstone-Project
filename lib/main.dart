@@ -29,7 +29,7 @@ import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'discussion_board/discussion.dart';
 import 'package:my_app/discussion_board/discussion.dart';
 import 'fitness_app_theme.dart';
-import 'food/food_list.dart';
+// import 'food/food_list.dart';
 import 'goal_tab/water/water_intake_patient_view.dart';
 import 'goal_tab/exercises/exercise_screen.dart';
 import 'package:my_app/registration.dart';
@@ -45,7 +45,6 @@ import 'package:my_app/management_plan/medication_prescription/specific_medical_
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
 import 'package:my_app/patient_list/doctor_add_patient.dart';
 import 'package:my_app/patient_list/doctor_patient_list.dart';
-
 import 'goal_tab/meals/meals_list.dart';
 
 

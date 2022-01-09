@@ -13,7 +13,7 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
-
+import 'package:http/http.dart' as http;
 import '../dialogs/policy_dialog.dart';
 import '../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
@@ -36,7 +36,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
+    Places("asd");
     controller = TabController(length: 4, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -663,6 +663,22 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         ],
       ),
     );
+  }
+
+  Future<String> Places(String query) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String a;
+    String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
+    String loc = "16.041739161613133, 120.32275975901386",
+        radius ="1000",
+        type="hospital",
+        query1= "Nazareth";
+
+    var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=$query1&key=$key&location=$loc&radius=$radius&type=$type"));
+
+    print(response.body);
+    return a;
   }
 
 }
