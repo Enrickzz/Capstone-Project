@@ -16,6 +16,7 @@ import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import '../dialogs/policy_dialog.dart';
 import '../fitness_app_theme.dart';
+import 'models/GooglePlaces.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class places extends StatefulWidget {
@@ -32,7 +33,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   final List<String> tabs = ['Drugstores', 'Hospitals', 'Recreational Centers', 'Restaurants'];
 
   TabController controller;
-
+  List<Results> places=[];
   @override
   void initState() {
     super.initState();
@@ -110,7 +111,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         children: [
           ListView.builder(
             padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: 3,
+            itemCount: places.length,
             itemBuilder: (context, index){
               return Container(
                 width: MediaQuery.of(context).size.width,
@@ -119,7 +120,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   child: ListTile(
                       title: Padding(
                         padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text("Hotel Sogo De La Salle University",
+                        child: Text(""+places[index].name,
                             style:TextStyle(
                               color: Colors.black,
                               fontSize: 14.0,
@@ -177,7 +178,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                 SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '2401 Taft Ave, Malate, Manila, 1004 Metro Manila ',
+                                    ''+places[index].formattedAddress,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
@@ -203,7 +204,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                 SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '7am - 10pm',
+                                    '',
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
                                 ),
@@ -218,7 +219,12 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Container(
                           height: 70.0,
                           width: 70.0,// Image radius
-                          child: Image.network('https://aiscracker.com/wp-content/uploads/2008/12/sogoBldg.jpg', fit: BoxFit.cover),
+                          child: _displayMedia(places[index].photos.photoReference)
+                          // Image.network("https://aiscracker.com/wp-content/uploads/2008/12/sogoBldg.jpg")
+                          
+                          // (Image.network('' + places[index].photos.photoReference) != null) ? Image.network('' +places[index].photos.photoReference, loadingBuilder: (context, child, loadingProgress) =>
+                          // (loadingProgress == null) ? child : CircularProgressIndicator(),
+                          //   errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover)
                         ),
                       ),
                       isThreeLine: false,
@@ -665,20 +671,60 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     );
   }
 
-  Future<String> Places(String query) async{
+  Future<List<Results>> Places(String query) async{
     final User user = auth.currentUser;
     final uid = user.uid;
     String a;
     String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
     String loc = "16.041739161613133, 120.32275975901386",
         radius ="1000",
-        type="hospital",
+        type="restaurant",
         query1= "Nazareth";
 
-    var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=$query1&key=$key&location=$loc&radius=$radius&type=$type"));
+    // var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=$query1&key=$key&location=$loc&radius=$radius&type=$type"));
+    var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=$type"));
+    //print (response.body);
+    List<Results> gplaces=[];
+    gplaces = GooglePlaces.fromJson(jsonDecode(response.body)).results;
+    places = gplaces;
+    for(var i = 0 ; i < places.length; i++){
+      // if(places[i].photos != null){
+      //   for (var j = 0 ; j < places[i].photos.length; j ++){
+      //     String ref = places[i].photos[j].photoReference;
+      //     places[i].photos[j].photoReference = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
+      //         ref+
+      //         "&sensor=false&maxheight=300&maxwidth=300&key=$key";
+      //   }
+      // }
+      if(places[i].photos != "photoref"){
+        String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
+            places[i].photos.photoReference+
+                    "&sensor=false&maxheight=300&maxwidth=300&key=$key";
+        places[i].photos.photoReference = replace;
 
-    print(response.body);
-    return a;
+        print(places[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
+
+      }
+
+    }
+    print("LENGTH OF PLACES "+gplaces.length.toString()+"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+    setState(() {
+
+      print("NAGSETSTATE SA CALL NG SHIT");
+    });
+    return gplaces;
   }
+  Widget _displayMedia(String media) {
+    if(media == "photoref") {
+      print("PHOTOREF ITO ");
+      return Image.asset("assets/images/no-image.jpg");
+    }
+    else{
+      return Image.network(media,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset("assets/images/no-image.jpg");
+        });
+    }
 
+    }
 }
