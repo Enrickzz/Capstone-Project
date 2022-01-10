@@ -415,7 +415,6 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       info = Additional_Info.fromJson3(temp);
     });
     if(cuser.usertype == "Patient"){
-      searchPatient = true;
       displayName = cuser.firstname;
       displayName += " ";
       displayName += cuser.lastname;
@@ -442,7 +441,8 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       }
     }
     setState(() {
-
+      print("set here");
+      searchPatient = true;
     });
 
     }
