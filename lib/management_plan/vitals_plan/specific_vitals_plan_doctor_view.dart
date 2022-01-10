@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/management_plan/vitals_plan/edit_vitals_prescription.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'package:my_app/additional_data_collection.dart';
@@ -154,54 +155,57 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
                                     )
                                 ),
                               ),
-                              InkWell(
-                                  highlightColor: Colors.transparent,
-                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                  onTap: () {
-                                    showModalBottomSheet(context: context,
-                                      isScrollControlled: true,
-                                      builder: (context) => SingleChildScrollView(child: Container(
-                                        padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                                        // child: edit_medication_prescription(thislist: templist),
-                                      ),
-                                      ),
-                                    ).then((value) =>
-                                        Future.delayed(const Duration(milliseconds: 1500), (){
-                                          setState((){
-                                            print("setstate medication prescription");
-                                            print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                            if(value != null){
-                                              templist = value[0];
-                                            }
-                                          });
-                                        }));
-                                  },
-                                  // child: Padding(
-                                  // padding: const EdgeInsets.only(left: 8),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text( "Edit",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.normal,
-                                            color:Color(0xFF2633C5),
+                              Visibility(
+                                visible: prescribedDoctor,
+                                child: InkWell(
+                                    highlightColor: Colors.transparent,
+                                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                    onTap: () {
+                                      showModalBottomSheet(context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) => SingleChildScrollView(child: Container(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                                          child: edit_vitals_prescription(),
+                                        ),
+                                        ),
+                                      ).then((value) =>
+                                          Future.delayed(const Duration(milliseconds: 1500), (){
+                                            setState((){
+                                              print("setstate medication prescription");
+                                              print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                                              if(value != null){
+                                                templist = value[0];
+                                              }
+                                            });
+                                          }));
+                                    },
+                                    // child: Padding(
+                                    // padding: const EdgeInsets.only(left: 8),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text( "Edit",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal,
+                                              color:Color(0xFF2633C5),
 
-                                          )
-                                      ),
+                                            )
+                                        ),
 
-                                      // SizedBox(
-                                      //   height: 38,
-                                      //   width: 26,
-                                      //   // child: Icon(
-                                      //   //   Icons.arrow_forward,
-                                      //   //   color: FitnessAppTheme.darkText,
-                                      //   //   size: 18,
-                                      //   // ),
-                                      // ),
-                                    ],
-                                  )
-                                // )
+                                        // SizedBox(
+                                        //   height: 38,
+                                        //   width: 26,
+                                        //   // child: Icon(
+                                        //   //   Icons.arrow_forward,
+                                        //   //   color: FitnessAppTheme.darkText,
+                                        //   //   size: 18,
+                                        //   // ),
+                                        // ),
+                                      ],
+                                    )
+                                  // )
+                                ),
                               )
                             ]
                         ),

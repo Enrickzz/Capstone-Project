@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_app/data_inputs/medicine_intake/edit_medication.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
@@ -62,6 +63,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
   String medicine_type = "";
   String medicine_date = "";
   String medicine_time = "";
+  String medicine_unit ="";
 
   @override
   void initState() {
@@ -145,6 +147,56 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                                   )
                               ),
                             ),
+                            InkWell(
+                                highlightColor: Colors.transparent,
+                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                onTap: () {
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: edit_medication(),
+                                    ),
+                                    ),
+                                  ).then((value) =>
+                                      Future.delayed(const Duration(milliseconds: 1500), (){
+                                        setState((){
+                                          print("setstate medication prescription");
+                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                                          if(value != null){
+                                            // prestemp = value[0];
+                                          }
+                                        });
+                                      }));
+                                },
+                                // child: Padding(
+                                // padding: const EdgeInsets.only(left: 8),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text( "Edit",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color:Color(0xFF2633C5),
+
+                                        )
+                                    ),
+
+
+                                    // SizedBox(
+                                    //   height: 38,
+                                    //   width: 26,
+                                    //   // child: Icon(
+                                    //   //   Icons.arrow_forward,
+                                    //   //   color: FitnessAppTheme.darkText,
+                                    //   //   size: 18,
+                                    //   // ),
+                                    // ),
+                                  ],
+                                )
+                              // )
+                            )
 
                           ]
                       ),
@@ -190,7 +242,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text( medicine_dosage + " + ",
+                                            Text( medicine_dosage  + medicine_unit,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -315,6 +367,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
         listtemp.add(Medication.fromJson(jsonString));
       });
       medicine_name = listtemp[index].medicine_name;
+      medicine_unit = listtemp[index].medicine_unit;
       medicine_dosage = listtemp[index].medicine_dosage.toString();
       medicine_type = listtemp[index].medicine_type;
       medicine_date = "${listtemp[index].medicine_date.month.toString().padLeft(2,"0")}/${listtemp[index].medicine_date.day.toString().padLeft(2,"0")}/${listtemp[index].medicine_date.year}";

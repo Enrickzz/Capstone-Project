@@ -160,7 +160,7 @@ class _SpecificSupplementViewAsDoctorState extends State<SpecificMedicineIntakeV
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text( medicine_dosage + " + " + medicine_unit,
+                                            Text( medicine_dosage + medicine_unit,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
