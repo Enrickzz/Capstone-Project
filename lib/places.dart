@@ -220,11 +220,6 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                           height: 70.0,
                           width: 70.0,// Image radius
                           child: _displayMedia(drugstores[index].photos.photoReference)
-                          // Image.network("https://aiscracker.com/wp-content/uploads/2008/12/sogoBldg.jpg")
-                          
-                          // (Image.network('' + places[index].photos.photoReference) != null) ? Image.network('' +places[index].photos.photoReference, loadingBuilder: (context, child, loadingProgress) =>
-                          // (loadingProgress == null) ? child : CircularProgressIndicator(),
-                          //   errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover)
                         ),
                       ),
                       isThreeLine: false,
@@ -236,7 +231,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(),
+                            child: info_restaurant(this_info:  drugstores[index]),
                           ),
                           ),
                         ).then((value) =>
@@ -374,7 +369,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(),
+                            child: info_restaurant(this_info:  hospitals[index]),
                           ),
                           ),
                         ).then((value) =>
@@ -512,7 +507,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(),
+                            child: info_restaurant(this_info:  recreations[index]),
                           ),
                           ),
                         ).then((value) =>
@@ -650,7 +645,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(),
+                            child: info_restaurant(this_info:  restaurants[index]),
                           ),
                           ),
                         ).then((value) =>
@@ -685,6 +680,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     var hospitalres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=hospital"));
     var recreationres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=court&key=$key&location=$loc&radius=$radius&type=recreation"));
     var restaurantsres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=restaurant"));
+    // var restaurantsres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=16.03599037979812, 120.33470282456094&radius=1000&key=AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk&type=restaurant"));
 
     List<Results> gplaces=[];
     gplaces = GooglePlaces.fromJson(jsonDecode(drugstorres.body)).results;
@@ -743,7 +739,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       return Image.network(media,
         errorBuilder: (context, error, stackTrace) {
           return Image.asset("assets/images/no-image.jpg");
-        });
+        },fit: BoxFit.cover);
     }
 
     }

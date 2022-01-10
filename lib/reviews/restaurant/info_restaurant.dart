@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -16,6 +16,8 @@ import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
+import 'package:my_app/models/GooglePlaces.dart';
+import 'package:my_app/models/specific_info_places.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/reviews/restaurant/specific_restaurant_reviews.dart';
 import 'package:my_app/services/auth.dart';
@@ -30,7 +32,8 @@ import 'package:my_app/widgets/rating.dart';
 
 class info_restaurant extends StatefulWidget {
   final List<FirebaseFile> files;
-  info_restaurant({Key key, this.files});
+  info_restaurant({Key key, this.files, this.this_info});
+  final Results this_info;
   @override
   _create_postState createState() => _create_postState();
 }
@@ -60,7 +63,14 @@ class _create_postState extends State<info_restaurant> {
   final double minScale = 1;
   final double maxScale = 1.5;
 
+  SpecificInfo details= new SpecificInfo();
+  bool isLoading = true;
 
+  @override
+  void initState(){
+    getspecifics(widget.this_info.placeId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,13 +97,13 @@ class _create_postState extends State<info_restaurant> {
                 children: <Widget>[
 
                   Text(
-                    'Name of Restaurant',
+                    widget.this_info.name,
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
                   Container(
-                    child: Image.file(file),
+                    child: _displayMedia(widget.this_info.photos.photoReference),
                     height:250,
                     width: 200,
                     decoration: BoxDecoration(
@@ -160,7 +170,7 @@ class _create_postState extends State<info_restaurant> {
                       SizedBox(width: 8.0),
                       Flexible(
                         child: Text(
-                          '2401 Taft Ave, Malate, Manila, 1004 Metro Manila ',
+                          widget.this_info.formattedAddress,
                           style: TextStyle( fontSize: 14),
                         ),
                       ),
@@ -180,8 +190,11 @@ class _create_postState extends State<info_restaurant> {
                       ),
                       SizedBox(width: 8.0),
                       Flexible(
-                        child: Text(
-                          '7655-1701',
+                        child: isLoading
+                            ? Center(
+                          child: CircularProgressIndicator(),
+                        ): new Text(
+                          details.result.formattedPhoneNumber,
                           style: TextStyle( fontSize: 14),
                         ),
                       ),
@@ -192,8 +205,13 @@ class _create_postState extends State<info_restaurant> {
                       ),
                       SizedBox(width: 8.0),
                       Flexible(
-                        child: Text(
-                          '7am - 10pm',
+                        child: isLoading
+                            ? Center(
+                          child: CircularProgressIndicator(),
+                        ): new Text(
+                          // '7am - 10pm',
+                               details.result.openingHours.periods[0].open.time + " - " +
+                              details.result.openingHours.periods[0].close.time,
                           style: TextStyle( fontSize: 14),
                         ),
                       ),
@@ -203,8 +221,6 @@ class _create_postState extends State<info_restaurant> {
 
 
                   ),
-
-
 
                   SizedBox(
                     height: 44,
@@ -220,9 +236,9 @@ class _create_postState extends State<info_restaurant> {
                   Visibility(
                       visible: pic,
                       child: Container(
-                        child: Image.file(file),
+                        child: _displayMedia(widget.this_info.photos.photoReference),
                         height:250,
-                        width: 200,
+                        width: 300,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
@@ -387,6 +403,31 @@ class _create_postState extends State<info_restaurant> {
     thisURL = downloadurl;
     return downloadurl;
   }
+  Widget _displayMedia(String media) {
+    if(media == "photoref") {
+      print("PHOTOREF ITO ");
+      return Image.asset("assets/images/no-image.jpg");
+    }
+    else{
+      return Image.network(media,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset("assets/images/no-image.jpg");
+          },fit: BoxFit.cover,);
+    }
 
+  }
+  Future<SpecificInfo> getspecifics(String id) async{
+
+    var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&key=AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk"));
+    details = SpecificInfo.fromJson(jsonDecode(response.body));
+
+    print(details.result.placeId);
+    print("===============\n" + widget.this_info.placeId);
+    // print(details.result.openingHours.periods[0].open.time);
+    // print(details.result.openingHours.periods[0].close.time);
+    setState(() {
+      isLoading = false;
+    });
+  }
 
 }
