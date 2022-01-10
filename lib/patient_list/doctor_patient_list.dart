@@ -94,7 +94,7 @@ class _PatientListState extends State<PatientList>  {
     }
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
-
+        isLoading = false;
       });
 
     });
