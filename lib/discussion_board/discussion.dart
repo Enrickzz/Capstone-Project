@@ -280,6 +280,8 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
                                                         width: MediaQuery.of(context).size.width * 0.65,
                                                         child: Text(
                                                           discussion_list[index].title,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          maxLines: 2,
                                                           style: TextStyle(
                                                             fontSize: 16,
                                                             fontWeight: FontWeight.bold,
@@ -290,7 +292,7 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
                                                       Row(
                                                         children: <Widget>[
                                                           Text(
-                                                            'Dr.' + discussion_list[index].createdBy,
+                                                            'Dr. ' + discussion_list[index].createdBy,
                                                             style: TextStyle(
                                                                 fontSize: 12,
                                                             ),
@@ -346,6 +348,16 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
                                               ),
                                             ],
                                           ),
+                                          InkWell(
+                                            onTap: () {
+                                              _showMyDialogDelete();
+
+                                            },
+                                            child: Icon(
+                                              Icons.delete,
+                                              size: 18,
+                                            ),
+                                          ),
                                         ],
                                       )
                                     ],
@@ -379,5 +391,41 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
         discussion_list.add(Discussion.fromJson(jsonString));
       });
     });
+  }
+
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to delete these record/s?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

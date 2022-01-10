@@ -91,6 +91,15 @@ class _specific_postState extends State<specific_post>
           centerTitle: true,
           backgroundColor: Colors.white,
           actions: [
+            GestureDetector(
+              onTap: () {
+                _showMyDialogDelete();
+              },
+              child: Icon(
+                Icons.delete,
+              ),
+            ),
+            SizedBox(width: 10),
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
@@ -159,7 +168,7 @@ class _specific_postState extends State<specific_post>
                                       children: <Widget>[
                                         Container(
                                           child: Text(
-                                            'Dr.'+ doctor_name,
+                                            'Dr. '+ doctor_name,
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -261,12 +270,16 @@ class _specific_postState extends State<specific_post>
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: <Widget>[
                                                     Container(
-                                                      child: Text(
-                                                        reply_list[index].createdBy,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            "Dr. " + reply_list[index].createdBy,
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                     SizedBox(height: 2.0),
@@ -288,6 +301,22 @@ class _specific_postState extends State<specific_post>
                                                   ],
                                                 ),
                                               )
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete();
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                              Container(),
+                                              Container()
                                             ],
                                           ),
                                         ],
@@ -355,4 +384,39 @@ class _specific_postState extends State<specific_post>
     });
   }
 
+  Future<void> _showMyDialogDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to delete these record/s?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                print('Deleted');
+                Navigator.of(context).pop();
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
