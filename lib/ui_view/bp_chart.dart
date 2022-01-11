@@ -113,42 +113,42 @@ class _blood_pressureState extends State<bp_chart> {
     final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
     //======================================================ADD DATA TO DB=================================================//
-    // final List<_ChartData> chartData = <_ChartData>[
-    //   _ChartData(1, 120, 70),
-    //   _ChartData(2, 120, 70),
-    //   _ChartData(3, 130, 90),
-    //   _ChartData(4, 120, 70),
-    //   _ChartData(5, 115, 85),
-    //   _ChartData(6, 122, 78),
-    //   _ChartData(7, 132, 80),
-    //   _ChartData(8, 120, 85),
-    //   _ChartData(9, 140, 90),
-    //   _ChartData(10, 120, 78),
-    //   _ChartData(11, 120, 84),
-    //   _ChartData(1, 120, 70),
-    //   _ChartData(2, 120, 70),
-    //   _ChartData(3, 130, 90),
-    //   _ChartData(4, 120, 70),
-    //   _ChartData(5, 115, 85),
-    //   _ChartData(6, 122, 78),
-    //   _ChartData(7, 132, 80),
-    //   _ChartData(8, 120, 85),
-    //   _ChartData(9, 140, 90),
-    //   _ChartData(10, 120, 78),
-    //   _ChartData(11, 120, 84),
-    //   _ChartData(1, 120, 70),
-    //   _ChartData(2, 120, 70),
-    //   _ChartData(3, 130, 90),
-    //   _ChartData(4, 120, 70),
-    //   _ChartData(5, 115, 85),
-    //   _ChartData(6, 122, 78),
-    //   _ChartData(7, 132, 80),
-    //   _ChartData(8, 120, 85),
-    //   _ChartData(9, 140, 90),
-    //   _ChartData(10, 120, 78),
-    //   _ChartData(11, 120, 84)
-    //
-    // ];
+    final List<_ChartData> chartData = <_ChartData>[
+      _ChartData(1, 120, 70),
+      _ChartData(2, 120, 70),
+      _ChartData(3, 130, 90),
+      _ChartData(4, 120, 70),
+      _ChartData(5, 115, 85),
+      _ChartData(6, 122, 78),
+      _ChartData(7, 132, 80),
+      _ChartData(8, 120, 85),
+      _ChartData(9, 140, 90),
+      _ChartData(10, 120, 78),
+      _ChartData(11, 120, 84),
+      _ChartData(1, 120, 70),
+      _ChartData(2, 120, 70),
+      _ChartData(3, 130, 90),
+      _ChartData(4, 120, 70),
+      _ChartData(5, 115, 85),
+      _ChartData(6, 122, 78),
+      _ChartData(7, 132, 80),
+      _ChartData(8, 120, 85),
+      _ChartData(9, 140, 90),
+      _ChartData(10, 120, 78),
+      _ChartData(11, 120, 84),
+      _ChartData(1, 120, 70),
+      _ChartData(2, 120, 70),
+      _ChartData(3, 130, 90),
+      _ChartData(4, 120, 70),
+      _ChartData(5, 115, 85),
+      _ChartData(6, 122, 78),
+      _ChartData(7, 132, 80),
+      _ChartData(8, 120, 85),
+      _ChartData(9, 140, 90),
+      _ChartData(10, 120, 78),
+      _ChartData(11, 120, 84)
+
+    ];
     //
     // try{
     //   // final bmiRef = databaseReference.child('users/'+uid+'/vitals/health_records/blood_pressure');

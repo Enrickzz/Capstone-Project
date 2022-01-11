@@ -1,25 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:basic_utils/basic_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:my_app/dashboards/dashboards_as_doctor.dart';
 import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
+import 'package:my_app/goal_tab/goals_doctor_view.dart';
+import 'package:my_app/goal_tab/meals/my_meals.dart';
+import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/goal_tab/exercises/my_exercises.dart';
+import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
-import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
+import 'package:my_app/support_system_journal/support_system/journal_list_suppsystem_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
-import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import 'package:my_app/fitness_app_theme.dart';
@@ -40,8 +38,8 @@ import '../../discussion_board/discussion.dart';
 
 
 class suppsystem_view_patient_profile extends StatefulWidget {
-  const suppsystem_view_patient_profile({Key key, this.animationController, this.patientUID}) : super(key: key);
-  final String patientUID;
+  const suppsystem_view_patient_profile({Key key, this.animationController, this.userUID}) : super(key: key);
+  final String userUID;
   final AnimationController animationController;
   @override
   _index3State createState() => _index3State();
@@ -50,6 +48,11 @@ class suppsystem_view_patient_profile extends StatefulWidget {
 class _index3State extends State<suppsystem_view_patient_profile>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
+  AnimationController animationController;
+  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  Widget tabBody = Container(
+    color: FitnessAppTheme.background,
+  );
 
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
@@ -84,22 +87,39 @@ class _index3State extends State<suppsystem_view_patient_profile>
   String ave_sticks = "";
   String alcohol_freq = "";
   String lifestyle = "";
-
+  bool isLoading = true;
 
 
   @override
   void initState() {
+    tabIconsList.forEach((TabIconData tab) {
+      tab.isSelected = false;
+    });
+    tabIconsList[0].isSelected = true;
+
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
+    tabBody = dashboards_as_doctor(animationController: animationController);
+
     super.initState();
     info = new Additional_Info(birthday: format.parse("01/01/0000"), gender: "Male");
-    String patientuid = widget.patientUID;
+    String patientuid = widget.userUID;
     getProfile(patientuid);
     getInfo(patientuid);
     // getDisease(patientuid);
     // getAllergies(patientuid);
     // getOtherInfo(patientuid);
-    Future.delayed(const Duration(milliseconds: 1000), (){
-      setState(() {});
+    Future.delayed(const Duration(milliseconds: 3000), (){
+      setState(() {
+        isLoading = false;
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    animationController?.dispose();
+    super.dispose();
   }
 
 
@@ -231,121 +251,111 @@ class _index3State extends State<suppsystem_view_patient_profile>
                         ),
                         SizedBox(height: 10.0),
                         Container(
-                            height: 380,
-                            child: Stack(
-                                children: [
-                                  Positioned(
-                                      child: Material(
-                                        child: Center(
-                                          child: Container(
-                                              width: 340,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(20.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.grey.withOpacity(0.5),
-                                                      blurRadius: 20.0)],
-                                              )
-                                          ),
-                                        ),
-                                      )),
-                                  Positioned(
-                                      child: Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18.0),
-                                          child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Complete Name",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(DisplayName,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Birthday",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text( info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Age",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(getAge(info.birthday) + " years old",
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Gender",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(info.gender,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Weight",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(param.weight.toString() + " kg",
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Height",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(param.height.toString() + " cm",
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                              ]
-                                          ),
-                                        ),
-                                      ))
-                                ]
-                            )
+                          width: 340,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: [BoxShadow(
+                                  color: Colors.black26.withOpacity(0.2),
+                                  offset: Offset(0.0,6.0),
+                                  blurRadius: 10.0,
+                                  spreadRadius: 0.10
+                              )]
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            ): new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text("Complete Name",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(DisplayName,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Text("Birthday",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text( info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Text("Age",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(getAge(info.birthday) + " years old",
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Text("Gender",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(StringUtils.capitalize(info.gender),
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Text("Weight",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(param.weight.toString() + " kg",
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Text("Height",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(param.height.toString() + " cm",
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),  // Personal Information
@@ -373,85 +383,73 @@ class _index3State extends State<suppsystem_view_patient_profile>
                         ),
                         SizedBox(height: 10.0),
                         Container(
-                            height: 280,
-                            // height: 500, if may contact number and email
-                            // margin: EdgeInsets.only(bottom: 50),
-                            child: Stack(
-                                children: [
-                                  Positioned(
-                                      child: Material(
-                                        child: Center(
-                                          child: Container(
-                                              width: 340,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(20.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.grey.withOpacity(0.5),
-                                                      blurRadius: 20.0)],
-                                              )
-                                          ),
-                                        ),
-                                      )),
-                                  Positioned(
-                                      child: Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18.0),
-                                          child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("CVD Condition/s",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(disease_name,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Row(
-                                                  children: [
-                                                    Text("Comorbidities",
-                                                      style: TextStyle(
-                                                        fontSize:14,
-                                                        color:Color(0xFF363f93),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(other_disease,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Family History",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(family_disease,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                              ]
-                                          ),
-                                        ),
-                                      ))
-                                ]
-                            )
+                          width: 340,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: [BoxShadow(
+                                  color: Colors.black26.withOpacity(0.2),
+                                  offset: Offset(0.0,6.0),
+                                  blurRadius: 10.0,
+                                  spreadRadius: 0.10
+                              )]
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            ): new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text("CVD Condition/s",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(disease_name,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Text("Comorbidities",
+                                      style: TextStyle(
+                                        fontSize:14,
+                                        color:Color(0xFF363f93),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                Text(other_disease == "" ? 'N/A' : other_disease,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Text("Family History",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(family_disease == "" ? 'N/A' : family_disease,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -478,85 +476,73 @@ class _index3State extends State<suppsystem_view_patient_profile>
                         ),
                         SizedBox(height: 10.0),
                         Container(
-                            height: 250,
-                            // height: 500, if may contact number and email
-                            // margin: EdgeInsets.only(bottom: 50),
-                            child: Stack(
-                                children: [
-                                  Positioned(
-                                      child: Material(
-                                        child: Center(
-                                          child: Container(
-                                              width: 340,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(20.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.grey.withOpacity(0.5),
-                                                      blurRadius: 20.0)],
-                                              )
-                                          ),
-                                        ),
-                                      )),
-                                  Positioned(
-                                      child: Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18.0),
-                                          child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Food Allergies",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(food_aller,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Row(
-                                                  children: [
-                                                    Text("Drug Allergies",
-                                                      style: TextStyle(
-                                                        fontSize:14,
-                                                        color:Color(0xFF363f93),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(drug_aller,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Other Allergies",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(other_aller,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                              ]
-                                          ),
-                                        ),
-                                      ))
-                                ]
-                            )
+                          width: 340,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: [BoxShadow(
+                                  color: Colors.black26.withOpacity(0.2),
+                                  offset: Offset(0.0,6.0),
+                                  blurRadius: 10.0,
+                                  spreadRadius: 0.10
+                              )]
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            ): new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text("Food Allergies",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(food_aller == "" ? 'N/A' : food_aller,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Text("Drug Allergies",
+                                      style: TextStyle(
+                                        fontSize:14,
+                                        color:Color(0xFF363f93),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                Text(drug_aller == "" ? 'N/A' : drug_aller,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Text("Other Allergies",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(other_aller == "" ? 'N/A' : other_aller,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -583,85 +569,73 @@ class _index3State extends State<suppsystem_view_patient_profile>
                         ),
                         SizedBox(height: 10.0),
                         Container(
-                            height: 200,
-                            // height: 500, if may contact number and email
-                            // margin: EdgeInsets.only(bottom: 50),
-                            child: Stack(
-                                children: [
-                                  Positioned(
-                                      child: Material(
-                                        child: Center(
-                                          child: Container(
-                                              width: 340,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(20.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.grey.withOpacity(0.5),
-                                                      blurRadius: 20.0)],
-                                              )
-                                          ),
-                                        ),
-                                      )),
-                                  Positioned(
-                                      child: Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18.0),
-                                          child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Lifestyle",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(lifestyle,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Row(
-                                                  children: [
-                                                    Text("Cigarettes per day",
-                                                      style: TextStyle(
-                                                        fontSize:14,
-                                                        color:Color(0xFF363f93),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(ave_sticks,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                SizedBox(height: 16),
-                                                Text("Alcohol Drinking Frequency",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(alcohol_freq,
-                                                  style: TextStyle(
-                                                      fontSize:16,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                              ]
-                                          ),
-                                        ),
-                                      ))
-                                ]
-                            )
+                          width: 340,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: [BoxShadow(
+                                  color: Colors.black26.withOpacity(0.2),
+                                  offset: Offset(0.0,6.0),
+                                  blurRadius: 10.0,
+                                  spreadRadius: 0.10
+                              )]
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            ): new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text("Lifestyle",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(lifestyle,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Text("Cigarettes per day",
+                                      style: TextStyle(
+                                        fontSize:14,
+                                        color:Color(0xFF363f93),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                Text(ave_sticks,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Text("Alcohol Drinking Frequency",
+                                  style: TextStyle(
+                                    fontSize:14,
+                                    color:Color(0xFF363f93),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(alcohol_freq,
+                                  style: TextStyle(
+                                      fontSize:16,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),// Health Informati// Health Information
@@ -690,7 +664,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                 onTap:(){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => management_plan(userUID: widget.patientUID)),
+                                    MaterialPageRoute(builder: (context) => management_plan(userUID: widget.userUID)),
                                   );
 
                                 },
@@ -702,19 +676,31 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                 onTap:(){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => discussion()),
+                                    MaterialPageRoute(builder: (context) => discussion(userUID: widget.userUID)),
                                   );
 
                                 },
                               ),
                               _buildDivider(),
                               ListTile(
-                                title: Text("Data Inputs (Temporary)"),
+                                title: Text("Data Inputs"),
                                 trailing: Icon(Icons.keyboard_arrow_right),
                                 onTap:(){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => data_inputs_doctor_view()),
+                                    MaterialPageRoute(builder: (context) => data_inputs_doctor_view(userUID: widget.userUID)),
+                                  );
+
+                                },
+                              ),
+                              _buildDivider(),
+                              ListTile(
+                                title: Text("Support Systems' Notes"),
+                                trailing: Icon(Icons.keyboard_arrow_right),
+                                onTap:(){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => journal_list_supp_view(userUID: widget.userUID)),
                                   );
 
                                 },
@@ -734,24 +720,48 @@ class _index3State extends State<suppsystem_view_patient_profile>
                     Container(
                       child: ElevatedButton(
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Text('View Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ),
                         onPressed: () async {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => dashboards_as_doctor()),
+                            MaterialPageRoute(builder: (context) => dashboards_as_doctor(animationController: animationController)),
                           );
                         },
                       ),
                     ),
+                    SizedBox(height: 8),
+                    Container(
+                      child: ElevatedButton(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: Text('View Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                        ),
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => goals_doctor_view(animationController: animationController)),
+                          );
 
+                        },
+                      ),
+                    ),
+                    Visibility(
+                        visible: false,
+                        child: tabBody),
+                    Visibility(
+                        visible: false,
+                        child: bottomBar()),
                   ]
+
               ),
 
 
             ),
+
           ),
 
         )
@@ -851,10 +861,70 @@ class _index3State extends State<suppsystem_view_patient_profile>
 
   }
 
-// Future<bool> getData() async {
-//   await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-//   return true;
-// }
+  Future<bool> getData() async {
+    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    return true;
+  }
+
+  Widget bottomBar() {
+    return Column(
+      children: <Widget>[
+        const Expanded(
+          child: SizedBox(),
+        ),
+        BottomBarView(
+          tabIconsList: tabIconsList,
+          addClick: () {},
+          changeIndex: (int index) {
+            if (index == 0) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      dashboards_as_doctor(animationController: animationController);
+                });
+              });
+            } else if (index == 1) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      my_exercises(animationController: animationController);
+                });
+              });
+            }else if(index ==2){
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                  // food_list(animationController: animationController);
+                  my_meals(animationController: animationController);
+                });
+              });
+            }else if(index ==3){
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      index3(animationController: animationController);
+                });
+              });
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+
   void getProfile(String uid) {
     final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
     readProfile.once().then((DataSnapshot snapshot){
@@ -967,10 +1037,19 @@ class _index3State extends State<suppsystem_view_patient_profile>
           }
         }
       }
-
-
-
     });
   }
 
+}
+
+class HexColor extends Color {
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
 }

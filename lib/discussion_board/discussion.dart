@@ -52,6 +52,8 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
   String title = '';
   String description = '';
   List<Discussion> discussion_list = new List<Discussion>();
+  bool prescribedDoctor = false;
+
 
   double topBarOpacity = 0.0;
   @override

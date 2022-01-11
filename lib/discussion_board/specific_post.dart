@@ -51,6 +51,7 @@ class _specific_postState extends State<specific_post>
   String doctor_name = "";
   String body = "";
   String noOfReply = "";
+  bool prescribedDoctor = false;
 
   @override
   void initState() {
@@ -362,6 +363,7 @@ class _specific_postState extends State<specific_post>
       temp.forEach((jsonString) {
         discussion_list.add(Discussion.fromJson(jsonString));
       });
+
       title = discussion_list[index].title;
       doctor_name = discussion_list[index].createdBy;
       date = "${discussion_list[index].discussionDate.month.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.day.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.year}";

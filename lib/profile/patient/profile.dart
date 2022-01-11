@@ -14,6 +14,7 @@ import 'package:my_app/profile/patient/edit_other_information.dart';
 import 'package:my_app/profile/patient/edit_personal_information.dart';
 import 'package:my_app/profile/patient/patient_view_support_list.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_and_doctor_view.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -848,6 +849,18 @@ class _index3State extends State<index3>
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => management_plan_patient_view()),
+                            );
+
+                          },
+                        ),
+                        _buildDivider(),
+                        ListTile(
+                          title: Text("Support Systems' Notes"),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap:(){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => journal_list_doctor_patient_view()),
                             );
 
                           },
