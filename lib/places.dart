@@ -134,41 +134,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                SizedBox(height: 16.0),
-                                Text(
-                                  'Rating',
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-                                RatingBar(
-                                  initialRating: 4.5,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  ignoreGestures: true,
-                                  itemSize: 12,
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
-                                  },
-                                  ratingWidget: RatingWidget(
-                                      full: Icon(Icons.star, color: Colors.orange),
-                                      half: Icon(
-                                        Icons.star_half,
-                                        color: Colors.orange,
-                                      ),
-                                      empty: Icon(
-                                        Icons.star_outline,
-                                        color: Colors.orange,
-                                      )),
-                                ),
-                                Text(
-                                  '(' +'10' +')',
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-
-                              ],
-                            ),
+                            checkrating(drugstores[index].placeId),
                             SizedBox(width: 8.0),
                             Row(
                               children: [
@@ -204,7 +170,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                 SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '',
+                                    '6am - 6pm',
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
                                 ),
@@ -272,41 +238,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                SizedBox(height: 16.0),
-                                Text(
-                                  'Rating',
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-                                RatingBar(
-                                  initialRating: 4.5,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  ignoreGestures: true,
-                                  itemSize: 12,
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
-                                  },
-                                  ratingWidget: RatingWidget(
-                                      full: Icon(Icons.star, color: Colors.orange),
-                                      half: Icon(
-                                        Icons.star_half,
-                                        color: Colors.orange,
-                                      ),
-                                      empty: Icon(
-                                        Icons.star_outline,
-                                        color: Colors.orange,
-                                      )),
-                                ),
-                                Text(
-                                  '(' +'10' +')',
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-
-                              ],
-                            ),
+                            checkrating(hospitals[index].placeId),
                             SizedBox(width: 8.0),
                             Row(
                               children: [
@@ -410,41 +342,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                SizedBox(height: 16.0),
-                                Text(
-                                  'Rating',
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-                                RatingBar(
-                                  initialRating: 4.5,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  ignoreGestures: true,
-                                  itemSize: 12,
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
-                                  },
-                                  ratingWidget: RatingWidget(
-                                      full: Icon(Icons.star, color: Colors.orange),
-                                      half: Icon(
-                                        Icons.star_half,
-                                        color: Colors.orange,
-                                      ),
-                                      empty: Icon(
-                                        Icons.star_outline,
-                                        color: Colors.orange,
-                                      )),
-                                ),
-                                Text(
-                                  '(' +'10' +')',
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-
-                              ],
-                            ),
+                            checkrating(recreations[index].placeId),
                             SizedBox(width: 8.0),
                             Row(
                               children: [
@@ -548,41 +446,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                SizedBox(height: 16.0),
-                                Text(
-                                  'Rating',
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-                                RatingBar(
-                                  initialRating: 4.5,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  ignoreGestures: true,
-                                  itemSize: 12,
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
-                                  },
-                                  ratingWidget: RatingWidget(
-                                      full: Icon(Icons.star, color: Colors.orange),
-                                      half: Icon(
-                                        Icons.star_half,
-                                        color: Colors.orange,
-                                      ),
-                                      empty: Icon(
-                                        Icons.star_outline,
-                                        color: Colors.orange,
-                                      )),
-                                ),
-                                Text(
-                                  '(' +'10' +')',
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-
-                              ],
-                            ),
+                            checkrating(restaurants[index].placeId),
                             SizedBox(width: 8.0),
                             Row(
                               children: [
@@ -743,4 +607,42 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     }
 
     }
+  Widget checkrating(String placeid) {
+
+    return Row(
+      children: [
+        SizedBox(height: 16.0),
+        Text(
+          'Rating',
+          style: TextStyle(color: Colors.black, fontSize: 12),
+        ),
+        RatingBar(
+          initialRating: 4.5,
+          direction: Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          ignoreGestures: true,
+          itemSize: 12,
+          onRatingUpdate: (rating) {
+            print(rating);
+          },
+          ratingWidget: RatingWidget(
+              full: Icon(Icons.star, color: Colors.orange),
+              half: Icon(
+                Icons.star_half,
+                color: Colors.orange,
+              ),
+              empty: Icon(
+                Icons.star_outline,
+                color: Colors.orange,
+              )),
+        ),
+        Text(
+          '(' +'10' +')',
+          style: TextStyle(color: Colors.black, fontSize: 12),
+        ),
+
+      ],
+    );
+  }
 }

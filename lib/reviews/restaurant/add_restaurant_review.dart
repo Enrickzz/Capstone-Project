@@ -15,6 +15,8 @@ import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
+import 'package:my_app/models/GooglePlaces.dart';
+import 'package:my_app/models/Reviews.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
@@ -28,7 +30,8 @@ import 'package:my_app/widgets/rating.dart';
 
 class add_restaurant_review extends StatefulWidget {
   final List<FirebaseFile> files;
-  add_restaurant_review({Key key, this.files});
+  final Results thisPlace;
+  add_restaurant_review({Key key, this.files, this.thisPlace});
   @override
   _create_postState createState() => _create_postState();
 }
@@ -55,7 +58,27 @@ class _create_postState extends State<add_restaurant_review> {
   //for rating
   int _rating = 0;
   bool isSwitched = false;
+  int count = 0;
+  List<Reviews> reviews=[];
+  Users thisuser;
+  @override
+  void initState(){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readUser = databaseReference.child('users/'+uid+"/personal_info/");
+    readUser.once().then((DataSnapshot snapshot){
+      // print(snapshot.value);
+      var temp1 = jsonDecode(jsonEncode(snapshot.value));
+      thisuser = Users.fromJson3(temp1);
+      print(thisuser);
+      Future.delayed(const Duration(milliseconds: 2000),(){
+        print("this user\n"+thisuser.firstname);
+        print(thisuser.firstname + " " + thisuser.lastname);
 
+      });
+    });
+    super.initState();
+  }
 
 
   @override
@@ -82,7 +105,7 @@ class _create_postState extends State<add_restaurant_review> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Restaurant Review/Recommendation',
+                    ' Review/Recommendation',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
@@ -265,7 +288,34 @@ class _create_postState extends State<add_restaurant_review> {
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.green,
-                        onPressed:() {
+                        onPressed:() async {
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            final readReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId +"/");
+                            //DatabaseReference last = addReview.push();
+                            readReview.once().then((DataSnapshot datasnapshot) {
+                              if(datasnapshot.value == null){
+                                final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
+                                addReview.set({"added_by": uid, "user_name": thisuser.firstname+" "+thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched });
+                              }else{
+                                List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+                                temp.forEach((jsonString) {
+                                  reviews.add(Reviews.fromJson(jsonString));
+                                  print(reviews.length.toString()+ "<<<<<<<<<<<");
+                                });
+                                count = reviews.length--;
+                                print("count " + count.toString());
+                                final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
+                                addReview.set({"added_by": uid, "user_name": thisuser.firstname+" "+thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched });
+                              }
+                            });
+                            Navigator.pop(context);
+                          }catch(e){
+                            print("Error");
+                          }
+
+
                           // Navigator.pop(context);
                         },
                       )

@@ -1,4 +1,10 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/discussion_board/create_post.dart';
+import 'package:my_app/models/GooglePlaces.dart';
+import 'package:my_app/models/Reviews.dart';
 import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
@@ -25,6 +31,8 @@ import 'add_restaurant_review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class restaurant_reviews extends StatefulWidget {
+  final Results thisPlace;
+  restaurant_reviews({Key key,this.thisPlace});
   @override
   _discussionState createState() => _discussionState();
 }
@@ -34,6 +42,8 @@ List<Common> result = [];
 List<double> calories = [];
 class _discussionState extends State<restaurant_reviews>
     with TickerProviderStateMixin {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
   String search="";
   List<Widget> listViews = <Widget>[];
@@ -48,10 +58,11 @@ class _discussionState extends State<restaurant_reviews>
   // bool isRecommendedTrue = false;
   // bool isRecommendedFalse = true;
   bool isRecommended = true;
-
+  List<Reviews> reviews =[];
   double topBarOpacity = 0.0;
   @override
   void initState() {
+    getReviews();
     super.initState();
   }
 
@@ -63,11 +74,6 @@ class _discussionState extends State<restaurant_reviews>
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(milliseconds: 5000), () {
-    //   setState(() {
-    //     print("FULL SET STATE");
-    //   });
-    // });
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
@@ -75,7 +81,7 @@ class _discussionState extends State<restaurant_reviews>
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text('Restaurant Reviews', style: TextStyle(
+          title:  Text(widget.thisPlace.name+"'s"+' Reviews', style: TextStyle(
               color: Colors.black
           )),
           centerTitle: true,
@@ -92,14 +98,15 @@ class _discussionState extends State<restaurant_reviews>
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           // child: add_medication(thislist: medtemp),
-                          child: add_restaurant_review(),
+                          child: add_restaurant_review(thisPlace: widget.thisPlace ),
                         ),
                         ),
-                      ).then((value) =>
-                          Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
-                          }));
+                      ).then((value) {
+                        Future.delayed(const Duration(milliseconds: 1500), (){
+                          setState((){
+                          });
+                        });
+                      });
                     },
                     child: Icon(
                       Icons.add,
@@ -172,7 +179,7 @@ class _discussionState extends State<restaurant_reviews>
                       ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: 4,
+                          itemCount: reviews.length,
                           itemBuilder: (context, index) {
                             return Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
@@ -248,7 +255,7 @@ class _discussionState extends State<restaurant_reviews>
                                                         //   ),
                                                         // ),
                                                         RatingBar(
-                                                            initialRating: 3,
+                                                            initialRating:  double.parse(reviews[index].rating.toString()),
                                                             direction: Axis.horizontal,
                                                             allowHalfRating: true,
                                                             itemCount: 5,
@@ -272,7 +279,7 @@ class _discussionState extends State<restaurant_reviews>
                                                         Row(
                                                           children: <Widget>[
                                                             Text(
-                                                              "Louis Borja",
+                                                              reviews[index].user_name,
                                                               style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight: FontWeight.bold
@@ -300,7 +307,7 @@ class _discussionState extends State<restaurant_reviews>
 
                                           child: Center(
                                             child: Text(
-                                              "Lorem ipsum bla bla bla bla tite masakit aray ko!!!! 121321 asd asd asd asd asd asddddddddddddd   sd asd asda d asd a das da ad asd asd asd asd asd asd asd as das dasd asd a dasd asd  asd asdasdad asd",
+                                              reviews[index].review,
                                               style: TextStyle(
                                                 fontSize: 14,
                                               ),
@@ -343,6 +350,24 @@ class _discussionState extends State<restaurant_reviews>
       ),
 
     );
+  }
+  void getReviews() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    // var userUID = widget.userUID;
+    final readReviews = databaseReference.child('reviews/' + widget.thisPlace.placeId+ "/");
+    await readReviews.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        reviews.add(Reviews.fromJson(jsonString));
+        print(reviews.length.toString()+ "<<<<<<<<<<<");
+      });
+    });
+    setState(() {
+      print("Tapos na get reviews");
+    });
+
   }
 
 }

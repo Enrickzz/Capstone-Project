@@ -582,10 +582,6 @@ class _addSymptomsState extends State<add_symptoms> {
                       final uid = user.uid;
                       final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
                       readsymptom.once().then((DataSnapshot datasnapshot) {
-                        // String temp1 = datasnapshot.value.toString();
-                        // print("temp1 " + temp1);
-                        // List<String> temp = temp1.split(',');
-                        // Symptom symptom;
                         if(datasnapshot.value == null){
                           if(valueChooseSymptom == "Others"){
                             valueChooseSymptom = other_name;
@@ -596,53 +592,6 @@ class _addSymptomsState extends State<add_symptoms> {
 
                         }
                         else{
-                          //getSymptoms();
-                          // int tempIntesityLvl = 0;
-                          // String tempSymptomName = "";
-                          // DateTime tempSymptomDate;
-                          // DateTime tempSymptomTime;
-                          // bool tempIsActive;
-                          // String tempSymptomFelt = "";
-                          // List<String> tempRecurring = [];
-                          // for(var i = 0; i < temp.length; i++){
-                          //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                          //   List<String> splitFull = full.split(" ");
-                          //     switch(i%6){
-                          //       case 0: {
-                          //         print("2nd switch intensity lvl " + splitFull.last);
-                          //         tempIntesityLvl = int.parse(splitFull.last);
-                          //       }
-                          //       break;
-                          //       case 1: {
-                          //         print("2nd switch symptom name " + splitFull.last);
-                          //         tempSymptomName = splitFull.last;
-                          //       }
-                          //       break;
-                          //       case 2: {
-                          //         print("2nd switch symptom name " + splitFull.last);
-                          //         tempSymptomDate = format.parse(splitFull.last);
-                          //       }
-                          //       break;
-                          //       case 3: {
-                          //         print("2nd switch symptom name " + splitFull.last);
-                          //
-                          //       }
-                          //       break;
-                          //       case 4: {
-                          //         print("2nd switch isactive " + splitFull.last);
-                          //         tempSymptomTime = timeformat.parse(splitFull.last);
-                          //       }
-                          //       break;
-                          //       case 5: {
-                          //         print("2nd switch symptom felt " + splitFull.last);
-                          //         tempSymptomFelt = splitFull.last;
-                          //         // symptom = new Symptom(symptom_name: tempSymptomName, intesity_lvl: tempIntesityLvl, symptom_felt: tempSymptomFelt,symptom_date: tempSymptomDate, symptom_time: tempSymptomTime, symptom_isActive: tempIsActive);
-                          //         symptoms_list.add(symptom);
-                          //       }
-                          //       break;
-                          //     }
-                          //   print("symptom list length " + symptoms_list.length.toString());
-                          // }
                           Future.delayed(const Duration(milliseconds: 1000), (){
                             count = symptoms_list.length--;
                             print("count " + count.toString());

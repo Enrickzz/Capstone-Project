@@ -79,7 +79,6 @@ class _create_postState extends State<info_restaurant> {
     double defaultFontSize = 14;
     double defaultIconSize = 17;
     final Storage storage = Storage();
-
     return Container(
         key: _formKey,
         color:Color(0xff757575),
@@ -118,47 +117,7 @@ class _create_postState extends State<info_restaurant> {
 
                   ),
                   SizedBox(height: 8.0),
-
-                  Row(
-                    children: [
-
-                      Text(
-                        'Rating',
-                        style: TextStyle( fontSize: 14),
-                      ),
-                      SizedBox(width: 8.0),
-
-                      RatingBar(
-                        initialRating: 4.5,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        ignoreGestures: true,
-                        itemSize: 26,
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                        ratingWidget: RatingWidget(
-                            full: Icon(Icons.star, color: Colors.orange),
-                            half: Icon(
-                              Icons.star_half,
-                              color: Colors.orange,
-                            ),
-                            empty: Icon(
-                              Icons.star_outline,
-                              color: Colors.orange,
-                            )),
-                      ),
-                      Text(
-                        '(' +'10' +')',
-                        style: TextStyle( fontSize: 14),
-                      ),
-
-                    ],
-
-                  ),
-
-
+                  checkrating(),
 
                   SizedBox(height: 8.0),
                   Row(
@@ -208,18 +167,9 @@ class _create_postState extends State<info_restaurant> {
                         child: isLoading
                             ? Center(
                           child: CircularProgressIndicator(),
-                        ): new Text(
-                          // '7am - 10pm',
-                               details.result.openingHours.periods[0].open.time + " - " +
-                              details.result.openingHours.periods[0].close.time,
-                          style: TextStyle( fontSize: 14),
-                        ),
+                        ): checkifnull(),
                       ),
-
-
                     ],
-
-
                   ),
 
                   SizedBox(
@@ -342,7 +292,7 @@ class _create_postState extends State<info_restaurant> {
                           onPressed:() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => restaurant_reviews()),
+                              MaterialPageRoute(builder: (context) => restaurant_reviews(thisPlace: widget.this_info)),
                             );
                           },
                         ),
@@ -410,10 +360,63 @@ class _create_postState extends State<info_restaurant> {
     }
     else{
       return Image.network(media,
-          errorBuilder: (context, error, stackTrace) {
-            return Image.asset("assets/images/no-image.jpg");
-          },fit: BoxFit.cover,);
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset("assets/images/no-image.jpg");
+        },fit: BoxFit.cover,);
     }
+
+  }
+
+  Widget checkifnull(){
+    if(details.result.openingHours != null){
+      if(details.result.openingHours.periods[0].open != null
+      && details.result.openingHours.periods[0].close != null){
+        return Text(
+          details.result.openingHours.periods[0].open.time.toString() + " - " +
+              details.result.openingHours.periods[0].close.time.toString(),
+          style: TextStyle( fontSize: 14),
+        );
+      }
+    }else{
+      return Text("Not Listed");
+    }
+  }
+  Widget checkrating() {
+    return Row(
+      children: [
+        Text(
+          'Rating',
+          style: TextStyle( fontSize: 14),
+        ),
+        SizedBox(width: 8.0),
+
+        RatingBar(
+          initialRating: 4.5,
+          direction: Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          ignoreGestures: true,
+          itemSize: 26,
+          onRatingUpdate: (rating) {
+            print(rating);
+          },
+          ratingWidget: RatingWidget(
+              full: Icon(Icons.star, color: Colors.orange),
+              half: Icon(
+                Icons.star_half,
+                color: Colors.orange,
+              ),
+              empty: Icon(
+                Icons.star_outline,
+                color: Colors.orange,
+              )),
+        ),
+        Text(
+          '(' +'10' +')',
+          style: TextStyle( fontSize: 14),
+        ),
+      ],
+    );
 
   }
   Future<SpecificInfo> getspecifics(String id) async{

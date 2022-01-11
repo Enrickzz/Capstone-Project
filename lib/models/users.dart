@@ -33,6 +33,11 @@ class Users {
     usertype = json['userType'];
     connections = json['connections'].cast<String>();
   }
+  Users.fromJson3(Map<String, dynamic> json) {
+    uid = json['uid'];
+    firstname = json['firstname'];
+    lastname = json['lastname'];
+  }
 
 
   Map<String, dynamic> toJson() {

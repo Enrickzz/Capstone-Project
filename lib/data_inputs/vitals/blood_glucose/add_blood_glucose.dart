@@ -301,40 +301,6 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                 print("Added Blood Glucose Successfully! " + uid);
                               }
                               else{
-                                // String tempGlucose = "";
-                                // String tempStatus = "";
-                                // String tempGlucoseStatus = "";
-                                // String tempGlucoseDate = "";
-                                // String tempGlucoseTime = "";
-                                //
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //   switch(i%5){
-                                //     case 0: {
-                                //       tempGlucose = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 1: {
-                                //       tempGlucoseTime = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 2: {
-                                //       tempStatus = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 3: {
-                                //       tempGlucoseStatus = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 4: {
-                                //       tempGlucoseDate = splitFull.last;
-                                //       bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), bloodGlucose_unit: tempStatus, bloodGlucose_status: tempGlucoseStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
-                                //       glucose_list.add(bloodGlucose);
-                                //     }
-                                //     break;
-                                //   }
-                                // }
                                 getBloodGlucose();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = glucose_list.length--;
