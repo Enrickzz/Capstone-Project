@@ -184,22 +184,22 @@ class _discussionState extends State<restaurant_reviews>
                             return Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
                               child: GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => SingleChildScrollView(child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      // child: add_medication(thislist: medtemp),
-                                      child: info_restaurant(),
-                                    ),
-                                    ),
-                                  ).then((value) =>
-                                      Future.delayed(const Duration(milliseconds: 1500), (){
-                                        setState((){
-                                        });
-                                      }));
-                                },
+                                // onTap: () {
+                                //   showModalBottomSheet(context: context,
+                                //     isScrollControlled: true,
+                                //     builder: (context) => SingleChildScrollView(child: Container(
+                                //       padding: EdgeInsets.only(
+                                //           bottom: MediaQuery.of(context).viewInsets.bottom),
+                                //       // child: add_medication(thislist: medtemp),
+                                //       child: info_restaurant(),
+                                //     ),
+                                //     ),
+                                //   ).then((value) =>
+                                //       Future.delayed(const Duration(milliseconds: 1500), (){
+                                //         setState((){
+                                //         });
+                                //       }));
+                                // },
                                 child: Container(
                                   height: 180,
                                   decoration: BoxDecoration(
