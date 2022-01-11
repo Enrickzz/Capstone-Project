@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_app/patient_list/doctor_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
+import 'package:my_app/profile/patient/data_privacy/patient_adjust_privacy.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -90,24 +91,6 @@ class _SupportSystemListState extends State<SupportSystemList>  {
                     );
 
 
-                    // showModalBottomSheet(context: context,
-                    //   isScrollControlled: true,
-                    //   builder: (context) => SingleChildScrollView(child: Container(
-                    //     padding: EdgeInsets.only(
-                    //         bottom: MediaQuery.of(context).viewInsets.bottom),
-                    //     child: add_medication_prescription(thislist: prestemp),
-                    //   ),
-                    //   ),
-                    // ).then((value) =>
-                    //     Future.delayed(const Duration(milliseconds: 1500), (){
-                    //       setState((){
-                    //         print("setstate medication prescription");
-                    //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                    //         if(value != null){
-                    //           prestemp = value[0];
-                    //         }
-                    //       });
-                    //     }));
                   },
                   child: Icon(
                     Icons.add,
@@ -142,7 +125,28 @@ class _SupportSystemListState extends State<SupportSystemList>  {
                         style:TextStyle(
                           color: Colors.grey,
                         )),
-                    trailing: Icon(Icons.health_and_safety_outlined ),
+                    trailing: GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(context: context,
+                            isScrollControlled: true,
+                            builder: (context) => SingleChildScrollView(child: Container(
+                              padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(context).viewInsets.bottom),
+                              child: patient_edit_privacy(),
+                            ),
+                            ),
+                          ).then((value) =>
+                              Future.delayed(const Duration(milliseconds: 1500), (){
+                                setState((){
+                                  print("setstate medication prescription");
+                                  print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                                  if(value != null){
+                                    // templist = value[0];
+                                  }
+                                });
+                              }));
+                        },
+                        child: Icon(Icons.admin_panel_settings_rounded )),
                     isThreeLine: true,
                     dense: true,
                     selected: true,

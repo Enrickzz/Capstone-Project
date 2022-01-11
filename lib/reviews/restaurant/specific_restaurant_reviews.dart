@@ -228,7 +228,7 @@ class _discussionState extends State<restaurant_reviews>
                                                   //   backgroundImage: AssetImage('assets/images/heart_icon.png'),
                                                   //   radius: 22,
                                                   // ),
-                                                  if (isRecommended) ...[
+                                                  if ( reviews[index].recommend) ...[
                                                     Icon(
                                                       Icons.thumb_up_alt_sharp,
                                                     ),
@@ -305,15 +305,13 @@ class _discussionState extends State<restaurant_reviews>
                                         ),
                                         Container(
 
-                                          child: Center(
-                                            child: Text(
-                                              reviews[index].review,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 3,
+                                          child: Text(
+                                            reviews[index].review,
+                                            style: TextStyle(
+                                              fontSize: 14,
                                             ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
                                           ),
                                         ),
                                         SizedBox(height: 5),

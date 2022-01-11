@@ -1081,7 +1081,7 @@ class _set_upState extends State<set_up> {
                 final loginRef = databaseReference.child('users/' + uid + '/personal_info/');
                 final physicalRef = databaseReference.child('users/' + uid + '/physical_parameters/');
                 final weightGoalRef = databaseReference.child('users/' + uid + '/goal/weight_goal/');
-                final weightRef = databaseReference.child('users/' + uid + '/goal/weight/');
+                final weightRef = databaseReference.child('users/' + uid + '/goal/weight/1');
                 final waterRef = databaseReference.child('users/' + uid + '/goal/water_goal/');
                 final sleepRef = databaseReference.child('users/' + uid + '/goal/sleep_goal/');
                 final stressRef = databaseReference.child('users/' + uid + '/goal/stress_goal/');
