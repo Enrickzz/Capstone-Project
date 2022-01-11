@@ -23,6 +23,8 @@ import 'package:my_app/storage_service.dart';
 import 'package:../my_app/dashboards/dashboards.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/set_up.dart';
+import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_and_doctor_view.dart';
+import 'package:my_app/support_system_journal/support_system/journal_list_suppsystem_view.dart';
 import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'allergies.dart';
@@ -244,7 +246,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => goalWeight()),
+                      MaterialPageRoute(builder: (context) => journal_list_doctor_patient_view()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

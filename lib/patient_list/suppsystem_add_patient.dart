@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/patient_list/doctor_patient_list.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';
@@ -30,21 +31,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SuppSystemAddPatient(title: 'Flutter Demo Home Page'),
+      home: SupportAddPatient(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class SuppSystemAddPatient extends StatefulWidget {
-  SuppSystemAddPatient({Key key, this.title}) : super(key: key);
-
+class SupportAddPatient extends StatefulWidget {
+  SupportAddPatient({Key key, this.title, this.nameslist, this.diseaseList, this.uidList}) : super(key: key);
+  final List<String> uidList;
+  final List nameslist;
+  final List diseaseList;
   final String title;
 
   @override
-  _SuppSystemAddPatientState createState() => _SuppSystemAddPatientState();
+  _DoctorAddPatientState createState() => _DoctorAddPatientState();
 }
 final FirebaseAuth auth = FirebaseAuth.instance;
-class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with SingleTickerProviderStateMixin {
+class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -70,11 +73,16 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
 
   bool searchPatient = false;
 
+  List namestemp;
+  List diseasetemp;
+  List<String> uidtemp;
 
   @override
   void initState() {
     super.initState();
-
+    namestemp = widget.nameslist;
+    diseasetemp = widget.diseaseList;
+    uidtemp = widget.uidList;
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -131,9 +139,6 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
                                 ),
                                 onChanged: (val) {
                                   userUID = val;
-
-
-
                                 },
                               ),
                             ),
@@ -148,10 +153,12 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
                               ),
                               onPressed: () {
                                 print(userUID);
-
-                                setState(() {
-                                  getPatient();
+                                getPatient();
+                                Future.delayed(const Duration(milliseconds: 2000), (){
+                                  setState(() {
+                                  });
                                 });
+
                               },
                             ),
                           ]
@@ -394,21 +401,20 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
 //
 // ],)
 
-  void getPatient() {
+  void getPatient() async{
     final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     final readinfo = databaseReference.child('users/' + userUID + '/vitals/additional_info/');
     cvdCondition = "";
     otherCondition = "";
-    readPatient.once().then((DataSnapshot snapshot){
+    await readPatient.once().then((DataSnapshot snapshot){
       var temp = jsonDecode(jsonEncode(snapshot.value));
       cuser = Users.fromJson(temp);
     });
-    readinfo.once().then((DataSnapshot snapshot){
+    await readinfo.once().then((DataSnapshot snapshot){
       var temp = jsonDecode(jsonEncode(snapshot.value));
       info = Additional_Info.fromJson3(temp);
     });
     if(cuser.usertype == "Patient"){
-      searchPatient = true;
       displayName = cuser.firstname;
       displayName += " ";
       displayName += cuser.lastname;
@@ -434,6 +440,10 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
         }
       }
     }
+    setState(() {
+      print("set here");
+      searchPatient = true;
+    });
 
   }
 
@@ -472,6 +482,7 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
     final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
     final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     doc_connection.clear();
+    patient_connection.clear();
     bool isPatient = false;
     bool isDoctor = false;
     readDoctor.once().then((DataSnapshot snapshot){
@@ -490,6 +501,7 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
       /// read patient connections
       readPatient.once().then((DataSnapshot snapshot){
         var temp2 = jsonDecode(jsonEncode(snapshot.value));
+        print(temp2);
         patient = Users.fromJson2(temp2);
         for(int i = 0; i < patient.connections.length; i++){
           if(patient.connections[i] != "NA"){
@@ -497,21 +509,28 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
               print("same doctor detected");
               isDoctor = true;
             }
+            print("PATIENT CONNECTIONS " + patient.connections[i]);
             patient_connection.add(patient.connections[i]);
           }
         }
+        if(isDoctor == false){
+          patient_connection.add(uid);
+          print("doctor added successfully");
+        }
+        readPatient.update({"connections": patient_connection});
       });
 
       if(isPatient == false){
         doc_connection.add(userUID);
         print("patient added successfully");
       }
-      if(isDoctor == false){
-        patient_connection.add(uid);
-        print("doctor added successfully");
-      }
+
+      print(patient_connection);
       readDoctor.update({"connections": doc_connection});
-      readPatient.update({"connections": patient_connection});
+
+      namestemp.add(displayName);
+      diseasetemp.add(cvdCondition);
+      uidtemp.add(userUID);
     });
 
 
@@ -539,8 +558,14 @@ class _SuppSystemAddPatientState extends State<SuppSystemAddPatient> with Single
               child: Text('Confirm'),
               onPressed: () {
                 print('Patient Added');
-                Navigator.of(context).pop();
                 addPatient();
+
+                Future.delayed(const Duration(milliseconds: 2000), (){
+                  print(namestemp.length);
+                  print('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => PatientList(nameslist: namestemp,diseaselist: diseasetemp, uidList: uidtemp,)));
+                });
 
               },
             ),
