@@ -90,7 +90,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 105,
+                        height: 140,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -156,7 +156,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 105,
+                        height: 140,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -222,7 +222,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 105,
+                        height: 140,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -279,72 +279,72 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                         )
                     ),
                   ),
-                  GestureDetector(
-                    // onTap:(){
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => blood_glucose(bglist: bglist)),
-                    //   );
-                    // },
-                    child: Container(
-                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 105,
-                        child: Stack(
-                            children: [
-                              Positioned.fill(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset('assets/images/activity.jpg',
-                                      fit: BoxFit.cover
-                                  ),
-                                ),
-                              ),
-                              Positioned (
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: Container(
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20)
-                                        ),
-                                        gradient: LinearGradient(
-                                            begin: Alignment.bottomCenter,
-                                            end: Alignment.topCenter,
-                                            colors: [
-                                              Colors.black.withOpacity(0.7),
-                                              Colors.transparent
-                                            ]
-                                        )
-                                    )
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                          'Activities',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18
-                                          )
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]
-                        )
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap:(){
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => blood_glucose(bglist: bglist)),
+                  //     );
+                  //   },
+                  //   child: Container(
+                  //       margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                  //       height: 140,
+                  //       child: Stack(
+                  //           children: [
+                  //             Positioned.fill(
+                  //               child: ClipRRect(
+                  //                 borderRadius: BorderRadius.circular(20),
+                  //                 child: Image.asset('assets/images/activity.jpg',
+                  //                     fit: BoxFit.cover
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             Positioned (
+                  //               bottom: 0,
+                  //               left: 0,
+                  //               right: 0,
+                  //               child: Container(
+                  //                   height: 80,
+                  //                   decoration: BoxDecoration(
+                  //                       borderRadius: BorderRadius.only(
+                  //                           bottomLeft: Radius.circular(20),
+                  //                           bottomRight: Radius.circular(20)
+                  //                       ),
+                  //                       gradient: LinearGradient(
+                  //                           begin: Alignment.bottomCenter,
+                  //                           end: Alignment.topCenter,
+                  //                           colors: [
+                  //                             Colors.black.withOpacity(0.7),
+                  //                             Colors.transparent
+                  //                           ]
+                  //                       )
+                  //                   )
+                  //               ),
+                  //             ),
+                  //             Positioned(
+                  //               bottom: 0,
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(10),
+                  //                 child: Row(
+                  //                   children: [
+                  //                     SizedBox(
+                  //                       width: 10,
+                  //                     ),
+                  //                     Text(
+                  //                         'Activities',
+                  //                         style: TextStyle(
+                  //                             color: Colors.white,
+                  //                             fontSize: 18
+                  //                         )
+                  //                     )
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ]
+                  //       )
+                  //   ),
+                  // ),
                   GestureDetector(
                     onTap:(){
                       Navigator.push(
@@ -354,7 +354,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 105,
+                        height: 140,
                         child: Stack(
                             children: [
                               Positioned.fill(

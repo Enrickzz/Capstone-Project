@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_app/patient_list/doctor_add_patient.dart';
+import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/profile/patient/data_privacy/patient_adjust_privacy.dart';
 import 'package:my_app/services/auth.dart';
@@ -146,7 +146,8 @@ class _SupportSystemListState extends State<SupportSystemList>  {
                                 });
                               }));
                         },
-                        child: Icon(Icons.admin_panel_settings_rounded )),
+                        child: Icon(Icons.admin_panel_settings_rounded )
+                    ),
                     isThreeLine: true,
                     dense: true,
                     selected: true,

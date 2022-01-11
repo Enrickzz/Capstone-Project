@@ -46,8 +46,8 @@ import 'package:my_app/profile/patient/patient_view_support_system.dart';
 import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsDoctor.dart';
 import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsPatient.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
-import 'package:my_app/patient_list/doctor_add_patient.dart';
-import 'package:my_app/patient_list/doctor_patient_list.dart';
+import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
+import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
 import 'goal_tab/meals/meals_list.dart';
 
 

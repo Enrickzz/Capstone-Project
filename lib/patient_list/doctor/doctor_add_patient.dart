@@ -9,15 +9,15 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
-import 'package:my_app/patient_list/doctor_patient_list.dart';
+import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
-import '../additional_data_collection.dart';
+import '../../additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 
-import '../dialogs/policy_dialog.dart';
-import '../fitness_app_theme.dart';
-import '../models/users.dart';
+import '../../dialogs/policy_dialog.dart';
+import '../../fitness_app_theme.dart';
+import '../../models/users.dart';
 
 
 
@@ -31,13 +31,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SupportAddPatient(title: 'Flutter Demo Home Page'),
+      home: DoctorAddPatient(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class SupportAddPatient extends StatefulWidget {
-  SupportAddPatient({Key key, this.title, this.nameslist, this.diseaseList, this.uidList}) : super(key: key);
+class DoctorAddPatient extends StatefulWidget {
+  DoctorAddPatient({Key key, this.title, this.nameslist, this.diseaseList, this.uidList}) : super(key: key);
   final List<String> uidList;
   final List nameslist;
   final List diseaseList;
@@ -47,7 +47,7 @@ class SupportAddPatient extends StatefulWidget {
   _DoctorAddPatientState createState() => _DoctorAddPatientState();
 }
 final FirebaseAuth auth = FirebaseAuth.instance;
-class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerProviderStateMixin {
+class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -168,10 +168,10 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
           ),
           body:  Scrollbar(
             child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
+              padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -445,7 +445,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
       searchPatient = true;
     });
 
-  }
+    }
 
   String getAge (DateTime birthday) {
     DateTime today = new DateTime.now();
@@ -534,7 +534,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
     });
 
 
-    // user.connections.add(userUID);
+      // user.connections.add(userUID);
     // readDoctor.set({connections: user.connections});
   }
 

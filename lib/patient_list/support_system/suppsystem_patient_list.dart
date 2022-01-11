@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:my_app/notifications/notifications_doctor.dart';
-import 'package:my_app/patient_list/doctor_add_patient.dart';
+import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
+import 'package:my_app/patient_list/support_system/suppsystem_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
+import 'package:my_app/profile/support_system/suppsystem_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/widgets/navigation_drawer_widget.dart';
 
-import '../main.dart';
-import '../models/users.dart';
+import '../../main.dart';
+import '../../models/users.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -25,13 +27,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PatientList(title: 'Flutter Demo Home Page'),
+      home: PatientListSupportSystemView(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class PatientList extends StatefulWidget {
-  PatientList({Key key, this.title, this.nameslist, this.diseaselist, this.uidList}) : super(key: key);
+class PatientListSupportSystemView extends StatefulWidget {
+  PatientListSupportSystemView({Key key, this.title, this.nameslist, this.diseaselist, this.uidList}) : super(key: key);
   final List nameslist;
   final List diseaselist;
   final List<String> uidList;
@@ -40,7 +42,7 @@ class PatientList extends StatefulWidget {
   @override
   _PatientListState createState() => _PatientListState();
 }
-class _PatientListState extends State<PatientList>  {
+class _PatientListState extends State<PatientListSupportSystemView>  {
 
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -111,10 +113,10 @@ class _PatientListState extends State<PatientList>  {
               color: Colors.black
           )),
           centerTitle: true,
+          //       padding: EdgeInsets.only(right: 20.0),
           backgroundColor: Colors.white,
           // actions: [
           //   Padding(
-          //       padding: EdgeInsets.only(right: 20.0),
           //       child: GestureDetector(
           //         onTap: () {
           //           Navigator.push(
@@ -166,56 +168,56 @@ class _PatientListState extends State<PatientList>  {
           //   ),
           // ],
         ),
-      body: isLoading
-          ? Center(
-        child: CircularProgressIndicator(),
-      ): new ListView.builder(
-          itemCount: names.length,
-          shrinkWrap: true,
-          itemBuilder: (BuildContext context, int index) =>Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-            child: Card(
-              child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.green,
-                    backgroundImage: NetworkImage
-                      ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
-                  ),
-                  title: Text(names[index],
-                      style:TextStyle(
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new ListView.builder(
+            itemCount: names.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) =>Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Card(
+                child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.green,
+                      backgroundImage: NetworkImage
+                        ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
+                    ),
+                    title: Text(names[index],
+                        style:TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
 
-                      )),
-                  subtitle:        Text(diseases[index],
-                      style:TextStyle(
-                        color: Colors.grey,
-                      )),
-                  trailing: Icon(Icons.sick_rounded ),
-                  isThreeLine: true,
-                  dense: true,
-                  selected: true,
-
-
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => view_patient_profile(userUID: uidlist[index])),
-                    );
+                        )),
+                    subtitle:        Text(diseases[index],
+                        style:TextStyle(
+                          color: Colors.grey,
+                        )),
+                    trailing: Icon(Icons.sick_rounded ),
+                    isThreeLine: true,
+                    dense: true,
+                    selected: true,
 
 
-                  }
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => suppsystem_view_patient_profile(userUID: uidlist[index])),
+                      );
+
+
+                    }
+
+                ),
 
               ),
+            )
 
-            ),
-          )
-
-      ),
+        ),
         drawer: _buildDrawer(context)
 
 
@@ -230,7 +232,7 @@ class _PatientListState extends State<PatientList>  {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-           UserAccountsDrawerHeader(
+          UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(
                   'https://images.unsplash.com/photo-1485290334039-a3c69043e517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYyOTU3NDE0MQ&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=300'),
@@ -267,7 +269,7 @@ class _PatientListState extends State<PatientList>  {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
+                MaterialPageRoute(builder: (context) => SupportAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
               );
             },
           ),
