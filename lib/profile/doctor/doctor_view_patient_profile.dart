@@ -14,6 +14,7 @@ import 'package:my_app/goal_tab/meals/my_meals.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
+import 'package:my_app/profile/doctor/doctor_view_patient_health_team.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_and_doctor_view.dart';
@@ -647,17 +648,18 @@ class _index3State extends State<view_patient_profile>
                             children: <Widget>[
 
                               _buildDivider(),
-                              // ListTile(
-                              //   title: Text("Doctors' Prescriptions"),
-                              //   trailing: Icon(Icons.keyboard_arrow_right),
-                              //   onTap:(){
-                              //     Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(builder: (context) => medication_prescription()),
-                              //     );
-                              //
-                              //   },
-                              // ),
+                              ListTile(
+                                title: Text("Patient's Health Team"),
+                                trailing: Icon(Icons.keyboard_arrow_right),
+                                onTap:(){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => doctor_view_patient_support_system()),
+                                  );
+
+                                },
+                              ),
+                              _buildDivider(),
                               ListTile(
                                 title: Text("Doctors' Orders"),
                                 trailing: Icon(Icons.keyboard_arrow_right),

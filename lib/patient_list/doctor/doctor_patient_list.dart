@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:my_app/notifications/notifications_doctor.dart';
 import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
-import 'package:my_app/patient_list/doctor/doctor_edit_management_privacy.dart';
+import 'package:my_app/profile/doctor/doctor_edit_management_privacy.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -196,29 +196,7 @@ class _PatientListState extends State<PatientList>  {
                       style:TextStyle(
                         color: Colors.grey,
                       )),
-                  trailing: GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(child: Container(
-                            padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                            child: doctor_edit_management_privacy(),
-                          ),
-                          ),
-                        ).then((value) =>
-                            Future.delayed(const Duration(milliseconds: 1500), (){
-                              setState((){
-                                print("setstate medication prescription");
-                                print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                if(value != null){
-                                  // templist = value[0];
-                                }
-                              });
-                            }));
-                      },
-                      child: Icon(Icons.admin_panel_settings_rounded )
-                  ),
+                  trailing: Icon(Icons.sick ),
                   isThreeLine: true,
                   dense: true,
                   selected: true,

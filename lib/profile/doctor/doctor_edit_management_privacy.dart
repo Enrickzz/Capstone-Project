@@ -27,10 +27,10 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
-  bool isAllowedMedicalPrescription = true;
-  bool isAllowedFoodPlan = true;
-  bool isAllowedExercisePlan = true;
-  bool isAllowedVitalsRecording = true;
+  bool isAllowedMedicalPrescription = false;
+  bool isAllowedFoodPlan = false;
+  bool isAllowedExercisePlan = false;
+  bool isAllowedVitalsRecording = false;
   bool showDisclaimer = false;
 
 
@@ -72,7 +72,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                   Divider(),
                   SwitchListTile(
                     title: Text('Medical Prescription', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('Allow Other Doctors/Support Systems to see My Prescribed Medications', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    subtitle: Text('Allow this Doctor to see My Prescribed Medications', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -85,13 +85,13 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                     onChanged: (value){
                       setState(() {
                         isAllowedMedicalPrescription = value;
-                        if(isAllowedFoodPlan == true && isAllowedExercisePlan == true && isAllowedMedicalPrescription == true && isAllowedVitalsRecording == true){
-                          showDisclaimer = false;
-                        }
-                        else{
-                          showDisclaimer = true;
-
-                        }
+                        // if(isAllowedFoodPlan == true && isAllowedExercisePlan == true && isAllowedMedicalPrescription == true && isAllowedVitalsRecording == true){
+                        //   showDisclaimer = false;
+                        // }
+                        // else{
+                        //   showDisclaimer = true;
+                        //
+                        // }
 
                       });
                     },
@@ -101,7 +101,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                   SizedBox(height: 14.0),
                   SwitchListTile(
                     title: Text('Food Plan', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('Allow Other Doctors/Support Systems to see My Prescribed Food Plans', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    subtitle: Text('Allow this Doctor Systems to see My Prescribed Food Plans', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -114,13 +114,13 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                     onChanged: (value){
                       setState(() {
                         isAllowedFoodPlan = value;
-                        if(isAllowedFoodPlan == true && isAllowedExercisePlan == true && isAllowedMedicalPrescription == true && isAllowedVitalsRecording == true){
-                          showDisclaimer = false;
-                        }
-                        else{
-                          showDisclaimer = true;
-
-                        }
+                        // if(isAllowedFoodPlan == true && isAllowedExercisePlan == true && isAllowedMedicalPrescription == true && isAllowedVitalsRecording == true){
+                        //   showDisclaimer = false;
+                        // }
+                        // else{
+                        //   showDisclaimer = true;
+                        //
+                        // }
 
                       });
                     },
@@ -129,7 +129,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                   SizedBox(height: 14.0),
                   SwitchListTile(
                     title: Text('Exercise Plan', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('Allow Other Doctors/Support Systems to see My Prescribed Exercise Plans', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    subtitle: Text('Allow this Doctor Systems to see My Prescribed Exercise Plans', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -142,13 +142,13 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                     onChanged: (value){
                       setState(() {
                         isAllowedExercisePlan = value;
-                        if(isAllowedFoodPlan == true && isAllowedExercisePlan == true && isAllowedMedicalPrescription == true && isAllowedVitalsRecording == true){
-                          showDisclaimer = false;
-                        }
-                        else{
-                          showDisclaimer = true;
-
-                        }
+                        // if(isAllowedFoodPlan == true && isAllowedExercisePlan == true && isAllowedMedicalPrescription == true && isAllowedVitalsRecording == true){
+                        //   showDisclaimer = false;
+                        // }
+                        // else{
+                        //   showDisclaimer = true;
+                        //
+                        // }
 
                       });
                     },
@@ -157,7 +157,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                   SizedBox(height: 14.0),
                   SwitchListTile(
                     title: Text('Vitals Recording', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('Allow Other Doctors/Support Systems to see My Prescribed Vitals Recording', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    subtitle: Text('Allow this Doctor Systems to see My Prescribed Vitals Recording', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -170,13 +170,13 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                     onChanged: (value){
                       setState(() {
                         isAllowedVitalsRecording = value;
-                        if(isAllowedFoodPlan == true && isAllowedExercisePlan == true && isAllowedMedicalPrescription == true && isAllowedVitalsRecording == true){
-                          showDisclaimer = false;
-                        }
-                        else{
-                          showDisclaimer = true;
-
-                        }
+                        // if(isAllowedFoodPlan == true && isAllowedExercisePlan == true && isAllowedMedicalPrescription == true && isAllowedVitalsRecording == true){
+                        //   showDisclaimer = false;
+                        // }
+                        // else{
+                        //   showDisclaimer = true;
+                        //
+                        // }
 
                       });
                     },
