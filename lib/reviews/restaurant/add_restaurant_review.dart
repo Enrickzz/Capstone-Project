@@ -61,8 +61,17 @@ class _create_postState extends State<add_restaurant_review> {
   int count = 0;
   List<Reviews> reviews=[];
   Users thisuser;
+  String date="",min="",hours="";
   @override
   void initState(){
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
     final User user = auth.currentUser;
     final uid = user.uid;
     final readUser = databaseReference.child('users/'+uid+"/personal_info/");
@@ -297,7 +306,7 @@ class _create_postState extends State<add_restaurant_review> {
                             readReview.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
-                                addReview.set({"added_by": uid, "user_name": thisuser.firstname+" "+thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched });
+                                addReview.set({"added_by": uid, "user_name": thisuser.firstname+" "+thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date", "reviewTime": "$hours:$min"});
                               }else{
                                 List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
                                 temp.forEach((jsonString) {
@@ -307,7 +316,7 @@ class _create_postState extends State<add_restaurant_review> {
                                 count = reviews.length--;
                                 print("count " + count.toString());
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
-                                addReview.set({"added_by": uid, "user_name": thisuser.firstname+" "+thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched });
+                                addReview.set({"added_by": uid, "user_name": thisuser.firstname+" "+thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date", "reviewTime": "$hours:$min" });
                               }
                             });
                             Navigator.pop(context);

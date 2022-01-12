@@ -288,7 +288,8 @@ class _discussionState extends State<restaurant_reviews>
 
                                                             SizedBox(width: 10),
                                                             Text(
-                                                              "12/29/2021 11:09",
+                                                              getDateFormatted(reviews[index].reviewDate.toString()) +  " " +
+                                                              getTimeFormatted(reviews[index].reviewTime.toString()),
                                                               style: TextStyle(
                                                                 fontSize: 12,
                                                               ),
@@ -349,6 +350,17 @@ class _discussionState extends State<restaurant_reviews>
 
     );
   }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    print(date);
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
+  }
   void getReviews() async{
     final User user = auth.currentUser;
     final uid = user.uid;
@@ -363,6 +375,7 @@ class _discussionState extends State<restaurant_reviews>
       });
     });
     setState(() {
+
       print("Tapos na get reviews");
     });
 
