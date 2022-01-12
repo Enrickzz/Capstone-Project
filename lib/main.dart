@@ -49,6 +49,7 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
 import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
 import 'goal_tab/meals/meals_list.dart';
+import 'patient_list/support_system/suppsystem_patient_list.dart';
 
 
 
@@ -135,7 +136,7 @@ class _LogInState extends State<LogIn> {
                         MaterialPageRoute(builder: (context) => AppSignIn()),
                             (route) => false,
                       );
-                    }else if(usertype=="Doctor" || usertype == "Family member / Caregiver"){
+                    }else if(usertype=="Doctor"){
                       print("IS DOCTOR? == " + usertype);
                       Navigator.pushAndRemoveUntil(
                         context,
@@ -145,7 +146,7 @@ class _LogInState extends State<LogIn> {
                     }else if(usertype== "Family member / Caregiver"){
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => PatientList()),
+                        MaterialPageRoute(builder: (context) => PatientListSupportSystemView()),
                             (route) => false,
                       );
                     }

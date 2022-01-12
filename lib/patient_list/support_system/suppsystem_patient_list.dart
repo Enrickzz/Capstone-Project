@@ -312,44 +312,45 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
         temp.forEach((jsonString) {
           supp_connections.add(Connection.fromJson2(jsonString));
         });
-      });
-      for(int i = 0; i < supp_connections.length; i++){
-        uidlist.add(supp_connections[i].uid);
-      }
-      for(int i = 0; i < uidlist.length; i++){
-        final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
-        final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
-        readPatient.once().then((DataSnapshot snapshot){
-          var temp1 = jsonDecode(jsonEncode(snapshot.value));
-          print(temp1);
-          Users patient = Users.fromJson(temp1);
-          //userlist.add(Users.fromJson(temp1));
-          readInfo.once().then((DataSnapshot snapshot){
-            var temp2 = jsonDecode(jsonEncode(snapshot.value));
-            print(temp2);
-            //userAddInfo.add(Additional_Info.fromJson(temp2));
-            String disease_name = "";
-            Additional_Info info = Additional_Info.fromJson4(temp2);
-            print(info.disease.length);
-            for(int j = 0; j < info.disease.length; j++){
-              if(j == info.disease.length - 1){
-                print("if statement " + info.disease[j]);
-                disease_name += info.disease[j];
+        for(int i = 0; i < supp_connections.length; i++){
+          uidlist.add(supp_connections[i].uid);
+        }
+        for(int i = 0; i < uidlist.length; i++){
+          final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
+          final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
+          readPatient.once().then((DataSnapshot snapshot){
+            var temp1 = jsonDecode(jsonEncode(snapshot.value));
+            print(temp1);
+            Users patient = Users.fromJson(temp1);
+            //userlist.add(Users.fromJson(temp1));
+            readInfo.once().then((DataSnapshot snapshot){
+              var temp2 = jsonDecode(jsonEncode(snapshot.value));
+              print(temp2);
+              //userAddInfo.add(Additional_Info.fromJson(temp2));
+              String disease_name = "";
+              Additional_Info info = Additional_Info.fromJson4(temp2);
+              print(info.disease.length);
+              for(int j = 0; j < info.disease.length; j++){
+                if(j == info.disease.length - 1){
+                  print("if statement " + info.disease[j]);
+                  disease_name += info.disease[j];
+                }
+                else{
+                  print("else statement " + info.disease[j]);
+                  disease_name += info.disease[j] + ", ";
+                }
               }
-              else{
-                print("else statement " + info.disease[j]);
-                disease_name += info.disease[j] + ", ";
-              }
-            }
-            diseases.add(disease_name);
-            print(diseases);
+              diseases.add(disease_name);
+              print(diseases);
+            });
+
+            names.add(patient.firstname + " " + patient.lastname);
+            print(names);
+
           });
+        }
+      });
 
-          names.add(patient.firstname + " " + patient.lastname);
-          print(names);
-
-        });
-      }
     });
     setState(() {
       isLoading = false;

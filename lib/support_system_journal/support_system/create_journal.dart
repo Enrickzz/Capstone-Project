@@ -260,9 +260,7 @@ class _create_postState extends State<create_journal> {
                         color: Colors.green,
                         onPressed: (){
                           Navigator.pop(context);
-
                         },
-
                         // onPressed:() async {
                         //   try{
                         //     final User user = auth.currentUser;
