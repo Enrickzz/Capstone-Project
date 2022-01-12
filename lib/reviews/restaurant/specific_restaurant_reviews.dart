@@ -203,7 +203,7 @@ class _discussionState extends State<restaurant_reviews>
                                 //       }));
                                 // },
                                 child: Container(
-                                  height: 180,
+
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(10.0),
@@ -215,7 +215,7 @@ class _discussionState extends State<restaurant_reviews>
                                       )]
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.all(15.0),
+                                    padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
@@ -232,11 +232,11 @@ class _discussionState extends State<restaurant_reviews>
                                                   // ),
                                                   if ( reviews[index].recommend) ...[
                                                     Icon(
-                                                      Icons.thumb_up_alt_sharp,
+                                                      Icons.thumb_up_alt_sharp, color: Colors.green,
                                                     ),
                                                   ] else ...[
                                                     Icon(
-                                                      Icons.thumb_down_alt_sharp,
+                                                      Icons.thumb_down_alt_sharp, color: Colors.red,
                                                     ),
                                                   ],
 
@@ -256,48 +256,55 @@ class _discussionState extends State<restaurant_reviews>
                                                         //     ),
                                                         //   ),
                                                         // ),
-                                                        RatingBar(
-                                                            initialRating:  double.parse(reviews[index].rating.toString()),
-                                                            direction: Axis.horizontal,
-                                                            allowHalfRating: true,
-                                                            itemCount: 5,
-                                                            ignoreGestures: true,
-                                                            itemSize: 15.0,
-                                                            onRatingUpdate: (rating) {
-                                                              print(rating);
-                                                            },
-                                                            ratingWidget: RatingWidget(
-                                                                full: Icon(Icons.star, color: Colors.orange),
-                                                                half: Icon(
-                                                                  Icons.star_half,
-                                                                  color: Colors.orange,
+
+                                                        Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Row(
+                                                              children: <Widget>[
+                                                                Text(
+                                                                  reviews[index].user_name,
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    fontWeight: FontWeight.bold
+                                                                  ),
                                                                 ),
-                                                                empty: Icon(
-                                                                  Icons.star_outline,
-                                                                  color: Colors.orange,
-                                                                )),
+                                                                SizedBox(width: 10),
+                                                                Text(
+                                                                  getDateFormatted(reviews[index].reviewDate.toString()) +  " " +
+                                                                  getTimeFormatted(reviews[index].reviewTime.toString()),
+                                                                  style: TextStyle(
+                                                                    fontSize: 12,
+                                                                  ),
+                                                                )
+                                                              ],
                                                             ),
-                                                        SizedBox(height: 2.0),
-                                                        Row(
-                                                          children: <Widget>[
-                                                            Text(
-                                                              reviews[index].user_name,
-                                                              style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.bold
-                                                              ),
+                                                            SizedBox(height: 2,),
+                                                            RatingBar(
+                                                              initialRating:  double.parse(reviews[index].rating.toString()),
+                                                              direction: Axis.horizontal,
+                                                              allowHalfRating: true,
+                                                              itemCount: 5,
+                                                              ignoreGestures: true,
+                                                              itemSize: 15.0,
+                                                              onRatingUpdate: (rating) {
+                                                                print(rating);
+                                                              },
+                                                              ratingWidget: RatingWidget(
+                                                                  full: Icon(Icons.star, color: Colors.orange),
+                                                                  half: Icon(
+                                                                    Icons.star_half,
+                                                                    color: Colors.orange,
+                                                                  ),
+                                                                  empty: Icon(
+                                                                    Icons.star_outline,
+                                                                    color: Colors.orange,
+                                                                  )),
                                                             ),
 
-                                                            SizedBox(width: 10),
-                                                            Text(
-                                                              getDateFormatted(reviews[index].reviewDate.toString()) +  " " +
-                                                              getTimeFormatted(reviews[index].reviewTime.toString()),
-                                                              style: TextStyle(
-                                                                fontSize: 12,
-                                                              ),
-                                                            )
                                                           ],
                                                         )
+
                                                       ],
                                                     ),
                                                   ),
@@ -307,14 +314,13 @@ class _discussionState extends State<restaurant_reviews>
                                           ),
                                         ),
                                         Container(
-
+                                          width: 300,
                                           child: Text(
                                             reviews[index].review,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 3,
+
                                           ),
                                         ),
                                         SizedBox(height: 5),

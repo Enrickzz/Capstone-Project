@@ -10,6 +10,7 @@ import 'package:my_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:my_app/dashboards/dashboards_as_doctor.dart';
 import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
 import 'package:my_app/goal_tab/goals_doctor_view.dart';
+import 'package:my_app/goal_tab/goals_support_view.dart';
 import 'package:my_app/goal_tab/meals/my_meals.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
@@ -743,7 +744,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
                         onPressed: () async {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => goals_doctor_view(animationController: animationController)),
+                            MaterialPageRoute(builder: (context) => goals_support_view(animationController: animationController)),
                           );
 
                         },

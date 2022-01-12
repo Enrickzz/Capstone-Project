@@ -78,6 +78,7 @@ class sleep_quality extends StatelessWidget {
                               ),
                             ],
                           ),
+                          SizedBox(height: 8,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -182,7 +183,6 @@ class sleep_quality extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 8,)
                         ],
                       ),
                     ),

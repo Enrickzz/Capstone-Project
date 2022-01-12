@@ -13,6 +13,7 @@ import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/profile/patient/add_image.dart';
 import 'package:my_app/profile/patient/edit_medical_history.dart';
+import 'package:my_app/profile/support_system/suppsystem_view_patient_profile.dart';
 import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/reviews/drugstore/specific_drugstore_review.dart';
 import 'package:my_app/reviews/facility/specific_facility_review.dart';
@@ -246,7 +247,7 @@ class _AppSignInState extends State<AppSignIn> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => set_up()),
+                      MaterialPageRoute(builder: (context) => suppsystem_view_patient_profile()),
                     );
                   },
                   child: Image.asset("assets/images/heart_icon.png")),

@@ -122,7 +122,7 @@ class TitleView extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => sleep_score()),
+                                        builder: (context) => weight_list_doctor_view()),
                                   );
                                 }
                                 else if (redirect == 8) {
@@ -132,13 +132,13 @@ class TitleView extends StatelessWidget {
                                         builder: (context) => water_intake_doctor_view()),
                                   );
                                 }
-                                // else if (redirect == 9) {
-                                //   Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => water_intake_doctor_view()),
-                                //   );
-                                // }
+                                else if (redirect == 9) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => sleep_score()),
+                                  );
+                                }
                                 // else if (redirect == 10) {
                                 //   Navigator.push(
                                 //     context,
