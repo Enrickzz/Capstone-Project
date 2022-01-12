@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,8 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
-
 import 'dialogs/policy_dialog.dart';
+import 'package:crypto/crypto.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class registration extends StatefulWidget {
@@ -466,6 +468,7 @@ class _AppSignUpState extends State<registration> {
                                   if(_formKey.currentState.validate()){
                                     dynamic result = await _auth.registerUser(lastname, firstname, email,password);
                                     if(result == null){
+
                                       setState(() => error = 'Sign Up Failed');
                                     }else{
                                       setState(() => error = '');
@@ -484,6 +487,7 @@ class _AppSignUpState extends State<registration> {
                                           MaterialPageRoute(builder: (context) => set_up()),
                                         );
                                         isFirstTime = true;
+                                        password = sha256.convert(utf8.encode(password)).toString();
                                         await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "connections": connection});
                                       }
                                     }
@@ -493,6 +497,7 @@ class _AppSignUpState extends State<registration> {
                                         MaterialPageRoute(builder: (context) => PatientList()),
                                       );
                                       isFirstTime = false;
+                                      password = sha256.convert(utf8.encode(password)).toString();
                                       await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "connections": connection, "specialty": valueChooseDoctorKind});
                                     }
                                     print("user registered Sucessfully!");

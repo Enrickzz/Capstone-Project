@@ -60,6 +60,7 @@ dependencies:
   syncfusion_flutter_gauges: ^19.3.55
   http: ^0.13.4
   google_maps_flutter: ^2.1.1
+  crypto: ^3.0.1
 
 
 clipboard: ^0.1.3
