@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
@@ -31,7 +32,9 @@ class _AppSignUpState extends State<registration> {
   String password = '';
   String error = '';
   String confirmpassword = '';
-  List<String> connection = ["NA", "NA"];
+  // List<String> connections = ["NA", "NA"];
+  // Connection connectionP = new Connection(uid: "NA", dashboard: false, nonhealth: false, health: false);
+  // Connection connectionD = new Connection(uid: "NA", medpres: false, foodplan: false, explan: false, vitals: false);
   bool isFirstTime = true;
   bool checkboxValue = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -479,7 +482,6 @@ class _AppSignUpState extends State<registration> {
                                     final uid = user.uid;
                                     final usersRef = databaseReference.child('users/' + uid + '/personal_info');
 
-
                                     if(valueChooseUserStatus == "Patient"){
                                       if(isFirstTime){
                                         Navigator.pushReplacement(
@@ -488,7 +490,7 @@ class _AppSignUpState extends State<registration> {
                                         );
                                         isFirstTime = true;
                                         password = sha256.convert(utf8.encode(password)).toString();
-                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "connections": connection});
+                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
                                       }
                                     }
                                     else{
@@ -498,7 +500,7 @@ class _AppSignUpState extends State<registration> {
                                       );
                                       isFirstTime = false;
                                       password = sha256.convert(utf8.encode(password)).toString();
-                                      await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "connections": connection, "specialty": valueChooseDoctorKind});
+                                      await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "specialty": valueChooseDoctorKind});
                                     }
                                     print("user registered Sucessfully!");
                                   } catch(e) {

@@ -47,7 +47,8 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  Users doctor = new Users(email: "", firstname: "", lastname: "");
+  Users supp_system = new Users(email: "", firstname: "", lastname: "");
+  List<Connection> supp_connections = [];
 
   List<String> uidlist = [];
   List<Users> userlist=[];
@@ -237,9 +238,9 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
               backgroundImage: NetworkImage(
                   'https://images.unsplash.com/photo-1485290334039-a3c69043e517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYyOTU3NDE0MQ&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=300'),
             ),
-            accountEmail: Text(doctor.email,style: TextStyle(fontSize: 12.0)),
+            accountEmail: Text(supp_system.email,style: TextStyle(fontSize: 12.0)),
             accountName: Text(
-              doctor.firstname + " " + doctor.lastname,
+              supp_system.firstname + " " + supp_system.lastname,
               style: TextStyle(fontSize: 16.0),
             ),
             decoration: BoxDecoration(
@@ -302,11 +303,18 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+    final readDoctorConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
     await readDoctor.once().then((DataSnapshot snapshot){
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
-      doctor = Users.fromJson2(temp1);
-      for(int i = 0; i < doctor.connections.length; i++){
-        uidlist.add(doctor.connections[i]);
+      supp_system = Users.fromJson(temp1);
+      readDoctorConnections.once().then((DataSnapshot datasnapshot){
+        List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+        temp.forEach((jsonString) {
+          supp_connections.add(Connection.fromJson2(jsonString));
+        });
+      });
+      for(int i = 0; i < supp_connections.length; i++){
+        uidlist.add(supp_connections[i].uid);
       }
       for(int i = 0; i < uidlist.length; i++){
         final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');

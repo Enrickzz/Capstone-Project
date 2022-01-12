@@ -58,8 +58,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   TabController controller;
   String userUID = "";
   Users cuser = new Users();
-  Users patient = new Users();
-  Users doctor = new Users();
+
   Additional_Info info = new Additional_Info();
   String displayName = "";
   String email = "";
@@ -68,10 +67,13 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   String gender = "";
   String cvdCondition = "";
   String otherCondition = "";
-  List<String> doc_connection = [];
-  List<String> patient_connection = [];
-
+  List<Connection> doc_connection = [];
+  List<Connection> patient_connection = [];
+  Connection docConnection = new Connection(uid: "", dashboard: "true", nonhealth: "true", health: "true");
+  Connection patientConnection = new Connection(uid: "", dashboard: "true", nonhealth: "true", health: "true");
   bool searchPatient = false;
+  int pcount = 1;
+  int dcount = 1;
 
   List namestemp;
   List diseasetemp;
@@ -476,66 +478,143 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
     return age.toString();
   }
 
+  // void addPatient() {
+  //   final User user = auth.currentUser;
+  //   final uid = user.uid;
+  //   final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+  //   final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+  //   doc_connection.clear();
+  //   patient_connection.clear();
+  //   bool isPatient = false;
+  //   bool isDoctor = false;
+  //   readDoctor.once().then((DataSnapshot snapshot){
+  //     /// read doctor connections
+  //     var temp1 = jsonDecode(jsonEncode(snapshot.value));
+  //     doctor = Users.fromJson2(temp1);
+  //     for(int i = 0; i < doctor.connections.length; i++){
+  //       if(doctor.connections[i] != "NA"){
+  //         if(doctor.connections[i] == userUID){
+  //           print("same patient detected");
+  //           isPatient = true;
+  //         }
+  //         doc_connection.add(doctor.connections[i]);
+  //       }
+  //     }
+  //     /// read patient connections
+  //     readPatient.once().then((DataSnapshot snapshot){
+  //       var temp2 = jsonDecode(jsonEncode(snapshot.value));
+  //       print(temp2);
+  //       patient = Users.fromJson2(temp2);
+  //       for(int i = 0; i < patient.connections.length; i++){
+  //         if(patient.connections[i] != "NA"){
+  //           if(patient.connections[i] == uid){
+  //             print("same doctor detected");
+  //             isDoctor = true;
+  //           }
+  //           print("PATIENT CONNECTIONS " + patient.connections[i]);
+  //           patient_connection.add(patient.connections[i]);
+  //         }
+  //       }
+  //       if(isDoctor == false){
+  //         patient_connection.add(uid);
+  //         print("doctor added successfully");
+  //       }
+  //       readPatient.update({"connections": patient_connection});
+  //     });
+  //
+  //     if(isPatient == false){
+  //       doc_connection.add(userUID);
+  //       print("patient added successfully");
+  //     }
+  //
+  //     print(patient_connection);
+  //     readDoctor.update({"connections": doc_connection});
+  //
+  //     namestemp.add(displayName);
+  //     diseasetemp.add(cvdCondition);
+  //     uidtemp.add(userUID);
+  //   });
+  //
+  //
+  //     // user.connections.add(userUID);
+  //   // readDoctor.set({connections: user.connections});
+  // }
+
   void addPatient() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
-    final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+    final readDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
+    // final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+    final readPatientConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
+    // final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     doc_connection.clear();
     patient_connection.clear();
     bool isPatient = false;
     bool isDoctor = false;
-    readDoctor.once().then((DataSnapshot snapshot){
-      /// read doctor connections
-      var temp1 = jsonDecode(jsonEncode(snapshot.value));
-      doctor = Users.fromJson2(temp1);
-      for(int i = 0; i < doctor.connections.length; i++){
-        if(doctor.connections[i] != "NA"){
-          if(doctor.connections[i] == userUID){
+    /// read doctor connections
+    readDoctorConnection.once().then((DataSnapshot datasnapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+      if(datasnapshot.value != null){
+        temp.forEach((jsonString) {
+          doc_connection.add(Connection.fromJson(jsonString));
+        });
+        for(int i = 0; i < doc_connection.length; i++){
+          if(doc_connection[i].uid == userUID){
             print("same patient detected");
             isPatient = true;
           }
-          doc_connection.add(doctor.connections[i]);
         }
+        dcount = doc_connection.length+1;
       }
+
       /// read patient connections
-      readPatient.once().then((DataSnapshot snapshot){
-        var temp2 = jsonDecode(jsonEncode(snapshot.value));
-        print(temp2);
-        patient = Users.fromJson2(temp2);
-        for(int i = 0; i < patient.connections.length; i++){
-          if(patient.connections[i] != "NA"){
-            if(patient.connections[i] == uid){
-              print("same doctor detected");
+      readPatientConnection.once().then((DataSnapshot snapshot){
+        List<dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        if(snapshot.value != null){
+          temp2.forEach((jsonString) {
+            patient_connection.add(Connection.fromJson(jsonString));
+          });
+          for(int i = 0; i < patient_connection.length; i++){
+            if(patient_connection[i].uid == uid){
+              print("same patient detected");
               isDoctor = true;
             }
-            print("PATIENT CONNECTIONS " + patient.connections[i]);
-            patient_connection.add(patient.connections[i]);
           }
+          pcount = patient_connection.length+1;
         }
         if(isDoctor == false){
-          patient_connection.add(uid);
+          patientConnection.uid = uid;
+          patient_connection.add(patientConnection);
           print("doctor added successfully");
         }
-        readPatient.update({"connections": patient_connection});
+        final addPatientConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/' + pcount.toString());
+
+        addPatientConnection.set({
+          "uid": patient_connection[patient_connection.length-1].uid,
+          "dashboard": patient_connection[patient_connection.length-1].dashboard.toString(),
+          "nonhealth": patient_connection[patient_connection.length-1].nonhealth.toString(),
+          "health": patient_connection[patient_connection.length-1].health.toString(),
+        });
       });
 
       if(isPatient == false){
-        doc_connection.add(userUID);
+        docConnection.uid = userUID;
+        doc_connection.add(docConnection);
         print("patient added successfully");
       }
 
-      print(patient_connection);
-      readDoctor.update({"connections": doc_connection});
+      final addDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/' + dcount.toString());
+      addDoctorConnection.set({
+        "uid": doc_connection[doc_connection.length-1].uid,
+        "dashboard": doc_connection[doc_connection.length-1].dashboard.toString(),
+        "nonhealth": doc_connection[doc_connection.length-1].nonhealth.toString(),
+        "health": doc_connection[doc_connection.length-1].health.toString(),
+      });
 
       namestemp.add(displayName);
       diseasetemp.add(cvdCondition);
       uidtemp.add(userUID);
     });
-
-
-      // user.connections.add(userUID);
-    // readDoctor.set({connections: user.connections});
   }
 
   Future<void> _showMyDialog() async {

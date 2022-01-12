@@ -110,7 +110,6 @@ class _LogInState extends State<LogIn> {
                 Future.delayed(const Duration(milliseconds: 2000), (){
                   setState(() {
                     print("SETSTATE INSIDE WIDGET ");
-                    print(isFTime);
                     print("USER TYPE IS " + usertype);
                     if(usertype == "Patient"){
                       print("should be PATIENT " + usertype);

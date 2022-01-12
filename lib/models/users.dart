@@ -51,6 +51,47 @@ class Users {
   }
 
 }
+class Connection{
+
+  Connection({
+    this.uid,
+    this.dashboard,
+    this.nonhealth,
+    this.health,
+    this.medpres,
+    this.foodplan,
+    this.explan,
+    this.vitals,
+  });
+
+  String uid;
+
+  /// patient to doctor
+  String dashboard;
+  String nonhealth;
+  String health;
+
+  Connection.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
+    dashboard = json['dashboard'];
+    nonhealth = json['nonhealth'];
+    health = json['health'];
+  }
+
+  /// doctor to doctor
+  String medpres;
+  String foodplan;
+  String explan;
+  String vitals;
+
+  Connection.fromJson2(Map<String, dynamic> json) {
+    uid = json['uid'];
+    medpres = json['medpres'];
+    foodplan = json['foodplan'];
+    explan = json['explan'];
+    vitals = json['vitals'];
+  }
+}
 
 class Additional_Info {
   DateTime birthday = new DateTime.now();

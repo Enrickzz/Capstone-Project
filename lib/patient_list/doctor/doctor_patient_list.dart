@@ -47,6 +47,7 @@ class _PatientListState extends State<PatientList>  {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   Users doctor = new Users(email: "", firstname: "", lastname: "");
+  List<Connection> doctor_connections = [];
 
   List<String> uidlist = [];
   List<Users> userlist=[];
@@ -301,11 +302,18 @@ class _PatientListState extends State<PatientList>  {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+    final readDoctorConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
     await readDoctor.once().then((DataSnapshot snapshot){
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
-      doctor = Users.fromJson2(temp1);
-      for(int i = 0; i < doctor.connections.length; i++){
-        uidlist.add(doctor.connections[i]);
+      doctor = Users.fromJson(temp1);
+      readDoctorConnections.once().then((DataSnapshot datasnapshot){
+        List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+        temp.forEach((jsonString) {
+          doctor_connections.add(Connection.fromJson2(jsonString));
+        });
+      });
+      for(int i = 0; i < doctor_connections.length; i++){
+        uidlist.add(doctor_connections[i].uid);
       }
       for(int i = 0; i < uidlist.length; i++){
         final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
