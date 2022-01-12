@@ -249,20 +249,20 @@ class _reply_postState extends State<reply_journal> {
                             int index = widget.index;
                             print(index);
                             Replies reply = new Replies();
-                            final readReply = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() +'/replies/');
+                            final readReply = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/');
                             final readCreator = databaseReference.child('users/' + uid + '/personal_info/');
-                            final readDiscussion = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString());
+                            final readDiscussion = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString());
                             readCreator.once().then((DataSnapshot createsnapshot){
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(createsnapshot.value));
                               doctor = Users.fromJson(temp);
                               doctor_name = doctor.firstname + " " + doctor.lastname;
-                              specialty = doctor.specialty;
+                              specialty = "Support System";
                               readReply.once().then((DataSnapshot replysnapshot) {
                                 String temp1 = replysnapshot.value.toString();
                                 print("temp1");
                                 print(temp1);
                                 if(replysnapshot.value == null){
-                                  final replyRef = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() + "/replies/" + count.toString());
+                                  final replyRef = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() + "/replies/" + count.toString());
                                   reply = new Replies(createdBy: doctor_name, specialty: specialty, replyDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}", replyTime: "${now.hour.toString().padLeft(2,"0")}:${now.minute.toString().padLeft(2,"0")}", replyBody: replyBody);
                                   replyRef.update(reply.toJson());
                                   readDiscussion.once().then((DataSnapshot discussionsnapshot) {
@@ -272,13 +272,13 @@ class _reply_postState extends State<reply_journal> {
                                     print("no of replies added 1 successfully");
                                   });
                                   // replyRef.set({"createdBy": doctor_name, "specialty": specialty, "replyDate": "${now.month}/${now.day}/${now.year}", "replyTime": "${now.hour}:${now.minute}", "replyBody": replyBody});
-                                  print("Added Discussion Board Reply Successfully! " + userUID);
+                                  print("Added Journal Entry Reply Successfully! " + userUID);
                                 }
                                 else{
                                   getReply();
                                   Future.delayed(const Duration(milliseconds: 1000), (){
                                     count = reply_list.length--;
-                                    final replyRef = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() +'/replies/' + count.toString());
+                                    final replyRef = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/' + count.toString());
                                     reply = new Replies(createdBy: doctor_name, specialty: specialty, replyDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}", replyTime: "${now.hour.toString().padLeft(2,"0")}:${now.minute.toString().padLeft(2,"0")}", replyBody: replyBody);
                                     replyRef.update(reply.toJson());
                                     readDiscussion.once().then((DataSnapshot discussionsnapshot) {
@@ -287,7 +287,7 @@ class _reply_postState extends State<reply_journal> {
                                       readDiscussion.update({"noOfReplies": discussion.noOfReplies+1});
                                       print("no of replies added 1 successfully");
                                     });
-                                    print("Added Discussion Board Reply Successfully! " + userUID);
+                                    print("Added Journal Entry Reply Successfully! " + userUID);
                                   });
 
                                 }
