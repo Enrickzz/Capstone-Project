@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/discussion_board/create_post.dart';
 import 'package:my_app/models/GooglePlaces.dart';
 import 'package:my_app/models/Reviews.dart';
+import 'package:my_app/models/spotify.dart';
 import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
@@ -374,8 +376,23 @@ class _discussionState extends State<restaurant_reviews>
         print(reviews.length.toString()+ "<<<<<<<<<<<");
       });
     });
-    setState(() {
 
+    //SPOTIFY SHIT
+
+    String query = "meditation";
+    var rng = new Random();
+    var response = await http.get(Uri.parse("https://api.spotify.com/v1/search?q=$query&type=track&market=PH"),
+        headers: {
+          'Authorization': "Bearer BQCO7TP4X7V2hpB3Ph9N6VLMvq7gdwDgNZaEjc5yqFFgmgnepbTJnqE6SaXg774148NnKrPTvmHzD45-W2ekCYjvSehIy87JYlr48DKL8DlKaRyeCFCZZ6w86Kub0imHf8PfcFY6ohf4r6z0OU6VTGoA",
+        });
+    List<Items> tracks =[];
+    tracks = Spotify.fromJson(jsonDecode(response.body)).tracks.items;
+    print("SPOTIFY ITEMS = " +tracks.length.toString() );
+    for(var i = 0; i < tracks.length; i ++){
+      print("$i. "+tracks[i].name +"  url: " + tracks[i].externalUrls.spotify + "  image: " + tracks[i].album.images[0].url);
+    }
+
+    setState(() {
       print("Tapos na get reviews");
     });
 
