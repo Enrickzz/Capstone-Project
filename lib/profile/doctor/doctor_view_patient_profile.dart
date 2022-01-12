@@ -143,7 +143,10 @@ class _index3State extends State<view_patient_profile>
             iconTheme: IconThemeData(
                 color: Colors.black
             ),
-            title: Text(DisplayName + "'s Profile", style: TextStyle(
+            title: isLoading
+                ? Center(
+              child: CircularProgressIndicator(),
+            ): new Text(DisplayName + "'s Profile", style: TextStyle(
                 color: Colors.black
             )),
             centerTitle: true,
@@ -169,7 +172,10 @@ class _index3State extends State<view_patient_profile>
             // ],
 
           ),
-          body: Scrollbar(
+          body: isLoading
+              ? Center(
+            child: CircularProgressIndicator(),
+          ): new Scrollbar(
             child: SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
               child: Column(

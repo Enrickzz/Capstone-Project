@@ -93,8 +93,9 @@ class _PatientListState extends State<PatientList>  {
       print("ASDASDASD");
     }else{
       getPatients();
+      isLoading = true;
     }
-    Future.delayed(const Duration(milliseconds: 4000), (){
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         isLoading = false;
       });
@@ -208,19 +209,12 @@ class _PatientListState extends State<PatientList>  {
                       context,
                       MaterialPageRoute(builder: (context) => view_patient_profile(userUID: uidlist[index])),
                     );
-
-
                   }
-
               ),
-
             ),
           )
-
       ),
         drawer: _buildDrawer(context)
-
-
     );
 
 
