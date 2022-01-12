@@ -258,60 +258,59 @@ class _create_postState extends State<create_journal> {
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.green,
-                        onPressed: (){
-                          Navigator.pop(context);
-                        },
-                        // onPressed:() async {
-                        //   try{
-                        //     final User user = auth.currentUser;
-                        //     final uid = user.uid;
-                        //     String userUID = widget.userUID;
-                        //     print(userUID);
-                        //     final readDiscussion = databaseReference.child('users/' + userUID + '/discussion/');
-                        //     final readCreator = databaseReference.child('users/' + uid + '/personal_info/');
-                        //     String createdBy = "";
-                        //     readCreator.once().then((DataSnapshot snapshot){
-                        //       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-                        //       doctor = Users.fromJson(temp);
-                        //       createdBy = doctor.firstname + " " + doctor.lastname;
-                        //       readDiscussion.once().then((DataSnapshot datasnapshot) {
-                        //         String temp1 = datasnapshot.value.toString();
-                        //         print("temp1 " + temp1);
-                        //         if(datasnapshot.value == null){
-                        //           final discussionRef = databaseReference.child('users/' + userUID + '/discussion/' + count.toString());
-                        //           discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0, "imgRef": fileName});
-                        //           print("Added to Discussion Board Successfully! " + userUID);
-                        //         }
-                        //         else{
-                        //           getDiscussion();
-                        //           Future.delayed(const Duration(milliseconds: 1000), (){
-                        //             print(count);
-                        //             count = discussion_list.length--;
-                        //             final discussionRef = databaseReference.child('users/' + userUID + '/discussion/' + count.toString());
-                        //             discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0, "imgRef": fileName});
-                        //             print("Added to Discussion Board Successfully! " + userUID);
-                        //           });
-                        //
-                        //         }
-                        //
-                        //       });
-                        //     });
-                        //     Future.delayed(const Duration(milliseconds: 1000), (){
-                        //       discussion_list.add(new Discussion(title: title, createdBy: createdBy, discussionDate: now, discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName));
-                        //       // for(var i=0;i<discussion_list.length/2;i++){
-                        //       //   var temp = discussion_list[i];
-                        //       //   discussion_list[i] = discussion_list[discussion_list.length-1-i];
-                        //       //   discussion_list[discussion_list.length-1-i] = temp;
-                        //       // }
-                        //       print("POP HERE ==========");
-                        //       Navigator.pop(context, [discussion_list, 1]);
-                        //     });
-                        //
-                        //   } catch(e) {
-                        //     print("you got an error! $e");
-                        //   }
-                        //   // Navigator.pop(context);
+                        // onPressed: (){
+                        //   Navigator.pop(context);
                         // },
+                        onPressed:() async {
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            String userUID = widget.userUID;
+                            final readDiscussion = databaseReference.child('users/' + userUID + '/journal/');
+                            final readCreator = databaseReference.child('users/' + uid + '/personal_info/');
+                            String createdBy = "";
+                            readCreator.once().then((DataSnapshot snapshot){
+                              Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+                              doctor = Users.fromJson(temp);
+                              createdBy = doctor.firstname + " " + doctor.lastname;
+                              readDiscussion.once().then((DataSnapshot datasnapshot) {
+                                String temp1 = datasnapshot.value.toString();
+                                print("temp1 " + temp1);
+                                if(datasnapshot.value == null){
+                                  final discussionRef = databaseReference.child('users/' + userUID + '/journal/' + count.toString());
+                                  discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0, "imgRef": fileName});
+                                  print("Added to Journal Entry Successfully! " + userUID);
+                                }
+                                else{
+                                  getDiscussion();
+                                  Future.delayed(const Duration(milliseconds: 1000), (){
+                                    print(count);
+                                    count = discussion_list.length--;
+                                    final discussionRef = databaseReference.child('users/' + userUID + '/journal/' + count.toString());
+                                    discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0, "imgRef": fileName});
+                                    print("Added to Journal Entry Successfully! " + userUID);
+                                  });
+
+                                }
+
+                              });
+                            });
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              discussion_list.add(new Discussion(title: title, createdBy: createdBy, discussionDate: now, discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName));
+                              // for(var i=0;i<discussion_list.length/2;i++){
+                              //   var temp = discussion_list[i];
+                              //   discussion_list[i] = discussion_list[discussion_list.length-1-i];
+                              //   discussion_list[discussion_list.length-1-i] = temp;
+                              // }
+                              print("POP HERE ==========");
+                              Navigator.pop(context, [discussion_list, 1]);
+                            });
+
+                          } catch(e) {
+                            print("you got an error! $e");
+                          }
+                          // Navigator.pop(context);
+                        },
                       )
                     ],
                   ),
@@ -349,25 +348,25 @@ class _create_postState extends State<create_journal> {
 
 
 
-  // Future <String> downloadUrl(String imagename) async{
-  //   final ref = FirebaseStorage.instance.ref('test/$imagename');
-  //   String downloadurl = await ref.getDownloadURL();
-  //   print ("THIS IS THE URL = "+ downloadurl);
-  //   thisURL = downloadurl;
-  //   return downloadurl;
-  // }
-  // void getDiscussion() {
-  //   // final User user = auth.currentUser;
-  //   // final uid = user.uid;
-  //   String userUID = widget.userUID;
-  //   final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
-  //   readdiscussion.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       discussion_list.add(Discussion.fromJson(jsonString));
-  //     });
-  //   });
-  // }
+  Future <String> downloadUrl(String imagename) async{
+    final ref = FirebaseStorage.instance.ref('test/$imagename');
+    String downloadurl = await ref.getDownloadURL();
+    print ("THIS IS THE URL = "+ downloadurl);
+    thisURL = downloadurl;
+    return downloadurl;
+  }
+  void getDiscussion() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readdiscussion = databaseReference.child('users/' + userUID + '/journal/');
+    readdiscussion.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        discussion_list.add(Discussion.fromJson(jsonString));
+      });
+    });
+  }
 
 }
 

@@ -53,7 +53,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
   // DateTime now =  DateTime.now();
   // String title = '';
   // String description = '';
-  // List<Discussion> discussion_list = new List<Discussion>();
+  List<Discussion> discussion_list = new List<Discussion>();
   // bool prescribedDoctor = false;
 
 
@@ -61,7 +61,8 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
   @override
   void initState() {
     super.initState();
-    // discussion_list.clear();
+    discussion_list.clear();
+    getDiscussion();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -217,7 +218,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                       ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: 3,
+                          itemCount: discussion_list.length,
                           itemBuilder: (context, index) {
                             return Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
@@ -267,7 +268,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                                         Container(
                                                           width: MediaQuery.of(context).size.width * 0.65,
                                                           child: Text(
-                                                            "BP Reading alarming?",
+                                                            discussion_list[index].title,
                                                             overflow: TextOverflow.ellipsis,
                                                             maxLines: 2,
                                                             style: TextStyle(
@@ -280,7 +281,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                                         Row(
                                                           children: <Widget>[
                                                             Text(
-                                                              "Sheila Borja",
+                                                              discussion_list[index].createdBy,
                                                               style: TextStyle(
                                                                 fontSize: 12,
                                                               ),
@@ -288,7 +289,9 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
 
                                                             SizedBox(width: 15),
                                                             Text(
-                                                              "01/09/2022 06:06",
+                                                              "${discussion_list[index].discussionDate.month.toString().padLeft(1,"0")}/${discussion_list[index].discussionDate.day.toString().padLeft(1,"0")}/${discussion_list[index].discussionDate.year}" +
+                                                                  " " +
+                                                                  "${discussion_list[index].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[index].discussionTime.minute.toString().padLeft(2,"0")}",
                                                               style: TextStyle(
                                                                 fontSize: 12,
                                                               ),
@@ -307,7 +310,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                           width: 300,
 
                                           child: Text(
-                                            "I recently Noticed that Louis' BP vitals have been constantly high is this a cause for me to be alarmed?",
+                                            discussion_list[index].discussionBody,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                               fontSize: 14,
@@ -328,7 +331,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                                 ),
                                                 SizedBox(width: 4.0),
                                                 Text(
-                                                  "1" + " replies",
+                                                  discussion_list[index].noOfReplies.toString() + " replies",
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                   ),
@@ -367,18 +370,18 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
 
     );
   }
-  // void getDiscussion() {
-  //   // final User user = auth.currentUser;
-  //   // final uid = user.uid;
-  //   String userUID = widget.userUID;
-  //   final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
-  //   readdiscussion.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       discussion_list.add(Discussion.fromJson(jsonString));
-  //     });
-  //   });
-  // }
+  void getDiscussion() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readdiscussion = databaseReference.child('users/' + userUID + '/journal/');
+    readdiscussion.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        discussion_list.add(Discussion.fromJson(jsonString));
+      });
+    });
+  }
 
   Future<void> _showMyDialogDelete() async {
     return showDialog<void>(
