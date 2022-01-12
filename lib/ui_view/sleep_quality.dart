@@ -52,6 +52,40 @@ class sleep_quality extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                     left: 4, bottom: 3),
                                 child: Text(
+                                  '78',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 30,
+                                    color: FitnessAppTheme.nearlyDarkBlue,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 4, bottom: 16, top: 0),
+                                child: Text(
+                                  'Sleep Score',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: FitnessAppTheme.fontName,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      color: FitnessAppTheme.darkText),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 4, bottom: 3),
+                                child: Text(
                                   '7',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(

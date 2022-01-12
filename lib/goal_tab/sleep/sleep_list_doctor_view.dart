@@ -200,10 +200,11 @@ class _sleepState extends State<sleep_doctor_view> {
 
 
 
-      DataColumn(label: Text('Duration')),
-      DataColumn(label: Text('Times Awake')),
-      DataColumn(label: Text('Times Restless')),
-      DataColumn(label: Text('Mins awake/restless')),
+      DataColumn(label: Text('Sleep Duration')),
+      DataColumn(label: Text('REM Duration')),
+      DataColumn(label: Text('Deep Sleep Duration')),
+      DataColumn(label: Text('Light Sleep Duration')),
+      DataColumn(label: Text('Sleep Score')),
 
 
 
@@ -216,6 +217,7 @@ class _sleepState extends State<sleep_doctor_view> {
         .mapIndexed((index, bp) => DataRow(
         cells: [
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),

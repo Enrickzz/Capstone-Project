@@ -84,6 +84,15 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
         actions: [
           GestureDetector(
             onTap: () {
+              showListRefresh();
+
+            },
+            child: Icon(
+              Icons.refresh,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
               _showMyDialogDelete();
 
             },
@@ -212,10 +221,11 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
 
 
 
-      DataColumn(label: Text('Duration')),
-      DataColumn(label: Text('Times Awake')),
-      DataColumn(label: Text('Times Restless')),
-      DataColumn(label: Text('Mins awake/restless')),
+      DataColumn(label: Text('Sleep Duration')),
+      DataColumn(label: Text('REM Duration')),
+      DataColumn(label: Text('Deep Sleep Duration')),
+      DataColumn(label: Text('Light Sleep Duration')),
+      DataColumn(label: Text('Sleep Score')),
 
 
 
@@ -228,6 +238,7 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
         .mapIndexed((index, bp) => DataRow(
         cells: [
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
@@ -267,6 +278,39 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
             ),
             TextButton(
               child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> showListRefresh() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('List Refresh'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text("Getting your latest sleep log from your Fitbit account..",
+                  style: TextStyle(fontSize: 16, ),
+                  textAlign: TextAlign.justify,
+                ),
+
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+
+            TextButton(
+              child: Text('Got it'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

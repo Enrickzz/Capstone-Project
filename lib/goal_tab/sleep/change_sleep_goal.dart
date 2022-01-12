@@ -248,12 +248,12 @@ class change_sleepGoalState extends State<change_sleep_goal> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('New Water Intake Goal'),
+          title: Text('New Sleep Goal'),
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
 
-                Text("Water is essential to good health and helps prevent dehydration. While water needs vary from person to person, we often need at laest 1893 ml or 64 oz of water a day.",
+                Text("Are you sure you want to change your sleep goal?",
                   style: TextStyle(fontSize: 16, ),
                   textAlign: TextAlign.justify,
                 ),
