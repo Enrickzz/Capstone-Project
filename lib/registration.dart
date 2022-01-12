@@ -14,6 +14,8 @@ import 'additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 import 'dialogs/policy_dialog.dart';
 import 'package:crypto/crypto.dart';
+
+import 'patient_list/support_system/suppsystem_patient_list.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class registration extends StatefulWidget {
@@ -492,6 +494,15 @@ class _AppSignUpState extends State<registration> {
                                         password = sha256.convert(utf8.encode(password)).toString();
                                         await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
                                       }
+                                    }
+                                    else if(valueChooseUserStatus == 'Family member / Caregiver'){
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => PatientListSupportSystemView()),
+                                      );
+                                      isFirstTime = false;
+                                      password = sha256.convert(utf8.encode(password)).toString();
+                                      await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
                                     }
                                     else{
                                       Navigator.pushReplacement(
