@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -44,6 +45,7 @@ class _my_exercisesState extends State<my_exercises>
   @override
   void initState() {
     myexerciselist.clear();
+    getFitbit();
     getMyExercises();
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
@@ -282,4 +284,13 @@ class _my_exercisesState extends State<my_exercises>
       });
     });
   }
+}
+
+void getFitbit() async {
+  var response = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?afterDate=2019-01-01&sort=asc&offset=0&limit=2"),
+      headers: {
+        'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyMDIwNDA5LCJpYXQiOjE2NDE5OTE2MDl9.4W6aT1tvmadZnSN32TkmNdWuhjTylv9f8kAJ4Y0940M",
+      });
+  print(response.body);
+  print("FITBIT ^");
 }

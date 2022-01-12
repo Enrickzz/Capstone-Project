@@ -379,9 +379,9 @@ class _discussionState extends State<restaurant_reviews>
 
     //SPOTIFY SHIT
 
-    String query = "meditation";
+    String query = "relaxing";
     var rng = new Random();
-    var response = await http.get(Uri.parse("https://api.spotify.com/v1/search?q=$query&type=track&market=PH"),
+    var response = await http.get(Uri.parse("https://api.spotify.com/v1/search?q=$query&type=track&market=PH&limit=50"),
         headers: {
           'Authorization': "Bearer BQCO7TP4X7V2hpB3Ph9N6VLMvq7gdwDgNZaEjc5yqFFgmgnepbTJnqE6SaXg774148NnKrPTvmHzD45-W2ekCYjvSehIy87JYlr48DKL8DlKaRyeCFCZZ6w86Kub0imHf8PfcFY6ohf4r6z0OU6VTGoA",
         });
