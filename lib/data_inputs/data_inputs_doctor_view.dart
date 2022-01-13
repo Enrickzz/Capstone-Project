@@ -50,6 +50,7 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
   //added by borj
   List<Supplement_Prescription> supplementList = new List<Supplement_Prescription>();
 
+
   @override
   void initState(){
     super.initState();
@@ -74,6 +75,7 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
+
 
     return Scaffold(
       backgroundColor: const Color(0xFFF2F3F8),

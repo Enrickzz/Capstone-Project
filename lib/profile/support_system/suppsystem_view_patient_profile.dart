@@ -15,6 +15,7 @@ import 'package:my_app/goal_tab/meals/my_meals.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
+import 'package:my_app/no_access.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/support_system_journal/support_system/journal_list_suppsystem_view.dart';
@@ -89,6 +90,11 @@ class _index3State extends State<suppsystem_view_patient_profile>
   String alcohol_freq = "";
   String lifestyle = "";
   bool isLoading = true;
+
+  //for data privacy
+  bool canViewDataInput = true;
+  bool canViewDashboard = true;
+  bool canViewGoal = true;
 
 
   @override
@@ -683,6 +689,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                 },
                               ),
                               _buildDivider(),
+                            if(canViewDataInput == true) ...[
                               ListTile(
                                 title: Text("Data Inputs"),
                                 trailing: Icon(Icons.keyboard_arrow_right),
@@ -693,7 +700,25 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                   );
 
                                 },
+                              )
+
+                              ] else ...[
+
+                              ListTile(
+                                title: Text("Data Inputs"),
+                                trailing: Icon(Icons.keyboard_arrow_right),
+                                onTap:(){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => noAccess()),
+                                  );
+
+                                },
                               ),
+
+                            ],
+
+
                               _buildDivider(),
                               ListTile(
                                 title: Text("Support Systems' Notes"),
@@ -718,38 +743,81 @@ class _index3State extends State<suppsystem_view_patient_profile>
                         )
                     ),
                     SizedBox(height: 30),
-                    Container(
-                      child: ElevatedButton(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: Text('View Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                    if(canViewDashboard == true) ...[
+                      Container(
+                        child: ElevatedButton(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Text('View Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
                           ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => dashboards_as_doctor(animationController: animationController)),
+                            );
+                          },
                         ),
-                        onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => dashboards_as_doctor(animationController: animationController)),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      child: ElevatedButton(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: Text('View Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                          ),
-                        ),
-                        onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => goals_support_view(animationController: animationController)),
-                          );
+                      )
 
-                        },
+
+                      ] else ...[
+                      Container(
+                        child: ElevatedButton(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Text('View Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => noAccess()),
+                            );
+                          },
+                        ),
+                      )
+
+                      ],
+
+
+                    SizedBox(height: 8),
+                    if(canViewGoal == true) ...[
+                      Container(
+                        child: ElevatedButton(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Text('View Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => goals_support_view(animationController: animationController)),
+                            );
+
+                          },
+                        ),
                       ),
-                    ),
+                    ] else ...[
+                      Container(
+                        child: ElevatedButton(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Text('View Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => noAccess()),
+                            );
+
+                          },
+                        ),
+                      ),
+                    ],
+
                     Visibility(
                         visible: false,
                         child: tabBody),
