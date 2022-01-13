@@ -11,9 +11,9 @@ import 'package:flutter/material.dart';
 
 class WaterViewDoctor extends StatefulWidget {
   const WaterViewDoctor(
-      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
+      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation, this.userUID})
       : super(key: key);
-
+  final String userUID;
   final AnimationController mainScreenAnimationController;
   final Animation<double> mainScreenAnimation;
 
@@ -201,7 +201,7 @@ class _WaterViewDoctorState extends State<WaterViewDoctor> with TickerProviderSt
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Last drink '+lastDrink,
+                                          'Last drink '+ lastDrink,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily:
@@ -343,14 +343,16 @@ class _WaterViewDoctorState extends State<WaterViewDoctor> with TickerProviderSt
     );
   }
   void getWaterGoal () {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
-    final readWater = databaseReference.child('users/' + uid + '/goal/water_intake/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readWaterGoal = databaseReference.child('users/' + userUID + '/goal/water_goal/');
+    final readWater = databaseReference.child('users/' + userUID + '/goal/water_intake/');
     DateTime now = DateTime.now();
     String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
     readWaterGoal.once().then((DataSnapshot snapshot){
       readWater.once().then((DataSnapshot datasnapshot) {
+        print("LAST DRINK UPDATED");
         Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
         water_goal = Water_Goal.fromJson(temp);
         waterintake_goal = water_goal.water_goal;
@@ -369,22 +371,31 @@ class _WaterViewDoctorState extends State<WaterViewDoctor> with TickerProviderSt
         var latestDate;
         List<WaterIntake> timesortwater = [];
         waterintake_list.sort((a,b) => a.dateCreated.compareTo(b.dateCreated));
-
-        if(waterintake_list[waterintake_list.length-1].dateCreated == waterintake_list[waterintake_list.length-2].dateCreated){
-          latestDate = waterintake_list[waterintake_list.length-1].dateCreated;
-          for(int i = 0; i < waterintake_list.length; i++){
-            if(waterintake_list[i].dateCreated == latestDate){
-              timesortwater.add(waterintake_list[i]);
+        if(waterintake_list.length != 1){
+          if(waterintake_list[waterintake_list.length-1].dateCreated == waterintake_list[waterintake_list.length-2].dateCreated){
+            latestDate = waterintake_list[waterintake_list.length-1].dateCreated;
+            for(int i = 0; i < waterintake_list.length; i++){
+              if(waterintake_list[i].dateCreated == latestDate){
+                timesortwater.add(waterintake_list[i]);
+              }
             }
+            timesortwater.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
+            lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+            print("LAST DRINK UPDATED");
+            readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
           }
-          timesortwater.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
-          lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
-          readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+          else{
+            timesortwater = waterintake_list;
+            lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+            print("LAST DRINK UPDATED");
+            readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+          }
         }
         else{
-          timesortwater = waterintake_list;
-          readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+          lastDrink = "${waterintake_list[waterintake_list.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${waterintake_list[waterintake_list.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+          print("LAST DRINK UPDATED");
         }
+
       });
     });
   }

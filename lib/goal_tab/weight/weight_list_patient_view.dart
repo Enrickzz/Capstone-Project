@@ -22,8 +22,7 @@ import '../../../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class weight_list_patient_view extends StatefulWidget {
-  final List<Body_Temperature> btlist;
-  weight_list_patient_view({Key key, this.btlist}): super(key: key);
+  weight_list_patient_view({Key key}): super(key: key);
   @override
   _weightPatienttate createState() => _weightPatienttate();
 }

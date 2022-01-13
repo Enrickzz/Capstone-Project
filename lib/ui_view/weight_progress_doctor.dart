@@ -10,8 +10,8 @@ import 'package:my_app/models/users.dart';
 class weight_progress_doctor extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-
-  const weight_progress_doctor({Key key, this.animationController, this.animation})
+  final String userUID;
+  const weight_progress_doctor({Key key, this.animationController, this.animation, this.userUID})
       : super(key: key);
 
   @override
@@ -402,10 +402,12 @@ class _weight_progress_doctorState extends State<weight_progress_doctor> {
       },
     );
   }
+
   void getLatestWeight () {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readWeightGoal = databaseReference.child('users/' + uid + '/goal/weight_goal/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readWeightGoal = databaseReference.child('users/' + userUID + '/goal/weight_goal/');
     readWeightGoal.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       weight_goal = Weight_Goal.fromJson(temp);
@@ -453,6 +455,5 @@ class _weight_progress_doctorState extends State<weight_progress_doctor> {
 
     });
   }
-
 }
 

@@ -369,22 +369,29 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
         var latestDate;
         List<WaterIntake> timesortwater = [];
         waterintake_list.sort((a,b) => a.dateCreated.compareTo(b.dateCreated));
-
-        if(waterintake_list[waterintake_list.length-1].dateCreated == waterintake_list[waterintake_list.length-2].dateCreated){
-          latestDate = waterintake_list[waterintake_list.length-1].dateCreated;
-          for(int i = 0; i < waterintake_list.length; i++){
-            if(waterintake_list[i].dateCreated == latestDate){
-              timesortwater.add(waterintake_list[i]);
+        if(waterintake_list.length != 1){
+          if(waterintake_list[waterintake_list.length-1].dateCreated == waterintake_list[waterintake_list.length-2].dateCreated){
+            latestDate = waterintake_list[waterintake_list.length-1].dateCreated;
+            for(int i = 0; i < waterintake_list.length; i++){
+              if(waterintake_list[i].dateCreated == latestDate){
+                timesortwater.add(waterintake_list[i]);
+              }
             }
+            timesortwater.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
+            lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+            readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
           }
-          timesortwater.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
-          lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
-          readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+          else{
+            timesortwater = waterintake_list;
+            readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+          }
         }
         else{
-          timesortwater = waterintake_list;
-          readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+          lastDrink = "${waterintake_list[waterintake_list.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${waterintake_list[waterintake_list.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+
         }
+
+
       });
     });
   }

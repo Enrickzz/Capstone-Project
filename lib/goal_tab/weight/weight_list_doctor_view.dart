@@ -21,9 +21,8 @@ import '../../../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class weight_list_doctor_view extends StatefulWidget {
-  final List<Body_Temperature> btlist;
   String userUID;
-  weight_list_doctor_view({Key key, this.btlist, this.userUID}): super(key: key);
+  weight_list_doctor_view({Key key, this.userUID}): super(key: key);
   @override
   _weightDoctorstate createState() => _weightDoctorstate();
 }
@@ -111,9 +110,10 @@ class _weightDoctorstate extends State<weight_list_doctor_view> {
     return "$hours:$min";
   }
   void getWeight() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readWeight = databaseReference.child('users/' + userUID + '/goal/weight/');
     readWeight.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

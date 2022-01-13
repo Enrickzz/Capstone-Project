@@ -160,34 +160,6 @@ class _waterIntakeState extends State<water_intake> {
     });
   }
 
-  int getAge (DateTime birthday) {
-    DateTime today = new DateTime.now();
-    String days1 = "";
-    String month1 = "";
-    String year1 = "";
-    int d = int.parse(DateFormat("dd").format(birthday));
-    int m = int.parse(DateFormat("MM").format(birthday));
-    int y = int.parse(DateFormat("yyyy").format(birthday));
-    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
-    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
-    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
-    int age = 0;
-    age = y1 - y;
-    print(age);
-
-    // dec < jan
-    if(m1 < m){
-      print("month --");
-      age--;
-    }
-    else if (m1 == m){
-      if(d1 < d){
-        print("day --");
-        age--;
-      }
-    }
-    return age;
-  }
 
   Color getMyColor(String indication) {
     if(indication == 'normal'){

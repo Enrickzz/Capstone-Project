@@ -22,15 +22,18 @@ class TitleView extends StatelessWidget {
   final String userType;
   final AnimationController animationController;
   final Animation<double> animation;
+  final String userUID;
 
   const TitleView(
       {Key key,
-      this.titleTxt: "",
-      this.subTxt: "",
-      this.redirect,
-      this.userType: "",
-      this.animationController,
-      this.animation, Map Function() onTap})
+        this.userUID,
+        this.titleTxt: "",
+        this.subTxt: "",
+        this.redirect,
+        this.userType: "",
+        this.animationController,
+        this.animation, Map Function() onTap
+      })
       : super(key: key);
 
   @override
@@ -115,7 +118,7 @@ class TitleView extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => weight_list_doctor_view()),
+                                          builder: (context) => weight_list_doctor_view(userUID: userUID)),
                                     );
                                   }
                                   else if (userType == "Support") {
@@ -138,7 +141,7 @@ class TitleView extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => water_intake_doctor_view()),
+                                          builder: (context) => water_intake_doctor_view(userUID: userUID)),
                                     );
                                   }
                                   else if (userType == "Support") {
