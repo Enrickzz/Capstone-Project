@@ -1,3 +1,7 @@
+import 'package:my_app/ui_view/StackedBar.dart';
+import 'package:my_app/ui_view/TimeSeries.dart';
+import 'package:my_app/ui_view/VerticalBC_Target.dart';
+import 'package:my_app/ui_view/VerticalBarChart.dart';
 import 'package:my_app/ui_view/water_view.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -17,6 +21,7 @@ import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import '../fitness_app_theme.dart';
 import '../main.dart';
@@ -89,7 +94,34 @@ class _DashboardsState extends State<Dashboards>
         animationController: widget.animationController,
       ),
     );
-
+    listViews.add(
+        StackedBarChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
+    listViews.add(
+        SimpleTimeSeriesChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
+    listViews.add(
+        VerticalBarLabelChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
+    listViews.add(
+        StackedBarTargetLineChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
     listViews.add(
       heartrate(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
