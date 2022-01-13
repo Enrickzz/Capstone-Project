@@ -70,52 +70,7 @@ class _discussionPatientViewState extends State<discussion_patient_view>
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
-          bottom: PreferredSize(
-              preferredSize: Size.fromHeight(56),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction, key: _formKey,
-                    child: Row (
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.search),
-                                hintText: 'Search a topic',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide: BorderSide(
-                                      width: 0,
-                                      style: BorderStyle.none,
-                                    )
-                                ),
-                                filled: true,
-                                errorStyle: TextStyle(fontSize: 15),
-                                contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
-                              ),
-                              onChanged: (val) {
-                                setState(() => search = val);
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          ElevatedButton(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                              child: Text('Search', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                              ),
-                            ),
-                            onPressed: () async{
 
-                            },
-                          ),
-                        ]
-                    )),
-              )
-          ),
 
         ),
         body:  Scrollbar(

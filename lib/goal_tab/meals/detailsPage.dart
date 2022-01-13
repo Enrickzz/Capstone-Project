@@ -142,9 +142,9 @@ class _DetailsPageState extends State<DetailsPage> {
                           SizedBox(width: 10.0,),
                           _buildInforCard('PROTEIN', widget.protein,'g'),
                           SizedBox(width: 10.0,),
-                          _buildInforCard('POTASSIUM', widget.potassium,'g'),
+                          _buildInforCard('POTASSIUM', widget.potassium,'mg'),
                           SizedBox(width: 10.0,),
-                          _buildInforCard('SODIUM', widget.sodium,'g'),
+                          _buildInforCard('SODIUM', widget.sodium,'mg'),
                           SizedBox(width: 10.0,),
 
 
