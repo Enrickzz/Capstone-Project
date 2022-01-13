@@ -20,20 +20,23 @@ import '../../../fitness_app_theme.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class water_intake_doctor_view extends StatefulWidget {
+class weight_list_support_view extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  water_intake_doctor_view({Key key, this.btlist}): super(key: key);
+  String userUID;
+  weight_list_support_view({Key key, this.btlist, this.userUID}): super(key: key);
   @override
-  _waterIntakeDoctorState createState() => _waterIntakeDoctorState();
+  _weightDoctorstate createState() => _weightDoctorstate();
 }
 
-class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
+class _weightDoctorstate extends State<weight_list_support_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isDateSelected= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Body_Temperature> bttemp = [];
+  List<Weight> weights = [];
+  Physical_Parameters pp = new Physical_Parameters();
+  List<double> bmi = [];
   List<File> _image = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -49,16 +52,16 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
   @override
   void initState() {
     super.initState();
-    // bttemp.clear();
-    // _selected.clear();
-    // getBodyTemp();
-    // Future.delayed(const Duration(milliseconds: 1500), (){
-    //   setState(() {
-    //     _selected = List<bool>.generate(bttemp.length, (int index) => false);
-    //
-    //     print("setstate");
-    //   });
-    // });
+    weights.clear();
+    getWeight();
+    // getBMIList();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        _selected = List<bool>.generate(weights.length, (int index) => false);
+
+        print("setstate");
+      });
+    });
   }
 
   @override
@@ -75,7 +78,7 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text("Patient's Water Intake", style: TextStyle(
+        title: const Text("Patient's Weight", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -106,6 +109,17 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+  void getWeight() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
+    readWeight.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        weights.add(Weight.fromJson(jsonString));
+      });
+    });
   }
   // void getBodyTemp() {
   //   final User user = auth.currentUser;
@@ -148,16 +162,24 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
     return age;
   }
 
-  Color getMyColor(String indication) {
-    if(indication == 'normal'){
-      return Colors.green;
-    }
-    else if(indication == 'low grade fever'){
+  Color getMyColor(double bmi) {
+    if(bmi < 18.5){
       return Colors.blue;
+      //underweight
+    }
+    else if(bmi >= 18.5 && bmi <= 24.9){
+      return Colors.green;
+      //normal
+
+    }
+    else if(bmi >= 25 && bmi <= 29.9){
+      return Colors.deepOrange;
+      //overweight
 
     }
     else
       return Colors.red;
+    //obese
 
   }
 
@@ -188,9 +210,9 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              bttemp.sort((a, b) => b.bt_date.compareTo(a.bt_date));
+              weights.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
             } else {
-              bttemp.sort((a, b) => a.bt_date.compareTo(b.bt_date));
+              weights.sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
             }
             _isSortAsc = !_isSortAsc;
           });
@@ -200,19 +222,25 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
 
 
       DataColumn(label: Text('Time')),
-      DataColumn(label: Text('Water Intake')),
+      DataColumn(label: Text('Weight')),
+      DataColumn(label: InkWell(onTap: (){
+        showLegend();
+
+      },child: Text('BMI'))),
+
 
     ];
 
   }
 
   List<DataRow> _createRows() {
-    return bttemp
+    return weights
         .mapIndexed((index, bp) => DataRow(
         cells: [
-          DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
+          DataCell(Text(getDateFormatted(bp.dateCreated.toString()))),
+          DataCell(Text(getTimeFormatted(bp.timeCreated.toString()))),
+          DataCell(Text(bp.weight.toStringAsFixed(1) +'kg', style: TextStyle(),)), //weight
+          DataCell(Text(bp.bmi.toStringAsFixed(1), style: TextStyle(color: getMyColor(bp.bmi)))), //bmi
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
@@ -248,6 +276,80 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
             ),
             TextButton(
               child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showLegend() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('BMi Legend'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.blue,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Underweight')
+                  ],
+                ),
+                SizedBox(height: 5,),
+
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.green,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Normal')
+                  ],
+                ),
+                SizedBox(height: 5,),
+
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.orangeAccent,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Overweight')
+                  ],
+                ),
+                SizedBox(height: 5,),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.red,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Obese')
+                  ],
+                )
+
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+
+            TextButton(
+              child: Text('Got it'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

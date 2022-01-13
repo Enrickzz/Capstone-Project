@@ -107,6 +107,7 @@ class _my_weightState extends State<my_weight>
         titleTxt: 'Weight Progress',
         subTxt: 'Log Weight',
         redirect: 4,
+        userType: 'Patient',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/goal_tab/water/add_water_intake.dart';
+import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
@@ -20,14 +21,14 @@ import '../../../fitness_app_theme.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class water_intake_doctor_view extends StatefulWidget {
+class sleep_support_view extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  water_intake_doctor_view({Key key, this.btlist}): super(key: key);
+  sleep_support_view({Key key, this.btlist}): super(key: key);
   @override
-  _waterIntakeDoctorState createState() => _waterIntakeDoctorState();
+  _sleepState createState() => _sleepState();
 }
 
-class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
+class _sleepState extends State<sleep_support_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -75,7 +76,7 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text("Patient's Water Intake", style: TextStyle(
+        title: const Text("Patient's Sleep Record", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -199,8 +200,13 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
 
 
 
-      DataColumn(label: Text('Time')),
-      DataColumn(label: Text('Water Intake')),
+      DataColumn(label: Text('Sleep Duration')),
+      DataColumn(label: Text('REM Duration')),
+      DataColumn(label: Text('Deep Sleep Duration')),
+      DataColumn(label: Text('Light Sleep Duration')),
+      DataColumn(label: Text('Sleep Score')),
+
+
 
     ];
 
@@ -211,6 +217,9 @@ class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
         .mapIndexed((index, bp) => DataRow(
         cells: [
           DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
+          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
           DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
         ],

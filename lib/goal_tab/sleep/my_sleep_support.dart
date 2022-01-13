@@ -11,12 +11,15 @@ import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
+import 'package:my_app/ui_view/fitbit_connect.dart';
 import 'package:my_app/ui_view/glass_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/running_view.dart';
+import 'package:my_app/ui_view/sleep_quality.dart';
+import 'package:my_app/ui_view/time_asleep.dart';
+import 'package:my_app/ui_view/time_asleep_support.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/water_view_support.dart';
 import 'package:my_app/ui_view/weight_progress.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
@@ -28,15 +31,15 @@ import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals_list_view.dart';
 import '../../ui_view/water_view.dart';
 
-class my_water_support extends StatefulWidget {
-  const my_water_support({Key key, this.animationController}) : super(key: key);
+class my_sleep_support extends StatefulWidget {
+  const my_sleep_support({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _my_water_supportState createState() => _my_water_supportState();
+  _my_sleep_supportState createState() => _my_sleep_supportState();
 }
 
-class _my_water_supportState extends State<my_water_support>
+class _my_sleep_supportState extends State<my_sleep_support>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -85,6 +88,16 @@ class _my_water_supportState extends State<my_water_support>
     const int count = 9;
 
     listViews.add(
+      fitbit_connect(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
       calorie_intake(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
@@ -96,9 +109,9 @@ class _my_water_supportState extends State<my_water_support>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Water Intake',
+        titleTxt: 'Last Sleep',
         subTxt: 'View Log',
-        redirect: 5,
+        redirect: 6,
         userType: "Support",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
@@ -109,23 +122,36 @@ class _my_water_supportState extends State<my_water_support>
     );
 
     listViews.add(
-      WaterViewSupport(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController,
-                curve: Interval((1 / count) * 7, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController,
+      time_asleep_support(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
       ),
     );
+
     listViews.add(
-      GlassView(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 8, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController),
+      TitleView(
+        titleTxt: 'Sleep Quality',
+        subTxt: 'Sleep Score?',
+        redirect: 9,
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      sleep_quality(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
     );
   }
 

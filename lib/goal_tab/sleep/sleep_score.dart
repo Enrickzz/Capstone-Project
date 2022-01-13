@@ -203,7 +203,7 @@ class _HealthTeamState extends State<sleep_score> with SingleTickerProviderState
                                                 Text('Fair: 60-79')
                                               ],
                                             ),
-                                            SizedBox(height: 12),
+                                            SizedBox(height: 5),
                                             Row(
                                               children: [
                                                 Icon(
@@ -216,80 +216,82 @@ class _HealthTeamState extends State<sleep_score> with SingleTickerProviderState
                                             ),
                                             SizedBox(height: 12),
 
-                                            SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: DataTable(
-                                                columns: [
+                                            Scrollbar(
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                child: DataTable(
+                                                  columns: [
 
-                                                  DataColumn(
-                                                    label: Text(
-                                                      'Sleep Score Item',
-
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    label: Text(
-                                                      'Description',
-
-                                                    ),
-                                                  ),
-
-                                                ],
-                                                rows: [
-                                                  DataRow(cells: [
-
-                                                    DataCell(
-                                                      Text(
-                                                        'Duration: Time asleep\nand awake',
-
-
+                                                    DataColumn(
+                                                      label: Text(
+                                                        'Sleep Score Item',
 
                                                       ),
                                                     ),
-                                                    DataCell(
-                                                      Center(
-                                                          child: Text('The more you \nsleep the better \nthe score',
-                                                    )),
-                                                    ),
-
-                                                  ]),
-                                                  DataRow(cells: [
-
-                                                    DataCell(
-                                                      Text(
-                                                        'Quality: Deep & \nREM sleep',
-                                                        overflow: TextOverflow.ellipsis,
-                                                        maxLines: 5,
-
-
+                                                    DataColumn(
+                                                      label: Text(
+                                                        'Description',
 
                                                       ),
                                                     ),
-                                                    DataCell(
-                                                      Center(
-                                                          child: Text('Longer hours spent \nin these sleep stages\nimproves the score',
-                                                          )),
-                                                    ),
 
-                                                  ]),
-                                                  DataRow(cells: [
+                                                  ],
+                                                  rows: [
+                                                    DataRow(cells: [
 
-                                                    DataCell(
-                                                      Text(
-                                                        'Restoration: Sleeping\nheart rate &\nrestlessness',
+                                                      DataCell(
+                                                        Text(
+                                                          'Duration: Time asleep\nand awake',
 
 
 
+                                                        ),
                                                       ),
-                                                    ),
-                                                    DataCell(
-                                                      Center(
-                                                          child: Text('High sleeping heart\nrate and movement\nlowers the score.',
-                                                          )),
-                                                    ),
+                                                      DataCell(
+                                                        Center(
+                                                            child: Text('The more you \nsleep the better \nthe score',
+                                                      )),
+                                                      ),
 
-                                                  ]),
-                                                ],
+                                                    ]),
+                                                    DataRow(cells: [
+
+                                                      DataCell(
+                                                        Text(
+                                                          'Quality: Deep & \nREM sleep',
+                                                          overflow: TextOverflow.ellipsis,
+                                                          maxLines: 5,
+
+
+
+                                                        ),
+                                                      ),
+                                                      DataCell(
+                                                        Center(
+                                                            child: Text('Longer hours spent \nin these sleep stages\nimproves the score',
+                                                            )),
+                                                      ),
+
+                                                    ]),
+                                                    DataRow(cells: [
+
+                                                      DataCell(
+                                                        Text(
+                                                          'Restoration: Sleeping\nheart rate &\nrestlessness',
+
+
+
+                                                        ),
+                                                      ),
+                                                      DataCell(
+                                                        Center(
+                                                            child: Text('High sleeping heart\nrate and movement\nlowers the score.',
+                                                            )),
+                                                      ),
+
+                                                    ]),
+                                                  ],
+                                                ),
                                               ),
                                             ),
 

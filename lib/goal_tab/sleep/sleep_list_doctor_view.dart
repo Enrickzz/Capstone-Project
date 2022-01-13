@@ -76,7 +76,7 @@ class _sleepState extends State<sleep_doctor_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Sleep Record', style: TextStyle(
+        title: const Text("Patient's Sleep Record", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,

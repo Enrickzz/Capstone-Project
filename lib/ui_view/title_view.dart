@@ -1,12 +1,16 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/goal_tab/sleep/sleep_list_doctor_view.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_patient_view.dart';
+import 'package:my_app/goal_tab/sleep/sleep_list_support_view.dart';
 import 'package:my_app/goal_tab/sleep/sleep_score.dart';
 import 'package:my_app/goal_tab/water/water_intake_doctor_view.dart';
 import 'package:my_app/goal_tab/water/water_intake_patient_view.dart';
+import 'package:my_app/goal_tab/water/water_intake_support_view.dart';
 import 'package:my_app/goal_tab/weight/weight_list_doctor_view.dart';
 import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
 import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
+import 'package:my_app/goal_tab/weight/weight_list_support_view.dart';
 import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 import 'package:my_app/goal_tab/exercises/exercise_screen.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
@@ -15,6 +19,7 @@ class TitleView extends StatelessWidget {
   final String titleTxt;
   final String subTxt;
   final int redirect;
+  final String userType;
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -23,6 +28,7 @@ class TitleView extends StatelessWidget {
       this.titleTxt: "",
       this.subTxt: "",
       this.redirect,
+      this.userType: "",
       this.animationController,
       this.animation, Map Function() onTap})
       : super(key: key);
@@ -98,39 +104,73 @@ class TitleView extends StatelessWidget {
                                   );
                                 }
                                 else if (redirect == 4) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => weight_list_patient_view()),
-                                  );
+                                  if (userType == "Patient") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => weight_list_patient_view()),
+                                    );
+                                  }
+                                  else if (userType == "Doctor") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => weight_list_doctor_view()),
+                                    );
+                                  }
+                                  else if (userType == "Support") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => weight_list_support_view()),
+                                    );
+                                  }
                                 }
                                 else if (redirect == 5) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => water_intake()),
-                                  );
+                                  if (userType == "Patient") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => water_intake()),
+                                    );
+                                  }
+                                  else if (userType == "Doctor") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => water_intake_doctor_view()),
+                                    );
+                                  }
+                                  else if (userType == "Support") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => water_intake_support_view()),
+                                    );
+                                  }
                                 }
                                 else if (redirect == 6) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => sleep_patient_view()),
-                                  );
-                                }
-                                else if (redirect == 7) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => weight_list_doctor_view()),
-                                  );
-                                }
-                                else if (redirect == 8) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => water_intake_doctor_view()),
-                                  );
+                                  if (userType == "Patient") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => sleep_patient_view()),
+                                    );
+                                  }
+                                  else if (userType == "Doctor") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => sleep_doctor_view()),
+                                    );
+                                  }
+                                  else if (userType == "Support") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => sleep_support_view()),
+                                    );
+                                  }
                                 }
                                 else if (redirect == 9) {
                                   Navigator.push(
@@ -139,13 +179,6 @@ class TitleView extends StatelessWidget {
                                         builder: (context) => sleep_score()),
                                   );
                                 }
-                                // else if (redirect == 10) {
-                                //   Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => water_intake_doctor_view()),
-                                //   );
-                                // }
                               },
                             ),
                             SizedBox(

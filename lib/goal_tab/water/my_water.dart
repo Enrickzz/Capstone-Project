@@ -97,6 +97,7 @@ class _my_waterState extends State<my_water>
         titleTxt: 'Water Intake',
         subTxt: 'Log Water Intake',
         redirect: 5,
+        userType: "Patient",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

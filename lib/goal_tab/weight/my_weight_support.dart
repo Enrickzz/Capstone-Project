@@ -107,7 +107,8 @@ class _my_weight_supportState extends State<my_weight_support>
       TitleView(
         titleTxt: 'Weight Progress',
         subTxt: 'View Log',
-        redirect: 7,
+        redirect: 4,
+        userType: 'Support',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

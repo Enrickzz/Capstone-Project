@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/goal_tab/meals/my_meals_doctor.dart';
 import 'package:my_app/goal_tab/sleep/my_sleep.dart';
+import 'package:my_app/goal_tab/sleep/my_sleep_support.dart';
 import 'package:my_app/goal_tab/water/my_water_doctor.dart';
 import 'package:my_app/goal_tab/water/my_water_support.dart';
 import 'package:my_app/goal_tab/weight/my_weight_doctor.dart';
@@ -197,7 +198,7 @@ class _goals_support_viewState extends State<goals_support_view>
           tabBody = my_exercises_doctor(animationController: animationController),
           tabBody = my_weight_support(animationController: animationController),
           tabBody = my_water_support(animationController: animationController),
-          tabBody = my_sleep(animationController: animationController),
+          tabBody = my_sleep_support(animationController: animationController),
           tabBody = my_stress(animationController: animationController),
         ],
       ),

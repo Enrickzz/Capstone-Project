@@ -20,14 +20,14 @@ import '../../../fitness_app_theme.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
-class water_intake_doctor_view extends StatefulWidget {
+class water_intake_support_view extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  water_intake_doctor_view({Key key, this.btlist}): super(key: key);
+  water_intake_support_view({Key key, this.btlist}): super(key: key);
   @override
   _waterIntakeDoctorState createState() => _waterIntakeDoctorState();
 }
 
-class _waterIntakeDoctorState extends State<water_intake_doctor_view> {
+class _waterIntakeDoctorState extends State<water_intake_support_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

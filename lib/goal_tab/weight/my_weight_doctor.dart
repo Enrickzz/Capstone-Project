@@ -106,7 +106,8 @@ class _my_weight_doctorState extends State<my_weight_doctor>
       TitleView(
         titleTxt: 'Weight Progress',
         subTxt: 'View Log',
-        redirect: 7,
+        redirect: 4,
+        userType: 'Doctor',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

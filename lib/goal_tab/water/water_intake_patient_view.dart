@@ -78,7 +78,7 @@ class _waterIntakeState extends State<water_intake> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Water Intake', style: TextStyle(
+        title: const Text('My Water Intake', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,

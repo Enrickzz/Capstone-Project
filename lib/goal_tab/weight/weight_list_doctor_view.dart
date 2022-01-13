@@ -78,7 +78,7 @@ class _weightDoctorstate extends State<weight_list_doctor_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('My Weight', style: TextStyle(
+        title: const Text("Patient's Weight", style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,

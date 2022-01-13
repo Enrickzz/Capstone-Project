@@ -76,7 +76,7 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Sleep Record', style: TextStyle(
+        title: const Text('My Sleep Record', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
@@ -91,16 +91,20 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
               Icons.refresh,
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              _showMyDialogDelete();
+          SizedBox(width: 10),
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                _showMyDialogDelete();
 
-            },
-            child: Icon(
-              Icons.delete,
+              },
+              child: Icon(
+                Icons.delete,
+              ),
             ),
           ),
-          SizedBox(width: 10),
+
         
         ],
       ),
