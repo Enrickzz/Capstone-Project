@@ -19,8 +19,9 @@ import 'meals/my_meals.dart';
 import 'my_stress.dart';
 
 class goals_doctor_view extends StatefulWidget {
-  const goals_doctor_view({Key key, this.animationController}) : super(key: key);
+  const goals_doctor_view({Key key, this.animationController, this.userUID}) : super(key: key);
   final AnimationController animationController;
+  final String userUID;
 
   @override
   _goals_doctor_viewState createState() => _goals_doctor_viewState();
@@ -192,10 +193,10 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
       body: TabBarView(
         controller: controller,
         children: [
-          tabBody = my_meals_doctor(animationController: animationController),
-          tabBody = my_exercises_doctor(animationController: animationController),
-          tabBody = my_weight_doctor(animationController: animationController),
-          tabBody = my_water_doctor(animationController: animationController),
+          tabBody = my_meals_doctor(animationController: animationController, userUID: widget.userUID),
+          tabBody = my_exercises_doctor(animationController: animationController, userUID: widget.userUID),
+          tabBody = my_weight_doctor(animationController: animationController, userUID: widget.userUID),
+          tabBody = my_water_doctor(animationController: animationController, userUID: widget.userUID),
           tabBody = my_sleep_doctor(animationController: animationController),
           tabBody = my_stress(animationController: animationController),
         ],

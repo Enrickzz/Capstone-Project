@@ -13,9 +13,10 @@ import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals_list_view.dart';
 
 class my_meals_doctor extends StatefulWidget {
-  const my_meals_doctor({Key key, this.animationController}) : super(key: key);
+  const my_meals_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
 
   final AnimationController animationController;
+  final String userUID;
   @override
   _my_meals_doctorState createState() => _my_meals_doctorState();
 }
@@ -98,6 +99,7 @@ class _my_meals_doctorState extends State<my_meals_doctor>
                 curve: Interval((1 / count) * 3, 1.0,
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController,
+        userUID: widget.userUID
       ),
     );
 

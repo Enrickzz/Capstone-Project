@@ -23,8 +23,9 @@ import '../../notifications/notifications._patients.dart';
 import 'exercise_screen.dart';
 
 class my_exercises_doctor extends StatefulWidget {
-  const my_exercises_doctor({Key key, this.animationController}) : super(key: key);
+  const my_exercises_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
   final AnimationController animationController;
+  final String userUID;
   @override
   _my_exercises_doctorState createState() => _my_exercises_doctorState();
 }

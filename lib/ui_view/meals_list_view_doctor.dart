@@ -14,11 +14,12 @@ import '../goal_tab/meals/meals_list.dart';
 
 class MealsListViewDoctor extends StatefulWidget {
   const MealsListViewDoctor(
-      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
+      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation, this.userUID})
       : super(key: key);
 
   final AnimationController mainScreenAnimationController;
   final Animation<double> mainScreenAnimation;
+  final String userUID;
 
   @override
   _MealsListViewDoctorState createState() => _MealsListViewDoctorState();
@@ -34,6 +35,7 @@ class _MealsListViewDoctorState extends State<MealsListViewDoctor>
     with TickerProviderStateMixin {
   AnimationController animationController;
   List<MealsListData> mealsListData = MealsListData.tabIconsList;
+  String now = "${DateTime.now().month.toString().padLeft(2,"0")}/${DateTime.now().day.toString().padLeft(2,"0")}/${DateTime.now().year}";
 
 
   @override
@@ -150,6 +152,87 @@ class _MealsListViewDoctorState extends State<MealsListViewDoctor>
     );
   }
 
+  void getBFoodIntake() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Breakfast');
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      List<FoodIntake> intake = [];
+      if(temp != null){
+        temp.forEach((jsonString) {
+          intake.add(FoodIntake.fromJson(jsonString));
+        });
+        for(int i = 0; i < intake.length; i++){
+          if(intake[i].intakeDate == now){
+            breakfast_list.add(intake[i]);
+          }
+        }
+      }
+    });
+  }
+  void getLFoodIntake() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Lunch');
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      List<FoodIntake> intake = [];
+      if(temp != null){
+        temp.forEach((jsonString) {
+          intake.add(FoodIntake.fromJson(jsonString));
+        });
+        for(int i = 0; i < intake.length; i++){
+          if(intake[i].intakeDate == now){
+            lunch_list.add(intake[i]);
+          }
+        }
+      }
+    });
+  }
+  void getDFoodIntake() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Dinner');
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      List<FoodIntake> intake = [];
+      if(temp != null){
+        temp.forEach((jsonString) {
+          intake.add(FoodIntake.fromJson(jsonString));
+        });
+        for(int i = 0; i < intake.length; i++){
+          if(intake[i].intakeDate == now){
+            dinner_list.add(intake[i]);
+          }
+        }
+      }
+    });
+  }
+  void getSFoodIntake() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Snacks');
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      List<FoodIntake> intake = [];
+      if(temp != null){
+        temp.forEach((jsonString) {
+          intake.add(FoodIntake.fromJson(jsonString));
+        });
+        for(int i = 0; i < intake.length; i++){
+          if(intake[i].intakeDate == now){
+            snack_list.add(intake[i]);
+          }
+        }
+
+      }
+    });
+  }
 }
 
 class MealsView extends StatelessWidget {
@@ -315,83 +398,4 @@ class MealsView extends StatelessWidget {
       },
     );
   }
-}
-DateTime today = DateTime.now();
-String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
-void getBFoodIntake() {
-  final User user = auth.currentUser;
-  final uid = user.uid;
-  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
-  readFoodIntake.once().then((DataSnapshot snapshot){
-    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-    List<FoodIntake> intake = [];
-    if(temp != null){
-      temp.forEach((jsonString) {
-        intake.add(FoodIntake.fromJson(jsonString));
-      });
-      for(int i = 0; i < intake.length; i++){
-        if(intake[i].intakeDate == now){
-          breakfast_list.add(intake[i]);
-        }
-      }
-    }
-  });
-}
-void getLFoodIntake() {
-  final User user = auth.currentUser;
-  final uid = user.uid;
-  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
-  readFoodIntake.once().then((DataSnapshot snapshot){
-    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-    List<FoodIntake> intake = [];
-    if(temp != null){
-      temp.forEach((jsonString) {
-        intake.add(FoodIntake.fromJson(jsonString));
-      });
-      for(int i = 0; i < intake.length; i++){
-        if(intake[i].intakeDate == now){
-          lunch_list.add(intake[i]);
-        }
-      }
-    }
-  });
-}
-void getDFoodIntake() {
-  final User user = auth.currentUser;
-  final uid = user.uid;
-  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
-  readFoodIntake.once().then((DataSnapshot snapshot){
-    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-    List<FoodIntake> intake = [];
-    if(temp != null){
-      temp.forEach((jsonString) {
-        intake.add(FoodIntake.fromJson(jsonString));
-      });
-      for(int i = 0; i < intake.length; i++){
-        if(intake[i].intakeDate == now){
-          dinner_list.add(intake[i]);
-        }
-      }
-    }
-  });
-}
-void getSFoodIntake() {
-  final User user = auth.currentUser;
-  final uid = user.uid;
-  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
-  readFoodIntake.once().then((DataSnapshot snapshot){
-    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-    List<FoodIntake> intake = [];
-    if(temp != null){
-      temp.forEach((jsonString) {
-        intake.add(FoodIntake.fromJson(jsonString));
-      });
-      for(int i = 0; i < intake.length; i++){
-        if(intake[i].intakeDate == now){
-          snack_list.add(intake[i]);
-        }
-      }
-
-    }
-  });
 }
