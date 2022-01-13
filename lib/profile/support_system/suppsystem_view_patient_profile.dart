@@ -676,18 +676,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
 
                                 },
                               ),
-                              _buildDivider(),
-                              ListTile(
-                                title: Text("Doctors' Discussion Board"),
-                                trailing: Icon(Icons.keyboard_arrow_right),
-                                onTap:(){
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => discussion(userUID: widget.userUID)),
-                                  );
 
-                                },
-                              ),
                               _buildDivider(),
                             if(canViewDataInput == true) ...[
                               ListTile(
