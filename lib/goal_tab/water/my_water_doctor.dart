@@ -29,8 +29,8 @@ import '../../ui_view/meals_list_view.dart';
 import '../../ui_view/water_view.dart';
 
 class my_water_doctor extends StatefulWidget {
-  const my_water_doctor({Key key, this.animationController}) : super(key: key);
-
+  const my_water_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
+  final String userUID;
   final AnimationController animationController;
   @override
   _my_water_doctorState createState() => _my_water_doctorState();

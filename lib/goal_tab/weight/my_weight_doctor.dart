@@ -29,8 +29,8 @@ import '../../ui_view/meals_list_view.dart';
 import '../../ui_view/water_view.dart';
 
 class my_weight_doctor extends StatefulWidget {
-  const my_weight_doctor({Key key, this.animationController}) : super(key: key);
-
+  const my_weight_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
+  final String userUID;
   final AnimationController animationController;
   @override
   _my_weight_doctorState createState() => _my_weight_doctorState();
