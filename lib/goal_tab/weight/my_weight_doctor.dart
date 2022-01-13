@@ -17,6 +17,7 @@ import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/weight_progress.dart';
+import 'package:my_app/ui_view/weight_progress_doctor.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,7 @@ class _my_weight_doctorState extends State<my_weight_doctor>
 
 
     listViews.add(
-      weight_progress(
+      weight_progress_doctor(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
