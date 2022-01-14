@@ -77,7 +77,7 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
     );
   }
   void getFitbit() async {
-    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=4"),
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
         headers: {
           'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyMTg3ODY2LCJpYXQiOjE2NDIxNTkwNjZ9.1o_gszd2e4qneVDztGJ_zrke98Jw-0Q2oN_h0y6eyeA",
         });
