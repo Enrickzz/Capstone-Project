@@ -301,8 +301,9 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                 print("Added Blood Glucose Successfully! " + uid);
                               }
                               else{
+                                glucose_list.clear();
                                 getBloodGlucose();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                Future.delayed(const Duration(milliseconds: 1200), (){
                                   count = glucose_list.length--;
                                   print("count " + count.toString());
                                   final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());

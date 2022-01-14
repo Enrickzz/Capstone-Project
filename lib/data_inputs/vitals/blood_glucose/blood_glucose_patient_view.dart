@@ -171,10 +171,11 @@ class _blood_glucoseState extends State<blood_glucose> {
                     print("setstate symptoms");
                     if(value != null){
                       bgtemp = value;
-                      _selected = List<bool>.generate(bgtemp.length, (int index) => false);
-
                     }
                     print("BGTEMP LENGTH AFTER SETSTATE  =="  + bgtemp.length.toString() );
+                    setState(() {
+                      _selected = List<bool>.generate(bgtemp.length, (int index) => false);
+                    });
                   }));
                 },
                 child: Icon(

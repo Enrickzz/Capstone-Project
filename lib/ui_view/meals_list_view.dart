@@ -89,9 +89,9 @@ class _MealsListViewState extends State<MealsListView>
       mealsListData[3].meals = smeal;
 
 
-      setState(() {
-        print("setstate");
-      });
+      // setState(() {
+      //   print("setstate");
+      // });
     });
 
   }

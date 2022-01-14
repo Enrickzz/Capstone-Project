@@ -1,3 +1,6 @@
+import 'package:my_app/ui_view/BloodGlucose_TimeChart.dart';
+import 'package:my_app/ui_view/HeartRate_TimeChart.dart';
+import 'package:my_app/ui_view/Oxygen_TimeChart.dart';
 import 'package:my_app/ui_view/StackedBar.dart';
 import 'package:my_app/ui_view/TimeSeries.dart';
 import 'package:my_app/ui_view/VerticalBC_Target.dart';
@@ -43,7 +46,7 @@ class _DashboardsState extends State<Dashboards>
   final ScrollController scrollController = ScrollController();
 
   final AuthService _auth = AuthService();
-
+  List<bool> expandableState=[];
   double topBarOpacity = 0.0;
 
   @override
@@ -77,6 +80,7 @@ class _DashboardsState extends State<Dashboards>
         }
       }
     });
+    expandableState = List.generate(listViews.length, (index) => false);
     super.initState();
   }
 
@@ -101,8 +105,29 @@ class _DashboardsState extends State<Dashboards>
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
           animationController: widget.animationController,
         ));
+    // listViews.add(
+    //     SimpleTimeSeriesChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    //         parent: widget.animationController,
+    //         curve:
+    //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+    //       animationController: widget.animationController,
+    //     ));
     listViews.add(
-        SimpleTimeSeriesChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        BGTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
+    listViews.add(
+        OxyTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
+    listViews.add(
+        HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
@@ -309,6 +334,44 @@ class _DashboardsState extends State<Dashboards>
     return true;
   }
 
+  Widget bloc (double width, int index) {
+    bool isExpanded = expandableState[index];
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          //changing the current expandableState
+          expandableState[index] = !isExpanded;
+        });
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        margin: const EdgeInsets.all(20.0),
+        width: !isExpanded ? width * 0.4 : width * 0.8,
+        height: !isExpanded ? width * 0.4 : width * 0.8,
+        child: Container(
+          child: listViews[index],
+        ),
+      ),
+    );
+  }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   double width = MediaQuery.of(context).size.width;
+  //
+  //   return Scaffold(
+  //     body: Align(
+  //       child: SingleChildScrollView(
+  //         child: Wrap(
+  //           children: List.generate(listViews.length, (index) {
+  //             return bloc(width, index);
+  //           }),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   @override
   Widget build(BuildContext context) {
     // Future.delayed(const Duration(milliseconds: 5000), () {
