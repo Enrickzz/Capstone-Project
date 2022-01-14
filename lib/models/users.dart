@@ -10,8 +10,11 @@ class Users {
   String password;
   String usertype;
   String specialty;
+  bool isMe;
+  List<String> connections;
 
-  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty});
+  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections, this.isMe});
+
 
   Users.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];

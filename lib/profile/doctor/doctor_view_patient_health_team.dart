@@ -76,7 +76,10 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
       setState(() {
         for(int i = 0; i < userlist.length; i++){
           if(userlist[i].uid == uid){
-            isme = true;
+            userlist[i].isMe = true;
+          }
+          else{
+            userlist[i].isMe = false;
           }
         }
       });
@@ -125,40 +128,41 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                       style:TextStyle(
                         color: Colors.grey,
                       )),
-                  trailing: GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(child: Container(
-                            padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                            child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid),
-                          ),
-                          ),
-                        ).then((value) =>
-                            Future.delayed(const Duration(milliseconds: 1500), (){
-                              setState((){
-                                print("setstate medication prescription");
-                                print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                if(value != null){
-                                  // templist = value[0];
-                                }
-                              });
-                            }));
-                      },
-                      child: Icon(Icons.admin_panel_settings_rounded )
+
+                  trailing: Visibility(
+                    visible:  !userlist[index].isMe,
+                    child: GestureDetector(
+
+                        onTap: () {
+
+                          showModalBottomSheet(context: context,
+                            isScrollControlled: true,
+                            builder: (context) => SingleChildScrollView(child: Container(
+                              padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(context).viewInsets.bottom),
+                              child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid),
+                            ),
+                            ),
+                          ).then((value) =>
+                              Future.delayed(const Duration(milliseconds: 1500), (){
+                                setState((){
+                                  print("setstate medication prescription");
+                                  print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                                  if(value != null){
+                                    // templist = value[0];
+                                  }
+                                });
+                              }));
+                        },
+
+                        child: Icon(Icons.admin_panel_settings_rounded )
+                    ),
                   ),
+
+
                   isThreeLine: true,
                   dense: true,
                   selected: true,
-
-
-                  // onTap: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => view_patient_profile(patientUID: uidlist[index])),
-                  //   );
-                  // }
 
                 ),
 
@@ -173,41 +177,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
 
   }
 
-  // void getPatients() {
-  //   final User user = auth.currentUser;
-  //   final uid = user.uid;
-  //   final readPatient = databaseReference.child('users/' + uid + '/personal_info/');
-  //   readPatient.once().then((DataSnapshot snapshot){
-  //     var temp1 = jsonDecode(jsonEncode(snapshot.value));
-  //     patient = Users.fromJson2(temp1);
-  //     for(int i = 0; i < patient.connections.length; i++){
-  //       uidlist.add(patient.connections[i]);
-  //     }
-  //     for(int i = 0; i < uidlist.length; i++){
-  //       final readDoctor = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
-  //       // final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
-  //       readDoctor.once().then((DataSnapshot snapshot){
-  //         var temp1 = jsonDecode(jsonEncode(snapshot.value));
-  //         print("temp1");
-  //         print(temp1);
-  //         Users doctor = Users.fromJson(temp1);
-  //         // readInfo.once().then((DataSnapshot snapshot){
-  //         var temp2 = jsonDecode(jsonEncode(snapshot.value));
-  //         print(temp2);
-  //         String specialty = "";
-  //         // Additional_Info info = Additional_Info.fromJson4(temp2);
-  //         specialty = doctor.specialty;
-  //
-  //         position.add(specialty);
-  //         // });
-  //
-  //         names.add(doctor.firstname + " " + doctor.lastname);
-  //         print(names);
-  //       });
-  //     }
-  //   });
-  //
-  // }
+
   void getPatients(){
     String userUID = widget.userUID;
     final readConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');

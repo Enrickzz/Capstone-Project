@@ -69,12 +69,12 @@ class _addSymptomsState extends State<add_symptoms> {
   String valueChooseSymptom;
   String valueChooseGeneralArea;
   List<String> listItemSymptoms = <String>[
-    'Bleedings', 'Chest Tightness', 'Dizziness', 'Excess Phlegm', 'Excess Sputum',
-    'Fatigue', 'Frequent Urination', 'Headaches', 'Imbalance', 'Involuntary Muscle Contractions',
-    'Itchy Skin', 'Loss of Balance', 'Loss of Appetite', 'Muscle Cramps',
-    'Muscle Numbness', 'Muscle Pain', 'Nausea', 'Palpitations',
+    'Bleedings', 'Chest Pain', 'Dizziness', 'Excess Phlegm',
+    'Fatigue', 'Frequent Urination', 'Headaches',
+    'Loss of Balance', 'Loss of Appetite', 'Muscle Cramps',
+   'Nausea', 'Numbness',   'Pain', 'Palpitations',
     'Seizures', 'Shortness of Breath', 'Skin Coloration',
-    'Swollen Limbs','Swollen Muscles','Vertigo',
+    'Swollen Limbs','Swollen Muscles',
     'Vomiting', 'Wheezing', 'Yellowish Eyes', 'Others'
   ];
 
