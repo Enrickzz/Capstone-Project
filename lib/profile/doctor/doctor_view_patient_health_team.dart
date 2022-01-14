@@ -93,7 +93,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text(" 's Doctors", style: TextStyle(
+          title: const Text("'s Doctors", style: TextStyle(
               color: Colors.black
           )),
           centerTitle: true,
@@ -202,6 +202,11 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
         });
       }
 
+    });
+    final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+    readPatient.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+        patient = Users.fromJson(temp2);
     });
 
 
