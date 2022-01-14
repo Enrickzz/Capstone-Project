@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -287,10 +288,13 @@ class _my_exercisesState extends State<my_exercises>
 }
 
 void getFitbit() async {
-  var response = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?afterDate=2019-01-01&sort=asc&offset=0&limit=2"),
+  var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=4"),
       headers: {
-        'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyMDIwNDA5LCJpYXQiOjE2NDE5OTE2MDl9.4W6aT1tvmadZnSN32TkmNdWuhjTylv9f8kAJ4Y0940M",
+        'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyMTg3ODY2LCJpYXQiOjE2NDIxNTkwNjZ9.1o_gszd2e4qneVDztGJ_zrke98Jw-0Q2oN_h0y6eyeA",
       });
+  List<Sleep> sleep=[];
+  sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+
   print(response.body);
-  print("FITBIT ^");
+  print("FITBIT ^ Length = " + sleep.length.toString());
 }

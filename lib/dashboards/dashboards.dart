@@ -1,6 +1,7 @@
 import 'package:my_app/ui_view/BloodGlucose_TimeChart.dart';
 import 'package:my_app/ui_view/HeartRate_TimeChart.dart';
 import 'package:my_app/ui_view/Oxygen_TimeChart.dart';
+import 'package:my_app/ui_view/Sleep_StackedBarChart.dart';
 import 'package:my_app/ui_view/StackedBar.dart';
 import 'package:my_app/ui_view/TimeSeries.dart';
 import 'package:my_app/ui_view/VerticalBC_Target.dart';
@@ -128,6 +129,13 @@ class _DashboardsState extends State<Dashboards>
         ));
     listViews.add(
         HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
+    listViews.add(
+        Sleep_StackedBarChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
