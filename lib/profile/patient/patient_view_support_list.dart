@@ -190,6 +190,7 @@ class _SupportSystemListState extends State<SupportSystemList>  {
         for(int i = 0; i < connections.length; i++){
           uidlist.add(connections[i].uid);
         }
+        print(uidlist);
         for(int i = 0; i < uidlist.length; i++){
           final readDoctor = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
           // final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
@@ -198,13 +199,13 @@ class _SupportSystemListState extends State<SupportSystemList>  {
             print("temp3");
             print(temp3);
             Users doctor = Users.fromJson(temp3);
-            String specialty = "";
             if(doctor.usertype != "Family member / Caregiver"){
-              specialty = doctor.specialty;
-              position.add(specialty);
-              names.add(doctor.firstname + " " + doctor.lastname);
+              position.add(doctor.specialty);
             }
-
+            else{
+              position.add("Family member / Caregiver");
+            }
+            names.add(doctor.firstname + " " + doctor.lastname);
           });
         }
       });
