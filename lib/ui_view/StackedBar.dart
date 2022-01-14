@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+import '../fitness_app_theme.dart';
+
 class StackedBarChart extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
@@ -12,15 +14,37 @@ class StackedBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     List<charts.Series> thisseries;
     thisseries = _createSampleData();
-    return Container(
-      height: 400,
-      child: charts.BarChart(
-        thisseries,
-        animate: false,
-        barGroupingType: charts.BarGroupingType.stacked,
+
+    return Padding(
+      padding: const EdgeInsets.only(
+          left: 24, right: 24, top: 16, bottom: 18),
+      child: Container(
+        height: 400,
+        decoration: BoxDecoration(
+          color: FitnessAppTheme.nearlyWhite,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8.0),
+              bottomLeft: Radius.circular(8.0),
+              bottomRight: Radius.circular(8.0),
+              topRight: Radius.circular(8.0)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: FitnessAppTheme.grey.withOpacity(0.6),
+                offset: Offset(1.1, 1.1),
+                blurRadius: 10.0),
+          ],
+        ),
+        child:Padding(
+          padding: const EdgeInsets.all(16.0),
+
+          child: charts.BarChart(
+            thisseries,
+            animate: false,
+            barGroupingType: charts.BarGroupingType.stacked,
+          ),
+        ) ,
       ),
     );
-
   }
 
   /// Create series list with multiple series
