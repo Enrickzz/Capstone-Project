@@ -48,6 +48,7 @@ class _SupportSystemListState extends State<SupportSystemList>  {
   List<String> uidlist = [];
   List<Users> userlist=[];
   List<Additional_Info> userAddInfo =[];
+  List<Connection> connections = [];
 
   List names = [
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
@@ -132,7 +133,7 @@ class _SupportSystemListState extends State<SupportSystemList>  {
                             builder: (context) => SingleChildScrollView(child: Container(
                               padding: EdgeInsets.only(
                                   bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: patient_edit_privacy(),
+                              child: patient_edit_privacy(connection: connections[index]),
                             ),
                             ),
                           ).then((value) =>
@@ -177,34 +178,36 @@ class _SupportSystemListState extends State<SupportSystemList>  {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readPatient = databaseReference.child('users/' + uid + '/personal_info/');
+    final readPatientConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
     readPatient.once().then((DataSnapshot snapshot){
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
       patient = Users.fromJson2(temp1);
-      for(int i = 0; i < patient.connections.length; i++){
-        uidlist.add(patient.connections[i]);
-      }
-      for(int i = 0; i < uidlist.length; i++){
-        final readDoctor = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
-        // final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          var temp1 = jsonDecode(jsonEncode(snapshot.value));
-          print("temp1");
-          print(temp1);
-          Users doctor = Users.fromJson(temp1);
-          // readInfo.once().then((DataSnapshot snapshot){
-            var temp2 = jsonDecode(jsonEncode(snapshot.value));
-            print(temp2);
-            String specialty = "";
-            // Additional_Info info = Additional_Info.fromJson4(temp2);
-            specialty = doctor.specialty;
-
-            position.add(specialty);
-          // });
-
-          names.add(doctor.firstname + " " + doctor.lastname);
-          print(names);
+      readPatientConnection.once().then((DataSnapshot datasnapshot){
+        List<dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
+        temp2.forEach((jsonString) {
+          connections.add(Connection.fromJson(jsonString));
         });
-      }
+        for(int i = 0; i < connections.length; i++){
+          uidlist.add(connections[i].uid);
+        }
+        for(int i = 0; i < uidlist.length; i++){
+          final readDoctor = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
+          // final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
+          readDoctor.once().then((DataSnapshot snapshot){
+            var temp3 = jsonDecode(jsonEncode(snapshot.value));
+            print("temp3");
+            print(temp3);
+            Users doctor = Users.fromJson(temp3);
+            String specialty = "";
+            if(doctor.usertype != "Family member / Caregiver"){
+              specialty = doctor.specialty;
+              position.add(specialty);
+              names.add(doctor.firstname + " " + doctor.lastname);
+            }
+
+          });
+        }
+      });
     });
 
   }

@@ -10,9 +10,8 @@ class Users {
   String password;
   String usertype;
   String specialty;
-  List<String> connections;
 
-  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections});
+  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty});
 
   Users.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -31,7 +30,6 @@ class Users {
     email = json['email'];
     password = json['password'];
     usertype = json['userType'];
-    connections = json['connections'].cast<String>();
   }
   Users.fromJson3(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -46,7 +44,6 @@ class Users {
     data['lastname'] = this.lastname;
     data['email'] = this.email;
     data['password'] = this.password;
-    data['connections'] = this.connections;
     return data;
   }
 
