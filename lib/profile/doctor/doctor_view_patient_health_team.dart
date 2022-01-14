@@ -31,11 +31,14 @@ class MyApp extends StatelessWidget {
 }
 
 class doctor_view_patient_support_system extends StatefulWidget {
-  doctor_view_patient_support_system({Key key, this.title, this.nameslist, this.diseaselist, this.uidList}) : super(key: key);
+  doctor_view_patient_support_system({Key key, this.userUID, this.title
+    // , this.nameslist, this.diseaselist, this.uidList
+  }) : super(key: key);
   final String title;
-  final List nameslist;
-  final List diseaselist;
-  final List<String> uidList;
+  // final List nameslist;
+  // final List diseaselist;
+  // final List<String> uidList;
+  final String userUID;
   @override
   _SupportSystemListState createState() => _SupportSystemListState();
 }
@@ -45,27 +48,38 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   Users patient = new Users();
+  bool isme = false;
+
 
   List<String> uidlist = [];
-  List<Users> userlist=[];
+  List<Connection> connections = [];
+  List<Users> userlist = [];
   List<Additional_Info> userAddInfo =[];
 
   List names = [
-      "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
-    "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
+    //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
+    // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
   ];
 
   List position = [
-    "Cardiologist", "Endocrinologist", 'Endocrinologist', "Cardiologist",
-    "Endocrinologist", "Cardiologist", 'Endocrinologist', "Cardiologist", 'Endocrinologist', "Cardiologist"
+    // "Cardiologist", "Endocrinologist", 'Endocrinologist', "Cardiologist",
+    // "Endocrinologist", "Cardiologist", 'Endocrinologist', "Cardiologist", 'Endocrinologist', "Cardiologist"
   ];
 
   @override
   void initState(){
     super.initState();
-    // getPatients();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    getPatients();
     Future.delayed(const Duration(milliseconds: 1000), (){
-      setState(() {});
+      setState(() {
+        for(int i = 0; i < userlist.length; i++){
+          if(userlist[i].uid == uid){
+            isme = true;
+          }
+        }
+      });
     });
   }
 
@@ -118,7 +132,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                           builder: (context) => SingleChildScrollView(child: Container(
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
-                            child: doctor_edit_management_privacy(),
+                            child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid),
                           ),
                           ),
                         ).then((value) =>
@@ -194,5 +208,33 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
   //   });
   //
   // }
+  void getPatients(){
+    String userUID = widget.userUID;
+    final readConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
+    readConnection.once().then((DataSnapshot snapshot){
+      List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
+      temp1.forEach((jsonString) {
+        connections.add(Connection.fromJson2(jsonString));
+      });
+      for(int i = 0; i < connections.length; i++){
+        final readDoctor = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
+        readDoctor.once().then((DataSnapshot datasnapshot){
+          Map<String, dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
+          userlist.add(Users.fromJson(temp2));
+          if(userlist[i].usertype != "Doctor"){
+            userlist.removeAt(i);
+          }
+          else{
+            names.add(userlist[i].firstname+ " " + userlist[i].lastname);
+            position.add(userlist[i].specialty);
+          }
+          print(names);
+        });
+      }
+
+    });
+
+
+  }
 
 }
