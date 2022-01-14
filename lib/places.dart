@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 import '../dialogs/policy_dialog.dart';
 import '../fitness_app_theme.dart';
 import 'models/GooglePlaces.dart';
+import 'models/Reviews.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class places extends StatefulWidget {
@@ -34,9 +35,12 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
 
   TabController controller;
   List<Results> drugstores=[], hospitals=[], restaurants=[], recreations=[];
+  List<Reviews> reviews =[];
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
+    reviews.clear();
     Places("asd");
     controller = TabController(length: 4, vsync: this);
     controller.addListener(() {
@@ -44,7 +48,6 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     });
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
-        print("setstate");
       });
     });
   }
@@ -106,7 +109,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      body: TabBarView(
+      body: isLoading
+          ? Center(
+        child: CircularProgressIndicator(),
+      ): new TabBarView(
         controller: controller,
         children: [
           ListView.builder(
@@ -139,9 +145,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             Row(
                               children: [
                                 Icon(
-                                  Icons.location_on, size: 12,
+                                  Icons.location_on, size: 15,
+                                  color: Colors.red,
                                 ),
-                                SizedBox(width: 8.0),
+                                SizedBox(width: 4.0),
                                 Flexible(
                                   child: Text(
                                     ''+drugstores[index].formattedAddress,
@@ -149,31 +156,32 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
                                 ),
+                                SizedBox(height: 30.0),
                               ],
                             ),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.local_phone_outlined, size: 12,
-                                ),
-                                SizedBox(width: 8.0),
+                                // Icon(
+                                //   Icons.local_phone_outlined, size: 12,
+                                // ),
+                                // SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '7655-1701',
+                                    'See more..',
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
                                 ),
-                                SizedBox(width: 20.0),
-                                Icon(
-                                  Icons.access_time_sharp, size: 12,
-                                ),
-                                SizedBox(width: 8.0),
-                                Flexible(
-                                  child: Text(
-                                    '6am - 6pm',
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
-                                  ),
-                                ),
+                                // SizedBox(width: 20.0),
+                                // Icon(
+                                //   Icons.access_time_sharp, size: 12,
+                                // ),
+                                // SizedBox(width: 8.0),
+                                // Flexible(
+                                //   child: Text(
+                                //     '6am - 6pm',
+                                //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ],
@@ -535,8 +543,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     final uid = user.uid;
     String a;
     String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
-    String loc = "16.03599037979812, 120.33470282456094",
-        radius ="1000",
+    String
+    //loc = "16.03599037979812, 120.33470282456094",
+    loc = "14.589281719512666, 121.03772954435867",
+        radius ="2000",
         type="drugstore",
         query1= "Drugstore";
 
@@ -580,6 +590,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
       }
     }
+
     for(var i = 0 ; i < restaurants.length; i++){
       if(restaurants[i].photos != "photoref"){
         String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
@@ -589,14 +600,66 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
       }
     }
+    for (var i = 0; i < drugstores.length;i++){
+      final readReviews = databaseReference.child('reviews/' + drugstores[i].placeId+"/");
+      await readReviews.once().then((DataSnapshot snapshot){
+        List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+        if(temp != null){
+          temp.forEach((jsonString) {
+            reviews.add(Reviews.fromJson(jsonString));
+            // print(reviews.length.toString()+ "<<<<<<<<<<<");
+          });
+        }
+      });
+    }
+    for (var i = 0; i < hospitals.length;i++){
+      final readReviews = databaseReference.child('reviews/' + hospitals[i].placeId+"/");
+      await readReviews.once().then((DataSnapshot snapshot){
+        // print(snapshot.value);
+        List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+        if(temp != null){
+          temp.forEach((jsonString) {
+            reviews.add(Reviews.fromJson(jsonString));
+            // print(reviews.length.toString()+ "<<<<<<<<<<<");
+          });
+        }
+      });
+    }
+    for (var i = 0; i < recreations.length;i++){
+      final readReviews = databaseReference.child('reviews/' + recreations[i].placeId+"/");
+      await readReviews.once().then((DataSnapshot snapshot){
+        // print(snapshot.value);
+        List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+        if(temp != null){
+          temp.forEach((jsonString) {
+            reviews.add(Reviews.fromJson(jsonString));
+            // print(reviews.length.toString()+ "<<<<<<<<<<<");
+          });
+        }
+      });
+    }
+    for (var i = 0; i < restaurants.length;i++){
+      final readReviews = databaseReference.child('reviews/' + restaurants[i].placeId+"/");
+      await readReviews.once().then((DataSnapshot snapshot){
+        // print(snapshot.value);
+        List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+        if(temp != null){
+          temp.forEach((jsonString) {
+            reviews.add(Reviews.fromJson(jsonString));
+            // print(reviews.length.toString()+ "<<<<<<<<<<<");
+          });
+        }
+      });
+    }
     setState(() {
       print("NAGSETSTATE SA CALL NG SHIT");
+      isLoading = false;
     });
     return gplaces;
   }
   Widget _displayMedia(String media) {
     if(media == "photoref") {
-      print("PHOTOREF ITO ");
+      // print("PHOTOREF ITO ");
       return Image.asset("assets/images/no-image.jpg");
     }
     else{
@@ -608,41 +671,71 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
 
     }
   Widget checkrating(String placeid) {
-
+    double thisrating=0;
+    String textRate="";
+    int counter = 0;
+    bool checker = true;
+    for(var i =0 ; i < reviews.length; i++){
+      if(reviews[i].placeid == placeid){
+        thisrating = thisrating + double.parse(reviews[i].rating.toString());
+        // print( reviews[i].placeid +"  "+reviews[i].rating.toString());
+        counter ++;
+      }
+    }
+    if(thisrating >0 ){
+      thisrating = thisrating/counter;
+    }
+    if(counter == 0){
+      textRate = "No reviews Yet";
+      checker = false;
+    }else{
+      textRate = '(' +thisrating.toString() +')';
+    }
+    // print("This rating = " +thisrating.toString() + " "+placeid);
     return Row(
       children: [
         SizedBox(height: 16.0),
         Text(
-          'Rating',
+          '',
           style: TextStyle(color: Colors.black, fontSize: 12),
         ),
-        RatingBar(
-          initialRating: 4.5,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          ignoreGestures: true,
-          itemSize: 12,
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
-          ratingWidget: RatingWidget(
-              full: Icon(Icons.star, color: Colors.orange),
-              half: Icon(
-                Icons.star_half,
-                color: Colors.orange,
-              ),
-              empty: Icon(
-                Icons.star_outline,
-                color: Colors.orange,
-              )),
-        ),
+        ratingWidget(checker, thisrating),
         Text(
-          '(' +'10' +')',
+          textRate,
           style: TextStyle(color: Colors.black, fontSize: 12),
         ),
 
       ],
     );
+  }
+  Widget ratingWidget(bool check, double thisrating){
+    if(check == true){
+      return RatingBar(
+        initialRating: thisrating,
+        direction: Axis.horizontal,
+        allowHalfRating: true,
+        itemCount: 5,
+        ignoreGestures: true,
+        itemSize: 12,
+        onRatingUpdate: (rating) {
+          print(rating);
+        },
+        ratingWidget: RatingWidget(
+            full: Icon(Icons.star, color: Colors.orange),
+            half: Icon(
+              Icons.star_half,
+              color: Colors.orange,
+            ),
+            empty: Icon(
+              Icons.star_outline,
+              color: Colors.orange,
+            )),
+      );
+    }else{
+      return Text(
+        "",
+        style: TextStyle(color: Colors.black, fontSize: 12),
+      );
+    }
   }
 }

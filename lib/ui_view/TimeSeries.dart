@@ -1,6 +1,8 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
+import '../fitness_app_theme.dart';
+
 class SimpleTimeSeriesChart extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
@@ -16,6 +18,20 @@ class SimpleTimeSeriesChart extends StatelessWidget {
     List<charts.Series> thisseries;
     thisseries = _createSampleData();
     return Container(
+      decoration: BoxDecoration(
+        color: FitnessAppTheme.nearlyWhite,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8.0),
+            bottomLeft: Radius.circular(8.0),
+            bottomRight: Radius.circular(8.0),
+            topRight: Radius.circular(68.0)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: FitnessAppTheme.grey.withOpacity(0.6),
+              offset: Offset(1.1, 1.1),
+              blurRadius: 10.0),
+        ],
+      ),
       height: 400,
       child: charts.TimeSeriesChart(
         thisseries,

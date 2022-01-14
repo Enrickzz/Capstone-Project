@@ -1,19 +1,20 @@
 import 'package:intl/intl.dart';
-
 class Reviews{
   String added_by;
   String review;
   String user_name;
+  String placeid;
   int rating;
   bool recommend;
   DateTime reviewDate;
   DateTime reviewTime;
 
-  Reviews({this.added_by, this.review, this.rating, this.recommend});
+  Reviews({this.added_by, this.review, this.rating, this.recommend, this.placeid});
 
   Reviews.fromJson(Map<String, dynamic> json) {
     added_by = json['added_by'];
     user_name = json['user_name'];
+    placeid = json['placeid'];
     review = json['review'];
     rating = json['rating'];
     recommend = json['recommend'];
@@ -25,6 +26,7 @@ class Reviews{
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['added_by'] = this.added_by;
     data['user_name'] = this.user_name;
+    data['placeid'] = this.placeid;
     data['review'] = this.review;
     data['rating'] = this.rating;
     data['recommend'] = this.recommend;
