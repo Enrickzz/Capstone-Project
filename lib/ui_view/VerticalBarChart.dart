@@ -1,6 +1,8 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
+import '../fitness_app_theme.dart';
+
 class VerticalBarLabelChart extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
@@ -13,20 +15,45 @@ class VerticalBarLabelChart extends StatelessWidget {
   Widget build(BuildContext context) {
     List<charts.Series> thisseries;
     thisseries = _createSampleData();
-    return Container(
-      height: 400,
-     child: charts.BarChart(
-          thisseries,
-          animate: false,
-          // Set a bar label decorator.
-          // Example configuring different styles for inside/outside:
-          //       barRendererDecorator: new charts.BarLabelDecorator(
-          //          insideLabelStyleSpec: new charts.TextStyleSpec(...),
-          //          outsideLabelStyleSpec: new charts.TextStyleSpec(...)),
-          barRendererDecorator: new charts.BarLabelDecorator<String>(),
-          domainAxis: new charts.OrdinalAxisSpec(),
-        )
-    ) ;
+
+    return Padding(
+      padding: const EdgeInsets.only(
+          left: 24, right: 24, top: 16, bottom: 18),
+      child: Container(
+        height: 400,
+        decoration: BoxDecoration(
+          color: FitnessAppTheme.nearlyWhite,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8.0),
+              bottomLeft: Radius.circular(8.0),
+              bottomRight: Radius.circular(8.0),
+              topRight: Radius.circular(8.0)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: FitnessAppTheme.grey.withOpacity(0.6),
+                offset: Offset(1.1, 1.1),
+                blurRadius: 10.0),
+          ],
+        ),
+        child:Padding(
+          padding: const EdgeInsets.all(16.0),
+
+            child: charts.BarChart(
+              thisseries,
+              animate: false,
+              // Set a bar label decorator.
+              // Example configuring different styles for inside/outside:
+              //       barRendererDecorator: new charts.BarLabelDecorator(
+              //          insideLabelStyleSpec: new charts.TextStyleSpec(...),
+              //          outsideLabelStyleSpec: new charts.TextStyleSpec(...)),
+              barRendererDecorator: new charts.BarLabelDecorator<String>(),
+              domainAxis: new charts.OrdinalAxisSpec(),
+            )
+        ) ,
+      ),
+    );
+
+
   }
 
   /// Create one series with sample hard coded data.

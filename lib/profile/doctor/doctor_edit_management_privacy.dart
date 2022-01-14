@@ -17,8 +17,9 @@ import 'package:my_app/services/auth.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class doctor_edit_management_privacy extends StatefulWidget {
   final List<Medication_Prescription> thislist;
-  String userUID;
-  doctor_edit_management_privacy({this.thislist, this.userUID});
+  final String userUID;
+  final String doctorUID;
+  doctor_edit_management_privacy({this.thislist, this.userUID, this.doctorUID});
   @override
   _editManagementPrivacyState createState() => _editManagementPrivacyState();
 }
@@ -26,18 +27,12 @@ final _formKey = GlobalKey<FormState>();
 class _editManagementPrivacyState extends State<doctor_edit_management_privacy> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-
+  List<Connection> connections = [];
   bool isAllowedMedicalPrescription = false;
   bool isAllowedFoodPlan = false;
   bool isAllowedExercisePlan = false;
   bool isAllowedVitalsRecording = false;
   bool showDisclaimer = false;
-
-
-
-
-
-
 
 
   @override
@@ -402,7 +397,33 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
             TextButton(
               child: Text('Confirm'),
               onPressed: () {
+                try{
+                  String userUID = widget.userUID;
+                  String doctorUID = widget.doctorUID;
+                  final readDoctorConnections = databaseReference.child('users/' + doctorUID + '/personal_info/connections/');
+                  readDoctorConnections.once().then((DataSnapshot snapshot) {
+                    List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
+                    temp1.forEach((jsonString) {
+                      connections.add(Connection.fromJson2(jsonString));
+                    });
+                    for(int i = 1; i <= connections.length; i++){
+                      if(connections[i-1].uid == userUID){
+                        final doctorConnectionsRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ i.toString());
+                        doctorConnectionsRef.set({
+                          "uid": userUID,
+                          "medpres": isAllowedMedicalPrescription.toString(),
+                          "foodplan": isAllowedFoodPlan.toString(),
+                          "explan": isAllowedExercisePlan.toString(),
+                          "vitals": isAllowedVitalsRecording.toString(),
+                        });
+                      }
+                    }
 
+                  });
+
+                } catch(e) {
+                  print("you got an error! $e");
+                }
                 // Future.delayed(const Duration(milliseconds: 2000), (){
                 //   print(namestemp.length);
                 //   print('^^^^^^^^^^^^^^^^^^^^^^^^^^^');

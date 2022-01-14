@@ -17,31 +17,40 @@ class SimpleTimeSeriesChart extends StatelessWidget {
   Widget build(BuildContext context) {
     List<charts.Series> thisseries;
     thisseries = _createSampleData();
-    return Container(
-      decoration: BoxDecoration(
-        color: FitnessAppTheme.nearlyWhite,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8.0),
-            bottomLeft: Radius.circular(8.0),
-            bottomRight: Radius.circular(8.0),
-            topRight: Radius.circular(68.0)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: FitnessAppTheme.grey.withOpacity(0.6),
-              offset: Offset(1.1, 1.1),
-              blurRadius: 10.0),
-        ],
-      ),
-      height: 400,
-      child: charts.TimeSeriesChart(
-        thisseries,
-        animate: false,
-        // Optionally pass in a [DateTimeFactory] used by the chart. The factory
-        // should create the same type of [DateTime] as the data provided. If none
-        // specified, the default creates local date time.
-        dateTimeFactory: const charts.LocalDateTimeFactory(),
+    return Padding(
+      padding: const EdgeInsets.only(
+          left: 24, right: 24, top: 16, bottom: 18),
+      child: Container(
+        height: 400,
+        decoration: BoxDecoration(
+          color: FitnessAppTheme.nearlyWhite,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8.0),
+              bottomLeft: Radius.circular(8.0),
+              bottomRight: Radius.circular(8.0),
+              topRight: Radius.circular(8.0)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: FitnessAppTheme.grey.withOpacity(0.6),
+                offset: Offset(1.1, 1.1),
+                blurRadius: 10.0),
+          ],
+        ),
+        child:Padding(
+          padding: const EdgeInsets.all(16.0),
+
+          child: charts.TimeSeriesChart(
+            thisseries,
+            animate: false,
+            // Optionally pass in a [DateTimeFactory] used by the chart. The factory
+            // should create the same type of [DateTime] as the data provided. If none
+            // specified, the default creates local date time.
+            dateTimeFactory: const charts.LocalDateTimeFactory(),
+          ),
+        ) ,
       ),
     );
+
   }
 
   /// Create one series with sample hard coded data.
