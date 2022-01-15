@@ -32,8 +32,9 @@ import 'package:my_app/widgets/rating.dart';
 
 class info_restaurant extends StatefulWidget {
   final List<FirebaseFile> files;
-  info_restaurant({Key key, this.files, this.this_info});
+  info_restaurant({Key key, this.files, this.this_info, this.thisrating});
   final Results this_info;
+  final double thisrating;
   @override
   _create_postState createState() => _create_postState();
 }
@@ -117,7 +118,7 @@ class _create_postState extends State<info_restaurant> {
 
                   ),
                   SizedBox(height: 8.0),
-                  checkrating(),
+                  checkrating(widget.thisrating),
 
                   SizedBox(height: 8.0),
                   Row(
@@ -381,43 +382,63 @@ class _create_postState extends State<info_restaurant> {
       return Text("Not Listed");
     }
   }
-  Widget checkrating() {
+  Widget checkrating(double thisrating) {
+    String textRate="";
+    String rating="";
+    bool checker = true;
+    if(thisrating == 0){
+      textRate = "No reviews yet";
+      rating = "";
+      checker = false;
+    }else{
+      textRate = '(' +thisrating.toString() +')';
+      rating = "Rating";
+    }
     return Row(
       children: [
         Text(
-          'Rating',
+          rating,
           style: TextStyle( fontSize: 14),
         ),
         SizedBox(width: 8.0),
 
-        RatingBar(
-          initialRating: 4.5,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          ignoreGestures: true,
-          itemSize: 26,
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
-          ratingWidget: RatingWidget(
-              full: Icon(Icons.star, color: Colors.orange),
-              half: Icon(
-                Icons.star_half,
-                color: Colors.orange,
-              ),
-              empty: Icon(
-                Icons.star_outline,
-                color: Colors.orange,
-              )),
-        ),
+        ratingWidget(checker, thisrating),
         Text(
-          '(' +'10' +')',
+          textRate,
           style: TextStyle( fontSize: 14),
         ),
       ],
     );
-
+  }
+  Widget ratingWidget(bool check, double thisrating){
+    if(check == true){
+      return RatingBar(
+        initialRating: thisrating,
+        direction: Axis.horizontal,
+        allowHalfRating: true,
+        itemCount: 5,
+        ignoreGestures: true,
+        itemSize: 12,
+        onRatingUpdate: (rating) {
+          print(rating);
+        },
+        ratingWidget: RatingWidget(
+            full: Icon(Icons.star, color: Colors.orange),
+            half: Icon(
+              Icons.star_half,
+              color: Colors.orange,
+            ),
+            empty: Icon(
+              Icons.star_outline,
+              color: Colors.orange,
+            )),
+      );
+    }else{
+      return Text(
+        "",
+        style: TextStyle(color: Colors.black, fontSize: 12),
+      );
+    }
   }
   Future<SpecificInfo> getspecifics(String id) async{
 

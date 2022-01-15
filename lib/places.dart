@@ -97,7 +97,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
               height:24,),
             ),
             Tab(
-              text: 'Recreational Centers', icon: Image.asset('assets/images/recreation.png',
+              text: 'Recreational', icon: Image.asset('assets/images/recreation.png',
               width: 24,
               height:24,),
             ),
@@ -205,7 +205,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  drugstores[index]),
+                            child: info_restaurant(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId)),
                           ),
                           ),
                         ).then((value) =>
@@ -309,7 +309,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  hospitals[index]),
+                            child: info_restaurant(this_info:  hospitals[index], thisrating: checkrating2(hospitals[index].placeId)),
                           ),
                           ),
                         ).then((value) =>
@@ -413,7 +413,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  recreations[index]),
+                            child: info_restaurant(this_info:  recreations[index],thisrating: checkrating2(recreations[index].placeId)),
                           ),
                           ),
                         ).then((value) =>
@@ -517,7 +517,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  restaurants[index]),
+                            child: info_restaurant(this_info:  restaurants[index], thisrating: checkrating2(restaurants[index].placeId)),
                           ),
                           ),
                         ).then((value) =>
@@ -707,6 +707,29 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
 
       ],
     );
+  }
+  double checkrating2(String placeid){
+    double thisrating=0;
+    String textRate="";
+    int counter = 0;
+    bool checker = true;
+    for(var i =0 ; i < reviews.length; i++){
+      if(reviews[i].placeid == placeid){
+        thisrating = thisrating + double.parse(reviews[i].rating.toString());
+        // print( reviews[i].placeid +"  "+reviews[i].rating.toString());
+        counter ++;
+      }
+    }
+    if(thisrating >0 ){
+      thisrating = thisrating/counter;
+    }
+    if(counter == 0){
+      textRate = "No reviews yet";
+      checker = false;
+    }else{
+      textRate = '(' +thisrating.toString() +')';
+    }
+    return thisrating;
   }
   Widget ratingWidget(bool check, double thisrating){
     if(check == true){
