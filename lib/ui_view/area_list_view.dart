@@ -190,7 +190,7 @@ class AreaView extends StatelessWidget {
                         child: view_exrx_added(exercise: thisExer, index: index),
                       ),
                       ),
-                    )
+                    );
                   },
                   child: Column(
                     children: <Widget>[

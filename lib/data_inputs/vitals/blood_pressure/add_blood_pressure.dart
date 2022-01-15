@@ -36,7 +36,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   DateTime bpDate;
   String bp_time;
   String bp_date = (new DateTime.now()).toString();
-  int count = 0;
+  String bp_status = "";
+  int count = 1;
   bool isDateSelected= false;
   List<Blood_Pressure> bp_list = new List<Blood_Pressure>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
@@ -45,7 +46,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   var dateValue = TextEditingController();
   List<Notifications> notifsList = new List<Notifications>();
   List<Recommendation> recommList = new List<Recommendation>();
-  String isResting = 'false';
+  String isResting = 'yes';
 
 
   @override
@@ -286,6 +287,12 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                               List<String> temp = temp1.split(',');
                               Blood_Pressure bloodPressure;
                               if(datasnapshot.value == null){
+                                if(isResting.toLowerCase() =='yes'){
+                                  bp_status = "Active";
+                                }
+                                else{
+                                  bp_status = "Resting";
+                                }
                                 if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
                                   pressure_level = "low";
                                   print(pressure_level);
@@ -302,11 +309,17 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                   pressure_level = "high";
                                   print(pressure_level);
                                 }
-                                final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + 0.toString());
-                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
+                                final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
+                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
                                 print("Added medication Successfully! " + uid);
                               }
                               else{
+                                if(isResting.toLowerCase() =='yes'){
+                                  bp_status = "Active";
+                                }
+                                else{
+                                  bp_status = "Resting";
+                                }
                                 if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
                                   pressure_level = "low";
                                   print(pressure_level);
@@ -325,9 +338,9 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 }
                                 getBloodPressure();
                                 Future.delayed(const Duration(milliseconds: 1500), (){
-                                  // count = bp_list.length--;
-                                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + (bp_list.length--).toString());
-                                  bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString()});
+                                  count = bp_list.length--;
+                                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
+                                  bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
                                   print("Added Blood Pressure Successfully! " + uid);
                                 });
 
@@ -338,7 +351,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                               print("MEDICATION LENGTH: " + bp_list.length.toString());
                               String message, title;
                               int priority;
-                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure,pressure_level: pressure_level, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time)));
+                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure,pressure_level: pressure_level, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time), bp_status: bp_status.toString()));
                               for(var i=0;i<bp_list.length/2;i++){
                                 var temp = bp_list[i];
                                 bp_list[i] = bp_list[bp_list.length-1-i];

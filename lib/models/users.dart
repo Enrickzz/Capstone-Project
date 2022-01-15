@@ -448,8 +448,9 @@ class Blood_Pressure {
   String pressure_level;
   DateTime bp_date;
   DateTime bp_time;
+  String bp_status;
 
-  Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure,this.pressure_level, this.bp_date, this.bp_time});
+  Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure,this.pressure_level, this.bp_date, this.bp_time, this.bp_status});
 
   Blood_Pressure.fromJson(Map<String, dynamic> json) {
     systolic_pressure = json['systolic_pressure'];
@@ -457,6 +458,7 @@ class Blood_Pressure {
     pressure_level = json['pressure_level'];
     bp_date = DateFormat("MM/dd/yyyy").parse(json['bp_date']);
     bp_time = DateFormat("hh:mm").parse(json['bp_time']);
+    bp_status = json['bp_status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -466,6 +468,7 @@ class Blood_Pressure {
     data['pressure_level'] = this.pressure_level;
     data['bp_date'] = this.bp_date;
     data['bp_time'] = this.bp_time;
+    data['bp_status'] = this.bp_status;
     return data;
   }
 
