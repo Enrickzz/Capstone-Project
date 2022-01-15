@@ -580,6 +580,7 @@ class _addSymptomsState extends State<add_symptoms> {
                     try{
                       final User user = auth.currentUser;
                       final uid = user.uid;
+                      symptoms_list.clear();
                       final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
                       readsymptom.once().then((DataSnapshot datasnapshot) {
                         if(datasnapshot.value == null){
@@ -592,9 +593,11 @@ class _addSymptomsState extends State<add_symptoms> {
 
                         }
                         else{
+                          getSymptoms();
                           Future.delayed(const Duration(milliseconds: 1000), (){
+                            // print("SYMPTOM LIST LENGTH");
+                            // print(symptoms_list.length);
                             count = symptoms_list.length--;
-                            print("count " + count.toString());
                             if(valueChooseSymptom == "Others"){
                               valueChooseSymptom = other_name;
                             }
@@ -612,23 +615,28 @@ class _addSymptomsState extends State<add_symptoms> {
                         if(valueChooseSymptom == "Others"){
                           valueChooseSymptom = other_name;
                         }
-                        print("SYMPTOMS LENGTH: " + symptoms_list.length.toString());
                         symptoms_list.add(new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl, symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date), symptomTime: timeformat.parse(symptom_time), symptomIsActive: true, recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: fileName));
                         for(var i=0;i<symptoms_list.length/2;i++){
                           var temp = symptoms_list[i];
                           symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
                           symptoms_list[symptoms_list.length-1-i] = temp;
                         }
-                        FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                          Future.delayed(const Duration(milliseconds: 1000), (){
-                            Navigator.pop(context, symptoms_list);
+                        if(fileName.toString() != "null"){
+                          FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              Navigator.pop(context, symptoms_list);
+                            });
                           });
-                        });
+                        }
+                        else{
+                          Navigator.pop(context, symptoms_list);
+                        }
+
                       });
                     } catch(e) {
                       print("you got an error! $e");
                     }
-                    // Navigator.pop(context);
+
                   },
                 )
               ],
@@ -689,14 +697,18 @@ class _addSymptomsState extends State<add_symptoms> {
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print(temp);
       temp.forEach((jsonString) {
         if(!jsonString.toString().contains("recurring")){
+          print("NO RECURRING");
           symptoms_list.add(Symptom.fromJson2(jsonString));
         }
         else{
+          print("WITH RECURRING");
           symptoms_list.add(Symptom.fromJson(jsonString));
         }
-
+        print("SYMPTOM LIST LENGTH");
+        print(symptoms_list.length);
       });
     });
   }

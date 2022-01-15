@@ -248,6 +248,8 @@ class Symptom {
     symptomDate = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
     symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
     symptomIsActive = json['symptom_isActive'];
+    symptomTrigger = json['symptom_trigger'];
+    imgRef = json['imgRef'];
   }
 
   Map<String, dynamic> toJson() {

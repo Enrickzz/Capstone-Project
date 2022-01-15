@@ -45,7 +45,6 @@ class _symptomsState extends State<symptoms> {
     super.initState();
     listtemp.clear();
     getSymptoms();
-
     Future.delayed(const Duration(milliseconds: 2000), (){
       downloadUrls();
       Future.delayed(const Duration(milliseconds: 2000), (){
@@ -153,7 +152,6 @@ class _symptomsState extends State<symptoms> {
                     if(value != null){
                       listtemp = value;
                     }
-                    print("SYMP LENGTH AFTER SETSTATE  =="  + listtemp.length.toString() );
                   }));
                 },
                 child: Icon(
@@ -247,7 +245,9 @@ class _symptomsState extends State<symptoms> {
         //print("symptoms length " + symptoms.length.toString());
       });
     });
-
+    setState(() {
+      isLoading = false;
+    });
     return symptoms;
   }
   Future <String> downloadUrls() async{

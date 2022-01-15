@@ -80,12 +80,9 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
       setState(() {});
     });
     thisSymptom = widget.thissymp;
-    print(thisSymptom.imgRef + " < <<<<<<<<");
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
-
-        if(thisSymptom.recurring.toString() == null){
-          print("HIIIIIIIIIIIIIIIIIIIIII");
+        if(thisSymptom.recurring.toString() == "null"){
           thisSymptom.recurring[0] = "";
         }
         print("setstate");
@@ -396,7 +393,9 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(thisSymptom.symptomDate.toString() + " " + thisSymptom.symptomTime.toString(),
+                                            Text("${thisSymptom.symptomDate.month.toString().padLeft(2,"0")}/${thisSymptom.symptomDate.day.toString().padLeft(2,"0")}/${thisSymptom.symptomDate.year.toString()}"
+                                                + " " +
+                                                "${thisSymptom.symptomTime.hour.toString().padLeft(2,"0")}:${thisSymptom.symptomTime.minute.toString().padLeft(2,"0")}",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
