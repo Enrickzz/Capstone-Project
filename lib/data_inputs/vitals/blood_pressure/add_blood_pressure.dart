@@ -343,9 +343,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                   bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
                                   print("Added Blood Pressure Successfully! " + uid);
                                 });
-
                               }
-
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + bp_list.length.toString());
@@ -364,38 +362,6 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 print("YOUR BP IS ELEVATED!");
                                 addtoNotifs("Blood Pressure is elevated", "Elevated BP", "1");
                                 Navigator.pop(context, bp_list);
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(builder: (context) => mainScreen()),
-                                // );
-                                // Widget cancelButton = TextButton(
-                                //   child: Text("Cancel"),
-                                //   onPressed:  () {
-                                //     Navigator.pop(context, false);
-                                //   },
-                                // );
-                                // Widget continueButton = TextButton(
-                                //   child: Text("Continue"),
-                                //   onPressed:  () {
-                                //
-                                //     },
-                                // );
-                                //
-                                // // set up the AlertDialog
-                                // AlertDialog alert = AlertDialog(
-                                //   title: Text("Warning"),
-                                //   content: Text("Your BP is elevated"),
-                                //   actions: [
-                                //     cancelButton,
-                                //     continueButton,
-                                //   ],
-                                // );
-                                // showDialog(
-                                //   context: context,
-                                //   builder: (BuildContext context) {
-                                //     return alert;
-                                //   },
-                                // );
                               }else if(double.parse(systolic_pressure) >= 130 &&  double.parse(systolic_pressure) < 140 && double.parse(diastolic_pressure) >= 80 && double.parse(diastolic_pressure) <= 89 ){
                                 print("YOU ARE ON STAGE 1 HIGH BP");
                                 addtoNotifs("Blood Pressure is on Stage 1 Alert Level", "STAGE 1 HIGH BP", "2");

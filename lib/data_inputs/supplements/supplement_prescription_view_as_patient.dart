@@ -42,70 +42,6 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
     super.initState();
     supptemp.clear();
     getSupplementPrescription();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/medication_prescription_list');
-    // String tempGenericName = "";
-    // String tempBrandedName = "";
-    // String tempIntakeTime = "";
-    // String tempSpecialInstruction = "";
-    // String tempStartDate = "";
-    // String tempEndDate = "";
-    // String tempPrescriptionUnit = "";
-    //
-    // readPrescription.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Supplement_Prescription prescription;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i%7){
-    //       case 0: {
-    //         tempPrescriptionUnit = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         tempEndDate = splitFull.last;
-    //
-    //       }
-    //       break;
-    //       case 2: {
-    //         tempIntakeTime = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         tempBrandedName = splitFull.last;
-    //
-    //       }
-    //       break;
-    //       case 4: {
-    //         tempSpecialInstruction = splitFull.last;
-    //       }
-    //       break;
-    //       case 5: {
-    //         tempGenericName = splitFull.last;
-    //       }
-    //       break;
-    //       case 6: {
-    //         tempStartDate = splitFull.last;
-    //         prescription = new Supplement_Prescription(generic_name: tempGenericName, branded_name: tempBrandedName, startdate: format.parse(tempStartDate), enddate: format.parse(tempEndDate), intake_time: tempIntakeTime, special_instruction: tempSpecialInstruction, prescription_unit: tempPrescriptionUnit);
-    //         prestemp.add(prescription);
-    //       }
-    //       break;
-    //     }
-    //
-    //   }
-    //   for(var i=0;i<prestemp.length/2;i++){
-    //     var temp = prestemp[i];
-    //     prestemp[i] = prestemp[prestemp.length-1-i];
-    //     prestemp[prestemp.length-1-i] = temp;
-    //   }
-    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -149,11 +85,14 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                     ),
                   ).then((value) =>
                       Future.delayed(const Duration(milliseconds: 1500), (){
+                        // supptemp = value;
+                        print("LENGTH: " + supptemp.length.toString());
+                        supptemp.add(value);
                         setState((){
-                          print("setstate supplement prescription");
-                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                          print("LENGTH: " + supptemp.length.toString());
+                          // print("setstate supplement prescription");
+                          // print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                           if(value != null){
-                            supptemp = value[0];
                           }
                         });
                       }));

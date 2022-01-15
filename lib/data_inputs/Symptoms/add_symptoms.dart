@@ -107,8 +107,8 @@ class _addSymptomsState extends State<add_symptoms> {
   String dropdownValue = 'Select Symptom';
   @override
   void initState(){
+    symptoms_list.clear();
     super.initState();
-    symptoms_list=widget.thislist;
   }
 
   @override
@@ -594,23 +594,21 @@ class _addSymptomsState extends State<add_symptoms> {
                         }
                         else{
                           getSymptoms();
-                          Future.delayed(const Duration(milliseconds: 1000), (){
-                            // print("SYMPTOM LIST LENGTH");
-                            // print(symptoms_list.length);
-                            count = symptoms_list.length--;
-                            if(valueChooseSymptom == "Others"){
-                              valueChooseSymptom = other_name;
-                            }
-                            final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
-                            symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "symptom_trigger": symptom_felt, "recurring": checkboxStatus, "imgRef": fileName.toString()});
-                            print("Added Symptom Successfully! " + uid);
+                          Future.delayed(const Duration(milliseconds: 2000), (){
+                            downloadUrls();
+                            Future.delayed(const Duration(milliseconds: 2000), (){
+                              count = symptoms_list.length--;
+                              print("count " + count.toString());
+                              if(valueChooseSymptom == "Others"){
+                                valueChooseSymptom = other_name;
+                              }
+                              final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
+                              symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "symptom_trigger": symptom_felt, "recurring": checkboxStatus, "imgRef": fileName.toString()});
+                              print("Added Symptom Successfully! " + uid);
+                            });
                           });
-
                         }
-
                       });
-
-
                       Future.delayed(const Duration(milliseconds: 1000), (){
                         if(valueChooseSymptom == "Others"){
                           valueChooseSymptom = other_name;
@@ -621,18 +619,17 @@ class _addSymptomsState extends State<add_symptoms> {
                           symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
                           symptoms_list[symptoms_list.length-1-i] = temp;
                         }
-                        if(fileName.toString() != "null"){
-                          FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              Navigator.pop(context, symptoms_list);
-                            });
-                          });
-                        }
-                        else{
-                          Navigator.pop(context, symptoms_list);
-                        }
 
+                        FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+
+                        });
+                        Symptom a = new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl, symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date), symptomTime: timeformat.parse(symptom_time), symptomIsActive: true, recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: fileName);
+                        Future.delayed(const Duration(milliseconds: 1000), (){
+                          print("SYMPTOMS UPDATE LENGTH = " + symptoms_list.length.toString());
+                          Navigator.pop(context, symptoms_list);
+                        });
                       });
+
                     } catch(e) {
                       print("you got an error! $e");
                     }
@@ -711,6 +708,21 @@ class _addSymptomsState extends State<add_symptoms> {
         print(symptoms_list.length);
       });
     });
+  }
+  Future <String> downloadUrls() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String downloadurl;
+    for(var i = 0 ; i < symptoms_list.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+symptoms_list[i].imgRef.toString());
+      downloadurl = await ref.getDownloadURL();
+      symptoms_list[i].imgRef = downloadurl;
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+    });
+    return downloadurl;
   }
 
 }

@@ -694,8 +694,9 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                                 supplement_list[i] = supplement_list[supplement_list.length-1-i];
                                 supplement_list[supplement_list.length-1-i] = temp;
                               }
+                              Supplement_Prescription a = new Supplement_Prescription(supplement_name: supplement_name, intake_time: quantity.toString(),dosage: supp_dosage, prescription_unit: prescription_unit, dateCreated: now);
                               print("POP HERE ==========");
-                              Navigator.pop(context, [supplement_list, 1]);
+                              Navigator.pop(context, a);
                             });
 
                           } catch(e) {
