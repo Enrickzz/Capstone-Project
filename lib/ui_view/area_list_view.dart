@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/view_exrx.dart';
@@ -25,9 +29,10 @@ class _AreaListViewState extends State<AreaListView>
     'assets/fitness_app/area3.png',
     'assets/fitness_app/area1.png',
   ];
-
+  List<ExercisesTest> showthis=[];
   @override
   void initState() {
+    showthis = widget.exerlist;
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
     super.initState();
@@ -41,6 +46,7 @@ class _AreaListViewState extends State<AreaListView>
 
   @override
   Widget build(BuildContext context) {
+    getMyExercises();
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController,
       builder: (BuildContext context, Widget child) {
@@ -59,9 +65,9 @@ class _AreaListViewState extends State<AreaListView>
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   children: List<Widget>.generate(
-                    widget.exerlist.length,
+                    showthis.length,
                     (int index) {
-                      final int count = widget.exerlist.length;
+                      final int count = showthis.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
@@ -72,10 +78,10 @@ class _AreaListViewState extends State<AreaListView>
                       );
                       animationController?.forward();
                       return AreaView(
-                        imagepath: widget.exerlist[index].largImg1,
+                        imagepath: showthis[index].largImg1,
                         animation: animation,
                         animationController: animationController,
-                        thisExer: widget.exerlist[index],
+                        thisExer: showthis[index],
                         index: index,
                       );
                     },
@@ -93,6 +99,33 @@ class _AreaListViewState extends State<AreaListView>
         );
       },
     );
+  }
+  void getMyExercises() {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    List<ExercisesTest> checkExRx = [];
+    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+    readprescription.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        checkExRx.add(ExercisesTest.fromJson(jsonString));
+      });
+
+      if(checkExRx.length != showthis.length){
+        print("CHECK = " + checkExRx.length.toString() + "\n ACTUAL = " + widget.exerlist.length.toString());
+        showthis = checkExRx;
+        setState(() {
+          showthis = checkExRx;
+          print("SETSTATE");
+        });
+      }else{
+        print("same lang");
+      }
+    });
+
   }
 }
 
@@ -114,6 +147,7 @@ class AreaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return AnimatedBuilder(
       animation: animationController,
       builder: (BuildContext context, Widget child) {
@@ -156,7 +190,7 @@ class AreaView extends StatelessWidget {
                         child: view_exrx_added(exercise: thisExer, index: index),
                       ),
                       ),
-                    );
+                    )
                   },
                   child: Column(
                     children: <Widget>[

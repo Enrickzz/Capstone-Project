@@ -94,7 +94,7 @@ class _my_exercisesState extends State<my_exercises>
     listViews.add(
       TitleView(
         titleTxt: 'Your Workouts',
-        subTxt: 'Log Workout',
+        subTxt: 'Add Workouts',
         redirect: 1,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,

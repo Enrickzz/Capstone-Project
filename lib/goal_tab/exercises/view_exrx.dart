@@ -160,6 +160,16 @@ class _view_exrxState extends State<view_exrx> {
                   ),
                   SizedBox(height: 8),
                   Text(widget.exercise.instructionsExecution),
+                  SizedBox(height: 8),
+                  Text("Go to link",
+                    style: TextStyle(
+                      fontSize:15,
+                      fontWeight: FontWeight.bold,
+                      color:Color(0xFF363f93),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(widget.exercise.uRL),
 
                   SizedBox(height: 24.0),
                   Row(

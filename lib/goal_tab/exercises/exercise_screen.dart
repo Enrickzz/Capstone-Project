@@ -112,11 +112,6 @@ class Exercise_screen_state extends State<ExerciseScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(milliseconds: 5000), () {
-    //   setState(() {
-    //     print("FULL SET STATE");
-    //   });
-    // });
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
@@ -271,12 +266,12 @@ class Exercise_screen_state extends State<ExerciseScreen>
                                                     color:Color(0xFF363f93),
                                                     fontWeight: FontWeight.bold
                                                 ),),
-                                              Text(listexercises[index].exerciseId.toString(),
-                                                style: TextStyle(
-                                                    fontSize:16,
-                                                    color:Colors.grey,
-                                                    fontWeight: FontWeight.bold
-                                                ),),
+                                              // Text(listexercises[index].exerciseId.toString(),
+                                              //   style: TextStyle(
+                                              //       fontSize:16,
+                                              //       color:Colors.grey,
+                                              //       fontWeight: FontWeight.bold
+                                              //   ),),
                                               Divider(color: Colors.blue),
                                               Text("" + listexercises[index].apparatusName,
                                                 style: TextStyle(
@@ -369,7 +364,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
     final uid = user.uid;
     var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
         headers: {
-          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQwODg0NTUyLCJleHAiOjE2NDA4ODgxNTIsIm5hbWUiOiJsb3Vpc2V4cngifQ.bZtBpKr7zbMd8qAUYdudIwd7TANGWif2E_XyrBMoLKU",
+          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQyMjMwNzI4LCJleHAiOjE2NDIyMzQzMjgsIm5hbWUiOiJsb3Vpc2V4cngifQ.UQTc87klxqURIu4xdo-qt9M0RlEzYUyrz2-cp5l4Fm4",
         });
     List<ExercisesTest> exers=[];
     exers = ExRxTest.fromJson(jsonDecode(response.body)).exercises;

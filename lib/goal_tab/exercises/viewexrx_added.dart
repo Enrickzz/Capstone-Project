@@ -208,12 +208,32 @@ class _view_exrx_addedState extends State<view_exrx_added> {
                                 }
                             });
                           });
-                          Navigator.pop(context);
+                          Navigator.pop(context, );
                           // a.once().then((DataSnapshot datasnapshot) {
                           //   String temp = datasnapshot.value.toString();
                           //   //temp = temp.replaceAll("[", "");
                           //   print(temp.toString());
                           // });
+                        },
+                      ),
+                      FlatButton(
+                        child: Text(
+                          'Log Workout',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Colors.blue,
+                        onPressed:() {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Colors.blue,
+                        onPressed:() {
+                          Navigator.pop(context);
                         },
                       ),
                     ],
