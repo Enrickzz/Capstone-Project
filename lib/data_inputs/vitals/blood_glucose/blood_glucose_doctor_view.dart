@@ -24,7 +24,8 @@ import '../../medicine_intake/add_medication.dart';
 
 class blood_glucose_doctor_view extends StatefulWidget {
   final List<Blood_Glucose> bglist;
-  blood_glucose_doctor_view({Key key, this.bglist}): super(key: key);
+  final String userUID;
+  blood_glucose_doctor_view({Key key, this.bglist, this.userUID}): super(key: key);
   @override
   _blood_glucoseDoctorState createState() => _blood_glucoseDoctorState();
 }
@@ -160,9 +161,10 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
     }
   }
   void getBloodGlucose() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBC = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readBC = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/');
     readBC.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

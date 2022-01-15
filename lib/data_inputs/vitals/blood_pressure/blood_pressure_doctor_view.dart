@@ -25,7 +25,8 @@ import 'package:collection/collection.dart';
 
 class blood_pressure_doctor_view extends StatefulWidget {
   final List<Blood_Pressure> bplist;
-  blood_pressure_doctor_view({Key key, this.bplist}): super(key: key);
+  final String userUID;
+  blood_pressure_doctor_view({Key key, this.bplist, this.userUID}): super(key: key);
   @override
   _blood_pressureDoctorState createState() => _blood_pressureDoctorState();
 }
@@ -51,64 +52,6 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
     bptemp.clear();
     _selected.clear();
     getBloodPressure();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list');
-    // String tempSystolicPressure = "";
-    // String tempDiastolicPressure = "";
-    // String tempBPDate = "";
-    // String tempBPTime = "";
-    // String tempBPLvl = "";
-    // readBP.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Blood_Pressure blood_pressure = new Blood_Pressure();
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i%5){
-    //       case 0: {
-    //         print("i is " + i.toString() + splitFull.last);
-    //         tempBPDate = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         print("i is " + i.toString() + splitFull.last);
-    //         tempDiastolicPressure = splitFull.last;
-    //       }
-    //       break;
-    //       case 2: {
-    //         print("i is " + i.toString() + splitFull.last);
-    //         tempBPLvl = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         print("i is " + i.toString() + splitFull.last);
-    //         tempBPTime = splitFull.last;
-    //       }
-    //       break;
-    //       case 4: {
-    //         print("i is " + i.toString() + splitFull.last);
-    //         tempSystolicPressure = splitFull.last;
-    //         blood_pressure = new Blood_Pressure(systolic_pressure: tempSystolicPressure, diastolic_pressure: tempDiastolicPressure,pressure_level: tempBPLvl, bp_date: format.parse(tempBPDate), bp_time: timeformat.parse(tempBPTime));
-    //         bptemp.add(blood_pressure);
-    //       }
-    //       break;
-    //     }
-    //
-    //   }
-    //   for(var i=0;i<bptemp.length/2;i++){
-    //     var temp = bptemp[i];
-    //     bptemp[i] = bptemp[bptemp.length-1-i];
-    //     bptemp[bptemp.length-1-i] = temp;
-    //   }
-    // });
-    // _selected = List<bool>.generate(bptemp.length, (int index) => false);
-    // bptemp = widget.bplist;
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         _selected = List<bool>.generate(bptemp.length, (int index) => false);
@@ -316,7 +259,14 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
     }
     else
       return Colors.red;
-
+  }
+  Color getMyColor2(String indication) {
+    if(indication == 'Active'){
+      return Colors.red;
+    }
+    else if(indication == 'Resting'){
+      return Colors.blue;
+    }
   }
 
   DataTable _createDataTable() {
@@ -395,7 +345,7 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
           DataCell(Text(getTimeFormatted(bp.bp_time.toString()))),
           DataCell(Text(bp.systolic_pressure +'/'+ bp.diastolic_pressure, style: TextStyle(),)),
           DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),)),
-          DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),))
+          DataCell(Text(bp.bp_status, style: TextStyle(color: getMyColor2(bp.bp_status)),))
 
         ],
         selected: _selected[index],
@@ -407,9 +357,12 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
         .toList();
   }
   void getBloodPressure() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    print("USERUID");
+    print(userUID);
+    final readBP = databaseReference.child('users/' + userUID + '/vitals/health_records/bp_list/');
     readBP.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

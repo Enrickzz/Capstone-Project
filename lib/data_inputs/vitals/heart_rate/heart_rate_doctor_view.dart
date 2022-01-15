@@ -24,7 +24,8 @@ import '../../medicine_intake/add_medication.dart';
 
 class heart_rate_doctor_view extends StatefulWidget {
   final List<Heart_Rate> hrlist;
-  heart_rate_doctor_view({Key key, this.hrlist}): super(key: key);
+  final String userUID;
+  heart_rate_doctor_view({Key key, this.hrlist, this.userUID}): super(key: key);
   @override
   _heart_rate_doctorState createState() => _heart_rate_doctorState();
 }
@@ -310,9 +311,10 @@ class _heart_rate_doctorState extends State<heart_rate_doctor_view> {
 
 
   void getHeartRate() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readHR = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readHR = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/');
     readHR.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

@@ -31,7 +31,7 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 
 
 class data_inputs_doctor_view extends StatefulWidget {
-  String userUID;
+  final String userUID;
   data_inputs_doctor_view({Key key, this.userUID}) : super(key: key);
   @override
   _AppSignUpState createState() => _AppSignUpState();
@@ -105,7 +105,7 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => vitals_doctor_view()),
+                        MaterialPageRoute(builder: (context) => vitals_doctor_view(userUID: widget.userUID)),
                       );
                     },
                     child: Container(

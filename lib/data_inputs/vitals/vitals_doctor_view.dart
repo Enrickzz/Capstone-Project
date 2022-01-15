@@ -27,7 +27,8 @@ import 'heart_rate/heart_rate_patient_view.dart';
 import 'oxygen_saturation/o2_saturation_doctor_view.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class vitals_doctor_view extends StatefulWidget {
-
+  final String userUID;
+  vitals_doctor_view({Key key, this.userUID}) : super(key: key);
   @override
   _AppSignUpState createState() => _AppSignUpState();
 }
@@ -94,7 +95,7 @@ class _AppSignUpState extends State<vitals_doctor_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => blood_pressure_doctor_view(bplist: thisbplist)),
+                        MaterialPageRoute(builder: (context) => blood_pressure_doctor_view(bplist: thisbplist, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -166,7 +167,7 @@ class _AppSignUpState extends State<vitals_doctor_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => heart_rate_doctor_view(hrlist: thisHRlist)),
+                        MaterialPageRoute(builder: (context) => heart_rate_doctor_view(hrlist: thisHRlist, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -232,7 +233,7 @@ class _AppSignUpState extends State<vitals_doctor_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => body_temperature_doctor_view(btlist: thisBTlist)),
+                        MaterialPageRoute(builder: (context) => body_temperature_doctor_view(btlist: thisBTlist, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -298,7 +299,7 @@ class _AppSignUpState extends State<vitals_doctor_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => blood_glucose_doctor_view(bglist: bglist)),
+                        MaterialPageRoute(builder: (context) => blood_glucose_doctor_view(bglist: bglist, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -364,7 +365,7 @@ class _AppSignUpState extends State<vitals_doctor_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => respiratory_rate_view_as_doctor()),
+                        MaterialPageRoute(builder: (context) => respiratory_rate_view_as_doctor(userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -430,7 +431,7 @@ class _AppSignUpState extends State<vitals_doctor_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => o2_saturation_doctor_view(oxygenlist: o2List)),
+                        MaterialPageRoute(builder: (context) => o2_saturation_doctor_view(oxygenlist: o2List, userUID: widget.userUID)),
                       );
                     },
                     child: Container(

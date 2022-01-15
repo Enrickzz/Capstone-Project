@@ -24,7 +24,8 @@ import '../../medicine_intake/add_medication.dart';
 
 class o2_saturation_doctor_view extends StatefulWidget {
   final List<Oxygen_Saturation> oxygenlist;
-  o2_saturation_doctor_view({Key key, this.oxygenlist}): super(key: key);
+  final String userUID;
+  o2_saturation_doctor_view({Key key, this.oxygenlist, this.userUID}): super(key: key);
   @override
   _o2_saturationDoctorState createState() => _o2_saturationDoctorState();
 }
@@ -296,9 +297,10 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
         .toList();
   }
   void getOxygenSaturation() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readOS = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readOS = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/');
     readOS.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

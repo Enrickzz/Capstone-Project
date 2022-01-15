@@ -23,7 +23,8 @@ import '../../medicine_intake/add_medication.dart';
 
 class respiratory_rate_view_as_doctor extends StatefulWidget {
   final List<Respiratory_Rate> rList;
-  respiratory_rate_view_as_doctor({Key key, this.rList});
+  final String userUID;
+  respiratory_rate_view_as_doctor({Key key, this.rList, this.userUID});
   @override
   _respiratory_rate_doctor_viewState createState() => _respiratory_rate_doctor_viewState();
 }
@@ -188,9 +189,10 @@ class _respiratory_rate_doctor_viewState extends State<respiratory_rate_view_as_
     return "$hours:$min";
   }
   List<Respiratory_Rate> getRespirations() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/respiratoryRate_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readsymptom = databaseReference.child('users/' + userUID + '/vitals/health_records/respiratoryRate_list/');
     List<Respiratory_Rate> rlist = [];
     rlist.clear();
     readsymptom.once().then((DataSnapshot snapshot){

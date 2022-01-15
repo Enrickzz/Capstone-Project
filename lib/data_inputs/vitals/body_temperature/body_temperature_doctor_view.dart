@@ -25,7 +25,8 @@ import 'edit_body_temperature.dart';
 
 class body_temperature_doctor_view extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  body_temperature_doctor_view({Key key, this.btlist}): super(key: key);
+  final String userUID;
+  body_temperature_doctor_view({Key key, this.btlist, this.userUID}): super(key: key);
   @override
   _body_temperatureDoctorState createState() => _body_temperatureDoctorState();
 }
@@ -158,9 +159,10 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
     return "$hours:$min";
   }
   void getBodyTemp() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readBT = databaseReference.child('users/' + userUID + '/vitals/health_records/body_temperature_list/');
     readBT.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
