@@ -69,7 +69,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_patient_vi
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text('My Exercise Planner', style: TextStyle(
+          title: const Text('My Exercise and Activity Planner', style: TextStyle(
               color: Colors.black
           )),
           centerTitle: true,

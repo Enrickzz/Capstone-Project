@@ -732,19 +732,16 @@ class FoodPlan {
 class ExPlan {
   String purpose;
   String type;
-  String intensity;
-  int frequency;
   String important_notes;
   String prescribedBy;
   DateTime dateCreated;
 
-  ExPlan({this.purpose, this.type, this.intensity, this.frequency, this.important_notes, this.prescribedBy, this.dateCreated});
+  ExPlan({this.purpose, this.type,  this.important_notes, this.prescribedBy, this.dateCreated});
 
   ExPlan.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
     type = json["type"];
-    frequency = int.parse(json['frequency']);
-    intensity = json['intensity'];
+
     important_notes = json['important_notes'];
     prescribedBy = json['prescribedBy'];
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
@@ -753,8 +750,6 @@ class ExPlan {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['purpose'] = this.purpose;
     data['type'] = this.type;
-    data['frequency'] = this.frequency;
-    data['intensity'] = this.intensity;
     data['important_notes'] = this.important_notes;
     data['prescribedBy'] = this.prescribedBy;
     data['dateCreated'] = this.dateCreated;
