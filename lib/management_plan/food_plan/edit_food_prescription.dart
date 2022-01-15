@@ -145,6 +145,8 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                   SizedBox(height: 8),
                   TextFormField(
                     showCursor: true,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -159,7 +161,7 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Food",
+                      hintText: "Diet Plan",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Food' : null,
                     onChanged: (val){
@@ -167,65 +169,7 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                     },
                   ),
 
-                  SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Quantity of food (grams)",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Quantity of food' : null,
-                    onChanged: (val){
-                      setState(() => quantity_food = val);
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Eat for:",
-                    ),
-                    isExpanded: true,
-                    value: valueChooseFoodTime,
-                    onChanged: (newValue){
-                      setState(() {
-                        valueChooseFoodTime = newValue;
-                      });
 
-                    },
-                    items: listFoodTime.map((valueItem){
-                      return DropdownMenuItem(
-                        value: valueItem,
-                        child: Text(valueItem),
-                      );
-                    },
-                    ).toList(),
-                  ),
 
                   SizedBox(height: 8.0),
 
@@ -299,7 +243,7 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + foodplan_list.length.toString());
-                              foodplan_list.add(new FoodPlan(purpose: purpose, food: food,quantity_food: double.parse(quantity_food), consumption_time: consumption_time, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
+                              foodplan_list.add(new FoodPlan(purpose: purpose, food: food, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
                               for(var i=0;i<foodplan_list.length/2;i++){
                                 var temp = foodplan_list[i];
                                 foodplan_list[i] = foodplan_list[foodplan_list.length-1-i];

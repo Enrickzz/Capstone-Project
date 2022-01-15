@@ -258,7 +258,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                Text("Eat more of",
+                                                Text("Diet Instructions",
                                                   style: TextStyle(
                                                     fontSize:14,
                                                     color:Color(0xFF363f93),
@@ -273,20 +273,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
-                                            SizedBox(height: 16),
-                                            Text("Eat during",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(consumption_time,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
+
                                             SizedBox(height: 16),
                                             Text("Important Notes/Assessments",
                                               style: TextStyle(
@@ -421,7 +408,6 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
       }
       purpose = templist[index].purpose;
       food = templist[index].food;
-      consumption_time = templist[index].consumption_time ;
       important_notes = templist[index].important_notes ;
       dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     });
