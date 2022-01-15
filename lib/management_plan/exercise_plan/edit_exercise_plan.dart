@@ -141,6 +141,8 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                   SizedBox(height: 8),
                   TextFormField(
                     showCursor: true,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -155,7 +157,7 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Type of workout",
+                      hintText: "Exercise/Activity Plan",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Type of Workout' : null,
                     onChanged: (val){
@@ -163,109 +165,8 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                     },
                   ),
 
-                  SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Intensity of workout",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Intensity of workout' : null,
-                    onChanged: (val){
-                      setState(() => intensity = val);
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  SizedBox(height: 16.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget> [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          "Perform how many times a day?",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
-                        ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Radio(
-                                value: 1,
-                                groupValue: frequency,
-                                onChanged: (value){
-                                  setState(() {
-                                    this.frequency = value;
-                                  });
-                                },
-                              ),
-                              Text("1"),
-                            ],
-                          ),
-                          SizedBox(width: 16),
-                          Row(
-                            children: [
-                              Radio(
-                                value: 2,
-                                groupValue: frequency,
-                                onChanged: (value){
-                                  setState(() {
-                                    this.frequency = value;
-                                  });
-                                },
-                              ),
-                              Text("2"),
-                            ],
-                          ),
-                          SizedBox(width: 16),
-                          Row(
-                            children: [
-                              Radio(
-                                value: 3,
-                                groupValue: frequency,
-                                onChanged: (value){
-                                  setState(() {
-                                    this.frequency = value;
-                                  });
-                                },
-                              ),
-                              Text("3"),
-                            ],
-                          ),
-                          SizedBox(width: 16),
-                          Row(
-                            children: [
-                              Radio(
-                                value: 4,
-                                groupValue: frequency,
-                                onChanged: (value){
-                                  setState(() {
-                                    this.frequency = value;
-                                  });
-                                },
-                              ),
-                              Text("4"),
-                            ],
-                          ),
-                          SizedBox(width: 3)
-                        ],
-                      )
-                    ],
-                  ),
+
+
 
                   SizedBox(height: 8.0),
 
@@ -338,7 +239,7 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + exercise_list.length.toString());
-                              exercise_list.add(new ExPlan(purpose: purpose, type: type,frequency: frequency, intensity: intensity, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
+                              exercise_list.add(new ExPlan(purpose: purpose, type: type,  important_notes: important_notes, prescribedBy: uid, dateCreated: now));
                               for(var i=0;i<exercise_list.length/2;i++){
                                 var temp = exercise_list[i];
                                 exercise_list[i] = exercise_list[exercise_list.length-1-i];

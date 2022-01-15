@@ -259,7 +259,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                Text("Type of exercise",
+                                                Text("Exercise/Activity Plan",
                                                   style: TextStyle(
                                                     fontSize:14,
                                                     color:Color(0xFF363f93),
@@ -274,38 +274,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Intensity of Exercise",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(intensity,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Frequency of Exercise",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(frequency + " Times a day",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
+
                                             SizedBox(height: 16),
                                             Text("Important Notes/Assessments",
                                               style: TextStyle(
@@ -441,8 +410,6 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
       }
       purpose = templist[index].purpose;
       type = templist[index].type;
-      frequency = templist[index].frequency.toString();
-      intensity = templist[index].intensity;
       important_notes = templist[index].important_notes ;
       dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     });
