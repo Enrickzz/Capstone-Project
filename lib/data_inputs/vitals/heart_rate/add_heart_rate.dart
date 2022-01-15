@@ -93,7 +93,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Number of Beats (15 seconds x 4)",
+                      hintText: "Number of Beats per minute?",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Number of Beats' : null,
                     onChanged: (val){
@@ -110,7 +110,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          "Did you just finish exercising?",
+                          "Did you just finish exercising or performing strenuous physical activities?",
                           textAlign: TextAlign.left,
                           style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
                         ),
@@ -242,7 +242,6 @@ class _add_heart_rateState extends State<add_heart_rate> {
                         ),
                         color: Colors.blue,
                         onPressed:() async {
-                         beats *= 4;
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;

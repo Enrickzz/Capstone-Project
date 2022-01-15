@@ -45,6 +45,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   var dateValue = TextEditingController();
   List<Notifications> notifsList = new List<Notifications>();
   List<Recommendation> recommList = new List<Recommendation>();
+  String isResting = 'false';
+
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +135,50 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                           },
                         ),
                       ),
+                    ],
+                  ),
+                  SizedBox(height: 16.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget> [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          "Did you just finish exercising or performing strenuous physical activities?",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
+                        ),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              Radio(
+                                value: "Yes",
+                                groupValue: isResting,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.isResting = value;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          Text("Yes"),
+                          SizedBox(width: 16),
+                          Radio(
+                            value: "No",
+                            groupValue: isResting,
+                            onChanged: (value){
+                              setState(() {
+                                this.isResting = value;
+                              });
+                            },
+                          ),
+                          Text("No"),
+                          SizedBox(width: 16)
+                        ],
+                      )
                     ],
                   ),
                   SizedBox(height: 8.0),

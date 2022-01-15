@@ -359,7 +359,8 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
 
       DataColumn(label: Text('Time')),
       DataColumn(label: Text('Blood Pressure')),
-      DataColumn(label: Text('Implication'))
+      DataColumn(label: Text('Implication')),
+      DataColumn(label: Text('Status'))
 
     ];
 
@@ -393,7 +394,9 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
           DataCell(Text(getDateFormatted(bp.bp_date.toString()))),
           DataCell(Text(getTimeFormatted(bp.bp_time.toString()))),
           DataCell(Text(bp.systolic_pressure +'/'+ bp.diastolic_pressure, style: TextStyle(),)),
+          DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),)),
           DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),))
+
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
