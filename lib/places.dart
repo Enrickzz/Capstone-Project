@@ -686,7 +686,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       thisrating = thisrating/counter;
     }
     if(counter == 0){
-      textRate = "No reviews Yet";
+      textRate = "No reviews yet";
       checker = false;
     }else{
       textRate = '(' +thisrating.toString() +')';

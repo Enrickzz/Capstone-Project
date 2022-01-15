@@ -238,9 +238,8 @@ class _AppSignInState extends State<AppSignIn> {
         child: Column(
           children: [
             Container(
-              width: 120,
-              height: 120,
-              margin: EdgeInsets.only(top: 80.0),
+
+              margin: EdgeInsets.only(top: 55.0),
               alignment: Alignment.center,
               child: GestureDetector(
 
@@ -250,14 +249,14 @@ class _AppSignInState extends State<AppSignIn> {
                       MaterialPageRoute(builder: (context) => suppsystem_view_patient_profile()),
                     );
                   },
-                  child: Image.asset("assets/images/heart_icon.png")),
+                  child: Image.asset("assets/images/heartistant_logo.png", width: 280, height: 180,)),
 
             ),
-            SizedBox(height: 40.0),
+            SizedBox(height: 30.0),
             Container(
 
               alignment: Alignment.topLeft,
-              child:  Text( "Welcome,", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              child:  Text( "Welcome,", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
@@ -351,16 +350,6 @@ class _AppSignInState extends State<AppSignIn> {
                               ),
                             ),
                             SizedBox(height: 8.0),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10,0,10,20),
-                              alignment: Alignment.topRight,
-                              child: GestureDetector(
-                                onTap: () {
-                                },
-                                child: Text( "Forgot your password?",
-                                ),
-                              ),
-                            ),
                             SizedBox(height: 10.0),
                             Text(
                               error,

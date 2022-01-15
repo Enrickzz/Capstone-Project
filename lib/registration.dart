@@ -106,7 +106,7 @@ class _AppSignUpState extends State<registration> {
             Container(
 
               alignment: Alignment.topLeft,
-              child:  Text( "Create Account,", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              child:  Text( "Create Account,", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
