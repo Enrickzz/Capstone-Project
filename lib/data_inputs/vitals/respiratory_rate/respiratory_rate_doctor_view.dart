@@ -285,7 +285,32 @@ class _respiratory_rate_doctor_viewState extends State<respiratory_rate_view_as_
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                // final User user = auth.currentUser;
+                // final uid = user.uid;
+                String userUID = widget.userUID;
+                int initial_length = respiratory_list.length;
+                List<int> delete_list = [];
+                for(int i = 0; i < respiratory_list.length; i++){
+                  if(_selected[i]){
+                    delete_list.add(i);
+                  }
+                }
+                delete_list.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < delete_list.length; i++){
+                  respiratory_list.removeAt(delete_list[i]);
+                }
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/respiratoryRate_list/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < respiratory_list.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/respiratoryRate_list/' + (i+1).toString());
+                  bpRef.set({
+                    "bpm": respiratory_list[i].bpm.toString(),
+                    "bpm_date": "${respiratory_list[i].bpm_date.month.toString().padLeft(2,"0")}/${respiratory_list[i].bpm_date.day.toString().padLeft(2,"0")}/${respiratory_list[i].bpm_date.year}",
+                    "bpm_time": "${respiratory_list[i].bpm_time.hour.toString().padLeft(2,"0")}:${respiratory_list[i].bpm_time.minute.toString().padLeft(2,"0")}",
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

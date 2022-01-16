@@ -266,7 +266,34 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                // final User user = auth.currentUser;
+                // final uid = user.uid;
+                String userUID = widget.userUID;
+                int initial_length = bttemp.length;
+                List<int> delete_list = [];
+                for(int i = 0; i < bttemp.length; i++){
+                  if(_selected[i]){
+                    delete_list.add(i);
+                  }
+                }
+                delete_list.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < delete_list.length; i++){
+                  bttemp.removeAt(delete_list[i]);
+                }
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/body_temperature_list/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < bttemp.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/body_temperature_list/' + (i+1).toString());
+                  bpRef.set({
+                    "unit": bttemp[i].unit.toString(),
+                    "temperature": bttemp[i].temperature.toString(),
+                    "bt_date": "${bttemp[i].bt_date.month.toString().padLeft(2,"0")}/${bttemp[i].bt_date.day.toString().padLeft(2,"0")}/${bttemp[i].bt_date.year}",
+                    "bt_time": "${bttemp[i].bt_time.hour.toString().padLeft(2,"0")}:${bttemp[i].bt_time.minute.toString().padLeft(2,"0")}",
+                    "indication": bttemp[i].indication.toString(),
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

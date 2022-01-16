@@ -299,9 +299,36 @@ class _blood_pressureState extends State<blood_pressure> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
-                Navigator.of(context).pop();
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                int initial_length = bptemp.length;
+                List<int> delete_list = [];
+                for(int i = 0; i < bptemp.length; i++){
+                  if(_selected[i]){
+                    delete_list.add(i);
+                  }
+                }
+                delete_list.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < delete_list.length; i++){
+                  bptemp.removeAt(delete_list[i]);
+                }
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < bptemp.length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + (i+1).toString());
+                  bpRef.set({
+                    "systolic_pressure": bptemp[i].systolic_pressure.toString(),
+                    "diastolic_pressure": bptemp[i].diastolic_pressure.toString(),
+                    "pressure_level": bptemp[i].pressure_level.toString(),
+                    "bp_date": "${bptemp[i].bp_date.month.toString().padLeft(2,"0")}/${bptemp[i].bp_date.day.toString().padLeft(2,"0")}/${bptemp[i].bp_date.year}",
+                    "bp_time": "${bptemp[i].bp_time.hour.toString().padLeft(2,"0")}:${bptemp[i].bp_time.minute.toString().padLeft(2,"0")}",
+                    "bp_status": bptemp[i].bp_status.toString()
+                  });
+                }
 
+                Navigator.of(context).pop();
               },
             ),
             TextButton(

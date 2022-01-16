@@ -327,7 +327,33 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                // final User user = auth.currentUser;
+                // final uid = user.uid;
+                String userUID = widget.userUID;
+                int initial_length = oxygentemp.length;
+                List<int> delete_list = [];
+                for(int i = 0; i < oxygentemp.length; i++){
+                  if(_selected[i]){
+                    delete_list.add(i);
+                  }
+                }
+                delete_list.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < delete_list.length; i++){
+                  oxygentemp.removeAt(delete_list[i]);
+                }
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < oxygentemp.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/' + (i+1).toString());
+                  bpRef.set({
+                    "oxygen_saturation": oxygentemp[i].oxygen_saturation.toString(),
+                    "oxygen_status": oxygentemp[i].oxygen_status.toString(),
+                    "os_date": "${oxygentemp[i].os_date.month.toString().padLeft(2,"0")}/${oxygentemp[i].os_date.day.toString().padLeft(2,"0")}/${oxygentemp[i].os_date.year}",
+                    "os_time": "${oxygentemp[i].os_time.hour.toString().padLeft(2,"0")}:${oxygentemp[i].os_time.minute.toString().padLeft(2,"0")}",
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

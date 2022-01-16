@@ -122,7 +122,7 @@ class _lab_resultsState extends State<lab_results> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: view_lab_result(lr: labResult_list[index]),
+                      child: view_lab_result(lr: labResult_list[index], index: index),
                     ),
                     ),
                   );

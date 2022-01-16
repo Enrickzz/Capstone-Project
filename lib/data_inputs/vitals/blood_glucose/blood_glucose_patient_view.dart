@@ -243,7 +243,33 @@ class _blood_glucoseState extends State<blood_glucose> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                int initial_length = bgtemp.length;
+                List<int> delete_list = [];
+                for(int i = 0; i < bgtemp.length; i++){
+                  if(_selected[i]){
+                    delete_list.add(i);
+                  }
+                }
+                delete_list.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < delete_list.length; i++){
+                  bgtemp.removeAt(delete_list[i]);
+                }
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < bgtemp.length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + (i+1).toString());
+                  bpRef.set({
+                    "glucose": bgtemp[i].glucose.toString(),
+                    "lastMeal": bgtemp[i].lastMeal.toString(),
+                    "glucose_status": bgtemp[i].bloodGlucose_status.toString(),
+                    "bloodGlucose_date": "${bgtemp[i].bloodGlucose_date.month.toString().padLeft(2,"0")}/${bgtemp[i].bloodGlucose_date.day.toString().padLeft(2,"0")}/${bgtemp[i].bloodGlucose_date.year}",
+                    "bloodGlucose_time": "${bgtemp[i].bloodGlucose_time.hour.toString().padLeft(2,"0")}:${bgtemp[i].bloodGlucose_time.minute.toString().padLeft(2,"0")}"
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

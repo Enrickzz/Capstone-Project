@@ -318,9 +318,37 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                int initial_length = listtemp.length;
+                listtemp.removeAt(widget.index);
+                // List<int> delete_list = [];
+                // for(int i = 0; i < listtemp.length; i++){
+                //   if(_selected[i]){
+                //     delete_list.add(i);
+                //   }
+                // }
+                // delete_list.sort((a,b) => b.compareTo(a));
+                // for(int i = 0; i < delete_list.length; i++){
+                //   listtemp.removeAt(delete_list[i]);
+                // }
+                /// delete fields
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + i.toString());
+                  bpRef.remove();
+                }
+                /// write fields
+                for(int i = 0; i < listtemp.length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + (i+1).toString());
+                  bpRef.set({
+                    "supplement_name": listtemp[i].supplement_name.toString(),
+                    "intake_time": listtemp[i].intake_time.toString(),
+                    "supp_dosage": listtemp[i].dosage.toString(),
+                    "medical_prescription_unit": listtemp[i].prescription_unit.toString(),
+                    "dateCreated": "${listtemp[i].dateCreated.month.toString().padLeft(2,"0")}/${listtemp[i].dateCreated.day.toString().padLeft(2,"0")}/${listtemp[i].dateCreated.year}",
+                  });
+                }
                 Navigator.of(context).pop();
-
               },
             ),
             TextButton(

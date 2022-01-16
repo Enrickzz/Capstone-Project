@@ -342,7 +342,33 @@ class _heart_rate_doctorState extends State<heart_rate_doctor_view> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                // final User user = auth.currentUser;
+                // final uid = user.uid;
+                String userUID = widget.userUID;
+                int initial_length = hrtemp.length;
+                List<int> delete_list = [];
+                for(int i = 0; i < hrtemp.length; i++){
+                  if(_selected[i]){
+                    delete_list.add(i);
+                  }
+                }
+                delete_list.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < delete_list.length; i++){
+                  hrtemp.removeAt(delete_list[i]);
+                }
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < hrtemp.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/' + (i+1).toString());
+                  bpRef.set({
+                    "HR_bpm": hrtemp[i].bpm.toString(),
+                    "hr_status": hrtemp[i].hr_status.toString(),
+                    "hr_date": "${hrtemp[i].hr_date.month.toString().padLeft(2,"0")}/${hrtemp[i].hr_date.day.toString().padLeft(2,"0")}/${hrtemp[i].hr_date.year}",
+                    "hr_time": "${hrtemp[i].hr_time.hour.toString().padLeft(2,"0")}:${hrtemp[i].hr_time.minute.toString().padLeft(2,"0")}"
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

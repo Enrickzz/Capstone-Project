@@ -327,7 +327,37 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                int initial_length = listtemp.length;
+                listtemp.removeAt(widget.index);
+                // List<int> delete_list = [];
+                // for(int i = 0; i < listtemp.length; i++){
+                //   if(_selected[i]){
+                //     delete_list.add(i);
+                //   }
+                // }
+                // delete_list.sort((a,b) => b.compareTo(a));
+                // for(int i = 0; i < delete_list.length; i++){
+                //   listtemp.removeAt(delete_list[i]);
+                // }
+                /// delete fields
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + i.toString());
+                  bpRef.remove();
+                }
+                /// write fields
+                for(int i = 0; i < listtemp.length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + (i+1).toString());
+                  bpRef.set({
+                    "medicine_name": listtemp[i].medicine_name.toString(),
+                    "medicine_type": listtemp[i].medicine_type.toString(),
+                    "medicine_unit": listtemp[i].medicine_unit.toString(),
+                    "medicine_dosage": listtemp[i].medicine_dosage.toString(),
+                    "medicine_date": "${listtemp[i].medicine_date.month.toString().padLeft(2,"0")}/${listtemp[i].medicine_date.day.toString().padLeft(2,"0")}/${listtemp[i].medicine_date.year}",
+                    "medicine_time": "${listtemp[i].medicine_time.hour.toString().padLeft(2,"0")}:${listtemp[i].medicine_time.minute.toString().padLeft(2,"0")}",
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

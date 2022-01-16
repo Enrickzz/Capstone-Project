@@ -51,6 +51,7 @@ class _AppSignUpState extends State<vitals> {
   List<Oxygen_Saturation> o2List = new List<Oxygen_Saturation>();
   List<Blood_Cholesterol> bclist = new List<Blood_Cholesterol>();
   List<Blood_Glucose> bglist = new List<Blood_Glucose>();
+  List<Respiratory_Rate> rlist = new List<Respiratory_Rate>();
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +359,7 @@ class _AppSignUpState extends State<vitals> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => respiratory_rate()),
+                        MaterialPageRoute(builder: (context) => respiratory_rate(rList: rlist)),
                       );
                     },
                     child: Container(

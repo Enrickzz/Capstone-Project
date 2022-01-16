@@ -440,7 +440,40 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                int initial_length = listtemp.length;
+                listtemp.removeAt(widget.index);
+                // List<int> delete_list = [];
+                // for(int i = 0; i < listtemp.length; i++){
+                //   if(_selected[i]){
+                //     delete_list.add(i);
+                //   }
+                // }
+                // delete_list.sort((a,b) => b.compareTo(a));
+                // for(int i = 0; i < delete_list.length; i++){
+                //   listtemp.removeAt(delete_list[i]);
+                // }
+                /// delete fields
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + i.toString());
+                  bpRef.remove();
+                }
+                /// write fields
+                for(int i = 0; i < listtemp.length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + (i+1).toString());
+                  bpRef.set({
+                    "symptom_name": listtemp[i].symptomName.toString(),
+                    "intensity_lvl": listtemp[i].intensityLvl.toString(),
+                    "symptom_felt": listtemp[i].symptomFelt.toString(),
+                    "symptom_date": "${listtemp[i].symptomDate.month.toString().padLeft(2,"0")}/${listtemp[i].symptomDate.day.toString().padLeft(2,"0")}/${listtemp[i].symptomDate.year}",
+                    "symptom_time": "${listtemp[i].symptomTime.hour.toString().padLeft(2,"0")}:${listtemp[i].symptomTime.minute.toString().padLeft(2,"0")}",
+                    "symptom_isActive": listtemp[i].symptomIsActive.toString(),
+                    "symptom_trigger": listtemp[i].symptomTrigger.toString(),
+                    "recurring": listtemp[i].recurring,
+                    "imgRef": listtemp[i].imgRef.toString(),
+                    });
+                }
                 Navigator.of(context).pop();
 
               },

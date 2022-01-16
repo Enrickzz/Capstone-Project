@@ -30,7 +30,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 class view_lab_result extends StatefulWidget {
   final Lab_Result lr;
   final String imgurl;
-  view_lab_result({Key key, this.lr, this.imgurl});
+  final int index;
+  view_lab_result({Key key, this.lr, this.imgurl, this.index});
   @override
   viewLabResult createState() => viewLabResult();
 }
@@ -386,7 +387,43 @@ class viewLabResult extends State<view_lab_result> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Lab result deleted');
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                int initial_length = labResult_list.length;
+                labResult_list.removeAt(widget.index);
+                // List<int> delete_list = [];
+                // for(int i = 0; i < listtemp.length; i++){
+                //   if(_selected[i]){
+                //     delete_list.add(i);
+                //   }
+                // }
+                // delete_list.sort((a,b) => b.compareTo(a));
+                // for(int i = 0; i < delete_list.length; i++){
+                //   listtemp.removeAt(delete_list[i]);
+                // }
+                /// delete fields
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + i.toString());
+                  bpRef.remove();
+                }
+                /// write fields
+                for(int i = 0; i < labResult_list.length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + (i+1).toString());
+                  bpRef.set({
+                    "labResult_name": labResult_list[i].labResult_name.toString(),
+                    "labResult_note": labResult_list[i].labResult_note.toString(),
+                    "labResult_date": "${labResult_list[i].labResult_date.month.toString().padLeft(2,"0")}/${labResult_list[i].labResult_date.day.toString().padLeft(2,"0")}/${labResult_list[i].labResult_date.year}",
+                    "labResult_time": "${labResult_list[i].labResult_time.hour.toString().padLeft(2,"0")}:${labResult_list[i].labResult_time.minute.toString().padLeft(2,"0")}",
+                    "international_normal_ratio": labResult_list[i].international_normal_ratio.toString(),
+                    "potassium": labResult_list[i].potassium.toString(),
+                    "hemoglobin_hb": labResult_list[i].hemoglobin_hb.toString(),
+                    "Bun_mgDl": labResult_list[i].Bun_mgDl.toString(),
+                    "creatinine_mgDl": labResult_list[i].creatinine_mgDl.toString(),
+                    "ldl": labResult_list[i].ldl.toString(),
+                    "hdl": labResult_list[i].hdl.toString(),
+                    "imgRef": labResult_list[i].imgRef.toString(),
+                  });
+                }
                 Navigator.of(context).pop();
 
               },
