@@ -6,6 +6,7 @@ import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
+import 'package:my_app/ui_view/Sleep_StackedBarChart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -97,7 +98,7 @@ class _my_sleepState extends State<my_sleep>
     );
 
     listViews.add(
-      calorie_intake(
+      Sleep_StackedBarChart(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

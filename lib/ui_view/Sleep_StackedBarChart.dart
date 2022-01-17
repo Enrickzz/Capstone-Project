@@ -79,7 +79,7 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
   void getFitbit() async {
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
         headers: {
-          'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyMjUyOTY1LCJpYXQiOjE2NDIyMjQxNjV9.SUkwU-LMmqdlZ9_TFqtomWbZC1ojYs2zum8ouCKkFKI",
+          'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNDI0NjI0LCJpYXQiOjE2NDIzOTU4MjR9.zEl3RVswkOTAcYLwgGoxCJNi1XBAdlmnZw1hfdVa5Pk",
         });
     List<Sleep> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
@@ -154,19 +154,19 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
     return [
       new charts.Series<OrdinalSales, String>(
         id: 'REM',
-        domainFn: (OrdinalSales sales, _) => sales.date,
+        domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: rem,
       ),
       new charts.Series<OrdinalSales, String>(
         id: 'DEEP',
-        domainFn: (OrdinalSales sales, _) => sales.date,
+        domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: deep,
       ),
       new charts.Series<OrdinalSales, String>(
         id: 'LIGHT',
-        domainFn: (OrdinalSales sales, _) => sales.date,
+        domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: light,
       ),

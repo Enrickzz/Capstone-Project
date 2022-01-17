@@ -364,7 +364,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
     final uid = user.uid;
     var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
         headers: {
-          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQyMjMwNzI4LCJleHAiOjE2NDIyMzQzMjgsIm5hbWUiOiJsb3Vpc2V4cngifQ.UQTc87klxqURIu4xdo-qt9M0RlEzYUyrz2-cp5l4Fm4",
+          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQyMzk1Nzc1LCJleHAiOjE2NDIzOTkzNzUsIm5hbWUiOiJsb3Vpc2V4cngifQ.MMzzA7xcEPGIEmAcCXaXWZInhBj6kd81d0cGfZwc4o0",
         });
     List<ExercisesTest> exers=[];
     exers = ExRxTest.fromJson(jsonDecode(response.body)).exercises;
