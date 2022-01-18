@@ -45,7 +45,7 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-
+  String access_code = "************************";
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
 
@@ -172,7 +172,6 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                                             SizedBox(height: 12),
 
                                             Text("My Access Code",
-
                                               style: TextStyle(
                                                 fontSize:14,
                                                 color:Color(0xFF363f93),
@@ -181,7 +180,7 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                                             SizedBox(height: 8),
                                             Visibility(
                                               visible: true,
-                                              child: Text(uid,
+                                              child: Text(access_code,
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     fontWeight: FontWeight.bold
@@ -193,7 +192,7 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                                                   setState(() {
                                                     isClipped = true;
                                                   });
-
+                                                  access_code = uid;
                                                   Clipboard.setData(new ClipboardData(text: uid)).then((_){
                                                     ScaffoldMessenger.of(context)
                                                         .showSnackBar(SnackBar(content: Text('Copied to your clipboard !')));
