@@ -405,11 +405,11 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
       if(snapshot.value == null){
         final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
         notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
-          "notif_time": bp_time.toString(), "notif_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
+          "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
       }else{
         final notifRef = databaseReference.child('users/' + uid + '/notifications/' + (notifsList.length--).toString());
         notifRef.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority,
-          "notif_time": bp_time.toString(), "notif_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
+          "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
 
       }
     });

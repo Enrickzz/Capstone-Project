@@ -68,8 +68,23 @@ class _AppSignUpState extends State<registration> {
     'Preventive Medicine Specialist','Psychiatrist','Pulmonologist','Radiologist',
     'Rheumatologist','Urologist'
   ];
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String date;
+  String hours,min;
 
-
+  @override
+  void initState(){
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -485,6 +500,9 @@ class _AppSignUpState extends State<registration> {
                                     final usersRef = databaseReference.child('users/' + uid + '/personal_info');
 
                                     if(valueChooseUserStatus == "Patient"){
+                                      addtoNotifs("Welcome to Heartistant your personal application for managing your CVD condition. Please feel free to explore the application on your way to a healthier lifestyle!",
+                                          "Welcome!",
+                                          "1");
                                       if(isFirstTime){
                                         Navigator.pushReplacement(
                                           context,
@@ -492,7 +510,10 @@ class _AppSignUpState extends State<registration> {
                                         );
                                         isFirstTime = true;
                                         password = sha256.convert(utf8.encode(password)).toString();
-                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+
+                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(),
+                                          "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+
                                       }
                                     }
                                     else if(valueChooseUserStatus == 'Family member / Caregiver'){
@@ -558,7 +579,19 @@ class _AppSignUpState extends State<registration> {
       ),
     );
   }
-
+  void addtoNotifs(String message, String title, String priority){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/notifications/');
+    String redirect= "";
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "welcome", "redirect": redirect});
+      }
+    });
+  }
   void _togglePassword() {
     setState(() {
       _isHidden = !_isHidden;
