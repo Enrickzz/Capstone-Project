@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
@@ -30,6 +31,7 @@ import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals_list_view.dart';
 import '../../ui_view/water_view.dart';
+import 'package:http/http.dart' as http;
 
 class my_sleep extends StatefulWidget {
   const my_sleep({Key key, this.animationController}) : super(key: key);
@@ -48,11 +50,15 @@ class _my_sleepState extends State<my_sleep>
   final AuthService _auth = AuthService();
 
   List<Widget> listViews = <Widget>[];
+  // List<Sleep> sleeptmp = [];
+  Sleep latestSleep = new Sleep();
+  DateTime now = DateTime.now();
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
 
   @override
   void initState() {
+    getLatestSleep();
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -299,5 +305,22 @@ class _my_sleepState extends State<my_sleep>
         )
       ],
     );
+  }
+  void getLatestSleep() async {
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
+        headers: {
+          'Authorization': "Bearer "+
+              "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNTM2ODc5LCJpYXQiOjE2NDI1MDgwNzl9.zsc8SbROKM-8QuzhF4jywn3M5nSkes3Tu5NJk9H_n4k",
+        });
+    List<Sleep> sleep=[];
+    sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+
+    print("Date of Sleep");
+    print(sleep[0].dateOfSleep);
+    if(sleep[0].dateOfSleep == "${now.year}-${now.month.toString().padLeft(2,"0")}-${now.day.toString().padLeft(2,"0")}"){
+      latestSleep = sleep[0];
+    }
+    // print(response.body);
+    // print("FITBIT ^ Length = " + sleep.length.toString());
   }
 }

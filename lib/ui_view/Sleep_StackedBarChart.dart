@@ -84,8 +84,9 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     sleeptmp = sleep;
     // print(response.body);
-    print("FITBIT ^ Length = " + sleep.length.toString());
+    // print("FITBIT ^ Length = " + sleep.length.toString());
   }
+
   List<charts.Series<OrdinalSales, String>> _createSampleData(List<Sleep> sleep) {
     List<OrdinalSales> rem=[];
     List<OrdinalSales> light=[];
@@ -101,7 +102,7 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
           rem[i].sales = rem[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
         }else if(sleep[i].levels.data[j].level  == "deep" || sleep[i].levels.data[j].level  == "asleep" ){
           deep[i].sales = deep[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
-        }else if(sleep[i].levels.data[j].level  == "light" || sleep[i].levels.data[j].level  == "awake" || sleep[i].levels.data[j].level  == "restless" ){
+        }else if(sleep[i].levels.data[j].level  == "light" || sleep[i].levels.data[j].level  == "restless" ){
           light[i].sales = light[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
         }else if(sleep[i].levels.data[j].level  == "wake" || sleep[i].levels.data[j].level  == "awake" ){
           wake[i].sales = wake[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());

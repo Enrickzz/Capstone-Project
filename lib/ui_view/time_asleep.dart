@@ -1,25 +1,73 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/goal_tab/sleep/change_sleep_goal.dart';
-import 'package:my_app/goal_tab/weight/change_weight_goal.dart';
+import 'package:my_app/models/Sleep.dart';
+import 'package:http/http.dart' as http;
+import 'package:my_app/models/users.dart';
 
-class time_asleep extends StatelessWidget {
+import 'Sleep_StackedBarChart.dart';
+import 'meals_list_view.dart';
+
+
+class time_asleep extends StatefulWidget {
+
   final AnimationController animationController;
   final Animation<double> animation;
-
   const time_asleep({Key key, this.animationController, this.animation})
       : super(key: key);
+  @override
+  State<time_asleep> createState() => _time_asleepState();
+}
+
+class _time_asleepState extends State<time_asleep> {
+  final DateTime now = DateTime.now();
+  Sleep latestSleep = new Sleep();
+  Sleep_Goal sleepGoal = new Sleep_Goal();
+  String time_asleep_hr = "";
+  String time_asleep_min = "";
+  String sleep_goal_hr = "";
+  String sleep_goal_min = "";
+  String to_go_hr = "";
+  String to_go_min = "";
+  DateTime timeAsleep;
+  DateTime sleepgoal;
+  List<Sleep> sleep_list = [];
+  List<OrdinalSales> rem=[];
+  List<OrdinalSales> light=[];
+  List<OrdinalSales> deep=[];
+  List<OrdinalSales> wake=[];
+
+
+  @override
+  void initState() {
+    super.initState();
+    getLatestSleep();
+    getSleepGoal();
+    Future.delayed(const Duration(milliseconds: 1500),(){
+      setState(() {
+        to_go_hr = sleepgoal.difference(timeAsleep).inHours.toString();
+        to_go_min = (sleepgoal.difference(timeAsleep).inMinutes % 60).toString();
+        print("Set State");
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -59,7 +107,7 @@ class time_asleep extends StatelessWidget {
                                     padding: const EdgeInsets.only(
                                         left: 4, bottom: 3),
                                     child: Text(
-                                      '7',
+                                      time_asleep_hr,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -89,7 +137,7 @@ class time_asleep extends StatelessWidget {
                                     padding: const EdgeInsets.only(
                                         left: 4, bottom: 3),
                                     child: Text(
-                                      '27',
+                                      time_asleep_min,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -128,7 +176,7 @@ class time_asleep extends StatelessWidget {
                                     child: Row(
                                       children: [
                                         Text(
-                                          '0',
+                                          to_go_hr,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: FitnessAppTheme.fontName,
@@ -150,7 +198,7 @@ class time_asleep extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          ' 33',
+                                          ' '+ to_go_min,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: FitnessAppTheme.fontName,
@@ -246,7 +294,7 @@ class time_asleep extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            '8 hr 00 min',
+                                            sleep_goal_hr + ' hr ' + sleep_goal_min + ' min',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily: FitnessAppTheme.fontName,
@@ -325,4 +373,107 @@ class time_asleep extends StatelessWidget {
       },
     );
   }
+
+  void getLatestSleep() async {
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
+        headers: {
+          'Authorization': "Bearer "+
+              "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNTM2ODc5LCJpYXQiOjE2NDI1MDgwNzl9.zsc8SbROKM-8QuzhF4jywn3M5nSkes3Tu5NJk9H_n4k",
+        });
+    List<Sleep> sleep=[];
+    sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+    if(sleep[0].dateOfSleep == "${now.year}-${now.month.toString().padLeft(2,"0")}-${now.day.toString().padLeft(2,"0")}"){
+      latestSleep = sleep[0];
+      Duration duration = new Duration(milliseconds: latestSleep.duration);
+      getTimeAsleep(duration);
+      time_asleep_hr = duration.inHours.toString();
+    }
+    // print(response.body);
+    // print("FITBIT ^ Length = " + sleep.length.toString());
+  }
+
+  void getTimeAsleep(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    time_asleep_hr = "${twoDigits(duration.inHours)}";
+    time_asleep_min = "$twoDigitMinutes";
+    timeAsleep = new DateTime(now.year,now.month,now.day,int.parse(time_asleep_hr), int.parse(time_asleep_min));
+    // timeAsleep.hour = time_asleep_hr;
+    // timeAsleep.minute = time_asleep_min;
+    // return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  void getSleepGoal() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readWaterIntake = databaseReference.child('users/' + uid + '/goal/sleep_goal/');
+    readWaterIntake.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      sleepGoal = Sleep_Goal.fromJson(temp);
+      print("SLEEP GOAL");
+      print(sleepGoal.duration);
+      Duration duration = new Duration(minutes: sleepGoal.duration);
+      print(duration.toString());
+      getSleepGoalDuration(duration);
+    });
+  }
+  void getSleepGoalDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    sleep_goal_hr = "${twoDigits(duration.inHours)}";
+    sleep_goal_min = "$twoDigitMinutes";
+    sleepgoal = new DateTime(now.year,now.month,now.day,int.parse(sleep_goal_hr), int.parse(sleep_goal_min));
+    // return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+  void getSleep() async {
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
+        headers: {
+          'Authorization': "Bearer "+
+              "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNTM2ODc5LCJpYXQiOjE2NDI1MDgwNzl9.zsc8SbROKM-8QuzhF4jywn3M5nSkes3Tu5NJk9H_n4k",
+        });
+    List<Sleep> sleep=[];
+    sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+    sleep_list = sleep;
+
+    String a;
+    for(var i = 0 ; i < sleep_list.length ; i ++){
+      rem.add(new OrdinalSales("", 0));
+      deep.add(new OrdinalSales("", 0));
+      light.add(new OrdinalSales("", 0));
+      wake.add(new OrdinalSales("", 0));
+      print("i is ");
+      print(i);
+      for(var j = 0 ; j < sleep[i].levels.data.length; j++){
+        a = sleep[i].levels.data[j].dateTime;
+        a = a.substring(0, a.indexOf("T"));
+        print("j is ");
+        print(j);
+        print("date");
+        print(a);
+        print("DATA");
+        print(sleep[i].levels.data[j].seconds);
+        print("LEVEL");
+        print(sleep[i].levels.data[j].level);
+        rem[i].date = a;
+        deep[i].date = a;
+        light[i].date = a;
+        wake[i].date = a;
+        if(sleep[i].levels.data[j].level == "rem" || sleep[i].levels.data[j].level == "restless"){
+          rem[i].sales += sleep[i].levels.data[j].seconds;
+        }
+        if(sleep[i].levels.data[j].level  == "deep" || sleep[i].levels.data[j].level  == "asleep"){
+          deep[i].sales += sleep[i].levels.data[j].seconds;
+        }
+        if(sleep[i].levels.data[j].level  == "light" || sleep[i].levels.data[j].level  == "restless"){
+          light[i].sales += sleep[i].levels.data[j].seconds;
+        }
+        if(sleep[i].levels.data[j].level  == "wake" || sleep[i].levels.data[j].level  == "awake"){
+          wake[i].sales += sleep[i].levels.data[j].seconds;
+        }
+      }
+    }
+  }
+
 }

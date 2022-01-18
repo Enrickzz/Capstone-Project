@@ -461,6 +461,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                     "1",
                     "Food Plan",
                     widget.userUID);
+
                 print('Deleted');
                 Navigator.of(context).pop();
 

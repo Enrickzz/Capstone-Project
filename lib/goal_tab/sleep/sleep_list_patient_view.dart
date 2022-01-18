@@ -14,10 +14,14 @@ import 'package:my_app/database.dart';
 import 'package:my_app/goal_tab/water/add_water_intake.dart';
 import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
+import 'package:my_app/ui_view/Sleep_StackedBarChart.dart';
 import '../../../fitness_app_theme.dart';
+import 'package:http/http.dart' as http;
+
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -34,10 +38,16 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isDateSelected= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Body_Temperature> bttemp = [];
+  // List<Body_Temperature> sleep_list = [];
   List<File> _image = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
+  List<Sleep> sleep_list = [];
+  List<OrdinalSales> rem=[];
+  List<OrdinalSales> light=[];
+  List<OrdinalSales> deep=[];
+  List<OrdinalSales> wake=[];
+
 
 
   int _currentSortColumn = 0;
@@ -53,13 +63,13 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
     // bttemp.clear();
     // _selected.clear();
     // getBodyTemp();
-    // Future.delayed(const Duration(milliseconds: 1500), (){
-    //   setState(() {
-    //     _selected = List<bool>.generate(bttemp.length, (int index) => false);
-    //
-    //     print("setstate");
-    //   });
-    // });
+    getSleep();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        _selected = List<bool>.generate(sleep_list.length, (int index) => false);
+        print("setstate");
+      });
+    });
   }
 
   @override
@@ -145,34 +155,34 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
   //   });
   // }
 
-  int getAge (DateTime birthday) {
-    DateTime today = new DateTime.now();
-    String days1 = "";
-    String month1 = "";
-    String year1 = "";
-    int d = int.parse(DateFormat("dd").format(birthday));
-    int m = int.parse(DateFormat("MM").format(birthday));
-    int y = int.parse(DateFormat("yyyy").format(birthday));
-    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
-    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
-    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
-    int age = 0;
-    age = y1 - y;
-    print(age);
-
-    // dec < jan
-    if(m1 < m){
-      print("month --");
-      age--;
-    }
-    else if (m1 == m){
-      if(d1 < d){
-        print("day --");
-        age--;
-      }
-    }
-    return age;
-  }
+  // int getAge (DateTime birthday) {
+  //   DateTime today = new DateTime.now();
+  //   String days1 = "";
+  //   String month1 = "";
+  //   String year1 = "";
+  //   int d = int.parse(DateFormat("dd").format(birthday));
+  //   int m = int.parse(DateFormat("MM").format(birthday));
+  //   int y = int.parse(DateFormat("yyyy").format(birthday));
+  //   int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
+  //   int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
+  //   int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
+  //   int age = 0;
+  //   age = y1 - y;
+  //   print(age);
+  //
+  //   // dec < jan
+  //   if(m1 < m){
+  //     print("month --");
+  //     age--;
+  //   }
+  //   else if (m1 == m){
+  //     if(d1 < d){
+  //       print("day --");
+  //       age--;
+  //     }
+  //   }
+  //   return age;
+  // }
 
   Color getMyColor(String indication) {
     if(indication == 'normal'){
@@ -214,9 +224,9 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              bttemp.sort((a, b) => b.bt_date.compareTo(a.bt_date));
+              sleep_list.sort((a, b) => b.dateOfSleep.compareTo(a.dateOfSleep));
             } else {
-              bttemp.sort((a, b) => a.bt_date.compareTo(b.bt_date));
+              sleep_list.sort((a, b) => a.dateOfSleep.compareTo(b.dateOfSleep));
             }
             _isSortAsc = !_isSortAsc;
           });
@@ -238,15 +248,15 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
   }
 
   List<DataRow> _createRows() {
-    return bttemp
+    return sleep_list
         .mapIndexed((index, bp) => DataRow(
         cells: [
-          DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
+          DataCell(Text(getDateFormatted(bp.dateOfSleep.toString()))),
+          DataCell(Text(milisecondToTime(bp.duration).toString() + " hr")),
+          DataCell(Text(rem[index].sales.toString())),
+          DataCell(Text(light[index].sales.toString())),
+          DataCell(Text(deep[index].sales.toString())),
+          DataCell(Text(bp.efficiency.toString(), style: TextStyle(),)),
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
@@ -316,6 +326,7 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
             TextButton(
               child: Text('Got it'),
               onPressed: () {
+
                 Navigator.of(context).pop();
               },
             ),
@@ -323,5 +334,66 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
         );
       },
     );
+  }
+  void getSleep() async {
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
+        headers: {
+          'Authorization': "Bearer "+
+              "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNTM2ODc5LCJpYXQiOjE2NDI1MDgwNzl9.zsc8SbROKM-8QuzhF4jywn3M5nSkes3Tu5NJk9H_n4k",
+        });
+    List<Sleep> sleep=[];
+    sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+    sleep_list = sleep;
+
+    String a;
+    for(var i = 0 ; i < sleep_list.length ; i ++){
+      rem.add(new OrdinalSales("", 0));
+      deep.add(new OrdinalSales("", 0));
+      light.add(new OrdinalSales("", 0));
+      wake.add(new OrdinalSales("", 0));
+      print("i is ");
+      print(i);
+      for(var j = 0 ; j < sleep[i].levels.data.length; j++){
+        a = sleep[i].levels.data[j].dateTime;
+        a = a.substring(0, a.indexOf("T"));
+        print("j is ");
+        print(j);
+        print("date");
+        print(a);
+        print("DATA");
+        print(sleep[i].levels.data[j].seconds);
+        print("LEVEL");
+        print(sleep[i].levels.data[j].level);
+        rem[i].date = a;
+        deep[i].date = a;
+        light[i].date = a;
+        wake[i].date = a;
+        if(sleep[i].levels.data[j].level == "rem" || sleep[i].levels.data[j].level == "restless"){
+          rem[i].sales += sleep[i].levels.data[j].seconds;
+        }
+        if(sleep[i].levels.data[j].level  == "deep" || sleep[i].levels.data[j].level  == "asleep"){
+          deep[i].sales += sleep[i].levels.data[j].seconds;
+        }
+        if(sleep[i].levels.data[j].level  == "light" || sleep[i].levels.data[j].level  == "restless"){
+          light[i].sales += sleep[i].levels.data[j].seconds;
+        }
+        if(sleep[i].levels.data[j].level  == "wake" || sleep[i].levels.data[j].level  == "awake"){
+          wake[i].sales += sleep[i].levels.data[j].seconds;
+        }
+      }
+    }
+    print("LIGHT LENGTH");
+    print(light.length);
+    // print(wake.length);
+    print(deep.length);
+    print(rem.length);
+    print(sleep_list.length);
+    // print(response.body);
+    // print("FITBIT ^ Length = " + sleep.length.toString());
+  }
+  String milisecondToTime(int duration){
+    var hours = (duration / 3600000).floor();
+    var minutes = (duration / 60000).remainder(60).toStringAsFixed(0).padLeft(2,"0");
+      return "$hours:$minutes";
   }
 }

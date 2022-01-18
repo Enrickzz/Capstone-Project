@@ -906,9 +906,9 @@ class Sleep_Goal {
   });
 
   Sleep_Goal.fromJson(Map<String, dynamic> json) {
-    bed_time = json["bed_time"];
-    wakeup_time = json['wakeup_time'];
-    duration = json['duration'];
+    bed_time = DateFormat("hh:mm").parse(json["bed_time"]);
+    wakeup_time = DateFormat("hh:mm").parse(json['wakeup_time']);
+    duration = int.parse(json['duration']);
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
   }
 
