@@ -249,7 +249,6 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         notifsList.add(RecomAndNotif.fromJson(jsonString));
-        print(notifsList);
       });
     });
   }
@@ -265,7 +264,6 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
         final deleteread = databaseReference.child('users/' + uid + '/recommendations/');
         deleteread.remove();
         if(temp != null){
-          recommList.clear();
           int counter2 = 0;
           print("THIS ONE");
           print(datasnapshot);
@@ -283,7 +281,6 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
             });
             counter2++;
             print("Added Body exercise Successfully! " + uid);
-            recommList.add(a);
           });
         }
       });

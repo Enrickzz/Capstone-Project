@@ -428,7 +428,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
       }else{
         // count = recommList.length--;
         final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
-        notifRef.set({"id": notifsList.length.toString(), "message": message, "title":title, "priority": priority,
+        notifRef.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority,
           "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bprecommend", "redirect": redirect});
 
       }

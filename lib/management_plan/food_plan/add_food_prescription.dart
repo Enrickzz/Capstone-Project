@@ -334,12 +334,12 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
     ref.once().then((DataSnapshot snapshot) {
       if(snapshot.value == null){
         final ref = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
-        ref.set({"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+        ref.set({"id": 0.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
           "rec_date": date, "category": "recommend", "redirect": redirect});
       }else{
         // count = recommList.length--;
-        final ref = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
-        ref.set({"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + recommList.length.toString());
+        ref.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
           "rec_date": date, "category": "recommend", "redirect": redirect});
 
       }
