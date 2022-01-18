@@ -139,8 +139,16 @@ class _symptomsState extends State<symptoms> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient(thissymp: listtemp[index])),
-                      );
+                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient(thissymp: listtemp[index], index: index,)),
+                      ).then((value) => setState((){
+                        if(value != null){
+                          listtemp.clear();
+                          listtemp = value;
+                          setState(() {
+                            print("SYMP LENGTH =="  + listtemp.length.toString() );
+                          });
+                        }
+                      }));
                     }
 
                 ),
@@ -173,11 +181,9 @@ class _symptomsState extends State<symptoms> {
       print("pasok here");
       temp.forEach((jsonString) {
         if(!jsonString.toString().contains("recurring")){
-          symptoms.add(Symptom.fromJson2(jsonString));
           listtemp.add(Symptom.fromJson2(jsonString));
         }
         else{
-          symptoms.add(Symptom.fromJson(jsonString));
           listtemp.add(Symptom.fromJson(jsonString));
         }
 

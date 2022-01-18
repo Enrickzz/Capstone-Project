@@ -74,7 +74,8 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   @override
   void initState() {
     super.initState();
-
+    listtemp.clear();
+    getSymptoms();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -107,7 +108,10 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    _showMyDialogDelete();
+                    _showMyDialogDelete().then((value) => setState((){
+                      Navigator.pop(context,listtemp);
+                      print("NEW LENGTH"  + listtemp.toString());
+                    }));
                     // showModalBottomSheet(context: context,
                     //   isScrollControlled: true,
                     //   builder: (context) => SingleChildScrollView(child: Container(
@@ -499,34 +503,32 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
 //   )
 //
 // ],)
-  void getSymptom() {
+  List<Symptom> getSymptoms() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    // var userUID = widget.userUID;
-    int index = widget.index;
-    final readsupplement = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
-    readsupplement.once().then((DataSnapshot snapshot){
+    final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
+    List<Symptom> symptoms = [];
+    symptoms.clear();
+    readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      //print("this is temp : "+temp.toString());
+      print("pasok here");
       temp.forEach((jsonString) {
-        listtemp.add(Symptom.fromJson(jsonString));
-      });
-      // for(var i=0;i<listtemp.length/2;i++){
-      //   var temp = listtemp[i];
-      //   listtemp[i] = listtemp[listtemp.length-1-i];
-      //   listtemp[listtemp.length-1-i] = temp;
-      // }
-      symptom_name = listtemp[index].symptomName;
-      intensityLvl = listtemp[index].intensityLvl.toString();
-      symptom_felt = listtemp[index].symptomFelt;
-      symptom_trigger = listtemp[index].symptomTrigger;
-      symptom_date = "${listtemp[index].symptomDate.month.toString().padLeft(2,"0")}/${listtemp[index].symptomDate.day.toString().padLeft(2,"0")}/${listtemp[index].symptomDate.year}";
-      symptom_time = "${listtemp[index].symptomTime.hour.toString().padLeft(2,"0")}:${listtemp[index].symptomTime.minute.toString().padLeft(2,"0")}";
-      if(listtemp[index].recurring != null){
-        for(int i = 0; i < listtemp[index].recurring.length; i++){
-          recurring.add(listtemp[index].recurring[i]);
+        if(!jsonString.toString().contains("recurring")){
+          symptoms.add(Symptom.fromJson2(jsonString));
+          listtemp.add(Symptom.fromJson2(jsonString));
         }
-        recurring.removeAt(0);
-      }
+        else{
+          symptoms.add(Symptom.fromJson(jsonString));
+          listtemp.add(Symptom.fromJson(jsonString));
+        }
+
+        //print(symptoms[0].symptomName);
+        //print("symptoms length " + symptoms.length.toString());
+      });
     });
+    setState(() {
+    });
+    return symptoms;
   }
 }

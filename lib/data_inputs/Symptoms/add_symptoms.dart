@@ -641,6 +641,78 @@ class _addSymptomsState extends State<add_symptoms> {
                             symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
                             recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: fileName);
 
+                        if(valueChooseSymptom.toString() == "Dizziness"){
+                          addtoRecommendation("We recommend that you closely monitor your dizziness symptom and seek immediate medical attention if the symptom manifests frequently. For the meantime please drink a glass of water and remain seated for a while.",
+                              "Dizziness",
+                              "3", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Excess Phlegm"){
+                          addtoRecommendation("We recommend that you closely monitor your symptoms for the following days. If pinkish substance can be seen in your phlegm, please seek immediate medical attention. For the meantime please stay hydrated throughout the day and gargle with anti-bacterial oral medicines.",
+                              "Excess Phlem",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Fatigue"){
+                          addtoRecommendation("If the symptom has lasted for more than a week, please seek immediate medical attention as this could be a sign of the progression of your CVD condition. For the meantime remember to eat healthy foods and get 7-9 hours of sleep every night. Avoid conducting any strenuous activities as this could lead to the progression of this symptom.",
+                              "Fatigue",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Loss of Balance"){
+                          addtoRecommendation("We recommend that you monitor this symptom for the next couple of days and immediately seek medical attention if you feel unwell. This can be a sign of the progression of your CVD condition. For the meantime please drink a glass of water and remain seated for a while. Avoid going up elevated areas and ask for assistance when moving around.",
+                              "Loss of Balance",
+                              "2", uid);
+                        }
+
+                        if(valueChooseSymptom.toString() == "Loss of Appetite"){
+                          addtoRecommendation("This may be caused by certain side effects from medicines. If you continue to lose your appetite for the next 3 days, please seek immediate medical attention. For the meantime to compensate for the lack of food intake, please drink more fluids and hydrate yourself. Try to consume food even at small amounts. Click here for a list of recommended meals to compensate for your lack of food intake.",
+                              "Loss of Appetite",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Loss of Appetite"){
+                          addtoRecommendation("This may be caused by certain side effects from medicines. If you continue to lose your appetite for the next 3 days, please seek immediate medical attention. For the meantime to compensate for the lack of food intake, please drink more fluids and hydrate yourself. Try to consume food even at small amounts. Click here for a list of recommended meals to compensate for your lack of food intake.",
+                              "Loss of Appetite",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Muscle Cramps"){
+                          addtoRecommendation("We recommend that you closely monitor your symptom, if the pain is unbearable or if you feel unwell about it please seek immediate medical attention. For the meantime please hydrate yourself by drinking a glass of water and rest your body at a comfortable lying position.",
+                              "Muscle Cramps",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Numbness"){
+                          addtoRecommendation("We recommend you to closely monitor this symptom and seek immediate medical attention if you feel unwell about it.",
+                              "Numbness",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Nausea"){
+                          addtoRecommendation("This can be a sign of the progression of your CVD condition. Please seek immediate medical attention to address this symptom. For the meantime please drink a glass of water and remain seated for a while. We recommend that you monitor your blood pressure as long as the symptom persists and drink a glass of water every now and then.",
+                              "Nausea",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Palpitations"){
+                          addtoRecommendation("We recommend you to closely monitor this symptom and record all future events of palpitations. If you feel unwell please do not hesitate to seek immediate medical attention. For the meantime please relax yourself and perform deep breathing exercises as you listen to some soothing music.",
+                              "Palpitations",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Seizures" && intesity_lvl > 7){
+                          addtoRecommendation("We recommend that you record all instances of seizures in the future and if you feel unwell please do not hesitate to seek immediate medical attention. During a seizure please remember that it is best to stay in a left or right lying position and remove any obstacles around the patient.",
+                              "Seizures",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Swollen Limbs" || valueChooseSymptom.toString() == "Swollen Muscle" ){
+                          addtoRecommendation("We recommend that you closely monitor this symptom. This can be a sign of the progression of your heart condition and must be attended to by your doctor. For the meantime Rest and elevate the painful area. If you feel unwell or the pain becomes unbearable, please do not hesitate to seek immediate medical attention or advice.",
+                              "Swollen",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Vomiting"){
+                          addtoRecommendation("Frequent vomiting can be a sign of high blood pressure which should not be ignored. We strongly advise you to record your blood pressure and seek medical attention if vomiting persists. For the meantime please keep yourself hydrated and Ease yourself back into your regular diet with small amounts of bland foods. Click here to see recommended foods",
+                              "Vomiting",
+                              "2", uid);
+                        }
+                        if(valueChooseSymptom.toString() == "Wheezing"){
+                          addtoRecommendation("We recommend that you closely monitor this symptom for the next few days. If you feel unwell please do not hesitate to seek immediate medical attention. For the meantime, drinking small amounts of warm fluids can relax the airway and loosen up sticky mucus in your throat.",
+                              "Wheezing",
+                              "2", uid);
+                        }
+
                         if(valueChooseSymptom.toString() == "Chest Pain" && intesity_lvl > 7){
                           print("ADDING NOW");
                           final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
@@ -657,6 +729,9 @@ class _addSymptomsState extends State<add_symptoms> {
                                   "4", a.uid);
                             });
                           });
+                          addtoRecommendation("We have notified your doctors regarding your experiences of severe Chest Tightness. This can be a sign of a possible heart attack. Please seek immediate medical attention to address this symptom. If you have any prescriptions for Chest Pains please take them now. For the meantime you can sit, stay calm, and rest with the help of this soothing song.",
+                              "Chest Pain",
+                              "3", uid);
 
                         }
                         if(valueChooseSymptom.toString() == "Headaches" && intesity_lvl > 7){
@@ -675,6 +750,9 @@ class _addSymptomsState extends State<add_symptoms> {
                                 "2", a.uid,);
                             });
                           });
+                          addtoRecommendation("We have notified your doctors regarding your experiences of a severe headache. This can be a sign of the progression of your CVD condition. Please seek immediate medical attention to address this symptom. For the meantime you can sit, stay calm, and rest with the help of this soothing song.",
+                              "Headache",
+                              "2", uid);
                         }
                         if(valueChooseSymptom.toString() == "Pain" && intesity_lvl > 7){
                           print("ADDING NOW");
@@ -692,6 +770,9 @@ class _addSymptomsState extends State<add_symptoms> {
                                 "3", a.uid,);
                             });
                           });
+                          addtoRecommendation("We have notified your doctor and support system regarding the occurrence of severe pain. For the meantime Rest and elevate the painful area. Alternate between ice packs to reduce inflammation and heat to improve blood flow. Please seek immediate medical attention if the pain becomes unbearable and take pain relievers if necessary.",
+                            "Pain",
+                            "3", uid);
                         }
                         if(valueChooseSymptom.toString() == "Shortness of Breath" && intesity_lvl > 7){
                           print("ADDING NOW");
@@ -830,6 +911,35 @@ class _addSymptomsState extends State<add_symptoms> {
           "rec_date": date, "category": "notification", "redirect": redirect});
 
       }
+    });
+  }
+  void addtoRecommendation(String message, String title, String priority, String uid){
+    getRecomm(uid);
+    final ref = databaseReference.child('users/' + uid + '/recommendations/');
+    String redirect = "";
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        ref.set({"id": 0.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + recommList.length.toString());
+        ref.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+
+      }
+    });
+  }
+  void getRecomm(String uid) {
+    print("GET RECOM");
+    recommList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
     });
   }
   void getNotifs(String uid) {

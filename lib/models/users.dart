@@ -233,7 +233,10 @@ class Symptom {
     symptomFelt = json['symptom_felt'];
     symptomDate = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
     symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
-    symptomIsActive = json['symptom_isActive'];
+    String a = json['symptom_isActive'];
+    if(a == "true"){
+      symptomIsActive = true;
+    } else symptomIsActive = false;
     symptomTrigger = json['symptom_trigger'];
     if(json['recurring'] != null){
       recurring = json['recurring'].cast<String>();
@@ -247,7 +250,10 @@ class Symptom {
     symptomFelt = json['symptom_felt'];
     symptomDate = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
     symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
-    symptomIsActive = json['symptom_isActive'];
+    String a = json['symptom_isActive'];
+    if(a == "true"){
+      symptomIsActive = true;
+    } else symptomIsActive = false;
     symptomTrigger = json['symptom_trigger'];
     imgRef = json['imgRef'];
   }
