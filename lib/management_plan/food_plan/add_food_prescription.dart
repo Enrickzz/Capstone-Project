@@ -102,24 +102,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
   void initState(){
     getRecomm(widget.userUID);
     getNotifs(widget.userUID);
-    DateTime a = new DateTime.now();
-    date = "${a.month}/${a.day}/${a.year}";
-    print("THIS DATE");
-    TimeOfDay time = TimeOfDay.now();
-    hours = time.hour.toString().padLeft(2,'0');
-    min = time.minute.toString().padLeft(2,'0');
-    print("DATE = " + date);
-    print("TIME = " + "$hours:$min");
-
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
-    readProfile.once().then((DataSnapshot snapshot){
-      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((key, jsonString) {
-        doctor = Users.fromJson(temp);
-      });
-    });
+    initNotif();
     Future.delayed(const Duration(milliseconds: 1500),(){
       setState(() {
 
@@ -378,6 +361,26 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
       print(temp);
       temp.forEach((jsonString) {
         foodplan_list.add(FoodPlan.fromJson(jsonString));
+      });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        doctor = Users.fromJson(temp);
       });
     });
   }

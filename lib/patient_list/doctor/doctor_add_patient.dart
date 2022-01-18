@@ -88,25 +88,8 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 
   @override
   void initState() {
+    initNotif();
 
-    DateTime a = new DateTime.now();
-    date = "${a.month}/${a.day}/${a.year}";
-    print("THIS DATE");
-    TimeOfDay time = TimeOfDay.now();
-    hours = time.hour.toString().padLeft(2,'0');
-    min = time.minute.toString().padLeft(2,'0');
-    print("DATE = " + date);
-    print("TIME = " + "$hours:$min");
-
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
-    readProfile.once().then((DataSnapshot snapshot){
-      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((key, jsonString) {
-        doctor = Users.fromJson(temp);
-      });
-    });
     namestemp = widget.nameslist;
     diseasetemp = widget.diseaseList;
     uidtemp = widget.uidList;
@@ -733,5 +716,27 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       });
     });
   }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        doctor = Users.fromJson(temp);
+      });
+    });
+  }
 }
+
+
 

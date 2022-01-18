@@ -193,11 +193,13 @@ class _symptomsState extends State<symptoms> {
   Future <String> downloadUrls() async{
     final User user = auth.currentUser;
     final uid = user.uid;
-    String downloadurl;
+    String downloadurl="null";
     for(var i = 0 ; i < listtemp.length; i++){
       final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+listtemp[i].imgRef.toString());
-      downloadurl = await ref.getDownloadURL();
-      listtemp[i].imgRef = downloadurl;
+      if(listtemp[i].imgRef.toString() != "null"){
+        downloadurl = await ref.getDownloadURL();
+        listtemp[i].imgRef = downloadurl;
+      }
       print ("THIS IS THE URL = at index $i "+ downloadurl);
     }
     //String downloadurl = await ref.getDownloadURL();

@@ -11,7 +11,7 @@ class Users {
   String usertype;
   String specialty;
   bool isMe;
-  List<String> connections;
+  List<Connection> connections;
 
   Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections, this.isMe});
 

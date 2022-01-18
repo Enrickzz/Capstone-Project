@@ -517,6 +517,9 @@ class _AppSignUpState extends State<registration> {
                                       }
                                     }
                                     else if(valueChooseUserStatus == 'Family member / Caregiver'){
+                                      addtoNotifs("Welcome to Heartistant your personal application for managing your CVD condition. Please feel free to explore the application and add a patient under your care list",
+                                          "Welcome!",
+                                          "1");
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (context) => PatientListSupportSystemView()),
@@ -526,6 +529,9 @@ class _AppSignUpState extends State<registration> {
                                       await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
                                     }
                                     else{
+                                      addtoNotifs("Welcome to Heartistant your personal application for managing your CVD condition. Please feel free to explore the application and add a patient under your care list",
+                                          "Welcome!",
+                                          "1");
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (context) => PatientList()),
