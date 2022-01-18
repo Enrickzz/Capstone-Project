@@ -156,29 +156,29 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                         leading: Container(
                             height: 50,
                             width: 50,
-                            decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+recommList[index].priority+ '.png'), fit: BoxFit.contain))
+                            decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+recomm.priority+ '.png'), fit: BoxFit.contain))
                         ),
-                        title: Text(''+recommList[index].title, style: TextStyle(fontSize: 14.0)),
+                        title: Text(''+recomm.title, style: TextStyle(fontSize: 14.0)),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(''+recommList[index].message, style: TextStyle(fontSize: 12.0)),
+                            Text(''+recomm.message, style: TextStyle(fontSize: 12.0)),
                             SizedBox(height: 4),
-                            Text(''+getDateFormatted(recommList[index].rec_date.toString())+" "+getTimeFormatted(recommList[index].rec_time.toString()), style: TextStyle(fontSize: 11.0)),
+                            Text(''+recomm.rec_date.toString()+" "+recomm.rec_time.toString(), style: TextStyle(fontSize: 11.0)),
                           ],
                         ),
                         onTap: (){
 
                         },
                       ),
-                      key: Key(recomm.title),
+                      key: Key(recomm.id),
                       onDismissed: (direction){
-                        deleteOneRecom(index);
                         setState(() {
                           recommList.removeAt(index);
                         });
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text('Recommendaiton dismissed')));
+                        deleteOneRecom(index);
                       },
                     );
                   },
