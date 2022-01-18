@@ -400,13 +400,16 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
     final uid = user.uid;
     final notifref = databaseReference.child('users/' + uid + '/notifications/');
     getNotifs();
+    String redirect= "";
     notifref.once().then((DataSnapshot snapshot) {
       if(snapshot.value == null){
         final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-        notifRef.set({"message": message, "title":title, "priority": priority, "notif_time": bp_time.toString(), "notif_date": bp_date.toString(), "category": "bloodpressure"});
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "notif_time": bp_time.toString(), "notif_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
       }else{
         final notifRef = databaseReference.child('users/' + uid + '/notifications/' + (notifsList.length--).toString());
-        notifRef.set({"message": message, "title":title, "priority": priority, "notif_time": bp_time.toString(), "notif_date": bp_date.toString(), "category": "bloodpressure"});
+        notifRef.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority,
+          "notif_time": bp_time.toString(), "notif_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
 
       }
     });
@@ -416,14 +419,17 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
     final uid = user.uid;
     final notifref = databaseReference.child('users/' + uid + '/recommendations/');
     getRecomm();
+    String redirect= "";
     notifref.once().then((DataSnapshot snapshot) {
       if(snapshot.value == null){
         final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
-        notifRef.set({"message": message, "title":title, "priority": priority, "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bprecommend"});
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bprecommend", "redirect": redirect});
       }else{
         // count = recommList.length--;
         final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
-        notifRef.set({"message": message, "title":title, "priority": priority, "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bprecommend"});
+        notifRef.set({"id": notifsList.length.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bprecommend", "redirect": redirect});
 
       }
     });
