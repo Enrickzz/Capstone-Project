@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/ActivitiesFitbit.dart';
 import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
@@ -288,13 +289,32 @@ class _my_exercisesState extends State<my_exercises>
 }
 
 void getFitbit() async {
-  var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=4"),
-      headers: {
-        'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyMTg3ODY2LCJpYXQiOjE2NDIxNTkwNjZ9.1o_gszd2e4qneVDztGJ_zrke98Jw-0Q2oN_h0y6eyeA",
-      });
-  List<Sleep> sleep=[];
-  sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+  DateTime a = DateTime.now();
+  String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
+  print("date now = " + a.toString() );
+  String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNTQyNjE0LCJpYXQiOjE2NDI1MTM4MTR9.T5Qn0SdpuaPVeXCqpcwhOf6CAXtE_kWoNGCPJ_6hxV0";
 
-  print(response.body);
-  print("FITBIT ^ Length = " + sleep.length.toString());
+  //FIRST (RAW)
+  var response = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&beforeDate=$y-$m-$d"),
+      headers: {
+        'Authorization': "Bearer $token",
+      });
+
+  List<Activities> activities=[];
+  activities = ActivitiesFitbit.fromJson(jsonDecode(response.body)).activities;
+  Activities act = activities[0];
+
+
+  //SECOND (DETAILED)
+  print("THIS LINK = " + act.caloriesLink.toString());
+  var response2 = await http.get(Uri.parse(act.caloriesLink),
+      headers: {
+        'Authorization': "Bearer $token",
+      });
+  print("response 2\n" + response2.body );
+  List<ActivitiesCalories> detailedArr = [];
+  detailedArr = ActivitiesFitbitDetailed.fromJson(jsonDecode(response2.body)).activitiesCalories;
+  ActivitiesCalories detailed = detailedArr[0];
+  print("THIS IS IT " + detailed.value.toString());
+
 }
