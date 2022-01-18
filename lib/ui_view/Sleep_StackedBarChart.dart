@@ -78,7 +78,7 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
   void getFitbit() async {
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
         headers: {
-          'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNDI0NjI0LCJpYXQiOjE2NDIzOTU4MjR9.zEl3RVswkOTAcYLwgGoxCJNi1XBAdlmnZw1hfdVa5Pk",
+          'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyNTQ1OTg1LCJpYXQiOjE2NDI1MTcxODV9.T86H-iqXnBuhucgKdwlKeiY8Sid8zcbCXstgE2iF7qw",
         });
     List<Sleep> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
@@ -91,91 +91,51 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
     List<OrdinalSales> light=[];
     List<OrdinalSales> deep=[];
     List<OrdinalSales> wake=[];
-    String a;
     for(var i = 0 ; i < sleep.length ; i ++){
+      rem.add(new OrdinalSales(sleep[i].dateOfSleep, 0));
+      deep.add(new OrdinalSales(sleep[i].dateOfSleep, 0));
+      light.add(new OrdinalSales(sleep[i].dateOfSleep, 0));
+      wake.add(new OrdinalSales(sleep[i].dateOfSleep, 0));
       for(var j = 0 ; j < sleep[i].levels.data.length; j++){
-        a = sleep[i].levels.data[j].dateTime;
-        a = a.substring(0, a.indexOf("T"));
-        if(sleep[i].levels.data[j].level == "rem"){
-          bool here=false;
-          for(var l = 0; l <rem.length; l ++){
-            if(rem[l].date == a ){
-              rem[l].sales = int.parse((rem[l].sales + (sleep[i].levels.data[j].seconds/60/60)).round().toString());
-              here = true;
-            }
-          }
-          if(here == false){
-            rem.add(new OrdinalSales(a, int.parse((sleep[i].levels.data[j].seconds/60/60).round().toString())));
-          }
-        }else if(sleep[i].levels.data[j].level  == "deep"){
-          bool here=false;
-          for(var l = 0; l <deep.length; l ++){
-            print("DATE = " +a);
-            if(deep[l].date == a ){
-              print("DATE in IF = " +a);
-              deep[l].sales = int.parse((deep[l].sales + (sleep[i].levels.data[j].seconds/60/60)).round().toString());
-              here = true;
-            }
-          }
-          if(here == false){
-            deep.add(new OrdinalSales(a, int.parse( (sleep[i].levels.data[j].seconds/60/60).round().toString())));
-          }
-        }else if(sleep[i].levels.data[j].level  == "light"){
-          bool here=false;
-          for(var l = 0; l <light.length; l ++){
-            print("DATE = " +a);
-            if(light[l].date == a ){
-              print("DATE in IF = " +a);
-              light[l].sales = int.parse((light[l].sales + (sleep[i].levels.data[j].seconds/60/60)).round().toString());
-              here = true;
-            }
-          }
-          if(here == false){
-            light.add(new OrdinalSales(a, int.parse( (sleep[i].levels.data[j].seconds/60/60).round().toString())));
-          }
-        }else if(sleep[i].levels.data[j].level  == "wake"){
-          bool here=false;
-          for(var l = 0; l <wake.length; l ++){
-            print("DATE = " +a);
-            if(wake[l].date == a ){
-              print("DATE in IF = " +a);
-              wake[l].sales = int.parse((wake[l].sales + (sleep[i].levels.data[j].seconds/60/60)).round().toString());
-              here = true;
-            }
-          }
-          if(here == false){
-            wake.add(new OrdinalSales(a, int.parse( (sleep[i].levels.data[j].seconds/60/60).round().toString())));
-          }
+        if(sleep[i].levels.data[j].level == "rem" || sleep[i].levels.data[j].level == "asleep" ){
+          rem[i].sales = rem[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
+        }else if(sleep[i].levels.data[j].level  == "deep" || sleep[i].levels.data[j].level  == "asleep" ){
+          deep[i].sales = deep[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
+        }else if(sleep[i].levels.data[j].level  == "light" || sleep[i].levels.data[j].level  == "awake" || sleep[i].levels.data[j].level  == "restless" ){
+          light[i].sales = light[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
+        }else if(sleep[i].levels.data[j].level  == "wake" || sleep[i].levels.data[j].level  == "awake" ){
+          wake[i].sales = wake[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
         }
       }
     }
-
+    print("LENGTHS: ");
+    print(rem.length);print(wake.length);print(deep.length);print(light.length);
     return [
       new charts.Series<OrdinalSales, String>(
         id: 'REM',
         domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
-        measureFn: (OrdinalSales sales, _) => sales.sales,
+        measureFn: (OrdinalSales sales, _) => (sales.sales/3600),
         data: rem,
       ),
       new charts.Series<OrdinalSales, String>(
         id: 'DEEP',
         domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
-        measureFn: (OrdinalSales sales, _) => sales.sales,
+        measureFn: (OrdinalSales sales, _) => (sales.sales/3600),
         data: deep,
       ),
       new charts.Series<OrdinalSales, String>(
         id: 'LIGHT',
         domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
-        measureFn: (OrdinalSales sales, _) => sales.sales,
+        measureFn: (OrdinalSales sales, _) => (sales.sales/3600),
         data: light,
       ),
-      // new charts.Series<OrdinalSales, String>(
-      //   id: 'WAKE',
-      //   colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-      //   domainFn: (OrdinalSales sales, _) => sales.date,
-      //   measureFn: (OrdinalSales sales, _) => sales.sales,
-      //   data: wake,
-      // ),
+      new charts.Series<OrdinalSales, String>(
+        id: 'WAKE',
+        colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
+        domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
+        measureFn: (OrdinalSales sales, _) => sales.sales/3600,
+        data: wake,
+      ),
     ];
   }
 }
@@ -183,7 +143,7 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
 /// Sample ordinal data type.
 class OrdinalSales {
   String date;
-  int sales;
+  double sales;
 
   OrdinalSales(this.date, this.sales);
 }
