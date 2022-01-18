@@ -27,6 +27,7 @@ final _formKey = GlobalKey<FormState>();
 class _editFoodPrescriptionState extends State<edit_food_prescription> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  Users doctor = new Users();
 
   DateFormat format = new DateFormat("MM/dd/yyyy");
   int count = 1;
@@ -43,7 +44,10 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
     'Breakfast', 'Lunch','Dinner', 'Snacks'
   ];
   String valueChooseFoodTime;
-
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String date;
+  String hours,min;
 
   // String getFrom(){
   //   if(dateRange == null){
@@ -88,7 +92,35 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
   //   });
   //   print("date Range " + dateRange.toString());
   // }
+  @override
+  void initState(){
+    getRecomm(widget.userUID);
+    getNotifs(widget.userUID);
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
 
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        doctor = Users.fromJson(temp);
+      });
+    });
+    Future.delayed(const Duration(milliseconds: 1500),(){
+      setState(() {
+
+      });
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -250,6 +282,11 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                                 foodplan_list[foodplan_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
+                              addtoNotif("Dr. "+doctor.lastname+ " has updated your Food management plan. Click here to view your updated Food management plan. " ,
+                                  "Doctor Updated your Food Plan!",
+                                  "1",
+                                  "Food Plan",
+                                  widget.userUID);
                               Navigator.pop(context, [foodplan_list, 1]);
                             });
                           } catch(e) {
@@ -267,6 +304,23 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
 
     );
   }
+  void addtoNotif(String message, String title, String priority,String redirect, String uid){
+    print ("ADDED TO NOTIFICATIONS");
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+
+      }
+    });
+  }
   void getFoodPlan() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
@@ -278,6 +332,28 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
       print(temp);
       temp.forEach((jsonString) {
         foodplan_list.add(FoodPlan.fromJson(jsonString));
+      });
+    });
+  }
+  void getNotifs(String uid) {
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void getRecomm(String uid) {
+    print("GET RECOM");
+    recommList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }

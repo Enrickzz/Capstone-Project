@@ -30,13 +30,14 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
-  List<Notifications> notifsList = new List<Notifications>();
-  List<Recommendation> recommList = new List<Recommendation>();
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   @override
   void initState() {
     super.initState();
     getNotifs();
     getRecomm();
+    print("NGI");
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -103,20 +104,20 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                     itemCount: notifsList.length,
                     itemBuilder: (context, index) {
                       final notif = notifsList[index];
-                      return Dismissible(key: Key(notif.title),
+                      return Dismissible(key: Key(notif.id),
                           child: ListTile(
                             leading: Container(
                                 height: 50,
                                 width: 50,
-                                decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+notifsList[index].priority+ '.png'), fit: BoxFit.contain))
+                                decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+notif.priority+ '.png'), fit: BoxFit.contain))
                             ),
-                            title: Text(''+notifsList[index].title, style: TextStyle(fontSize: 14.0)),
+                            title: Text(''+notif.title, style: TextStyle(fontSize: 14.0)),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(''+notifsList[index].message, style: TextStyle(fontSize: 12.0)),
+                                Text(''+notif.message, style: TextStyle(fontSize: 12.0)),
                                 SizedBox(height: 4),
-                                Text(''+getDateFormatted(notifsList[index].notif_date.toString())+" "+getTimeFormatted(notifsList[index].notif_time.toString()), style: TextStyle(fontSize: 11.0)),
+                                Text(''+notif.rec_date.toString()+" "+notif.rec_time.toString(), style: TextStyle(fontSize: 11.0)),
                               ],
                             ),
                             onTap: (){
@@ -127,9 +128,10 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                           setState(() {
                             notifsList.removeAt(index);
                           });
-
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Notification dismissed')));
+                          deleteOneNotif(index);
+
                         },
                       );
                     },
@@ -171,10 +173,10 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                       ),
                       key: Key(recomm.title),
                       onDismissed: (direction){
+                        deleteOneRecom(index);
                         setState(() {
                           recommList.removeAt(index);
                         });
-
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text('Recommendaiton dismissed')));
                       },
@@ -201,15 +203,89 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
   }
+  void deleteOneNotif(int index) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readExers = databaseReference.child('users/' + uid + '/notifications/'+ index.toString());
+    //readExers.reference().child("exerciseId").child(widget.exercise.exerciseId.toString()).remove().then((value) => Navigator.pop(context));
+    await readExers.remove().then((value) {
+      final nextread = databaseReference.child('users/' + uid + '/notifications/');
+      nextread.once().then((DataSnapshot datasnapshot) {
+        List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+        final deleteread = databaseReference.child('users/' + uid + '/notifications/');
+        deleteread.remove();
+        if(temp != null){
+          // notifsList.clear();
+          int counter2 = 0;
+          print("THIS ONE");
+          print(datasnapshot);
+          temp.forEach((jsonString) {
+            RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
+            final exerRef = databaseReference.child('users/' + uid + '/notifications/' + counter2.toString());
+            exerRef.set({
+              "id": counter2.toString(),
+              "message": a.message,
+              "title": a.title,
+              "priority": a.priority,
+              "rec_date": a.rec_date,
+              "rec_time": a.rec_time,
+              "category": a.category,
+              "redirect": a.redirect,
+            });
+            counter2++;
+            print("Added Body exercise Successfully! " + uid);
+            // notifsList.add(a);
+          });
+        }
+      });
+    });
+  }
   void getNotifs() {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
     readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        notifsList.add(Notifications.fromJson(jsonString));
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
         print(notifsList);
+      });
+    });
+  }
+  void deleteOneRecom(int index) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readExers = databaseReference.child('users/' + uid + '/recommendations/'+ index.toString());
+    //readExers.reference().child("exerciseId").child(widget.exercise.exerciseId.toString()).remove().then((value) => Navigator.pop(context));
+    await readExers.remove().then((value) {
+      final nextread = databaseReference.child('users/' + uid + '/recommendations/');
+      nextread.once().then((DataSnapshot datasnapshot) {
+        List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+        final deleteread = databaseReference.child('users/' + uid + '/recommendations/');
+        deleteread.remove();
+        if(temp != null){
+          recommList.clear();
+          int counter2 = 0;
+          print("THIS ONE");
+          print(datasnapshot);
+          temp.forEach((jsonString) {
+            RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
+            final exerRef = databaseReference.child('users/' + uid + '/recommendations/' + counter2.toString());
+            exerRef.set({
+              "message": a.message,
+              "title": a.title,
+              "priority": a.priority,
+              "rec_date": a.rec_date,
+              "rec_time": a.rec_time,
+              "category": a.category,
+              "redirect": a.redirect,
+            });
+            counter2++;
+            print("Added Body exercise Successfully! " + uid);
+            recommList.add(a);
+          });
+        }
       });
     });
   }
@@ -218,10 +294,13 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
     final uid = user.uid;
     final readBP = databaseReference.child('users/' + uid + '/recommendations/');
     readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        recommList.add(Recommendation.fromJson(jsonString));
+        recommList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }
 }
+
+

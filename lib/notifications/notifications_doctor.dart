@@ -30,8 +30,8 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
-  List<Notifications> notifsList = new List<Notifications>();
-  List<Recommendation> recommList = new List<Recommendation>();
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   @override
   void initState() {
     super.initState();
@@ -97,7 +97,7 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
                       children: [
                         Text(''+notifsList[index].message, style: TextStyle(fontSize: 12.0)),
                         SizedBox(height: 4),
-                        Text(''+getDateFormatted(notifsList[index].notif_date.toString())+" "+getTimeFormatted(notifsList[index].notif_time.toString()), style: TextStyle(fontSize: 11.0)),
+                        Text(''+getDateFormatted(notifsList[index].rec_date.toString())+" "+getTimeFormatted(notifsList[index].rec_time.toString()), style: TextStyle(fontSize: 11.0)),
                       ],
                     ),
                     onTap: (){
@@ -140,7 +140,7 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
     readBP.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        notifsList.add(Notifications.fromJson(jsonString));
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
         print(notifsList);
       });
     });

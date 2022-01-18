@@ -44,8 +44,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
-  List<Notifications> notifsList = new List<Notifications>();
-  List<Recommendation> recommList = new List<Recommendation>();
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   String isResting = 'yes';
 
 
@@ -448,7 +448,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
     readBP.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        notifsList.add(Notifications.fromJson(jsonString));
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }
@@ -460,7 +460,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
     readBP.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        recommList.add(Recommendation.fromJson(jsonString));
+        recommList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }

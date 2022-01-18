@@ -27,7 +27,6 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
   @override
   void initState(){
     getFitbit();
-
     Future.delayed(const Duration(milliseconds: 2000),(){
       thisseries = _createSampleData(sleeptmp);
       setState(() {
