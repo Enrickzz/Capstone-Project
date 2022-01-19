@@ -65,6 +65,10 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
       }
     });
     super.initState();
+    result.clear();
+    setState(() {
+      
+    });
   }
 
   void addAllListData() {

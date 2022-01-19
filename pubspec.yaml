@@ -61,6 +61,7 @@ dependencies:
   http: ^0.13.4
   google_maps_flutter: ^2.1.1
   crypto: ^3.0.1
+  url_launcher: ^6.0.18
 
 
 clipboard: ^0.1.3
