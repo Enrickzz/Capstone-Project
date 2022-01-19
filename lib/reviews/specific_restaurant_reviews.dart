@@ -5,10 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/discussion_board/create_post.dart';
 import 'package:my_app/models/GooglePlaces.dart';
-import 'package:my_app/models/OnePlace.dart';
 import 'package:my_app/models/Reviews.dart';
 import 'package:my_app/models/spotify.dart';
-import 'package:my_app/reviews/restaurant/info_restaurant.dart';
+import 'package:my_app/reviews/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
@@ -29,16 +28,14 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import '../../../fitness_app_theme.dart';
+import '../../fitness_app_theme.dart';
 import 'add_restaurant_review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import 'add_review.dart';
-
-class specific_reviews extends StatefulWidget {
-  final Result2 thisPlace;
+class restaurant_reviews extends StatefulWidget {
+  final Results thisPlace;
   final String type;
-  specific_reviews({Key key,this.thisPlace, this.type});
+  restaurant_reviews({Key key,this.thisPlace, this.type});
   @override
   _discussionState createState() => _discussionState();
 }
@@ -46,7 +43,7 @@ class specific_reviews extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
-class _discussionState extends State<specific_reviews>
+class _discussionState extends State<restaurant_reviews>
     with TickerProviderStateMixin {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
@@ -103,7 +100,8 @@ class _discussionState extends State<specific_reviews>
                         builder: (context) => SingleChildScrollView(child: Container(
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
-                          child: add_review(thisPlace: widget.thisPlace,type: widget.type ),
+                          // child: add_medication(thislist: medtemp),
+                          child: add_restaurant_review(thisPlace: widget.thisPlace,type: widget.type ),
                         ),
                         ),
                       ).then((value) {
@@ -268,14 +266,14 @@ class _discussionState extends State<specific_reviews>
                                                                 Text(
                                                                   reviews[index].user_name,
                                                                   style: TextStyle(
-                                                                      fontSize: 14,
-                                                                      fontWeight: FontWeight.bold
+                                                                    fontSize: 14,
+                                                                    fontWeight: FontWeight.bold
                                                                   ),
                                                                 ),
                                                                 SizedBox(width: 10),
                                                                 Text(
                                                                   getDateFormatted(reviews[index].reviewDate.toString()) +  " " +
-                                                                      getTimeFormatted(reviews[index].reviewTime.toString()),
+                                                                  getTimeFormatted(reviews[index].reviewTime.toString()),
                                                                   style: TextStyle(
                                                                     fontSize: 12,
                                                                   ),

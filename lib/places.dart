@@ -8,7 +8,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/nutritionixApi.dart';
-import 'package:my_app/reviews/restaurant/info_restaurant.dart';
+import 'package:my_app/reviews/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';
