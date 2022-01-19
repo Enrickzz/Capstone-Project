@@ -108,6 +108,9 @@ class _discussionState extends State<specific_reviews>
                         ),
                       ).then((value) {
                         Future.delayed(const Duration(milliseconds: 1500), (){
+                          if(value != null){
+                            getReviews2(value.toString());
+                          }
                           setState((){
                           });
                         });
@@ -371,6 +374,27 @@ class _discussionState extends State<specific_reviews>
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+  void getReviews2(String placeid) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    reviews.clear();
+    // var userUID = widget.userUID;
+    final readReviews = databaseReference.child('reviews/' + placeid+ "/");
+    await readReviews.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        reviews.add(Reviews.fromJson(jsonString));
+        print(reviews.length.toString()+ "<<<<<<<<<<<");
+      });
+    });
+
+
+    setState(() {
+      print("Tapos na get reviews");
+    });
+
   }
   void getReviews() async{
     final User user = auth.currentUser;

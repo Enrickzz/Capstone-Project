@@ -327,7 +327,7 @@ class _create_postState extends State<add_restaurant_review> {
                                 NotifyPatients(widget.thisPlace);
                               }
                             });
-                            Navigator.pop(context);
+                            Navigator.pop(context, widget.thisPlace.placeId);
                           }catch(e){
                             print("Error");
                           }

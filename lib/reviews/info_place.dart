@@ -72,11 +72,10 @@ class _create_postState extends State<info_place> {
   String imgurl="";
   @override
   void initState(){
-    if(widget.this_info.photos == null){
+    if(widget.this_info.photos == null)
       imgurl="";
-    }else{
-      imgurl = widget.this_info.photos[0].photoReference;
-    }
+    else imgurl = widget.this_info.photos[0].photoReference;
+
     getspecifics(widget.this_info.placeId);
     super.initState();
   }
