@@ -922,4 +922,43 @@ class Sleep_Goal {
   }
 }
 
+class patient_ids {
+  List<PatientIds> patientIds;
+
+  patient_ids({this.patientIds});
+
+  patient_ids.fromJson(Map<String, dynamic> json) {
+    if (json['patient_ids'] != null) {
+      patientIds = <PatientIds>[];
+      json['patient_ids'].forEach((v) {
+        patientIds.add(new PatientIds.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.patientIds != null) {
+      data['patient_ids'] = this.patientIds.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class PatientIds {
+  String id;
+
+  PatientIds({this.id});
+
+  PatientIds.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    return data;
+  }
+}
+
 

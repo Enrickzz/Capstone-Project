@@ -513,6 +513,21 @@ class _AppSignUpState extends State<registration> {
 
                                         await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(),
                                           "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+                                        final idRef = databaseReference.child('patient_ids/');
+                                        await idRef.once().then((DataSnapshot snapshot) {
+                                          print(snapshot.value);
+                                          List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+                                          if(temp == null){
+                                            idRef.child("/"+0.toString()).set({"id": uid.toString()});
+                                          }else{
+                                            List<PatientIds> plist=[];
+                                            temp.forEach((jsonString) {
+                                              plist.add(PatientIds.fromJson(jsonString));
+                                            });
+                                            idRef.child("/"+plist.length.toString()).set({"id": uid.toString()});
+                                          }
+                                          print(temp);
+                                        });
 
                                       }
                                     }

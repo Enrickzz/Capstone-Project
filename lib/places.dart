@@ -205,7 +205,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId)),
+                            child: info_restaurant(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId), type: "drugstore"),
                           ),
                           ),
                         ).then((value) =>
@@ -309,7 +309,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  hospitals[index], thisrating: checkrating2(hospitals[index].placeId)),
+                            child: info_restaurant(this_info:  hospitals[index], thisrating: checkrating2(hospitals[index].placeId), type: "hospital"),
                           ),
                           ),
                         ).then((value) =>
@@ -413,7 +413,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  recreations[index],thisrating: checkrating2(recreations[index].placeId)),
+                            child: info_restaurant(this_info:  recreations[index],thisrating: checkrating2(recreations[index].placeId), type: "recreation"),
                           ),
                           ),
                         ).then((value) =>
@@ -517,7 +517,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  restaurants[index], thisrating: checkrating2(restaurants[index].placeId)),
+                            child: info_restaurant(this_info:  restaurants[index], thisrating: checkrating2(restaurants[index].placeId), type: "restaurant"),
                           ),
                           ),
                         ).then((value) =>

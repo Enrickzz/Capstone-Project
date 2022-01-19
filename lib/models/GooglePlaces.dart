@@ -6,6 +6,7 @@ class GooglePlaces {
   GooglePlaces.fromJson(Map<String, dynamic> json) {
     if (json['results'] != null) {
       results = <Results>[];
+      print("PUMASOK DITO");
       json['results'].forEach((v) {
         results.add(new Results.fromJson(v));
       });

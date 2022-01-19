@@ -17,9 +17,11 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/models/GooglePlaces.dart';
+import 'package:my_app/models/OnePlace.dart';
 import 'package:my_app/models/specific_info_places.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/reviews/restaurant/specific_restaurant_reviews.dart';
+import 'package:my_app/reviews/restaurant/specific_reviews.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
@@ -30,17 +32,17 @@ import 'package:my_app/widgets/rating.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 
-class info_restaurant extends StatefulWidget {
+class info_place extends StatefulWidget {
   final List<FirebaseFile> files;
-  info_restaurant({Key key, this.files, this.this_info, this.thisrating,this.type});
-  final Results this_info;
+  info_place({Key key, this.files, this.this_info, this.thisrating,this.type});
+  final Result2 this_info;
   final double thisrating;
   final String type;
   @override
   _create_postState createState() => _create_postState();
 }
 final _formKey = GlobalKey<FormState>();
-class _create_postState extends State<info_restaurant> {
+class _create_postState extends State<info_place> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   var path;
@@ -104,7 +106,7 @@ class _create_postState extends State<info_restaurant> {
                   SizedBox(height: 8.0),
                   Divider(),
                   Container(
-                    child: _displayMedia(widget.this_info.photos.photoReference),
+                    child: _displayMedia(widget.this_info.photos[0].photoReference),
                     height:250,
                     width: 200,
                     decoration: BoxDecoration(
@@ -188,7 +190,7 @@ class _create_postState extends State<info_restaurant> {
                   Visibility(
                       visible: pic,
                       child: Container(
-                        child: _displayMedia(widget.this_info.photos.photoReference),
+                        child: _displayMedia(widget.this_info.photos[0].photoReference),
                         height:250,
                         width: 300,
                         decoration: BoxDecoration(
@@ -294,7 +296,7 @@ class _create_postState extends State<info_restaurant> {
                           onPressed:() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => restaurant_reviews(thisPlace: widget.this_info, type: widget.type)),
+                              MaterialPageRoute(builder: (context) => specific_reviews(thisPlace: widget.this_info, type: widget.type)),
                             );
                           },
                         ),
@@ -361,7 +363,10 @@ class _create_postState extends State<info_restaurant> {
       return Image.asset("assets/images/no-image.jpg");
     }
     else{
-      return Image.network(media,
+      String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
+          media+
+          "&sensor=false&maxheight=300&maxwidth=300&key=AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
+      return Image.network(replace,
         errorBuilder: (context, error, stackTrace) {
           return Image.asset("assets/images/no-image.jpg");
         },fit: BoxFit.cover,);
@@ -372,7 +377,7 @@ class _create_postState extends State<info_restaurant> {
   Widget checkifnull(){
     if(details.result.openingHours != null){
       if(details.result.openingHours.periods[0].open != null
-      && details.result.openingHours.periods[0].close != null){
+          && details.result.openingHours.periods[0].close != null){
         return Text(
           details.result.openingHours.periods[0].open.time.toString() + " - " +
               details.result.openingHours.periods[0].close.time.toString(),

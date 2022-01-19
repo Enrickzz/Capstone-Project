@@ -31,7 +31,8 @@ import 'package:my_app/widgets/rating.dart';
 class add_restaurant_review extends StatefulWidget {
   final List<FirebaseFile> files;
   final Results thisPlace;
-  add_restaurant_review({Key key, this.files, this.thisPlace});
+  final String type;
+  add_restaurant_review({Key key, this.files, this.thisPlace, this.type});
   @override
   _create_postState createState() => _create_postState();
 }
@@ -56,6 +57,7 @@ class _create_postState extends State<add_restaurant_review> {
   File file = new File("path");
 
   //for rating
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   int _rating = 0;
   bool isSwitched = false;
   int count = 0;
@@ -306,7 +308,10 @@ class _create_postState extends State<add_restaurant_review> {
                             readReview.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "+thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date", "reviewTime": "$hours:$min"});
+                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
+                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min"});
+                                NotifyPatients(widget.thisPlace);
                               }else{
                                 List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
                                 temp.forEach((jsonString) {
@@ -316,7 +321,10 @@ class _create_postState extends State<add_restaurant_review> {
                                 count = reviews.length--;
                                 print("count " + count.toString());
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "+thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date", "reviewTime": "$hours:$min" });
+                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
+                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date",
+                                  "reviewTime": "$hours:$min" });
+                                NotifyPatients(widget.thisPlace);
                               }
                             });
                             Navigator.pop(context);
@@ -335,6 +343,42 @@ class _create_postState extends State<add_restaurant_review> {
             )
         )
     );
+  }
+  void NotifyPatients(Results placeobj) async{
+    final User user = auth.currentUser;
+    final loggedId = user.uid;
+    List<Users> patients;
+    List<PatientIds> plist=[];
+    final idRef = databaseReference.child('patient_ids/');
+    await idRef.once().then((DataSnapshot snapshot) {
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp == null){
+
+      }else{
+        temp.forEach((jsonString) {
+          plist.add(PatientIds.fromJson(jsonString));
+        });
+
+        for(var i = 0 ; i < plist.length; i++){
+          getRecomm(plist[i].id);
+          var readUsers = databaseReference.child('users/'+plist[i].id+"/personal_info");
+          readUsers.once().then((DataSnapshot snapshot2) {
+            var temp2 = jsonDecode(jsonEncode(snapshot2.value));
+            Users thisUser = Users.fromJson2(temp2);
+            print("ADD RECOMMENDATIONS TO "+ thisUser.firstname + " << " + thisUser.uid);
+            if(plist[i].id != loggedId){
+              addtoRecommendation("Another Heartistant CVD user has recommended "+placeobj.name+", a "+ widget.type+", "
+                  "which is suitable for other CVD patients. Click here to view",
+                  "Peer Recommendation!",
+                  "1",
+                  placeobj.placeId,
+                  plist[i].id);
+            }
+          });
+        }
+      }
+    });
   }
   Future <List<String>>_getDownloadLinks(List<Reference> refs) {
     return Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
@@ -370,6 +414,34 @@ class _create_postState extends State<add_restaurant_review> {
     print ("THIS IS THE URL = "+ downloadurl);
     thisURL = downloadurl;
     return downloadurl;
+  }
+  void getRecomm(String uid) {
+    print("GET RECOM");
+    recommList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void addtoRecommendation(String message, String title, String priority,String redirect, String uid) async {
+    final ref = databaseReference.child('users/' + uid + '/recommendations/');
+    getRecomm(uid);
+    await ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        ref.set({"id": 0.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + recommList.length.toString());
+        ref.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+
+      }
+    });
   }
 
 

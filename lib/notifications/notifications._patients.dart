@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -6,6 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/GooglePlaces.dart';
+import 'package:my_app/models/OnePlace.dart';
+import 'package:my_app/models/Reviews.dart';
+import 'package:my_app/reviews/restaurant/info_place.dart';
+import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';
@@ -32,6 +38,8 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  List<Reviews> reviews =[];
+  Result2 thisPlace;
   @override
   void initState() {
     super.initState();
@@ -168,7 +176,33 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                           ],
                         ),
                         onTap: (){
-
+                          getPlace(recomm.redirect);
+                          getReview(recomm.redirect);
+                          String type="";
+                          if(recomm.message.contains("restaurant")){
+                            type = "restaurant";
+                          }else if(recomm.message.contains("hospital")){
+                            type = "hospital";
+                          }else if(recomm.message.contains("drugstore")){
+                            type = "drugstore";
+                          }else if(recomm.message.contains("recreation")){
+                            type = "recreation";
+                          }
+                          print("TYPE = " + type);
+                          Future.delayed(const Duration(milliseconds: 2000), (){
+                            if(recomm.title == "Peer Recommendation!"){
+                              showModalBottomSheet(context: context,
+                                isScrollControlled: true,
+                                builder: (context) => SingleChildScrollView(child: Container(
+                                  padding: EdgeInsets.only(
+                                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                                  // child: add_medication(thislist: medtemp),
+                                  child: info_place(this_info:  thisPlace, thisrating: checkrating2(thisPlace.placeId), type: type),
+                                ),
+                                ),
+                              );
+                            }
+                          });
                         },
                       ),
                       key: Key(recomm.id),
@@ -202,6 +236,60 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+  void getReview(String placeid){
+    reviews.clear();
+    final readReviews = databaseReference.child('reviews/' + placeid +"/");
+    readReviews.once().then((DataSnapshot snapshot){
+      // print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          reviews.add(Reviews.fromJson(jsonString));
+          // print(reviews.length.toString()+ "<<<<<<<<<<<");
+        });
+      }
+    });
+  }
+  void getPlace(String placeid) async{
+    String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
+    String
+    loc = "14.589281719512666, 121.03772954435867",
+        radius ="2000",
+        type="drugstore",
+        query1= "Drugstore";
+    var placeRead = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeid&key=$key"));
+    print(placeRead.body.toString());
+    Result2 a;
+    a = OnePlace.fromJson(jsonDecode(placeRead.body)).result;
+    thisPlace = a;
+    print("THIS IS A ");
+    print(a.name);
+    //a = Results.fromJson(jsonDecode(placeRead.body));
+  }
+  double checkrating2(String placeid){
+    double thisrating=0;
+    String textRate="";
+    int counter = 0;
+    bool checker = true;
+
+    for(var i =0 ; i < reviews.length; i++){
+      if(reviews[i].placeid == placeid){
+        thisrating = thisrating + double.parse(reviews[i].rating.toString());
+        // print( reviews[i].placeid +"  "+reviews[i].rating.toString());
+        counter ++;
+      }
+    }
+    if(thisrating >0 ){
+      thisrating = thisrating/counter;
+    }
+    if(counter == 0){
+      textRate = "No reviews yet";
+      checker = false;
+    }else{
+      textRate = '(' +thisrating.toString() +')';
+    }
+    return thisrating;
   }
   void deleteOneNotif(int index) async{
     final User user = auth.currentUser;

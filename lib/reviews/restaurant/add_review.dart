@@ -2,14 +2,13 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
@@ -17,9 +16,9 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/models/GooglePlaces.dart';
-import 'package:my_app/models/specific_info_places.dart';
+import 'package:my_app/models/OnePlace.dart';
+import 'package:my_app/models/Reviews.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/reviews/restaurant/specific_restaurant_reviews.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
@@ -30,17 +29,16 @@ import 'package:my_app/widgets/rating.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 
-class info_restaurant extends StatefulWidget {
+class add_review extends StatefulWidget {
   final List<FirebaseFile> files;
-  info_restaurant({Key key, this.files, this.this_info, this.thisrating,this.type});
-  final Results this_info;
-  final double thisrating;
+  final Result2 thisPlace;
   final String type;
+  add_review({Key key, this.files, this.thisPlace, this.type});
   @override
   _create_postState createState() => _create_postState();
 }
 final _formKey = GlobalKey<FormState>();
-class _create_postState extends State<info_restaurant> {
+class _create_postState extends State<add_review> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   var path;
@@ -60,19 +58,40 @@ class _create_postState extends State<info_restaurant> {
   File file = new File("path");
 
   //for rating
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   int _rating = 0;
   bool isSwitched = false;
-  final double minScale = 1;
-  final double maxScale = 1.5;
-
-  SpecificInfo details= new SpecificInfo();
-  bool isLoading = true;
-
+  int count = 0;
+  List<Reviews> reviews=[];
+  Users thisuser;
+  String date="",min="",hours="";
   @override
   void initState(){
-    getspecifics(widget.this_info.placeId);
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readUser = databaseReference.child('users/'+uid+"/personal_info/");
+    readUser.once().then((DataSnapshot snapshot){
+      // print(snapshot.value);
+      var temp1 = jsonDecode(jsonEncode(snapshot.value));
+      thisuser = Users.fromJson3(temp1);
+      print(thisuser);
+      Future.delayed(const Duration(milliseconds: 2000),(){
+        print("this user\n"+thisuser.firstname);
+        print(thisuser.firstname + " " + thisuser.lastname);
+
+      });
+    });
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +100,7 @@ class _create_postState extends State<info_restaurant> {
     double defaultFontSize = 14;
     double defaultIconSize = 17;
     final Storage storage = Storage();
+
     return Container(
         key: _formKey,
         color:Color(0xff757575),
@@ -96,82 +116,63 @@ class _create_postState extends State<info_restaurant> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-
                   Text(
-                    widget.this_info.name,
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                    ' Review/Recommendation',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
-                  Container(
-                    child: _displayMedia(widget.this_info.photos.photoReference),
-                    height:250,
-                    width: 200,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
+                  TextFormField(
+                    showCursor: true,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 12,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(
+                          width:0,
+                          style: BorderStyle.none,
                         ),
-                        color: Colors.black
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFF2F3F5),
+                      hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize),
+                      hintText: "Description",
                     ),
-
+                    onChanged: (val){
+                      setState(() => description = val);
+                    },
                   ),
                   SizedBox(height: 8.0),
-                  checkrating(widget.thisrating),
-
-                  SizedBox(height: 8.0),
-                  Row(
-
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                      ),
-                      SizedBox(width: 8.0),
-                      Flexible(
-                        child: Text(
-                          widget.this_info.formattedAddress,
-                          style: TextStyle( fontSize: 14),
-                        ),
-                      ),
-
-
-                    ],
-
-
+                  SwitchListTile(
+                    title: Text('Recommend', style: TextStyle(fontSize: 22.0)),
+                    subtitle: Text('I would like to recommend this restaurant to other CVD patients.', style: TextStyle(fontSize: 12.0)),
+                    secondary: Icon(Icons.thumb_up_alt_sharp, size: 34.0, color: Colors.green),
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    value: isSwitched,
+                    onChanged: (value){
+                      setState(() {
+                        isSwitched = value;
+                      });
+                    },
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 8),
                   Row(
                     children: [
+                      Text("Rating", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                      SizedBox(width: 14,),
+                      Rating((rating){
+                        setState(() {
+                          _rating = rating;
+                        });
 
-
-                      Icon(
-                        Icons.local_phone_outlined,
-                      ),
-                      SizedBox(width: 8.0),
-                      Flexible(
-                        child: isLoading
-                            ? Center(
-                          child: CircularProgressIndicator(),
-                        ): new Text(
-                          details.result.formattedPhoneNumber,
-                          style: TextStyle( fontSize: 14),
-                        ),
-                      ),
-                      SizedBox(width: 20.0),
-
-                      Icon(
-                        Icons.access_time_sharp,
-                      ),
-                      SizedBox(width: 8.0),
-                      Flexible(
-                        child: isLoading
-                            ? Center(
-                          child: CircularProgressIndicator(),
-                        ): checkifnull(),
-                      ),
+                      }),
                     ],
+
                   ),
 
                   SizedBox(
@@ -188,9 +189,9 @@ class _create_postState extends State<info_restaurant> {
                   Visibility(
                       visible: pic,
                       child: Container(
-                        child: _displayMedia(widget.this_info.photos.photoReference),
+                        child: Image.file(file),
                         height:250,
-                        width: 300,
+                        width: 200,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
@@ -283,25 +284,9 @@ class _create_postState extends State<info_restaurant> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Visibility(
-                        visible: true,
-                        child: FlatButton(
-                          child: Text(
-                            'View Reviews',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          color: Colors.green,
-                          onPressed:() {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => restaurant_reviews(thisPlace: widget.this_info, type: widget.type)),
-                            );
-                          },
-                        ),
-                      ),
                       FlatButton(
                         child: Text(
-                          'Close',
+                          'Cancel',
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
@@ -309,9 +294,49 @@ class _create_postState extends State<info_restaurant> {
                           Navigator.pop(context);
                         },
                       ),
+                      FlatButton(
+                        child: Text(
+                          'Post',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Colors.green,
+                        onPressed:() async {
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            final readReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId +"/");
+                            //DatabaseReference last = addReview.push();
+                            readReview.once().then((DataSnapshot datasnapshot) {
+                              if(datasnapshot.value == null){
+                                final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
+                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
+                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min"});
+                                NotifyPatients(widget.thisPlace);
+                              }else{
+                                List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+                                temp.forEach((jsonString) {
+                                  reviews.add(Reviews.fromJson(jsonString));
+                                  print(reviews.length.toString()+ "<<<<<<<<<<<");
+                                });
+                                count = reviews.length--;
+                                print("count " + count.toString());
+                                final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
+                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
+                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date",
+                                  "reviewTime": "$hours:$min" });
+                                NotifyPatients(widget.thisPlace);
+                              }
+                            });
+                            Navigator.pop(context);
+                          }catch(e){
+                            print("Error");
+                          }
 
 
-
+                          // Navigator.pop(context);
+                        },
+                      )
                     ],
                   ),
 
@@ -319,6 +344,42 @@ class _create_postState extends State<info_restaurant> {
             )
         )
     );
+  }
+  void NotifyPatients(Result2 placeobj) async{
+    final User user = auth.currentUser;
+    final loggedId = user.uid;
+    List<Users> patients;
+    List<PatientIds> plist=[];
+    final idRef = databaseReference.child('patient_ids/');
+    await idRef.once().then((DataSnapshot snapshot) {
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp == null){
+
+      }else{
+        temp.forEach((jsonString) {
+          plist.add(PatientIds.fromJson(jsonString));
+        });
+
+        for(var i = 0 ; i < plist.length; i++){
+          getRecomm(plist[i].id);
+          var readUsers = databaseReference.child('users/'+plist[i].id+"/personal_info");
+          readUsers.once().then((DataSnapshot snapshot2) {
+            var temp2 = jsonDecode(jsonEncode(snapshot2.value));
+            Users thisUser = Users.fromJson2(temp2);
+            print("ADD RECOMMENDATIONS TO "+ thisUser.firstname + " << " + thisUser.uid);
+            if(plist[i].id != loggedId){
+              addtoRecommendation("Another Heartistant CVD user has recommended "+placeobj.name+", a "+ widget.type+", "
+                  "which is suitable for other CVD patients. Click here to view",
+                  "Peer Recommendation!",
+                  "1",
+                  placeobj.placeId,
+                  plist[i].id);
+            }
+          });
+        }
+      }
+    });
   }
   Future <List<String>>_getDownloadLinks(List<Reference> refs) {
     return Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
@@ -355,104 +416,34 @@ class _create_postState extends State<info_restaurant> {
     thisURL = downloadurl;
     return downloadurl;
   }
-  Widget _displayMedia(String media) {
-    if(media == "photoref") {
-      print("PHOTOREF ITO ");
-      return Image.asset("assets/images/no-image.jpg");
-    }
-    else{
-      return Image.network(media,
-        errorBuilder: (context, error, stackTrace) {
-          return Image.asset("assets/images/no-image.jpg");
-        },fit: BoxFit.cover,);
-    }
-
-  }
-
-  Widget checkifnull(){
-    if(details.result.openingHours != null){
-      if(details.result.openingHours.periods[0].open != null
-      && details.result.openingHours.periods[0].close != null){
-        return Text(
-          details.result.openingHours.periods[0].open.time.toString() + " - " +
-              details.result.openingHours.periods[0].close.time.toString(),
-          style: TextStyle( fontSize: 14),
-        );
-      }
-    }else{
-      return Text("Not Listed");
-    }
-  }
-  Widget checkrating(double thisrating) {
-    String textRate="";
-    String rating="";
-    bool checker = true;
-    if(thisrating == 0){
-      textRate = "No reviews yet";
-      rating = "";
-      checker = false;
-    }else{
-      textRate = '(' +thisrating.toString() +')';
-      rating = "Rating";
-    }
-    return Row(
-      children: [
-        Text(
-          rating,
-          style: TextStyle( fontSize: 14),
-        ),
-        SizedBox(width: 8.0),
-
-        ratingWidget(checker, thisrating),
-        Text(
-          textRate,
-          style: TextStyle( fontSize: 14),
-        ),
-      ],
-    );
-  }
-  Widget ratingWidget(bool check, double thisrating){
-    if(check == true){
-      return RatingBar(
-        initialRating: thisrating,
-        direction: Axis.horizontal,
-        allowHalfRating: true,
-        itemCount: 5,
-        ignoreGestures: true,
-        itemSize: 12,
-        onRatingUpdate: (rating) {
-          print(rating);
-        },
-        ratingWidget: RatingWidget(
-            full: Icon(Icons.star, color: Colors.orange),
-            half: Icon(
-              Icons.star_half,
-              color: Colors.orange,
-            ),
-            empty: Icon(
-              Icons.star_outline,
-              color: Colors.orange,
-            )),
-      );
-    }else{
-      return Text(
-        "",
-        style: TextStyle(color: Colors.black, fontSize: 12),
-      );
-    }
-  }
-  Future<SpecificInfo> getspecifics(String id) async{
-
-    var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&key=AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk"));
-    details = SpecificInfo.fromJson(jsonDecode(response.body));
-
-    print(details.result.placeId);
-    print("===============\n" + widget.this_info.placeId);
-    // print(details.result.openingHours.periods[0].open.time);
-    // print(details.result.openingHours.periods[0].close.time);
-    setState(() {
-      isLoading = false;
+  void getRecomm(String uid) {
+    print("GET RECOM");
+    recommList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
     });
   }
+  void addtoRecommendation(String message, String title, String priority,String redirect, String uid) async {
+    final ref = databaseReference.child('users/' + uid + '/recommendations/');
+    getRecomm(uid);
+    await ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        ref.set({"id": 0.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + recommList.length.toString());
+        ref.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+
+      }
+    });
+  }
+
 
 }
