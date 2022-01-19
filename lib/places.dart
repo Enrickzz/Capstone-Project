@@ -251,7 +251,8 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             Row(
                               children: [
                                 Icon(
-                                  Icons.location_on, size: 12,
+                                  Icons.location_on, size: 15,
+                                  color: Colors.red,
                                 ),
                                 SizedBox(width: 8.0),
                                 Flexible(
@@ -265,27 +266,33 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             ),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.local_phone_outlined, size: 12,
-                                ),
-                                SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '7655-1701',
+                                    'See more..',
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
                                 ),
-                                SizedBox(width: 20.0),
-                                Icon(
-                                  Icons.access_time_sharp, size: 12,
-                                ),
-                                SizedBox(width: 8.0),
-                                Flexible(
-                                  child: Text(
-                                    '7am - 10pm',
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
-                                  ),
-                                ),
+                                // Icon(
+                                //   Icons.local_phone_outlined, size: 12,
+                                // ),
+                                // SizedBox(width: 8.0),
+                                // Flexible(
+                                //   child: Text(
+                                //     '7655-1701',
+                                //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                //   ),
+                                // ),
+                                // SizedBox(width: 20.0),
+                                // Icon(
+                                //   Icons.access_time_sharp, size: 12,
+                                // ),
+                                // SizedBox(width: 8.0),
+                                // Flexible(
+                                //   child: Text(
+                                //     '7am - 10pm',
+                                //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ],
@@ -355,7 +362,8 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             Row(
                               children: [
                                 Icon(
-                                  Icons.location_on, size: 12,
+                                  Icons.location_on, size: 15,
+                                  color: Colors.red,
                                 ),
                                 SizedBox(width: 8.0),
                                 Flexible(
@@ -369,27 +377,33 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             ),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.local_phone_outlined, size: 12,
-                                ),
-                                SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '7655-1701',
+                                    'See more..',
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
-                                ),
-                                SizedBox(width: 20.0),
-                                Icon(
-                                  Icons.access_time_sharp, size: 12,
-                                ),
-                                SizedBox(width: 8.0),
-                                Flexible(
-                                  child: Text(
-                                    '7am - 10pm',
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
-                                  ),
-                                ),
+                                )
+                                // Icon(
+                                //   Icons.local_phone_outlined, size: 12,
+                                // ),
+                                // SizedBox(width: 8.0),
+                                // Flexible(
+                                //   child: Text(
+                                //     '7655-1701',
+                                //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                //   ),
+                                // ),
+                                // SizedBox(width: 20.0),
+                                // Icon(
+                                //   Icons.access_time_sharp, size: 12,
+                                // ),
+                                // SizedBox(width: 8.0),
+                                // Flexible(
+                                //   child: Text(
+                                //     '7am - 10pm',
+                                //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ],
@@ -459,7 +473,8 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             Row(
                               children: [
                                 Icon(
-                                  Icons.location_on, size: 12,
+                                  Icons.location_on, size: 15,
+                                  color: Colors.red,
                                 ),
                                 SizedBox(width: 8.0),
                                 Flexible(
@@ -473,27 +488,33 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             ),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.local_phone_outlined, size: 12,
-                                ),
-                                SizedBox(width: 8.0),
                                 Flexible(
                                   child: Text(
-                                    '7655-1701',
+                                    'See more..',
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
-                                ),
-                                SizedBox(width: 20.0),
-                                Icon(
-                                  Icons.access_time_sharp, size: 12,
-                                ),
-                                SizedBox(width: 8.0),
-                                Flexible(
-                                  child: Text(
-                                    '7am - 10pm',
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
-                                  ),
-                                ),
+                                )
+                                // Icon(
+                                //   Icons.local_phone_outlined, size: 12,
+                                // ),
+                                // SizedBox(width: 8.0),
+                                // Flexible(
+                                //   child: Text(
+                                //     '7655-1701',
+                                //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                //   ),
+                                // ),
+                                // SizedBox(width: 20.0),
+                                // Icon(
+                                //   Icons.access_time_sharp, size: 12,
+                                // ),
+                                // SizedBox(width: 8.0),
+                                // Flexible(
+                                //   child: Text(
+                                //     '7am - 10pm',
+                                //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ],
