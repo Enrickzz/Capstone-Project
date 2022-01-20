@@ -140,6 +140,8 @@ class _water_intake_chartState extends State<water_intake_chart> {
     final uid = user.uid;
     final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
     final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
+    DateTime today = DateTime.now();
+    DateTime firstDayOfTheweek = today.subtract(new Duration(days: today.weekday));
     readWaterIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       readWaterGoal.once().then((DataSnapshot datasnapshot){
@@ -150,29 +152,32 @@ class _water_intake_chartState extends State<water_intake_chart> {
       });
       goal = water_goal.water_goal;
       for(int i = 0; i< waterintake_list.length; i++){
-        switch(waterintake_list[i].dateCreated.weekday){
-          case 1:
-            monday += waterintake_list[i].water_intake;
-            break;
-          case 2:
-            tuesday += waterintake_list[i].water_intake;
-            break;
-          case 3:
-            wednesday += waterintake_list[i].water_intake;
-            break;
-          case 4:
-            thursday += waterintake_list[i].water_intake;
-            break;
-          case 5:
-            friday += waterintake_list[i].water_intake;
-            break;
-          case 6:
-            saturday += waterintake_list[i].water_intake;
-            break;
-          case 7:
-            sunday += waterintake_list[i].water_intake;
-            break;
+        if(waterintake_list[i].dateCreated.day >= firstDayOfTheweek.day){
+          switch(waterintake_list[i].dateCreated.weekday){
+            case 1:
+              monday += waterintake_list[i].water_intake;
+              break;
+            case 2:
+              tuesday += waterintake_list[i].water_intake;
+              break;
+            case 3:
+              wednesday += waterintake_list[i].water_intake;
+              break;
+            case 4:
+              thursday += waterintake_list[i].water_intake;
+              break;
+            case 5:
+              friday += waterintake_list[i].water_intake;
+              break;
+            case 6:
+              saturday += waterintake_list[i].water_intake;
+              break;
+            case 7:
+              sunday += waterintake_list[i].water_intake;
+              break;
+          }
         }
+
         print("THIS IS DATE CREATED WEEK");
         print(waterintake_list[i].dateCreated.weekday);
       }
