@@ -11,10 +11,10 @@ import 'package:my_app/models/nutritionixApi.dart';
 import '../fitness_app_theme.dart';
 import '../main.dart';
 
-class test_chart extends StatefulWidget{
+class sleep_barchart_sf extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
-  test_chart({Key key, this.animationController, this.animation})
+  sleep_barchart_sf({Key key, this.animationController, this.animation})
       : super(key: key);
 
   @override
@@ -22,7 +22,7 @@ class test_chart extends StatefulWidget{
 }
 List<calorie_intake_data> finaList = new List();
 
-class _calorie_intakeState extends State<test_chart> {
+class _calorie_intakeState extends State<sleep_barchart_sf> {
   @override
   void initState() {
     super.initState();

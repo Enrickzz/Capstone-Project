@@ -23,6 +23,7 @@ import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/sleep_quality.dart';
 import 'package:my_app/ui_view/sleep_score_bar_chart.dart';
 import 'package:my_app/ui_view/sleep_barchart_sfcharts.dart';
+import 'package:my_app/ui_view/sleep_stackedbar_sfchart.dart';
 import 'package:my_app/ui_view/time_asleep.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/weight_progress.dart';
@@ -167,7 +168,7 @@ class _my_sleepState extends State<my_sleep>
     // );
 
     listViews.add(
-      test_chart(
+      sleep_barchart_sf(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -175,6 +176,18 @@ class _my_sleepState extends State<my_sleep>
         animationController: widget.animationController,
       ),
     );
+
+    listViews.add(
+      stacked_sleep_chart(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+
 
 
 
