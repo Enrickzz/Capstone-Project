@@ -728,7 +728,6 @@ class ExPlan {
   ExPlan.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
     type = json["type"];
-
     important_notes = json['important_notes'];
     prescribedBy = json['prescribedBy'];
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
