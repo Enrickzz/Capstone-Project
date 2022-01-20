@@ -8,6 +8,8 @@ import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/BMI_chart.dart';
 import 'package:my_app/ui_view/Sleep_StackedBarChart.dart';
+import 'package:my_app/ui_view/VerticalBC_Target.dart';
+import 'package:my_app/ui_view/VerticalBarChart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -19,6 +21,8 @@ import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/running_view.dart';
 import 'package:my_app/ui_view/sleep_quality.dart';
+import 'package:my_app/ui_view/sleep_score_bar_chart.dart';
+import 'package:my_app/ui_view/sleep_barchart_sfcharts.dart';
 import 'package:my_app/ui_view/time_asleep.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/weight_progress.dart';
@@ -104,16 +108,6 @@ class _my_sleepState extends State<my_sleep>
     );
 
     listViews.add(
-      Sleep_StackedBarChart(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
       TitleView(
         titleTxt: 'Last Sleep',
         subTxt: 'Sleep Log',
@@ -138,6 +132,18 @@ class _my_sleepState extends State<my_sleep>
     );
 
     listViews.add(
+      Sleep_StackedBarChart(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+
+
+    listViews.add(
       TitleView(
         titleTxt: 'Sleep Quality',
         subTxt: 'Sleep Score?',
@@ -150,15 +156,29 @@ class _my_sleepState extends State<my_sleep>
       ),
     );
 
+    // listViews.add(
+    //   SleepScoreVerticalBarLabelChart(
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    //         parent: widget.animationController,
+    //         curve:
+    //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+    //     animationController: widget.animationController,
+    //   ),
+    // );
+
     listViews.add(
-      sleep_quality(
+      test_chart(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
-            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );
+
+
+
+
   }
 
   Future<bool> getData() async {
