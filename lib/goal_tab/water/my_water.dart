@@ -84,6 +84,18 @@ class _my_waterState extends State<my_water>
     const int count = 9;
 
     listViews.add(
+      TitleView(
+        titleTxt: 'Water Intake this week',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+
+    listViews.add(
       water_intake_chart(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,

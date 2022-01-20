@@ -232,7 +232,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                         ),
                                         Flexible(
                                           child: Text(
-                                            'You have reached your daily water intake goal!',
+                                            'Please remember to drink water daily',
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                               fontFamily:

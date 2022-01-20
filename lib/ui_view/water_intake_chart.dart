@@ -113,7 +113,7 @@ class _water_intake_chartState extends State<water_intake_chart> {
               thisseries,
               animate: false,
               behaviors: [
-                // charts.ChartTitle("Title", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black,)),
+                // charts.ChartTitle("Water Intake this Week", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
                 charts.RangeAnnotation([charts.LineAnnotationSegment(goal, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
               ],
               // Set a bar label decorator.
