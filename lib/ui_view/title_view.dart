@@ -1,5 +1,6 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/goal_tab/meals/recommended_meals.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_doctor_view.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_patient_view.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_support_view.dart';
@@ -174,6 +175,13 @@ class TitleView extends StatelessWidget {
                                           builder: (context) => sleep_support_view()),
                                     );
                                   }
+                                }
+                                else if (redirect == 7) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => recommended_meals(animationController: animationController)),
+                                  );
                                 }
                                 else if (redirect == 9) {
                                   Navigator.push(

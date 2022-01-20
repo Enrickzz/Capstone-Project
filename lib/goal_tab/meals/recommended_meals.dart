@@ -11,18 +11,18 @@ import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
 import 'detailsPage.dart';
 
-class nutritionix_meals extends StatefulWidget {
-  const nutritionix_meals({Key key, this.animationController}) : super(key: key);
+class recommended_meals extends StatefulWidget {
+  const recommended_meals({Key key, this.animationController}) : super(key: key);
   final AnimationController animationController;
   @override
-  _nutritionix_mealsState createState() => _nutritionix_mealsState();
+  _recommended_mealsState createState() => _recommended_mealsState();
 }
 
 final _formKey = GlobalKey<FormState>();
-List<Common> result = [];
+List<Common> recommended = [];
 List<double> calories = [];
 
-class _nutritionix_mealsState extends State<nutritionix_meals>
+class _recommended_mealsState extends State<recommended_meals>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -65,7 +65,7 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
       }
     });
     super.initState();
-    result.clear();
+    recommended.clear();
     setState(() {
       
     });
@@ -93,11 +93,10 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(milliseconds: 5000), () {
-    //   setState(() {
-    //     print("FULL SET STATE");
-    //   });
-    // });
+    fetchNutritionix("fish").then((value) => setState((){
+      recommended=value;
+    }));
+
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
@@ -105,95 +104,33 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: Row(
-            children: [
-              SizedBox(width: 36),
-              Image.asset(
-                "assets/images/nutritionix.png",
-                width: 100
-              ),
-              SizedBox(width: 8),
-              const Text('Meals', style: TextStyle(
-                  color: Colors.black
-              )),
-            ],
-          ),
+          title: const Text('Recommended Meals', style: TextStyle(
+              color: Colors.black
+          )),
           centerTitle: true,
           backgroundColor: Colors.white,
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(56),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Form(
-                  autovalidateMode: AutovalidateMode.onUserInteraction, key: _formKey,
-                  child: Row (
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.search),
-                              hintText: 'Search here',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
-                                  )
-                              ),
-                              filled: true,
-                              errorStyle: TextStyle(fontSize: 15),
-                              contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
-                            ),
-                            onChanged: (val) {
-                              setState(() => search = val);
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        ElevatedButton(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                            child: Text('Search', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                            ),
-                          ),
-                          onPressed: () async{
-                            await fetchNutritionix(search).then((value) => setState((){
-                              result=value;
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            }));
-                          },
-                        ),
-                      ]
-                  )),
-            )
-          ),
         ),
         body: ListView.builder(
           padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
-          itemCount: result.length,
+          itemCount: 5,
           itemBuilder: (context, index){
             return SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: InkWell(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => DetailsPage(heroTag:(""+result[index].photo.thumb).toString(),
-                          foodName: StringUtils.capitalize(result[index].foodName),
-                          weight: result[index].getGrams().toString(),
-                          calories: result[index].getCalories().round().toString(),
-                          cholesterol: result[index].getCholesterol().round().toString(),
-                          total_fat: result[index].getTotalFat().round().toString(),
-                          sugar: result[index].getSugar().round().toString(),
-                          protein: result[index].getProtein().round().toString(),
-                          potassium: result[index].getPotassium().round().toString(),
-                          sodium: result[index].getSodium().round().toString(),
+                      builder: (context) => DetailsPage(heroTag:(""+recommended[index].photo.thumb).toString(),
+                          foodName: StringUtils.capitalize(recommended[index].foodName),
+                          weight: recommended[index].getGrams().toString(),
+                          calories: recommended[index].getCalories().round().toString(),
+                          cholesterol: recommended[index].getCholesterol().round().toString(),
+                          total_fat: recommended[index].getTotalFat().round().toString(),
+                          sugar: recommended[index].getSugar().round().toString(),
+                          protein: recommended[index].getProtein().round().toString(),
+                          potassium: recommended[index].getPotassium().round().toString(),
+                          sodium: recommended[index].getSodium().round().toString(),
                         )
                   ));
-                  print("hello index");
-                  print(result);
-                  print(index);
                 },
                 child: Column(
                   children: [
@@ -235,7 +172,7 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
                                             borderRadius: BorderRadius.circular(10.0),
                                             image: DecorationImage(
                                                 fit:BoxFit.cover,
-                                                image: NetworkImage(""+result[index].photo.thumb)
+                                                image: NetworkImage(""+recommended[index].photo.thumb)
                                             )
                                         ),
                                       )
@@ -250,18 +187,18 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
                                     child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(StringUtils.capitalize(result[index].foodName),
+                                          Text(StringUtils.capitalize(recommended[index].foodName),
                                             style: TextStyle(
                                                 fontSize:16,
                                                 fontWeight: FontWeight.bold
                                             ),),
                                           Divider(color: Colors.blue),
-                                          Text("Calories: " + result[index].getCalories().round().toString() + " kcal",
+                                          Text("Calories: " + recommended[index].getCalories().round().toString() + " kcal",
                                             style: TextStyle(
                                               fontSize:14,
                                               // color:Colors.grey,
                                             ),),
-                                          Text("Grams: " + result[index].getGrams() +"g",
+                                          Text("Grams: " + recommended[index].getGrams() +"g",
                                             style: TextStyle(
                                               fontSize:14,
                                               // color:Colors.grey,

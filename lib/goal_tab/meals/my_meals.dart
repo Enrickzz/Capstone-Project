@@ -100,18 +100,18 @@ class _my_mealsState extends State<my_meals>
       ),
     );
 
-    // listViews.add(
-    //   TitleView(
-    //     titleTxt: 'Recommended meals',
-    //     subTxt: 'See more',
-    //     redirect: 3,
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-    //         parent: widget.animationController,
-    //         curve:
-    //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-    //     animationController: widget.animationController,
-    //   ),
-    // );
+    listViews.add(
+      TitleView(
+        titleTxt: 'Recommended Meals',
+        subTxt: 'View Meals',
+        redirect: 7,
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
   }
 
   Future<bool> getData() async {
@@ -123,6 +123,7 @@ class _my_mealsState extends State<my_meals>
   Widget build(BuildContext context) {
     return Container(
       color: FitnessAppTheme.background,
+
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -134,6 +135,7 @@ class _my_mealsState extends State<my_meals>
             )
           ],
         ),
+
       ),
     );
   }
@@ -151,7 +153,7 @@ class _my_mealsState extends State<my_meals>
               // top: AppBar().preferredSize.height +
               //     MediaQuery.of(context).padding.top +
               //     24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+              bottom: 90 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,
