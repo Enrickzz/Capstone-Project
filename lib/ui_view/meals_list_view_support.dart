@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/goal_tab/meals/meals_list_doctor.dart';
+import 'package:my_app/goal_tab/meals/meals_list_support.dart';
 import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
 import 'package:my_app/models/meals_list_data.dart';
 import 'package:my_app/main.dart';
@@ -13,8 +14,8 @@ import 'package:my_app/models/nutritionixApi.dart';
 import '../main.dart';
 import '../goal_tab/meals/meals_list.dart';
 
-class MealsListViewDoctor extends StatefulWidget {
-  const MealsListViewDoctor(
+class MealsListViewSupport extends StatefulWidget {
+  const MealsListViewSupport(
       {Key key, this.mainScreenAnimationController, this.mainScreenAnimation, this.userUID})
       : super(key: key);
 
@@ -23,7 +24,7 @@ class MealsListViewDoctor extends StatefulWidget {
   final String userUID;
 
   @override
-  _MealsListViewDoctorState createState() => _MealsListViewDoctorState();
+  _MealsListViewSupportState createState() => _MealsListViewSupportState();
 }
 final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -32,7 +33,7 @@ List<FoodIntake> lunch_list = [];
 List<FoodIntake> dinner_list = [];
 List<FoodIntake> snack_list = [];
 
-class _MealsListViewDoctorState extends State<MealsListViewDoctor>
+class _MealsListViewSupportState extends State<MealsListViewSupport>
     with TickerProviderStateMixin {
   AnimationController animationController;
   List<MealsListData> mealsListData = MealsListData.tabIconsList;
@@ -255,7 +256,7 @@ class MealsView extends StatelessWidget {
           child: InkWell(
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => meals_list_doctor()
+                  builder: (context) => meals_list_support()
               ));
             },
             child: Transform(

@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/diet_view.dart';
+import 'package:my_app/ui_view/meals_list_view_doctor.dart';
+import 'package:my_app/ui_view/meals_list_view_support.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 
@@ -11,15 +13,16 @@ import '../../fitness_app_theme.dart';
 import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals_list_view.dart';
 
-class my_meals extends StatefulWidget {
-  const my_meals({Key key, this.animationController}) : super(key: key);
+class my_meals_support extends StatefulWidget {
+  const my_meals_support({Key key, this.animationController, this.userUID}) : super(key: key);
 
   final AnimationController animationController;
+  final String userUID;
   @override
-  _my_mealsState createState() => _my_mealsState();
+  _my_meals_supportState createState() => _my_meals_supportState();
 }
 
-class _my_mealsState extends State<my_meals>
+class _my_meals_supportState extends State<my_meals_support>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -79,8 +82,8 @@ class _my_mealsState extends State<my_meals>
     listViews.add(
       TitleView(
         titleTxt: 'Meals Today',
-        subTxt: 'Log Meals',
-        userType: "Patient",
+        subTxt: 'View Log',
+        userType: "Support",
         redirect: 2,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
@@ -91,28 +94,29 @@ class _my_mealsState extends State<my_meals>
     );
 
     listViews.add(
-      MealsListView(
+      MealsListViewSupport(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController,
                 curve: Interval((1 / count) * 3, 1.0,
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController,
+        userUID: widget.userUID
       ),
     );
 
-    listViews.add(
-      TitleView(
-        titleTxt: 'Recommended Meals',
-        subTxt: 'View Meals',
-        redirect: 7,
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
+    // listViews.add(
+    //   TitleView(
+    //     titleTxt: 'Recommended meals',
+    //     subTxt: 'See more',
+    //     redirect: 3,
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    //         parent: widget.animationController,
+    //         curve:
+    //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+    //     animationController: widget.animationController,
+    //   ),
+    // );
   }
 
   Future<bool> getData() async {
@@ -124,7 +128,6 @@ class _my_mealsState extends State<my_meals>
   Widget build(BuildContext context) {
     return Container(
       color: FitnessAppTheme.background,
-
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -136,7 +139,6 @@ class _my_mealsState extends State<my_meals>
             )
           ],
         ),
-
       ),
     );
   }
@@ -154,7 +156,7 @@ class _my_mealsState extends State<my_meals>
               // top: AppBar().preferredSize.height +
               //     MediaQuery.of(context).padding.top +
               //     24,
-              bottom: 90 + MediaQuery.of(context).padding.bottom,
+              bottom: 62 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,

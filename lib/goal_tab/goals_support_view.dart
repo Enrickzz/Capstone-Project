@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/goal_tab/meals/my_meals_doctor.dart';
+import 'package:my_app/goal_tab/meals/my_meals_support.dart';
 import 'package:my_app/goal_tab/sleep/my_sleep.dart';
 import 'package:my_app/goal_tab/sleep/my_sleep_support.dart';
 import 'package:my_app/goal_tab/water/my_water_doctor.dart';
@@ -194,7 +195,7 @@ class _goals_support_viewState extends State<goals_support_view>
       body: TabBarView(
         controller: controller,
         children: [
-          tabBody = my_meals_doctor(animationController: animationController),
+          tabBody = my_meals_support(animationController: animationController),
           tabBody = my_exercises_doctor(animationController: animationController),
           tabBody = my_weight_support(animationController: animationController),
           tabBody = my_water_support(animationController: animationController),

@@ -1,5 +1,7 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/goal_tab/meals/meals_list_doctor.dart';
+import 'package:my_app/goal_tab/meals/meals_list_support.dart';
 import 'package:my_app/goal_tab/meals/recommended_meals.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_doctor_view.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_patient_view.dart';
@@ -94,11 +96,27 @@ class TitleView extends StatelessWidget {
                                         builder: (context) => ExerciseScreen(animationController: animationController)),
                                   );
                                 } else if (redirect == 2) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => nutritionix_meals(animationController: animationController)),
-                                  );
+                                  if (userType == "Patient") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => nutritionix_meals(animationController: animationController)),
+                                    );
+                                  }
+                                  else if (userType == "Doctor") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => meals_list_doctor()),
+                                    );
+                                  }
+                                  else if (userType == "Support") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => meals_list_support()),
+                                    );
+                                  }
                                 }
                                 else if (redirect == 3) {
                                   Navigator.push(

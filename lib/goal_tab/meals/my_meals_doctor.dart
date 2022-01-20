@@ -80,9 +80,10 @@ class _my_meals_doctorState extends State<my_meals_doctor>
     );
     listViews.add(
       TitleView(
-        titleTxt: 'Meals today',
+        titleTxt: 'Meals Today',
         subTxt: 'View Log',
-        // redirect: 2,
+        userType: "Doctor",
+        redirect: 2,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
