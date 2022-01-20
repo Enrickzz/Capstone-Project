@@ -1,22 +1,86 @@
+import 'dart:convert';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_flutter/flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/models/users.dart';
 
 import '../fitness_app_theme.dart';
+import 'meals_list_view.dart';
 
-class water_intake_chart extends StatelessWidget {
+class water_intake_chart extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
   const water_intake_chart({Key key, this.animationController, this.animation})
       : super(key: key);
 
+  @override
+  State<water_intake_chart> createState() => _water_intake_chartState();
 
+
+  /// Create one series with sample hard coded data.
+  static List<charts.Series<Waterintake, String>> _createSampleData(int sunday, int monday, int tuesday, int wednesday, int thursday, int friday, int saturday, double goal) {
+
+
+    final data = [
+      new Waterintake('Su', sunday),
+      new Waterintake('M', monday),
+      new Waterintake('T', tuesday),
+      new Waterintake('W', wednesday),
+      new Waterintake('Th', thursday),
+      new Waterintake('F', friday),
+      new Waterintake('Sa', saturday),
+    ];
+
+    return [
+      new charts.Series<Waterintake, String>(
+          id: 'Water',
+          domainFn: (Waterintake water, _) => water.day,
+          measureFn: (Waterintake water, _) => water.water,
+          data: data,
+          // Set a label accessor to control the text of the bar label.
+          // ignore: missing_return
+          labelAccessorFn: (Waterintake water, _) {
+            if (water.water >= goal) {
+              // return '${water.water.toString()}';
+              return '★';
+            }
+
+          })
+    ];
+  }
+}
+
+class _water_intake_chartState extends State<water_intake_chart> {
+  List<WaterIntake> waterintake_list = [];
+  Water_Goal water_goal = new Water_Goal();
+  int sunday = 0;
+  int monday = 0;
+  int tuesday = 0;
+  int wednesday = 0;
+  int thursday = 0;
+  int friday = 0;
+  int saturday = 0;
+  double goal = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getWaterIntake();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<charts.Series> thisseries;
-    thisseries = _createSampleData();
+    thisseries = water_intake_chart._createSampleData(sunday, monday, tuesday, wednesday, thursday, friday,saturday, goal);
 
     final myNumericFormatter =
     BasicNumericTickFormatterSpec.fromNumberFormat(
@@ -50,7 +114,7 @@ class water_intake_chart extends StatelessWidget {
               animate: false,
               behaviors: [
                 // charts.ChartTitle("Title", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black,)),
-                charts.RangeAnnotation([charts.LineAnnotationSegment(2022, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
+                charts.RangeAnnotation([charts.LineAnnotationSegment(goal, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
               ],
               // Set a bar label decorator.
               // Example configuring different styles for inside/outside:
@@ -71,49 +135,56 @@ class water_intake_chart extends StatelessWidget {
 
   }
 
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<WaterIntake, String>> _createSampleData() {
-    int sunday = 1985;
-    int monday = 1875;
-    int tuesday = 1900;
-    int wednesday = 2245;
-    int thursday = 2022;
-    int friday = 1205;
-    int saturday = 2375;
-
-    final data = [
-      new WaterIntake('Su', sunday),
-      new WaterIntake('M', monday),
-      new WaterIntake('T', tuesday),
-      new WaterIntake('W', wednesday),
-      new WaterIntake('Th', thursday),
-      new WaterIntake('F', friday),
-      new WaterIntake('Sa', saturday),
-    ];
-
-    return [
-      new charts.Series<WaterIntake, String>(
-          id: 'Water',
-          domainFn: (WaterIntake water, _) => water.day,
-          measureFn: (WaterIntake water, _) => water.water,
-          data: data,
-          // Set a label accessor to control the text of the bar label.
-          // ignore: missing_return
-          labelAccessorFn: (WaterIntake water, _) {
-            if (water.water >= 2022) {
-              // return '${water.water.toString()}';
-              return '★';
-            }
-
-          })
-    ];
+  void getWaterIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
+    final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
+    readWaterIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      readWaterGoal.once().then((DataSnapshot datasnapshot){
+        Map<String, dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
+        water_goal = Water_Goal.fromJson(temp2);
+      temp.forEach((jsonString) {
+        waterintake_list.add(WaterIntake.fromJson(jsonString));
+      });
+      goal = water_goal.water_goal;
+      for(int i = 0; i< waterintake_list.length; i++){
+        switch(waterintake_list[i].dateCreated.weekday){
+          case 1:
+            monday += waterintake_list[i].water_intake;
+            break;
+          case 2:
+            tuesday += waterintake_list[i].water_intake;
+            break;
+          case 3:
+            wednesday += waterintake_list[i].water_intake;
+            break;
+          case 4:
+            thursday += waterintake_list[i].water_intake;
+            break;
+          case 5:
+            friday += waterintake_list[i].water_intake;
+            break;
+          case 6:
+            saturday += waterintake_list[i].water_intake;
+            break;
+          case 7:
+            sunday += waterintake_list[i].water_intake;
+            break;
+        }
+        print("THIS IS DATE CREATED WEEK");
+        print(waterintake_list[i].dateCreated.weekday);
+      }
+      });
+    });
   }
 }
 
 /// Sample ordinal data type.
-class WaterIntake {
+class Waterintake {
   final String day;
   final int water;
 
-  WaterIntake(this.day, this.water);
+  Waterintake(this.day, this.water);
 }
