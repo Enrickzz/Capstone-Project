@@ -47,7 +47,15 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   String isResting = 'yes';
-
+  String date;
+  String hours,min;
+  Users thisuser = new Users();
+  List<Connection> connections = new List<Connection>();
+  @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -356,6 +364,11 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 bp_list[bp_list.length-1-i] = temp;
                               }
                               if(double.parse(systolic_pressure) <= 120 && double.parse(diastolic_pressure) <= 80 ){
+                                // future test
+                                Future.delayed(const Duration(seconds: 30), (){
+                                  print("FUTURE");
+                                  addtoNotifs("Test future add", "30 Seconds Future!", "1");
+                                });
                                 print("YOU ARE NORMAL");
                                 Navigator.pop(context, bp_list);
                               }else if(double.parse(systolic_pressure) > 120 &&  double.parse(systolic_pressure) < 130 && double.parse(diastolic_pressure) < 80 ){
@@ -395,6 +408,25 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
 
     );
   }
+  void addtoNotif2(String message, String title, String priority,String uid){
+    print ("ADDED TO NOTIFICATIONS");
+    getNotifs2(uid);
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    String redirect = "";
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+
+      }
+    });
+  }
   void addtoNotifs(String message, String title, String priority){
     final User user = auth.currentUser;
     final uid = user.uid;
@@ -412,6 +444,17 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
           "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
 
       }
+    });
+  }
+  void getNotifs2(String uid) {
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
     });
   }
   void addtoRecommendation(String message, String title, String priority){
@@ -468,6 +511,27 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
       temp.forEach((jsonString) {
         recommList.add(RecomAndNotif.fromJson(jsonString));
       });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+
     });
   }
 

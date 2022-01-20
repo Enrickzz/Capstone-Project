@@ -32,6 +32,8 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  Users thisuser = new Users();
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +41,17 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
+    });
+    final User user = auth.currentUser;
+    final uid = user.uid;
+
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+
     });
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
@@ -49,6 +62,7 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
   }
   @override
   void dispose() {
+
     controller.dispose();
     super.dispose();
   }
@@ -91,7 +105,7 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
                         width: 50,
                         decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/priority'+notif.priority+ '.png'), fit: BoxFit.contain))
                     ),
-                    title: Text(''+notif.title, style: TextStyle(fontSize: 14.0)),
+                    title: Text(''+notif.title.replaceAll("<type>", checktype(thisuser.usertype)), style: TextStyle(fontSize: 14.0)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -183,4 +197,12 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
     });
   }
 
+}
+
+String checktype(String usertype) {
+  if(usertype == "Doctor"){
+    return "patient,";
+  }else{
+    return "family member, ";
+  }
 }

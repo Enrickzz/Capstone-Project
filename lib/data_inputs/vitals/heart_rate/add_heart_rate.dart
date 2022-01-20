@@ -44,6 +44,19 @@ class _add_heart_rateState extends State<add_heart_rate> {
   TimeOfDay time;
   var dateValue = TextEditingController();
   var heartRateValue = TextEditingController();
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String date;
+  String hours,min;
+  Users thisuser = new Users();
+  List<Connection> connections = new List<Connection>();
+
+
+  @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,6 +274,24 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 }
                                 heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                 print("Added Heart Rate Successfully! " + uid);
+                                if(beats < 40){
+                                  print("ADDING NOW");
+                                  final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                  readConnections.once().then((DataSnapshot snapshot2) {
+                                    print(snapshot2.value);
+                                    print("CONNECTION");
+                                    List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                    temp.forEach((jsonString) {
+                                      connections.add(Connection.fromJson(jsonString)) ;
+                                      Connection a = Connection.fromJson(jsonString);
+                                      print(a.uid);
+                                      addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a very low heart rate and requires your immediate medical attention",
+                                          thisuser.firstname + " has very low heart rate!",
+                                          "3",
+                                          a.uid);
+                                    });
+                                  });
+                                }
                               }
                               else{
                                 // String tempbeats = "";
@@ -309,6 +340,24 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                   final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
                                   heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                   print("Added Heart Rate Successfully! " + uid);
+                                  if(beats < 40){
+                                    print("ADDING NOW");
+                                    final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                    readConnections.once().then((DataSnapshot snapshot2) {
+                                      print(snapshot2.value);
+                                      print("CONNECTION");
+                                      List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                      temp.forEach((jsonString) {
+                                        connections.add(Connection.fromJson(jsonString)) ;
+                                        Connection a = Connection.fromJson(jsonString);
+                                        print(a.uid);
+                                        addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a very low heart rate and requires your immediate medical attention",
+                                            thisuser.firstname + " has very low heart rate!",
+                                            "3",
+                                            a.uid);
+                                      });
+                                    });
+                                  }
                                 });
 
                               }
@@ -360,6 +409,87 @@ class _add_heart_rateState extends State<add_heart_rate> {
       temp.forEach((jsonString) {
         heartRate_list.add(Heart_Rate.fromJson(jsonString));
       });
+    });
+  }
+  void addtoNotif(String message, String title, String priority,String uid){
+    print ("ADDED TO NOTIFICATIONS");
+    getNotifs(uid);
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    String redirect = "";
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+
+      }
+    });
+  }
+  void addtoRecommendation(String message, String title, String priority, String uid){
+    getRecomm(uid);
+    final ref = databaseReference.child('users/' + uid + '/recommendations/');
+    String redirect = "";
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        ref.set({"id": 0.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + recommList.length.toString());
+        ref.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+
+      }
+    });
+  }
+  void getRecomm(String uid) {
+    print("GET RECOM");
+    recommList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void getNotifs(String uid) {
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    getRecomm(uid);
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+
     });
   }
 }

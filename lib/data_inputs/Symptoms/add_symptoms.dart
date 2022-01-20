@@ -965,6 +965,7 @@ class _addSymptomsState extends State<add_symptoms> {
 
     final User user = auth.currentUser;
     final uid = user.uid;
+
     final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
     readProfile.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
