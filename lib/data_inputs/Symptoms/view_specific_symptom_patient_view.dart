@@ -171,7 +171,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                     builder: (context) => SingleChildScrollView(child: Container(
                                       padding: EdgeInsets.only(
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_symptoms(thislist: listtemp),
+                                      child: edit_symptoms(thislist: listtemp, index: widget.index),
                                     ),
                                     ),
                                   ).then((value) =>

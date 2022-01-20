@@ -156,7 +156,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                                     builder: (context) => SingleChildScrollView(child: Container(
                                       padding: EdgeInsets.only(
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_medication(),
+                                      child: edit_medication(index: widget.index),
                                     ),
                                     ),
                                   ).then((value) =>
