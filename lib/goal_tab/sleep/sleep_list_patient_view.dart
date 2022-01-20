@@ -92,28 +92,8 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
-          GestureDetector(
-            onTap: () {
-              showListRefresh();
 
-            },
-            child: Icon(
-              Icons.refresh,
-            ),
-          ),
-          SizedBox(width: 10),
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                _showMyDialogDelete();
 
-              },
-              child: Icon(
-                Icons.delete,
-              ),
-            ),
-          ),
 
         
         ],
