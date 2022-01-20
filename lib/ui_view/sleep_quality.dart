@@ -35,7 +35,7 @@ class _sleep_qualityState extends State<sleep_quality> {
   void initState() {
     super.initState();
     getSleep();
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         print("setstate");
       });
@@ -230,12 +230,12 @@ class _sleep_qualityState extends State<sleep_quality> {
   void getSleep() async {
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
         headers: {
-          'Authorization': "Bearer "+
-              "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNTM2ODc5LCJpYXQiOjE2NDI1MDgwNzl9.zsc8SbROKM-8QuzhF4jywn3M5nSkes3Tu5NJk9H_n4k",
+          'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyNzAxNDM5LCJpYXQiOjE2NDI2NzI2Mzl9.HE3SuWpJIWm8SvQudMIfpTZVQk7tnCiQfE-9lbQ4i88",
         });
     List<Sleep> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     sleep_list = sleep;
+
 
     String a;
     String today = "${now.year}-${now.month.toString().padLeft(2,"0")}-${now.day.toString().padLeft(2,"0")}";
