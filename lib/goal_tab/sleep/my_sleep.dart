@@ -96,7 +96,7 @@ class _my_sleepState extends State<my_sleep>
 
   void addAllListData() {
     const int count = 9;
-
+    String fitbitToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyNzAxNDM5LCJpYXQiOjE2NDI2NzI2Mzl9.HE3SuWpJIWm8SvQudMIfpTZVQk7tnCiQfE-9lbQ4i88";
     listViews.add(
       fitbit_connect(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -104,6 +104,17 @@ class _my_sleepState extends State<my_sleep>
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      Sleep_StackedBarChart(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+        fitbitToken: fitbitToken
       ),
     );
 
@@ -118,6 +129,7 @@ class _my_sleepState extends State<my_sleep>
             curve:
             Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+          fitbitToken: fitbitToken
       ),
     );
 
@@ -128,6 +140,7 @@ class _my_sleepState extends State<my_sleep>
             curve:
             Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+          fitbitToken: fitbitToken
       ),
     );
 
@@ -173,6 +186,7 @@ class _my_sleepState extends State<my_sleep>
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+        fitbitToken: fitbitToken
       ),
     );
 

@@ -304,7 +304,32 @@ class _weightPatienttate extends State<weight_list_patient_view> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                int initial_length = weights.length;
+                List<int> delete_list = [];
+                for(int i = 0; i < weights.length; i++){
+                  if(_selected[i]){
+                    delete_list.add(i);
+                  }
+                }
+                delete_list.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < delete_list.length; i++){
+                  weights.removeAt(delete_list[i]);
+                }
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/goal/weight/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < weights.length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/goal/weight/' + (i+1).toString());
+                  bpRef.set({
+                    "weight": weights[i].weight.toString(),
+                    "bmi": weights[i].bmi.toString(),
+                    "dateCreated": "${weights[i].dateCreated.month.toString().padLeft(2,"0")}/${weights[i].dateCreated.day.toString().padLeft(2,"0")}/${weights[i].dateCreated.year}",
+                    "timeCreated": "${weights[i].timeCreated.hour.toString().padLeft(2,"0")}:${weights[i].timeCreated.minute.toString().padLeft(2,"0")}"
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

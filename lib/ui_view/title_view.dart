@@ -24,9 +24,12 @@ class TitleView extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
   final String userUID;
+  final String fitbitToken;
+
 
   const TitleView(
       {Key key,
+        this.fitbitToken,
         this.userUID,
         this.titleTxt: "",
         this.subTxt: "",
@@ -158,7 +161,7 @@ class TitleView extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => sleep_patient_view()),
+                                          builder: (context) => sleep_patient_view(fitbitToken: fitbitToken)),
                                     );
                                   }
                                   else if (userType == "Doctor") {

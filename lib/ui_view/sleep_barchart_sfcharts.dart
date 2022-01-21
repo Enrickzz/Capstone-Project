@@ -14,7 +14,8 @@ import '../main.dart';
 class test_chart extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
-  test_chart({Key key, this.animationController, this.animation})
+  final String fitbitToken;
+  test_chart({Key key, this.animationController, this.animation, this.fitbitToken})
       : super(key: key);
 
   @override

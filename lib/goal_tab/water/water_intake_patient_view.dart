@@ -254,7 +254,31 @@ class _waterIntakeState extends State<water_intake> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                int initial_length = waterintake_list.length;
+                List<int> delete_list = [];
+                for(int i = 0; i < waterintake_list.length; i++){
+                  if(_selected[i]){
+                    delete_list.add(i);
+                  }
+                }
+                delete_list.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < delete_list.length; i++){
+                  waterintake_list.removeAt(delete_list[i]);
+                }
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < waterintake_list.length; i++){
+                  final bpRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + (i+1).toString());
+                  bpRef.set({
+                    "water_intake": waterintake_list[i].water_intake.toString(),
+                    "dateCreated": "${waterintake_list[i].dateCreated.month.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}",
+                    "timeCreated": "${waterintake_list[i].timeCreated.hour.toString().padLeft(2,"0")}:${waterintake_list[i].timeCreated.minute.toString().padLeft(2,"0")}"
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

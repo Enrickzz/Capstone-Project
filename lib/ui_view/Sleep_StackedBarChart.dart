@@ -10,7 +10,8 @@ import 'package:http/http.dart' as http;
 class Sleep_StackedBarChart extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-  const Sleep_StackedBarChart({Key key, this.animationController, this.animation})
+  final String fitbitToken;
+  const Sleep_StackedBarChart({Key key, this.animationController, this.animation, this.fitbitToken})
       : super(key: key);
   @override
   State<Sleep_StackedBarChart> createState() => _Sleep_StackedBarChartState();
@@ -76,9 +77,10 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChart> {
     );
   }
   void getFitbit() async {
+    String token = widget.fitbitToken;
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
         headers: {
-          'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyNzAxNDM5LCJpYXQiOjE2NDI2NzI2Mzl9.HE3SuWpJIWm8SvQudMIfpTZVQk7tnCiQfE-9lbQ4i88",
+          'Authorization': "Bearer " + token,
         });
     List<Sleep> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
