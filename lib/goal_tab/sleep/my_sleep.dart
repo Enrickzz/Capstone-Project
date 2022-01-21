@@ -53,6 +53,8 @@ class _my_sleepState extends State<my_sleep>
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
+  String fitbitToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNzgwMTYzLCJpYXQiOjE2NDI3NTEzNjN9.JFwXuW6PmkVcLslKm5NKIgRHudGD5tELxos-OT42iU0";
+
 
   List<Widget> listViews = <Widget>[];
   // List<Sleep> sleeptmp = [];
@@ -97,7 +99,6 @@ class _my_sleepState extends State<my_sleep>
 
   void addAllListData() {
     const int count = 9;
-    String fitbitToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyNzAxNDM5LCJpYXQiOjE2NDI2NzI2Mzl9.HE3SuWpJIWm8SvQudMIfpTZVQk7tnCiQfE-9lbQ4i88";
     listViews.add(
       fitbit_connect(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -356,8 +357,7 @@ class _my_sleepState extends State<my_sleep>
   void getLatestSleep() async {
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
         headers: {
-          'Authorization': "Bearer "+
-              "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyNzAxNDM5LCJpYXQiOjE2NDI2NzI2Mzl9.HE3SuWpJIWm8SvQudMIfpTZVQk7tnCiQfE-9lbQ4i88",
+          'Authorization': "Bearer " + fitbitToken
         });
     List<Sleep> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;

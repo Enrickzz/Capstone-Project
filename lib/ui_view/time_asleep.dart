@@ -378,8 +378,7 @@ class _time_asleepState extends State<time_asleep> {
   void getLatestSleep() async {
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
         headers: {
-          'Authorization': "Bearer "+
-              "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNjQyNzAxNDM5LCJpYXQiOjE2NDI2NzI2Mzl9.HE3SuWpJIWm8SvQudMIfpTZVQk7tnCiQfE-9lbQ4i88",
+          'Authorization': "Bearer "+ widget.fitbitToken
         });
     List<Sleep> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
