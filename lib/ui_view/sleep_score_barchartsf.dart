@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/Sleep.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -22,13 +25,24 @@ class sleep_barchart_sf extends StatefulWidget{
   sleepScoreState createState() => sleepScoreState();
 }
 List<calorie_intake_data> finaList = new List();
-
+List<Sleep> sleeptmp=[];
+String sleepdate1 = "";
+String sleepdate2 = "";
+String sleepdate3 = "";
+String sleepdate4 = "";
+String sleepdate5 = "";
+String sleepdate6 = "";
+String sleepdate7 = "";
 class sleepScoreState extends State<sleep_barchart_sf> {
+
+
   @override
   void initState() {
     super.initState();
-    setState(() {
-      //fetchNutritionix();
+    getFitbit();
+    Future.delayed(const Duration(milliseconds: 2000),()
+    {
+      setState(() {});
     });
   }
   @override
@@ -106,19 +120,41 @@ class sleepScoreState extends State<sleep_barchart_sf> {
       },
     );
   }
+
   List<calorie_intake_data> chartData =[
-    calorie_intake_data('1/1/21', 80),
-    calorie_intake_data('1/2/21', 85),
-    calorie_intake_data('1/3/21', 77),
-    calorie_intake_data('1/4/21', 73),
-    calorie_intake_data('1/5/21', 72),
-    calorie_intake_data('1/6/21', 71),
-    calorie_intake_data('1/7/21', 80),
-
-
-
+    calorie_intake_data(sleepdate7, sleeptmp[6].efficiency-10),
+    calorie_intake_data(sleepdate6, sleeptmp[5].efficiency-10),
+    calorie_intake_data(sleepdate5, sleeptmp[4].efficiency-10),
+    calorie_intake_data(sleepdate4, sleeptmp[3].efficiency-10),
+    calorie_intake_data(sleepdate3, sleeptmp[2].efficiency-10),
+    calorie_intake_data(sleepdate2, sleeptmp[1].efficiency-10),
+    calorie_intake_data(sleepdate1, sleeptmp[0].efficiency-10),
   ];
 
+  void getFitbit() async {
+    String token = widget.fitbitToken;
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
+        headers: {
+          'Authorization': "Bearer " + token,
+        });
+    List<Sleep> sleep=[];
+    sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+    sleeptmp = sleep;
+    DateTime datesleep = DateTime.parse(sleeptmp[0].dateOfSleep);
+    DateTime datesleep2 = DateTime.parse(sleeptmp[1].dateOfSleep);
+    DateTime datesleep3 = DateTime.parse(sleeptmp[2].dateOfSleep);
+    DateTime datesleep4 = DateTime.parse(sleeptmp[3].dateOfSleep);
+    DateTime datesleep5 = DateTime.parse(sleeptmp[4].dateOfSleep);
+    DateTime datesleep6 = DateTime.parse(sleeptmp[5].dateOfSleep);
+    DateTime datesleep7 = DateTime.parse(sleeptmp[6].dateOfSleep);
+    sleepdate1 = "${datesleep.month.toString().padLeft(2,"0")}/${datesleep.day.toString().padLeft(2,"0")}/${datesleep.year % 100}";
+    sleepdate2 = "${datesleep2.month.toString().padLeft(2,"0")}/${datesleep2.day.toString().padLeft(2,"0")}/${datesleep2.year % 100}";
+    sleepdate3 = "${datesleep3.month.toString().padLeft(2,"0")}/${datesleep3.day.toString().padLeft(2,"0")}/${datesleep3.year % 100}";
+    sleepdate4 = "${datesleep4.month.toString().padLeft(2,"0")}/${datesleep4.day.toString().padLeft(2,"0")}/${datesleep4.year % 100}";
+    sleepdate5 = "${datesleep5.month.toString().padLeft(2,"0")}/${datesleep5.day.toString().padLeft(2,"0")}/${datesleep5.year % 100}";
+    sleepdate6 = "${datesleep6.month.toString().padLeft(2,"0")}/${datesleep6.day.toString().padLeft(2,"0")}/${datesleep6.year % 100}";
+    sleepdate7 = "${datesleep7.month.toString().padLeft(2,"0")}/${datesleep7.day.toString().padLeft(2,"0")}/${datesleep7.year % 100}";
+  }
 
 
 }
@@ -128,7 +164,7 @@ class sleepScoreState extends State<sleep_barchart_sf> {
 class calorie_intake_data{
   calorie_intake_data(this.date, this.calories);
   final String date;
-  final double calories;
+  final int calories;
 }
 
 // Future<void> getData (var name, var id) async {

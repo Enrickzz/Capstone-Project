@@ -145,14 +145,6 @@ class _my_sleepState extends State<my_sleep>
       ),
     );
 
-
-
-
-
-
-
-
-
     listViews.add(
       TitleView(
         titleTxt: 'Sleep Quality',
