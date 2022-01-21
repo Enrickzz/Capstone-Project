@@ -1,20 +1,25 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/Sleep.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:my_app/models/nutritionixApi.dart';
 import '../fitness_app_theme.dart';
 import '../main.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class stacked_sleep_chart extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
-  stacked_sleep_chart({Key key, this.animationController, this.animation})
+  final String fitbittoken;
+  stacked_sleep_chart({Key key, this.animationController, this.animation, this.fitbittoken})
       : super(key: key);
 
   @override
@@ -24,15 +29,23 @@ class stacked_sleep_chart extends StatefulWidget{
 
 class _calorie_intakeState extends State<stacked_sleep_chart> {
 
-   List<MySleep> _chartData;
+   List<MySleep> _chartData=[];
    TooltipBehavior _tooltpBehavior;
-  @override
+   List<Sleep> sleeptmp=[];
+   bool isLoading=true;
+
+   @override
   void initState() {
-    _chartData = getChartData();
+     getFitbit();
+     Future.delayed(const Duration(milliseconds: 1500), () {
+       _createSampleData(sleeptmp);
+       setState(() {
+
+       });
+     });
+    // _chartData = getChartData();
     _tooltpBehavior = TooltipBehavior(enable: true);
     super.initState();
-    setState(() {
-    });
   }
   @override
   Widget build(BuildContext context) {
@@ -70,29 +83,32 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
-                        child: SfCartesianChart(
+                        child: isLoading
+                            ? Center(
+                          child: CircularProgressIndicator(),
+                        ): new SfCartesianChart(
                           title: ChartTitle(text: "Sleep Composition"),
-                          legend: Legend(isVisible: true),
+                          legend: Legend(isVisible: true, position: LegendPosition.top),
                           tooltipBehavior: _tooltpBehavior,
                           series: <ChartSeries>[
                             StackedColumnSeries<MySleep, String>(dataSource: _chartData,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
-                                yValueMapper: (MySleep exp, _) => exp.rem,
+                                yValueMapper: (MySleep exp, _) => exp.rem/3600,
                             name: 'REM',
                             markerSettings: MarkerSettings(isVisible: true)),
                             StackedColumnSeries<MySleep, String>(dataSource: _chartData,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
-                                yValueMapper: (MySleep exp, _) => exp.deep,
+                                yValueMapper: (MySleep exp, _) => exp.deep/3600,
                                 name: 'DEEP',
                                 markerSettings: MarkerSettings(isVisible: true)),
                             StackedColumnSeries<MySleep, String>(dataSource: _chartData,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
-                                yValueMapper: (MySleep exp, _) => exp.light,
+                                yValueMapper: (MySleep exp, _) => exp.light/3600,
                                 name: 'Light',
                                 markerSettings: MarkerSettings(isVisible: true)),
                             StackedColumnSeries<MySleep, String>(dataSource: _chartData,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
-                                yValueMapper: (MySleep exp, _) => exp.wake,
+                                yValueMapper: (MySleep exp, _) => exp.wake/3600,
                                 name: 'Wake',
                                 markerSettings: MarkerSettings(isVisible: true)),
 
@@ -130,7 +146,78 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
     ];
     return chartData;
   }
+   void getFitbit() async {
+     String token = widget.fitbittoken;
+     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
+         headers: {
+           'Authorization': "Bearer " + token,
+         });
+     List<Sleep> sleep=[];
+     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+     sleeptmp = sleep;
+     // print(response.body);
+     // print("FITBIT ^ Length = " + sleep.length.toString());
+   }
 
+   List<charts.Series<OrdinalSales, String>> _createSampleData(List<Sleep> sleep) {
+     List<OrdinalSales> rem=[];
+     List<OrdinalSales> light=[];
+     List<OrdinalSales> deep=[];
+     List<OrdinalSales> wake=[];
+     _chartData.clear();
+     for(var i = 0 ; i < sleep.length ; i ++){
+       rem.add(new OrdinalSales(sleep[i].dateOfSleep, 0));
+       deep.add(new OrdinalSales(sleep[i].dateOfSleep, 0));
+       light.add(new OrdinalSales(sleep[i].dateOfSleep, 0));
+       wake.add(new OrdinalSales(sleep[i].dateOfSleep, 0));
+       _chartData.add(new MySleep(sleep[i].dateOfSleep, 0, 0, 0, 0));
+       for(var j = 0 ; j < sleep[i].levels.data.length; j++){
+         if(sleep[i].levels.data[j].level == "rem" || sleep[i].levels.data[j].level == "asleep" ){
+           _chartData[i].rem =  _chartData[i].rem + double.parse((sleep[i].levels.data[j].seconds).toString());
+           rem[i].sales = rem[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
+         }else if(sleep[i].levels.data[j].level  == "deep" || sleep[i].levels.data[j].level  == "asleep" ){
+           _chartData[i].deep =  _chartData[i].deep + double.parse((sleep[i].levels.data[j].seconds).toString());
+           deep[i].sales = deep[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
+         }else if(sleep[i].levels.data[j].level  == "light" || sleep[i].levels.data[j].level  == "restless" ){
+           _chartData[i].light =  _chartData[i].light + double.parse((sleep[i].levels.data[j].seconds).toString());
+           light[i].sales = light[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
+         }else if(sleep[i].levels.data[j].level  == "wake" || sleep[i].levels.data[j].level  == "awake" ){
+           _chartData[i].wake =  _chartData[i].wake + double.parse((sleep[i].levels.data[j].seconds).toString());
+           wake[i].sales = wake[i].sales +double.parse((sleep[i].levels.data[j].seconds).toString());
+         }
+       }
+     }
+     isLoading = false;
+     print("LENGTHS: ");
+     print(rem.length);print(wake.length);print(deep.length);print(light.length);
+     return [
+       new charts.Series<OrdinalSales, String>(
+         id: 'REM',
+         domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
+         measureFn: (OrdinalSales sales, _) => (sales.sales/3600),
+         data: rem,
+       ),
+       new charts.Series<OrdinalSales, String>(
+         id: 'DEEP',
+         domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
+         measureFn: (OrdinalSales sales, _) => (sales.sales/3600),
+         data: deep,
+       ),
+       new charts.Series<OrdinalSales, String>(
+         id: 'LIGHT',
+         domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
+         measureFn: (OrdinalSales sales, _) => (sales.sales/3600),
+         data: light,
+       ),
+       new charts.Series<OrdinalSales, String>(
+         id: 'WAKE',
+         colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
+         domainFn: (OrdinalSales sales, _) => sales.date.replaceAll("2022-", ""),
+         measureFn: (OrdinalSales sales, _) => sales.sales/3600,
+         data: wake,
+       ),
+     ];
+   }
 
 
 
@@ -145,11 +232,17 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
 
 class MySleep{
   MySleep(this.sleepDate, this.rem, this.deep, this.light, this.wake);
-  final String sleepDate;
-  final num rem;
-  final num deep;
-  final num light;
-  final num wake;
+   String sleepDate;
+   num rem;
+   num deep;
+   num light;
+   num wake;
+}
+class OrdinalSales {
+  String date;
+  double sales;
+
+  OrdinalSales(this.date, this.sales);
 }
 
 // Future<void> getData (var name, var id) async {
