@@ -53,7 +53,7 @@ class _my_sleepState extends State<my_sleep>
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
-  String fitbitToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNzgwMTYzLCJpYXQiOjE2NDI3NTEzNjN9.JFwXuW6PmkVcLslKm5NKIgRHudGD5tELxos-OT42iU0";
+  String fitbitToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNzg0MzgxLCJpYXQiOjE2NDI3NTU1ODF9.d3JfpNowesILgLa306QAyOJbAcPbbVZ9Aj9U-pPdCWs";
 
 
   List<Widget> listViews = <Widget>[];
@@ -65,7 +65,15 @@ class _my_sleepState extends State<my_sleep>
 
   @override
   void initState() {
-    getLatestSleep();
+    final readFitbit = databaseReference.child('fitbitToken/');
+    readFitbit.once().then((DataSnapshot snapshot) {
+      print("FITBIT TOKEN");
+      print(snapshot.value);
+      if(snapshot.value != null || snapshot.value != ""){
+        fitbitToken = snapshot.value.toString();
+      }
+      getLatestSleep();
+    });
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -94,6 +102,10 @@ class _my_sleepState extends State<my_sleep>
         }
       }
     });
+    Future.delayed(const Duration(milliseconds: 1200), (){
+
+    });
+
     super.initState();
   }
 
@@ -132,6 +144,16 @@ class _my_sleepState extends State<my_sleep>
               Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
           animationController: widget.animationController,
           fitbitToken: fitbitToken
+      ),
+    );
+    listViews.add(
+      stacked_sleep_chart(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+        fitbittoken: fitbitToken
       ),
     );
     listViews.add(
@@ -178,17 +200,8 @@ class _my_sleepState extends State<my_sleep>
         fitbitToken: fitbitToken
       ),
     );
+    //
 
-    listViews.add(
-      stacked_sleep_chart(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-        fitbittoken: fitbitToken
-      ),
-    );
 
 
 

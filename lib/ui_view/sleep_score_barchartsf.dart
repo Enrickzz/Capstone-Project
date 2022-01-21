@@ -35,14 +35,17 @@ String sleepdate6 = "";
 String sleepdate7 = "";
 class sleepScoreState extends State<sleep_barchart_sf> {
 
-
+  bool isLoading = true;
+  List<calorie_intake_data> chartData=[];
   @override
   void initState() {
     super.initState();
     getFitbit();
-    Future.delayed(const Duration(milliseconds: 2000),()
-    {
-      setState(() {});
+    Future.delayed(const Duration(milliseconds: 2000),() {
+      isLoading = false;
+      setState(() {
+
+      });
     });
   }
   @override
@@ -81,7 +84,10 @@ class sleepScoreState extends State<sleep_barchart_sf> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
-                        child: SfCartesianChart(
+                        child: isLoading
+                            ? Center(
+                          child: CircularProgressIndicator(),
+                        ): new SfCartesianChart(
                           // Setting isTransposed to true to render vertically.
                           // isTransposed: true,
                           title: ChartTitle(text: 'Sleep Score past 7 days'),
@@ -121,15 +127,7 @@ class sleepScoreState extends State<sleep_barchart_sf> {
     );
   }
 
-  List<calorie_intake_data> chartData =[
-    calorie_intake_data(sleepdate7, sleeptmp[6].efficiency-10),
-    calorie_intake_data(sleepdate6, sleeptmp[5].efficiency-10),
-    calorie_intake_data(sleepdate5, sleeptmp[4].efficiency-10),
-    calorie_intake_data(sleepdate4, sleeptmp[3].efficiency-10),
-    calorie_intake_data(sleepdate3, sleeptmp[2].efficiency-10),
-    calorie_intake_data(sleepdate2, sleeptmp[1].efficiency-10),
-    calorie_intake_data(sleepdate1, sleeptmp[0].efficiency-10),
-  ];
+
 
   void getFitbit() async {
     String token = widget.fitbitToken;
@@ -154,6 +152,16 @@ class sleepScoreState extends State<sleep_barchart_sf> {
     sleepdate5 = "${datesleep5.month.toString().padLeft(2,"0")}/${datesleep5.day.toString().padLeft(2,"0")}/${datesleep5.year % 100}";
     sleepdate6 = "${datesleep6.month.toString().padLeft(2,"0")}/${datesleep6.day.toString().padLeft(2,"0")}/${datesleep6.year % 100}";
     sleepdate7 = "${datesleep7.month.toString().padLeft(2,"0")}/${datesleep7.day.toString().padLeft(2,"0")}/${datesleep7.year % 100}";
+
+    chartData =[
+      calorie_intake_data(sleepdate7, sleeptmp[6].efficiency-10),
+      calorie_intake_data(sleepdate6, sleeptmp[5].efficiency-10),
+      calorie_intake_data(sleepdate5, sleeptmp[4].efficiency-10),
+      calorie_intake_data(sleepdate4, sleeptmp[3].efficiency-10),
+      calorie_intake_data(sleepdate3, sleeptmp[2].efficiency-10),
+      calorie_intake_data(sleepdate2, sleeptmp[1].efficiency-10),
+      calorie_intake_data(sleepdate1, sleeptmp[0].efficiency-10),
+    ];
   }
 
 
