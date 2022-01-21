@@ -782,7 +782,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
                           onPressed: () async {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => goals_support_view(animationController: animationController)),
+                              MaterialPageRoute(builder: (context) => goals_support_view(animationController: animationController, userUID: widget.userUID)),
                             );
 
                           },

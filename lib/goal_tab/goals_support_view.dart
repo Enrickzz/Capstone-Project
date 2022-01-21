@@ -23,9 +23,9 @@ import 'meals/my_meals.dart';
 import 'my_stress.dart';
 
 class goals_support_view extends StatefulWidget {
-  const goals_support_view({Key key, this.animationController}) : super(key: key);
+  const goals_support_view({Key key, this.animationController, this.userUID}) : super(key: key);
   final AnimationController animationController;
-
+  final String userUID;
   @override
   _goals_support_viewState createState() => _goals_support_viewState();
 }
@@ -196,10 +196,10 @@ class _goals_support_viewState extends State<goals_support_view>
       body: TabBarView(
         controller: controller,
         children: [
-          tabBody = my_meals_support(animationController: animationController),
-          tabBody = my_exercises_support(animationController: animationController),
-          tabBody = my_weight_support(animationController: animationController),
-          tabBody = my_water_support(animationController: animationController),
+          tabBody = my_meals_support(animationController: animationController, userUID: widget.userUID),
+          tabBody = my_exercises_support(animationController: animationController, userUID: widget.userUID),
+          tabBody = my_weight_support(animationController: animationController, userUID: widget.userUID),
+          tabBody = my_water_support(animationController: animationController, userUID: widget.userUID),
           tabBody = my_sleep_support(animationController: animationController),
           tabBody = my_stress(animationController: animationController),
         ],
