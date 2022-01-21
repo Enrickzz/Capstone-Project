@@ -8,17 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/models/users.dart';
 
-import '../fitness_app_theme.dart';
-import 'meals/meals_list_view.dart';
+import '../../fitness_app_theme.dart';
+import '../meals/meals_list_view.dart';
 
-class water_intake_chart extends StatefulWidget {
+class water_intake_chart_support extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-  const water_intake_chart({Key key, this.animationController, this.animation})
+  const water_intake_chart_support({Key key, this.animationController, this.animation})
       : super(key: key);
 
   @override
-  State<water_intake_chart> createState() => _water_intake_chartState();
+  State<water_intake_chart_support> createState() => _water_intake_chart_supportState();
 
 
   /// Create one series with sample hard coded data.
@@ -54,7 +54,7 @@ class water_intake_chart extends StatefulWidget {
   }
 }
 
-class _water_intake_chartState extends State<water_intake_chart> {
+class _water_intake_chart_supportState extends State<water_intake_chart_support> {
   List<WaterIntake> waterintake_list = [];
   Water_Goal water_goal = new Water_Goal();
   int sunday = 0;
@@ -80,7 +80,7 @@ class _water_intake_chartState extends State<water_intake_chart> {
   @override
   Widget build(BuildContext context) {
     List<charts.Series> thisseries;
-    thisseries = water_intake_chart._createSampleData(sunday, monday, tuesday, wednesday, thursday, friday,saturday, goal);
+    thisseries = water_intake_chart_support._createSampleData(sunday, monday, tuesday, wednesday, thursday, friday,saturday, goal);
 
     final myNumericFormatter =
     BasicNumericTickFormatterSpec.fromNumberFormat(
@@ -91,7 +91,7 @@ class _water_intake_chartState extends State<water_intake_chart> {
       padding: const EdgeInsets.only(
           left: 24, right: 24, top: 16, bottom: 18),
       child: Container(
-        height: 250,
+        height: 270,
         decoration: BoxDecoration(
           color: FitnessAppTheme.nearlyWhite,
           borderRadius: BorderRadius.only(
@@ -113,7 +113,7 @@ class _water_intake_chartState extends State<water_intake_chart> {
               thisseries,
               animate: false,
               behaviors: [
-                // charts.ChartTitle("Water Intake this Week", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
+                charts.ChartTitle("Daily Water Intake", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
                 charts.RangeAnnotation([charts.LineAnnotationSegment(goal, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
               ],
               // Set a bar label decorator.

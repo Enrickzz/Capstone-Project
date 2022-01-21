@@ -16,10 +16,10 @@ import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
 import 'package:my_app/ui_view/fitbit_connect.dart';
-import 'package:my_app/ui_view/glass_view.dart';
+import 'package:my_app/ui_view/water/glass_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
+import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/sleep_quality.dart';
 import 'package:my_app/ui_view/sleep_score_bar_chart.dart';
 import 'package:my_app/ui_view/sleep_barchart_sfcharts.dart';
@@ -35,7 +35,7 @@ import '../../fitness_app_theme.dart';
 import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals/meals_list_view.dart';
-import '../../ui_view/water_view.dart';
+import '../../ui_view/water/water_view.dart';
 import 'package:http/http.dart' as http;
 
 class my_sleep extends StatefulWidget {

@@ -5,18 +5,19 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/ui_view/water/water_intake_chart_doctor.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glass_view.dart';
+import 'package:my_app/ui_view/water/glass_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
+import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/water_view_doctor.dart';
+import 'package:my_app/ui_view/water/water_view_doctor.dart';
 import 'package:my_app/ui_view/weight/weight_progress.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
@@ -26,7 +27,7 @@ import '../../fitness_app_theme.dart';
 import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals/meals_list_view.dart';
-import '../../ui_view/water_view.dart';
+import '../../ui_view/water/water_view.dart';
 
 class my_water_doctor extends StatefulWidget {
   const my_water_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
@@ -85,7 +86,7 @@ class _my_water_doctorState extends State<my_water_doctor>
     const int count = 9;
 
     listViews.add(
-      calorie_intake(
+      water_intake_chart_doctor(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -120,15 +121,7 @@ class _my_water_doctorState extends State<my_water_doctor>
         userUID: widget.userUID
       ),
     );
-    listViews.add(
-      GlassView(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 8, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController),
-    );
+
   }
 
   Future<bool> getData() async {

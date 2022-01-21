@@ -1,12 +1,12 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
-import '../fitness_app_theme.dart';
+import '../../fitness_app_theme.dart';
 
-class weight_trend extends StatelessWidget {
+class weight_trend_support extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-  const weight_trend({Key key, this.animationController, this.animation})
+  const weight_trend_support({Key key, this.animationController, this.animation})
       : super(key: key);
 
   /// Creates a [TimeSeriesChart] with sample data and no transition.
