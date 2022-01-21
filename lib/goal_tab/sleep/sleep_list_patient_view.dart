@@ -234,10 +234,10 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
         cells: [
           DataCell(Text(getDateFormatted(bp.dateOfSleep.toString()))),
           DataCell(Text(milisecondToTime(bp.duration).toString() + " hr")),
-          DataCell(Text(rem[index].sales.toString())),
-          DataCell(Text(light[index].sales.toString())),
-          DataCell(Text(deep[index].sales.toString())),
-          DataCell(Text(bp.efficiency.toString(), style: TextStyle(),)),
+          DataCell(Text(secondToTime(rem[index].sales).toString()  + " hr")),
+          DataCell(Text(secondToTime(deep[index].sales).toString() + " hr")),
+          DataCell(Text(secondToTime(light[index].sales).toString()+ " hr")),
+          DataCell(Text((bp.efficiency - 10).toString(), style: TextStyle(),)),
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
@@ -367,5 +367,10 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
     var hours = (duration / 3600000).floor();
     var minutes = (duration / 60000).remainder(60).toStringAsFixed(0).padLeft(2,"0");
       return "$hours:$minutes";
+  }
+  String secondToTime(double duration){
+    var hours = (duration / 3600).floor();
+    var minutes = (duration / 60).remainder(60).toStringAsFixed(0).padLeft(2,"0");
+    return "$hours:$minutes";
   }
 }

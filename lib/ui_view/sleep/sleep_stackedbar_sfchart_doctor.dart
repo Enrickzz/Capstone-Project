@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +28,7 @@ class stacked_sleep_chart_doctor extends StatefulWidget{
 class _calorie_intakeState extends State<stacked_sleep_chart_doctor> {
 
   List<MySleep> _chartData=[];
+  List<MySleep> _chartDataReveresed=[];
   TooltipBehavior _tooltpBehavior;
   List<Sleep> sleeptmp=[];
   bool isLoading=true;
@@ -90,22 +90,22 @@ class _calorie_intakeState extends State<stacked_sleep_chart_doctor> {
                           legend: Legend(isVisible: true, position: LegendPosition.top),
                           tooltipBehavior: _tooltpBehavior,
                           series: <ChartSeries>[
-                            StackedColumnSeries<MySleep, String>(dataSource: _chartData,
+                            StackedColumnSeries<MySleep, String>(dataSource: _chartDataReveresed,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
                                 yValueMapper: (MySleep exp, _) => exp.rem/3600,
                                 name: 'REM',
                                 markerSettings: MarkerSettings(isVisible: true)),
-                            StackedColumnSeries<MySleep, String>(dataSource: _chartData,
+                            StackedColumnSeries<MySleep, String>(dataSource: _chartDataReveresed,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
                                 yValueMapper: (MySleep exp, _) => exp.deep/3600,
                                 name: 'DEEP',
                                 markerSettings: MarkerSettings(isVisible: true)),
-                            StackedColumnSeries<MySleep, String>(dataSource: _chartData,
+                            StackedColumnSeries<MySleep, String>(dataSource: _chartDataReveresed,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
                                 yValueMapper: (MySleep exp, _) => exp.light/3600,
                                 name: 'Light',
                                 markerSettings: MarkerSettings(isVisible: true)),
-                            StackedColumnSeries<MySleep, String>(dataSource: _chartData,
+                            StackedColumnSeries<MySleep, String>(dataSource: _chartDataReveresed,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
                                 yValueMapper: (MySleep exp, _) => exp.wake/3600,
                                 name: 'Wake',
@@ -186,6 +186,7 @@ class _calorie_intakeState extends State<stacked_sleep_chart_doctor> {
         }
       }
     }
+    _chartDataReveresed = List.from(_chartData.reversed);
     isLoading = false;
     print("LENGTHS: ");
     print(rem.length);print(wake.length);print(deep.length);print(light.length);
