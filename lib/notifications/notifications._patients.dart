@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_app/data_inputs/vitals/blood_pressure/add_blood_pressure.dart';
+import 'package:my_app/data_inputs/vitals/heart_rate/add_heart_rate.dart';
+import 'package:my_app/data_inputs/vitals/oxygen_saturation/add_o2_saturation.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/GooglePlaces.dart';
@@ -129,6 +132,44 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                               ],
                             ),
                             onTap: (){
+                              Future.delayed(const Duration(milliseconds: 1000), (){
+                                if(notif.title == "Reminder!" && notif.category == "bprecommend"){
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      // child: add_medication(thislist: medtemp),
+                                      child: add_blood_pressure(instance: "Recommend"),
+                                    ),
+                                    ),
+                                  );
+                                }
+                                if(notif.title == "Reminder!" && notif.category == "heartrate"){
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      // child: add_medication(thislist: medtemp),
+                                      child: add_heart_rate(instance: "Recommend"),
+                                    ),
+                                    ),
+                                  );
+                                }
+                                if(notif.title == "Reminder!" && notif.category == "oxygen"){
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      // child: add_medication(thislist: medtemp),
+                                      child: add_o2_saturation(instance: "Recommend"),
+                                    ),
+                                    ),
+                                  );
+                                }
+                              });
 
                             },
                           ),
@@ -202,6 +243,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                                 ),
                               );
                             }
+
                           });
                         },
                       ),

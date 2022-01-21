@@ -362,9 +362,18 @@ class Exercise_screen_state extends State<ExerciseScreen>
   Future<List<ExercisesTest>> getExercises(String query) async{
     final User user = auth.currentUser;
     final uid = user.uid;
+    final readExRx = databaseReference.child('ExRxToken/');
+    String token = "";
+    await readExRx.once().then((DataSnapshot snapshot) {
+      print("EXRX TOKEN");
+      print(snapshot.value);
+      if(snapshot.value != null || snapshot.value != ""){
+        token = snapshot.value.toString();
+      }
+    });
     var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
         headers: {
-          'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjQyMzk1Nzc1LCJleHAiOjE2NDIzOTkzNzUsIm5hbWUiOiJsb3Vpc2V4cngifQ.MMzzA7xcEPGIEmAcCXaXWZInhBj6kd81d0cGfZwc4o0",
+          'Authorization': "Bearer $token",
         });
     List<ExercisesTest> exers=[];
     exers = ExRxTest.fromJson(jsonDecode(response.body)).exercises;

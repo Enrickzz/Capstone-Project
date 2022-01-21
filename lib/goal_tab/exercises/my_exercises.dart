@@ -292,8 +292,16 @@ void getFitbit() async {
   DateTime a = DateTime.now();
   String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
   print("date now = " + a.toString() );
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNTQyNjE0LCJpYXQiOjE2NDI1MTM4MTR9.T5Qn0SdpuaPVeXCqpcwhOf6CAXtE_kWoNGCPJ_6hxV0";
-
+  final readFitbit = databaseReference.child('fitbitToken/');
+  await readFitbit.once().then((DataSnapshot snapshot) {
+    print("FITBIT TOKEN");
+    print(snapshot.value);
+    if(snapshot.value != null || snapshot.value != ""){
+      token = snapshot.value.toString();
+    }
+  });
   //FIRST (RAW)
   var response = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&beforeDate=$y-$m-$d"),
       headers: {

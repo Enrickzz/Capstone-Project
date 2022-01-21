@@ -21,7 +21,8 @@ import 'o2_saturation_patient_view.dart';
 
 class add_o2_saturation extends StatefulWidget {
   final List<Oxygen_Saturation> o2list;
-  add_o2_saturation({this.o2list});
+  final String instance;
+  add_o2_saturation({this.o2list, this.instance});
   @override
   _add_o2_saturationState createState() => _add_o2_saturationState();
 }
@@ -42,7 +43,19 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String date;
+  String hours,min;
+  Users thisuser = new Users();
+  List<Connection> connections = new List<Connection>();
 
+
+  @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -266,6 +279,66 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                               }
 
                             });
+                            //RECOMMEND AND NOTIFS
+                            if(widget.instance =="Reminder!"){
+                              if(spo2 < 95){
+                                addtoNotif("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. Please remain calm and stay composed and continue to monitor your other vitals such as blood pressure and heart rate.",
+                                    "Low Oxygen!",
+                                    "3",
+                                    uid,
+                                    "None");
+                              }
+                              print("ADDING NOW");
+                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                              readConnections.once().then((DataSnapshot snapshot2) {
+                                print(snapshot2.value);
+                                print("CONNECTION");
+                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                temp.forEach((jsonString) {
+                                  connections.add(Connection.fromJson(jsonString)) ;
+                                  Connection a = Connection.fromJson(jsonString);
+                                  print(a.uid);
+                                  addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a consistent oxygen rate between 90 - 95 and requires your medical attention",
+                                      thisuser.firstname + " has consecutive low SPO2 readings",
+                                      "3",
+                                      a.uid,
+                                      "None");
+                                });
+                              });
+                            }
+                            if(spo2 < 90){
+                              addtoRecommendation("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. You or someone else near you must administer an immediate oxygen supply as your body is lacking oxygen right now. ",
+                                  "Low Oxygen Levels!",
+                                  "3",
+                                  uid,
+                                  "None");
+                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                              readConnections.once().then((DataSnapshot snapshot2) {
+                                print(snapshot2.value);
+                                print("CONNECTION");
+                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                temp.forEach((jsonString) {
+                                  connections.add(Connection.fromJson(jsonString)) ;
+                                  Connection a = Connection.fromJson(jsonString);
+                                  print(a.uid);
+                                  addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a oxygen rate of 90 and requires your immediate medical attention",
+                                      thisuser.firstname + " has low SPO2 readings",
+                                      "3",
+                                      a.uid,
+                                      "None");
+                                });
+                              });
+                            }
+                            if(spo2 >= 91 && spo2 <= 95){
+                              addtoRecommendation("Your Oxygen Saturation is lower than normal but is still not a cause to be alarmed. We recommend that you record your oxygen saturation again after 30 minutes. For the meantime try to remain calm and perform deep breathing as you listen to some soothing spotify songs.",
+                                  "Low Oxygen Levels",
+                                  "2",
+                                  uid,
+                                  "Spotify");
+                              Future.delayed(const Duration(minutes: 30), (){
+                                addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen");
+                              });
+                            }
 
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + oxygen_list.length.toString());
@@ -303,6 +376,85 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
       temp.forEach((jsonString) {
         oxygen_list.add(Oxygen_Saturation.fromJson(jsonString));
       });
+    });
+  }
+  void addtoNotif(String message, String title, String priority,String uid, String redirect){
+    print ("ADDED TO NOTIFICATIONS");
+    getNotifs(uid);
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "oxygen", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "oxygen", "redirect": redirect});
+
+      }
+    });
+  }
+  void addtoRecommendation(String message, String title, String priority, String uid,String redirect){
+    getRecomm(uid);
+    final ref = databaseReference.child('users/' + uid + '/recommendations/');
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        ref.set({"id": 0.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/recommendations/' + recommList.length.toString());
+        ref.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "recommend", "redirect": redirect});
+
+      }
+    });
+  }
+  void getRecomm(String uid) {
+    print("GET RECOM");
+    recommList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void getNotifs(String uid) {
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    getRecomm(uid);
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+
     });
   }
 }

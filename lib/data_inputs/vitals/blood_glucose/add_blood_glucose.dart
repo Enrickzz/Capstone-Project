@@ -47,6 +47,21 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   var unitValue = TextEditingController();
   List <bool> isSelected = [true, false];
 
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String isResting = 'yes';
+  String date;
+  String hours,min;
+  Users thisuser = new Users();
+  List<Connection> connections = new List<Connection>();
+
+
+  @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -315,6 +330,27 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
 
 
                             });
+                            if(glucose < 80){
+                              addtoRecommendation("Your blood sugar is lower than normal. You should speak to your physician about it and seek immediate medical attention if you feel unwell. In the meantime, have something to eat to help improve your condition.",
+                                  "Unusually Low Blood Sugar",
+                                  "3",
+                                  "None");
+                            }
+                            if(glucose > 120 && double.parse(lastMeal.toString()) >= 2){
+                              addtoRecommendation("Your blood sugar is higher than normal and we have already informed your doctor and support system about it. You should speak to your physician about it unless you feel unwell, then you should go to your nearest emergency room immediately",
+                                  "Unusually High Blood Sugar",
+                                  "3",
+                                  "None");
+                            }
+                            if(glucose >120 && double.parse(lastMeal.toString()) <= 2){
+                              addtoRecommendation("We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. Please record your blood sugar again 2 hours after your last meal. We have set an alarm to remind you to record your blood sugar later. For now please drink a glass of water and try to walk around.",
+                                  "High Blood Sugar!",
+                                  "2",
+                                  "None");
+                              Future.delayed(const Duration(hours: 1), (){
+                                addtoNotifs("Check your Blood Sugar now", "Reminder!", "1");
+                              });
+                            }
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               glucose_list.add(new Blood_Glucose(glucose: glucose, lastMeal: int.parse(lastMeal), bloodGlucose_status: glucose_status, bloodGlucose_date: format.parse(glucose_date), bloodGlucose_time: timeformat.parse(glucose_time)));
                               for(var i=0;i<glucose_list.length/2;i++){
@@ -350,6 +386,88 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
       temp.forEach((jsonString) {
         glucose_list.add(Blood_Glucose.fromJson(jsonString));
       });
+    });
+  }
+  void addtoNotifs(String message, String title, String priority){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/notifications/');
+    getNotifs();
+    String redirect= "";
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "bloodpressure", "redirect": redirect});
+      }else{
+        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + (notifsList.length--).toString());
+        notifRef.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "bloodpressure", "redirect": redirect});
+
+      }
+    });
+  }
+  void getNotifs() {
+    notifsList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void getRecomm() {
+    recommList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void addtoRecommendation(String message, String title, String priority, String redirect){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/recommendations/');
+    getRecomm();
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "labrecommend", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
+        notifRef.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "labrecommend", "redirect": redirect});
+      }
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+
     });
   }
 }

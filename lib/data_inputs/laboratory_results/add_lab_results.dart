@@ -83,7 +83,19 @@ class _addLabResultState extends State<add_lab_results> {
   String ldl=" ";
   String hdl=" ";
 
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String isResting = 'yes';
+  String date;
+  String hours,min;
+  Users thisuser = new Users();
+  List<Connection> connections = new List<Connection>();
 
+  @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -732,16 +744,64 @@ class _addLabResultState extends State<add_lab_results> {
                                 labResult_list[i] = labResult_list[labResult_list.length-1-i];
                                 labResult_list[labResult_list.length-1-i] = temp;
                               }
-
-                              FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                                setState(() {
-                                  trythis.clear();
-                                  listAll("path");
-                                  Future.delayed(const Duration(milliseconds: 1000), (){
-                                    Navigator.pop(context, trythis);
+                              // RECOMMENDATION N NOTIFS
+                              if(hemoglobin_hb != " " && valueChooseLabResult == "Complete Blood Count"){
+                                if(double.parse(hemoglobin_hb.toString()) < 12){
+                                  addtoRecommendation("We noticed that you have a low hemoglobin level. This is due to your body’s lack of protein which can cause Anemia. We recommend that you eat foods rich in protein. Click here to view recommended foods for you.",
+                                      "Low Hemoglobin!",
+                                      "3",
+                                      "Food - Hemoglobin");
+                                }
+                              }
+                              if(potassium != " " && valueChooseLabResult == "Serum Electrolytes"){
+                                if(double.parse(potassium.toString()) <= 3){
+                                  addtoRecommendation("We noticed that you have a low potassium level. We strongly advise you to seek immediate medical attention as soon as possible. For the meantime we recommend that you eat foods rich in Potassium . Click here to view recommended foods for you.",
+                                      "Low Potassium!",
+                                      "3",
+                                      "Food - Potassium");
+                                }
+                              }
+                              if(ldl != " " && valueChooseLabResult == "Lipid Profile"){
+                                if(double.parse(ldl.toString()) <= 3){
+                                  addtoRecommendation("We noticed that your LDL Cholesterol level is high which could be harmful for your body. We recommend that you eat food rich in Omega-3. Click here to view recommended foods for you.",
+                                      "High Cholesterol!",
+                                      "3",
+                                      "Food - Cholesterol");
+                                }
+                              }
+                              if(creatinine_mgDl != " " && valueChooseLabResult == "Bun&Creatinine"){
+                                if(double.parse(creatinine_mgDl.toString()) > 1.2){
+                                  final readAddinf = databaseReference.child("users/"+thisuser.uid+"/vitals/additional_info");
+                                  readAddinf.once().then((DataSnapshot snapshot) {
+                                    Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+                                    bool check = false;
+                                    for(var i = 0; i < userInfo.other_disease.length; i++){
+                                      if(userInfo.disease[i] == "Chronic Kidney Disease") check == true;
+                                    }
+                                    if(check == true){
+                                      addtoRecommendation("We noticed that your Creatinine level is unusually high and you do not have Chronic Kidney Disease as a listed ailment. We recommend that you consult with a Nephrologist as soon as possible.",
+                                          "Creatinine Level is High!",
+                                          "3",
+                                          "None");
+                                    }
                                   });
+                                }
+                              }
+
+                              if(fileName != null){
+                                FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+
+                                });
+                              }
+
+                              setState(() {
+                                trythis.clear();
+                                listAll("path");
+                                Future.delayed(const Duration(milliseconds: 1200), (){
+                                  Navigator.pop(context, trythis);
                                 });
                               });
+
                               // print("POP HERE ==========");
                               // Navigator.pop(context, labResult_list);
                             });
@@ -758,6 +818,25 @@ class _addLabResultState extends State<add_lab_results> {
             )
         )
     );
+  }
+
+  void addtoRecommendation(String message, String title, String priority, String redirect){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/recommendations/');
+    getRecomm();
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "labrecommend", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
+        notifRef.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "labrecommend", "redirect": redirect});
+      }
+    });
   }
    Future <List<String>>_getDownloadLinks(List<Reference> refs) {
     return Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
@@ -807,6 +886,50 @@ class _addLabResultState extends State<add_lab_results> {
       });
     });
   }
+  void getNotifs() {
+    notifsList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void getRecomm() {
+    recommList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
 
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+
+    });
+  }
 
 }

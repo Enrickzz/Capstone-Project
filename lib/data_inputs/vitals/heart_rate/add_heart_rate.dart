@@ -21,7 +21,8 @@ import '../../medicine_intake/medication_patient_view.dart';
 
 class add_heart_rate extends StatefulWidget {
   final List<Heart_Rate> thislist;
-  add_heart_rate({this.thislist});
+  final String instance;
+  add_heart_rate({this.thislist, this.instance});
   @override
   _add_heart_rateState createState() => _add_heart_rateState();
 }
@@ -274,24 +275,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 }
                                 heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                 print("Added Heart Rate Successfully! " + uid);
-                                if(beats < 40){
-                                  print("ADDING NOW");
-                                  final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                                  readConnections.once().then((DataSnapshot snapshot2) {
-                                    print(snapshot2.value);
-                                    print("CONNECTION");
-                                    List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
-                                    temp.forEach((jsonString) {
-                                      connections.add(Connection.fromJson(jsonString)) ;
-                                      Connection a = Connection.fromJson(jsonString);
-                                      print(a.uid);
-                                      addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a very low heart rate and requires your immediate medical attention",
-                                          thisuser.firstname + " has very low heart rate!",
-                                          "3",
-                                          a.uid);
-                                    });
-                                  });
-                                }
+
                               }
                               else{
                                 // String tempbeats = "";
@@ -354,7 +338,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                         addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a very low heart rate and requires your immediate medical attention",
                                             thisuser.firstname + " has very low heart rate!",
                                             "3",
-                                            a.uid);
+                                            a.uid, "None");
                                       });
                                     });
                                   }
@@ -363,6 +347,70 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               }
 
                             });
+                            //Recommendations / Notifs
+                            if(widget.instance =="Reminder!"){
+                              if(beats > 100 && hr_status =="Resting"){
+                                addtoRecommendation("We have informed your doctor and support system regarding your condition as your heart rate is still higher than the normal range. Please seek immediate medical atention if you are feeling unwell or take prescribed medications if your doctor has given you one. Please remain calm and try to compose yourself.",
+                                    "High Heart Rate!",
+                                    "3",
+                                    uid,
+                                    "None");
+                                print("ADDING NOW");
+                                final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                readConnections.once().then((DataSnapshot snapshot2) {
+                                  print(snapshot2.value);
+                                  print("CONNECTION");
+                                  List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                  temp.forEach((jsonString) {
+                                    connections.add(Connection.fromJson(jsonString)) ;
+                                    Connection a = Connection.fromJson(jsonString);
+                                    print(a.uid);
+                                    addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a high heart rate and requires your immediate medical attention",
+                                        thisuser.firstname + " has consecutive high heart rate readings",
+                                        "3",
+                                        a.uid,
+                                        "None");
+                                  });
+                                });
+                              }
+                            }
+                            if(beats < 40){
+                              addtoNotif("Your Heart Rate is alarming which is why we have already notified your doctor and support system regarding this. Please remain calm at all times and seek immediate medical attention.",
+                                  "High Heart Rate!",
+                                  "2",
+                                  uid,"None");
+                              print("ADDING NOW");
+                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                              readConnections.once().then((DataSnapshot snapshot2) {
+                                print(snapshot2.value);
+                                print("CONNECTION");
+                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                temp.forEach((jsonString) {
+                                  connections.add(Connection.fromJson(jsonString)) ;
+                                  Connection a = Connection.fromJson(jsonString);
+                                  print(a.uid);
+                                  addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a very low heart rate and requires your immediate medical attention",
+                                      thisuser.firstname + " has very low heart rate!",
+                                      "3",
+                                      a.uid, "None");
+                                });
+                              });
+                            }
+                            if(beats > 100 && hr_status == "Resting"){
+                              addtoRecommendation("We recommend that you record your heart rate again after an hour since your heart rate is higher than the normal range. We have set an alarm for you to record your heart rate again later  If you are feeling unwell please seek immediate medical attention. For the meantime we advise you to keep yourself calm and listen to some relaxing music while managing your breathing.",
+                                  "Heart Rate is High!",
+                                  "2",
+                                  uid, "Spotify");
+                              Future.delayed(const Duration(hours: 1), (){
+                                addtoNotif("Check your Heart Rate now", "Reminder!", "1", uid, "HeartRate");
+                              });
+                            }
+                            if(beats > 100 && hr_status == "Active"){
+                              addtoRecommendation("Your heart rate seems a bit high but since you just finished exercising. If you feel unwell please don’t hesitate to seek immediate medical attention. We recommend that you record your heart rate again after an hour as we would be setting a reminder for you to do so. For the meantime please listen to some soothing music while you take a rest and relax yourself.",
+                                  "Heart Rate is High!",
+                                  "2",
+                                  uid, "Spotify");
+                            }
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + heartRate_list.length.toString());
                               heartRate_list.add(new Heart_Rate(bpm: beats, hr_status: hr_status, hr_date: format.parse(heartRate_date),hr_time: timeformat.parse(heartRate_time)));
@@ -411,29 +459,27 @@ class _add_heart_rateState extends State<add_heart_rate> {
       });
     });
   }
-  void addtoNotif(String message, String title, String priority,String uid){
+  void addtoNotif(String message, String title, String priority,String uid, String redirect){
     print ("ADDED TO NOTIFICATIONS");
     getNotifs(uid);
     final ref = databaseReference.child('users/' + uid + '/notifications/');
-    String redirect = "";
     ref.once().then((DataSnapshot snapshot) {
       if(snapshot.value == null){
         final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
         ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "notification", "redirect": redirect});
+          "rec_date": date, "category": "heartrate", "redirect": redirect});
       }else{
         // count = recommList.length--;
         final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
         ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "notification", "redirect": redirect});
+          "rec_date": date, "category": "heartrate", "redirect": redirect});
 
       }
     });
   }
-  void addtoRecommendation(String message, String title, String priority, String uid){
+  void addtoRecommendation(String message, String title, String priority, String uid,String redirect){
     getRecomm(uid);
     final ref = databaseReference.child('users/' + uid + '/recommendations/');
-    String redirect = "";
     ref.once().then((DataSnapshot snapshot) {
       if(snapshot.value == null){
         final ref = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());

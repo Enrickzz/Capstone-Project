@@ -1,17 +1,14 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_app/models/spotify.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-
-
-
-
+import 'package:http/http.dart' as http;
 
 class music_rec extends StatefulWidget {
-
-
-
-
 
   @override
   _DetailsPageState createState() => _DetailsPageState();
@@ -22,7 +19,14 @@ class _DetailsPageState extends State<music_rec> {
   var selectedCard = 'GRAMS';
   final ButtonStyle style =
   ElevatedButton.styleFrom(textStyle: const TextStyle(fontFamily:'Montserrat',fontSize: 20));
+  Items showitem = new Items();
+  bool isLoading = true;
 
+  @override
+  void initState(){
+    spotify();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +42,6 @@ class _DetailsPageState extends State<music_rec> {
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
-        // actions: <Widget>[
-        //   IconButton(
-        //     icon: Icon(Icons.more_horiz),
-        //     onPressed: (){},
-        //     color: Colors.white,
-        // )
-        // ],
       ),
       body: ListView(
         children: [
@@ -73,14 +70,18 @@ class _DetailsPageState extends State<music_rec> {
                 top: 30.0,
                 left: (MediaQuery.of(context).size.width /2) -100.0,
                 child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: ExactAssetImage('assets/images/spotify_logo.png'),
-                          fit: BoxFit.cover
-                      )
-                  ),
+                  // decoration: BoxDecoration(
+                  //     image: DecorationImage(
+                  //         image: Image.network('assets/images/spotify_logo.png'),
+                  //         fit: BoxFit.cover
+                  //     )
+                  // ),
                   height: 200.0,
                   width: 200.0,
+                  child: isLoading
+                      ? Center(
+                    child: CircularProgressIndicator(),
+                  ): new Image.network(showitem.album.images[0].url),
                 ),
               ),
               Positioned(
@@ -91,24 +92,33 @@ class _DetailsPageState extends State<music_rec> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text("The Feels",
+                    isLoading
+                        ? Center(
+                      child: CircularProgressIndicator(),
+                    ): new Text(showitem.name,
                       style: TextStyle(
                           fontSize: 22.0,
                           fontWeight: FontWeight.bold
                       ),
                     ),
-                    Text("by:" + "Twice",
+                    isLoading
+                        ? Center(
+                      child: CircularProgressIndicator(),
+                    ): new Text("by: " + showitem.artists[0].name,
                       style: TextStyle(
                         fontSize: 18.0,
                       ),
                     ),
                     SizedBox(height: 12.0),
 
-                    Text("K-pop",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    ),
+                    // isLoading
+                    //     ? Center(
+                    //   child: CircularProgressIndicator(),
+                    // ): new Text(showitem.,
+                    //   style: TextStyle(
+                    //     fontSize: 16.0,
+                    //   ),
+                    // ),
                     SizedBox(height: 20.0),
                     // Text("Hopefully this song recommendation will help you relax as you perform deep breathing exercises to help improve your current health situation.",
                     //   style: TextStyle(
@@ -172,14 +182,12 @@ class _DetailsPageState extends State<music_rec> {
                             ElevatedButton(
                               style: style,
                               onPressed: () async {
-                                final url = 'https://open.spotify.com/track/1XyzcGhmO7iUamSS94XfqY?si=42eb5dd5e2e04598';
+                                final url = showitem.externalUrls.spotify;
+                                print("THIS IS " + url.toString());
 
                                 if(await canLaunch(url)){
                                   await launch(url);
                                 }
-
-
-
                               },
                               child: const Text('Open'),
                             ),
@@ -281,6 +289,37 @@ class _DetailsPageState extends State<music_rec> {
   selectCard(cardTitle){
     setState(() {
       selectedCard = cardTitle;
+    });
+  }
+  void spotify() async{
+    String token = "";
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    final readFitbit = databaseReference.child('spotifyToken/');
+    await readFitbit.once().then((DataSnapshot snapshot) {
+      print("SPOTIFY TOKEN");
+      print(snapshot.value);
+      if(snapshot.value != null || snapshot.value != ""){
+        token = snapshot.value.toString();
+      }
+    });
+    String query = "relaxing";
+    List<String> queryarr = ["relaxing", "meditation", "lofi"];
+    var rng = new Random();
+    var response = await http.get(Uri.parse("https://api.spotify.com/v1/search?q="+ queryarr[rng.nextInt(2)]+"&type=track&market=PH&limit=50"),
+        headers: {
+          'Authorization': "Bearer $token",
+        });
+    List<Items> tracks =[];
+    tracks = Spotify.fromJson(jsonDecode(response.body)).tracks.items;
+    // print("SPOTIFY ITEMS = " +tracks.length.toString() );
+    showitem = tracks[rng.nextInt(30)];
+    print("PRINT ONE ITEM = "  + tracks[rng.nextInt(30)].name );
+    for(var i = 0; i < tracks.length; i ++){
+      print("$i. "+tracks[i].name +"  url: " + tracks[i].externalUrls.spotify + "  image: " + tracks[i].album.images[0].url);
+    }
+    isLoading = false;
+    setState(() {
+
     });
   }
 
