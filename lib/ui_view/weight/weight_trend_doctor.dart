@@ -1,12 +1,12 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
-import '../fitness_app_theme.dart';
+import '../../fitness_app_theme.dart';
 
-class weight_chart extends StatelessWidget {
+class weight_trend_doctor extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-  const weight_chart({Key key, this.animationController, this.animation})
+  const weight_trend_doctor({Key key, this.animationController, this.animation})
       : super(key: key);
 
   /// Creates a [TimeSeriesChart] with sample data and no transition.
@@ -48,7 +48,7 @@ class weight_chart extends StatelessWidget {
             dateTimeFactory: const charts.LocalDateTimeFactory(),
             
             behaviors: [
-              // charts.ChartTitle("Title", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black,)),
+              charts.ChartTitle("Weight Trend", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
               charts.RangeAnnotation([charts.LineAnnotationSegment(40, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
             ],
           ),

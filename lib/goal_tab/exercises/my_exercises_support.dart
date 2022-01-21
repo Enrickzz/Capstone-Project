@@ -3,23 +3,16 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/exrxTEST.dart';
-import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/water/glass_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/weight/BMI_chart_doctor.dart';
-import 'package:my_app/ui_view/weight/weight_progress.dart';
-import 'package:my_app/ui_view/weight/weight_progress_doctor.dart';
-import 'package:my_app/ui_view/weight/weight_trend_doctor.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
@@ -27,31 +20,32 @@ import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
-import '../../ui_view/meals/meals_list_view.dart';
-import '../../ui_view/water/water_view.dart';
+import 'exercise_screen.dart';
 
-class my_weight_doctor extends StatefulWidget {
-  const my_weight_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
-  final String userUID;
+class my_exercises_support extends StatefulWidget {
+  const my_exercises_support({Key key, this.animationController, this.userUID}) : super(key: key);
   final AnimationController animationController;
+  final String userUID;
   @override
-  _my_weight_doctorState createState() => _my_weight_doctorState();
+  _my_exercises_supportState createState() => _my_exercises_supportState();
 }
 
-class _my_weight_doctorState extends State<my_weight_doctor>
+class _my_exercises_supportState extends State<my_exercises_support>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
-
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  final AuthService _auth = AuthService();
-
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
+  List<ExercisesTest> myexerciselist= [];
+  final AuthService _auth = AuthService();
+
   double topBarOpacity = 0.0;
 
   @override
   void initState() {
+    myexerciselist.clear();
+    getMyExercises();
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -84,20 +78,10 @@ class _my_weight_doctorState extends State<my_weight_doctor>
   }
 
   void addAllListData() {
-    const int count = 9;
+    const int count = 5;
 
     listViews.add(
-      weight_trend_doctor(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      BMI_Chart_doctor(
+      heartrate(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -107,31 +91,40 @@ class _my_weight_doctorState extends State<my_weight_doctor>
     );
     listViews.add(
       TitleView(
-        titleTxt: 'Weight Progress',
+        titleTxt: 'Your Workouts',
         subTxt: 'View Log',
-        redirect: 4,
-        userType: 'Doctor',
+        // redirect: 1,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
-            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+            Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
-        userUID: widget.userUID
+      ),
+    );
+    listViews.add(
+      RunningView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
       ),
     );
 
-
     listViews.add(
-      weight_progress_doctor(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-        userUID: widget.userUID
+      AreaListView(
+        exerlist: myexerciselist,
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController,
+                curve: Interval((1 / count) * 5, 1.0,
+                    curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController,
       ),
     );
   }
+
+
 
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
@@ -227,7 +220,7 @@ class _my_weight_doctorState extends State<my_weight_doctor>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'My Meals',
+                                  'My Exercises',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,
@@ -251,7 +244,7 @@ class _my_weight_doctorState extends State<my_weight_doctor>
                                 },
                                 child: Stack(
                                   children: <Widget>[
-                                    Icon(Icons.notifications,),
+                                    Icon(Icons.notifications, ),
                                     Positioned(
                                       right: 0,
                                       child: Container(
@@ -277,5 +270,17 @@ class _my_weight_doctorState extends State<my_weight_doctor>
         )
       ],
     );
+  }
+  void getMyExercises() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/vitals/health_records/my_exercises/');
+    readprescription.once().then((DataSnapshot snapshot){
+      // print(snapshot);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        myexerciselist.add(ExercisesTest.fromJson(jsonString));
+      });
+    });
   }
 }

@@ -7,14 +7,14 @@ import 'package:my_app/models/ActivitiesFitbit.dart';
 import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
+import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
+import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
@@ -166,7 +166,7 @@ class _my_exercisesState extends State<my_exercises>
               // top: AppBar().preferredSize.height +
               //     MediaQuery.of(context).padding.top +
               //     24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+              bottom: 90 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,

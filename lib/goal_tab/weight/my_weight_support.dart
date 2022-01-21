@@ -5,19 +5,21 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
+import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glass_view.dart';
+import 'package:my_app/ui_view/water/glass_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
+import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/weight_progress.dart';
-import 'package:my_app/ui_view/weight_progress_support.dart';
+import 'package:my_app/ui_view/weight/BMI_chart_support.dart';
+import 'package:my_app/ui_view/weight/weight_progress.dart';
+import 'package:my_app/ui_view/weight/weight_progress_support.dart';
+import 'package:my_app/ui_view/weight/weight_trend_support.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +27,8 @@ import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
-import '../../ui_view/meals_list_view.dart';
-import '../../ui_view/water_view.dart';
+import '../../ui_view/meals/meals_list_view.dart';
+import '../../ui_view/water/water_view.dart';
 
 class my_weight_support extends StatefulWidget {
   const my_weight_support({Key key, this.animationController}) : super(key: key);
@@ -85,7 +87,7 @@ class _my_weight_supportState extends State<my_weight_support>
     const int count = 9;
 
     listViews.add(
-      calorie_intake(
+      weight_trend_support(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -95,7 +97,7 @@ class _my_weight_supportState extends State<my_weight_support>
     );
 
     listViews.add(
-      BMI_Chart(
+      BMI_Chart_support(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -166,7 +168,7 @@ class _my_weight_supportState extends State<my_weight_support>
               // top: AppBar().preferredSize.height +
               //     MediaQuery.of(context).padding.top +
               //     24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+              bottom: 90 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,

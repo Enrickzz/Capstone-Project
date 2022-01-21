@@ -3,25 +3,26 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
+import 'package:my_app/goal_tab/water/change_water_intake_goal_doctor.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/ui_view/wave_view.dart';
+import 'package:my_app/ui_view/water/wave_view.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 
-class WaterView extends StatefulWidget {
-  const WaterView(
-      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
+class WaterViewDoctor extends StatefulWidget {
+  const WaterViewDoctor(
+      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation, this.userUID})
       : super(key: key);
-
+  final String userUID;
   final AnimationController mainScreenAnimationController;
   final Animation<double> mainScreenAnimation;
 
   @override
-  _WaterViewState createState() => _WaterViewState();
+  _WaterViewDoctorState createState() => _WaterViewDoctorState();
 }
 
-class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
+class _WaterViewDoctorState extends State<WaterViewDoctor> with TickerProviderStateMixin {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
@@ -148,7 +149,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                         builder: (context) => SingleChildScrollView(child: Container(
                                           padding: EdgeInsets.only(
                                               bottom: MediaQuery.of(context).viewInsets.bottom),
-                                          child: change_water_intake_goal(),
+                                          child: change_water_intake_goal_doctor(),
                                         ),
                                         ),
                                       );
@@ -201,7 +202,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Last drink '+lastDrink,
+                                          'Last drink '+ lastDrink,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily:
@@ -232,7 +233,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                         ),
                                         Flexible(
                                           child: Text(
-                                            'Please remember to drink water daily',
+                                            'You have reached your daily water intake goal!',
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                               fontFamily:
@@ -343,14 +344,16 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
     );
   }
   void getWaterGoal () {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
-    final readWater = databaseReference.child('users/' + uid + '/goal/water_intake/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readWaterGoal = databaseReference.child('users/' + userUID + '/goal/water_goal/');
+    final readWater = databaseReference.child('users/' + userUID + '/goal/water_intake/');
     DateTime now = DateTime.now();
     String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
     readWaterGoal.once().then((DataSnapshot snapshot){
       readWater.once().then((DataSnapshot datasnapshot) {
+        print("LAST DRINK UPDATED");
         Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
         water_goal = Water_Goal.fromJson(temp);
         waterintake_goal = water_goal.water_goal;
@@ -379,18 +382,20 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
             }
             timesortwater.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
             lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+            print("LAST DRINK UPDATED");
             readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
           }
           else{
             timesortwater = waterintake_list;
+            lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+            print("LAST DRINK UPDATED");
             readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
           }
         }
         else{
           lastDrink = "${waterintake_list[waterintake_list.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${waterintake_list[waterintake_list.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
-
+          print("LAST DRINK UPDATED");
         }
-
 
       });
     });

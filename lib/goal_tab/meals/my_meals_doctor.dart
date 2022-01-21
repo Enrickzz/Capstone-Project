@@ -4,13 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/meals_list_view_doctor.dart';
+import 'package:my_app/ui_view/meals/meals_list_view_doctor.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../notifications/notifications._patients.dart';
-import '../../ui_view/meals_list_view.dart';
+import '../../ui_view/meals/meals_list_view.dart';
 
 class my_meals_doctor extends StatefulWidget {
   const my_meals_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
@@ -80,9 +80,10 @@ class _my_meals_doctorState extends State<my_meals_doctor>
     );
     listViews.add(
       TitleView(
-        titleTxt: 'Meals today',
+        titleTxt: 'Meals Today',
         subTxt: 'View Log',
-        // redirect: 2,
+        userType: "Doctor",
+        redirect: 2,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -154,7 +155,7 @@ class _my_meals_doctorState extends State<my_meals_doctor>
               // top: AppBar().preferredSize.height +
               //     MediaQuery.of(context).padding.top +
               //     24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+              bottom: 90 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,

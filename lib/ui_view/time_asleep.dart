@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:my_app/models/users.dart';
 
 import 'Sleep_StackedBarChart.dart';
-import 'meals_list_view.dart';
+import 'meals/meals_list_view.dart';
 
 
 class time_asleep extends StatefulWidget {

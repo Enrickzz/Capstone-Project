@@ -11,19 +11,19 @@ import 'package:my_app/models/nutritionixApi.dart';
 import '../fitness_app_theme.dart';
 import '../main.dart';
 
-class test_chart extends StatefulWidget{
+class sleep_barchart_sf extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
   final String fitbitToken;
-  test_chart({Key key, this.animationController, this.animation, this.fitbitToken})
+  sleep_barchart_sf({Key key, this.animationController, this.animation, this.fitbitToken})
       : super(key: key);
 
   @override
-  _calorie_intakeState createState() => _calorie_intakeState();
+  sleepScoreState createState() => sleepScoreState();
 }
 List<calorie_intake_data> finaList = new List();
 
-class _calorie_intakeState extends State<test_chart> {
+class sleepScoreState extends State<sleep_barchart_sf> {
   @override
   void initState() {
     super.initState();
@@ -106,24 +106,22 @@ class _calorie_intakeState extends State<test_chart> {
       },
     );
   }
-     List<calorie_intake_data> chartData =[
-      calorie_intake_data('1/1/21', 80),
-      calorie_intake_data('1/2/21', 85),
-      calorie_intake_data('1/3/21', 77),
-      calorie_intake_data('1/4/21', 73),
-      calorie_intake_data('1/5/21', 72),
-      calorie_intake_data('1/6/21', 71),
-      calorie_intake_data('1/7/21', 80),
+  List<calorie_intake_data> chartData =[
+    calorie_intake_data('1/1/21', 80),
+    calorie_intake_data('1/2/21', 85),
+    calorie_intake_data('1/3/21', 77),
+    calorie_intake_data('1/4/21', 73),
+    calorie_intake_data('1/5/21', 72),
+    calorie_intake_data('1/6/21', 71),
+    calorie_intake_data('1/7/21', 80),
 
 
 
-
-
-    ];
+  ];
 
 
 
-  }
+}
 
 
 

@@ -6,7 +6,7 @@ import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
+import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/Sleep_StackedBarChart.dart';
 import 'package:my_app/ui_view/VerticalBC_Target.dart';
 import 'package:my_app/ui_view/VerticalBarChart.dart';
@@ -16,16 +16,17 @@ import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
 import 'package:my_app/ui_view/fitbit_connect.dart';
-import 'package:my_app/ui_view/glass_view.dart';
+import 'package:my_app/ui_view/water/glass_view.dart';
 import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/running_view.dart';
+import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/sleep_quality.dart';
 import 'package:my_app/ui_view/sleep_score_bar_chart.dart';
-import 'package:my_app/ui_view/sleep_barchart_sfcharts.dart';
+import 'package:my_app/ui_view/sleep_stackedbar_sfchart.dart';
+import 'package:my_app/ui_view/sleep_score_barchartsf.dart';
 import 'package:my_app/ui_view/time_asleep.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/weight_progress.dart';
+import 'package:my_app/ui_view/weight/weight_progress.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,8 @@ import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
-import '../../ui_view/meals_list_view.dart';
-import '../../ui_view/water_view.dart';
+import '../../ui_view/meals/meals_list_view.dart';
+import '../../ui_view/water/water_view.dart';
 import 'package:http/http.dart' as http;
 
 class my_sleep extends StatefulWidget {
@@ -180,7 +181,7 @@ class _my_sleepState extends State<my_sleep>
     // );
 
     listViews.add(
-      test_chart(
+      sleep_barchart_sf(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -189,6 +190,18 @@ class _my_sleepState extends State<my_sleep>
         fitbitToken: fitbitToken
       ),
     );
+
+    listViews.add(
+      stacked_sleep_chart(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+
 
 
 

@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../notifications/notifications._patients.dart';
-import '../../ui_view/meals_list_view.dart';
+import '../../ui_view/meals/meals_list_view.dart';
 
 class my_meals extends StatefulWidget {
   const my_meals({Key key, this.animationController}) : super(key: key);
@@ -78,8 +78,9 @@ class _my_mealsState extends State<my_meals>
     );
     listViews.add(
       TitleView(
-        titleTxt: 'Meals today',
+        titleTxt: 'Meals Today',
         subTxt: 'Log Meals',
+        userType: "Patient",
         redirect: 2,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
