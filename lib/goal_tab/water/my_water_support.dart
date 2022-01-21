@@ -30,9 +30,10 @@ import '../../ui_view/meals/meals_list_view.dart';
 import '../../ui_view/water/water_view.dart';
 
 class my_water_support extends StatefulWidget {
-  const my_water_support({Key key, this.animationController}) : super(key: key);
+  const my_water_support({Key key, this.animationController, this.userUID}) : super(key: key);
 
   final AnimationController animationController;
+  final String userUID;
   @override
   _my_water_supportState createState() => _my_water_supportState();
 }
@@ -92,6 +93,7 @@ class _my_water_supportState extends State<my_water_support>
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+        userUID: widget.userUID
       ),
     );
 

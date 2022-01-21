@@ -31,8 +31,8 @@ import '../../ui_view/meals/meals_list_view.dart';
 import '../../ui_view/water/water_view.dart';
 
 class my_weight_support extends StatefulWidget {
-  const my_weight_support({Key key, this.animationController}) : super(key: key);
-
+  const my_weight_support({Key key, this.animationController, this.userUID}) : super(key: key);
+  final String userUID;
   final AnimationController animationController;
   @override
   _my_weight_supportState createState() => _my_weight_supportState();

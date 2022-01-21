@@ -14,7 +14,8 @@ import '../meals/meals_list_view.dart';
 class water_intake_chart_support extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-  const water_intake_chart_support({Key key, this.animationController, this.animation})
+  final String userUID;
+  const water_intake_chart_support({Key key, this.animationController, this.animation, this.userUID})
       : super(key: key);
 
   @override
@@ -136,10 +137,11 @@ class _water_intake_chart_supportState extends State<water_intake_chart_support>
   }
 
   void getWaterIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
-    final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readWaterIntake = databaseReference.child('users/' + userUID + '/goal/water_intake/');
+    final readWaterGoal = databaseReference.child('users/' + userUID + '/goal/water_goal/');
     DateTime today = DateTime.now();
     DateTime firstDayOfTheweek = today.subtract(new Duration(days: today.weekday));
     DateTime lastDayOfTheweek = firstDayOfTheweek.add(new Duration(days: 6));

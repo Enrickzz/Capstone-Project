@@ -368,6 +368,9 @@ class _WaterViewDoctorState extends State<WaterViewDoctor> with TickerProviderSt
           }
         }
         waterpercentage = double.parse((total_water/ waterintake_goal * 100).toStringAsFixed(1));
+        if(waterpercentage > 100){
+          waterpercentage = 100;
+        }
         /// getting the latest water
         var latestDate;
         List<WaterIntake> timesortwater = [];
