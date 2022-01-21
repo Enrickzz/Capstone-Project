@@ -183,8 +183,6 @@ class _DetailsPageState extends State<music_rec> {
                               style: style,
                               onPressed: () async {
                                 final url = showitem.externalUrls.spotify;
-                                print("THIS IS " + url.toString());
-
                                 if(await canLaunch(url)){
                                   await launch(url);
                                 }

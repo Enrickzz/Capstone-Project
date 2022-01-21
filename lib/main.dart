@@ -243,10 +243,10 @@ class _AppSignInState extends State<AppSignIn> {
               child: GestureDetector(
 
                   onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => music_rec()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => music_rec()),
+                    // );
                   },
                   child: Image.asset("assets/images/heartistant_logo.png", width: 280, height: 180,)),
 
