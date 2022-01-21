@@ -2,10 +2,18 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/ui_view/sleep/Sleep_StackedBarChartDoctor.dart';
+import 'package:my_app/ui_view/sleep/sleep_score_barchartsf_doctor.dart';
+import 'package:my_app/ui_view/sleep/sleep_stackedbar_sfchart_doctor.dart';
+import 'package:my_app/ui_view/sleep/time_asleep_doctor.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
+import 'package:my_app/ui_view/Sleep_StackedBarChart.dart';
+import 'package:my_app/ui_view/VerticalBC_Target.dart';
+import 'package:my_app/ui_view/VerticalBarChart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -17,6 +25,9 @@ import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/sleep_quality.dart';
+import 'package:my_app/ui_view/sleep_score_bar_chart.dart';
+import 'package:my_app/ui_view/sleep_stackedbar_sfchart.dart';
+import 'package:my_app/ui_view/sleep_score_barchartsf.dart';
 import 'package:my_app/ui_view/time_asleep.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/weight/weight_progress.dart';
@@ -29,29 +40,44 @@ import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals/meals_list_view.dart';
 import '../../ui_view/water/water_view.dart';
+import 'package:http/http.dart' as http;
 
 class my_sleep_doctor extends StatefulWidget {
   const my_sleep_doctor({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _my_sleep_doctorState createState() => _my_sleep_doctorState();
+  _my_sleepState createState() => _my_sleepState();
 }
 
-class _my_sleep_doctorState extends State<my_sleep_doctor>
+class _my_sleepState extends State<my_sleep_doctor>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
+  String fitbitToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNzg0MzgxLCJpYXQiOjE2NDI3NTU1ODF9.d3JfpNowesILgLa306QAyOJbAcPbbVZ9Aj9U-pPdCWs";
+
 
   List<Widget> listViews = <Widget>[];
+  // List<Sleep> sleeptmp = [];
+  Sleep latestSleep = new Sleep();
+  DateTime now = DateTime.now();
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
 
   @override
   void initState() {
+    final readFitbit = databaseReference.child('fitbitToken/');
+    readFitbit.once().then((DataSnapshot snapshot) {
+      print("FITBIT TOKEN");
+      print(snapshot.value);
+      if(snapshot.value != null || snapshot.value != ""){
+        fitbitToken = snapshot.value.toString();
+      }
+      getLatestSleep();
+    });
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -80,6 +106,10 @@ class _my_sleep_doctorState extends State<my_sleep_doctor>
         }
       }
     });
+    Future.delayed(const Duration(milliseconds: 1200), (){
+
+    });
+
     super.initState();
   }
 
@@ -87,48 +117,41 @@ class _my_sleep_doctorState extends State<my_sleep_doctor>
     const int count = 9;
 
     listViews.add(
-      fitbit_connect(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      calorie_intake(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
       TitleView(
-        titleTxt: 'Last Sleep',
-        subTxt: 'View Log',
-        redirect: 6,
-        userType: "Doctor",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
+          titleTxt: 'Last Sleep',
+          subTxt: 'Sleep Log',
+          redirect: 6,
+          userType: "Patient",
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+              parent: widget.animationController,
+              curve:
+              Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+          fitbitToken: fitbitToken
       ),
     );
 
     listViews.add(
-      time_asleep(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
+      time_asleep_doctor(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+              parent: widget.animationController,
+              curve:
+              Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+          fitbitToken: fitbitToken
       ),
     );
+    listViews.add(
+      stacked_sleep_chart_doctor(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+              parent: widget.animationController,
+              curve:
+              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+          fitbittoken: fitbitToken
+      ),
+    );
+
 
     listViews.add(
       TitleView(
@@ -143,15 +166,26 @@ class _my_sleep_doctorState extends State<my_sleep_doctor>
       ),
     );
 
+
+
     listViews.add(
-      sleep_quality(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
+      sleep_barchart_sf_doctor(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+              parent: widget.animationController,
+              curve:
+              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+          fitbitToken: fitbitToken
       ),
     );
+    //
+
+
+
+
+
+
+
   }
 
   Future<bool> getData() async {
@@ -298,5 +332,21 @@ class _my_sleep_doctorState extends State<my_sleep_doctor>
         )
       ],
     );
+  }
+  void getLatestSleep() async {
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
+        headers: {
+          'Authorization': "Bearer " + fitbitToken
+        });
+    List<Sleep> sleep=[];
+    sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+
+    print("Date of Sleep");
+    print(sleep[0].dateOfSleep);
+    if(sleep[0].dateOfSleep == "${now.year}-${now.month.toString().padLeft(2,"0")}-${now.day.toString().padLeft(2,"0")}"){
+      latestSleep = sleep[0];
+    }
+    // print(response.body);
+    // print("FITBIT ^ Length = " + sleep.length.toString());
   }
 }
