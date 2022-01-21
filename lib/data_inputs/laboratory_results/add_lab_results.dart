@@ -897,8 +897,7 @@ class _addLabResultState extends State<add_lab_results> {
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
-  }
-  void getRecomm() {
+  }void getRecomm() {
     recommList.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
@@ -931,5 +930,6 @@ class _addLabResultState extends State<add_lab_results> {
 
     });
   }
+
 
 }

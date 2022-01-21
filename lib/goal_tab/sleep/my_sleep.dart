@@ -156,16 +156,16 @@ class _my_sleepState extends State<my_sleep>
         fitbittoken: fitbitToken
       ),
     );
-    listViews.add(
-      Sleep_StackedBarChart(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-        fitbitToken: fitbitToken
-      ),
-    );
+    // listViews.add(
+    //   Sleep_StackedBarChart(
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    //         parent: widget.animationController,
+    //         curve:
+    //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+    //     animationController: widget.animationController,
+    //     fitbitToken: fitbitToken
+    //   ),
+    // );
 
     listViews.add(
       TitleView(
