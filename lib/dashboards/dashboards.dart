@@ -8,7 +8,7 @@ import 'package:my_app/ui_view/VerticalBC_Target.dart';
 import 'package:my_app/ui_view/VerticalBarChart.dart';
 import 'package:my_app/ui_view/water_view.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
+import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';

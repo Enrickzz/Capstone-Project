@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:my_app/models/users.dart';
 
 import '../fitness_app_theme.dart';
-import 'meals_list_view.dart';
+import 'meals/meals_list_view.dart';
 
 class water_intake_chart extends StatefulWidget {
   final AnimationController animationController;

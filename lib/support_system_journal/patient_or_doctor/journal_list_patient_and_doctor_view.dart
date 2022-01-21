@@ -10,7 +10,7 @@ import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/support_system_journal/patient_or_doctor/specific_journal_patient_and_doctor_view.dart';
 import 'package:my_app/support_system_journal/support_system/create_journal.dart';
 import 'package:my_app/support_system_journal/support_system/specific_journal_suppsystem_view.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
+import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/diet_view.dart';

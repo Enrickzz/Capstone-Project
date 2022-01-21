@@ -7,7 +7,7 @@ import 'package:my_app/models/discussionModel.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
+import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/diet_view.dart';

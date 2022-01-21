@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/BMI_chart.dart';
+import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
@@ -163,7 +163,7 @@ class _my_exercises_doctorState extends State<my_exercises_doctor>
               // top: AppBar().preferredSize.height +
               //     MediaQuery.of(context).padding.top +
               //     24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+              bottom: 90 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,

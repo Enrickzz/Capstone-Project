@@ -10,8 +10,8 @@ import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 
-import '../main.dart';
-import '../goal_tab/meals/meals_list.dart';
+import '../../main.dart';
+import '../../goal_tab/meals/meals_list.dart';
 
 class MealsListViewDoctor extends StatefulWidget {
   const MealsListViewDoctor(

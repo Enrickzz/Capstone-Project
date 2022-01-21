@@ -10,7 +10,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import '../fitness_app_theme.dart';
+import '../../fitness_app_theme.dart';
 
 class BMI_Chart extends StatefulWidget {
   final AnimationController animationController;
@@ -85,11 +85,21 @@ class _BMI_ChartState extends State<BMI_Chart> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Center(
+                        child: Text(
+                          'Body Mass Index',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: FitnessAppTheme.fontName,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
 
@@ -135,46 +145,6 @@ class _BMI_ChartState extends State<BMI_Chart> {
                               )]
                         ),
                       ),
-                      SizedBox(
-                        height: 32,
-                      ),
-
-
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4),
-                              child: Icon(
-                                Icons.accessibility_new_rounded,
-                                color: FitnessAppTheme.nearlyBlack,
-                                size: 20,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: const Text(
-                                'My Body Mass Index',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: FitnessAppTheme.fontName,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                  letterSpacing: 0.0,
-                                  color: FitnessAppTheme.nearlyBlack,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: SizedBox(),
-                            ),
-
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),

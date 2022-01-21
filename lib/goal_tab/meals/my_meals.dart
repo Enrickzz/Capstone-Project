@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../notifications/notifications._patients.dart';
-import '../../ui_view/meals_list_view.dart';
+import '../../ui_view/meals/meals_list_view.dart';
 
 class my_meals extends StatefulWidget {
   const my_meals({Key key, this.animationController}) : super(key: key);
