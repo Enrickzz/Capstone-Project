@@ -7,6 +7,7 @@ import 'package:my_app/models/ActivitiesFitbit.dart';
 import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/ui_view/exercises/steps_view.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -92,6 +93,16 @@ class _my_exercisesState extends State<my_exercises>
     //     animationController: widget.animationController,
     //   ),
     // );
+    listViews.add(
+      steps_view(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
     listViews.add(
       TitleView(
         titleTxt: 'Your Workouts',
