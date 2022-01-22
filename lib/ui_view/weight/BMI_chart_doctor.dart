@@ -15,7 +15,8 @@ import '../../fitness_app_theme.dart';
 class BMI_Chart_doctor extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-  const BMI_Chart_doctor({Key key, this.animationController, this.animation})
+  final String userUID;
+  const BMI_Chart_doctor({Key key, this.animationController, this.animation, this.userUID})
       : super(key: key);
 
   @override
@@ -159,9 +160,10 @@ class _BMI_Chart_doctorState extends State<BMI_Chart_doctor> {
   void getBMIdata() async{
     final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
     final FirebaseAuth auth = FirebaseAuth.instance;
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/physical_parameters/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readBP = databaseReference.child('users/' + userUID + '/physical_parameters/');
     readBP.once().then((DataSnapshot snapshot){
       var temp = jsonDecode(jsonEncode(snapshot.value));
       print(snapshot.value.toString());

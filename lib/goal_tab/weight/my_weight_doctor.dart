@@ -93,6 +93,7 @@ class _my_weight_doctorState extends State<my_weight_doctor>
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+        userUID: widget.userUID
       ),
     );
 
@@ -103,6 +104,7 @@ class _my_weight_doctorState extends State<my_weight_doctor>
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+        userUID: widget.userUID
       ),
     );
     listViews.add(

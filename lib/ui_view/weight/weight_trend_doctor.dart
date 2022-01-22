@@ -1,17 +1,42 @@
+import 'dart:convert';
+
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/goal_tab/sleep/sleep_score.dart';
+import 'package:my_app/models/users.dart';
 
 import '../../fitness_app_theme.dart';
 
-class weight_trend_doctor extends StatelessWidget {
+class weight_trend_doctor extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-  const weight_trend_doctor({Key key, this.animationController, this.animation})
-      : super(key: key);
+  final String userUID;
+  const weight_trend_doctor({Key key, this.animationController, this.animation, this.userUID}) : super(key: key);
 
+  @override
+  State<weight_trend_doctor> createState() => _weight_trend_doctorState();
+
+}
+
+class _weight_trend_doctorState extends State<weight_trend_doctor> {
   /// Creates a [TimeSeriesChart] with sample data and no transition.
 
-
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  List<Weight> weights = new List<Weight>();
+  Weight_Goal weight_goal = new Weight_Goal();
+  @override
+  void initState() {
+    super.initState();
+    getWeightGoal();
+    getWeight();
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      setState(() {
+        print("setstate");
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,39 +71,45 @@ class weight_trend_doctor extends StatelessWidget {
             // should create the same type of [DateTime] as the data provided. If none
             // specified, the default creates local date time.
             dateTimeFactory: const charts.LocalDateTimeFactory(),
-            
+
             behaviors: [
               charts.ChartTitle("Weight Trend", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
-              charts.RangeAnnotation([charts.LineAnnotationSegment(40, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
+              charts.RangeAnnotation([charts.LineAnnotationSegment(weight_goal.target_weight, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
             ],
           ),
         ) ,
       ),
     );
-
   }
-
+  void getWeightGoal() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readWeightGoal = databaseReference.child('users/' + userUID + '/goal/weight_goal/');
+    readWeightGoal.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      weight_goal = Weight_Goal.fromJson(temp);
+    });
+  }
+  void getWeight() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readWeight = databaseReference.child('users/' + userUID + '/goal/weight/');
+    readWeight.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        weights.add(Weight.fromJson(jsonString));
+      });
+    });
+  }
   /// Create one series with sample hard coded data.
-  static List<charts.Series<TimeSeriesWeight, DateTime>> _createSampleData() {
-    final data = [
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 9, 19), 25),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 9, 20), 26),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 9, 21), 30),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 10, 1), 35),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 10, 2), 35),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 10, 4), 33),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 10, 7), 30),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 10, 10), 31),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 10, 12), 35),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 10, 16), 37),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 11, 3), 40),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 11, 12), 45),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 11, 19), 47),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 11, 26), 45),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 11, 30), 42),
-      new TimeSeriesWeight.TimeSeriesWeight(new DateTime(2017, 12, 1), 40),
-    ];
+  List<charts.Series<TimeSeriesWeight, DateTime>> _createSampleData() {
 
+    List<TimeSeriesWeight> data = [];
+    for(int i =0; i < weights.length; i++){
+      data.add(new TimeSeriesWeight.TimeSeriesWeight(new DateTime(weights[i].dateCreated.year, weights[i].dateCreated.month, weights[i].dateCreated.day), weights[i].weight));
+    }
     return [
       new charts.Series<TimeSeriesWeight, DateTime>(
         id: 'Weight',
@@ -94,7 +125,7 @@ class weight_trend_doctor extends StatelessWidget {
 /// Sample time series data type.
 class TimeSeriesWeight {
   final DateTime time;
-  final int weight;
+  final double weight;
 
   TimeSeriesWeight.TimeSeriesWeight(this.time, this.weight);
 }
