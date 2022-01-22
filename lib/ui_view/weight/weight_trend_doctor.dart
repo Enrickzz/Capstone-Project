@@ -26,6 +26,7 @@ class _weight_trend_doctorState extends State<weight_trend_doctor> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   List<Weight> weights = new List<Weight>();
   Weight_Goal weight_goal = new Weight_Goal();
+
   @override
   void initState() {
     super.initState();
