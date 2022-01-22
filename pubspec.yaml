@@ -35,7 +35,7 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   intl: ^0.17.0
   animations: ^2.0.0
-
+  scheduled_timer: ^2.0.1
   cloud_firestore: ^2.5.3
   firebase_database: ^8.0.0
   firebase_core: ^1.7.0
