@@ -58,6 +58,8 @@ class _AppSignUpState extends State<data_inputs> {
 
   @override
   void initState(){
+
+    // print("DATE TIME " + DateTime.parse("$y-$m-$d 20:18:04Z").toString() );
     super.initState();
     setState(() {
       print("SET STATE data input");
