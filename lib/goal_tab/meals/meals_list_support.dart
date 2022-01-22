@@ -8,6 +8,8 @@ import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/services/auth.dart';
 
 class meals_list_support extends StatefulWidget {
+  const meals_list_support({Key key, this.userUID}) : super(key: key);
+  final String userUID;
   @override
   _meals_list_supportState createState() => _meals_list_supportState();
 }
@@ -467,9 +469,10 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
     );
   }
   void getBFoodIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Breakfast');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
@@ -480,9 +483,10 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
     });
   }
   void getLFoodIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Lunch');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
@@ -493,9 +497,10 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
     });
   }
   void getDFoodIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Dinner');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
@@ -506,9 +511,10 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
     });
   }
   void getSFoodIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Snacks');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){

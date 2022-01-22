@@ -966,7 +966,7 @@ class _index3State extends State<view_patient_profile>
                 }
                 setState(() {
                   tabBody =
-                      dashboards_as_doctor(animationController: animationController);
+                      dashboards_as_doctor(animationController: animationController, userUID: widget.userUID);
                 });
               });
             } else if (index == 1) {

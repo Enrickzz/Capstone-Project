@@ -32,6 +32,7 @@ List<FoodIntake> breakfast_list = [];
 List<FoodIntake> lunch_list = [];
 List<FoodIntake> dinner_list = [];
 List<FoodIntake> snack_list = [];
+String useruid = "";
 
 class _MealsListViewSupportState extends State<MealsListViewSupport>
     with TickerProviderStateMixin {
@@ -158,6 +159,7 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
+    useruid = widget.userUID;
     final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Breakfast');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -178,6 +180,7 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
+    useruid = widget.userUID;
     final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Lunch');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -198,6 +201,7 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
+    useruid = widget.userUID;
     final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Dinner');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -218,6 +222,7 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
+    useruid = widget.userUID;
     final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Snacks');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -256,7 +261,7 @@ class MealsView extends StatelessWidget {
           child: InkWell(
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => meals_list_support()
+                  builder: (context) => meals_list_support(userUID: useruid)
               ));
             },
             child: Transform(

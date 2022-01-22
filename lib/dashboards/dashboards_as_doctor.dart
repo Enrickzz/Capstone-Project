@@ -17,8 +17,8 @@ import '../../main.dart';
 import '../notifications/notifications._patients.dart';
 
 class dashboards_as_doctor extends StatefulWidget {
-  const dashboards_as_doctor({Key key, this.animationController}) : super(key: key);
-
+  const dashboards_as_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
+  final String userUID;
   final AnimationController animationController;
   @override
   _dashboards_as_doctorState createState() => _dashboards_as_doctorState();
@@ -81,6 +81,7 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
             curve:
             Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+        userUID: widget.userUID,
       ),
     );
 

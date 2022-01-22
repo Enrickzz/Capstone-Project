@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/goal_tab/meals/meals_list_doctor.dart';
@@ -110,14 +111,14 @@ class TitleView extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => meals_list_doctor()),
+                                          builder: (context) => meals_list_doctor(userUID: userUID)),
                                     );
                                   }
                                   else if (userType == "Support") {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => meals_list_support()),
+                                          builder: (context) => meals_list_support(userUID: userUID)),
                                     );
                                   }
                                 }
