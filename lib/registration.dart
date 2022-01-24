@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_app/continue_facebook.dart';
 import 'package:my_app/continue_google.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -581,7 +582,19 @@ class _AppSignUpState extends State<registration> {
                                   children: <Widget>[
                                     SignInButton(
                                       Buttons.Facebook,
-                                      onPressed: () => _auth.loginFacebook(),
+                                      onPressed: () {
+                                        showModalBottomSheet(context: context,
+                                          isScrollControlled: true,
+                                          builder: (context) => SingleChildScrollView(child: Container(
+                                            padding: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context).viewInsets.bottom),
+                                            child: continue_facebook(),
+                                          ),
+                                          ),
+                                        );
+
+                                        // return _auth.loginFacebook();
+                                      },
                                     )
                                   ],
                                 ),
