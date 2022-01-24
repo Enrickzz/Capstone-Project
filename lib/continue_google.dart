@@ -13,9 +13,12 @@ import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
+import 'package:my_app/patient_list/support_system/suppsystem_patient_list.dart';
 import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
+import 'package:my_app/set_up.dart';
 import 'package:provider/provider.dart';
 import '../../../notifications/notifications._patients.dart';
 import 'dialogs/policy_dialog.dart';
@@ -273,8 +276,29 @@ class _continue_googleState extends State<continue_google> {
                             if(_formKey.currentState.validate()){
                               final provider = Provider.of<GoogleSignInProvider>(context, listen:false);
                               provider.googleLogin();
-                            }
+                              if(valueChooseUserStatus == "Patient"){
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => set_up()),
+                                  );
+                              }
+                              else if(valueChooseUserStatus == 'Family member / Caregiver'){
 
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => PatientListSupportSystemView()),
+                                );
+
+                              }
+                              else{
+
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => PatientList()),
+                                );
+                              }
+                            }
+                            // Navigator.pop(context);
                           },
                         )
                       ],
