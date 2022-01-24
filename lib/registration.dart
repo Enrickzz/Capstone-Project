@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_app/continue_google.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
@@ -595,8 +596,18 @@ class _AppSignUpState extends State<registration> {
                                 icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
                                 label: Text("Sign up with Google"),
                                 onPressed: (){
-                                  final provider = Provider.of<GoogleSignInProvider>(context, listen:false);
-                                  provider.googleLogin();
+
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: continue_google(),
+                                    ),
+                                    ),
+                                  );
+
+
                                 },
                               ),
                               SizedBox(height: 15.0),
