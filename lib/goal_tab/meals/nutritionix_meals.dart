@@ -19,8 +19,7 @@ class nutritionix_meals extends StatefulWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
-List<Common> result = [];
-List<double> calories = [];
+
 
 class _nutritionix_mealsState extends State<nutritionix_meals>
     with TickerProviderStateMixin {
@@ -29,7 +28,8 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
   String search="";
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
-
+  List<Common> result = [];
+  List<double> calories = [];
   final AuthService _auth = AuthService();
 
   double topBarOpacity = 0.0;

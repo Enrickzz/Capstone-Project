@@ -251,7 +251,11 @@ class _respiratory_rateState extends State<respiratory_rate> {
           respiratory_list.add(Respiratory_Rate.fromJson(jsonString));
       });
     });
-
+    for(var i=0;i<respiratory_list.length/2;i++){
+      var temp = respiratory_list[i];
+      respiratory_list[i] = respiratory_list[respiratory_list.length-1-i];
+      respiratory_list[respiratory_list.length-1-i] = temp;
+    }
     return respiratory_list;
   }
 

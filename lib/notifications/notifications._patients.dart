@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,7 @@ import 'package:my_app/data_inputs/vitals/blood_pressure/add_blood_pressure.dart
 import 'package:my_app/data_inputs/vitals/heart_rate/add_heart_rate.dart';
 import 'package:my_app/data_inputs/vitals/oxygen_saturation/add_o2_saturation.dart';
 import 'package:my_app/database.dart';
+import 'package:my_app/goal_tab/meals/recommended_meals.dart';
 import 'package:my_app/goal_tab/music/music_recommendation.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/GooglePlaces.dart';
@@ -20,7 +22,8 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
-
+import 'package:my_app/models/nutritionixApi.dart';
+import 'dart:convert' as convert;
 import '../dialogs/policy_dialog.dart';
 import '../fitness_app_theme.dart';
 import '../models/users.dart';
@@ -44,6 +47,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   List<Reviews> reviews =[];
   Result2 thisPlace;
+  List<Common> foodrecomm=[];
   @override
   void initState() {
     super.initState();
@@ -234,6 +238,46 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                             Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
                           }
                           Future.delayed(const Duration(milliseconds: 2000), (){
+                            if(recomm.redirect == "food_intake"){
+                              if(recomm.title == "Meals too fatty!"){
+                                List<String> query = ["Fish", "Lean Meat", "Vegetables"];
+                                var rng = new Random();
+                                fetchNutritionix(query[rng.nextInt(query.length)]);
+                                Future.delayed(const Duration(milliseconds: 1500),(){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                });
+                              }else if (recomm.title == "Too much cholesterol!" ){
+                                List<String> query = ["Avocado", "Salmon", "Dark Chocolate"];
+                                var rng = new Random();
+                                fetchNutritionix(query[rng.nextInt(query.length)]);
+                                Future.delayed(const Duration(milliseconds: 1500),(){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                });
+                              }else if (recomm.title == "Salty food!" ){
+                                List<String> query = ["Banana", "Tuna", "Salad"];
+                                var rng = new Random();
+                                fetchNutritionix(query[rng.nextInt(query.length)]);
+                                Future.delayed(const Duration(milliseconds: 1500),(){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                });
+                              }else if (recomm.title == "Too much salt!" ){
+                                List<String> query = ["Banana", "Tuna", "Salad"];
+                                var rng = new Random();
+                                fetchNutritionix(query[rng.nextInt(query.length)]);
+                                Future.delayed(const Duration(milliseconds: 1500),(){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                });
+                              }else if (recomm.title == "Had Coffee?" ){
+                                List<String> query = ["Green Tea", "Hot Tea", "Black Tea"];
+                                var rng = new Random();
+                                fetchNutritionix(query[rng.nextInt(query.length)]);
+                                Future.delayed(const Duration(milliseconds: 1500),(){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                });
+                              }else if (recomm.title == "Too much Sugar!" ){
+
+                              }
+                            }
                             if(recomm.title == "Peer Recommendation!"){
                               getPlace(recomm.redirect);
                               getReview(recomm.redirect);
@@ -433,6 +477,39 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
         recommList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
+  }
+  Future<List<Common>> fetchNutritionix(String thisquery) async {
+    var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
+    Map<String, String> headers = {
+      "x-app-id": "f4507302",
+      "x-app-key": "6db30b5553ddddbb5e2543a32c2d58de",
+      "x-remote-user-id": "0",
+    };
+    // String query = '{ "query" : "chicken noodle soup" }';
+
+    // http.Response response = await http.post(url, headers: headers, body: query);
+    List<FullNutrients> temp;
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: {
+        'query': '$thisquery',
+        'detailed': "true",
+      },
+    );
+
+    if(response.statusCode == 200){
+      String data = response.body;
+      final parsedJson = convert.jsonDecode(data);
+      print(parsedJson);
+      final food = nutritionixApi.fromJson(parsedJson);
+      print("NUTRITIONIX SEARCH = $thisquery SUCCESS");
+      foodrecomm = food.common;
+      return food.common;
+    }
+    else{
+      print("response status code is " + response.statusCode.toString());
+    }
   }
 }
 

@@ -278,6 +278,11 @@ class _blood_pressureState extends State<blood_pressure> {
       temp.forEach((jsonString) {
         bptemp.add(Blood_Pressure.fromJson(jsonString));
       });
+      for(var i=0;i<bptemp.length/2;i++){
+        var temp = bptemp[i];
+        bptemp[i] = bptemp[bptemp.length-1-i];
+        bptemp[bptemp.length-1-i] = temp;
+      }
     });
   }
   Future<void> _showMyDialogDelete() async {

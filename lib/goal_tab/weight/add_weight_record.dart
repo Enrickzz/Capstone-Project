@@ -49,7 +49,19 @@ class add_weightState extends State<add_weight_record> {
   TimeOfDay time;
   var dateValue = TextEditingController();
   List <bool> isSelected = [true, false];
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String isResting = 'yes';
+  String date;
+  String hours,min;
+  Users thisuser = new Users();
+  List<Connection> connections = new List<Connection>();
 
+  @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -318,6 +330,51 @@ class add_weightState extends State<add_weight_record> {
                                     isCongratulation = true;
                                   }
                                 }
+                                weightgoalRef.once().then((DataSnapshot wgoal) {
+                                  Map<String, dynamic> temp = jsonDecode(jsonEncode(wgoal.value));
+                                  Weight_Goal goal = Weight_Goal.fromJson(temp);
+                                  // goal.current_weight
+                                  print("GOAL");
+                                  print(goal.current_weight);
+                                  double check = goal.current_weight - current_weight;
+                                  print(check.abs());
+                                  if(check.abs() >=5){
+                                    final readAddinf = databaseReference.child("users/"+thisuser.uid+"/vitals/additional_info");
+                                    readAddinf.once().then((DataSnapshot snapshot) {
+                                      Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+                                      bool check2 = false;
+                                      for(var i = 0; i < userInfo.other_disease.length; i++){
+                                        if(userInfo.other_disease[i] == "Congestive Heart Failure") check2 == true;
+                                      }
+                                      for(var i = 0 ; i < userInfo.disease.length ; i++ ){
+                                        if(userInfo.disease[i] == "Congestive Heart Failure") check2 == true;
+                                      }
+                                      if(check2 == true){
+                                        addtoRecommendation("We have notified your doctor regarding your sudden weight change. This can be a sign of the progression of your heart failure and must be attended to by your doctor.",
+                                            "Consult With Doctor",
+                                            "3",
+                                            "None",
+                                            "Immediate");
+                                        final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                        readConnections.once().then((DataSnapshot snapshot2) {
+                                          print(snapshot2.value);
+                                          print("CONNECTION");
+                                          List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                          temp.forEach((jsonString) {
+                                            connections.add(Connection.fromJson(jsonString)) ;
+                                            Connection a = Connection.fromJson(jsonString);
+                                            print(a.uid);
+                                            addtoNotif("Your <type> "+thisuser.firstname+" "+ thisuser.lastname + " who has heart failure has recorded a drastic change in weight. He/she may require your immediate medical attention.",
+                                                thisuser.firstname + " has recorded drastic weight changes",
+                                                "3",
+                                                a.uid,
+                                                "None");
+                                          });
+                                        });
+                                      }
+                                    });
+                                  }
+                                });
                                 /// getting the latest weight
                                 var latestDate;
                                 List<Weight> timesortweights = [];
@@ -365,6 +422,85 @@ class add_weightState extends State<add_weight_record> {
             )
         )
     );
+  }
+  void getNotifs2(String uid) {
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void addtoNotif(String message, String title, String priority,String uid, String redirect){
+    print ("ADDED TO NOTIFICATIONS");
+    getNotifs2(uid);
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "heartrate", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "heartrate", "redirect": redirect});
+
+      }
+    });
+  }
+  void addtoRecommendation(String message, String title, String priority, String redirect,String category){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/recommendations/');
+    getRecomm();
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": category, "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
+        notifRef.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": category, "redirect": redirect});
+      }
+    });
+  }
+  void getRecomm() {
+    recommList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+    });
   }
   void getWeightGoal() {
     final User user = auth.currentUser;

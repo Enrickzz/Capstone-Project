@@ -775,8 +775,11 @@ class _addLabResultState extends State<add_lab_results> {
                                   readAddinf.once().then((DataSnapshot snapshot) {
                                     Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
                                     bool check = false;
-                                    for(var i = 0; i < userInfo.other_disease.length; i++){
+                                    for(var i = 0; i < userInfo.disease.length; i++){
                                       if(userInfo.disease[i] == "Chronic Kidney Disease") check == true;
+                                    }
+                                    for(var i = 0; i < userInfo.other_disease.length; i++){
+                                      if(userInfo.other_disease[i] == "Chronic Kidney Disease") check == true;
                                     }
                                     if(check == true){
                                       addtoRecommendation("We noticed that your Creatinine level is unusually high and you do not have Chronic Kidney Disease as a listed ailment. We recommend that you consult with a Nephrologist as soon as possible.",

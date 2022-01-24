@@ -70,12 +70,19 @@ class _addFoodIntakeState extends State<add_food_intake> {
   bool unitSelected = false;
   double print_calories = 0;
 
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String isResting = 'yes';
+  String date;
+  String hours,min;
+  Users thisuser = new Users();
+  List<Connection> connections = new List<Connection>();
 
-
-
-
-
-
+  double total_sugar = 0;
+  double total_sodium = 0;
+  double total_cholesterol = 0;
+  double total_calories = 0;
+  double total_tfat = 0;
   @override
   Widget build(BuildContext context) {
 
@@ -307,13 +314,9 @@ class _addFoodIntakeState extends State<add_food_intake> {
                               print(temp1);
                               if(datasnapshot.value == null){
                                 final foodintakeRef = databaseReference.child('users/' + uid + '/intake/food_intake/'+ valueChooseFoodTime+ "/" + count.toString());
-                                double total_calories = 0;
                                 double total_cholesterol = 0;
-                                double total_tfat = 0;
-                                double total_sugar = 0;
                                 double total_protein = 0;
                                 double total_potassium = 0;
-                                double total_sodium = 0;
                                 /// total calories
                                 total_calories = double.parse(widget.calories) / double.parse(widget.weight);
                                 total_calories *= double.parse(serving_size);
@@ -405,6 +408,56 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                 foodintake_list[i] = foodintake_list[foodintake_list.length-1-i];
                                 foodintake_list[foodintake_list.length-1-i] = temp;
                               }
+                              //recom
+                              if(total_sugar >= 32){
+                                addtoRecommendation("We have detected that you have eaten a meal that contains a high amount of sugar. We recommend that you drink a glass of water to ensure and walk around so you won’t reach hyperglycemia.",
+                                    "Too much Sugar!",
+                                    "3",
+                                    "food_intake");
+                              }
+                              if(widget.foodName.toString().toLowerCase().contains("coffee") == true){
+                                addtoRecommendation("Please refrain from drinking caffeine as it is detrimental to patients with Arrhythmia. Next time please consider drinking tea instead.",
+                                    "Had Coffee?",
+                                    "3",
+                                    "food_intake");
+                              }
+                              if(total_sodium >= 1500){
+                                addtoRecommendation("We recommend that you limit your intake of salty foods for today as you have consumed more than 1500mg of sodium for today. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
+                                    "Too much salt!",
+                                    "3",
+                                    "food_intake");
+                              }
+                              if(double.parse(widget.sodium) >= 600){
+                                addtoRecommendation("You have eaten a meal with high amounts of sodium, to compensate for this we recommend that you drink 2 glasses of water and eat potassium rich-foods for your next meal. Click here to view food recommendations.",
+                                    "Salty food!",
+                                    "3",
+                                    "food_intake");
+                              }
+                              if(total_cholesterol >= 300){
+                                addtoRecommendation("We recommend that you limit your intake of high cholesterol containing foods for the day as you have already consumed past the 300mg threshold for cholesterol. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
+                                    "Too much cholesterol!",
+                                    "3",
+                                    "food_intake");
+                              }
+                              if(total_tfat > (total_calories*.3)){
+                                addtoRecommendation("We recommend that you limit your intake of high fat containing foods for the day. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
+                                    "Meals to fatty!",
+                                    "3",
+                                    "food_intake");
+                              }
+                              List<String> alcohol = ["Whiskey", "Gin", "Vodka", "beer", "Tequila", "Wine",];
+                              bool alc = false;
+                              for(var i=0;i < alcohol.length ; i++){
+                                if(widget.foodName.toString().toLowerCase().contains(alcohol[i])){
+                                  alc = true;
+                                }
+                              }
+                              if(alc == true){
+                                addtoRecommendation("We strongly advise you to not consume alcoholic beverages as this is detrimental to your heart condition.",
+                                    "Stop Drinking Alcohol",
+                                    "3",
+                                    "food_intake");
+                              }
                               print("POP HERE ==========");
                               Navigator.pop(context, [foodintake_list, 1]);
                             });
@@ -422,6 +475,57 @@ class _addFoodIntakeState extends State<add_food_intake> {
         )
 
     );
+  }
+  void addtoRecommendation(String message, String title, String priority, String redirect){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/recommendations/');
+    getRecomm();
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "food_intake", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
+        notifRef.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": "food_intake", "redirect": redirect});
+      }
+    });
+  }
+  void getRecomm() {
+    recommList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+
+    });
   }
   void getFoodIntake() {
     final User user = auth.currentUser;

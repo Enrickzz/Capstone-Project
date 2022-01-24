@@ -126,7 +126,7 @@ class Additional_Info {
     drugAller = json['drugAller'].cast<String>();
     otherAller = json['otherAller'].cast<String>();
     lifestyle = json['lifestyle'];
-    average_stick = int.parse(json['average_stick']);
+    average_stick = int.parse(json['average_stick'].toString());
     alcohol_freq = json['alcohol_freq'];
     disease = json['disease'].cast<String>();
     other_disease = json['other_disease'].cast<String>();

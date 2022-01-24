@@ -316,6 +316,11 @@ class _heart_rateState extends State<heart_rate> {
         hrtemp.add(Heart_Rate.fromJson(jsonString));
       });
     });
+    for(var i=0;i<hrtemp.length/2;i++){
+      var temp = hrtemp[i];
+      hrtemp[i] = hrtemp[hrtemp.length-1-i];
+      hrtemp[hrtemp.length-1-i] = temp;
+    }
   }
 
   Future<void> _showMyDialogDelete() async {
