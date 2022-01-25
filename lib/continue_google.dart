@@ -275,7 +275,7 @@ class _continue_googleState extends State<continue_google> {
                           onPressed:() async {
                             if(_formKey.currentState.validate()){
                               final provider = Provider.of<GoogleSignInProvider>(context, listen:false);
-                              provider.googleLogin();
+                              provider.googleLogin(valueChooseUserStatus, true);
                               if(valueChooseUserStatus == "Patient"){
                                   Navigator.pushReplacement(
                                     context,

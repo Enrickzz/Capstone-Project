@@ -77,6 +77,8 @@ class AuthService{
           final User user = auth.currentUser;
           final uid = user.uid;
           final usersRef = databaseReference.child('users/' + uid + '/personal_info');
+          final fitbitRef = databaseReference.child('users/' + uid + '/fitbit_connection/');
+          fitbitRef.update({"isConnected": "false"});
           String name = result.user.displayName;
           String lastName = "";
           String firstName= "";

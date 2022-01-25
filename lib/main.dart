@@ -405,7 +405,7 @@ class _AppSignInState extends State<AppSignIn> {
                                 label: Text("Sign in with Google"),
                                 onPressed: (){
                                 final provider = Provider.of<GoogleSignInProvider>(context, listen:false);
-                                provider.googleLogin();
+                                provider.googleLogin("", false);
                                },
                             ),
                             SizedBox(height: 15.0),
