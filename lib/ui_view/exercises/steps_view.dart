@@ -19,7 +19,7 @@ class steps_view extends StatelessWidget {
     String steps = "0";
     String calories = "0";
     String active_min = "0";
-    if(activities != null){
+    if(activities.distance != null){
       distance = activities.distance.toString();
       steps = activities.steps.toString();
       calories = activities.calories.toString();

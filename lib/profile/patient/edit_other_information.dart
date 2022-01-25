@@ -275,7 +275,16 @@ class _addSymptomsState extends State<edit_other_information> {
                     ),
                     color: Colors.blue,
                     onPressed:() {
-                      Navigator.pop(context, widget.thislist);
+                      try{
+                        final User user = auth.currentUser;
+                        final uid = user.uid;
+                        final personalInfoRef = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+                        personalInfoRef.update({"lifestyle": valueLifestyle, "average_stick": goal, "alcohol_freq": valueAlcohol});
+                        print("Edited Medical History Successfully! " + uid);
+                        Navigator.pop(context, widget.thislist);
+                      } catch(e) {
+                        print("you got an error! $e");
+                      }
                     },
 
                   )

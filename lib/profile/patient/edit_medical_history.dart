@@ -103,7 +103,7 @@ class _MedicalHistoryState extends State<edit_medical_history> {
   static List<String>additionalConditionList = [null];
 
   //for family history
-  List<String> familyConditionChecboxStatus = [];
+  List<String> familyConditionCheckboxStatus = [];
   final family_condition_list ={
     CheckBoxState(title: 'Chronic Obstructive Pulmonary Disease'),
     CheckBoxState(title: 'Chronic Kidney Disease'),
@@ -233,10 +233,21 @@ class _MedicalHistoryState extends State<edit_medical_history> {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => index3()),
-                      );
+                      try{
+                        getOtherDisease();
+                        final User user = auth.currentUser;
+                        final uid = user.uid;
+                        final personalInfoRef = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+                        personalInfoRef.update({"disease": cvdChecboxStatus, "other_disease": additionalConditionChecboxStatus, "family_disease": familyConditionCheckboxStatus});
+                        print("Edited Medical History Successfully! " + uid);
+                        Navigator.pop(context);
+                      } catch(e) {
+                        print("you got an error! $e");
+                      }
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => index3(animationController: animationController)),
+                      // );
                     },
                   ),
                 ),
@@ -409,12 +420,12 @@ class _MedicalHistoryState extends State<edit_medical_history> {
       onChanged: (value) => setState(() => {
         checkbox.value = value,
         if(checkbox.value){
-          familyConditionChecboxStatus.add(checkbox.title),
+          familyConditionCheckboxStatus.add(checkbox.title),
         }
         else{
-          for(int i = 0; i < familyConditionChecboxStatus.length; i++){
-            if(familyConditionChecboxStatus[i] == checkbox.title){
-              familyConditionChecboxStatus.removeAt(i)
+          for(int i = 0; i < familyConditionCheckboxStatus.length; i++){
+            if(familyConditionCheckboxStatus[i] == checkbox.title){
+              familyConditionCheckboxStatus.removeAt(i)
             },
           },
         },
@@ -589,6 +600,30 @@ class _MedicalHistoryState extends State<edit_medical_history> {
         child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
       ),
     );
+  }
+  void getOtherDisease(){
+    if(cvdChecboxStatus != null){
+      if(cvd_others_check){
+        for(int i = 0; i < otherCVDList.length; i++){
+          cvdChecboxStatus.add(otherCVDList[i].toString());
+        }
+      }
+
+    }
+    if(additionalConditionChecboxStatus != null){
+      if(additional_condition_others_check){
+        for(int i = 0; i < additionalConditionList.length; i++){
+          additionalConditionChecboxStatus.add(additionalConditionList[i].toString());
+        }
+      }
+    }
+    if(familyConditionCheckboxStatus != null){
+      if(family_condition_others_check){
+        for(int i = 0; i < familyConditionList.length; i++){
+          familyConditionCheckboxStatus.add(familyConditionList[i].toString());
+        }
+      }
+    }
   }
 }
 

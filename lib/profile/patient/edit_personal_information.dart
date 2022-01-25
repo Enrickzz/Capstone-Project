@@ -27,6 +27,14 @@ final _formKey = GlobalKey<FormState>();
 class _editPersonalInformation extends State<edit_personal_information> {
 
 
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+
+  String firstname = "";
+  String lastname = "";
+  String weight = "";
+  String height = "";
+
   final _formKey = GlobalKey<FormState>();
 
   //birthday
@@ -112,7 +120,7 @@ class _editPersonalInformation extends State<edit_personal_information> {
                           ),
                           validator: (val) => val.isEmpty ? 'Enter First Name' : null,
                           onChanged: (val){
-                            // setState(() => firstname = val);
+                            setState(() => firstname = val);
                           },
                         ),
                       ),
@@ -138,7 +146,7 @@ class _editPersonalInformation extends State<edit_personal_information> {
                           ),
                           validator: (val) => val.isEmpty ? 'Enter Last Name' : null,
                           onChanged: (val){
-                            // setState(() => lastname = val);
+                            setState(() => lastname = val);
                           },
                         ),
                       ),
@@ -228,7 +236,7 @@ class _editPersonalInformation extends State<edit_personal_information> {
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Weight in KG' : null,
                     onChanged: (val){
-                      // setState(() => weight = val);
+                      setState(() => weight = val);
                     },
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
@@ -265,7 +273,7 @@ class _editPersonalInformation extends State<edit_personal_information> {
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Height in cm' : null,
                     onChanged: (val){
-                      // setState(() => height = val);
+                      setState(() => height = val);
                     },
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
@@ -277,13 +285,6 @@ class _editPersonalInformation extends State<edit_personal_information> {
                   ),SizedBox(
                     height: 8,
                   ),
-
-
-
-
-
-
-
                   SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -305,50 +306,25 @@ class _editPersonalInformation extends State<edit_personal_information> {
                         ),
                         color: Colors.blue,
                         onPressed:()  {
-
+                          try{
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
+                            final personalInfoRef = databaseReference.child('users/' + uid + '/personal_info/');
+                            personalInfoRef.update({"firstname": firstname.toString(),"lastname": lastname.toString()});
+                            final additionalInfoRef = databaseReference.child('users/' + uid + '/vitals/additional_info/');
+                            additionalInfoRef.update({"birthday": birthDateInString});
+                            final ppRef = databaseReference.child('users/' + uid + '/physical_parameters/');
+                            ppRef.update({"height": height.toString(), "weight": weight.toString()});
+                            print("Edited Personal Info Successfully! " + uid);
+                            Future.delayed(const Duration(milliseconds: 1000), (){
+                              print("POP HERE ==========");
+                              Navigator.pop(context);
+                            });
+                          } catch(e) {
+                            print("you got an error! $e");
+                          }
                           // Navigator.pop(context);
                         },
-                        // onPressed:() async {
-                        //   try{
-                        //     final User user = auth.currentUser;
-                        //     final uid = user.uid;
-                        //     String userUID = widget.userUID;
-                        //     consumption_time = valueChooseFoodTime;
-                        //     final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
-                        //     readFoodPlan.once().then((DataSnapshot datasnapshot) {
-                        //       String temp1 = datasnapshot.value.toString();
-                        //       print(temp1);
-                        //       if(datasnapshot.value == null){
-                        //         final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
-                        //         foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "quantity_food": quantity_food.toString(), "consumption_time": consumption_time.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                        //         print("Added Food Plan Successfully! " + uid);
-                        //       }
-                        //       else{
-                        //         getFoodPlan();
-                        //         Future.delayed(const Duration(milliseconds: 1000), (){
-                        //           count = foodplan_list.length--;
-                        //           final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
-                        //           foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "quantity_food": quantity_food.toString(), "consumption_time": consumption_time.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                        //           print("Added Food Plan Successfully! " + uid);
-                        //         });
-                        //       }
-                        //     });
-                        //     Future.delayed(const Duration(milliseconds: 1000), (){
-                        //       print("MEDICATION LENGTH: " + foodplan_list.length.toString());
-                        //       foodplan_list.add(new FoodPlan(purpose: purpose, food: food,quantity_food: double.parse(quantity_food), consumption_time: consumption_time, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
-                        //       for(var i=0;i<foodplan_list.length/2;i++){
-                        //         var temp = foodplan_list[i];
-                        //         foodplan_list[i] = foodplan_list[foodplan_list.length-1-i];
-                        //         foodplan_list[foodplan_list.length-1-i] = temp;
-                        //       }
-                        //       print("POP HERE ==========");
-                        //       Navigator.pop(context, [foodplan_list, 1]);
-                        //     });
-                        //   } catch(e) {
-                        //     print("you got an error! $e");
-                        //   }
-                        //   // Navigator.pop(context);
-                        // },
                       )
                     ],
                   ),
