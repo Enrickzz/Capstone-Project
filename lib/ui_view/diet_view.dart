@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class DietView extends StatelessWidget {
+import 'package:my_app/models/nutritionixApi.dart';
+
+class DietView extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -12,15 +18,78 @@ class DietView extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<DietView> createState() => _DietViewState();
+}
+
+class _DietViewState extends State<DietView> {
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  List<FoodIntake> breakfast_list = [];
+  List<FoodIntake> lunch_list = [];
+  List<FoodIntake> dinner_list = [];
+  List<FoodIntake> snack_list = [];
+  int total_cal = 0;
+  double cholesterol = 0;
+  double total_fat = 0;
+  double sugar = 0;
+  DateTime today = DateTime.now();
+
+  @override
+  void initState() {
+    getBFoodIntake();
+    getLFoodIntake();
+    getDFoodIntake();
+    getSFoodIntake();
+
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        for(int i = 0; i < breakfast_list.length; i++){
+          if(breakfast_list[i].intakeDate == today){
+            total_cal += breakfast_list[i].calories;
+            cholesterol += breakfast_list[i].cholesterol;
+            total_fat += breakfast_list[i].total_fat;
+            sugar += breakfast_list[i].sugar;
+          }
+        }
+        for(int i = 0; i < lunch_list.length; i++){
+          if(lunch_list[i].intakeDate == today){
+            total_cal += lunch_list[i].calories;
+            cholesterol += lunch_list[i].cholesterol;
+            total_fat += lunch_list[i].total_fat;
+            sugar += lunch_list[i].sugar;
+          }
+        }
+        for(int i = 0; i < dinner_list.length; i++){
+          if(dinner_list[i].intakeDate == today){
+            total_cal += dinner_list[i].calories;
+            cholesterol += dinner_list[i].cholesterol;
+            total_fat += dinner_list[i].total_fat;
+            sugar += dinner_list[i].sugar;
+          }
+        }
+        for(int i = 0; i < snack_list.length; i++){
+          if(snack_list[i].intakeDate == today){
+            total_cal += snack_list[i].calories;
+            cholesterol += snack_list[i].cholesterol;
+            total_fat += snack_list[i].total_fat;
+            sugar += snack_list[i].sugar;
+          }
+        }
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -106,7 +175,7 @@ class DietView extends StatelessWidget {
                                                       const EdgeInsets.only(
                                                           left: 4, bottom: 3),
                                                   child: Text(
-                                                    '${(1128 * animation.value).toInt()}',
+                                                    total_cal.toString(),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
@@ -205,7 +274,7 @@ class DietView extends StatelessWidget {
                                                       const EdgeInsets.only(
                                                           left: 4, bottom: 3),
                                                   child: Text(
-                                                    '${(102 * animation.value).toInt()}',
+                                                    '${(102 * widget.animation.value).toInt()}',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
@@ -280,7 +349,7 @@ class DietView extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            '${(1503 * animation.value).toInt()}',
+                                            total_cal.toString(),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:
@@ -309,24 +378,22 @@ class DietView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: CustomPaint(
-                                      painter: CurvePainter(
-                                          colors: [
-                                            FitnessAppTheme.nearlyDarkBlue,
-                                            HexColor("#8A98E8"),
-                                            HexColor("#8A98E8")
-                                          ],
-                                          angle: 140 +
-                                              (360 - 140) *
-                                                  (1.0 - animation.value)),
-                                      child: SizedBox(
-                                        width: 108,
-                                        height: 108,
-                                      ),
-                                    ),
-                                  )
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(4.0),
+                                  //   child: CustomPaint(
+                                  //     painter: CurvePainter(
+                                  //         colors: [
+                                  //           FitnessAppTheme.nearlyDarkBlue,
+                                  //           HexColor("#8A98E8"),
+                                  //           HexColor("#8A98E8")
+                                  //         ],
+                                  //         angle: 5),
+                                  //     child: SizedBox(
+                                  //       width: 108,
+                                  //       height: 108,
+                                  //     ),
+                                  //   ),
+                                  // )
                                 ],
                               ),
                             ),
@@ -356,7 +423,7 @@ class DietView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Carbs',
+                                  'Cholesterol',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,
@@ -380,7 +447,7 @@ class DietView extends StatelessWidget {
                                     child: Row(
                                       children: <Widget>[
                                         Container(
-                                          width: ((70 / 1.2) * animation.value),
+                                          width: ((70 / 1.2) * widget.animation.value),
                                           height: 4,
                                           decoration: BoxDecoration(
                                             gradient: LinearGradient(colors: [
@@ -399,7 +466,7 @@ class DietView extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 6),
                                   child: Text(
-                                    '12g left',
+                                    cholesterol.toStringAsFixed(1),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -423,7 +490,7 @@ class DietView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      'Protein',
+                                      'Sugar',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -448,7 +515,7 @@ class DietView extends StatelessWidget {
                                           children: <Widget>[
                                             Container(
                                               width: ((70 / 2) *
-                                                  animationController.value),
+                                                  widget.animationController.value),
                                               height: 4,
                                               decoration: BoxDecoration(
                                                 gradient:
@@ -468,7 +535,7 @@ class DietView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        '30g left',
+                                        sugar.toStringAsFixed(1),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -494,7 +561,7 @@ class DietView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      'Fat',
+                                      'Total Fat',
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
                                         fontWeight: FontWeight.w500,
@@ -519,7 +586,7 @@ class DietView extends StatelessWidget {
                                           children: <Widget>[
                                             Container(
                                               width: ((70 / 2.5) *
-                                                  animationController.value),
+                                                  widget.animationController.value),
                                               height: 4,
                                               decoration: BoxDecoration(
                                                 gradient:
@@ -539,7 +606,7 @@ class DietView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        '10g left',
+                                        total_fat.toStringAsFixed(1),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -566,6 +633,87 @@ class DietView extends StatelessWidget {
         );
       },
     );
+  }
+  void getBFoodIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
+    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      List<FoodIntake> intake = [];
+      if(temp != null){
+        temp.forEach((jsonString) {
+          intake.add(FoodIntake.fromJson(jsonString));
+        });
+        for(int i = 0; i < intake.length; i++){
+          if(intake[i].intakeDate == now){
+            breakfast_list.add(intake[i]);
+          }
+        }
+      }
+    });
+  }
+  void getLFoodIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
+    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      List<FoodIntake> intake = [];
+      if(temp != null){
+        temp.forEach((jsonString) {
+          intake.add(FoodIntake.fromJson(jsonString));
+        });
+        for(int i = 0; i < intake.length; i++){
+          if(intake[i].intakeDate == now){
+            lunch_list.add(intake[i]);
+          }
+        }
+      }
+    });
+  }
+  void getDFoodIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
+    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      List<FoodIntake> intake = [];
+      if(temp != null){
+        temp.forEach((jsonString) {
+          intake.add(FoodIntake.fromJson(jsonString));
+        });
+        for(int i = 0; i < intake.length; i++){
+          if(intake[i].intakeDate == now){
+            dinner_list.add(intake[i]);
+          }
+        }
+      }
+    });
+  }
+  void getSFoodIntake() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
+    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    readFoodIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      List<FoodIntake> intake = [];
+      if(temp != null){
+        temp.forEach((jsonString) {
+          intake.add(FoodIntake.fromJson(jsonString));
+        });
+        for(int i = 0; i < intake.length; i++){
+          if(intake[i].intakeDate == now){
+            snack_list.add(intake[i]);
+          }
+        }
+
+      }
+    });
   }
 }
 

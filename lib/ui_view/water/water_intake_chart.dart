@@ -44,7 +44,7 @@ class water_intake_chart extends StatefulWidget {
           // Set a label accessor to control the text of the bar label.
           // ignore: missing_return
           labelAccessorFn: (Waterintake water, _) {
-            if (water.water >= goal) {
+            if (water.water >= goal && water.water != 0) {
               // return '${water.water.toString()}';
               return '★';
             }

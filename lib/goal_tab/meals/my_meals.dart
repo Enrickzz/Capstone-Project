@@ -37,7 +37,6 @@ class _my_mealsState extends State<my_meals>
         CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
 
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
@@ -60,6 +59,11 @@ class _my_mealsState extends State<my_meals>
           });
         }
       }
+    });
+    Future.delayed(const Duration(milliseconds: 1200), (){
+      setState(() {
+        addAllListData();
+      });
     });
     super.initState();
   }

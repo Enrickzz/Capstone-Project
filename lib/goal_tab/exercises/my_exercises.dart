@@ -41,9 +41,10 @@ class _my_exercisesState extends State<my_exercises>
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   List<ExercisesTest> myexerciselist= [];
+  Activities act = new Activities();
   final AuthService _auth = AuthService();
-
   double topBarOpacity = 0.0;
+
 
   @override
   void initState() {
@@ -54,7 +55,7 @@ class _my_exercisesState extends State<my_exercises>
         CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
+
 
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
@@ -78,6 +79,12 @@ class _my_exercisesState extends State<my_exercises>
         }
       }
     });
+
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      setState(() {
+        addAllListData();
+      });
+    });
     super.initState();
   }
 
@@ -100,6 +107,7 @@ class _my_exercisesState extends State<my_exercises>
             curve:
             Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+        activities: act,
       ),
     );
 
@@ -297,43 +305,42 @@ class _my_exercisesState extends State<my_exercises>
       });
     });
   }
+  void getFitbit() async {
+    DateTime a = DateTime.now();
+    String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
+    print("date now = " + a.toString() );
+    final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+    String token = "";
+    final readFitbit = databaseReference.child('fitbitToken/');
+    await readFitbit.once().then((DataSnapshot snapshot) {
+      print("FITBIT TOKEN");
+      print(snapshot.value);
+      if(snapshot.value != null || snapshot.value != ""){
+        token = snapshot.value.toString();
+      }
+    });
+    //FIRST (RAW)
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&beforeDate=$y-$m-$d"),
+        headers: {
+          'Authorization': "Bearer $token",
+        });
+
+    List<Activities> activities=[];
+    activities = ActivitiesFitbit.fromJson(jsonDecode(response.body)).activities;
+    act = activities[0];
+
+    //SECOND (DETAILED)
+    print("THIS LINK = " + act.caloriesLink.toString());
+    var response2 = await http.get(Uri.parse(act.caloriesLink),
+        headers: {
+          'Authorization': "Bearer $token",
+        });
+    print("response 2\n" + response2.body );
+    List<ActivitiesCalories> detailedArr = [];
+    detailedArr = ActivitiesFitbitDetailed.fromJson(jsonDecode(response2.body)).activitiesCalories;
+    ActivitiesCalories detailed = detailedArr[0];
+    print("THIS IS IT " + detailed.value.toString());
+  }
 }
 
-void getFitbit() async {
-  DateTime a = DateTime.now();
-  String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
-  print("date now = " + a.toString() );
-  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNTQyNjE0LCJpYXQiOjE2NDI1MTM4MTR9.T5Qn0SdpuaPVeXCqpcwhOf6CAXtE_kWoNGCPJ_6hxV0";
-  final readFitbit = databaseReference.child('fitbitToken/');
-  await readFitbit.once().then((DataSnapshot snapshot) {
-    print("FITBIT TOKEN");
-    print(snapshot.value);
-    if(snapshot.value != null || snapshot.value != ""){
-      token = snapshot.value.toString();
-    }
-  });
-  //FIRST (RAW)
-  var response = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&beforeDate=$y-$m-$d"),
-      headers: {
-        'Authorization': "Bearer $token",
-      });
 
-  List<Activities> activities=[];
-  activities = ActivitiesFitbit.fromJson(jsonDecode(response.body)).activities;
-  Activities act = activities[0];
-
-
-  //SECOND (DETAILED)
-  print("THIS LINK = " + act.caloriesLink.toString());
-  var response2 = await http.get(Uri.parse(act.caloriesLink),
-      headers: {
-        'Authorization': "Bearer $token",
-      });
-  print("response 2\n" + response2.body );
-  List<ActivitiesCalories> detailedArr = [];
-  detailedArr = ActivitiesFitbitDetailed.fromJson(jsonDecode(response2.body)).activitiesCalories;
-  ActivitiesCalories detailed = detailedArr[0];
-  print("THIS IS IT " + detailed.value.toString());
-
-}

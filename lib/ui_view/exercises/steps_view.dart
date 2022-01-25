@@ -3,16 +3,28 @@ import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:my_app/models/ActivitiesFitbit.dart';
+
 class steps_view extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-
+  final Activities activities;
   const steps_view(
-      {Key key, this.animationController, this.animation})
+      {Key key, this.animationController, this.animation, this.activities})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String distance = "0";
+    String steps = "0";
+    String calories = "0";
+    String active_min = "0";
+    if(activities != null){
+      distance = activities.distance.toString();
+      steps = activities.steps.toString();
+      calories = activities.calories.toString();
+      active_min = (activities.activeDuration / 60000).toStringAsFixed(0);
+    }
     return AnimatedBuilder(
       animation: animationController,
       builder: (BuildContext context, Widget child) {
@@ -73,7 +85,8 @@ class steps_view extends StatelessWidget {
                                     CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
-                                        '${(7500 * animation.value).toInt()}',
+                                        // '${(activities.steps * animation.value).toInt()}',
+                                        steps,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily:
@@ -102,22 +115,22 @@ class steps_view extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: CustomPaint(
-                                  painter: CurvePainter(
-                                      colors: [
-                                        FitnessAppTheme.nearlyDarkBlue,
-                                        HexColor("#8A98E8"),
-                                        HexColor("#8A98E8")
-                                      ],
-                                      angle: 7500*.036),
-                                  child: SizedBox(
-                                    width: 108,
-                                    height: 108,
-                                  ),
-                                ),
-                              )
+                              // Padding(
+                              //   padding: const EdgeInsets.all(4.0),
+                              //   child: CustomPaint(
+                              //     painter: CurvePainter(
+                              //         colors: [
+                              //           FitnessAppTheme.nearlyDarkBlue,
+                              //           HexColor("#8A98E8"),
+                              //           HexColor("#8A98E8")
+                              //         ],
+                              //         angle: 60*.036),
+                              //     child: SizedBox(
+                              //       width: 108,
+                              //       height: 108,
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
                         ),
@@ -152,7 +165,7 @@ class steps_view extends StatelessWidget {
                                 ),
                                 SizedBox(height: 6,),
                                 Text(
-                                  '0.82',
+                                  distance,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,
@@ -194,7 +207,7 @@ class steps_view extends StatelessWidget {
                                     ),
                                     SizedBox(height: 6,),
                                     Text(
-                                      '2223',
+                                      calories,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -234,11 +247,11 @@ class steps_view extends StatelessWidget {
                                       width: 28,
                                       height: 28,
                                       child: Image.asset(
-                                          "assets/fitness_app/floors.jpg"),
+                                          "assets/fitness_app/active_duration.png"),
                                     ),
                                     SizedBox(height: 6,),
                                     Text(
-                                      '4',
+                                      active_min,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
                                         fontWeight: FontWeight.w500,
@@ -249,7 +262,7 @@ class steps_view extends StatelessWidget {
                                     ),
                                     SizedBox(height: 2,),
                                     Text(
-                                      'Floors',
+                                      'Active Duration',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
