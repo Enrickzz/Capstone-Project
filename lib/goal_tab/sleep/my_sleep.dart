@@ -39,8 +39,8 @@ import '../../ui_view/water/water_view.dart';
 import 'package:http/http.dart' as http;
 
 class my_sleep extends StatefulWidget {
-  const my_sleep({Key key, this.animationController}) : super(key: key);
-
+  const my_sleep({Key key, this.animationController, this.accessToken}) : super(key: key);
+  final String accessToken;
   final AnimationController animationController;
   @override
   _my_sleepState createState() => _my_sleepState();
@@ -55,7 +55,6 @@ class _my_sleepState extends State<my_sleep>
   final AuthService _auth = AuthService();
   String fitbitToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzg0VzQiLCJzdWIiOiI4VFFGUEQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNjQyNzg0MzgxLCJpYXQiOjE2NDI3NTU1ODF9.d3JfpNowesILgLa306QAyOJbAcPbbVZ9Aj9U-pPdCWs";
 
-
   List<Widget> listViews = <Widget>[];
   // List<Sleep> sleeptmp = [];
   Sleep latestSleep = new Sleep();
@@ -66,17 +65,23 @@ class _my_sleepState extends State<my_sleep>
 
   @override
   void initState() {
-    final readFitbit = databaseReference.child('fitbitToken/');
-    readFitbit.once().then((DataSnapshot snapshot) {
-      // print(snapshot.value);
-      if(snapshot.value != null || snapshot.value != ""){
-        print("FITBIT TOKEN");
-        fitbitToken = snapshot.value.toString();
-        print(fitbitToken);
-        // isLoading=false;
-      }
+    if(widget.accessToken != null){
+      fitbitToken = widget.accessToken;
       getLatestSleep();
-    });
+    }else{
+      final readFitbit = databaseReference.child('fitbitToken/');
+      readFitbit.once().then((DataSnapshot snapshot) {
+        // print(snapshot.value);
+        if(snapshot.value != null || snapshot.value != ""){
+          print("FITBIT TOKEN");
+          fitbitToken = snapshot.value.toString();
+          print(fitbitToken);
+          // isLoading=false;
+        }
+        getLatestSleep();
+      });
+    }
+
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -123,6 +128,9 @@ class _my_sleepState extends State<my_sleep>
       var temp = jsonDecode(jsonEncode(snapshot.value));
       if(snapshot.value != null || snapshot.value != ""){
         if(temp.toString().contains("false")){
+
+        }
+        else{
           listViews.add(
             fitbit_connect(
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -132,8 +140,6 @@ class _my_sleepState extends State<my_sleep>
               animationController: widget.animationController,
             ),
           );
-        }
-        else{
           listViews.add(
             TitleView(
                 titleTxt: 'Last Sleep',

@@ -62,7 +62,8 @@ dependencies:
   google_maps_flutter: ^2.1.1
   crypto: ^3.0.1
   url_launcher: ^6.0.18
-
+  uni_links: ^0.2.0
+  oauth2: ^2.0.0
 
 clipboard: ^0.1.3
 
