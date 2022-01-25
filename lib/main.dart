@@ -397,11 +397,15 @@ class _AppSignInState extends State<AppSignIn> {
                             SizedBox(height: 8.0),
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.blue,
-                                onPrimary: Colors.white,
+                                primary: Colors.white,
+                                onPrimary: Colors.grey,
                                 minimumSize: Size(220, 40),
+                                elevation: 3,
                               ),
-                                icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
+                                icon: new Image.network(
+                                    'http://pngimg.com/uploads/google/google_PNG19635.png', width: 30,
+                                    fit:BoxFit.cover,
+                                )                  ,
                                 label: Text("Sign in with Google"),
                                 onPressed: (){
                                 final provider = Provider.of<GoogleSignInProvider>(context, listen:false);
