@@ -340,7 +340,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                             ),
                                             InkWell(
                                               onTap: () {
-                                                _showMyDialogDelete();
+                                                _showMyDialogDelete(index);
 
                                               },
                                               child: Icon(
@@ -383,7 +383,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
     });
   }
 
-  Future<void> _showMyDialogDelete() async {
+  Future<void> _showMyDialogDelete(int index) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -402,9 +402,28 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                String userUID = widget.userUID;
+                int initial_length = discussion_list.length;
+                discussion_list.removeAt(index);
+                /// delete fields
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/journal/' + i.toString());
+                  bpRef.remove();
+                }
+                /// write fields
+                for(int i = 0; i < discussion_list.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/journal/' + (i+1).toString());
+                  bpRef.set({
+                    "title": discussion_list[i].title.toString(),
+                    "createdBy": discussion_list[i].createdBy.toString(),
+                    "discussionDate": "${discussion_list[i].discussionDate.month.toString().padLeft(2,"0")}/${discussion_list[i].discussionDate.day.toString().padLeft(2,"0")}/${discussion_list[i].discussionDate.year}",
+                    "discussionTime": "${discussion_list[i].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[i].discussionTime.minute.toString().padLeft(2,"0")}",
+                    "discussionBody": discussion_list[i].discussionBody.toString(),
+                    "noOfReplies": discussion_list[i].noOfReplies.toString(),
+                    "imgRef": discussion_list[i].imgRef.toString(),
+                  });
+                }
                 Navigator.of(context).pop();
-
               },
             ),
             TextButton(

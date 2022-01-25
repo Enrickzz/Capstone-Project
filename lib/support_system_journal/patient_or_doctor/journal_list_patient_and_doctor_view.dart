@@ -32,7 +32,8 @@ import '../../../fitness_app_theme.dart';
 
 class journal_list_doctor_patient_view extends StatefulWidget {
   // journal_list_doctor_patient_view({Key key, this.userUID}): super(key: key);
-  journal_list_doctor_patient_view({Key key}): super(key: key);
+  String userUID;
+  journal_list_doctor_patient_view({Key key, this.userUID}): super(key: key);
 
   @override
   _journalState createState() => _journalState();
@@ -55,15 +56,15 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
   // DateTime now =  DateTime.now();
   // String title = '';
   // String description = '';
-  // List<Discussion> discussion_list = new List<Discussion>();
+  List<Discussion> discussion_list = new List<Discussion>();
   // bool prescribedDoctor = false;
-
 
   double topBarOpacity = 0.0;
   @override
   void initState() {
     super.initState();
-    // discussion_list.clear();
+    discussion_list.clear();
+    getDiscussion();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -219,7 +220,7 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
                       ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: 3,
+                          itemCount: discussion_list.length,
                           itemBuilder: (context, index) {
                             return Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
@@ -271,7 +272,7 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
                                                         Container(
                                                           width: MediaQuery.of(context).size.width * 0.65,
                                                           child: Text(
-                                                            "BP Reading alarming?",
+                                                            discussion_list[index].title,
                                                             overflow: TextOverflow.ellipsis,
                                                             maxLines: 2,
                                                             style: TextStyle(
@@ -284,7 +285,7 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
                                                         Row(
                                                           children: <Widget>[
                                                             Text(
-                                                              "Sheila Borja",
+                                                              discussion_list[index].createdBy,
                                                               style: TextStyle(
                                                                 fontSize: 12,
                                                               ),
@@ -292,7 +293,9 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
 
                                                             SizedBox(width: 15),
                                                             Text(
-                                                              "01/09/2022 06:06",
+                                                              "${discussion_list[index].discussionDate.month.toString().padLeft(1,"0")}/${discussion_list[index].discussionDate.day.toString().padLeft(1,"0")}/${discussion_list[index].discussionDate.year}" +
+                                                                  " " +
+                                                                  "${discussion_list[index].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[index].discussionTime.minute.toString().padLeft(2,"0")}",
                                                               style: TextStyle(
                                                                 fontSize: 12,
                                                               ),
@@ -311,7 +314,7 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
                                           width: 300,
 
                                           child: Text(
-                                            "I recently Noticed that Louis' BP vitals have been constantly high is this a cause for me to be alarmed?",
+                                            discussion_list[index].discussionBody,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                               fontSize: 14,
@@ -332,7 +335,7 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
                                                 ),
                                                 SizedBox(width: 4.0),
                                                 Text(
-                                                  "1" + " replies",
+                                                  discussion_list[index].noOfReplies.toString() + " replies",
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                   ),
@@ -341,7 +344,7 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
                                             ),
                                             InkWell(
                                               onTap: () {
-                                                _showMyDialogDelete();
+                                                _showMyDialogDelete(index);
 
                                               },
                                               child: Icon(
@@ -371,20 +374,20 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
 
     );
   }
-  // void getDiscussion() {
-  //   // final User user = auth.currentUser;
-  //   // final uid = user.uid;
-  //   String userUID = widget.userUID;
-  //   final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
-  //   readdiscussion.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       discussion_list.add(Discussion.fromJson(jsonString));
-  //     });
-  //   });
-  // }
+  void getDiscussion() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
+    readdiscussion.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        discussion_list.add(Discussion.fromJson(jsonString));
+      });
+    });
+  }
 
-  Future<void> _showMyDialogDelete() async {
+  Future<void> _showMyDialogDelete(int index) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -403,9 +406,28 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                String userUID = widget.userUID;
+                int initial_length = discussion_list.length;
+                discussion_list.removeAt(index);
+                /// delete fields
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/journal/' + i.toString());
+                  bpRef.remove();
+                }
+                /// write fields
+                for(int i = 0; i < discussion_list.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/journal/' + (i+1).toString());
+                  bpRef.set({
+                    "title": discussion_list[i].title.toString(),
+                    "createdBy": discussion_list[i].createdBy.toString(),
+                    "discussionDate": "${discussion_list[i].discussionDate.month.toString().padLeft(2,"0")}/${discussion_list[i].discussionDate.day.toString().padLeft(2,"0")}/${discussion_list[i].discussionDate.year}",
+                    "discussionTime": "${discussion_list[i].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[i].discussionTime.minute.toString().padLeft(2,"0")}",
+                    "discussionBody": discussion_list[i].discussionBody.toString(),
+                    "noOfReplies": discussion_list[i].noOfReplies.toString(),
+                    "imgRef": discussion_list[i].imgRef.toString(),
+                  });
+                }
                 Navigator.of(context).pop();
-
               },
             ),
             TextButton(
