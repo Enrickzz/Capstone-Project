@@ -53,7 +53,9 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
   // DateTime now =  DateTime.now();
   // String title = '';
   // String description = '';
-  List<Discussion> discussion_list = new List<Discussion>();
+  List<Discussion> discussion_list = [];
+  List<Discussion> searched_list = [];
+  List<Discussion> fullListHolder = [];
   // bool prescribedDoctor = false;
 
 
@@ -121,7 +123,9 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                 contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
                               ),
                               onChanged: (val) {
-                                setState(() => search = val);
+                                setState(() {
+                                  search = val;
+                                });
                               },
                             ),
                           ),
@@ -135,7 +139,20 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                               ),
                             ),
                             onPressed: () async{
-
+                              setState(() {
+                                if(search != null){
+                                  for(int i = 0; i < discussion_list.length; i++){
+                                    if(discussion_list[i].title.toLowerCase().contains(search.toLowerCase())){
+                                      searched_list.add(discussion_list[i]);
+                                    }
+                                  }
+                                  fullListHolder = discussion_list;
+                                  discussion_list = searched_list;
+                                }
+                                else{
+                                  discussion_list = fullListHolder;
+                                }
+                              });
                             },
                           ),
                         ]

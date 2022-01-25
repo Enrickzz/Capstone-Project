@@ -28,7 +28,7 @@ class Discussion {
     discussionDate = DateFormat("MM/dd/yyyy").parse(json['discussionDate']);
     discussionTime = DateFormat("hh:mm").parse(json['discussionTime']);
     discussionBody = json['discussionBody'];
-    noOfReplies = json['noOfReplies'];
+    noOfReplies = int.parse(json['noOfReplies']);
     imgRef = json['imgRef'];
   }
 
