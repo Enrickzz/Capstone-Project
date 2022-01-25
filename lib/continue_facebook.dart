@@ -276,10 +276,9 @@ class _continue_facebookState extends State<continue_facebook> {
                           ),
                           color: Colors.blue,
                           onPressed:() async {
+
                             if(_formKey.currentState.validate()){
-
-                              // return _auth.loginFacebook();
-
+                              _auth.loginFacebook(valueChooseUserStatus, true);
                               if(valueChooseUserStatus == "Patient"){
                                   Navigator.pushReplacement(
                                     context,

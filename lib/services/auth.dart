@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:my_app/database.dart';
@@ -8,7 +9,8 @@ class AuthService{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final fb = FacebookLogin();
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   // create user
 
   Users _userCreated(User user){
@@ -57,7 +59,7 @@ class AuthService{
     }
   }
 
-  loginFacebook() async {
+  loginFacebook(String usertype, isFirstTime) async {
     print("Starting Facebook login");
 
     final facebookLogin = FacebookLogin();
@@ -71,6 +73,19 @@ class AuthService{
         final AuthCredential credential = FacebookAuthProvider.credential(fbToken.token);
         //User Credential to sign in with firebase
         final result = await _auth.signInWithCredential(credential);
+        if(isFirstTime){
+          final User user = auth.currentUser;
+          final uid = user.uid;
+          final usersRef = databaseReference.child('users/' + uid + '/personal_info');
+          String name = result.user.displayName;
+          String lastName = "";
+          String firstName= "";
+          var names = name.split(' ');
+          firstName = names[0];
+          lastName = names[1];
+          await usersRef.set({"uid": uid.toString(), "firstname": firstName, "lastname": lastName.toString(),
+            "email": result.user.email.toString(), "password": "ecd71870d1963316a97e3ac3408c9835ad8cf0f3c1bc703527c30265534f75ae", "isFirstTime": true.toString(), "userType": usertype.toString()});
+        }
         print('${result.user.displayName} is now logged in');
         break;
       case FacebookLoginStatus.cancel:

@@ -389,7 +389,7 @@ class _AppSignInState extends State<AppSignIn> {
                                 children: <Widget>[
                                   SignInButton(
                                     Buttons.Facebook,
-                                    onPressed: () => _auth.loginFacebook(),
+                                    onPressed: () => _auth.loginFacebook("", false),
                                   )
                                 ],
                               ),
