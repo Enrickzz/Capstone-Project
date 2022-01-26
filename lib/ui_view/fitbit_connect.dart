@@ -10,6 +10,7 @@ import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/goal_tab/sleep/my_sleep.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/FitBitToken.dart';
 import 'package:my_app/models/Sleep.dart';
 import 'dart:math' as math;
 import 'package:oauth2/oauth2.dart' as oauth2;
@@ -49,15 +50,6 @@ class _fitbit_connectState extends State<fitbit_connect> {
   @override
   void initState(){
     super.initState();
-  }
-  void _loadFromUrl(String url) async {
-    http.Response response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      print(response.body);
-    }
-    else {
-      print("ERROR");
-    }
   }
   Future<oauth2.Client> createClient() async {
     var exists = await credentialsFile.exists();
@@ -136,124 +128,7 @@ class _fitbit_connectState extends State<fitbit_connect> {
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
-              // child: Container(
-              //   decoration: BoxDecoration(
-              //     color: FitnessAppTheme.white,
-              //     borderRadius: BorderRadius.only(
-              //         topLeft: Radius.circular(8.0),
-              //         bottomLeft: Radius.circular(8.0),
-              //         bottomRight: Radius.circular(8.0),
-              //         topRight: Radius.circular(68.0)),
-              //     boxShadow: <BoxShadow>[
-              //       BoxShadow(
-              //           color: FitnessAppTheme.grey.withOpacity(0.2),
-              //           offset: Offset(1.1, 1.1),
-              //           blurRadius: 10.0),
-              //     ],
-              //   ),
-              //   child: Column(
-              //     children: <Widget>[
-              //       Padding(
-              //         padding:
-              //         const EdgeInsets.only(top: 16, left: 8,),
-              //         child: Row(
-              //           children: <Widget>[
-              //             Expanded(
-              //               child: Padding(
-              //                 padding: const EdgeInsets.only(
-              //                     left: 0, right: 0, top: 4),
-              //                 child: Column(
-              //                   children: <Widget>[
-              //                     Row(
-              //                       children: <Widget>[
-              //
-              //                         Padding(
-              //                           padding: const EdgeInsets.all(8.0),
-              //                           child: Column(
-              //                             mainAxisAlignment:
-              //                             MainAxisAlignment.center,
-              //                             crossAxisAlignment:
-              //                             CrossAxisAlignment.start,
-              //                             children: <Widget>[
-              //                               Padding(
-              //                                 padding: const EdgeInsets.only(
-              //                                     left: 4, bottom: 2),
-              //                                 child: Row(
-              //                                   children: [
-              //                                     Text(
-              //                                       'Connect your Fitbit account',
-              //                                       textAlign: TextAlign.center,
-              //                                       style: TextStyle(
-              //                                         fontWeight: FontWeight.bold,
-              //                                         fontSize: 16,
-              //                                       ),
-              //                                     ),
-              //                                     SizedBox(width: 16,),
-              //                                     Image.asset(
-              //                                       "assets/images/fitbit.png",
-              //                                       width: 70,
-              //                                     ),
-              //                                   ],
-              //                                 ),
-              //                               ),
-              //                               SizedBox(height: 16,),
-              //                               Padding(
-              //                                 padding:
-              //                                 const EdgeInsets.only(
-              //                                     left: 4, bottom: 3),
-              //                                 child: Text(
-              //                                   'By connecting your FitBit account, you allow FitBit to help manage your cardiovascular disease in numerous ways. These ways are: to know your heart rate, the activity that you do per day and to know if you are sleeping properly. All of these are imperative to your cardiovascular disease management and to keep you in good health.',
-              //                                   textAlign: TextAlign.start,
-              //                                   style: TextStyle(
-              //                                     fontSize: 12,
-              //                                   ),
-              //                                 ),
-              //                               )
-              //                             ],
-              //                           ),
-              //                         )
-              //                       ],
-              //                     ),
-              //                     SizedBox(
-              //                       height: 8,
-              //                     ),
-              //                     Row(
-              //                       children: <Widget>[
-              //                         Padding(
-              //                           padding: const EdgeInsets.all(8.0),
-              //                           child: Column(
-              //                             mainAxisAlignment:
-              //                             MainAxisAlignment.center,
-              //                             crossAxisAlignment:
-              //                             CrossAxisAlignment.start,
-              //                             children: <Widget>[
-              //                               Padding(
-              //                                 padding: const EdgeInsets.only(
-              //                                     left: 4, bottom: 2),
-              //                                 child: Text(
-              //                                   'By connecting your FitBit account, you allow FitBit to help manage your cardiovascular disease in numerous ways. These ways are: to know your heart rate, the activity that you do per day and to know if you are sleeping properly. All of these are imperative to your cardiovascular disease management and to keep you in good health.',
-              //                                   textAlign: TextAlign.start,
-              //                                   style: TextStyle(
-              //                                     fontSize: 12,
-              //                                   ),
-              //                                 ),
-              //                               ),
-              //                             ],
-              //                           ),
-              //                         )
-              //                       ],
-              //                     )
-              //                   ],
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //
-              //     ],
-              //   ),
-              // ),
+
               child: Container(
                 decoration: BoxDecoration(
                       color: FitnessAppTheme.white,
@@ -331,7 +206,14 @@ class _fitbit_connectState extends State<fitbit_connect> {
                             createClient().then((value) {
                               print("THIS IS IT");
                               _client = value;
-                              print(_client.credentials.toJson().toString());
+                              // print(_client.credentials.toJson().toString());
+                              FitBitToken test = FitBitToken.fromJson(jsonDecode(_client.credentials.toJson()));
+                              print(test.accessToken);
+                              final User user = auth.currentUser;
+                              final uid = user.uid;
+                              final Fitbittokenref = databaseReference.child('users/' + uid + '/fitbittoken/');
+                              Fitbittokenref.set({"accessToken": test.accessToken, "refreshToken": test.refreshToken, "idToken": test.idToken,
+                                                  "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
                               getLatestSleep();
                               // credentialsFile.writeAsString(_client.credentials.toJson());
                               // Navigator.push(
@@ -374,7 +256,7 @@ class _fitbit_connectState extends State<fitbit_connect> {
     if(sleep[0].dateOfSleep == "${now.year}-${now.month.toString().padLeft(2,"0")}-${now.day.toString().padLeft(2,"0")}"){
       latestSleep = sleep[0];
     }
-    print("latest sleep" + latestSleep.dateOfSleep.toString());
+    print("latest sleep " + latestSleep.dateOfSleep.toString());
     // print(response.body);
     // print("FITBIT ^ Length = " + sleep.length.toString());
   }

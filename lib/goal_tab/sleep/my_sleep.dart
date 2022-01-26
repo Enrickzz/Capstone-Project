@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/FitBitToken.dart';
 import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
@@ -30,6 +32,8 @@ import 'package:my_app/ui_view/weight/weight_progress.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/bp_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
@@ -37,6 +41,7 @@ import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals/meals_list_view.dart';
 import '../../ui_view/water/water_view.dart';
 import 'package:http/http.dart' as http;
+import 'package:oauth2/oauth2.dart' as oauth2;
 
 class my_sleep extends StatefulWidget {
   const my_sleep({Key key, this.animationController, this.accessToken}) : super(key: key);
@@ -62,25 +67,56 @@ class _my_sleepState extends State<my_sleep>
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
   bool isLoading = true;
-
+  final authorizationEndpoint =
+  Uri.parse("https://www.fitbit.com/oauth2/authorize");
+  final tokenEndpoint = Uri.parse("https://api.fitbit.com/oauth2/token");
+  final identifier = "2384W4";
+  final secret = "8fa2d37b0bdf0b766d6a14f9ce64638c";
+  final redirectUrl = Uri.parse("localhost://callback");
+  final credentialsFile = new File("encrypt/credentials.json");
+  final _scopes = ['weight', 'location','settings','profile','nutrition', 'activity','sleep','heartrate','social'];
+  oauth2.AuthorizationCodeGrant grant;
+  oauth2.Client _client;
+  Uri _uri;
   @override
   void initState() {
-    if(widget.accessToken != null){
-      fitbitToken = widget.accessToken;
-      getLatestSleep();
-    }else{
-      final readFitbit = databaseReference.child('fitbitToken/');
-      readFitbit.once().then((DataSnapshot snapshot) {
-        // print(snapshot.value);
-        if(snapshot.value != null || snapshot.value != ""){
-          print("FITBIT TOKEN");
-          fitbitToken = snapshot.value.toString();
-          print(fitbitToken);
-          // isLoading=false;
-        }
+    FitBitToken test;
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFitbit = databaseReference.child('users/' + uid + "/fitbittoken/");
+    readFitbit.once().then((DataSnapshot snapshot) {
+      test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+      print("TEST = " + test.accessToken);
+      if(test != null){
+        fitbitToken = test.accessToken;
         getLatestSleep();
-      });
-    }
+        Future.delayed(const Duration(milliseconds: 1200), (){
+          setState(() {
+
+          });
+        });
+      }else{
+        createClient().then((value) {
+          _client = value;
+          test =  FitBitToken.fromJson(jsonDecode(_client.credentials.toJson()));
+          final Fitbittokenref = databaseReference.child('users/' + uid + '/fitbittoken/');
+          Fitbittokenref.set({"accessToken": test.accessToken, "refreshToken": test.refreshToken, "idToken": test.idToken,
+            "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
+          final readfitbitConnection = databaseReference.child('users/' + uid + '/fitbit_connection/');
+          readfitbitConnection.set({"isConnected": true});
+          if(test != null){
+            fitbitToken = test.accessToken;
+            getLatestSleep();
+            Future.delayed(const Duration(milliseconds: 1200), (){
+              setState(() {
+
+              });
+            });
+          }
+        });
+      }
+    });
+    
 
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
@@ -115,8 +151,52 @@ class _my_sleepState extends State<my_sleep>
         isLoading = false;
       });
     });
-
     super.initState();
+  }
+  Future<oauth2.Client> createClient() async {
+    var exists = await credentialsFile.exists();
+    if (exists) {
+      print("CREDENTIALS");
+      var credentials =
+      oauth2.Credentials.fromJson(await credentialsFile.readAsString());
+      return oauth2.Client(credentials, identifier: identifier, secret: secret);
+    }
+    var grant = oauth2.AuthorizationCodeGrant(
+        identifier, authorizationEndpoint, tokenEndpoint,
+        secret: secret);
+    var authorizationUrl = grant.getAuthorizationUrl(redirectUrl,scopes: _scopes);
+    await redirect(authorizationUrl);
+    var responseUrl = await listen(redirectUrl);
+    String code = "";
+    if(responseUrl == null) {
+      throw Exception('response was null');
+    }else{
+      // print("NAG ELSE");
+      print("CODE = ");
+      code = responseUrl.toString();
+      code = code.replaceAll("localhost://callback?code=", "");
+      code = code.replaceAll("#_=_", "");
+      print(code);
+    }
+    var  readToken =await http.post(Uri.parse("https://api.fitbit.com/oauth2/token?code=$code&grant_type=authorization_code&redirect_uri=localhost://callback"),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': "Basic MjM4NFc0OjhmYTJkMzdiMGJkZjBiNzY2ZDZhMTRmOWNlNjQ2Mzhj"
+      },);
+
+    return await grant.handleAuthorizationResponse(responseUrl.queryParameters);
+  }
+
+  Future<void> redirect (Uri authurl) async{
+    if(await canLaunch(authurl.toString())){
+      await launch(authurl.toString());
+    }else{
+      throw Exception('Unable to launch $authurl');
+    }
+  }
+
+  Future<Uri> listen (Uri redirect) async {
+    return await getUriLinksStream().firstWhere((element) => element.toString().startsWith(redirect.toString()));
   }
 
   void addAllListData() {
@@ -128,9 +208,6 @@ class _my_sleepState extends State<my_sleep>
       var temp = jsonDecode(jsonEncode(snapshot.value));
       if(snapshot.value != null || snapshot.value != ""){
         if(temp.toString().contains("false")){
-
-        }
-        else{
           listViews.add(
             fitbit_connect(
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -140,6 +217,8 @@ class _my_sleepState extends State<my_sleep>
               animationController: widget.animationController,
             ),
           );
+        }
+        else{
           listViews.add(
             TitleView(
                 titleTxt: 'Last Sleep',
