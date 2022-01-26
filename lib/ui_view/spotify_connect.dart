@@ -1,9 +1,19 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/FitBitToken.dart';
 import 'dart:math' as math;
-
-class spotify_connect extends StatelessWidget {
+import 'dart:math' as math;
+import 'package:oauth2/oauth2.dart' as oauth2;
+import 'package:uni_links/uni_links.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+class spotify_connect extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -12,136 +22,83 @@ class spotify_connect extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<spotify_connect> createState() => _spotify_connectState();
+}
+
+class _spotify_connectState extends State<spotify_connect> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final authorizationEndpoint =
+  Uri.parse("https://accounts.spotify.com/authorize?");
+  final tokenEndpoint = Uri.parse("https://accounts.spotify.com/api/token");
+  final identifier = "588607448cfe482d97cafbd8f063b571";
+  final secret = "c4396ad514eb4ec8b4149e2d350fe41c";
+  final redirectUrl = Uri.parse("localhost://callback");
+  final credentialsFile = new File("encrypt/credentials.json");
+  final _scopes = ['weight', 'location','settings','profile','nutrition', 'activity','sleep','heartrate','social'];
+  oauth2.AuthorizationCodeGrant grant;
+  oauth2.Client _client;
+  Uri _uri;
+
+  Future<oauth2.Client> createClient() async {
+    var exists = await credentialsFile.exists();
+
+    if (exists) {
+      print("CREDENTIALS");
+      var credentials =
+      oauth2.Credentials.fromJson(await credentialsFile.readAsString());
+      return oauth2.Client(credentials, identifier: identifier, secret: secret);
+    }
+
+    var grant = oauth2.AuthorizationCodeGrant(
+        identifier, authorizationEndpoint, tokenEndpoint,
+        secret: secret);
+
+    var authorizationUrl = grant.getAuthorizationUrl(redirectUrl);
+
+    await redirect(authorizationUrl);
+    var responseUrl = await listen(redirectUrl);
+    String code = "";
+    if(responseUrl == null) {
+      throw Exception('response was null');
+    }else{
+      // print("NAG ELSE");
+      print(responseUrl.toString());
+      print("CODE = ");
+      code = responseUrl.toString();
+      code = code.replaceAll("localhost://callback?code=", "");
+      code = code.replaceAll("#_=_", "");
+      print(code);
+    }
+
+    return await grant.handleAuthorizationResponse(responseUrl.queryParameters);
+  }
+
+  Future<void> redirect (Uri authurl) async{
+    if(await canLaunch(authurl.toString())){
+      await launch(authurl.toString());
+    }else{
+      throw Exception('Unable to launch $authurl');
+    }
+  }
+
+  Future<Uri> listen (Uri redirect) async {
+    return await getUriLinksStream().firstWhere((element) => element.toString().startsWith(redirect.toString()));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
-              // child: Container(
-              //   decoration: BoxDecoration(
-              //     color: FitnessAppTheme.white,
-              //     borderRadius: BorderRadius.only(
-              //         topLeft: Radius.circular(8.0),
-              //         bottomLeft: Radius.circular(8.0),
-              //         bottomRight: Radius.circular(8.0),
-              //         topRight: Radius.circular(68.0)),
-              //     boxShadow: <BoxShadow>[
-              //       BoxShadow(
-              //           color: FitnessAppTheme.grey.withOpacity(0.2),
-              //           offset: Offset(1.1, 1.1),
-              //           blurRadius: 10.0),
-              //     ],
-              //   ),
-              //   child: Column(
-              //     children: <Widget>[
-              //       Padding(
-              //         padding:
-              //         const EdgeInsets.only(top: 16, left: 8,),
-              //         child: Row(
-              //           children: <Widget>[
-              //             Expanded(
-              //               child: Padding(
-              //                 padding: const EdgeInsets.only(
-              //                     left: 0, right: 0, top: 4),
-              //                 child: Column(
-              //                   children: <Widget>[
-              //                     Row(
-              //                       children: <Widget>[
-              //
-              //                         Padding(
-              //                           padding: const EdgeInsets.all(8.0),
-              //                           child: Column(
-              //                             mainAxisAlignment:
-              //                             MainAxisAlignment.center,
-              //                             crossAxisAlignment:
-              //                             CrossAxisAlignment.start,
-              //                             children: <Widget>[
-              //                               Padding(
-              //                                 padding: const EdgeInsets.only(
-              //                                     left: 4, bottom: 2),
-              //                                 child: Row(
-              //                                   children: [
-              //                                     Text(
-              //                                       'Connect your Fitbit account',
-              //                                       textAlign: TextAlign.center,
-              //                                       style: TextStyle(
-              //                                         fontWeight: FontWeight.bold,
-              //                                         fontSize: 16,
-              //                                       ),
-              //                                     ),
-              //                                     SizedBox(width: 16,),
-              //                                     Image.asset(
-              //                                       "assets/images/fitbit.png",
-              //                                       width: 70,
-              //                                     ),
-              //                                   ],
-              //                                 ),
-              //                               ),
-              //                               SizedBox(height: 16,),
-              //                               Padding(
-              //                                 padding:
-              //                                 const EdgeInsets.only(
-              //                                     left: 4, bottom: 3),
-              //                                 child: Text(
-              //                                   'By connecting your FitBit account, you allow FitBit to help manage your cardiovascular disease in numerous ways. These ways are: to know your heart rate, the activity that you do per day and to know if you are sleeping properly. All of these are imperative to your cardiovascular disease management and to keep you in good health.',
-              //                                   textAlign: TextAlign.start,
-              //                                   style: TextStyle(
-              //                                     fontSize: 12,
-              //                                   ),
-              //                                 ),
-              //                               )
-              //                             ],
-              //                           ),
-              //                         )
-              //                       ],
-              //                     ),
-              //                     SizedBox(
-              //                       height: 8,
-              //                     ),
-              //                     Row(
-              //                       children: <Widget>[
-              //                         Padding(
-              //                           padding: const EdgeInsets.all(8.0),
-              //                           child: Column(
-              //                             mainAxisAlignment:
-              //                             MainAxisAlignment.center,
-              //                             crossAxisAlignment:
-              //                             CrossAxisAlignment.start,
-              //                             children: <Widget>[
-              //                               Padding(
-              //                                 padding: const EdgeInsets.only(
-              //                                     left: 4, bottom: 2),
-              //                                 child: Text(
-              //                                   'By connecting your FitBit account, you allow FitBit to help manage your cardiovascular disease in numerous ways. These ways are: to know your heart rate, the activity that you do per day and to know if you are sleeping properly. All of these are imperative to your cardiovascular disease management and to keep you in good health.',
-              //                                   textAlign: TextAlign.start,
-              //                                   style: TextStyle(
-              //                                     fontSize: 12,
-              //                                   ),
-              //                                 ),
-              //                               ),
-              //                             ],
-              //                           ),
-              //                         )
-              //                       ],
-              //                     )
-              //                   ],
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //
-              //     ],
-              //   ),
-              // ),
               child: Container(
                 decoration: BoxDecoration(
                   color: FitnessAppTheme.white,
@@ -216,7 +173,20 @@ class spotify_connect extends StatelessWidget {
                           ),
 
                           onPressed: (){
-
+                            createClient().then((value) {
+                              _client = value;
+                              FitBitToken test = FitBitToken.fromJson(jsonDecode(_client.credentials.toJson()));
+                              print("TEST THIS");
+                              print(test.accessToken);
+                              print(value.toString());
+                              final User user = auth.currentUser;
+                              final uid = user.uid;
+                              final Fitbittokenref = databaseReference.child('users/' + uid + '/spotifytoken/');
+                              Fitbittokenref.set({"accessToken": test.accessToken, "refreshToken": test.refreshToken, "idToken": test.idToken,
+                                "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
+                              final readfitbitConnection = databaseReference.child('users/' + uid + '/spotify_connection/');
+                              readfitbitConnection.set({"isConnected": true});
+                            });
                             // fitbit API here
 
                           },

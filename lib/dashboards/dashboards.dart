@@ -64,6 +64,11 @@ class _DashboardsState extends State<Dashboards>
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
     addAllListData();
 
+    Future.delayed(const Duration(milliseconds: 1200),(){
+      setState(() {
+
+      });
+    });
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
@@ -96,273 +101,184 @@ class _DashboardsState extends State<Dashboards>
     final User user = auth.currentUser;
     final uid = user.uid;
     final ihealthconnection = databaseReference.child('users/' + uid + '/ihealth_connection/');
+    final spotifyconnection = databaseReference.child('users/' + uid + '/spotify_connection/');
     ihealthconnection.once().then((DataSnapshot snapshot) {
       var temp = jsonDecode(jsonEncode(snapshot.value));
-      if(snapshot.value != null || snapshot.value != ""){
-        if(temp.toString().contains("false")){
-          listViews.add(
-            ihealth_connect(
-              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                  parent: widget.animationController,
-                  curve:
-                  Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-              animationController: widget.animationController,
-            ),
-          );
-        }else{
-
+      spotifyconnection.once().then((DataSnapshot snapshot2) {
+        print("IHEALTH = " + temp.toString());
+        if(snapshot.value != null || snapshot.value != ""){
+          if(temp.toString().contains("false")){
+            listViews.add(
+              ihealth_connect(
+                animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                    parent: widget.animationController,
+                    curve:
+                    Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+                animationController: widget.animationController,
+              ),
+            );
+          }else{
+          }
         }
-      }
-      listViews.add(
-        TitleView(
-          titleTxt: 'Your program',
-          subTxt: 'Details',
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
-      // listViews.add(
-      //     StackedBarChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //       animationController: widget.animationController,
-      //     ));
-      // listViews.add(
-      //     SimpleTimeSeriesChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //       animationController: widget.animationController,
-      //     ));
-      listViews.add(
-          BGTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        var temp2 = jsonDecode(jsonEncode(snapshot2.value));
+        print("SPOTIFY = " + temp2.toString());
+        if(snapshot2.value != null || snapshot2.value != ""){
+          if(temp2.toString().contains("false")){
+            listViews.add(
+              spotify_connect(
+                animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                    parent: widget.animationController,
+                    curve:
+                    Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+                animationController: widget.animationController,
+              ),
+            );
+          }else{
+          }
+        }
+        listViews.add(
+          TitleView(
+            titleTxt: 'Your program',
+            subTxt: 'Details',
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
             animationController: widget.animationController,
-          ));
-      listViews.add(
-          OxyTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          ),
+        );
+
+        listViews.add(
+            BGTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+        listViews.add(
+            OxyTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+        listViews.add(
+            HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+
+
+        listViews.add(
+          bp_chart(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
             animationController: widget.animationController,
-          ));
-      listViews.add(
-          HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          ),
+        );
+
+        listViews.add(
+          glucose_levels(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
             animationController: widget.animationController,
-          ));
-      listViews.add(
-          Sleep_StackedBarChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          ),
+        );
+        // listViews.add(
+        //   ihealth_connect(
+        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        //         parent: widget.animationController,
+        //         curve:
+        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        //     animationController: widget.animationController,
+        //   ),
+        // );
+
+
+
+        listViews.add(
+          TitleView(
+            titleTxt: 'Body measurement',
+            subTxt: 'Today',
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
             animationController: widget.animationController,
-          ));
-      // listViews.add(
-      //     VerticalBarLabelChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //       animationController: widget.animationController,
-      //     ));
-      // listViews.add(
-      //     StackedBarTargetLineChart( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //       animationController: widget.animationController,
-      //     ));
-      // listViews.add(
-      //   heartrate(
-      //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //     animationController: widget.animationController,
-      //   ),
-      // );
-      // listViews.add(
-      //   DietView(
-      //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //     animationController: widget.animationController,
-      //   ),
-      // );
-      listViews.add(
-        cholesterol_chart(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
+          ),
+        );
 
-      listViews.add(
-        bp_chart(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
+        listViews.add(
+          BodyMeasurementView(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
+        listViews.add(
+          TitleView(
+            titleTxt: 'Water',
+            subTxt: 'Aqua SmartBottle',
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
 
-      // listViews.add(
-      //   calorie_intake(
-      //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //     animationController: widget.animationController,
-      //   ),
-      // );
-      listViews.add(
-        glucose_levels(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
-
-      // listViews.add(
-      //   WorkoutView(
-      //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //     animationController: widget.animationController,
-      //   ),
-      // );
-      // listViews.add(
-      //   RunningView(
-      //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //             Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
-      //     animationController: widget.animationController,
-      //   ),
-      // );
-
-      listViews.add(
-        fitbit_connect(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
-      // listViews.add(
-      //   ihealth_connect(
-      //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //     animationController: widget.animationController,
-      //   ),
-      // );
-      // listViews.add(
-      //   spotify_connect(
-      //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-      //     animationController: widget.animationController,
-      //   ),
-      // );
-
-
-      listViews.add(
-        TitleView(
-          titleTxt: 'Body measurement',
-          subTxt: 'Today',
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
-
-      listViews.add(
-        BodyMeasurementView(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
-      listViews.add(
-        TitleView(
-          titleTxt: 'Water',
-          subTxt: 'Aqua SmartBottle',
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: widget.animationController,
-              curve:
-              Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
-
-      listViews.add(
-        WaterView(
-          mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 7, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          mainScreenAnimationController: widget.animationController,
-        ),
-      );
-      listViews.add(
-        GlassView(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+        listViews.add(
+          WaterView(
+            mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
                 CurvedAnimation(
                     parent: widget.animationController,
-                    curve: Interval((1 / count) * 8, 1.0,
+                    curve: Interval((1 / count) * 7, 1.0,
                         curve: Curves.fastOutSlowIn))),
-            animationController: widget.animationController),
-      );
+            mainScreenAnimationController: widget.animationController,
+          ),
+        );
+        listViews.add(
+          GlassView(
+              animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                  CurvedAnimation(
+                      parent: widget.animationController,
+                      curve: Interval((1 / count) * 8, 1.0,
+                          curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController),
+        );
 
-      // listViews.add(
-      //   TitleView(
-      //     titleTxt: 'Area of focus',
-      //     subTxt: 'more',
-      //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      //         parent: widget.animationController,
-      //         curve:
-      //             Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-      //     animationController: widget.animationController,
-      //   ),
-      // );
+        // listViews.add(
+        //   TitleView(
+        //     titleTxt: 'Area of focus',
+        //     subTxt: 'more',
+        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        //         parent: widget.animationController,
+        //         curve:
+        //             Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+        //     animationController: widget.animationController,
+        //   ),
+        // );
 
-      // listViews.add(
-      //   AreaListView(
-      //     mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-      //         CurvedAnimation(
-      //             parent: widget.animationController,
-      //             curve: Interval((1 / count) * 5, 1.0,
-      //                 curve: Curves.fastOutSlowIn))),
-      //     mainScreenAnimationController: widget.animationController,
-      //   ),
-      // );
+        // listViews.add(
+        //   AreaListView(
+        //     mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+        //         CurvedAnimation(
+        //             parent: widget.animationController,
+        //             curve: Interval((1 / count) * 5, 1.0,
+        //                 curve: Curves.fastOutSlowIn))),
+        //     mainScreenAnimationController: widget.animationController,
+        //   ),
+        // );
+      });
     });
-
-
   }
 
   Future<bool> getData() async {

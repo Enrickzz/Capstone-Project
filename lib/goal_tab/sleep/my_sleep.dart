@@ -237,6 +237,8 @@ class _my_sleepState extends State<my_sleep>
       var temp = jsonDecode(jsonEncode(snapshot.value));
       if(snapshot.value != null || snapshot.value != ""){
         if(temp.toString().contains("false")){
+
+        }else{
           listViews.add(
             fitbit_connect(
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -247,88 +249,85 @@ class _my_sleepState extends State<my_sleep>
             ),
           );
         }
-        else{
-          listViews.add(
-            TitleView(
-                titleTxt: 'Last Sleep',
-                subTxt: 'Sleep Log',
-                redirect: 6,
-                userType: "Patient",
-                animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                    parent: widget.animationController,
-                    curve:
-                    Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-                animationController: widget.animationController,
-                fitbitToken: fitbitToken
-            ),
-          );
-
-          listViews.add(
-            time_asleep(
-                animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                    parent: widget.animationController,
-                    curve:
-                    Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-                animationController: widget.animationController,
-                fitbitToken: fitbitToken
-            ),
-          );
-          listViews.add(
-            stacked_sleep_chart(
-                animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                    parent: widget.animationController,
-                    curve:
-                    Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-                animationController: widget.animationController,
-                fitbittoken: fitbitToken
-            ),
-          );
-          // listViews.add(
-          //   Sleep_StackedBarChart(
-          //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-          //         parent: widget.animationController,
-          //         curve:
-          //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-          //     animationController: widget.animationController,
-          //     fitbitToken: fitbitToken
-          //   ),
-          // );
-
-          listViews.add(
-            TitleView(
-              titleTxt: 'Sleep Quality',
-              subTxt: 'Sleep Score?',
-              redirect: 9,
+        listViews.add(
+          TitleView(
+              titleTxt: 'Last Sleep',
+              subTxt: 'Sleep Log',
+              redirect: 6,
+              userType: "Patient",
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                   parent: widget.animationController,
                   curve:
                   Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
               animationController: widget.animationController,
-            ),
-          );
+              fitbitToken: fitbitToken
+          ),
+        );
 
-          // listViews.add(
-          //   SleepScoreVerticalBarLabelChart(
-          //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-          //         parent: widget.animationController,
-          //         curve:
-          //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-          //     animationController: widget.animationController,
-          //   ),
-          // );
+        listViews.add(
+          time_asleep(
+              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                  parent: widget.animationController,
+                  curve:
+                  Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+              fitbitToken: fitbitToken
+          ),
+        );
+        listViews.add(
+          stacked_sleep_chart(
+              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                  parent: widget.animationController,
+                  curve:
+                  Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+              fitbittoken: fitbitToken
+          ),
+        );
+        // listViews.add(
+        //   Sleep_StackedBarChart(
+        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        //         parent: widget.animationController,
+        //         curve:
+        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        //     animationController: widget.animationController,
+        //     fitbitToken: fitbitToken
+        //   ),
+        // );
 
-          listViews.add(
-            sleep_barchart_sf(
-                animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                    parent: widget.animationController,
-                    curve:
-                    Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-                animationController: widget.animationController,
-                fitbitToken: fitbitToken
-            ),
-          );
+        listViews.add(
+          TitleView(
+            titleTxt: 'Sleep Quality',
+            subTxt: 'Sleep Score?',
+            redirect: 9,
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
 
-        }
+        // listViews.add(
+        //   SleepScoreVerticalBarLabelChart(
+        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        //         parent: widget.animationController,
+        //         curve:
+        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        //     animationController: widget.animationController,
+        //   ),
+        // );
+
+        listViews.add(
+          sleep_barchart_sf(
+              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                  parent: widget.animationController,
+                  curve:
+                  Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+              fitbitToken: fitbitToken
+          ),
+        );
       }
     });
   }
