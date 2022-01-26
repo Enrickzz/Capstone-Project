@@ -1,8 +1,8 @@
 **Terms & Conditions**
 
-By downloading or using the app, these terms will automatically apply to you – you should make sure therefore that you read them carefully before using the app. You’re not allowed to copy or modify the app, any part of the app, or our trademarks in any way. You’re not allowed to attempt to extract the source code of the app, and you also shouldn’t try to translate the app into other languages or make derivative versions. The app itself, and all the trademarks, copyright, database rights, and other intellectual property rights related to it, still belong to Oli's Babies.
+By downloading or using the app, these terms will automatically apply to you – you should make sure therefore that you read them carefully before using the app. You’re not allowed to copy or modify the app, any part of the app, or our trademarks in any way. You’re not allowed to attempt to extract the source code of the app, and you also shouldn’t try to translate the app into other languages or make derivative versions. The app itself, and all the trademarks, copyright, database rights, and other intellectual property rights related to it, still belong to Heartistant.
 
-Oli's Babies is committed to ensuring that the app is as useful and efficient as possible. For that reason, we reserve the right to make changes to the app or to charge for its services, at any time and for any reason. We will never charge you for the app or its services without making it very clear to you exactly what you’re paying for.
+Heartistant is committed to ensuring that the app is as useful and efficient as possible. For that reason, we reserve the right to make changes to the app or to charge for its services, at any time and for any reason. We will never charge you for the app or its services without making it very clear to you exactly what you’re paying for.
 
 The CVD App app stores and processes personal data that you have provided to us, to provide our Service. It’s your responsibility to keep your phone and access to the app secure. We therefore recommend that you do not jailbreak or root your phone, which is the process of removing software restrictions and limitations imposed by the official operating system of your device. It could make your phone vulnerable to malware/viruses/malicious programs, compromise your phone’s security features and it could mean that the CVD App app won’t work properly or at all.
 
@@ -14,21 +14,76 @@ Link to Terms and Conditions of third-party service providers used by the app
 *   [Google Analytics for Firebase](https://firebase.google.com/terms/analytics)
 *   [Facebook](https://www.facebook.com/legal/terms/plain_text_terms)
 
-You should be aware that there are certain things that Oli's Babies will not take responsibility for. Certain functions of the app will require the app to have an active internet connection. The connection can be Wi-Fi or provided by your mobile network provider, but Oli's Babies cannot take responsibility for the app not working at full functionality if you don’t have access to Wi-Fi, and you don’t have any of your data allowance left.
+You should be aware that there are certain things that Heartistant will not take responsibility for. Certain functions of the app will require the app to have an active internet connection. The connection can be Wi-Fi or provided by your mobile network provider, but Heartistant cannot take responsibility for the app not working at full functionality if you don’t have access to Wi-Fi, and you don’t have any of your data allowance left.
 
 If you’re using the app outside of an area with Wi-Fi, you should remember that the terms of the agreement with your mobile network provider will still apply. As a result, you may be charged by your mobile provider for the cost of data for the duration of the connection while accessing the app, or other third-party charges. In using the app, you’re accepting responsibility for any such charges, including roaming data charges if you use the app outside of your home territory (i.e. region or country) without turning off data roaming. If you are not the bill payer for the device on which you’re using the app, please be aware that we assume that you have received permission from the bill payer for using the app.
 
-Along the same lines, Oli's Babies cannot always take responsibility for the way you use the app i.e. You need to make sure that your device stays charged – if it runs out of battery and you can’t turn it on to avail the Service, Oli's Babies cannot accept responsibility.
+Along the same lines, Heartistant cannot always take responsibility for the way you use the app i.e. You need to make sure that your device stays charged – if it runs out of battery and you can’t turn it on to avail the Service, Heartistant cannot accept responsibility.
 
-With respect to Oli's Babies’s responsibility for your use of the app, when you’re using the app, it’s important to bear in mind that although we endeavor to ensure that it is updated and correct at all times, we do rely on third parties to provide information to us so that we can make it available to you. Oli's Babies accepts no liability for any loss, direct or indirect, you experience as a result of relying wholly on this functionality of the app.
+With respect to Heartistant’s responsibility for your use of the app, when you’re using the app, it’s important to bear in mind that although we endeavor to ensure that it is updated and correct at all times, we do rely on third parties to provide information to us so that we can make it available to you. Heartistant accepts no liability for any loss, direct or indirect, you experience as a result of relying wholly on this functionality of the app.
 
-At some point, we may wish to update the app. The app is currently available on Android & iOS – the requirements for the both systems(and for any additional systems we decide to extend the availability of the app to) may change, and you’ll need to download the updates if you want to keep using the app. Oli's Babies does not promise that it will always update the app so that it is relevant to you and/or works with the Android & iOS version that you have installed on your device. However, you promise to always accept updates to the application when offered to you, We may also wish to stop providing the app, and may terminate use of it at any time without giving notice of termination to you. Unless we tell you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must stop using the app, and (if needed) delete it from your device.
+At some point, we may wish to update the app. The app is currently available on Android & iOS – the requirements for the both systems(and for any additional systems we decide to extend the availability of the app to) may change, and you’ll need to download the updates if you want to keep using the app. Heartistant does not promise that it will always update the app so that it is relevant to you and/or works with the Android & iOS version that you have installed on your device. However, you promise to always accept updates to the application when offered to you, We may also wish to stop providing the app, and may terminate use of it at any time without giving notice of termination to you. Unless we tell you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must stop using the app, and (if needed) delete it from your device.
+
+**HEARTISTANT - PRIVACY STATEMENT**
+
+This PRIVACY STATEMENT sets how HEARTISTANT uses personal information of patients and explains:
+
+* What kind of information is collected
+* How it is collected
+* How it is managed and stored
+* How it is used
+* How you can access and update information relating to you
+
+This policy applies to information acquired from patients of Heartistant that have completed the user registration process and other accompanying forms that are required to administer their requests.
+
+Information collected and held by Heartistant is subjected to the Data Privacy Act of 2012, and Heartistant respects and supports privacy protection in relation to information collected. Heartistant is committed to comply with the Data Privacy Act (Republic Act No. 10173).
+
+
+**WHAT KIND OF INFORMATION IS COLLECTED?**
+
+HEARTISTANT collects and holds information relating to CVD patient's health and non-health data which are needed to create a dashboard and health record of their personal condition. This information includes patient's personal data such as name, age, email, birthday, weight, height, and other physical data. The health data may include, but not limited to the following data:
+
+* Health vitals
+* Medicne Intake Record
+* Fitbit activity record
+* Lab results
+* Food Intake
+
+HEARTISTANT also collects and holds information relating to the CVD patient's doctor particularly their management plans for the patients which may include, but not limited to the following data:
+
+* Exercise Plan
+* Medical Prescription
+* Exercise Plan
+* Vitals Recording
+* Discussion with other Doctors
+
+
+**HOW IS IT COLLECTED?**
+
+These data are collected whenever the patient, support system, or doctor users input these records through the various forms throughout the system. In the case of the patient, some data are automatically collected via their Fitit and iHealth wearable devices.
+
+
+**HOW IS IT STORED AND MANAGED?**
+
+The digital records of the users are stored electronically in a safe Firebase database managed by representatives of Heartistant.
+
+
+**HOW HEARTISTANT USES PERSONAL INFORMATION (USE OF DATA)**
+
+Heartistant uses the information contained in the database primarily for managing and creation of dashboards of the patients and relaying of doctor's management plan to their respective patients. In addition, Heartistant utilizes information held on the database for the secondary purpose of performing statistical analysis, executing marketing campaigns, demand and supply strategic planning and product development. No persons other thant Heartistant are authorized to access patient information held in the program database. All persons who can access the information are required to maintain its confidentiality and comply with privacy laws.
+
+
+**DATA QUALITY AND SECURITY**
+
+Heartistant is committed to taking all reasonable steps to make sure the information acquired using manual forms, and digital information held on its database, are accurate and secure.
+
 
 **Changes to This Terms and Conditions**
 
 We may update our Terms and Conditions from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Terms and Conditions on this page.
 
 These terms and conditions are effective as of 2022-10-07
+
 
 **Contact Us**
 
