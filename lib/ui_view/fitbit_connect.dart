@@ -214,12 +214,9 @@ class _fitbit_connectState extends State<fitbit_connect> {
                               final Fitbittokenref = databaseReference.child('users/' + uid + '/fitbittoken/');
                               Fitbittokenref.set({"accessToken": test.accessToken, "refreshToken": test.refreshToken, "idToken": test.idToken,
                                                   "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
+                              final readfitbitConnection = databaseReference.child('users/' + uid + '/fitbit_connection/');
+                              readfitbitConnection.set({"isConnected": true});
                               getLatestSleep();
-                              // credentialsFile.writeAsString(_client.credentials.toJson());
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => my_sleep(accessToken: _client.credentials.accessToken)),
-                              // );
                             });
                             // fitbit API here
                             final User user = auth.currentUser;
