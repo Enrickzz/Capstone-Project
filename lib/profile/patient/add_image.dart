@@ -93,22 +93,9 @@ class _AddImageState extends State<addImage> {
       child: Column(
         children: [
           Spacer(),
-          image!= null
-              ? ClipOval(
-              child: Image.file(
-                  image,
-                  width: 160,
-                  height: 160,
-                  fit: BoxFit.cover
-              )
-          )
-              : ClipOval(
-                child: Image.asset("assets/images/blank_person.png",
-                width: 160,
-                height: 160,
-                fit: BoxFit.cover
+               ClipOval(
+              child: checkimage(widget.img.path)
           ),
-              ),
           const SizedBox(height: 24),
           Text(
             'Image Gallery',
@@ -183,7 +170,16 @@ class _AddImageState extends State<addImage> {
         ),
         onPressed: onClicked,
       );
-
+  Widget checkimage(String img) {
+    if(img == null || img == ""){
+      return Image.asset("assets/images/blank_person.png", width: 150, height: 150,fit: BoxFit.cover);
+    }else{
+      return Image.file(image,
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover);
+    }
+  }
 }
 
 

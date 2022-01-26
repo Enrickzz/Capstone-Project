@@ -36,11 +36,15 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
 
    @override
   void initState() {
+     print("TOKEN");
+     print(widget.fitbittoken);
      getFitbit();
      Future.delayed(const Duration(milliseconds: 1500), () {
+       print("LENGTH SLEEP" );
+       print(sleeptmp.length);
        _createSampleData(sleeptmp);
        setState(() {
-
+         isLoading =false;
        });
      });
     // _chartData = getChartData();
@@ -153,8 +157,13 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
            'Authorization': "Bearer " + token,
          });
      List<Sleep> sleep=[];
+     print("token in get");
+     print(token);
      sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
      sleeptmp = sleep;
+     setState(() {
+       sleeptmp = sleep;
+     });
      // print(response.body);
      // print("FITBIT ^ Length = " + sleep.length.toString());
    }

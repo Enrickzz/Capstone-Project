@@ -86,16 +86,19 @@ class _my_sleepState extends State<my_sleep>
     final uid = user.uid;
     final readFitbit = databaseReference.child('users/' + uid + "/fitbittoken/");
     readFitbit.once().then((DataSnapshot snapshot) {
-      test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
-      print("TEST = " + test.accessToken);
-      if(test != null){
-        checkToken(test.accessToken);
-        fitbitToken = test.accessToken;
-        Future.delayed(const Duration(milliseconds: 2000), () {
-          setState(() { isLoading = false;
+      if(snapshot.value != null){
+        test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+        if(test != null){
+          fitbitToken = test.accessToken;
+          checkToken(test.accessToken);
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            setState(() { isLoading = false;
+            });
           });
-        });
-      }else{
+        }else{
+
+        }
+      }else {
         createClient().then((value) {
           _client = value;
           test =  FitBitToken.fromJson(jsonDecode(_client.credentials.toJson()));
@@ -105,13 +108,28 @@ class _my_sleepState extends State<my_sleep>
           final readfitbitConnection = databaseReference.child('users/' + uid + '/fitbit_connection/');
           readfitbitConnection.set({"isConnected": true});
           if(test != null){
+            print("trap");
             fitbitToken = test.accessToken;
-            Future.delayed(const Duration(milliseconds: 2000), (){
-              setState(() {isLoading = false;});
+            Future.delayed(const Duration(milliseconds: 4000), (){
+              setState(() {print("SETSTATE"); isLoading = false;fitbitToken = test.accessToken; });
             });
           }
         });
+        // setState(() {
+        //
+        // });
       }
+      print(snapshot.value);
+      // print("TEST = " + test.accessToken);
+      // if(test != null){
+      //   checkToken(test.accessToken);
+      //   Future.delayed(const Duration(milliseconds: 2000), () {
+      //     setState(() { isLoading = false;
+      //     });
+      //   });
+      // }else{
+      //
+      // }
     });
     
 
@@ -150,6 +168,7 @@ class _my_sleepState extends State<my_sleep>
     super.initState();
   }
   void checkToken(String accessToken) async{
+    print("CHECKING ACCESS TOKEN");
     final User user = auth.currentUser;
     final uid = user.uid;
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),

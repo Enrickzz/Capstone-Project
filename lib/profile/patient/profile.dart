@@ -241,11 +241,7 @@ class _index3State extends State<index3>
                             // )
                           child: ClipOval(
                             // child:Image.asset("assets/images/blank_person.png",
-                            child: Image.file(File(pp_img),
-                                width: 70,
-                                height: 70,
-                                fit: BoxFit.cover),
-                          ),
+                            child: checkimage(pp_img)),
 
                         ),
                       ),
@@ -1162,4 +1158,16 @@ class _index3State extends State<index3>
       }
     });
   }
+  Widget checkimage(String img) {
+    if(img == null || img == ""){
+      return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
+    }else{
+      return Image.file(File(pp_img),
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover);
+    }
+  }
 }
+
+
