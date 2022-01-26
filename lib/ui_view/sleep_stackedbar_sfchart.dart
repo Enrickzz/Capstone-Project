@@ -98,7 +98,7 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
                             markerSettings: MarkerSettings(isVisible: true)),
                             StackedColumnSeries<MySleep, String>(dataSource: _chartData,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
-                                yValueMapper: (MySleep exp, _) => exp.deep/3600,
+                                yValueMapper: (MySleep exp, _) => exp.deep/3600 ,
                                 name: 'DEEP',
                                 markerSettings: MarkerSettings(isVisible: true)),
                             StackedColumnSeries<MySleep, String>(dataSource: _chartData,
@@ -148,7 +148,7 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
   }
    void getFitbit() async {
      String token = widget.fitbittoken;
-     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
+     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=7"),
          headers: {
            'Authorization': "Bearer " + token,
          });

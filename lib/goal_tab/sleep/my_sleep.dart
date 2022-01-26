@@ -78,6 +78,7 @@ class _my_sleepState extends State<my_sleep>
   oauth2.AuthorizationCodeGrant grant;
   oauth2.Client _client;
   Uri _uri;
+  bool tokenTrue=true;
   @override
   void initState() {
     FitBitToken test;
@@ -88,11 +89,10 @@ class _my_sleepState extends State<my_sleep>
       test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
       print("TEST = " + test.accessToken);
       if(test != null){
+        checkToken(test.accessToken);
         fitbitToken = test.accessToken;
-        getLatestSleep();
-        Future.delayed(const Duration(milliseconds: 1200), (){
-          setState(() {
-
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          setState(() { isLoading = false;
           });
         });
       }else{
@@ -106,11 +106,8 @@ class _my_sleepState extends State<my_sleep>
           readfitbitConnection.set({"isConnected": true});
           if(test != null){
             fitbitToken = test.accessToken;
-            getLatestSleep();
-            Future.delayed(const Duration(milliseconds: 1200), (){
-              setState(() {
-
-              });
+            Future.delayed(const Duration(milliseconds: 2000), (){
+              setState(() {isLoading = false;});
             });
           }
         });
@@ -148,10 +145,42 @@ class _my_sleepState extends State<my_sleep>
     });
     Future.delayed(const Duration(milliseconds: 1200), (){
       setState(() {
-        isLoading = false;
       });
     });
     super.initState();
+  }
+  void checkToken(String accessToken) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
+        headers: {
+          'Authorization': "Bearer " + accessToken
+        });
+    if(response.body.contains("Access token expired")){
+      print("Access token expired : Get Token now");
+      FitBitToken test;
+      createClient().then((value) {
+        _client = value;
+        test =  FitBitToken.fromJson(jsonDecode(_client.credentials.toJson()));
+        final Fitbittokenref = databaseReference.child('users/' + uid + '/fitbittoken/');
+        Fitbittokenref.set({"accessToken": test.accessToken, "refreshToken": test.refreshToken, "idToken": test.idToken,
+          "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
+        final readfitbitConnection = databaseReference.child('users/' + uid + '/fitbit_connection/');
+        readfitbitConnection.set({"isConnected": true});
+        if(test != null){
+          fitbitToken = test.accessToken;
+          Future.delayed(const Duration(milliseconds: 1200), (){
+            setState(() {});
+          });
+        }
+      });
+    }else{
+      print("Token working");
+      fitbitToken = accessToken;
+      Future.delayed(const Duration(milliseconds: 1200), () {
+        setState(() {});
+      });
+    }
   }
   Future<oauth2.Client> createClient() async {
     var exists = await credentialsFile.exists();
@@ -302,17 +331,6 @@ class _my_sleepState extends State<my_sleep>
         }
       }
     });
-
-
-
-    //
-
-
-
-
-
-
-
   }
 
   Future<bool> getData() async {
@@ -331,8 +349,7 @@ class _my_sleepState extends State<my_sleep>
             isLoading
                 ? Center(
               child: CircularProgressIndicator(),
-            ):
-            getMainListViewUI(),
+            ): getMainListViewUI(),
             // getAppBarUI(),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
@@ -344,7 +361,10 @@ class _my_sleepState extends State<my_sleep>
   }
 
   Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
+    return  isLoading
+        ? Center(
+      child: CircularProgressIndicator(),
+    ): new FutureBuilder<bool>(
       future: getData(),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (!snapshot.hasData) {
@@ -464,10 +484,10 @@ class _my_sleepState extends State<my_sleep>
       ],
     );
   }
-  void getLatestSleep() async {
+  void getLatestSleep(String accessToken) async {
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
         headers: {
-          'Authorization': "Bearer " + fitbitToken
+          'Authorization': "Bearer " + accessToken
         });
     List<Sleep> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
@@ -481,3 +501,5 @@ class _my_sleepState extends State<my_sleep>
     // print("FITBIT ^ Length = " + sleep.length.toString());
   }
 }
+
+

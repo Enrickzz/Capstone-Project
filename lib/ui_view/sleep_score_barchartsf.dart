@@ -41,7 +41,7 @@ class sleepScoreState extends State<sleep_barchart_sf> {
   void initState() {
     super.initState();
     getFitbit();
-    Future.delayed(const Duration(milliseconds: 2000),() {
+    Future.delayed(const Duration(milliseconds: 1200),() {
       isLoading = false;
       setState(() {
 

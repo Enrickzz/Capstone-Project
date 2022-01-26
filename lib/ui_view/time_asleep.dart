@@ -43,14 +43,16 @@ class _time_asleepState extends State<time_asleep> {
   List<OrdinalSales> deep=[];
   List<OrdinalSales> wake=[];
 
+  bool isLoading = true;
+
 
   @override
   void initState() {
     super.initState();
     getLatestSleep();
-    getSleepGoal();
-    Future.delayed(const Duration(milliseconds: 1500),(){
+    Future.delayed(const Duration(milliseconds: 1200),(){
       setState(() {
+        isLoading = false;
         to_go_hr = sleepgoal.difference(timeAsleep).inHours.toString();
         to_go_min = (sleepgoal.difference(timeAsleep).inMinutes % 60).toString();
         print("Set State");
@@ -87,7 +89,7 @@ class _time_asleepState extends State<time_asleep> {
                         blurRadius: 10.0),
                   ],
                 ),
-                child: Column(
+                child:  Column(
                   children: <Widget>[
                     Padding(
                       padding:
@@ -100,7 +102,10 @@ class _time_asleepState extends State<time_asleep> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Row(
+                              isLoading
+                                  ? Center(
+                                child: CircularProgressIndicator(),
+                              ): new Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
@@ -166,7 +171,10 @@ class _time_asleepState extends State<time_asleep> {
                                 ],
                               ),
 
-                              Column(
+                              isLoading
+                                  ? Center(
+                                child: CircularProgressIndicator(),
+                              ): new Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -246,7 +254,10 @@ class _time_asleepState extends State<time_asleep> {
                               )
                             ],
                           ),
-                          Row(
+                          isLoading
+                              ? Center(
+                            child: CircularProgressIndicator(),
+                          ): new Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -286,7 +297,10 @@ class _time_asleepState extends State<time_asleep> {
                             child: Row(
                               children: <Widget>[
                                 Expanded(
-                                  child: Row(
+                                  child: isLoading
+                                      ? Center(
+                                    child: CircularProgressIndicator(),
+                                  ): new Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
@@ -325,7 +339,10 @@ class _time_asleepState extends State<time_asleep> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Row(
+                                  child: isLoading
+                                      ? Center(
+                                    child: CircularProgressIndicator(),
+                                  ): new Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
@@ -382,12 +399,17 @@ class _time_asleepState extends State<time_asleep> {
         });
     List<Sleep> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
+    print("LATEST SLEEP");
+    print(sleep[0].dateOfSleep);
+    print("${now.year}-${now.month.toString().padLeft(2,"0")}-${now.day.toString().padLeft(2,"0")}");
     if(sleep[0].dateOfSleep == "${now.year}-${now.month.toString().padLeft(2,"0")}-${now.day.toString().padLeft(2,"0")}"){
       latestSleep = sleep[0];
       Duration duration = new Duration(milliseconds: latestSleep.duration);
       getTimeAsleep(duration);
       time_asleep_hr = duration.inHours.toString();
+      getSleepGoal();
     }
+
     // print(response.body);
     // print("FITBIT ^ Length = " + sleep.length.toString());
   }
@@ -416,6 +438,9 @@ class _time_asleepState extends State<time_asleep> {
       Duration duration = new Duration(minutes: sleepGoal.duration);
       print(duration.toString());
       getSleepGoalDuration(duration);
+      setState(() {
+        isLoading = false;
+      });
     });
   }
   void getSleepGoalDuration(Duration duration) {
