@@ -525,7 +525,7 @@ class _AppSignUpState extends State<registration> {
                                           password = sha256.convert(utf8.encode(password)).toString();
 
                                           await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(),
-                                            "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+                                            "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "pp_img": "assets/images/blank_person.png"});
                                           final fitbitRef = databaseReference.child('users/' + uid + '/fitbit_connection/');
                                           fitbitRef.update({"isConnected": "false"});
                                           final idRef = databaseReference.child('patient_ids/');

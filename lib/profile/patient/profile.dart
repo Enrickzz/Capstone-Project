@@ -66,6 +66,7 @@ class _index3State extends State<index3>
   Users profile = new Users();
   String DisplayName = " ";
   String email = "";
+  String pp_img = "";
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateTime birthdate;
   final test = DateTime(1999, 5, 18); // for test
@@ -223,19 +224,29 @@ class _index3State extends State<index3>
                             BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
                           ],
                         ),
+
                         child: GestureDetector(
                             onTap: (){
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => addImage()),
-                              );
+                                MaterialPageRoute(builder: (context) => addImage(img: File(pp_img))),
+                                );
                             },
+                            // child: Container(
+                            //     decoration: BoxDecoration(
+                            //         image: DecorationImage(
+                            //             image: FileImage(File(pp_img)),
+                            //         )
+                            //     )
+                            // )
                           child: ClipOval(
-                              child:Image.asset("assets/images/blank_person.png",
-                                  width: 70,
-                                  height: 70,
-                                  fit: BoxFit.cover),
+                            // child:Image.asset("assets/images/blank_person.png",
+                            child: Image.file(File(pp_img),
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover),
                           ),
+
                         ),
                       ),
                     ),
@@ -1041,6 +1052,7 @@ class _index3State extends State<index3>
       });
       DisplayName = profile.firstname + " " + profile.lastname;
       email = profile.email;
+      pp_img = profile.pp_img;
     });
   }
   void getInfo() {

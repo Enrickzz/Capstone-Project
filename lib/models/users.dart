@@ -12,8 +12,9 @@ class Users {
   String specialty;
   bool isMe;
   List<Connection> connections;
+  String pp_img;
 
-  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections, this.isMe});
+  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections, this.isMe, this.pp_img});
 
 
   Users.fromJson(Map<String, dynamic> json) {
@@ -24,6 +25,7 @@ class Users {
     password = json['password'];
     usertype = json['userType'];
     specialty = json['specialty'];
+    pp_img = json['pp_img'];
   }
 
   Users.fromJson2(Map<String, dynamic> json) {

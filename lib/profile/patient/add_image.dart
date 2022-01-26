@@ -16,16 +16,22 @@ import 'package:path_provider/path_provider.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class addImage extends StatefulWidget {
+  final File img;
+  addImage({this.img});
   @override
   _AddImageState createState() => _AddImageState();
 }
 
 class _AddImageState extends State<addImage> {
 
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   //based sa tutorial File? image; dapat https://www.youtube.com/watch?v=MSv38jO4EJk&t=339s 2:08
   File image;
   bool isUpdated = false;
+  // var imagePermanent;
+  // File image_path = "";
   Future pickImage() async{
     try{
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -33,11 +39,11 @@ class _AddImageState extends State<addImage> {
 
       final imageTemporary = File(image.path);
       // image permanent https://www.youtube.com/watch?v=MSv38jO4EJk&t=339s 6:39
-      final imagePermanent = await saveImagePermanently(image.path);
+      // imagePermanent = await saveImagePermanently(image.path);
+      // image_path = File(image.path);
       setState(() {
         this.image = imageTemporary;
         isUpdated = true;
-
       });
       // setState(() =>  this.image = imageTemporary);
     } on PlatformException catch (e){
@@ -54,7 +60,17 @@ class _AddImageState extends State<addImage> {
   }
 
 
-
+  @override
+  void initState(){
+    super.initState();
+    if(widget.img != null){
+      image = widget.img;
+    }
+    // Future.delayed(const Duration(milliseconds: 1200), (){
+    //   setState(() {
+    //   });
+    // });
+  }
 
 
 
@@ -119,6 +135,11 @@ class _AddImageState extends State<addImage> {
                   ),
                 ),
                 onPressed: ()  {
+                  final User user = auth.currentUser;
+                  final uid = user.uid;
+                  final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+                  readProfile.update({"pp_img": image.path});
+                  Navigator.pop(context);
 
                   // print('signed out');
                   // Navigator.pushReplacement(
