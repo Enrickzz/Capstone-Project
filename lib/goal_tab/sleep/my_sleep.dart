@@ -237,8 +237,6 @@ class _my_sleepState extends State<my_sleep>
       var temp = jsonDecode(jsonEncode(snapshot.value));
       if(snapshot.value != null || snapshot.value != ""){
         if(temp.toString().contains("false")){
-
-        }else{
           listViews.add(
             fitbit_connect(
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -248,6 +246,7 @@ class _my_sleepState extends State<my_sleep>
               animationController: widget.animationController,
             ),
           );
+        }else{
         }
         listViews.add(
           TitleView(
