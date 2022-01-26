@@ -85,40 +85,53 @@ class _my_sleepState extends State<my_sleep>
     final User user = auth.currentUser;
     final uid = user.uid;
     final readFitbit = databaseReference.child('users/' + uid + "/fitbittoken/");
+    final read_connection = databaseReference.child('users/' + uid + "/fitbit_connection/");
     readFitbit.once().then((DataSnapshot snapshot) {
-      if(snapshot.value != null){
-        test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
-        if(test != null){
-          fitbitToken = test.accessToken;
-          checkToken(test.accessToken);
-          Future.delayed(const Duration(milliseconds: 2000), () {
-            setState(() { isLoading = false;
-            });
-          });
+      read_connection.once().then((DataSnapshot connection) {
+        var temp = jsonDecode(jsonEncode(connection.value));
+        print("connection");
+        print(temp);
+        if(temp.toString().contains("false")){
+          addFitbit();
         }else{
+          if(snapshot.value != null){
+            test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+            if(test != null){
+              fitbitToken = test.accessToken;
+              checkToken(test.accessToken);
+              addAllListData();
+              Future.delayed(const Duration(milliseconds: 2000), () {
+                setState(() { isLoading = false;
+                });
+              });
+            }else{
 
-        }
-      }else {
-        createClient().then((value) {
-          _client = value;
-          test =  FitBitToken.fromJson(jsonDecode(_client.credentials.toJson()));
-          final Fitbittokenref = databaseReference.child('users/' + uid + '/fitbittoken/');
-          Fitbittokenref.set({"accessToken": test.accessToken, "refreshToken": test.refreshToken, "idToken": test.idToken,
-            "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
-          final readfitbitConnection = databaseReference.child('users/' + uid + '/fitbit_connection/');
-          readfitbitConnection.set({"isConnected": true});
-          if(test != null){
-            print("trap");
-            fitbitToken = test.accessToken;
-            Future.delayed(const Duration(milliseconds: 4000), (){
-              setState(() {print("SETSTATE"); isLoading = false;fitbitToken = test.accessToken; });
+            }
+          }else {
+            createClient().then((value) {
+              _client = value;
+              test =  FitBitToken.fromJson(jsonDecode(_client.credentials.toJson()));
+              final Fitbittokenref = databaseReference.child('users/' + uid + '/fitbittoken/');
+              Fitbittokenref.set({"accessToken": test.accessToken, "refreshToken": test.refreshToken, "idToken": test.idToken,
+                "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
+              final readfitbitConnection = databaseReference.child('users/' + uid + '/fitbit_connection/');
+              readfitbitConnection.set({"isConnected": true});
+              if(test != null){
+                print("trap");
+                setState(() {
+                  fitbitToken = test.accessToken;
+                });
+                addAllListData();
+                Future.delayed(const Duration(milliseconds: 4000), (){
+                  setState(() {print("SETSTATE"); isLoading = false;fitbitToken = test.accessToken; });
+                });
+              }
             });
+
           }
-        });
-        // setState(() {
-        //
-        // });
-      }
+        }
+      });
+
       print(snapshot.value);
       // print("TEST = " + test.accessToken);
       // if(test != null){
@@ -131,13 +144,11 @@ class _my_sleepState extends State<my_sleep>
       //
       // }
     });
-    
 
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
 
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
@@ -246,13 +257,30 @@ class _my_sleepState extends State<my_sleep>
   Future<Uri> listen (Uri redirect) async {
     return await getUriLinksStream().firstWhere((element) => element.toString().startsWith(redirect.toString()));
   }
+  void addFitbit() async {
 
-  void addAllListData() {
+    const int count = 9;
+    listViews.add(
+      fitbit_connect(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+  void addAllListData() async {
     const int count = 9;
     final User user = auth.currentUser;
     final uid = user.uid;
     final readfitbitConnection = databaseReference.child('users/' + uid + '/fitbit_connection/');
-    readfitbitConnection.once().then((DataSnapshot snapshot) {
+    await readfitbitConnection.once().then((DataSnapshot snapshot) {
       var temp = jsonDecode(jsonEncode(snapshot.value));
       if(snapshot.value != null || snapshot.value != ""){
         if(temp.toString().contains("false")){
@@ -302,17 +330,6 @@ class _my_sleepState extends State<my_sleep>
               fitbittoken: fitbitToken
           ),
         );
-        // listViews.add(
-        //   Sleep_StackedBarChart(
-        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        //         parent: widget.animationController,
-        //         curve:
-        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        //     animationController: widget.animationController,
-        //     fitbitToken: fitbitToken
-        //   ),
-        // );
-
         listViews.add(
           TitleView(
             titleTxt: 'Sleep Quality',
@@ -325,16 +342,6 @@ class _my_sleepState extends State<my_sleep>
             animationController: widget.animationController,
           ),
         );
-
-        // listViews.add(
-        //   SleepScoreVerticalBarLabelChart(
-        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        //         parent: widget.animationController,
-        //         curve:
-        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        //     animationController: widget.animationController,
-        //   ),
-        // );
 
         listViews.add(
           sleep_barchart_sf(

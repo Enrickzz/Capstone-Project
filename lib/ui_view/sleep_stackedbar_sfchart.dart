@@ -44,7 +44,6 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
        print(sleeptmp.length);
        _createSampleData(sleeptmp);
        setState(() {
-         isLoading =false;
        });
      });
     // _chartData = getChartData();
@@ -108,12 +107,12 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
                             StackedColumnSeries<MySleep, String>(dataSource: _chartData,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
                                 yValueMapper: (MySleep exp, _) => exp.light/3600,
-                                name: 'Light',
+                                name: 'LIGHT',
                                 markerSettings: MarkerSettings(isVisible: true)),
                             StackedColumnSeries<MySleep, String>(dataSource: _chartData,
                                 xValueMapper: (MySleep exp, _) => exp.sleepDate,
                                 yValueMapper: (MySleep exp, _) => exp.wake/3600,
-                                name: 'Wake',
+                                name: 'WAKE',
                                 markerSettings: MarkerSettings(isVisible: true)),
 
                           ],
@@ -157,8 +156,6 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
            'Authorization': "Bearer " + token,
          });
      List<Sleep> sleep=[];
-     print("token in get");
-     print(token);
      sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
      sleeptmp = sleep;
      setState(() {
@@ -196,7 +193,11 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
          }
        }
      }
-     isLoading = false;
+     Future.delayed(const Duration(milliseconds: 1000),(){
+       setState(() {
+         isLoading = false;
+       });
+     });
      print("LENGTHS: ");
      print(rem.length);print(wake.length);print(deep.length);print(light.length);
      return [
