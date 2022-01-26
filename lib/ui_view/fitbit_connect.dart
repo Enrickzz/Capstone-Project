@@ -54,8 +54,6 @@ class _fitbit_connectState extends State<fitbit_connect> {
   Future<oauth2.Client> createClient() async {
     var exists = await credentialsFile.exists();
 
-    // If the OAuth2 credentials have already been saved from a previous run, we
-    // just want to reload them.
     if (exists) {
       print("CREDENTIALS");
       var credentials =
@@ -63,23 +61,12 @@ class _fitbit_connectState extends State<fitbit_connect> {
       return oauth2.Client(credentials, identifier: identifier, secret: secret);
     }
 
-    // If we don't have OAuth2 credentials yet, we need to get the resource owner
-    // to authorize us. We're assuming here that we're a command-line application.
     var grant = oauth2.AuthorizationCodeGrant(
         identifier, authorizationEndpoint, tokenEndpoint,
         secret: secret);
-    // var testauth = "https://www.fitbit.com/oauth2/authorize?client_id=2384W4&response_type=code&redirect_uri=$redirectUrl&scope=weight%20location%20settings%20profile%20nutrition%20activity%20sleep%20heartrate%20social";
-    // A URL on the authorization server (authorizationEndpoint with some additional
-    // query parameters). Scopes and state can optionally be passed into this method.
+
     var authorizationUrl = grant.getAuthorizationUrl(redirectUrl,scopes: _scopes);
 
-    // Redirect the resource owner to the authorization URL. Once the resource
-    // owner has authorized, they'll be redirected to `redirectUrl` with an
-    // authorization code. The `redirect` should cause the browser to redirect to
-    // another URL which should also have a listener.
-    //
-    // `redirect` and `listen` are not shown implemented here. See below for the
-    // details.
     await redirect(authorizationUrl);
     var responseUrl = await listen(redirectUrl);
     String code = "";
@@ -87,17 +74,13 @@ class _fitbit_connectState extends State<fitbit_connect> {
       throw Exception('response was null');
     }else{
       // print("NAG ELSE");
+      print(responseUrl.toString());
       print("CODE = ");
       code = responseUrl.toString();
       code = code.replaceAll("localhost://callback?code=", "");
       code = code.replaceAll("#_=_", "");
       print(code);
     }
-    var  readToken =await http.post(Uri.parse("https://api.fitbit.com/oauth2/token?code=$code&grant_type=authorization_code&redirect_uri=localhost://callback"),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': "Basic MjM4NFc0OjhmYTJkMzdiMGJkZjBiNzY2ZDZhMTRmOWNlNjQ2Mzhj"
-        },);
 
     return await grant.handleAuthorizationResponse(responseUrl.queryParameters);
   }
