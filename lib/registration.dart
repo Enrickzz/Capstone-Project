@@ -608,12 +608,16 @@ class _AppSignUpState extends State<registration> {
                                   onPrimary: Colors.grey,
                                   minimumSize: Size(220, 40),
                                   elevation: 3,
+                                    side: BorderSide(width: 0.8, color: Colors.black,)
                                 ),
                                   icon: new Image.network(
                                     'http://pngimg.com/uploads/google/google_PNG19635.png', width: 30,
                                     fit:BoxFit.cover,
                                   ),
-                                  label: Text("Sign up with Google"),
+                                  label: Text("Sign up with Google",
+                                  style: TextStyle(fontWeight: FontWeight.bold,
+                                      color: Colors.black.withOpacity(0.6)),),
+
                                 onPressed: (){
 
                                   showModalBottomSheet(context: context,

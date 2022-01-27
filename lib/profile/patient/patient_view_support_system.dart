@@ -71,7 +71,7 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final uid = user.uid;
-    bool isClipped = false;
+    bool isVisible = false;
     return Scaffold(
         appBar: AppBar(
           title: Text('My Healthteam'),
@@ -170,13 +170,32 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                                               ),
                                             ),
                                             SizedBox(height: 12),
-
-                                            Text("My Access Code",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
+                                            Row(
+                                              children: [
+                                                Text("My Access Code",
+                                                  style: TextStyle(
+                                                    fontSize:14,
+                                                    color:Color(0xFF363f93),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 3),
+                                                GestureDetector(
+                                                  child: Icon(Icons.visibility),
+                                                  onTap: (){
+                                                    setState(() {
+                                                      if(access_code == "************************"){
+                                                        access_code = uid;
+                                                      }
+                                                      else{
+                                                        access_code = "************************";
+                                                      }
+                                                    });
+                                                  },
+                                                )
+                                              ],
                                             ),
+
+
                                             SizedBox(height: 8),
                                             Visibility(
                                               visible: true,
@@ -190,9 +209,8 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                                             ElevatedButton(
                                                 onPressed: (){
                                                   setState(() {
-                                                    isClipped = true;
                                                   });
-                                                  access_code = uid;
+                                                  // access_code = uid;
                                                   Clipboard.setData(new ClipboardData(text: uid)).then((_){
                                                     ScaffoldMessenger.of(context)
                                                         .showSnackBar(SnackBar(content: Text('Copied to your clipboard !')));
