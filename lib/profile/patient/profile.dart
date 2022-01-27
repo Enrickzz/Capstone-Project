@@ -1108,7 +1108,7 @@ class _index3State extends State<index3>
       }
 
       /// food allergies
-      if(info.foodAller.contains("NA")){
+      if(!info.foodAller.contains("NA")){
         if(info.foodAller.length == 1){
           food_aller += info.foodAller[0];
         }
@@ -1142,7 +1142,7 @@ class _index3State extends State<index3>
       }
 
       /// other allergies
-      if(info.otherAller.contains("NA")){
+      if(!info.otherAller.contains("NA")){
         if(info.otherAller.length == 1){
           other_aller += info.otherAller[0];
         }
