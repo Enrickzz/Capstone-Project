@@ -94,7 +94,7 @@ class _recommended_mealsState extends State<recommended_meals>
 
   @override
   Widget build(BuildContext context) {
-    if(widget.mealsrecommendation.isEmpty){
+    if(widget.mealsrecommendation == null){
       fetchNutritionix("fish").then((value) => setState((){
         recommended=value;
       }));
@@ -223,8 +223,6 @@ class _recommended_mealsState extends State<recommended_meals>
     );
   }
 
-
-
   Widget getAppBarUI() {
     return Column(
       children: <Widget>[
@@ -268,9 +266,6 @@ Future<List<Common>> fetchNutritionix(String thisquery) async {
     "x-app-key": "6db30b5553ddddbb5e2543a32c2d58de",
     "x-remote-user-id": "0",
   };
-  // String query = '{ "query" : "chicken noodle soup" }';
-
-  // http.Response response = await http.post(url, headers: headers, body: query);
   List<FullNutrients> temp;
   var response = await http.post(
     url,
@@ -280,7 +275,6 @@ Future<List<Common>> fetchNutritionix(String thisquery) async {
       'detailed': "true",
     },
   );
-
   if(response.statusCode == 200){
     String data = response.body;
     final parsedJson = convert.jsonDecode(data);

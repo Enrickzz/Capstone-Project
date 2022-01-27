@@ -277,22 +277,6 @@ class _DashboardsState extends State<Dashboards>
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   double width = MediaQuery.of(context).size.width;
-  //
-  //   return Scaffold(
-  //     body: Align(
-  //       child: SingleChildScrollView(
-  //         child: Wrap(
-  //           children: List.generate(listViews.length, (index) {
-  //             return bloc(width, index);
-  //           }),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     // Future.delayed(const Duration(milliseconds: 5000), () {
