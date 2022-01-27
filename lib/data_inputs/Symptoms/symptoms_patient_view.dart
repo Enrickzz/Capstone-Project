@@ -90,9 +90,8 @@ class _symptomsState extends State<symptoms> {
                     ),
                   ).then((value) => setState((){
                     if(value != null){
-                      listtemp.clear();
-                      print("SYMP LENGTH =="  + listtemp.length.toString() );
-                      listtemp = value;
+                      listtemp.insert(0,value);
+                      downloadOneUrl(listtemp[0], 0);
                       Future.delayed(const Duration(milliseconds: 2000), (){
                         setState(() {
                           print("SYMP LENGTH =="  + listtemp.length.toString() );
@@ -190,6 +189,11 @@ class _symptomsState extends State<symptoms> {
         //print(symptoms[0].symptomName);
         //print("symptoms length " + symptoms.length.toString());
       });
+      for(var i=0;i<listtemp.length/2;i++){
+        var temp = listtemp[i];
+        listtemp[i] = listtemp[listtemp.length-1-i];
+        listtemp[listtemp.length-1-i] = temp;
+      }
     });
     setState(() {
       isLoading = false;
@@ -220,6 +224,8 @@ class _symptomsState extends State<symptoms> {
     String downloadurl;
     final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+thissymp.imgRef.toString());
     downloadurl = await ref.getDownloadURL();
+    print("THIS");
+    print(downloadurl.toString());
     // thissymp.imgRef = downloadurl;
     listtemp[index].imgRef=downloadurl;
     setState(() {

@@ -87,7 +87,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                       Future.delayed(const Duration(milliseconds: 1500), (){
                         // supptemp = value;
                         print("LENGTH: " + supptemp.length.toString());
-                        supptemp.add(value);
+                        supptemp.insert(0, value);
                         setState((){
                           print("LENGTH: " + supptemp.length.toString());
                           // print("setstate supplement prescription");
@@ -240,6 +240,14 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
       temp.forEach((jsonString) {
         supptemp.add(Supplement_Prescription.fromJson(jsonString));
       });
+      for(var i=0;i<supptemp.length/2;i++){
+        var temp = supptemp[i];
+        supptemp[i] = supptemp[supptemp.length-1-i];
+        supptemp[supptemp.length-1-i] = temp;
+      }
+      print(supptemp[0].supplement_name);
     });
+
+
   }
 }

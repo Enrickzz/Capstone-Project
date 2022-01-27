@@ -84,17 +84,16 @@ class _medicationState extends State<medication> {
                       child: add_medication(thislist: medtemp),
                     ),
                     ),
-                  ).then((value) =>
-                    Future.delayed(const Duration(milliseconds: 1500), (){
+                  ).then((value) {
+                    if(value != null){
+                      medtemp.insert(0, value);
+                    }
                       setState((){
-                        print("setstate medicines");
-                        if(value != null){
-                          medtemp = value;
-                        }
-                        print("medetmp.length == " + medtemp.length.toString());
+                        // print("setstate medicines");
+                        //
+                        // print("medetmp.length == " + medtemp.length.toString());
                       });
-                    }));
-
+                  });
                 },
                 child: Icon(
                   Icons.add,
@@ -241,6 +240,11 @@ class _medicationState extends State<medication> {
       temp.forEach((jsonString) {
         medtemp.add(Medication.fromJson(jsonString));
       });
+      for(var i=0;i<medtemp.length/2;i++){
+        var temp = medtemp[i];
+        medtemp[i] = medtemp[medtemp.length-1-i];
+        medtemp[medtemp.length-1-i] = temp;
+      }
     });
   }
 }

@@ -410,7 +410,9 @@ class _addMedicationState extends State<add_medication> {
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + medication_list.length.toString());
-                              medication_list.add(new Medication(medicine_name: valueChooseMedicineSupplement, medicine_type: medicine_type, medicine_unit: medicine_unit, medicine_dosage: medicine_dosage, medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time)));
+                              medication_list.add(new Medication(medicine_name: valueChooseMedicineSupplement, medicine_type: medicine_type
+                                  , medicine_unit: medicine_unit, medicine_dosage: medicine_dosage
+                                  , medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time)));
 
                               for(var i=0;i<medication_list.length/2;i++){
                                 var temp = medication_list[i];
@@ -421,7 +423,10 @@ class _addMedicationState extends State<add_medication> {
                                 print(medication_list[i].medicine_name);
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, medication_list);
+                              Medication newMed = new Medication(medicine_name: valueChooseMedicineSupplement, medicine_type: medicine_type
+                                  , medicine_unit: medicine_unit, medicine_dosage: medicine_dosage
+                                  , medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time));
+                              Navigator.pop(context, newMed);
                             });
                             // print("POP HERE ========== MEDICATION");
                             // Navigator.pop(context,medication_list);

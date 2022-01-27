@@ -39,7 +39,6 @@ class _lab_resultsState extends State<lab_results> {
   @override
   void initState(){
     super.initState();
-    print("ASFASFUIASFH");
     listAll("path");
     getLabResult();
     Future.delayed(const Duration(milliseconds: 1500), (){
@@ -87,7 +86,16 @@ class _lab_resultsState extends State<lab_results> {
                     ),
                   ).then((value) => setState((){
                     print("setstate lab\n\n" + value.toString());
+                    if(value != null){
+                      labResult_list.insert(0, value);
+                      downloadUrls();
+                      listAll("path");
+                        Future.delayed(const Duration(milliseconds: 2000), (){
+                          setState(() {
 
+                          });
+                        });
+                    }
                     if(value != null){
                       trythis = value;
                     }

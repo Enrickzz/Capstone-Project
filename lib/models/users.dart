@@ -252,7 +252,7 @@ class Symptom {
     symptomFelt = json['symptom_felt'];
     symptomDate = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
     symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
-    String a = json['symptom_isActive'];
+    String a = json['symptom_isActive'].toString();
     if(a == "true"){
       symptomIsActive = true;
     } else symptomIsActive = false;

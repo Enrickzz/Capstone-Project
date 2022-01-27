@@ -174,7 +174,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                       child: edit_symptoms(thislist: listtemp, index: widget.index),
                                     ),
                                     ),
-                                  ).then((value) =>
+                                  ).then((value) {
                                       Future.delayed(const Duration(milliseconds: 1500), (){
                                         setState((){
                                           print("setstate medication prescription");
@@ -183,7 +183,8 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                                             listtemp = value[0];
                                           }
                                         });
-                                      }));
+                                      });
+                                  });
                                 },
                                 // child: Padding(
                                 // padding: const EdgeInsets.only(left: 8),
@@ -346,9 +347,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                           aspectRatio: 1,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: (Image.network(thisSymptom.imgRef) != null) ? Image.network('' + thisSymptom.imgRef, loadingBuilder: (context, child, loadingProgress) =>
-                            (loadingProgress == null) ? child : CircularProgressIndicator(),
-                              errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
+                            child: showimg(thisSymptom.imgRef),
                           ),
                         ),
                       ),
@@ -531,4 +530,13 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
     });
     return symptoms;
   }
+  showimg(String imgref) {
+    if(imgref == "null" || imgref == null || imgref == ""){
+      return Image.asset("assets/images/no-image.jpg");
+    }else{
+      return Image.network(thisSymptom.imgRef.toString(), loadingBuilder: (context, child, loadingProgress) =>
+      (loadingProgress == null) ? child : CircularProgressIndicator());
+    }
+  }
 }
+

@@ -605,46 +605,6 @@ class _addLabResultState extends State<add_lab_results> {
                     ],
                   ),
 
-                  // GestureDetector(
-                  //     child: Text(
-                  //       'Upload',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //     onTap: () async {
-                  //       final result = await FilePicker.platform.pickFiles(
-                  //         allowMultiple: false,
-                  //         // type: FileType.custom,
-                  //         // allowedExtensions: ['jpg', 'png'],
-                  //       );
-                  //       if(result == null) return;
-                  //       final FirebaseAuth auth = FirebaseAuth.instance;
-                  //       final path = result.files.single.path;
-                  //       user = auth.currentUser;
-                  //       uid = user.uid;
-                  //       fileName = result.files.single.name;
-                  //       file = File(path);
-                  //       PlatformFile thisfile = result.files.first;
-                  //       cacheFile = thisfile.path;
-                  //       Future.delayed(const Duration(milliseconds: 1000), (){
-                  //         setState(() {
-                  //           print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
-                  //           pic = true;
-                  //         });
-                  //       });
-                  //
-                  //       // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                  //       //   setState(() {
-                  //       //     trythis.clear();
-                  //       //     listAll("path");
-                  //       //     Future.delayed(const Duration(milliseconds: 1000), (){
-                  //       //       Navigator.pop(context, trythis);
-                  //       //     });
-                  //       //   });
-                  //       // });
-                  //       // fileName = uid + fileName + "_lab_result" + "counter";
-                  //       //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-                  //     }
-                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -689,6 +649,12 @@ class _addLabResultState extends State<add_lab_results> {
                                   "Bun_mgDl": Bun_mgDl, "creatinine_mgDl": creatinine_mgDl,
                                   "ldl": ldl,
                                   "hdl": hdl, "imgRef": fileName.toString()});
+                                Lab_Result newlab= new Lab_Result(
+                                  labResult_name: valueChooseLabResult.toString()
+                                  ,labResult_note: lab_result_note.toString()
+                                  ,labResult_date: format.parse(lab_result_date), labResult_time: timeformat.parse(lab_result_time),
+                                international_normal_ratio: international_normal_ratio, potassium: potassium, hemoglobin_hb: hemoglobin_hb, Bun_mgDl: Bun_mgDl, creatinine_mgDl: creatinine_mgDl,
+                                ldl: ldl,hdl: hdl, imgRef: fileName.toString());
 
                                 print("Added Lab Result Successfully! " + uid);
                               }
@@ -796,17 +762,17 @@ class _addLabResultState extends State<add_lab_results> {
 
                                 });
                               }
+                              Future.delayed(const Duration(milliseconds: 1200), (){
+                                Lab_Result newlab= new Lab_Result(
+                                    labResult_name: valueChooseLabResult.toString()
+                                    ,labResult_note: lab_result_note.toString()
+                                    ,labResult_date: format.parse(lab_result_date), labResult_time: timeformat.parse(lab_result_time),
+                                    international_normal_ratio: international_normal_ratio, potassium: potassium, hemoglobin_hb: hemoglobin_hb, Bun_mgDl: Bun_mgDl, creatinine_mgDl: creatinine_mgDl,
+                                    ldl: ldl,hdl: hdl, imgRef: fileName.toString());
 
-                              setState(() {
-                                trythis.clear();
-                                listAll("path");
-                                Future.delayed(const Duration(milliseconds: 1200), (){
-                                  Navigator.pop(context, trythis);
-                                });
+                                Navigator.pop(context, newlab);
                               });
 
-                              // print("POP HERE ==========");
-                              // Navigator.pop(context, labResult_list);
                             });
                           } catch(e) {
                             print("you got an error! $e");

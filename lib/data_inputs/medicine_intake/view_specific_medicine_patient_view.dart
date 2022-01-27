@@ -163,9 +163,14 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                                       Future.delayed(const Duration(milliseconds: 1500), (){
                                         setState((){
                                           print("setstate medication prescription");
-                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                                           if(value != null){
-                                            // prestemp = value[0];
+                                            Medication updated = value;
+                                             medicine_name = updated.medicine_name;
+                                             medicine_dosage = updated.medicine_dosage.toString();
+                                             medicine_type = updated.medicine_type;
+                                             medicine_date = updated.medicine_date.toString();
+                                             medicine_time = updated.medicine_time.toString();
+                                             medicine_unit =updated.medicine_unit;
                                           }
                                         });
                                       }));

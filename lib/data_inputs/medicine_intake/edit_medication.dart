@@ -395,7 +395,9 @@ class _editMedicationState extends State<edit_medication> {
                             final uid = user.uid;
                             int index = widget.index+1;
                             final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + index.toString());
-                            medicationRef.update({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(),"medicine_unit": medicine_unit.toString(),  "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
+                            medicationRef.update({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(),
+                              "medicine_unit": medicine_unit.toString(),  "medicine_dosage": medicine_dosage.toString(),
+                              "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
                             print("Edited Medication Successfully! " + uid);
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               index = widget.index;
@@ -412,7 +414,10 @@ class _editMedicationState extends State<edit_medication> {
                                 medication_list[medication_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, medication_list);
+                              Medication editedMed = new Medication(medicine_name: valueChooseMedicineSupplement.toString(),
+                              medicine_type: medicine_type.toString(), medicine_unit: medicine_unit.toString(), medicine_dosage: medicine_dosage,
+                              medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time));
+                              Navigator.pop(context, editedMed);
                             });
 
 
