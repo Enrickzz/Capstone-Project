@@ -390,10 +390,12 @@ class _editMedicationState extends State<edit_medication> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            getMedication();
+                            medication_list = widget.thislist;
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            int index = widget.index;
+                            // 0 - > 2 // length = 3
+                            int index = ((medication_list.length + 1) - (widget.index+1)) ;
+                                //((medication_list.length - (widget.index+1)) +2).abs();
                             final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + index.toString());
                             medicationRef.update({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(),
                               "medicine_unit": medicine_unit.toString(),  "medicine_dosage": medicine_dosage.toString(),
@@ -408,11 +410,6 @@ class _editMedicationState extends State<edit_medication> {
                               medication_list[index].medicine_date = format.parse(medicine_date);
                               medication_list[index].medicine_time = timeformat.parse(medicine_time);
 
-                              for(var i=0;i<medication_list.length/2;i++){
-                                var temp = medication_list[i];
-                                medication_list[i] = medication_list[medication_list.length-1-i];
-                                medication_list[medication_list.length-1-i] = temp;
-                              }
                               print("POP HERE ==========");
                               Medication editedMed = new Medication(medicine_name: valueChooseMedicineSupplement.toString(),
                               medicine_type: medicine_type.toString(), medicine_unit: medicine_unit.toString(), medicine_dosage: medicine_dosage,

@@ -100,10 +100,6 @@ class _editSymptomsState extends State<edit_symptoms> {
   String cacheFile="";
   File file = new File("path");
 
-
-
-
-
   User user;
   var uid, fileName;
   // File file;
@@ -452,37 +448,6 @@ class _editSymptomsState extends State<edit_symptoms> {
                       ),
                     ],
                   ),
-                  // GestureDetector(
-                  //     child: Text(
-                  //       'Upload',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //     onTap: () async {
-                  //       final result = await FilePicker.platform.pickFiles(
-                  //         allowMultiple: false,
-                  //         // type: FileType.custom,
-                  //         // allowedExtensions: ['jpg', 'png'],
-                  //       );
-                  //       if(result == null) return;
-                  //       final FirebaseAuth auth = FirebaseAuth.instance;
-                  //       final path = result.files.single.path;
-                  //       user = auth.currentUser;
-                  //       uid = user.uid;
-                  //       fileName = result.files.single.name;
-                  //       file = File(path);
-                  //       // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                  //       //   setState(() {
-                  //       //     trythis.clear();
-                  //       //     listAll("path");
-                  //       //     Future.delayed(const Duration(milliseconds: 1000), (){
-                  //       //       Navigator.pop(context, trythis);
-                  //       //     });
-                  //       //   });
-                  //       // });
-                  //       // fileName = uid + fileName + "_lab_result" + "counter";
-                  //       //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-                  //     }
-                  // ),
                   GestureDetector(
                     onTap: ()async{
                       await showDatePicker(
@@ -567,7 +532,7 @@ class _editSymptomsState extends State<edit_symptoms> {
                         ),
                         color: Colors.blue,
                         onPressed:() {
-                          Navigator.pop(context, widget.thislist);
+                          Navigator.pop(context);
                         },
                       ),
                       FlatButton(
@@ -579,12 +544,15 @@ class _editSymptomsState extends State<edit_symptoms> {
                         onPressed:() async {
 
                           try{
-                            getSymptoms();
+                            symptoms_list = widget.thislist;
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            int index = widget.index+1;
+                            int index =  ((symptoms_list.length + 1) - (widget.index+1));
                             final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + index.toString());
-                            symptomRef.update({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true,"symptom_trigger": symptom_felt, "recurring": checkboxStatus, "imgRef": fileName.toString()});
+                            symptomRef.update({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(),
+                              "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(),
+                              "symptom_time": symptom_time.toString(), "symptom_isActive": true,"symptom_trigger": symptom_felt,
+                              "recurring": checkboxStatus, "imgRef": fileName.toString()});
                             print("Edited Symptom Successfully! " + uid);
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               index = widget.index;
@@ -597,13 +565,18 @@ class _editSymptomsState extends State<edit_symptoms> {
                               symptoms_list[index].symptomTrigger = symptom_felt;
                               symptoms_list[index].recurring = checkboxStatus;
                               symptoms_list[index].imgRef = fileName.toString();
-                              for(var i=0;i<symptoms_list.length/2;i++){
-                                var temp = symptoms_list[i];
-                                symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
-                                symptoms_list[symptoms_list.length-1-i] = temp;
-                              }
+                              // for(var i=0;i<symptoms_list.length/2;i++){
+                              //   var temp = symptoms_list[i];
+                              //   symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
+                              //   symptoms_list[symptoms_list.length-1-i] = temp;
+                              // }
                               print("POP HERE ==========");
-                              Navigator.pop(context, symptoms_list);
+                              // Symptom editedSymp = new Symptom(symptomName: valueChooseSymptom,
+                              // intensityLvl: intesity_lvl, symptomFelt: valueChooseGeneralArea,
+                              // symptomDate: format.parse(symptom_date), symptomTime: timeformat.parse(symptom_time),
+                              // symptomIsActive: true, symptomTrigger: symptom_felt,
+                              // recurring: checkboxStatus, imgRef: fileName.toString());
+                              Navigator.pop(context, symptoms_list[index]);
                             });
                           } catch(e) {
                             print("you got an error! $e");
@@ -678,6 +651,11 @@ class _editSymptomsState extends State<edit_symptoms> {
         }
 
       });
+      for(var i=0;i<symptoms_list.length/2;i++){
+        var temp = symptoms_list[i];
+        symptoms_list[i] = symptoms_list[symptoms_list.length-1-i];
+        symptoms_list[symptoms_list.length-1-i] = temp;
+      }
     });
   }
 

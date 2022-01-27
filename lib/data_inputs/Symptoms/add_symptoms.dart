@@ -597,17 +597,18 @@ class _addSymptomsState extends State<add_symptoms> {
                           if(valueChooseSymptom == "Others"){
                             valueChooseSymptom = other_name;
                           }
-                          final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 0.toString());
+                          final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 1.toString());
                           symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true,"symptom_trigger": symptom_felt, "recurring": checkboxStatus, "imgRef": fileName.toString()});
                           print("Added Symptom Successfully! " + uid);
 
                         }
                         else{
+                          symptoms_list.clear();
                           getSymptoms();
                           Future.delayed(const Duration(milliseconds: 2000), (){
                             downloadUrls();
                             Future.delayed(const Duration(milliseconds: 2000), (){
-                              count = symptoms_list.length;
+                              count = symptoms_list.length--;
                               print("count " + count.toString());
                               if(valueChooseSymptom == "Others"){
                                 valueChooseSymptom = other_name;
@@ -863,6 +864,7 @@ class _addSymptomsState extends State<add_symptoms> {
   }
 
   void getSymptoms() {
+    symptoms_list.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');

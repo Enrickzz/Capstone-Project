@@ -98,7 +98,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
                     int initLeng = listtemp.length;
                     _showMyDialogDelete().then((value) {
                       if(initLeng != listtemp.length){
-                        Navigator.pop(context, value);
+                        Navigator.pop(context, listtemp);
                       }
                     });
                   },
@@ -146,7 +146,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
                                       builder: (context) => SingleChildScrollView(child: Container(
                                         padding: EdgeInsets.only(
                                             bottom: MediaQuery.of(context).viewInsets.bottom),
-                                        child: edit_supplement_prescription(index: widget.index),
+                                        child: edit_supplement_prescription(index: widget.index, thislist: listtemp),
                                       ),
                                       ),
                                     ).then((value) =>

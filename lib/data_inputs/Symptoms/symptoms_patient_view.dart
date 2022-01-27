@@ -138,13 +138,12 @@ class _symptomsState extends State<symptoms> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient(thissymp: listtemp[index], index: index,)),
+                        MaterialPageRoute(builder: (context) => SpecificSymptomViewAsPatient( index: index,)),
                       ).then((value) => setState((){
                         if(value != null){
-                          listtemp.clear();
                           listtemp = value;
                           setState(() {
-                            print("SYMP LENGTH =="  + listtemp.length.toString() );
+                            listtemp = value;
                           });
                         }
                       }));
@@ -200,6 +199,7 @@ class _symptomsState extends State<symptoms> {
     });
     return symptoms;
   }
+
   Future <String> downloadUrls() async{
     final User user = auth.currentUser;
     final uid = user.uid;
