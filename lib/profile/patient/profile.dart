@@ -1064,6 +1064,7 @@ class _index3State extends State<index3>
     });
     readInfo.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print(temp);
       temp.forEach((key, jsonString) {
         info = Additional_Info.fromJson5(temp);
       });
@@ -1107,7 +1108,7 @@ class _index3State extends State<index3>
       }
 
       /// food allergies
-      if(info.foodAller[0] != "NA"){
+      if(info.foodAller.contains("NA")){
         if(info.foodAller.length == 1){
           food_aller += info.foodAller[0];
         }
@@ -1124,7 +1125,7 @@ class _index3State extends State<index3>
       }
 
       /// drug allergies
-      if(info.drugAller[0] != "NA"){
+      if(!info.drugAller.contains("NA")){
         if(info.drugAller.length == 1){
           drug_aller += info.drugAller[0];
         }
@@ -1141,7 +1142,7 @@ class _index3State extends State<index3>
       }
 
       /// other allergies
-      if(info.otherAller[0] != "NA"){
+      if(info.otherAller.contains("NA")){
         if(info.otherAller.length == 1){
           other_aller += info.otherAller[0];
         }
@@ -1154,12 +1155,14 @@ class _index3State extends State<index3>
               other_aller += info.otherAller[j] + ", ";
             }
           }
+          print("OTHER ALLER");
+          print(other_aller.toString());
         }
       }
     });
   }
   Widget checkimage(String img) {
-    if(img == null || img == ""){
+    if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
     }else{
       return Image.file(File(pp_img),

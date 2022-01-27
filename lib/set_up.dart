@@ -1170,7 +1170,7 @@ class _set_upState extends State<set_up> {
                   "drugAller": drugList,
                   "otherAller": otherList,
                   "lifestyle": valueLifestyle,
-                  "average_stick": average_sticks,
+                  "average_stick": average_sticks.toString(),
                   "alcohol_freq": valueAlcohol,
                   "disease": cvdChecboxStatus,
                   "other_disease": additionalConditionChecboxStatus,
