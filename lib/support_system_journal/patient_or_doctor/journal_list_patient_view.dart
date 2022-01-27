@@ -7,6 +7,7 @@ import 'package:my_app/models/discussionModel.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
+import 'package:my_app/support_system_journal/patient_or_doctor/specific_journal_patient_view.dart';
 import 'package:my_app/support_system_journal/support_system/create_journal.dart';
 import 'package:my_app/support_system_journal/support_system/specific_journal_suppsystem_view.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
@@ -29,9 +30,11 @@ import 'package:flutter/material.dart';
 
 import '../../../fitness_app_theme.dart';
 
-class journal_list_supp_view extends StatefulWidget {
+class journal_list_patient_view extends StatefulWidget {
+  // journal_list_doctor_patient_view({Key key, this.userUID}): super(key: key);
   String userUID;
-  journal_list_supp_view({Key key, this.userUID}): super(key: key);
+  journal_list_patient_view({Key key, this.userUID}): super(key: key);
+
   @override
   _journalState createState() => _journalState();
 }
@@ -39,7 +42,7 @@ class journal_list_supp_view extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
-class _journalState extends State<journal_list_supp_view> with TickerProviderStateMixin {
+class _journalState extends State<journal_list_patient_view> with TickerProviderStateMixin {
 
   String search="";
   List<Widget> listViews = <Widget>[];
@@ -53,11 +56,8 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
   // DateTime now =  DateTime.now();
   // String title = '';
   // String description = '';
-  List<Discussion> discussion_list = [];
-  List<Discussion> searched_list = [];
-  List<Discussion> fullListHolder = [];
+  List<Discussion> discussion_list = new List<Discussion>();
   // bool prescribedDoctor = false;
-
 
   double topBarOpacity = 0.0;
   @override
@@ -100,30 +100,30 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
           backgroundColor: Colors.white,
 
           actions: [
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(context: context,
-                        isScrollControlled: true,
-                        builder: (context) => SingleChildScrollView(child: Container(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          // child: add_medication(thislist: medtemp),
-                          child: create_journal(userUID: widget.userUID),
-                        ),
-                        ),
-                      ).then((value) =>
-                          Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
-                          }));
-                    },
-                    child: Icon(
-                      Icons.add,
-                    )
-                )
-            ),
+            // Padding(
+            //     padding: EdgeInsets.only(right: 20.0),
+            //     child: GestureDetector(
+            //         onTap: () {
+            //           showModalBottomSheet(context: context,
+            //             isScrollControlled: true,
+            //             builder: (context) => SingleChildScrollView(child: Container(
+            //               padding: EdgeInsets.only(
+            //                   bottom: MediaQuery.of(context).viewInsets.bottom),
+            //               // child: add_medication(thislist: medtemp),
+            //               child: create_journal(userUID: widget.userUID),
+            //             ),
+            //             ),
+            //           ).then((value) =>
+            //               Future.delayed(const Duration(milliseconds: 1500), (){
+            //                 setState((){
+            //                 });
+            //               }));
+            //         },
+            //         child: Icon(
+            //           Icons.add,
+            //         )
+            //     )
+            // ),
           ],
         ),
         body:  Scrollbar(
@@ -184,7 +184,9 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => specific_post_suppsystem_view(userUID: widget.userUID, index: index)
+                                          // builder: (context) => specific_post_doctor_patient_view(userUID: widget.userUID, index: index)
+                                          builder: (context) => specific_journal_patient_view( index: index)
+
                                       )
                                   );
                                 },
@@ -331,7 +333,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readdiscussion = databaseReference.child('users/' + userUID + '/journal/');
+    final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
     readdiscussion.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

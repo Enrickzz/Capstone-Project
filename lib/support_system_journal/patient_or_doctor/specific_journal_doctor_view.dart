@@ -25,17 +25,17 @@ import 'package:flutter/material.dart';
 
 import '../../../fitness_app_theme.dart';
 
-class specific_post_doctor_patient_view extends StatefulWidget {
+class specific_journal_doctor_view extends StatefulWidget {
   String userUID;
   int index;
-  specific_post_doctor_patient_view({Key key, this.userUID, this.index}): super(key: key);
+  specific_journal_doctor_view({Key key, this.userUID, this.index}): super(key: key);
   @override
   _specific_postState createState() => _specific_postState();
 }
 
 final _formKey = GlobalKey<FormState>();
 
-class _specific_postState extends State<specific_post_doctor_patient_view>
+class _specific_postState extends State<specific_journal_doctor_view>
     with TickerProviderStateMixin {
 
   List<Widget> listViews = <Widget>[];

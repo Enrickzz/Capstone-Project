@@ -18,7 +18,8 @@ import 'package:my_app/no_access.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_health_team.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_and_doctor_view.dart';
+import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_doctor_view.dart';
+import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
 import 'package:flutter/material.dart';
 
@@ -737,7 +738,7 @@ class _index3State extends State<view_patient_profile>
                                 onTap:(){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => journal_list_doctor_patient_view(userUID: widget.userUID)),
+                                    MaterialPageRoute(builder: (context) => journal_list_doctor_view(userUID: widget.userUID)),
                                   );
 
                                 },

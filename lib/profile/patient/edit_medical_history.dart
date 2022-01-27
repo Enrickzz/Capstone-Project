@@ -141,6 +141,18 @@ class _MedicalHistoryState extends State<edit_medical_history> {
     double defaultIconSize = 17;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF2F3F8),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.black
+        ),
+        title: const Text('Edit Medical History', style: TextStyle(
+            color: Colors.black
+        )),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
@@ -151,19 +163,7 @@ class _MedicalHistoryState extends State<edit_medical_history> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      width: 300,
-                      height: 200,
-                      alignment: Alignment.center,
-                      child:
-                      Text("Edit Medical History",
-                          style: TextStyle(
-                            color: Color(0xFF666666),
-                            fontFamily: defaultFontFamily,
-                            fontSize: 30,
-                            fontStyle: FontStyle.normal,
-                          )),
-                    ),
+
 
                     Container(
                       alignment: Alignment.center,

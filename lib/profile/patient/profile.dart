@@ -14,7 +14,7 @@ import 'package:my_app/profile/patient/edit_other_information.dart';
 import 'package:my_app/profile/patient/edit_personal_information.dart';
 import 'package:my_app/profile/patient/patient_view_support_list.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_and_doctor_view.dart';
+import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_view.dart';
 import 'package:my_app/support_system_journal/support_system/journal_list_suppsystem_view.dart';
 import 'package:my_app/ui_view/meals/meals_list_view_doctor.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
@@ -870,7 +870,7 @@ class _index3State extends State<index3>
                             Navigator.push(
                               context,
                               // MaterialPageRoute(builder: (context) => journal_list_supp_view()),
-                              MaterialPageRoute(builder: (context) => journal_list_doctor_patient_view(userUID: useruid)),
+                              MaterialPageRoute(builder: (context) => journal_list_patient_view(userUID: useruid)),
                             );
 
                           },

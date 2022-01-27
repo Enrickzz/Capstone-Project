@@ -7,7 +7,8 @@ import 'package:my_app/models/discussionModel.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
-import 'package:my_app/support_system_journal/patient_or_doctor/specific_journal_patient_and_doctor_view.dart';
+import 'package:my_app/support_system_journal/patient_or_doctor/specific_journal_doctor_view.dart';
+import 'package:my_app/support_system_journal/patient_or_doctor/specific_journal_patient_view.dart';
 import 'package:my_app/support_system_journal/support_system/create_journal.dart';
 import 'package:my_app/support_system_journal/support_system/specific_journal_suppsystem_view.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
@@ -30,10 +31,10 @@ import 'package:flutter/material.dart';
 
 import '../../../fitness_app_theme.dart';
 
-class journal_list_doctor_patient_view extends StatefulWidget {
+class journal_list_doctor_view extends StatefulWidget {
   // journal_list_doctor_patient_view({Key key, this.userUID}): super(key: key);
   String userUID;
-  journal_list_doctor_patient_view({Key key, this.userUID}): super(key: key);
+  journal_list_doctor_view({Key key, this.userUID}): super(key: key);
 
   @override
   _journalState createState() => _journalState();
@@ -42,7 +43,7 @@ class journal_list_doctor_patient_view extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
-class _journalState extends State<journal_list_doctor_patient_view> with TickerProviderStateMixin {
+class _journalState extends State<journal_list_doctor_view> with TickerProviderStateMixin {
 
   String search="";
   List<Widget> listViews = <Widget>[];
@@ -98,52 +99,7 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
-          bottom: PreferredSize(
-              preferredSize: Size.fromHeight(56),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction, key: _formKey,
-                    child: Row (
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.search),
-                                hintText: 'Search a topic',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide: BorderSide(
-                                      width: 0,
-                                      style: BorderStyle.none,
-                                    )
-                                ),
-                                filled: true,
-                                errorStyle: TextStyle(fontSize: 15),
-                                contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
-                              ),
-                              onChanged: (val) {
-                                setState(() => search = val);
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          ElevatedButton(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                              child: Text('Search', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                              ),
-                            ),
-                            onPressed: () async{
 
-                            },
-                          ),
-                        ]
-                    )),
-              )
-          ),
           actions: [
             // Padding(
             //     padding: EdgeInsets.only(right: 20.0),
@@ -229,8 +185,8 @@ class _journalState extends State<journal_list_doctor_patient_view> with TickerP
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          // builder: (context) => specific_post_doctor_patient_view(userUID: widget.userUID, index: index)
-                                          builder: (context) => specific_post_doctor_patient_view( index: index)
+                                        // builder: (context) => specific_post_doctor_patient_view(userUID: widget.userUID, index: index)
+                                          builder: (context) => specific_journal_doctor_view( index: index)
 
                                       )
                                   );
