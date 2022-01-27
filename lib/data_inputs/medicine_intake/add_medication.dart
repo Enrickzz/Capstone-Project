@@ -155,98 +155,12 @@ class _addMedicationState extends State<add_medication> {
                     },
                     ).toList(),
                   ),
-
-                  // TextFormField(
-                  //   showCursor: true,
-                  //   decoration: InputDecoration(
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(
-                  //         width:0,
-                  //         style: BorderStyle.none,
-                  //       ),
-                  //     ),
-                  //     filled: true,
-                  //     fillColor: Color(0xFFF2F3F5),
-                  //     hintStyle: TextStyle(
-                  //         color: Color(0xFF666666),
-                  //         fontFamily: defaultFontFamily,
-                  //         fontSize: defaultFontSize),
-                  //     hintText: "Medicine Name",
-                  //   ),
-                  //   validator: (val) => val.isEmpty ? 'Enter Medicine Name' : null,
-                  //   onChanged: (val){
-                  //     setState(() => medicine_name = val);
-                  //   },
-                  // ),
-                  // SizedBox(height: 16.0),
-            // Column(
-            //   crossAxisAlignment: CrossAxisAlignment.stretch,
-            //   children: <Widget> [
-            //     Text(
-            //       "Medicine Type",
-            //       textAlign: TextAlign.left,
-            //     ),
-            //     Row(
-            //       children: <Widget>[
-            //         Row(
-            //           children: [
-            //             Radio(
-            //               value: "Liquid",
-            //               groupValue: medicine_type,
-            //               onChanged: (value){
-            //                 setState(() {
-            //                   this.medicine_type = value;
-            //                 });
-            //               },
-            //             ),
-            //           ],
-            //         ),
-            //         Text("Liquid"),
-            //         SizedBox(width: 3),
-            //         Radio(
-            //           value: "Tablet",
-            //           groupValue: medicine_type,
-            //           onChanged: (value){
-            //             setState(() {
-            //               this.medicine_type = value;
-            //             });
-            //           },
-            //         ),
-            //         Text("Tablet"),
-            //         SizedBox(width: 3),
-            //         Radio(
-            //           value: "Pill",
-            //           groupValue: medicine_type,
-            //           onChanged: (value){
-            //             setState(() {
-            //               this.medicine_type = value;
-            //             });
-            //           },
-            //         ),
-            //         Text("Pill"),
-            //         SizedBox(width: 3),
-            //         Radio(
-            //           value: "Others",
-            //           groupValue: medicine_type,
-            //           onChanged: (value){
-            //             setState(() {
-            //               this.medicine_type = value;
-            //             });
-            //           },
-            //         ),
-            //         Text("Others"),
-            //         SizedBox(width: 3)
-            //       ],
-            //     )
-            //
-            //   ],
-            // ),
                   SizedBox(height: 8.0),
                   Row(
                     children: [
                       Expanded(
                           child:TextFormField(
+                            enabled: false,
                             showCursor: true,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
@@ -287,8 +201,6 @@ class _addMedicationState extends State<add_medication> {
                         //
                         // },
                       ),
-
-
                     ],
                   ),
 

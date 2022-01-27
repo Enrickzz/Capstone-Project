@@ -7,6 +7,7 @@ import 'package:my_app/goal_tab/water/my_water.dart';
 import 'package:my_app/goal_tab/weight/my_weight.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
@@ -58,16 +59,18 @@ class _goalsState extends State<goals>
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
 
   double topBarOpacity = 0.0;
-
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   @override
   void initState() {
     super.initState();
-
+    getNotifs();
+    getRecomm();
     controller = TabController(length: 6, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
-    Future.delayed(const Duration(milliseconds: 2000), (){
+    Future.delayed(const Duration(milliseconds: 3000), (){
       setState(() {
         print("Set State this");
       });
@@ -151,7 +154,7 @@ class _goalsState extends State<goals>
                     right: 0,
                     child: Container(
                       padding: EdgeInsets.all(1),
-                      decoration: BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6),),
+                      decoration: checkNotifs(),
                       constraints: BoxConstraints( minWidth: 12, minHeight: 12, ),
                       child: Text( '5', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
                     ),
@@ -215,5 +218,38 @@ class _goalsState extends State<goals>
     );
 
   }
+  void getRecomm() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void getNotifs() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  Decoration checkNotifs() {
+    if(notifsList.isNotEmpty || recommList.isNotEmpty){
+      return BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6));
+    }else{
+      return BoxDecoration();
+    }
 
+  }
 }
+
+
