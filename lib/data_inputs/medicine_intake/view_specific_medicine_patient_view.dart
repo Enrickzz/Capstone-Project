@@ -96,8 +96,11 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   onTap: () {
+                    int initLeng = listtemp.length;
                     _showMyDialogDelete().then((value) {
-                      Navigator.pop(context, value);
+                      if(initLeng != listtemp.length){
+                        Navigator.pop(context, value);
+                      }
                     });
                   },
                   child: Icon(
@@ -151,7 +154,6 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                                     ).then((value) =>
                                         Future.delayed(const Duration(milliseconds: 1500), (){
                                           setState((){
-                                            print("setstate medication prescription");
                                             if(value != null){
                                               Medication updated = value;
                                               medicine_name = updated.medicine_name;
@@ -184,17 +186,6 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
 
                                           )
                                       ),
-
-
-                                      // SizedBox(
-                                      //   height: 38,
-                                      //   width: 26,
-                                      //   // child: Icon(
-                                      //   //   Icons.arrow_forward,
-                                      //   //   color: FitnessAppTheme.darkText,
-                                      //   //   size: 18,
-                                      //   // ),
-                                      // ),
                                     ],
                                   )
                                 // )

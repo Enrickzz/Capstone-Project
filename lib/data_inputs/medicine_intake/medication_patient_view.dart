@@ -87,12 +87,10 @@ class _medicationState extends State<medication> {
                   ).then((value) {
                     if(value != null){
                       medtemp.insert(0, value);
-                    }
                       setState((){
-                        // print("setstate medicines");
-                        //
-                        // print("medetmp.length == " + medtemp.length.toString());
                       });
+                    }
+
                   });
                 },
                 child: Icon(

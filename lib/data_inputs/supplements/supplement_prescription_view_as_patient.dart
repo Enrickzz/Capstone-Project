@@ -136,7 +136,16 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SpecificSupplementViewAsPatient(index: index)),
-                  );
+                  ).then((value) {
+                    if(value != null){
+                      print("length b4 = " + supptemp.length.toString());
+                      supptemp = value;
+                      print("length af = " +supptemp.length.toString());
+                      setState(() {
+                        supptemp = value;
+                      });
+                    }
+                  });
                 }
 
             ),
@@ -144,77 +153,6 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
           ),
         )
     ),
-      // body: ListView.builder(
-      //   itemCount: supptemp.length,
-      //   itemBuilder: (context, index) {
-      //     return GestureDetector(
-      //       child: Container(
-      //           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      //           height: 140,
-      //           child: Stack(
-      //               children: [
-      //                 Positioned (
-      //                   bottom: 0,
-      //                   left: 0,
-      //                   right: 0,
-      //                   child: Container(
-      //                       height: 120,
-      //                       decoration: BoxDecoration(
-      //                           borderRadius: BorderRadius.only(
-      //                               bottomLeft: Radius.circular(20),
-      //                               topLeft: Radius.circular(20),
-      //                               topRight: Radius.circular(20),
-      //                               bottomRight: Radius.circular(20)
-      //                           ),
-      //                           gradient: LinearGradient(
-      //                               begin: Alignment.bottomCenter,
-      //                               end: Alignment.topCenter,
-      //                               colors: [
-      //                                 Colors.white.withOpacity(0.7),
-      //                                 Colors.white
-      //                               ]
-      //                           ),
-      //                           boxShadow: <BoxShadow>[
-      //                             BoxShadow(
-      //                                 color: FitnessAppTheme.grey.withOpacity(0.6),
-      //                                 offset: Offset(1.1, 1.1),
-      //                                 blurRadius: 10.0),
-      //                           ]
-      //                       )
-      //                   ),
-      //                 ),
-      //                 Positioned(
-      //                   top: 25,
-      //                   child: Padding(
-      //                     padding: const EdgeInsets.all(10),
-      //                     child: Row(
-      //                       children: [
-      //                         SizedBox(
-      //                           width: 10,
-      //                         ),
-      //                         Text(
-      //                             '' + "Supplement Name: " + supptemp[index].supplement_name + " "
-      //                                 +"\nDosage: "+ supptemp[index].dosage.toString()+ " "
-      //                                 +"\nunit: "+ supptemp[index].prescription_unit+ " "
-      //                                 +"\nTake "+ supptemp[index].intake_time+ " times a day"
-      //                                 +"\nDate: "+ "mm/dd/yyyy"+ " ",
-      //
-      //                             style: TextStyle(
-      //                                 color: Colors.black,
-      //                                 fontSize: 18
-      //                             )
-      //                         ),
-      //
-      //                       ],
-      //                     ),
-      //                   ),
-      //                 ),
-      //               ]
-      //           )
-      //       ),
-      //     );
-      //   },
-      // ),
     );
   }
   String getDateFormatted (String date){

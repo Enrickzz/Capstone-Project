@@ -95,25 +95,12 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    _showMyDialogDelete();
-                    // showModalBottomSheet(context: context,
-                    //   isScrollControlled: true,
-                    //   builder: (context) => SingleChildScrollView(child: Container(
-                    //     padding: EdgeInsets.only(
-                    //         bottom: MediaQuery.of(context).viewInsets.bottom),
-                    //     child: add_supplement_prescription(thislist: supptemp),
-                    //   ),
-                    //   ),
-                    // ).then((value) =>
-                    //     Future.delayed(const Duration(milliseconds: 1500), (){
-                    //       setState((){
-                    //         print("setstate supplement prescription");
-                    //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                    //         if(value != null){
-                    //           supptemp = value[0];
-                    //         }
-                    //       });
-                    //     }));
+                    int initLeng = listtemp.length;
+                    _showMyDialogDelete().then((value) {
+                      if(initLeng != listtemp.length){
+                        Navigator.pop(context, value);
+                      }
+                    });
                   },
                   child: Icon(
                     Icons.delete,
@@ -122,175 +109,181 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
             ),
           ],
         ),
-        body:  Scrollbar(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
+        body:  WillPopScope(
+          onWillPop: () async{
+            Navigator.pop(context,listtemp);
+            return true;
+          },
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
 
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:<Widget>[
-                            Expanded(
-                              child: Text( supplement_name,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color:Color(0xFF4A6572),
-                                  )
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                        child: Row(
+                            children:<Widget>[
+                              Expanded(
+                                child: Text( supplement_name,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color:Color(0xFF4A6572),
+                                    )
+                                ),
                               ),
-                            ),
-                            InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                onTap: () {
-                                  showModalBottomSheet(context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => SingleChildScrollView(child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_supplement_prescription(index: widget.index),
-                                    ),
-                                    ),
-                                  ).then((value) =>
-                                      Future.delayed(const Duration(milliseconds: 1500), (){
-                                        setState((){
-                                          print("setstate medication prescription");
-                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                          if(value != null){
-                                            // prestemp = value[0];
-                                          }
-                                        });
-                                      }));
-                                },
-                                // child: Padding(
-                                // padding: const EdgeInsets.only(left: 8),
-                                child: Row(
-                                  children: <Widget>[
-                                    Text( "Edit",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                          color:Color(0xFF2633C5),
+                              InkWell(
+                                  highlightColor: Colors.transparent,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        child: edit_supplement_prescription(index: widget.index),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                            if(value != null){
+                                              Supplement_Prescription updated = value;
+                                              supplement_name = updated.supplement_name;
+                                              dosage =updated.dosage.toString();
+                                              unit = updated.prescription_unit;
+                                              frequency = updated.intake_time;
+                                              dateCreated = updated.dateCreated.toString();
 
-                                        )
-                                    ),
+                                              listtemp[widget.index].supplement_name = updated.supplement_name;
+                                              listtemp[widget.index].dosage =updated.dosage;
+                                              listtemp[widget.index].prescription_unit = updated.prescription_unit;
+                                              listtemp[widget.index].intake_time = updated.intake_time;
+                                              listtemp[widget.index].dateCreated = updated.dateCreated;
+                                              setState(() {
 
+                                              });
+                                            }
+                                          });
+                                        }));
+                                  },
+                                  // child: Padding(
+                                  // padding: const EdgeInsets.only(left: 8),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text( "Edit",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color:Color(0xFF2633C5),
 
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
-                                  ],
-                                )
-                              // )
-                            )
-                          ]
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 200,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
                                           )
                                       ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text("Dosage",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(dosage + " " + unit,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("How many times a day?",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(frequency + " times a day",
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Date Prescribed",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(dateCreated,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ]
-
-                                      ),
-                                    ),
-                                  ))
+                                    ],
+                                  )
+                                // )
+                              )
                             ]
-                        )
-                    ),
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      Container(
+                          height: 200,
+                          // height: 500, if may contact number and email
+                          // margin: EdgeInsets.only(bottom: 50),
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    child: Material(
+                                      child: Center(
+                                        child: Container(
+                                            width: 340,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 20.0)],
+                                            )
+                                        ),
+                                      ),
+                                    )),
+                                Positioned(
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(18.0),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text("Dosage",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(dosage + " " + unit,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Text("How many times a day?",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(frequency + " times a day",
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  Text("Date Prescribed",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(dateCreated,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ]
 
-                  ],
-                ),
+                                        ),
+                                      ),
+                                    ))
+                              ]
+                          )
+                      ),
 
-              ],
+                    ],
+                  ),
+
+                ],
+              ),
             ),
           ),
         )
@@ -348,13 +341,13 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
                     "dateCreated": "${listtemp[i].dateCreated.month.toString().padLeft(2,"0")}/${listtemp[i].dateCreated.day.toString().padLeft(2,"0")}/${listtemp[i].dateCreated.year}",
                   });
                 }
-                Navigator.of(context).pop();
+                Navigator.pop(context, listtemp);
               },
             ),
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context, listtemp);
               },
             ),
           ],
@@ -392,6 +385,11 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
         //   prescribedBy = doctor.lastname + " " + doctor.firstname;
         // });
       });
+      for(var i=0;i<listtemp.length/2;i++){
+        var temp = listtemp[i];
+        listtemp[i] = listtemp[listtemp.length-1-i];
+        listtemp[listtemp.length-1-i] = temp;
+      }
       supplement_name = listtemp[index].supplement_name;
       dosage = listtemp[index].dosage.toStringAsFixed(2);
       unit = listtemp[index].prescription_unit.toString();

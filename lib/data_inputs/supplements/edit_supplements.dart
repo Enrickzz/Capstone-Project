@@ -665,46 +665,28 @@ class _editSupplementPrescriptionState extends State<edit_supplement_prescriptio
                             getSupplementPrescription();
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            int index = widget.index+1;
+                            int index = widget.index;
                             final prescriptionRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + index.toString());
-                            prescriptionRef.update({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit});
+                            prescriptionRef.update({"supplement_name": supplement_name.toString(),
+                              "intake_time": quantity.toString(),
+                              "supp_dosage": supp_dosage.toString(),
+                              "medical_prescription_unit": prescription_unit});
                             print("Edited Supplement Prescription Successfully! " + uid);
-                            // final readPrescription = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list');
-                            // readPrescription.once().then((DataSnapshot datasnapshot) {
-                            //   String temp1 = datasnapshot.value.toString();
-                            //   print("temp1 " + temp1);
-                            //   List<String> temp = temp1.split(',');
-                            //   Medication_Prescription prescription;
-                            //   if(datasnapshot.value == null){
-                            //     final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + count.toString());
-                            //     prescriptionRef.set({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit});
-                            //     print("Added Supplement Prescription Successfully! " + uid);
-                            //   }
-                            //   else{
-                            //     getSupplementPrescription();
-                            //     Future.delayed(const Duration(milliseconds: 1000), (){
-                            //       count = supplement_list.length--;
-                            //       final prescriptionRef = databaseReference.child('users/' + uid + '/vitals/health_records/supplement_prescription_list/' + count.toString());
-                            //       prescriptionRef.set({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit});
-                            //       print("Added Supplement Prescription Successfully! " + uid);
-                            //     });
-                            //
-                            //   }
-                            //
-                            // });
+
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               index = widget.index;
                               supplement_list[index].supplement_name = supplement_name;
                               supplement_list[index].intake_time =  quantity.toString();
                               supplement_list[index].dosage = supp_dosage;
                               supplement_list[index].prescription_unit = prescription_unit;
-                              for(var i=0;i<supplement_list.length/2;i++){
-                                var temp = supplement_list[i];
-                                supplement_list[i] = supplement_list[supplement_list.length-1-i];
-                                supplement_list[supplement_list.length-1-i] = temp;
-                              }
+                              // for(var i=0;i<supplement_list.length/2;i++){
+                              //   var temp = supplement_list[i];
+                              //   supplement_list[i] = supplement_list[supplement_list.length-1-i];
+                              //   supplement_list[supplement_list.length-1-i] = temp;
+                              // }
                               print("POP HERE ==========");
-                              Navigator.pop(context, supplement_list);
+
+                              Navigator.pop(context, supplement_list[index]);
                             });
 
                           } catch(e) {
@@ -731,6 +713,11 @@ class _editSupplementPrescriptionState extends State<edit_supplement_prescriptio
       temp.forEach((jsonString) {
         supplement_list.add(Supplement_Prescription.fromJson(jsonString));
       });
+      for(var i=0;i<supplement_list.length/2;i++){
+        var temp = supplement_list[i];
+        supplement_list[i] = supplement_list[supplement_list.length-1-i];
+        supplement_list[supplement_list.length-1-i] = temp;
+      }
     });
   }
 }
