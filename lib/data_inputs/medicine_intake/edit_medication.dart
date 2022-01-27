@@ -393,7 +393,7 @@ class _editMedicationState extends State<edit_medication> {
                             getMedication();
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            int index = widget.index+1;
+                            int index = widget.index;
                             final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + index.toString());
                             medicationRef.update({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(),
                               "medicine_unit": medicine_unit.toString(),  "medicine_dosage": medicine_dosage.toString(),

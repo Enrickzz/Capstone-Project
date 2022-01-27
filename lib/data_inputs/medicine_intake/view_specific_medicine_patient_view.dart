@@ -96,25 +96,9 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    _showMyDialogDelete();
-                    // showModalBottomSheet(context: context,
-                    //   isScrollControlled: true,
-                    //   builder: (context) => SingleChildScrollView(child: Container(
-                    //     padding: EdgeInsets.only(
-                    //         bottom: MediaQuery.of(context).viewInsets.bottom),
-                    //     child: add_supplement_prescription(thislist: supptemp),
-                    //   ),
-                    //   ),
-                    // ).then((value) =>
-                    //     Future.delayed(const Duration(milliseconds: 1500), (){
-                    //       setState((){
-                    //         print("setstate supplement prescription");
-                    //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                    //         if(value != null){
-                    //           supptemp = value[0];
-                    //         }
-                    //       });
-                    //     }));
+                    _showMyDialogDelete().then((value) {
+                      Navigator.pop(context, value);
+                    });
                   },
                   child: Icon(
                     Icons.delete,
@@ -123,191 +107,206 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
             ),
           ],
         ),
-        body:  Scrollbar(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
+        body: WillPopScope(
+            onWillPop: () async {
+              Navigator.pop(context, listtemp);
+              return true;
+            },
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
 
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:<Widget>[
-                            Expanded(
-                              child: Text( medicine_name,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color:Color(0xFF4A6572),
-                                  )
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:<Widget>[
+                              Expanded(
+                                child: Text( medicine_name,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color:Color(0xFF4A6572),
+                                    )
+                                ),
                               ),
-                            ),
-                            InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                onTap: () {
-                                  showModalBottomSheet(context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => SingleChildScrollView(child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_medication(index: widget.index),
-                                    ),
-                                    ),
-                                  ).then((value) =>
-                                      Future.delayed(const Duration(milliseconds: 1500), (){
-                                        setState((){
-                                          print("setstate medication prescription");
-                                          if(value != null){
-                                            Medication updated = value;
-                                             medicine_name = updated.medicine_name;
-                                             medicine_dosage = updated.medicine_dosage.toString();
-                                             medicine_type = updated.medicine_type;
-                                             medicine_date = updated.medicine_date.toString();
-                                             medicine_time = updated.medicine_time.toString();
-                                             medicine_unit =updated.medicine_unit;
-                                          }
-                                        });
-                                      }));
-                                },
-                                // child: Padding(
-                                // padding: const EdgeInsets.only(left: 8),
-                                child: Row(
-                                  children: <Widget>[
-                                    Text( "Edit",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                          color:Color(0xFF2633C5),
+                              InkWell(
+                                  highlightColor: Colors.transparent,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        child: edit_medication(index: widget.index),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                            print("setstate medication prescription");
+                                            if(value != null){
+                                              Medication updated = value;
+                                              medicine_name = updated.medicine_name;
+                                              medicine_dosage = updated.medicine_dosage.toString();
+                                              medicine_type = updated.medicine_type;
+                                              medicine_date = updated.medicine_date.toString();
+                                              medicine_time = updated.medicine_time.toString();
+                                              medicine_unit =updated.medicine_unit;
 
-                                        )
-                                    ),
+                                              listtemp[widget.index].medicine_name = updated.medicine_name;
+                                              listtemp[widget.index].medicine_dosage = updated.medicine_dosage;
+                                              listtemp[widget.index].medicine_type = updated.medicine_type;
+                                              listtemp[widget.index]. medicine_date = updated.medicine_date;
+                                              listtemp[widget.index].medicine_time = updated.medicine_time;
+                                              listtemp[widget.index].medicine_unit =updated.medicine_unit;
+                                              // Navigator.pop(context, listtemp );
+                                            }
+                                          });
+                                        }));
+                                  },
+                                  // child: Padding(
+                                  // padding: const EdgeInsets.only(left: 8),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text( "Edit",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color:Color(0xFF2633C5),
 
-
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
-                                  ],
-                                )
-                              // )
-                            )
-
-                          ]
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 200,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
                                           )
                                       ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text("Dosage",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text( medicine_dosage  + medicine_unit,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Time Taken",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(medicine_time,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
 
 
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Date Taken",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(medicine_date,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ]
+                                      // SizedBox(
+                                      //   height: 38,
+                                      //   width: 26,
+                                      //   // child: Icon(
+                                      //   //   Icons.arrow_forward,
+                                      //   //   color: FitnessAppTheme.darkText,
+                                      //   //   size: 18,
+                                      //   // ),
+                                      // ),
+                                    ],
+                                  )
+                                // )
+                              )
 
-
-                                      ),
-                                    ),
-                                  ))
                             ]
-                        )
-                    ),
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      Container(
+                          height: 200,
+                          // height: 500, if may contact number and email
+                          // margin: EdgeInsets.only(bottom: 50),
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    child: Material(
+                                      child: Center(
+                                        child: Container(
+                                            width: 340,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 20.0)],
+                                            )
+                                        ),
+                                      ),
+                                    )),
+                                Positioned(
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(18.0),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text("Dosage",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text( medicine_dosage  + medicine_unit,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  Text("Time Taken",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(medicine_time,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
 
-                  ],
-                ),
 
-              ],
+                                              SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  Text("Date Taken",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(medicine_date,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ]
+
+
+                                        ),
+                                      ),
+                                    ))
+                              ]
+                          )
+                      ),
+
+                    ],
+                  ),
+
+                ],
+              ),
             ),
           ),
-        )
+        ),
+
     );
 
 
@@ -363,7 +362,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                     "medicine_time": "${listtemp[i].medicine_time.hour.toString().padLeft(2,"0")}:${listtemp[i].medicine_time.minute.toString().padLeft(2,"0")}",
                   });
                 }
-                Navigator.of(context).pop();
+                Navigator.pop(context, listtemp);
 
               },
             ),
@@ -401,6 +400,11 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
       temp.forEach((jsonString) {
         listtemp.add(Medication.fromJson(jsonString));
       });
+      for(var i=0;i<listtemp.length/2;i++){
+        var temp = listtemp[i];
+        listtemp[i] = listtemp[listtemp.length-1-i];
+        listtemp[listtemp.length-1-i] = temp;
+      }
       medicine_name = listtemp[index].medicine_name;
       medicine_unit = listtemp[index].medicine_unit;
       medicine_dosage = listtemp[index].medicine_dosage.toString();

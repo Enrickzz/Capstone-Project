@@ -134,7 +134,16 @@ class _medicationState extends State<medication> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SpecificMedicineIntakeViewAsPatient(index: index)),
-                    );
+                    ).then((value) {
+                      if(value != null){
+                        print("length b4 = " + medtemp.length.toString());
+                        medtemp = value;
+                        print("length af = " +medtemp.length.toString());
+                        setState(() {
+                          medtemp = value;
+                        });
+                      }
+                    });
                   }
 
               ),
