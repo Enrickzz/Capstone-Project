@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/ui_view/BloodGlucose_TimeChart.dart';
 import 'package:my_app/ui_view/HeartRate_TimeChart.dart';
 import 'package:my_app/ui_view/Oxygen_TimeChart.dart';
@@ -54,17 +55,20 @@ class _DashboardsState extends State<Dashboards>
   final AuthService _auth = AuthService();
   List<bool> expandableState=[];
   double topBarOpacity = 0.0;
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
 
   @override
   void initState() {
-
+    getRecomm();
+    getNotifs();
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
     addAllListData();
 
-    Future.delayed(const Duration(milliseconds: 1200),(){
+    Future.delayed(const Duration(milliseconds: 2000),(){
       setState(() {
 
       });
@@ -190,18 +194,6 @@ class _DashboardsState extends State<Dashboards>
             animationController: widget.animationController,
           ),
         );
-        // listViews.add(
-        //   ihealth_connect(
-        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        //         parent: widget.animationController,
-        //         curve:
-        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        //     animationController: widget.animationController,
-        //   ),
-        // );
-
-
-
         listViews.add(
           TitleView(
             titleTxt: 'Body measurement',
@@ -254,29 +246,6 @@ class _DashboardsState extends State<Dashboards>
                           curve: Curves.fastOutSlowIn))),
               animationController: widget.animationController),
         );
-
-        // listViews.add(
-        //   TitleView(
-        //     titleTxt: 'Area of focus',
-        //     subTxt: 'more',
-        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        //         parent: widget.animationController,
-        //         curve:
-        //             Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        //     animationController: widget.animationController,
-        //   ),
-        // );
-
-        // listViews.add(
-        //   AreaListView(
-        //     mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-        //         CurvedAnimation(
-        //             parent: widget.animationController,
-        //             curve: Interval((1 / count) * 5, 1.0,
-        //                 curve: Curves.fastOutSlowIn))),
-        //     mainScreenAnimationController: widget.animationController,
-        //   ),
-        // );
       });
     });
   }
@@ -447,7 +416,7 @@ class _DashboardsState extends State<Dashboards>
                                       right: 0,
                                       child: Container(
                                         padding: EdgeInsets.all(1),
-                                        decoration: BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6),),
+                                        decoration: checkNotifs(),
                                         constraints: BoxConstraints( minWidth: 12, minHeight: 12, ),
                                         child: Text( '5', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
                                       ),
@@ -468,5 +437,36 @@ class _DashboardsState extends State<Dashboards>
         )
       ],
     );
+  }
+  void getRecomm() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void getNotifs() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  Decoration checkNotifs() {
+    if(notifsList.isNotEmpty || recommList.isNotEmpty){
+      return BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6));
+    }else{
+      return BoxDecoration();
+    }
   }
 }

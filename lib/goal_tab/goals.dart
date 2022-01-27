@@ -248,7 +248,6 @@ class _goalsState extends State<goals>
     }else{
       return BoxDecoration();
     }
-
   }
 }
 

@@ -85,10 +85,13 @@ class _index3State extends State<index3>
   String alcohol_freq = "";
   String lifestyle = "";
   bool isLoading = true;
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
 
   @override
   void initState() {
     super.initState();
+    getNotifs();getRecomm();
     info = new Additional_Info(birthday: format.parse("01/01/0000"), gender: "Male");
     getProfile();
     getInfo();
@@ -188,7 +191,7 @@ class _index3State extends State<index3>
                       right: 0,
                       child: Container(
                         padding: EdgeInsets.all(1),
-                        decoration: BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6),),
+                        decoration: checkNotifs(),
                         constraints: BoxConstraints( minWidth: 12, minHeight: 12, ),
                         child: Text( '5', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
                       ),
@@ -1169,6 +1172,37 @@ class _index3State extends State<index3>
           width: 70,
           height: 70,
           fit: BoxFit.cover);
+    }
+  }
+  void getRecomm() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void getNotifs() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  Decoration checkNotifs() {
+    if(notifsList.isNotEmpty || recommList.isNotEmpty){
+      return BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6));
+    }else{
+      return BoxDecoration();
     }
   }
 }
