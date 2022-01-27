@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/discussion_board/create_post.dart';
@@ -32,8 +33,8 @@ import '../../../fitness_app_theme.dart';
 
 class journal_list_patient_view extends StatefulWidget {
   // journal_list_doctor_patient_view({Key key, this.userUID}): super(key: key);
-  String userUID;
-  journal_list_patient_view({Key key, this.userUID}): super(key: key);
+
+  journal_list_patient_view({Key key}): super(key: key);
 
   @override
   _journalState createState() => _journalState();
@@ -48,6 +49,7 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   final AuthService _auth = AuthService();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -330,10 +332,10 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
     );
   }
   void getDiscussion() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    // String userUID = widget.userUID;
+    final readdiscussion = databaseReference.child('users/' + uid + '/discussion/');
     readdiscussion.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
@@ -361,17 +363,18 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                String userUID = widget.userUID;
+                final User user = auth.currentUser;
+                final uid = user.uid;
                 int initial_length = discussion_list.length;
                 discussion_list.removeAt(index);
                 /// delete fields
                 for(int i = 1; i <= initial_length; i++){
-                  final bpRef = databaseReference.child('users/' + userUID + '/journal/' + i.toString());
+                  final bpRef = databaseReference.child('users/' + uid + '/journal/' + i.toString());
                   bpRef.remove();
                 }
                 /// write fields
                 for(int i = 0; i < discussion_list.length; i++){
-                  final bpRef = databaseReference.child('users/' + userUID + '/journal/' + (i+1).toString());
+                  final bpRef = databaseReference.child('users/' + uid + '/journal/' + (i+1).toString());
                   bpRef.set({
                     "title": discussion_list[i].title.toString(),
                     "createdBy": discussion_list[i].createdBy.toString(),

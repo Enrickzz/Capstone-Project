@@ -870,7 +870,7 @@ class _index3State extends State<index3>
                             Navigator.push(
                               context,
                               // MaterialPageRoute(builder: (context) => journal_list_supp_view()),
-                              MaterialPageRoute(builder: (context) => journal_list_patient_view(userUID: useruid)),
+                              MaterialPageRoute(builder: (context) => journal_list_patient_view()),
                             );
 
                           },
