@@ -235,15 +235,8 @@ class _index3State extends State<index3>
                                 MaterialPageRoute(builder: (context) => addImage(img: File(pp_img))),
                                 );
                             },
-                            // child: Container(
-                            //     decoration: BoxDecoration(
-                            //         image: DecorationImage(
-                            //             image: FileImage(File(pp_img)),
-                            //         )
-                            //     )
-                            // )
+
                           child: ClipOval(
-                            // child:Image.asset("assets/images/blank_person.png",
                             child: checkimage(pp_img)),
 
                         ),

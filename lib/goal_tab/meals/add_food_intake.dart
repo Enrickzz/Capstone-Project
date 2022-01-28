@@ -106,7 +106,7 @@ class _addFoodIntakeState extends State<add_food_intake> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Add Food Plan',
+                    'Add Food Intake',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),

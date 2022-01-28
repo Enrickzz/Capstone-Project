@@ -97,7 +97,7 @@ class sleepScoreState extends State<sleep_barchart_sf_doctor> {
                                 dataSource: chartData,
                                 xValueMapper: (calorie_intake_data sales, _) => sales.date,
                                 yValueMapper: (calorie_intake_data sales, _) => sales.calories,
-                                color: Colors.purple,
+                                color: Colors.greenAccent,
                                 animationDuration: 5000, animationDelay: 500
                             ),
                           ],

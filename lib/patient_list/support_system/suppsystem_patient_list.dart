@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -9,6 +10,7 @@ import 'package:my_app/notifications/notifications_doctor.dart';
 import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
 import 'package:my_app/patient_list/support_system/suppsystem_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
+import 'package:my_app/profile/support_system/add_image_supportsystem.dart';
 import 'package:my_app/profile/support_system/suppsystem_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -61,6 +63,9 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
   var imagesVisible = true;
   var cardContent = [];
   bool isLoading = true;
+
+  // profile pic
+  String pp_img = "";
 
   @override
   void initState(){
@@ -234,9 +239,17 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1485290334039-a3c69043e517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYyOTU3NDE0MQ&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=300'),
+            currentAccountPicture: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => addImageSupport(img: File(pp_img))),
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://images.unsplash.com/photo-1485290334039-a3c69043e517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYyOTU3NDE0MQ&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=300'),
+              ),
             ),
             accountEmail: Text(supp_system.email,style: TextStyle(fontSize: 12.0)),
             accountName: Text(

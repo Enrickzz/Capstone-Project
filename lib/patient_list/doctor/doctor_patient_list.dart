@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/widgets/navigation_drawer_widget.dart';
+import 'package:my_app/profile/doctor/add_image_doctor.dart';
 
 import '../../main.dart';
 import '../../models/users.dart';
@@ -60,6 +62,9 @@ class _PatientListState extends State<PatientList>  {
   var imagesVisible = true;
   var cardContent = [];
   bool isLoading = true;
+
+  // profile pic
+  String pp_img = "";
 
   @override
   void initState(){
@@ -227,9 +232,17 @@ class _PatientListState extends State<PatientList>  {
         padding: EdgeInsets.zero,
         children: [
            UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1485290334039-a3c69043e517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYyOTU3NDE0MQ&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=300'),
+            currentAccountPicture: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => addImageDoctor(img: File(pp_img))),
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://images.unsplash.com/photo-1485290334039-a3c69043e517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYyOTU3NDE0MQ&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=300'),
+              ),
             ),
             accountEmail: Text(doctor.email,style: TextStyle(fontSize: 12.0)),
             accountName: Text(

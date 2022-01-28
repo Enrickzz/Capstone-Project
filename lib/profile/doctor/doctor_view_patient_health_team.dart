@@ -93,7 +93,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text("'s Doctors", style: TextStyle(
+          title: const Text("Patient's Doctors", style: TextStyle(
               color: Colors.black
           )),
           centerTitle: true,
