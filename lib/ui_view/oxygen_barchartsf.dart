@@ -11,36 +11,43 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:my_app/models/nutritionixApi.dart';
-import '../../fitness_app_theme.dart';
+import '../fitness_app_theme.dart';
+import '../main.dart';
 
-class sleep_barchart_sf_doctor extends StatefulWidget{
+class oxygen_barchartsf extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
   final String fitbitToken;
-  sleep_barchart_sf_doctor({Key key, this.animationController, this.animation, this.fitbitToken})
+  oxygen_barchartsf({Key key, this.animationController, this.animation, this.fitbitToken})
       : super(key: key);
 
   @override
-  sleepScoreState createState() => sleepScoreState();
+  oxygenSaturationState createState() => oxygenSaturationState();
 }
-List<calorie_intake_data> finaList = new List();
-List<Oxygen> sleeptmp=[];
-String sleepdate1 = "";
-String sleepdate2 = "";
-String sleepdate3 = "";
-String sleepdate4 = "";
-String sleepdate5 = "";
-String sleepdate6 = "";
-String sleepdate7 = "";
-class sleepScoreState extends State<sleep_barchart_sf_doctor> {
+List<Oxygen> oxygentmp=[];
+String date1 = "";
+String date2 = "";
+String date3 = "";
+String date4 = "";
+String date5 = "";
+String date6 = "";
+String date7 = "";
+String date8 = "";
+String date9 = "";
+String date10 = "";
+String date11 = "";
+String date12 = "";
+String date13 = "";
+String date14 = "";
+class oxygenSaturationState extends State<oxygen_barchartsf> {
 
   bool isLoading = true;
   List<calorie_intake_data> chartData=[];
   @override
   void initState() {
     super.initState();
-    getFitbit();
-    Future.delayed(const Duration(milliseconds: 2000),() {
+
+    Future.delayed(const Duration(milliseconds: 1200),() {
       isLoading = false;
       setState(() {
 
@@ -89,7 +96,7 @@ class sleepScoreState extends State<sleep_barchart_sf_doctor> {
                         ): new SfCartesianChart(
                           // Setting isTransposed to true to render vertically.
                           // isTransposed: true,
-                          title: ChartTitle(text: 'Sleep Score past 7 days'),
+                          title: ChartTitle(text: 'Oxygen Saturation past 14 days'),
                           legend: Legend(isVisible: false),
                           series: <ColumnSeries<calorie_intake_data, String>>[
                             ColumnSeries<calorie_intake_data, String>(
@@ -97,7 +104,7 @@ class sleepScoreState extends State<sleep_barchart_sf_doctor> {
                                 dataSource: chartData,
                                 xValueMapper: (calorie_intake_data sales, _) => sales.date,
                                 yValueMapper: (calorie_intake_data sales, _) => sales.calories,
-                                color: Colors.greenAccent,
+                                color: Colors.purple,
                                 animationDuration: 5000, animationDelay: 500
                             ),
                           ],
@@ -108,7 +115,7 @@ class sleepScoreState extends State<sleep_barchart_sf_doctor> {
                               tooltipPosition: TooltipPosition.pointer),
                           primaryYAxis: NumericAxis(
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
-                              title: AxisTitle(text: 'Sleep Score'),
+                              title: AxisTitle(text: 'Oxygen Saturation'),
                               minimum: 30),
                         ),
                       ),
@@ -136,30 +143,51 @@ class sleepScoreState extends State<sleep_barchart_sf_doctor> {
         });
     List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
-    sleeptmp = sleep;
-    DateTime datesleep = DateTime.parse(sleeptmp[0].dateOfSleep);
-    DateTime datesleep2 = DateTime.parse(sleeptmp[1].dateOfSleep);
-    DateTime datesleep3 = DateTime.parse(sleeptmp[2].dateOfSleep);
-    DateTime datesleep4 = DateTime.parse(sleeptmp[3].dateOfSleep);
-    DateTime datesleep5 = DateTime.parse(sleeptmp[4].dateOfSleep);
-    DateTime datesleep6 = DateTime.parse(sleeptmp[5].dateOfSleep);
-    DateTime datesleep7 = DateTime.parse(sleeptmp[6].dateOfSleep);
-    sleepdate1 = "${datesleep.month.toString().padLeft(2,"0")}/${datesleep.day.toString().padLeft(2,"0")}/${datesleep.year % 100}";
-    sleepdate2 = "${datesleep2.month.toString().padLeft(2,"0")}/${datesleep2.day.toString().padLeft(2,"0")}/${datesleep2.year % 100}";
-    sleepdate3 = "${datesleep3.month.toString().padLeft(2,"0")}/${datesleep3.day.toString().padLeft(2,"0")}/${datesleep3.year % 100}";
-    sleepdate4 = "${datesleep4.month.toString().padLeft(2,"0")}/${datesleep4.day.toString().padLeft(2,"0")}/${datesleep4.year % 100}";
-    sleepdate5 = "${datesleep5.month.toString().padLeft(2,"0")}/${datesleep5.day.toString().padLeft(2,"0")}/${datesleep5.year % 100}";
-    sleepdate6 = "${datesleep6.month.toString().padLeft(2,"0")}/${datesleep6.day.toString().padLeft(2,"0")}/${datesleep6.year % 100}";
-    sleepdate7 = "${datesleep7.month.toString().padLeft(2,"0")}/${datesleep7.day.toString().padLeft(2,"0")}/${datesleep7.year % 100}";
+    oxygentmp = sleep;
+    DateTime dateoxygen = DateTime.parse(oxygentmp[0].dateOfSleep);
+    DateTime dateoxygen2 = DateTime.parse(oxygentmp[1].dateOfSleep);
+    DateTime dateoxygen3 = DateTime.parse(oxygentmp[2].dateOfSleep);
+    DateTime dateoxygen4 = DateTime.parse(oxygentmp[3].dateOfSleep);
+    DateTime dateoxygen5 = DateTime.parse(oxygentmp[4].dateOfSleep);
+    DateTime dateoxygen6 = DateTime.parse(oxygentmp[5].dateOfSleep);
+    DateTime dateoxygen7 = DateTime.parse(oxygentmp[6].dateOfSleep);
+    DateTime dateoxygen8 = DateTime.parse(oxygentmp[7].dateOfSleep);
+    DateTime dateoxygen9 = DateTime.parse(oxygentmp[8].dateOfSleep);
+    DateTime dateoxygen10 = DateTime.parse(oxygentmp[9].dateOfSleep);
+    DateTime dateoxygen11 = DateTime.parse(oxygentmp[10].dateOfSleep);
+    DateTime dateoxygen12 = DateTime.parse(oxygentmp[11].dateOfSleep);
+    DateTime dateoxygen13 = DateTime.parse(oxygentmp[12].dateOfSleep);
+    DateTime dateoxygen14 = DateTime.parse(oxygentmp[13].dateOfSleep);
+    date1 = "${dateoxygen.month.toString().padLeft(2,"0")}/${dateoxygen.day.toString().padLeft(2,"0")}/${dateoxygen.year % 100}";
+    date2 = "${dateoxygen2.month.toString().padLeft(2,"0")}/${dateoxygen2.day.toString().padLeft(2,"0")}/${dateoxygen2.year % 100}";
+    date3 = "${dateoxygen3.month.toString().padLeft(2,"0")}/${dateoxygen3.day.toString().padLeft(2,"0")}/${dateoxygen3.year % 100}";
+    date4 = "${dateoxygen4.month.toString().padLeft(2,"0")}/${dateoxygen4.day.toString().padLeft(2,"0")}/${dateoxygen4.year % 100}";
+    date5 = "${dateoxygen5.month.toString().padLeft(2,"0")}/${dateoxygen5.day.toString().padLeft(2,"0")}/${dateoxygen5.year % 100}";
+    date6 = "${dateoxygen6.month.toString().padLeft(2,"0")}/${dateoxygen6.day.toString().padLeft(2,"0")}/${dateoxygen6.year % 100}";
+    date7 = "${dateoxygen7.month.toString().padLeft(2,"0")}/${dateoxygen7.day.toString().padLeft(2,"0")}/${dateoxygen7.year % 100}";
+    date8 = "${dateoxygen8.month.toString().padLeft(2,"0")}/${dateoxygen8.day.toString().padLeft(2,"0")}/${dateoxygen8.year % 100}";
+    date9 = "${dateoxygen9.month.toString().padLeft(2,"0")}/${dateoxygen9.day.toString().padLeft(2,"0")}/${dateoxygen9.year % 100}";
+    date10 = "${dateoxygen10.month.toString().padLeft(2,"0")}/${dateoxygen10.day.toString().padLeft(2,"0")}/${dateoxygen10.year % 100}";
+    date11 = "${dateoxygen11.month.toString().padLeft(2,"0")}/${dateoxygen11.day.toString().padLeft(2,"0")}/${dateoxygen11.year % 100}";
+    date12 = "${dateoxygen12.month.toString().padLeft(2,"0")}/${dateoxygen12.day.toString().padLeft(2,"0")}/${dateoxygen12.year % 100}";
+    date13 = "${dateoxygen13.month.toString().padLeft(2,"0")}/${dateoxygen13.day.toString().padLeft(2,"0")}/${dateoxygen13.year % 100}";
+    date14 = "${dateoxygen14.month.toString().padLeft(2,"0")}/${dateoxygen14.day.toString().padLeft(2,"0")}/${dateoxygen14.year % 100}";
 
     chartData =[
-      calorie_intake_data(sleepdate7, sleeptmp[6].efficiency-10),
-      calorie_intake_data(sleepdate6, sleeptmp[5].efficiency-10),
-      calorie_intake_data(sleepdate5, sleeptmp[4].efficiency-10),
-      calorie_intake_data(sleepdate4, sleeptmp[3].efficiency-10),
-      calorie_intake_data(sleepdate3, sleeptmp[2].efficiency-10),
-      calorie_intake_data(sleepdate2, sleeptmp[1].efficiency-10),
-      calorie_intake_data(sleepdate1, sleeptmp[0].efficiency-10),
+      calorie_intake_data(date14, oxygentmp[6].efficiency-10),
+      calorie_intake_data(date13, oxygentmp[5].efficiency-10),
+      calorie_intake_data(date12, oxygentmp[4].efficiency-10),
+      calorie_intake_data(date11, oxygentmp[3].efficiency-10),
+      calorie_intake_data(date10, oxygentmp[2].efficiency-10),
+      calorie_intake_data(date9, oxygentmp[1].efficiency-10),
+      calorie_intake_data(date8, oxygentmp[0].efficiency-10),
+      calorie_intake_data(date7, oxygentmp[6].efficiency-10),
+      calorie_intake_data(date6, oxygentmp[5].efficiency-10),
+      calorie_intake_data(date5, oxygentmp[4].efficiency-10),
+      calorie_intake_data(date4, oxygentmp[3].efficiency-10),
+      calorie_intake_data(date3, oxygentmp[2].efficiency-10),
+      calorie_intake_data(date2, oxygentmp[1].efficiency-10),
+      calorie_intake_data(date1, oxygentmp[0].efficiency-10),
     ];
   }
 

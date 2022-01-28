@@ -62,7 +62,7 @@ class _my_sleepState extends State<my_sleep>
 
   List<Widget> listViews = <Widget>[];
   // List<Sleep> sleeptmp = [];
-  Sleep latestSleep = new Sleep();
+  Oxygen latestSleep = new Oxygen();
   DateTime now = DateTime.now();
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
@@ -512,7 +512,7 @@ class _my_sleepState extends State<my_sleep>
         headers: {
           'Authorization': "Bearer " + accessToken
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
 
     print("Date of Sleep");

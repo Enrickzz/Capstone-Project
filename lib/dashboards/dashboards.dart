@@ -12,6 +12,7 @@ import 'package:my_app/ui_view/TimeSeries.dart';
 import 'package:my_app/ui_view/VerticalBC_Target.dart';
 import 'package:my_app/ui_view/VerticalBarChart.dart';
 import 'package:my_app/ui_view/blood_pressure/blood_pressure_groupbarchart_sf.dart';
+import 'package:my_app/ui_view/oxygen_barchartsf.dart';
 import 'package:my_app/ui_view/water/water_view.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
@@ -167,6 +168,15 @@ class _DashboardsState extends State<Dashboards>
                 Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
               animationController: widget.animationController,
             ));
+
+        listViews.add(
+            oxygen_barchartsf( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+
         listViews.add(
             HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                 parent: widget.animationController,

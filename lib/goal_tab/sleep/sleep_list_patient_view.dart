@@ -43,7 +43,7 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
   List<File> _image = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
-  List<Sleep> sleep_list = [];
+  List<Oxygen> sleep_list = [];
   List<OrdinalSales> rem=[];
   List<OrdinalSales> light=[];
   List<OrdinalSales> deep=[];
@@ -339,7 +339,7 @@ class _sleep_patient_viewState extends State<sleep_patient_view> {
         headers: {
           'Authorization': "Bearer " + widget.fitbitToken
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     sleep_list = sleep;
     if(sleep_list[0].duration/3600000 < 6){

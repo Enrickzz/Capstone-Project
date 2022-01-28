@@ -105,7 +105,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                           ],
                         ),
                         Container(
-                          height: 250,
+                          height: 313,
                           padding: EdgeInsets.only(top: 20),
                           child: TabBarView(
                             children: <Widget>[
@@ -209,6 +209,181 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                       ),
                                     ),
                                   ),
+                                  SizedBox(height: 119.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      FlatButton(
+                                        child: Text(
+                                          'Save',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() async {
+                                          try{
+                                            final User user = auth.currentUser;
+                                            final uid = user.uid;
+                                            final readOxygen = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list');
+                                            readOxygen.once().then((DataSnapshot datasnapshot) {
+                                              String temp1 = datasnapshot.value.toString();
+                                              print("temp1 " + temp1);
+                                              List<String> temp = temp1.split(',');
+                                              Oxygen_Saturation oxygen;
+                                              if(spo2 < 90){
+                                                oxygen_status = "critical";
+                                              }
+                                              else if(spo2 >= 90 && spo2 <= 95){
+                                                oxygen_status = "alarming";
+                                              }
+                                              else if (spo2 > 95 && spo2 <= 100){
+                                                oxygen_status = "normal";
+                                              }
+                                              else {
+                                                oxygen_status = "error";
+                                              }
+                                              if(datasnapshot.value == null){
+                                                final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + 0.toString());
+                                                oxygenRef.set({"oxygen_saturation": spo2.toString(),"oxygen_status": oxygen_status.toString(), "os_date": oxygen_date.toString(), "os_time": oxygen_time.toString()});
+                                                print("Added Oxygen Saturation Successfully! " + uid);
+                                              }
+                                              else{
+                                                // String tempOxygen = "";
+                                                // String tempOxygenStatus = "";
+                                                // String tempOxygenDate = "";
+                                                // String tempOxygenTime = "";
+                                                //
+                                                // for(var i = 0; i < temp.length; i++){
+                                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
+                                                //   List<String> splitFull = full.split(" ");
+                                                //   switch(i%4){
+                                                //     case 0: {
+                                                //       tempOxygen = splitFull.last;
+                                                //     }
+                                                //     break;
+                                                //     case 1: {
+                                                //       tempOxygenDate = splitFull.last;
+                                                //     }
+                                                //     break;
+                                                //     case 2: {
+                                                //       tempOxygenStatus = splitFull.last;
+                                                //     }
+                                                //     break;
+                                                //     case 3: {
+                                                //       tempOxygenTime = splitFull.last;
+                                                //       oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen),oxygen_status: tempOxygenStatus, os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
+                                                //       oxygen_list.add(oxygen);
+                                                //     }
+                                                //     break;
+                                                //   }
+                                                // }
+                                                getOxygenSaturation();
+                                                Future.delayed(const Duration(milliseconds: 1000), (){
+                                                  count = oxygen_list.length--;
+                                                  print("count " + count.toString());
+                                                  //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
+
+                                                  // symptoms_list.add(symptom);
+
+                                                  // print("symptom list  " + symptoms_list.toString());
+                                                  final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + count.toString());
+                                                  oxygenRef.set({"oxygen_saturation": spo2.toString(),"oxygen_status": oxygen_status.toString(), "os_date": oxygen_date.toString(), "os_time": oxygen_time.toString()});
+                                                  print("Added Oxygen Saturation Successfully! " + uid);
+                                                });
+
+                                              }
+
+                                            });
+                                            //RECOMMEND AND NOTIFS
+                                            if(widget.instance =="Reminder!"){
+                                              if(spo2 < 95){
+                                                addtoNotif("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. Please remain calm and stay composed and continue to monitor your other vitals such as blood pressure and heart rate.",
+                                                    "Low Oxygen!",
+                                                    "3",
+                                                    uid,
+                                                    "None");
+                                              }
+                                              print("ADDING NOW");
+                                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                              readConnections.once().then((DataSnapshot snapshot2) {
+                                                print(snapshot2.value);
+                                                print("CONNECTION");
+                                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                                temp.forEach((jsonString) {
+                                                  connections.add(Connection.fromJson(jsonString)) ;
+                                                  Connection a = Connection.fromJson(jsonString);
+                                                  print(a.uid);
+                                                  addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a consistent oxygen rate between 90 - 95 and requires your medical attention",
+                                                      thisuser.firstname + " has consecutive low SPO2 readings",
+                                                      "3",
+                                                      a.uid,
+                                                      "None");
+                                                });
+                                              });
+                                            }
+                                            if(spo2 < 90){
+                                              addtoRecommendation("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. You or someone else near you must administer an immediate oxygen supply as your body is lacking oxygen right now. ",
+                                                  "Low Oxygen Levels!",
+                                                  "3",
+                                                  uid,
+                                                  "None");
+                                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                              readConnections.once().then((DataSnapshot snapshot2) {
+                                                print(snapshot2.value);
+                                                print("CONNECTION");
+                                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                                temp.forEach((jsonString) {
+                                                  connections.add(Connection.fromJson(jsonString)) ;
+                                                  Connection a = Connection.fromJson(jsonString);
+                                                  print(a.uid);
+                                                  addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a oxygen rate of 90 and requires your immediate medical attention",
+                                                      thisuser.firstname + " has low SPO2 readings",
+                                                      "3",
+                                                      a.uid,
+                                                      "None");
+                                                });
+                                              });
+                                            }
+                                            if(spo2 >= 91 && spo2 <= 95){
+                                              addtoRecommendation("Your Oxygen Saturation is lower than normal but is still not a cause to be alarmed. We recommend that you record your oxygen saturation again after 30 minutes. For the meantime try to remain calm and perform deep breathing as you listen to some soothing spotify songs.",
+                                                  "Low Oxygen Levels",
+                                                  "2",
+                                                  uid,
+                                                  "Spotify");
+                                              Future.delayed(const Duration(minutes: 30), (){
+                                                addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen");
+                                              });
+                                            }
+
+                                            Future.delayed(const Duration(milliseconds: 1000), (){
+                                              print("MEDICATION LENGTH: " + oxygen_list.length.toString());
+                                              oxygen_list.add(new Oxygen_Saturation(oxygen_saturation: spo2,oxygen_status: oxygen_status, os_date: format.parse(oxygen_date), os_time: timeformat.parse(oxygen_time)));
+                                              for(var i=0;i<oxygen_list.length/2;i++){
+                                                var temp = oxygen_list[i];
+                                                oxygen_list[i] = oxygen_list[oxygen_list.length-1-i];
+                                                oxygen_list[oxygen_list.length-1-i] = temp;
+                                              }
+                                              print("POP HERE ==========");
+                                              Navigator.pop(context, oxygen_list);
+                                            });
+
+                                          } catch(e) {
+                                            print("you got an error! $e");
+                                          }
+                                          // Navigator.pop(context);
+                                        },
+                                      )
+                                    ],
+                                  ),
                                 ],
                               ),
                               Column(
@@ -242,7 +417,22 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                       },
                                     ),
                                   ),
-
+                                  SizedBox(height: 24.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               )
                             ],
@@ -251,182 +441,8 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 24.0),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FlatButton(
-                        child: Text(
-                          'Save',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() async {
-                          try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
-                            final readOxygen = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list');
-                            readOxygen.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              Oxygen_Saturation oxygen;
-                              if(spo2 < 90){
-                                oxygen_status = "critical";
-                              }
-                              else if(spo2 >= 90 && spo2 <= 95){
-                                oxygen_status = "alarming";
-                              }
-                              else if (spo2 > 95 && spo2 <= 100){
-                                oxygen_status = "normal";
-                              }
-                              else {
-                                oxygen_status = "error";
-                              }
-                              if(datasnapshot.value == null){
-                                final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + 0.toString());
-                                oxygenRef.set({"oxygen_saturation": spo2.toString(),"oxygen_status": oxygen_status.toString(), "os_date": oxygen_date.toString(), "os_time": oxygen_time.toString()});
-                                print("Added Oxygen Saturation Successfully! " + uid);
-                              }
-                              else{
-                                // String tempOxygen = "";
-                                // String tempOxygenStatus = "";
-                                // String tempOxygenDate = "";
-                                // String tempOxygenTime = "";
-                                //
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //   switch(i%4){
-                                //     case 0: {
-                                //       tempOxygen = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 1: {
-                                //       tempOxygenDate = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 2: {
-                                //       tempOxygenStatus = splitFull.last;
-                                //     }
-                                //     break;
-                                //     case 3: {
-                                //       tempOxygenTime = splitFull.last;
-                                //       oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen),oxygen_status: tempOxygenStatus, os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
-                                //       oxygen_list.add(oxygen);
-                                //     }
-                                //     break;
-                                //   }
-                                // }
-                                getOxygenSaturation();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = oxygen_list.length--;
-                                  print("count " + count.toString());
-                                  //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
 
-                                  // symptoms_list.add(symptom);
-
-                                  // print("symptom list  " + symptoms_list.toString());
-                                  final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + count.toString());
-                                  oxygenRef.set({"oxygen_saturation": spo2.toString(),"oxygen_status": oxygen_status.toString(), "os_date": oxygen_date.toString(), "os_time": oxygen_time.toString()});
-                                  print("Added Oxygen Saturation Successfully! " + uid);
-                                });
-
-                              }
-
-                            });
-                            //RECOMMEND AND NOTIFS
-                            if(widget.instance =="Reminder!"){
-                              if(spo2 < 95){
-                                addtoNotif("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. Please remain calm and stay composed and continue to monitor your other vitals such as blood pressure and heart rate.",
-                                    "Low Oxygen!",
-                                    "3",
-                                    uid,
-                                    "None");
-                              }
-                              print("ADDING NOW");
-                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                              readConnections.once().then((DataSnapshot snapshot2) {
-                                print(snapshot2.value);
-                                print("CONNECTION");
-                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
-                                temp.forEach((jsonString) {
-                                  connections.add(Connection.fromJson(jsonString)) ;
-                                  Connection a = Connection.fromJson(jsonString);
-                                  print(a.uid);
-                                  addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a consistent oxygen rate between 90 - 95 and requires your medical attention",
-                                      thisuser.firstname + " has consecutive low SPO2 readings",
-                                      "3",
-                                      a.uid,
-                                      "None");
-                                });
-                              });
-                            }
-                            if(spo2 < 90){
-                              addtoRecommendation("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. You or someone else near you must administer an immediate oxygen supply as your body is lacking oxygen right now. ",
-                                  "Low Oxygen Levels!",
-                                  "3",
-                                  uid,
-                                  "None");
-                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                              readConnections.once().then((DataSnapshot snapshot2) {
-                                print(snapshot2.value);
-                                print("CONNECTION");
-                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
-                                temp.forEach((jsonString) {
-                                  connections.add(Connection.fromJson(jsonString)) ;
-                                  Connection a = Connection.fromJson(jsonString);
-                                  print(a.uid);
-                                  addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a oxygen rate of 90 and requires your immediate medical attention",
-                                      thisuser.firstname + " has low SPO2 readings",
-                                      "3",
-                                      a.uid,
-                                      "None");
-                                });
-                              });
-                            }
-                            if(spo2 >= 91 && spo2 <= 95){
-                              addtoRecommendation("Your Oxygen Saturation is lower than normal but is still not a cause to be alarmed. We recommend that you record your oxygen saturation again after 30 minutes. For the meantime try to remain calm and perform deep breathing as you listen to some soothing spotify songs.",
-                                  "Low Oxygen Levels",
-                                  "2",
-                                  uid,
-                                  "Spotify");
-                              Future.delayed(const Duration(minutes: 30), (){
-                                addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen");
-                              });
-                            }
-
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + oxygen_list.length.toString());
-                              oxygen_list.add(new Oxygen_Saturation(oxygen_saturation: spo2,oxygen_status: oxygen_status, os_date: format.parse(oxygen_date), os_time: timeformat.parse(oxygen_time)));
-                              for(var i=0;i<oxygen_list.length/2;i++){
-                                var temp = oxygen_list[i];
-                                oxygen_list[i] = oxygen_list[oxygen_list.length-1-i];
-                                oxygen_list[oxygen_list.length-1-i] = temp;
-                              }
-                              print("POP HERE ==========");
-                              Navigator.pop(context, oxygen_list);
-                            });
-
-                          } catch(e) {
-                            print("you got an error! $e");
-                          }
-                          // Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  ),
 
                 ]
             )
