@@ -119,7 +119,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Prescribed by: Dr." + doctor_names[index],
+                    subtitle:        Text("Prescribed by: Dr." + checkthisDoc(doctor_names[index]),
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -196,5 +196,12 @@ class _medication_prescriptionState extends State<medication_prescription> {
         prestemp[prestemp.length-1-i] = temp;
       }
     });
+  }
+}
+String checkthisDoc(String name) {
+  if(name == null){
+    return "";
+  }else{
+    return name;
   }
 }

@@ -129,7 +129,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle: Text("Planned by: Dr." + foodPtemp[index].doctor,
+                    subtitle: Text("Planned by: Dr." + checkthisDoc(foodPtemp[index].doctor),
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -207,5 +207,12 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
         foodPtemp[foodPtemp.length-1-i] = temp;
       }
     });
+  }
+}
+String checkthisDoc(String name) {
+  if(name == null){
+    return "";
+  }else{
+    return name;
   }
 }

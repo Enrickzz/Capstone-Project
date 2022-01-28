@@ -109,7 +109,7 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(''+notif.message, style: TextStyle(fontSize: 12.0)),
+                        Text(''+notif.message.replaceAll("<type>", checktype(thisuser.usertype)) , style: TextStyle(fontSize: 12.0)),
                         SizedBox(height: 4),
                         Text(''+notif.rec_date.toString()+" "+notif.rec_time.toString(), style: TextStyle(fontSize: 11.0)),
                       ],
