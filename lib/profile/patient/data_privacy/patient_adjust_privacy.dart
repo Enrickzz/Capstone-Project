@@ -33,6 +33,28 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
   bool showDisclaimer = false;
 
   @override
+  void initState(){
+    super.initState();
+    Connection doctorconnection = widget.connection;
+    if(doctorconnection.dashboard.toLowerCase() == "false"){
+      isAllowedDashboard = false;
+    }
+    if(doctorconnection.nonhealth.toLowerCase() == "false"){
+      isAllowedNonHealth = false;
+    }
+    if(doctorconnection.health.toLowerCase() == "false"){
+      isAllowedDataInputs = false;
+    }
+    if(isAllowedDashboard == false || isAllowedNonHealth == false || isAllowedDataInputs == false){
+      showDisclaimer = true;
+    }
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      setState(() {
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     String defaultFontFamily = 'Roboto-Light.ttf';
@@ -524,7 +546,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                     for(int i = 1; i <= connections.length; i++){
                       if(connections[i-1].uid == doctorconnection.uid){
                         final doctorConnectionsRef = databaseReference.child('users/' + uid + '/personal_info/connections/'+ i.toString());
-                        doctorConnectionsRef.set({
+                        doctorConnectionsRef.update({
                           "uid": doctorconnection.uid,
                           "dashboard": isAllowedDashboard.toString(),
                           "nonhealth": isAllowedNonHealth.toString(),
@@ -533,6 +555,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                       }
                     }
                   });
+                  Navigator.pop(context);
 
 
                 } catch(e) {
