@@ -154,8 +154,8 @@ class _AllergiesState extends State<edit_allergies> {
                         }
 
                       },
-                      child: Text('Edit'),
-                      color: Colors.green,
+                      child: Text('Edit', style: TextStyle(color: Colors.white),),
+                      color: Colors.blue,
                     ),
 
                     SizedBox(height: 12.0),
@@ -210,7 +210,7 @@ class _AllergiesState extends State<edit_allergies> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: (add) ? Colors.green : Colors.red,
+          color: (add) ? Colors.blue : Colors.red,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
@@ -255,7 +255,7 @@ class _AllergiesState extends State<edit_allergies> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: (add) ? Colors.green : Colors.red,
+          color: (add) ? Colors.blue : Colors.red,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
@@ -300,7 +300,7 @@ class _AllergiesState extends State<edit_allergies> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: (add) ? Colors.green : Colors.red,
+          color: (add) ? Colors.blue : Colors.red,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
