@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:basic_utils/basic_utils.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/grid_images.dart';
@@ -33,15 +35,22 @@ class _recommended_mealsState extends State<recommended_meals>
 
   final AuthService _auth = AuthService();
 
+  bool isLoading = true;
   double topBarOpacity = 0.0;
   @override
   void initState() {
-
+    if(widget.mealsrecommendation == null){
+      List<String> random = ["fish fillet","steamed fish", "vegetables", "steamed chicken", "brocolli", "avocado", "mango", "banana"];
+      Random rng = new Random();
+      fetchNutritionix(random[rng.nextInt(random.length)]).then((value) => setState((){
+        recommended=value;
+        isLoading=false;
+      }));
+    }
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
 
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
@@ -72,21 +81,6 @@ class _recommended_mealsState extends State<recommended_meals>
     });
   }
 
-  void addAllListData() {
-    const int count = 5;
-    listViews.add(
-      GridImages(
-        titleTxt: 'Your program',
-        subTxt: 'Details',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-  }
-
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
@@ -94,11 +88,6 @@ class _recommended_mealsState extends State<recommended_meals>
 
   @override
   Widget build(BuildContext context) {
-    if(widget.mealsrecommendation == null){
-      fetchNutritionix("fish").then((value) => setState((){
-        recommended=value;
-      }));
-    }
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
@@ -112,7 +101,10 @@ class _recommended_mealsState extends State<recommended_meals>
           centerTitle: true,
           backgroundColor: Colors.white,
         ),
-        body: ListView.builder(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new ListView.builder(
           padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
           itemCount: 5,
           itemBuilder: (context, index){
