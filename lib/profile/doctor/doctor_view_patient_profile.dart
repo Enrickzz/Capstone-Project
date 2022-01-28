@@ -1118,7 +1118,7 @@ class _index3State extends State<view_patient_profile>
     });
   }
   Widget checkimage(String img) {
-    if(img == null || img == "assets/images/blank_person.png"){
+    if(img == null || img == "assets/images/blank_person.png" || img == ""){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
     }else{
       return Image.network(img,

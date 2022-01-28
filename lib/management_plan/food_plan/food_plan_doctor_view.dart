@@ -141,8 +141,6 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                     isThreeLine: true,
                     dense: true,
                     selected: true,
-
-
                     onTap: (){
                       Navigator.push(
                         context,
