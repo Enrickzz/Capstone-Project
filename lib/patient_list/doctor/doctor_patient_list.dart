@@ -124,59 +124,6 @@ class _PatientListState extends State<PatientList>  {
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
-          // actions: [
-          //   Padding(
-          //       padding: EdgeInsets.only(right: 20.0),
-          //       child: GestureDetector(
-          //         onTap: () {
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
-          //           );
-          //
-          //
-          //           // showModalBottomSheet(context: context,
-          //           //   isScrollControlled: true,
-          //           //   builder: (context) => SingleChildScrollView(child: Container(
-          //           //     padding: EdgeInsets.only(
-          //           //         bottom: MediaQuery.of(context).viewInsets.bottom),
-          //           //     child: add_medication_prescription(thislist: prestemp),
-          //           //   ),
-          //           //   ),
-          //           // ).then((value) =>
-          //           //     Future.delayed(const Duration(milliseconds: 1500), (){
-          //           //       setState((){
-          //           //         print("setstate medication prescription");
-          //           //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-          //           //         if(value != null){
-          //           //           prestemp = value[0];
-          //           //         }
-          //           //       });
-          //           //     }));
-          //         },
-          //         child: Icon(
-          //           Icons.add,
-          //         ),
-          //       )
-          //   ),
-          //
-          //   Padding(
-          //       padding: EdgeInsets.only(right: 20.0),
-          //       child: GestureDetector(
-          //         onTap: () async{
-          //           await _auth.signOut();
-          //           print('signed out');
-          //           Navigator.pushReplacement(
-          //             context,
-          //             MaterialPageRoute(builder: (context) => LogIn()),
-          //           );
-          //         },
-          //         child: Icon(
-          //           Icons.audiotrack,
-          //         ),
-          //       )
-          //   ),
-          // ],
         ),
       body: isLoading
           ? Center(
@@ -189,13 +136,6 @@ class _PatientListState extends State<PatientList>  {
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Card(
               child: ListTile(
-                  // leading: CircleAvatar(
-                  //   radius: 25,
-                  //   backgroundColor: Colors.green,
-                  //   foregroundColor: Colors.green,
-                  //   backgroundImage: NetworkImage
-                  //     ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
-                  // ),
                   leading: Container(
                     height: 50,
                     width: 50,
