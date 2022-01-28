@@ -364,6 +364,8 @@ class Exercise_screen_state extends State<ExerciseScreen>
     final uid = user.uid;
     final readExRx = databaseReference.child('ExRxToken/');
     String token = "";
+    List<ExercisesTest> exers=[];
+
     await readExRx.once().then((DataSnapshot snapshot) {
       print("EXRX TOKEN");
       print(snapshot.value);
@@ -375,14 +377,47 @@ class Exercise_screen_state extends State<ExerciseScreen>
         headers: {
           'Authorization': "Bearer $token",
         });
-    List<ExercisesTest> exers=[];
-    exers = ExRxTest.fromJson(jsonDecode(response.body)).exercises;
-    print("EXERS LENGTH " + exers.length.toString());
-    for(var i =0; i < exers.length; i++){
-      print("EXER NAME = "  + exers[i].exerciseName);
-      print("IMG = " + exers[i].largImg1);
+
+    print("STATUS");
+    print(response.statusCode);
+    if(response.statusCode == 500 || response.statusCode == 401){
+      var trytoken = await http.post(Uri.parse("http://204.235.60.194/consumer/login"),body: {
+        "username": "louisexrx",
+        "password": "xHj4vNnb"
+      });
+      token = trytoken.body.toString();
+      token = token.replaceAll("{", "").replaceAll("}", "").replaceAll("token", "").replaceAll('"', "").replaceAll(":", "").replaceAll(" ", "").replaceAll("\n", "").replaceAll("/", "");
+      print("THIS IS TOKEN = " + token);
+      var updateexrx = databaseReference;
+      print('UPDATING');
+      updateexrx.update({"ExRxToken/": token});
+      var response1 = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+          headers: {
+            'Authorization': "Bearer $token",
+          });
+      exers = ExRxTest.fromJson(jsonDecode(response1.body)).exercises;
+      for(var i =0; i < exers.length; i++){
+        print("EXER NAME = "  + exers[i].exerciseName);
+        print("IMG = " + exers[i].largImg1);
+      }
+      listexercises= exers;
+      return exers;
+    }else{
+      print("STATUS\n"+response.statusCode.toString());
+      var response2 = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+          headers: {
+            'Authorization': "Bearer $token",
+          });
+      exers = ExRxTest.fromJson(jsonDecode(response2.body)).exercises;
+      print("EXERS LENGTH " + exers.length.toString());
+      for(var i =0; i < exers.length; i++){
+        print("EXER NAME = "  + exers[i].exerciseName);
+        print("IMG = " + exers[i].largImg1);
+      }
+      listexercises= exers;
+      return exers;
     }
-    listexercises= exers;
-    return exers;
+
+
   }
 }
