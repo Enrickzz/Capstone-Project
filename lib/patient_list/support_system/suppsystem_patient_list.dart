@@ -67,11 +67,12 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
 
   // profile pic
   String pp_img = "";
+  String ss_ppimg = "";
 
   @override
   void initState(){
     var ran = Random();
-
+    getSupportSystem();
     for (var i = 0; i < 5; i++) {
       var heading = '\$${(ran.nextInt(20) + 15).toString()}00 per month';
       var subheading =
@@ -248,10 +249,10 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => addImageSupport(img: File(pp_img))),
+                  MaterialPageRoute(builder: (context) => addImageSupport(img: pp_img)),
                 );
               },
-              child: ClipOval(child: Image.asset("assets/images/blank_person.png", fit: BoxFit.cover))
+              child: ClipOval(child: checkimage(ss_ppimg))
             ),
             accountEmail: Text(supp_system.email,style: TextStyle(fontSize: 12.0)),
             accountName: Text(
@@ -372,6 +373,18 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
       print("FIXED");
     });
   }
+
+  void getSupportSystem() async {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+    await readDoctor.once().then((DataSnapshot snapshot){
+      var temp1 = jsonDecode(jsonEncode(snapshot.value));
+      supp_system = Users.fromJson(temp1);
+      ss_ppimg = supp_system.pp_img;
+    });
+  }
+
   Widget checkimage(String img) {
     if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);

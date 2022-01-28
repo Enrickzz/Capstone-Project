@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +17,7 @@ import 'package:path_provider/path_provider.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class addImageSupport extends StatefulWidget {
-  final File img;
+  final String img;
   addImageSupport({this.img});
   @override
   _AddImageState createState() => _AddImageState();
@@ -26,24 +27,29 @@ class _AddImageState extends State<addImageSupport> {
 
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseStorage _storage = FirebaseStorage.instance;
+  var image_url;
 
   //based sa tutorial File? image; dapat https://www.youtube.com/watch?v=MSv38jO4EJk&t=339s 2:08
-  File image;
+  String image;
   bool isUpdated = false;
   // var imagePermanent;
   // File image_path = "";
   Future pickImage() async{
     try{
+      final User user = auth.currentUser;
+      final uid = user.uid;
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if(image == null) return;
-
-      final imageTemporary = File(image.path);
-      // image permanent https://www.youtube.com/watch?v=MSv38jO4EJk&t=339s 6:39
-      // imagePermanent = await saveImagePermanently(image.path);
-      // image_path = File(image.path);
-      setState(() {
-        this.image = imageTemporary;
-        isUpdated = true;
+      Reference reference = _storage.ref().child("test/" + uid + "/display_picture/");
+      UploadTask uploadTask = reference.putFile(File(image.path));
+      uploadTask.then((res) async{
+        image_url = await res.ref.getDownloadURL();
+        setState(() {
+          // this.image = imageTemporary;
+          this.image = image_url;
+          isUpdated = true;
+        });
       });
       // setState(() =>  this.image = imageTemporary);
     } on PlatformException catch (e){
@@ -66,10 +72,10 @@ class _AddImageState extends State<addImageSupport> {
     if(widget.img != null){
       image = widget.img;
     }
-    // Future.delayed(const Duration(milliseconds: 1200), (){
-    //   setState(() {
-    //   });
-    // });
+    Future.delayed(const Duration(milliseconds: 1200), (){
+      setState(() {
+      });
+    });
   }
 
 
@@ -94,7 +100,7 @@ class _AddImageState extends State<addImageSupport> {
         children: [
           Spacer(),
           ClipOval(
-              child: checkimage(widget.img.path)
+              child: checkimage(image)
           ),
           const SizedBox(height: 24),
           Text(
@@ -125,7 +131,7 @@ class _AddImageState extends State<addImageSupport> {
                   final User user = auth.currentUser;
                   final uid = user.uid;
                   final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
-                  readProfile.update({"pp_img": image.path});
+                  readProfile.update({"pp_img": image_url.toString()});
                   Navigator.pop(context);
 
                   // print('signed out');
@@ -174,9 +180,9 @@ class _AddImageState extends State<addImageSupport> {
     if(img == null || img == ""){
       return Image.asset("assets/images/blank_person.png", width: 150, height: 150,fit: BoxFit.cover);
     }else{
-      return Image.file(image,
-          width: 70,
-          height: 70,
+      return Image.network(img,
+          width: 140,
+          height: 140,
           fit: BoxFit.cover);
     }
   }
