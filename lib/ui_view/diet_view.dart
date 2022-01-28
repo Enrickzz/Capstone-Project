@@ -6,6 +6,9 @@ import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:http/http.dart' as http;
+import 'package:my_app/models/ActivitiesFitbit.dart';
+import 'package:my_app/models/FitBitToken.dart';
 
 import 'package:my_app/models/nutritionixApi.dart';
 
@@ -29,6 +32,7 @@ class _DietViewState extends State<DietView> {
   List<FoodIntake> dinner_list = [];
   List<FoodIntake> snack_list = [];
   int total_cal = 0;
+  int burned = 0;
   double cholesterol = 0;
   double total_fat = 0;
   double sugar = 0;
@@ -40,8 +44,8 @@ class _DietViewState extends State<DietView> {
     getLFoodIntake();
     getDFoodIntake();
     getSFoodIntake();
-
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    getFitbit();
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         for(int i = 0; i < breakfast_list.length; i++){
           if(breakfast_list[i].intakeDate == today){
@@ -274,7 +278,7 @@ class _DietViewState extends State<DietView> {
                                                       const EdgeInsets.only(
                                                           left: 4, bottom: 3),
                                                   child: Text(
-                                                    '${(102 * widget.animation.value).toInt()}',
+                                                    burned.toStringAsFixed(0),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
@@ -714,6 +718,45 @@ class _DietViewState extends State<DietView> {
 
       }
     });
+  }
+  void getFitbit() {
+    DateTime a = DateTime.now();
+    String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
+    Activities act = new Activities();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    FitBitToken test;
+    String accessToken = "";
+    final readFitbit = databaseReference.child('users/' + uid + "/fitbittoken/");
+    readFitbit.once().then((DataSnapshot snapshot) {
+      print("SNAPSHOT");
+      print(snapshot.value);
+      if (snapshot.value != null) {
+        test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+        print("TEST");
+        print(test.accessToken);
+        if (test != null) {
+          accessToken = test.accessToken;
+        }
+      }
+    });
+    Future.delayed(const Duration(milliseconds: 1200), ()  {
+      setState(() async {
+        var result = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&beforeDate=$y-$m-$d"),
+            headers: {
+              'Authorization': "Bearer $accessToken",
+            });
+        List<Activities> activities=[];
+        activities = ActivitiesFitbit.fromJson(jsonDecode(result.body)).activities;
+        act = activities[0];
+        if(act.calories != null){
+          burned = act.calories;
+        }
+      });
+    });
+
+
+
   }
 }
 

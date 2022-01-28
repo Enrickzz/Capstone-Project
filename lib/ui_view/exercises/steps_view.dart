@@ -1,38 +1,52 @@
+import 'dart:convert';
+
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
+import 'package:http/http.dart' as http;
 import 'package:my_app/models/ActivitiesFitbit.dart';
 
-class steps_view extends StatelessWidget {
+class steps_view extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
-  final Activities activities;
+  final String accessToken;
   const steps_view(
-      {Key key, this.animationController, this.animation, this.activities})
+      {Key key, this.animationController, this.animation, this.accessToken})
       : super(key: key);
 
   @override
+  State<steps_view> createState() => _steps_viewState();
+}
+
+class _steps_viewState extends State<steps_view> {
+
+  String distance = "0";
+  String steps = "0";
+  String calories = "0";
+  String active_min = "0";
+
+  @override
+  void initState() {
+    getFitbit(widget.accessToken);
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {
+
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String distance = "0";
-    String steps = "0";
-    String calories = "0";
-    String active_min = "0";
-    if(activities.distance != null){
-      distance = activities.distance.toString();
-      steps = activities.steps.toString();
-      calories = activities.calories.toString();
-      active_min = (activities.activeDuration / 60000).toStringAsFixed(0);
-    }
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -289,7 +303,28 @@ class steps_view extends StatelessWidget {
       },
     );
   }
+  void getFitbit(String accessToken) async {
+    DateTime a = DateTime.now();
+    String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
+    Activities act = new Activities();
+    var result = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&beforeDate=$y-$m-$d"),
+        headers: {
+          'Authorization': "Bearer $accessToken",
+        });
+    List<Activities> activities=[];
+    activities = ActivitiesFitbit.fromJson(jsonDecode(result.body)).activities;
+    act = activities[0];
+
+    if(act.distance != null){
+      distance = act.distance.toString();
+      steps = act.steps.toString();
+      calories = act.calories.toString();
+      active_min = (act.activeDuration / 60000).toStringAsFixed(0);
+    }
+  }
 }
+
+
 
 class CurvePainter extends CustomPainter {
   final double angle;

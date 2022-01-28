@@ -293,7 +293,6 @@ class _my_sleepState extends State<my_sleep>
               animationController: widget.animationController,
             ),
           );
-        }else{
         }
         listViews.add(
           TitleView(
