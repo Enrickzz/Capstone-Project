@@ -67,11 +67,12 @@ class _PatientListState extends State<PatientList>  {
 
   // profile pic
   String pp_img = "";
+  String doctor_ppimg = "";
 
   @override
   void initState(){
     var ran = Random();
-
+    getDoctor();
     for (var i = 0; i < 5; i++) {
       var heading = '\$${(ran.nextInt(20) + 15).toString()}00 per month';
       var subheading =
@@ -90,7 +91,6 @@ class _PatientListState extends State<PatientList>  {
       cardContent.add(cardData);
     }
     super.initState();
-    print("ASDASDASDASDAS");
     if(widget.nameslist != null){
       if(widget.nameslist.isNotEmpty){
         names = widget.nameslist;
@@ -101,6 +101,7 @@ class _PatientListState extends State<PatientList>  {
       print("ASDASDASD");
     }else{
       getPatients();
+
       isLoading = true;
     }
     Future.delayed(const Duration(milliseconds: 2000), (){
@@ -246,10 +247,10 @@ class _PatientListState extends State<PatientList>  {
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => addImageDoctor(img: File(pp_img))),
+                  MaterialPageRoute(builder: (context) => addImageDoctor(img: pp_img)),
                 );
               },
-              child: ClipOval(child: Image.asset("assets/images/blank_person.png", fit: BoxFit.cover))
+              child: ClipOval(child: checkimage(doctor_ppimg))
             ),
             accountEmail: Text(doctor.email,style: TextStyle(fontSize: 12.0)),
             accountName: Text(
@@ -366,6 +367,17 @@ class _PatientListState extends State<PatientList>  {
     setState(() {
       isLoading = false;
       print("FIXED");
+    });
+  }
+
+  void getDoctor() async {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+    await readDoctor.once().then((DataSnapshot snapshot){
+      var temp1 = jsonDecode(jsonEncode(snapshot.value));
+      doctor = Users.fromJson(temp1);
+      doctor_ppimg = doctor.pp_img;
     });
   }
 

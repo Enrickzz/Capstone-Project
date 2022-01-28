@@ -133,16 +133,6 @@ class _index3State extends State<suppsystem_view_patient_profile>
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(milliseconds: 5000), () {
-    //   setState(() {
-    //     print("FULL SET STATE");
-    //   });
-    // });
-
-    String defaultFontFamily = 'Roboto-Light.ttf';
-    double defaultFontSize = 14;
-    double defaultIconSize = 17;
-
     return Container(
         color: FitnessAppTheme.background,
         child: Scaffold(
@@ -155,26 +145,6 @@ class _index3State extends State<suppsystem_view_patient_profile>
             )),
             centerTitle: true,
             backgroundColor: Colors.white,
-            // actions: [
-            //   Container(
-            //     margin: EdgeInsets.only( top: 16, right: 16,),
-            //     child: Stack(
-            //       children: <Widget>[
-            //         Icon(Icons.notifications, ),
-            //         Positioned(
-            //           right: 0,
-            //           child: Container(
-            //             padding: EdgeInsets.all(1),
-            //             decoration: BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6),),
-            //             constraints: BoxConstraints( minWidth: 12, minHeight: 12, ),
-            //             child: Text( '5', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
-            //           ),
-            //         )
-            //       ],
-            //     ),
-            //   )
-            // ],
-
           ),
           body: Scrollbar(
             child: SingleChildScrollView(
@@ -183,7 +153,10 @@ class _index3State extends State<suppsystem_view_patient_profile>
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Row(
+                    isLoading
+                        ? Center(
+                      child: CircularProgressIndicator(),
+                    ): new Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Container(
@@ -198,12 +171,6 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                   BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
                                 ],
                               ),
-                              // child: ClipOval(
-                              //   child:Image.asset("assets/images/blank_person.png",
-                              //       width: 70,
-                              //       height: 70,
-                              //       fit: BoxFit.cover),
-                              // ),
                               child: ClipOval(
                                 // child:Image.asset("assets/images/blank_person.png",
                                   child: checkimage(pp_img),
