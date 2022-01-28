@@ -106,6 +106,7 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
         userUID: widget.userUID
+
       ),
     );
     listViews.add(
@@ -124,6 +125,7 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
           animationController: widget.animationController,
           userUID: widget.userUID
+
         ));
 
     listViews.add(
@@ -136,24 +138,13 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
         ));
 
 
-
-
-    listViews.add(
-      bp_chart(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
     listViews.add(
       BMI_Chart(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
+        animationController: widget.animationController,userUID: widget.userUID
       ),
     );
 
@@ -166,11 +157,6 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(milliseconds: 5000), () {
-    //   setState(() {
-    //     print("FULL SET STATE");
-    //   });
-    // });
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(

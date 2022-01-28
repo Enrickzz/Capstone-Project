@@ -4,19 +4,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/meals/meals_list_view_doctor.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../notifications/notifications._patients.dart';
 import '../../ui_view/meals/meals_list_view.dart';
+import 'MealListViewDoc.dart';
+import 'dietViewDoc.dart';
 
 class my_meals_doctor extends StatefulWidget {
-  const my_meals_doctor({Key key, this.animationController, this.userUID}) : super(key: key);
+  const my_meals_doctor({Key key, this.animationController,this.userUID}) : super(key: key);
+  final String userUID;
 
   final AnimationController animationController;
-  final String userUID;
   @override
   _my_meals_doctorState createState() => _my_meals_doctorState();
 }
@@ -39,7 +40,6 @@ class _my_meals_doctorState extends State<my_meals_doctor>
         CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
 
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
@@ -63,6 +63,11 @@ class _my_meals_doctorState extends State<my_meals_doctor>
         }
       }
     });
+    Future.delayed(const Duration(milliseconds: 1200), (){
+      setState(() {
+        addAllListData();
+      });
+    });
     super.initState();
   }
 
@@ -70,52 +75,29 @@ class _my_meals_doctorState extends State<my_meals_doctor>
     const int count = 9;
 
     listViews.add(
-      DietView(
+      DietViewDoc(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
             Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
-      ),
-    );
-    listViews.add(
-      TitleView(
-        titleTxt: 'Meals Today',
-        subTxt: 'View Log',
-        userType: "Doctor",
-        redirect: 2,
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
+        userUID: widget.userUID,
+
       ),
     );
 
     listViews.add(
-      MealsListViewDoctor(
+      MealsListViewDoc(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController,
                 curve: Interval((1 / count) * 3, 1.0,
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController,
-        userUID: widget.userUID
+        userUID: widget.userUID,
+
       ),
     );
-
-    // listViews.add(
-    //   TitleView(
-    //     titleTxt: 'Recommended meals',
-    //     subTxt: 'See more',
-    //     redirect: 3,
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-    //         parent: widget.animationController,
-    //         curve:
-    //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-    //     animationController: widget.animationController,
-    //   ),
-    // );
   }
 
   Future<bool> getData() async {
@@ -127,6 +109,7 @@ class _my_meals_doctorState extends State<my_meals_doctor>
   Widget build(BuildContext context) {
     return Container(
       color: FitnessAppTheme.background,
+
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -138,6 +121,7 @@ class _my_meals_doctorState extends State<my_meals_doctor>
             )
           ],
         ),
+
       ),
     );
   }

@@ -71,10 +71,14 @@ class _weight_trendState extends State<weight_trend> {
             // should create the same type of [DateTime] as the data provided. If none
             // specified, the default creates local date time.
             dateTimeFactory: const charts.LocalDateTimeFactory(),
-
             behaviors: [
               charts.ChartTitle("Weight Trend", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
-              charts.RangeAnnotation([charts.LineAnnotationSegment(weight_goal.target_weight, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
+              charts.RangeAnnotation([
+                charts.LineAnnotationSegment(weight_goal.target_weight,
+                  charts.RangeAnnotationAxisType.measure,
+                  color: charts.ColorUtil.fromDartColor(Colors.greenAccent), startLabel: 'goal' ,
+                  labelAnchor: charts.AnnotationLabelAnchor.middle,
+                  labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
             ],
           ),
         ) ,

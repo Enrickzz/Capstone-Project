@@ -132,63 +132,21 @@ class _blood_pressureState extends State<bp_chart_doctor> {
         finaList.add(new _ChartData("${a.bp_date.month.toString().padLeft(2,"0")}/${a.bp_date.day.toString().padLeft(2,"0")}",double.parse(a.systolic_pressure), double.parse(a.diastolic_pressure)));
         // }
       });
-      // DateTime now = DateTime.now();
-      // int start = now.day;
-      // for(var i = 0 ; i < 14; i++) {
-      //   //addchart
-      //   start = now.day - i;
-      //   bool check1 = false;
-      //   print("START HERE = " + start.toString());
-      //   print("CHECK START = " + check1.toString());
-      //   _ChartData thisData = new _ChartData(double.parse(i.toString()), 0, 0);
-      //   int divider = 1;
-      //   for(var j = 0 ; j < thisbp.length; j++){
-      //     if(start == 0) start = 30;
-      //     if(start == thisbp[j].bp_date.day){
-      //       print("BP DATE = " + thisbp[j].bp_date.day.toString());
-      //       print("START = " + start.toString());
-      //       check1 = true;
-      //       divider++;
-      //       thisData.y = thisData.y + double.parse(thisbp[j].systolic_pressure);
-      //       thisData.y2 = thisData.y2 + double.parse(thisbp[j].diastolic_pressure);
-      //     }
-      //   }
-      //   print("CHECK END = " + check1.toString());
-      //   if(check1){
-      //     thisData.y = thisData.y/divider;
-      //     thisData.y2 = thisData.y2/divider;
-      //     finaList.add(thisData);
-      //   }else{
-      //     thisData.x = null;
-      //     thisData.y = null;
-      //     thisData.y2 = null;
-      //     finaList.add(thisData);
-      //   }
-      //
-      //   print(finaList.length.toString() + "<<<<<<<");
-      // }
 
       finalLine = getLine(finaList);
     });
   }
 }
 
-formatthis(String s) {
-  print(s);
-  return "";
-}
-
-axis(AxisLabelRenderDetails details) {
-
-  // return ChartAxisLabel(returnDate(int.parse(details.value.toString())), details.textStyle);
-  return ChartAxisLabel(returnDate(details.value.toString()), details.textStyle);
-}
-String returnDate(String num){
-  DateTime now = DateTime.now();
-  String a = "";
-  a = now.month.toString() + "/" + (double.parse(now.day.toString()) - double.parse(num)).toString().replaceAll(".0", "");
-  return a;
-}
+  axis(AxisLabelRenderDetails details) {
+    return ChartAxisLabel(returnDate(details.value.toString()), details.textStyle);
+  }
+  String returnDate(String num){
+    DateTime now = DateTime.now();
+    String a = "";
+    a = now.month.toString() + "/" + (double.parse(now.day.toString()) - double.parse(num)).toString().replaceAll(".0", "");
+    return a;
+  }
 
 
 List<LineSeries<_ChartData, String>> getLine(List<_ChartData> thisList){

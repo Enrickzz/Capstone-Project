@@ -12,19 +12,20 @@ import 'package:my_app/models/FitBitToken.dart';
 
 import 'package:my_app/models/nutritionixApi.dart';
 
-class DietView extends StatefulWidget {
+class DietViewDoc extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
+  final String userUID;
 
-  const DietView(
-      {Key key, this.animationController, this.animation})
+  const DietViewDoc(
+      {Key key, this.animationController, this.animation, this.userUID})
       : super(key: key);
 
   @override
-  State<DietView> createState() => _DietViewState();
+  State<DietViewDoc> createState() => _DietViewDocState();
 }
 
-class _DietViewState extends State<DietView> {
+class _DietViewDocState extends State<DietViewDoc> {
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<FoodIntake> breakfast_list = [];
@@ -116,7 +117,7 @@ class _DietViewState extends State<DietView> {
                   children: <Widget>[
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 16, left: 16, right: 16),
+                      const EdgeInsets.only(top: 16, left: 16, right: 16),
                       child: Row(
                         children: <Widget>[
                           Expanded(
@@ -141,9 +142,9 @@ class _DietViewState extends State<DietView> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
@@ -153,7 +154,7 @@ class _DietViewState extends State<DietView> {
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontFamily:
-                                                      FitnessAppTheme.fontName,
+                                                  FitnessAppTheme.fontName,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 16,
                                                   letterSpacing: -0.1,
@@ -164,9 +165,9 @@ class _DietViewState extends State<DietView> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                              CrossAxisAlignment.end,
                                               children: <Widget>[
                                                 SizedBox(
                                                   width: 28,
@@ -176,17 +177,17 @@ class _DietViewState extends State<DietView> {
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4, bottom: 3),
+                                                  const EdgeInsets.only(
+                                                      left: 4, bottom: 3),
                                                   child: Text(
                                                     total_cal.toString(),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
-                                                          FitnessAppTheme
-                                                              .fontName,
+                                                      FitnessAppTheme
+                                                          .fontName,
                                                       fontWeight:
-                                                          FontWeight.w600,
+                                                      FontWeight.w600,
                                                       fontSize: 16,
                                                       color: FitnessAppTheme
                                                           .darkerText,
@@ -195,17 +196,17 @@ class _DietViewState extends State<DietView> {
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4, bottom: 3),
+                                                  const EdgeInsets.only(
+                                                      left: 4, bottom: 3),
                                                   child: Text(
                                                     'Kcal',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
-                                                          FitnessAppTheme
-                                                              .fontName,
+                                                      FitnessAppTheme
+                                                          .fontName,
                                                       fontWeight:
-                                                          FontWeight.w600,
+                                                      FontWeight.w600,
                                                       fontSize: 12,
                                                       letterSpacing: -0.2,
                                                       color: FitnessAppTheme
@@ -240,9 +241,9 @@ class _DietViewState extends State<DietView> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
@@ -252,7 +253,7 @@ class _DietViewState extends State<DietView> {
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontFamily:
-                                                      FitnessAppTheme.fontName,
+                                                  FitnessAppTheme.fontName,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 16,
                                                   letterSpacing: -0.1,
@@ -263,9 +264,9 @@ class _DietViewState extends State<DietView> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                              CrossAxisAlignment.end,
                                               children: <Widget>[
                                                 SizedBox(
                                                   width: 28,
@@ -275,17 +276,17 @@ class _DietViewState extends State<DietView> {
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4, bottom: 3),
+                                                  const EdgeInsets.only(
+                                                      left: 4, bottom: 3),
                                                   child: Text(
                                                     burned.toStringAsFixed(0),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
-                                                          FitnessAppTheme
-                                                              .fontName,
+                                                      FitnessAppTheme
+                                                          .fontName,
                                                       fontWeight:
-                                                          FontWeight.w600,
+                                                      FontWeight.w600,
                                                       fontSize: 16,
                                                       color: FitnessAppTheme
                                                           .darkerText,
@@ -294,17 +295,17 @@ class _DietViewState extends State<DietView> {
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8, bottom: 3),
+                                                  const EdgeInsets.only(
+                                                      left: 8, bottom: 3),
                                                   child: Text(
                                                     'Kcal',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
-                                                          FitnessAppTheme
-                                                              .fontName,
+                                                      FitnessAppTheme
+                                                          .fontName,
                                                       fontWeight:
-                                                          FontWeight.w600,
+                                                      FontWeight.w600,
                                                       fontSize: 12,
                                                       letterSpacing: -0.2,
                                                       color: FitnessAppTheme
@@ -348,16 +349,16 @@ class _DietViewState extends State<DietView> {
                                       ),
                                       child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        MainAxisAlignment.center,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
                                             total_cal.toString(),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:
-                                                  FitnessAppTheme.fontName,
+                                              FitnessAppTheme.fontName,
                                               fontWeight: FontWeight.normal,
                                               fontSize: 24,
                                               letterSpacing: 0.0,
@@ -370,7 +371,7 @@ class _DietViewState extends State<DietView> {
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:
-                                                  FitnessAppTheme.fontName,
+                                              FitnessAppTheme.fontName,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12,
                                               letterSpacing: 0.0,
@@ -444,7 +445,7 @@ class _DietViewState extends State<DietView> {
                                     width: 70,
                                     decoration: BoxDecoration(
                                       color:
-                                          HexColor('#87A0E5').withOpacity(0.2),
+                                      HexColor('#87A0E5').withOpacity(0.2),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(4.0)),
                                     ),
@@ -477,7 +478,7 @@ class _DietViewState extends State<DietView> {
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                       color:
-                                          FitnessAppTheme.grey.withOpacity(0.5),
+                                      FitnessAppTheme.grey.withOpacity(0.5),
                                     ),
                                   ),
                                 ),
@@ -523,7 +524,7 @@ class _DietViewState extends State<DietView> {
                                               height: 4,
                                               decoration: BoxDecoration(
                                                 gradient:
-                                                    LinearGradient(colors: [
+                                                LinearGradient(colors: [
                                                   HexColor('#F56E98')
                                                       .withOpacity(0.1),
                                                   HexColor('#F56E98'),
@@ -594,7 +595,7 @@ class _DietViewState extends State<DietView> {
                                               height: 4,
                                               decoration: BoxDecoration(
                                                 gradient:
-                                                    LinearGradient(colors: [
+                                                LinearGradient(colors: [
                                                   HexColor('#F1B440')
                                                       .withOpacity(0.1),
                                                   HexColor('#F1B440'),
@@ -639,9 +640,8 @@ class _DietViewState extends State<DietView> {
     );
   }
   void getBFoodIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
+
+    final readFoodIntake = databaseReference.child('users/' + widget.userUID + '/intake/food_intake/Breakfast');
     String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -659,9 +659,8 @@ class _DietViewState extends State<DietView> {
     });
   }
   void getLFoodIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
+
+    final readFoodIntake = databaseReference.child('users/' + widget.userUID + '/intake/food_intake/Lunch');
     String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -679,9 +678,8 @@ class _DietViewState extends State<DietView> {
     });
   }
   void getDFoodIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
+
+    final readFoodIntake = databaseReference.child('users/' + widget.userUID + '/intake/food_intake/Dinner');
     String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -699,9 +697,8 @@ class _DietViewState extends State<DietView> {
     });
   }
   void getSFoodIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
+
+    final readFoodIntake = databaseReference.child('users/' + widget.userUID + '/intake/food_intake/Snacks');
     String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -723,11 +720,10 @@ class _DietViewState extends State<DietView> {
     DateTime a = DateTime.now();
     String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
     Activities act = new Activities();
-    final User user = auth.currentUser;
-    final uid = user.uid;
+
     FitBitToken test;
     String accessToken = "";
-    final readFitbit = databaseReference.child('users/' + uid + "/fitbittoken/");
+    final readFitbit = databaseReference.child('users/' + widget.userUID + "/fitbittoken/");
     readFitbit.once().then((DataSnapshot snapshot) {
       print("SNAPSHOT");
       print(snapshot.value);

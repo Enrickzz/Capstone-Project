@@ -20,7 +20,8 @@ class heart_rate_sf_doctor extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
   final String userUID;
-  heart_rate_sf_doctor({Key key, this.animationController, this.animation, this.userUID})
+
+  heart_rate_sf_doctor({Key key, this.animationController, this.animation,this.userUID })
       : super(key: key);
 
   @override

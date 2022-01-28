@@ -133,16 +133,6 @@ class _my_sleepState extends State<my_sleep>
       });
 
       print(snapshot.value);
-      // print("TEST = " + test.accessToken);
-      // if(test != null){
-      //   checkToken(test.accessToken);
-      //   Future.delayed(const Duration(milliseconds: 2000), () {
-      //     setState(() { isLoading = false;
-      //     });
-      //   });
-      // }else{
-      //
-      // }
     });
 
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(

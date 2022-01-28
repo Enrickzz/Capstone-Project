@@ -96,20 +96,20 @@ class _my_water_doctorState extends State<my_water_doctor>
       ),
     );
 
-    listViews.add(
-      TitleView(
-        titleTxt: 'Water Intake',
-        subTxt: 'View Log',
-        redirect: 5,
-        userType: "Doctor",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-        userUID: widget.userUID
-      ),
-    );
+    // listViews.add(
+    //   TitleView(
+    //     titleTxt: 'Water Intake',
+    //     subTxt: 'View Log',
+    //     redirect: 5,
+    //     userType: "Doctor",
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    //         parent: widget.animationController,
+    //         curve:
+    //         Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+    //     animationController: widget.animationController,
+    //     userUID: widget.userUID
+    //   ),
+    // );
 
     listViews.add(
       WaterViewDoctor(

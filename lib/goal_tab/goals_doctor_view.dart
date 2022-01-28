@@ -197,7 +197,7 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
           tabBody = my_exercises_doctor(animationController: animationController, userUID: widget.userUID),
           tabBody = my_weight_doctor(animationController: animationController, userUID: widget.userUID),
           tabBody = my_water_doctor(animationController: animationController, userUID: widget.userUID),
-          tabBody = my_sleep_doctor(animationController: animationController),
+          tabBody = my_sleep_doctor(animationController: animationController,userUID: widget.userUID),
           tabBody = my_stress(animationController: animationController),
         ],
       ),

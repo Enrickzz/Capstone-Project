@@ -20,7 +20,8 @@ class oxygen_barchartsfDoctor extends StatefulWidget{
   final Animation<double> animation;
   final String fitbitToken;
   final String userUID;
-  oxygen_barchartsfDoctor({Key key, this.animationController, this.animation, this.fitbitToken, this.userUID})
+
+  oxygen_barchartsfDoctor({Key key, this.animationController, this.animation, this.fitbitToken,this.userUID})
       : super(key: key);
 
   @override

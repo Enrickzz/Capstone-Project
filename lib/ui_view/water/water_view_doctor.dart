@@ -144,18 +144,9 @@ class _WaterViewDoctorState extends State<WaterViewDoctor> with TickerProviderSt
                                       left: 4),
                                   child: GestureDetector(
                                     onTap: () {
-                                      showModalBottomSheet(context: context,
-                                        isScrollControlled: true,
-                                        builder: (context) => SingleChildScrollView(child: Container(
-                                          padding: EdgeInsets.only(
-                                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                                          child: change_water_intake_goal_doctor(),
-                                        ),
-                                        ),
-                                      );
                                     },
                                     child: Text(
-                                      'Edit Goal',
+                                      '',
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
                                         fontSize: 16,

@@ -20,7 +20,8 @@ class blood_glucose_sf_doctor extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
   final String userUID;
-  blood_glucose_sf_doctor({Key key, this.animationController, this.animation, this.userUID})
+
+  blood_glucose_sf_doctor({Key key, this.animationController, this.animation,this.userUID })
       : super(key: key);
 
   @override
