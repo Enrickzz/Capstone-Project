@@ -78,10 +78,11 @@ class _blood_pressureState extends State<bp_chart> {
                                     overflowMode: LegendItemOverflowMode.wrap,
                                     position: LegendPosition.top),
                                 primaryXAxis: CategoryAxis(
-                                  isVisible: false,
+                                  isVisible: true,
                                     edgeLabelPlacement: EdgeLabelPlacement.shift,
-                                    interval: 30,
-                                    //maximum: 30,
+                                    interval: 1,
+                                    axisLabelFormatter: (AxisLabelRenderDetails details) => axis(details),
+                                    maximum: 7,
                                     minimum: 0,
                                     majorGridLines: const MajorGridLines(width: 0)),
                                 title: ChartTitle(text: 'Blood Pressure'),
@@ -107,6 +108,18 @@ class _blood_pressureState extends State<bp_chart> {
     );
   }
 }
+
+axis(AxisLabelRenderDetails details) {
+
+  // return ChartAxisLabel(returnDate(int.parse(details.value.toString())), details.textStyle);
+  return ChartAxisLabel(returnDate(details.value.toString()), details.textStyle);
+}
+String returnDate(String num){
+  DateTime now = DateTime.now();
+  String a = "";
+  a = now.month.toString() + "/" + (double.parse(now.day.toString()) - double.parse(num)).toString().replaceAll(".0", "");
+  return a;
+}
 Future<void> getData() async{
   final FirebaseAuth auth = FirebaseAuth.instance;
   final User user = auth.currentUser;
@@ -122,8 +135,10 @@ Future<void> getData() async{
     temp.forEach((jsonString) {
       thisbp.add(new Blood_Pressure.fromJson(jsonString));
       Blood_Pressure a = new Blood_Pressure.fromJson(jsonString);
-      finaList.add(new _ChartData(double.parse(count.toString()),double.parse(a.systolic_pressure), double.parse(a.diastolic_pressure)));
-      count++;
+      if(count <= 14){
+        finaList.add(new _ChartData(double.parse(count.toString()),double.parse(a.systolic_pressure), double.parse(a.diastolic_pressure)));
+        count++;
+      }
     });
     finalLine = getLine(finaList);
     for(var i = 0; i < finaList.length;i++){
