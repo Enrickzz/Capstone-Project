@@ -50,6 +50,7 @@ import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
 import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
 import 'goal_tab/meals/meals_list.dart';
 import 'patient_list/support_system/suppsystem_patient_list.dart';
+import 'package:my_app/ui_view/blood_pressure/blood_pressure_groupbarchart_sf.dart';
 
 
 
@@ -242,12 +243,12 @@ class _AppSignInState extends State<AppSignIn> {
               alignment: Alignment.center,
               child: GestureDetector(
 
-                  onTap: (){
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => music_rec()),
-                    // );
-                  },
+                  // onTap: (){
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => blood_pressure_chart()),
+                  //   );
+                  // },
                   child: Image.asset("assets/images/heartistant_logo.png", width: 280, height: 180,)),
 
             ),

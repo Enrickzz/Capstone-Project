@@ -9,11 +9,6 @@ class SleepScoreVerticalBarLabelChart extends StatelessWidget {
   const SleepScoreVerticalBarLabelChart({Key key, this.animationController, this.animation})
       : super(key: key);
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     List<charts.Series> thisseries;
