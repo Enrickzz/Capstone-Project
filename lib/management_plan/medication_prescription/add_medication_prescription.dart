@@ -704,7 +704,8 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 prescription_list[prescription_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, [prescription_list, 1]);
+                              Medication_Prescription newPres = new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated));
+                              Navigator.pop(context, newPres);
                             });
 
                           } catch(e) {

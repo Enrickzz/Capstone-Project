@@ -101,9 +101,6 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
                     isThreeLine: true,
                     dense: true,
                     selected: true,
-
-
-
                     onTap: (){
                       Navigator.push(
                         context,

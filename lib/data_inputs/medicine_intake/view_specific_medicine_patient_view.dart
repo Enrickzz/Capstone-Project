@@ -326,16 +326,6 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
                 final uid = user.uid;
                 int initial_length = listtemp.length;
                 listtemp.removeAt(widget.index);
-                // List<int> delete_list = [];
-                // for(int i = 0; i < listtemp.length; i++){
-                //   if(_selected[i]){
-                //     delete_list.add(i);
-                //   }
-                // }
-                // delete_list.sort((a,b) => b.compareTo(a));
-                // for(int i = 0; i < delete_list.length; i++){
-                //   listtemp.removeAt(delete_list[i]);
-                // }
                 /// delete fields
                 for(int i = 1; i <= initial_length; i++){
                   final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + i.toString());

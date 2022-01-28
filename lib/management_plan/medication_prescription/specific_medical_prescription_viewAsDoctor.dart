@@ -39,8 +39,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificPrescriptionViewAsDoctor extends StatefulWidget {
-  SpecificPrescriptionViewAsDoctor({Key key, this.title, this.userUID, this.index}) : super(key: key);
+  SpecificPrescriptionViewAsDoctor({Key key, this.title, this.userUID, this.index, this.thispres}) : super(key: key);
   final String title;
+  final Medication_Prescription thispres;
   String userUID;
   int index;
   @override
@@ -105,25 +106,12 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                   padding: EdgeInsets.only(right: 20.0),
                   child: GestureDetector(
                     onTap: () {
-                      _showMyDialogDelete();
-                      // showModalBottomSheet(context: context,
-                      //   isScrollControlled: true,
-                      //   builder: (context) => SingleChildScrollView(child: Container(
-                      //     padding: EdgeInsets.only(
-                      //         bottom: MediaQuery.of(context).viewInsets.bottom),
-                      //     child: add_supplement_prescription(thislist: supptemp),
-                      //   ),
-                      //   ),
-                      // ).then((value) =>
-                      //     Future.delayed(const Duration(milliseconds: 1500), (){
-                      //       setState((){
-                      //         print("setstate supplement prescription");
-                      //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                      //         if(value != null){
-                      //           supptemp = value[0];
-                      //         }
-                      //       });
-                      //     }));
+                      int initLeng = prestemp.length;
+                      _showMyDialogDelete().then((value) {
+                        if(initLeng != prestemp.length){
+                          Navigator.pop(context, value);
+                        }
+                      });
                     },
                     child: Icon(
                       Icons.delete,
@@ -134,282 +122,303 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
           ],
 
         ),
-        body:  Scrollbar(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-
-                Column(
-                  children: [
-                    Visibility(
-                      visible: prescribedDoctor,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children:<Widget>[
-                              Expanded(
-                                child: Text( "Prescribed Medicine",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color:Color(0xFF4A6572),
-                                    )
+        body:  WillPopScope(
+          onWillPop:()async{
+            Navigator.pop(context,prestemp);
+            return true;
+          },
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      Visibility(
+                        visible: prescribedDoctor,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:<Widget>[
+                                Expanded(
+                                  child: Text( "Prescribed Medicine",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color:Color(0xFF4A6572),
+                                      )
+                                  ),
                                 ),
-                              ),
-                              InkWell(
-                                  highlightColor: Colors.transparent,
-                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                  onTap: () {
-                                    showModalBottomSheet(context: context,
-                                      isScrollControlled: true,
-                                      builder: (context) => SingleChildScrollView(child: Container(
-                                        padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                                        child: edit_medication_prescription(thislist: prestemp),
-                                      ),
-                                      ),
-                                    ).then((value) =>
-                                        Future.delayed(const Duration(milliseconds: 1500), (){
-                                          setState((){
-                                            print("setstate medication prescription");
-                                            print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                            if(value != null){
-                                              prestemp = value[0];
-                                            }
-                                          });
-                                        }));
-                                  },
-                                  // child: Padding(
-                                  // padding: const EdgeInsets.only(left: 8),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text( "Edit",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.normal,
-                                            color:Color(0xFF2633C5),
+                                InkWell(
+                                    highlightColor: Colors.transparent,
+                                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                    onTap: () {
+                                      showModalBottomSheet(context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) => SingleChildScrollView(child: Container(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                                          child: edit_medication_prescription(thislist: prestemp, index: widget.index, userID: widget.userUID),
+                                        ),
+                                        ),
+                                      ).then((value) =>
+                                          Future.delayed(const Duration(milliseconds: 1500), (){
+                                            setState((){
+                                              if(value != null){
+                                                print(value.toString());
+                                                Medication_Prescription newMP = value;
+                                                generic_name = newMP.generic_name;
+                                                dosage = newMP.dosage.toString();
+                                                unit = newMP.prescription_unit.toString();
+                                                frequency = newMP.intake_time;
+                                                special_instruction = newMP.special_instruction;
+                                                startDate = newMP.startdate.toString();
+                                                endDate = newMP.enddate.toString();
+                                                prescribedBy = doctor.lastname;
+                                                dateCreated = newMP.datecreated.toString();
+                                                brand_name =newMP.branded_name;
+                                                startDate = "${newMP.startdate.month}/${newMP.startdate.day}/${newMP.startdate.year}";
+                                                endDate = "${newMP.enddate.month}/${newMP.enddate.day}/${newMP.enddate.year}";
+                                                dateCreated = "${newMP.datecreated.month}/${newMP.datecreated.day}/${newMP.datecreated.year}";
 
-                                          )
-                                      ),
+                                                prestemp[widget.index].generic_name = newMP.generic_name;
+                                                prestemp[widget.index].dosage = newMP.dosage;
+                                                prestemp[widget.index].prescription_unit = newMP.prescription_unit.toString();
+                                                prestemp[widget.index].intake_time = newMP.intake_time;
+                                                prestemp[widget.index].special_instruction = newMP.special_instruction;
+                                                prestemp[widget.index].startdate = newMP.startdate;
+                                                prestemp[widget.index].enddate = newMP.enddate;
+                                                prestemp[widget.index].prescribedBy = doctor.lastname;
+                                                prestemp[widget.index].datecreated = newMP.datecreated;
+                                                prestemp[widget.index].branded_name =newMP.branded_name;
+                                                setState(() {
 
-                                      // SizedBox(
-                                      //   height: 38,
-                                      //   width: 26,
-                                      //   // child: Icon(
-                                      //   //   Icons.arrow_forward,
-                                      //   //   color: FitnessAppTheme.darkText,
-                                      //   //   size: 18,
-                                      //   // ),
-                                      // ),
-                                    ],
-                                  )
-                                // )
-                              )
-                            ]
+                                                });
+                                              }
+                                            });
+                                          }));
+                                    },
+                                    // child: Padding(
+                                    // padding: const EdgeInsets.only(left: 8),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text( "Edit",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal,
+                                              color:Color(0xFF2633C5),
+
+                                            )
+                                        ),
+                                      ],
+                                    )
+                                  // )
+                                )
+                              ]
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 400,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
+                      SizedBox(height: 10.0),
+                      Container(
+                          height: 400,
+                          // height: 500, if may contact number and email
+                          // margin: EdgeInsets.only(bottom: 50),
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    child: Material(
+                                      child: Center(
+                                        child: Container(
+                                            width: 340,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 20.0)],
+                                            )
+                                        ),
                                       ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Brand Name",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(brand_name,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text("Generic Name",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(generic_name,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Dosage",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
+                                    )),
+                                Positioned(
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(18.0),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text("Brand Name",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
                                                 ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(dosage + " " + unit,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
                                               ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("How many times a day?",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(frequency,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Special Instructions",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(special_instruction,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Text("Date Period",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(startDate + ' - ' + endDate,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 150,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Prescribed by",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text("Dr." + prescribedBy,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Date Prescribed",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
+                                              SizedBox(height: 8),
+                                              Text(brand_name,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
                                                 ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(dateCreated,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
                                               ),
-                                            ),
-
-                                          ]
+                                              SizedBox(height: 8),
+                                              Text("Generic Name",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(generic_name,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  Text("Dosage",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(dosage + " " + unit,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Text("How many times a day?",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(frequency,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Text("Special Instructions",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(special_instruction,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Text("Date Period",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(startDate + ' - ' + endDate,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ]
+                                        ),
                                       ),
-                                    ),
-                                  ))
-                            ]
-                        )
-                    ),
-                  ],
-                ),
+                                    ))
+                              ]
+                          )
+                      ),
+                      SizedBox(height: 10.0),
+                      Container(
+                          height: 150,
+                          // height: 500, if may contact number and email
+                          // margin: EdgeInsets.only(bottom: 50),
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    child: Material(
+                                      child: Center(
+                                        child: Container(
+                                            width: 340,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 20.0)],
+                                            )
+                                        ),
+                                      ),
+                                    )),
+                                Positioned(
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(18.0),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text("Prescribed by",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text("Dr." + prescribedBy,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  Text("Date Prescribed",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(dateCreated,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
 
-              ],
+                                            ]
+                                        ),
+                                      ),
+                                    ))
+                              ]
+                          )
+                      ),
+                    ],
+                  ),
+
+                ],
+              ),
             ),
           ),
         )
@@ -446,6 +455,11 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
       });
       if(prestemp[index].prescribedBy == uid){
         prescribedDoctor = true;
+      }
+      for(var i=0;i<prestemp.length/2;i++){
+        var temp = prestemp[i];
+        prestemp[i] = prestemp[prestemp.length-1-i];
+        prestemp[prestemp.length-1-i] = temp;
       }
       brand_name = prestemp[index].branded_name;
       generic_name = prestemp[index].generic_name;
@@ -512,14 +526,13 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                     "datecreated": "${prestemp[i].datecreated.month.toString().padLeft(2,"0")}/${prestemp[i].datecreated.day.toString().padLeft(2,"0")}/${prestemp[i].datecreated.year}",
                   });
                 }
-                Navigator.of(context).pop();
-
+                Navigator.pop(context, prestemp);
               },
             ),
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
             ),
           ],

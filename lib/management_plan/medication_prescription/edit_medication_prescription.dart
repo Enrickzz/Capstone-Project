@@ -347,43 +347,7 @@ class _editMedicationPrescriptionState extends State<edit_medication_prescriptio
                       )
                     ],
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(0.0),
-                  //   child: Container(
-                  //     padding: EdgeInsets.only(left: 16, right: 16),
-                  //     decoration: BoxDecoration(
-                  //         border: Border.all(color: Colors.grey, width: 1),
-                  //         borderRadius: BorderRadius.circular(15)
-                  //     ),
-                  //     child: DropdownButton(
-                  //       dropdownColor: Colors.white,
-                  //       hint: Text("Take how many times a day? "),
-                  //       icon: Icon(Icons.arrow_drop_down),
-                  //       style: TextStyle(
-                  //           color: Colors.black,
-                  //           fontSize: 14
-                  //       ),
-                  //       iconSize: 36,
-                  //       isExpanded: true,
-                  //       underline: SizedBox(),
-                  //       value: valueChooseInterval,
-                  //       onChanged: (newValue){
-                  //         setState(() {
-                  //           valueChooseInterval = newValue;
-                  //         });
-                  //       },
-                  //
-                  //       items: listItemSymptoms.map((valueItem){
-                  //         return DropdownMenuItem(
-                  //           value: valueItem,
-                  //           child: Text(valueItem),
-                  //         );
-                  //       },
-                  //       ).toList(),
-                  //
-                  //     ),
-                  //   ),
-                  // ),
+
                   SizedBox(height: 8.0),
                   Row(
                     children: [
@@ -489,139 +453,7 @@ class _editMedicationPrescriptionState extends State<edit_medication_prescriptio
                     ],
                   ),
 
-                  // SizedBox(height: 27.0),
-                  // GestureDetector(
-                  //   onTap: ()async{
-                  //     await showDatePicker(
-                  //         context: context,
-                  //         initialDate: new DateTime.now(),
-                  //         firstDate: new DateTime(1900),
-                  //         lastDate: new DateTime(2100)
-                  //     ).then((value){
-                  //       if(value != null && value != prescriptionDate){
-                  //         setState(() {
-                  //           prescriptionDate = value;
-                  //           isDateSelected = true;
-                  //           startdate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
-                  //         });
-                  //         startDate.text = startdate + "\r";
-                  //       }
-                  //     });
-                  //   },
-                  //   child: AbsorbPointer(
-                  //     child: TextFormField(
-                  //       controller: startDate,
-                  //       showCursor: false,
-                  //       decoration: InputDecoration(
-                  //         border: OutlineInputBorder(
-                  //           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //           borderSide: BorderSide(
-                  //             width:0,
-                  //             style: BorderStyle.none,
-                  //           ),
-                  //         ),
-                  //         filled: true,
-                  //         fillColor: Color(0xFFF2F3F5),
-                  //         hintStyle: TextStyle(
-                  //             color: Color(0xFF666666),
-                  //             fontFamily: defaultFontFamily,
-                  //             fontSize: defaultFontSize),
-                  //         hintText: "Start Date",
-                  //         prefixIcon: Icon(
-                  //           Icons.calendar_today,
-                  //           color: Color(0xFF666666),
-                  //           size: defaultIconSize,
-                  //         ),
-                  //       ),
-                  //       validator: (val) => val.isEmpty ? 'Select Start Date' : null,
-                  //       onChanged: (val){
-                  //
-                  //         print(startDate);
-                  //         setState((){
-                  //         });
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 8.0),
-                  // GestureDetector(
-                  //   onTap: ()async{
-                  //     await showDatePicker(
-                  //         context: context,
-                  //         initialDate: new DateTime.now(),
-                  //         firstDate: new DateTime(1900),
-                  //         lastDate: new DateTime(2100)
-                  //     ).then((value){
-                  //       if(value != null && value != prescriptionDate){
-                  //         setState(() {
-                  //           prescriptionDate = value;
-                  //           isDateSelected = true;
-                  //           enddate = "${prescriptionDate.month}/${prescriptionDate.day}/${prescriptionDate.year}";
-                  //         });
-                  //         endDate.text = enddate + "\r";
-                  //       }
-                  //     });
-                  //   },
-                  //   child: AbsorbPointer(
-                  //     child: TextFormField(
-                  //       controller: endDate,
-                  //       showCursor: false,
-                  //       decoration: InputDecoration(
-                  //         border: OutlineInputBorder(
-                  //           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //           borderSide: BorderSide(
-                  //             width:0,
-                  //             style: BorderStyle.none,
-                  //           ),
-                  //         ),
-                  //         filled: true,
-                  //         fillColor: Color(0xFFF2F3F5),
-                  //         hintStyle: TextStyle(
-                  //             color: Color(0xFF666666),
-                  //             fontFamily: defaultFontFamily,
-                  //             fontSize: defaultFontSize),
-                  //         hintText: "End Date",
-                  //         prefixIcon: Icon(
-                  //           Icons.calendar_today,
-                  //           color: Color(0xFF666666),
-                  //           size: defaultIconSize,
-                  //         ),
-                  //       ),
-                  //       validator: (val) => val.isEmpty ? 'Select End Date' : null,
-                  //       onChanged: (val){
-                  //
-                  //         print(endDate);
-                  //         setState((){
-                  //         });
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(height: 8.0),
-                  // TextFormField(
-                  //   showCursor: true,
-                  //   decoration: InputDecoration(
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(
-                  //         width:0,
-                  //         style: BorderStyle.none,
-                  //       ),
-                  //     ),
-                  //     filled: true,
-                  //     fillColor: Color(0xFFF2F3F5),
-                  //     hintStyle: TextStyle(
-                  //         color: Color(0xFF666666),
-                  //         fontFamily: defaultFontFamily,
-                  //         fontSize: defaultFontSize),
-                  //     hintText: "Intake Time",
-                  //   ),
-                  //   validator: (val) => val.isEmpty ? 'Enter Intake Time' : null,
-                  //   onChanged: (val){
-                  //     setState(() => intake_time = val);
-                  //   },
-                  // ),
-                  // SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
                     decoration: InputDecoration(
@@ -656,6 +488,7 @@ class _editMedicationPrescriptionState extends State<edit_medication_prescriptio
                         ),
                         color: Colors.blue,
                         onPressed:() {
+                          print("CANCELLED DIS");
                           Navigator.pop(context);
                         },
                       ),

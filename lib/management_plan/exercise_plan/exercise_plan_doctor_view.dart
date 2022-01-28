@@ -95,10 +95,11 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                     ).then((value) =>
                         Future.delayed(const Duration(milliseconds: 1500), (){
                           setState((){
-                            print("setstate medication prescription");
-                            print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                             if(value != null){
-                              extemp = value[0];
+                              setState(() {
+                                extemp.insert(0, value);
+                                doctor_names.insert(0, doctor.lastname);
+                              });
                             }
                           });
                         }));
@@ -143,8 +144,15 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificExercisePrescriptionViewAsDoctor(userUID: widget.userUID, index: index)),
-                      );
+                        MaterialPageRoute(builder: (context) => SpecificExercisePrescriptionViewAsDoctor(thislist: extemp,userUID: widget.userUID, index: index)),
+                      ).then((value) {
+                        if(value!= null){
+                          extemp = value;
+                          setState(() {
+
+                          });
+                        }
+                      });
                     }
 
                 ),
@@ -188,6 +196,11 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
             doctor_names.add(doctor.lastname);
           }
         });
+      }
+      for(var i=0;i<extemp.length/2;i++){
+        var temp = extemp[i];
+        extemp[i] = extemp[extemp.length-1-i];
+        extemp[extemp.length-1-i] = temp;
       }
     });
   }

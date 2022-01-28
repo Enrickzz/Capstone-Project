@@ -85,16 +85,16 @@ class _medication_prescriptionState extends State<medication_prescription> {
                       child: add_medication_prescription(thislist: prestemp, userUID: widget.userUID),
                     ),
                     ),
-                  ).then((value) =>
-                      Future.delayed(const Duration(milliseconds: 1500), (){
-                        setState((){
-                          print("setstate medication prescription");
-                          print(value);
-                          if(value != null){
-                            prestemp = value[0];
-                          }
-                        });
-                      }));
+                  ).then((value) {
+                    if(value != null){
+                      Medication_Prescription newP = value;
+                      prestemp.insert(0, newP);
+                      doctor_names.insert(0, doctor.lastname);
+                      setState(() {
+
+                      });
+                    }
+                  });
                 },
                 child: Icon(
                   Icons.add,
@@ -134,8 +134,17 @@ class _medication_prescriptionState extends State<medication_prescription> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor(userUID: widget.userUID, index: index)),
-                      );
+                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor(thispres: prestemp[index],userUID: widget.userUID, index: index)),
+                      ).then((value) {
+                        if(value != null){
+                          print("length b4 = " + prestemp.length.toString());
+                          prestemp = value;
+                          print("length af = " +prestemp.length.toString());
+                          setState(() {
+                            prestemp = value;
+                          });
+                        }
+                      });
                     }
 
                 ),
@@ -180,6 +189,11 @@ class _medication_prescriptionState extends State<medication_prescription> {
             print("length " + doctor_names.length.toString());
           }
         });
+      }
+      for(var i=0;i<prestemp.length/2;i++){
+        var temp = prestemp[i];
+        prestemp[i] = prestemp[prestemp.length-1-i];
+        prestemp[prestemp.length-1-i] = temp;
       }
     });
   }

@@ -307,13 +307,15 @@ class _steps_viewState extends State<steps_view> {
     DateTime a = DateTime.now();
     String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
     Activities act = new Activities();
-    var result = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&beforeDate=$y-$m-$d"),
+    var result = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&afterDate=$y-$m-$d"),
         headers: {
           'Authorization': "Bearer $accessToken",
         });
     List<Activities> activities=[];
     activities = ActivitiesFitbit.fromJson(jsonDecode(result.body)).activities;
     act = activities[0];
+    print("GETFITBIT");
+    print(act.steps);
 
     if(act.distance != null){
       distance = act.distance.toString();

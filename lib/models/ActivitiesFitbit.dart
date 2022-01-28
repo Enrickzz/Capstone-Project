@@ -99,7 +99,7 @@ class Activities {
         : null;
     originalDuration = json['originalDuration'];
     originalStartTime = json['originalStartTime'];
-    pace = json['pace'];
+    pace = double.parse(json['pace'].toString());
     speed = double.parse(json['speed'].toString());
     startTime = json['startTime'];
     steps = json['steps'];
@@ -270,7 +270,7 @@ class HeartRateZones {
       {this.caloriesOut, this.max, this.min, this.minutes, this.name});
 
   HeartRateZones.fromJson(Map<String, dynamic> json) {
-    caloriesOut = json['caloriesOut'];
+    caloriesOut = double.parse(json['caloriesOut'].toString());
     max = json['max'];
     min = json['min'];
     minutes = json['minutes'];
