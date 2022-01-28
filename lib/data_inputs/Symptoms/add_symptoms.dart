@@ -598,7 +598,7 @@ class _addSymptomsState extends State<add_symptoms> {
                             valueChooseSymptom = other_name;
                           }
                           final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + 1.toString());
-                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true.toString(),"symptom_trigger": symptom_felt, "recurring": checkboxStatus, "imgRef": fileName.toString()});
+                          symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(), "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": "true","symptom_trigger": symptom_felt, "recurring": checkboxStatus, "imgRef": fileName.toString()});
                           print("Added Symptom Successfully! " + uid);
 
                         }
@@ -615,7 +615,7 @@ class _addSymptomsState extends State<add_symptoms> {
                               }
                               final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
                               symptomRef.set({"symptom_name": valueChooseSymptom.toString(), "intensity_lvl": intesity_lvl.toString(), "symptom_felt": valueChooseGeneralArea.toString(),
-                                "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": true, "symptom_trigger": symptom_felt,
+                                "symptom_date": symptom_date.toString(), "symptom_time": symptom_time.toString(), "symptom_isActive": "true", "symptom_trigger": symptom_felt,
                                 "recurring": checkboxStatus, "imgRef": fileName.toString()});
 
                               print("Added Symptom Successfully! " + uid);
