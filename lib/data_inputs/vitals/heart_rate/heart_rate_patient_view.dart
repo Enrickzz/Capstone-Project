@@ -244,6 +244,21 @@ class _heart_rateState extends State<heart_rate> {
 
   }
 
+  Color getMyColorHeartRate(int indication) {
+    if(indication <= 40){
+      return Colors.orange;
+    }
+    else if(indication >= 41 && indication <= 100){
+      return Colors.green;
+
+    }
+    else{
+      return Colors.red;
+    }
+    return Colors.blue;
+
+  }
+
   DataTable _createDataTable() {
     return DataTable(
       columns: _createColumns(),
@@ -280,7 +295,10 @@ class _heart_rateState extends State<heart_rate> {
         },
       ),
       DataColumn(label: Text('Time')),
-      DataColumn(label: Text('Heart Rate')),
+      DataColumn(label: InkWell(onTap: (){
+        showLegend();
+
+      },child: Text('Heart Rate'))),
       DataColumn(label: Text('Status'))
 
     ];
@@ -293,7 +311,7 @@ class _heart_rateState extends State<heart_rate> {
         cells: [
           DataCell(Text(getDateFormatted(hr.hr_date.toString()))),
           DataCell(Text(getTimeFormatted(hr.hr_time.toString()))),
-          DataCell(Text(hr.bpm.toString())),
+          DataCell(Text(hr.bpm.toString(), style: TextStyle(color: getMyColorHeartRate(hr.bpm)),)),
           DataCell(Text(hr.hr_status, style: TextStyle(color: getMyColor(hr.hr_status)),))
         ],
         selected: _selected[index],
@@ -374,6 +392,69 @@ class _heart_rateState extends State<heart_rate> {
             ),
             TextButton(
               child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> showLegend() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Heart Rate'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                SizedBox(height: 5,),
+
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.orange,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Low')
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.green,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Normal')
+                  ],
+                ),
+
+
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.red,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('High')
+                  ],
+                )
+
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+
+            TextButton(
+              child: Text('Got it'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
