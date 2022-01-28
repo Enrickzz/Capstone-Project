@@ -129,22 +129,22 @@ class _steps_viewState extends State<steps_view> {
                                   ),
                                 ),
                               ),
-                              // Padding(
-                              //   padding: const EdgeInsets.all(4.0),
-                              //   child: CustomPaint(
-                              //     painter: CurvePainter(
-                              //         colors: [
-                              //           FitnessAppTheme.nearlyDarkBlue,
-                              //           HexColor("#8A98E8"),
-                              //           HexColor("#8A98E8")
-                              //         ],
-                              //         angle: 60*.036),
-                              //     child: SizedBox(
-                              //       width: 108,
-                              //       height: 108,
-                              //     ),
-                              //   ),
-                              // )
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: CustomPaint(
+                                  painter: CurvePainter(
+                                      colors: [
+                                        FitnessAppTheme.nearlyDarkBlue,
+                                        HexColor("#8A98E8"),
+                                        HexColor("#8A98E8")
+                                      ],
+                                      angle: int.parse(steps)*.036),
+                                  child: SizedBox(
+                                    width: 108,
+                                    height: 108,
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         ),

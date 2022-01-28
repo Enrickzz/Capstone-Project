@@ -55,6 +55,8 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
 
+  List options = ['Manual Input', 'iHealth'];
+
 
   @override
   void initState(){
@@ -68,6 +70,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
+
 
     return Container(
         key: _formKey,
@@ -93,178 +96,243 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                   Divider(),
                   SizedBox(height: 8),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          // controller: unitValue,
-                          showCursor: true,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(
-                                width:0,
-                                style: BorderStyle.none,
+                  DefaultTabController(
+                    length: 2,
+                    initialIndex: 0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        TabBar(
+                          labelColor: Colors.black,
+                          tabs: <Widget>[
+                            Tab(
+                              text: "Manual Input",
+                            ),
+                            Tab(
+                              text: "iHealth",
+                            )
+                          ],
+                        ),
+                        Container(
+                          height: 250,
+                          padding: EdgeInsets.only(top: 20),
+                          child: TabBarView(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // controller: unitValue,
+                                          showCursor: true,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderSide: BorderSide(
+                                                width:0,
+                                                style: BorderStyle.none,
+                                              ),
+                                            ),
+                                            filled: true,
+                                            fillColor: Color(0xFFF2F3F5),
+                                            hintStyle: TextStyle(
+                                                color: Color(0xFF666666),
+                                                fontFamily: defaultFontFamily,
+                                                fontSize: defaultFontSize),
+                                            hintText: "Blood Glucose Level",
+                                          ),
+                                          validator: (val) => val.isEmpty ? 'Enter Blood Glucose Level' : null,
+                                          onChanged: (val){
+                                            setState(() => glucose = double.parse(val));
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(width: 8,),
+                                      ToggleButtons(
+                                        isSelected: isSelected,
+                                        highlightColor: Colors.blue,
+                                        borderRadius: BorderRadius.circular(10),
+                                        children: <Widget> [
+                                          Padding (
+                                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                                              child: Text('mmol/L')
+                                          ),
+                                          Padding (
+                                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                                              child: Text('mg/dL')
+                                          ),
+                                        ],
+                                        onPressed:(int newIndex){
+                                          setState(() {
+                                            for (int index = 0; index < isSelected.length; index++){
+                                              if (index == newIndex) {
+                                                isSelected[index] = true;
+                                                print("mmol/L");
+                                              } else {
+                                                isSelected[index] = false;
+                                                print("mg/dL");
+                                              }
+                                            }
+                                            // if(newIndex == 0 && unitStatus != "mmol/L"){
+                                            if(newIndex == 0){
+                                              print("mmol/L");
+                                              unitStatus = "mmol/L";
+                                              // unitValue.text = glucose.toStringAsFixed(2);
+                                              // print(glucose.toStringAsFixed(2));
+                                            }
+                                            // if(newIndex == 1 && unitStatus != "mg/dL"){
+                                            if(newIndex == 1){
+                                              print("mg/dL");
+                                              unitStatus = "mg/dL";
+                                              // glucose = glucose / 18;
+                                              // unitValue.text = glucose.toStringAsFixed(2);
+                                              // print(glucose.toStringAsFixed(2));
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 8.0),
+                                  TextFormField(
+                                    showCursor: true,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                        borderSide: BorderSide(
+                                          width:0,
+                                          style: BorderStyle.none,
+                                        ),
+                                      ),
+                                      filled: true,
+                                      fillColor: Color(0xFFF2F3F5),
+                                      hintStyle: TextStyle(
+                                          color: Color(0xFF666666),
+                                          fontFamily: defaultFontFamily,
+                                          fontSize: defaultFontSize),
+                                      hintText: "Number of Hours since last meal",
+                                    ),
+                                    validator: (val) => val.isEmpty ? 'Enter status when you took your blood glucose level' : null,
+                                    onChanged: (val){
+                                      setState(() => lastMeal = val);
+                                    },
+                                  ),
+                                  SizedBox(height: 8.0),
+                                  GestureDetector(
+                                    onTap: ()async{
+                                      await showDatePicker(
+                                        context: context,
+                                        initialDate: new DateTime.now(),
+                                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
+                                        lastDate: new DateTime.now(),
+                                      ).then((value){
+                                        if(value != null && value != glucoseDate){
+                                          setState(() {
+                                            glucoseDate = value;
+                                            isDateSelected = true;
+                                            glucose_date = "${glucoseDate.month}/${glucoseDate.day}/${glucoseDate.year}";
+                                          });
+                                          dateValue.text = glucose_date + "\r";
+                                        }
+                                      });
+
+                                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                                      await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay(
+                                            hour: TimeOfDay.now().hour,
+                                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
+                                                .toInt()),
+                                      ).then((value){
+                                        if(value != null && value != time){
+                                          setState(() {
+                                            time = value;
+                                            final hours = time.hour.toString().padLeft(2,'0');
+                                            final min = time.minute.toString().padLeft(2,'0');
+                                            glucose_time = "$hours:$min";
+                                            dateValue.text += "$hours:$min";
+                                            print("data value " + dateValue.text);
+                                          });
+                                        }
+                                      });
+                                    },
+                                    child: AbsorbPointer(
+                                      child: TextFormField(
+                                        controller: dateValue,
+                                        showCursor: false,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                            borderSide: BorderSide(
+                                              width:0,
+                                              style: BorderStyle.none,
+                                            ),
+                                          ),
+                                          filled: true,
+                                          fillColor: Color(0xFFF2F3F5),
+                                          hintStyle: TextStyle(
+                                              color: Color(0xFF666666),
+                                              fontFamily: defaultFontFamily,
+                                              fontSize: defaultFontSize),
+                                          hintText: "Date and Time",
+                                          prefixIcon: Icon(
+                                            Icons.calendar_today,
+                                            color: Color(0xFF666666),
+                                            size: defaultIconSize,
+                                          ),
+                                        ),
+                                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                                        onChanged: (val){
+
+                                          print(dateValue);
+                                          setState((){
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+
+                                ],
                               ),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3F5),
-                            hintStyle: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize),
-                            hintText: "Blood Glucose Level",
-                          ),
-                          validator: (val) => val.isEmpty ? 'Enter Blood Glucose Level' : null,
-                          onChanged: (val){
-                            setState(() => glucose = double.parse(val));
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 8,),
-                      ToggleButtons(
-                        isSelected: isSelected,
-                        highlightColor: Colors.blue,
-                        borderRadius: BorderRadius.circular(10),
-                        children: <Widget> [
-                          Padding (
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('mmol/L')
-                          ),
-                          Padding (
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('mg/dL')
-                          ),
-                        ],
-                        onPressed:(int newIndex){
-                          setState(() {
-                            for (int index = 0; index < isSelected.length; index++){
-                              if (index == newIndex) {
-                                isSelected[index] = true;
-                                print("mmol/L");
-                              } else {
-                                isSelected[index] = false;
-                                print("mg/dL");
-                              }
-                            }
-                            // if(newIndex == 0 && unitStatus != "mmol/L"){
-                            if(newIndex == 0){
-                              print("mmol/L");
-                              unitStatus = "mmol/L";
-                              // unitValue.text = glucose.toStringAsFixed(2);
-                              // print(glucose.toStringAsFixed(2));
-                            }
-                            // if(newIndex == 1 && unitStatus != "mg/dL"){
-                            if(newIndex == 1){
-                              print("mg/dL");
-                              unitStatus = "mg/dL";
-                              // glucose = glucose / 18;
-                              // unitValue.text = glucose.toStringAsFixed(2);
-                              // print(glucose.toStringAsFixed(2));
-                            }
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  TextFormField(
-                    showCursor: true,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Number of Hours since last meal",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter status when you took your blood glucose level' : null,
-                    onChanged: (val){
-                      setState(() => lastMeal = val);
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  GestureDetector(
-                    onTap: ()async{
-                      await showDatePicker(
-                          context: context,
-                        initialDate: new DateTime.now(),
-                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
-                        lastDate: new DateTime.now(),
-                      ).then((value){
-                        if(value != null && value != glucoseDate){
-                          setState(() {
-                            glucoseDate = value;
-                            isDateSelected = true;
-                            glucose_date = "${glucoseDate.month}/${glucoseDate.day}/${glucoseDate.year}";
-                          });
-                          dateValue.text = glucose_date + "\r";
-                        }
-                      });
+                              Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(top: 55.0),
+                                        alignment: Alignment.center,
+                                        child: Image.asset("assets/images/bgdevice.png",),
 
-                      final initialTime = TimeOfDay(hour:12, minute: 0);
-                      await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay(
-                            hour: TimeOfDay.now().hour,
-                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
-                                .toInt()),
-                      ).then((value){
-                        if(value != null && value != time){
-                          setState(() {
-                            time = value;
-                            final hours = time.hour.toString().padLeft(2,'0');
-                            final min = time.minute.toString().padLeft(2,'0');
-                            glucose_time = "$hours:$min";
-                            dateValue.text += "$hours:$min";
-                            print("data value " + dateValue.text);
-                          });
-                        }
-                      });
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: dateValue,
-                        showCursor: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
-                            ),
+                                      ),
+                                      Container(
+                                        child: Text(
+                                          'Connect your iHealth account',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8,),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 16.0),
+                                        child: Image.asset(
+                                          "assets/images/ihealth.png",
+                                          width: 70,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: "Date and Time",
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color(0xFF666666),
-                            size: defaultIconSize,
-                          ),
-                        ),
-                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
-                        onChanged: (val){
-
-                          print(dateValue);
-                          setState((){
-                          });
-                        },
-                      ),
+                        )
+                      ],
                     ),
                   ),
                   SizedBox(height: 24.0),
@@ -326,7 +394,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                   print("Added Blood Glucose Successfully! " + uid);
                                 });
 
-                                };
+                              };
 
 
                             });
