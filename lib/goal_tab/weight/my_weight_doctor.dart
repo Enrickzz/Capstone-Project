@@ -21,7 +21,7 @@ import 'package:my_app/ui_view/weight/weight_progress.dart';
 import 'package:my_app/ui_view/weight/weight_progress_doctor.dart';
 import 'package:my_app/ui_view/weight/weight_trend_doctor.dart';
 import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
+import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';

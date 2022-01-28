@@ -11,8 +11,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:my_app/models/nutritionixApi.dart';
-import '../fitness_app_theme.dart';
-import '../main.dart';
+import '../../fitness_app_theme.dart';
+import '../../main.dart';
 
 class oxygen_barchartsf extends StatefulWidget{
   final AnimationController animationController;
@@ -96,7 +96,7 @@ class oxygenSaturationState extends State<oxygen_barchartsf> {
                         ): new SfCartesianChart(
                           // Setting isTransposed to true to render vertically.
                           // isTransposed: true,
-                          title: ChartTitle(text: 'Oxygen Saturation past 14 days'),
+                          title: ChartTitle(text: 'Oxygen Saturation'),
                           legend: Legend(isVisible: false),
                           series: <ColumnSeries<calorie_intake_data, String>>[
                             ColumnSeries<calorie_intake_data, String>(

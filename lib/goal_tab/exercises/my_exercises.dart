@@ -21,7 +21,7 @@ import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
+import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';

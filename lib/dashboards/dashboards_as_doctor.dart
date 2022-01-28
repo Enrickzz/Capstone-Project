@@ -1,5 +1,9 @@
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/blood_glucose/blood_glucose_linechartsf_doctor.dart';
+import 'package:my_app/ui_view/blood_pressure/bp_chart_doctor.dart';
+import 'package:my_app/ui_view/body_measurement/body_measurement_doctor_view.dart';
+import 'package:my_app/ui_view/heart_rate/heart_rate_linesf_doctor.dart';
+import 'package:my_app/ui_view/oxygen_saturation/oxygen_barchartsf_doctor.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -10,7 +14,7 @@ import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
+import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
@@ -75,19 +79,26 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Your program',
-        subTxt: 'Details',
+        titleTxt: 'Body measurement',
+        subTxt: 'Today',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
-            Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
-        userUID: widget.userUID,
       ),
     );
-
     listViews.add(
-      heartrate(
+      BodyMeasurementViewDoctor(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+    listViews.add(
+      bp_chart_doctor(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -95,16 +106,6 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
         animationController: widget.animationController,
       ),
     );
-    listViews.add(
-      DietView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
     listViews.add(
         blood_glucose_sf_doctor( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
@@ -112,6 +113,25 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
           animationController: widget.animationController,
         ));
+
+    listViews.add(
+        oxygen_barchartsfDoctor( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
+
+    listViews.add(
+        heart_rate_sf_doctor( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ));
+
+
+
 
     listViews.add(
       bp_chart(
@@ -131,66 +151,7 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
         animationController: widget.animationController,
       ),
     );
-    listViews.add(
-      calorie_intake(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-    listViews.add(
-      glucose_levels(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
 
-    listViews.add(
-      WorkoutView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-    listViews.add(
-      RunningView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: 'Area of focus',
-        subTxt: 'more',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      AreaListView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController,
-                curve: Interval((1 / count) * 5, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController,
-      ),
-    );
   }
 
   Future<bool> getData() async {
@@ -241,9 +202,8 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
           return ListView.builder(
             controller: scrollController,
             padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
+              top: MediaQuery.of(context).padding.top +
+                  12,
               bottom: 62 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,

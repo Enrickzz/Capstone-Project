@@ -13,7 +13,8 @@ import 'package:my_app/ui_view/VerticalBC_Target.dart';
 import 'package:my_app/ui_view/VerticalBarChart.dart';
 import 'package:my_app/ui_view/blood_glucose/blood_glucose_linechartsf_patient.dart';
 import 'package:my_app/ui_view/blood_pressure/blood_pressure_groupbarchart_sf.dart';
-import 'package:my_app/ui_view/oxygen_barchartsf.dart';
+import 'package:my_app/ui_view/heart_rate/heart_rate_linsesf_patient.dart';
+import 'package:my_app/ui_view/oxygen_saturation/oxygen_barchartsf.dart';
 import 'package:my_app/ui_view/water/water_view.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
@@ -31,7 +32,7 @@ import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/spotify_connect.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/bp_chart.dart';
+import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -176,6 +177,15 @@ class _DashboardsState extends State<Dashboards>
           ),
         );
         listViews.add(
+          bp_chart(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
+        listViews.add(
             blood_glucose_sf_patient( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                 parent: widget.animationController,
                 curve:
@@ -183,20 +193,14 @@ class _DashboardsState extends State<Dashboards>
               animationController: widget.animationController,
             ));
 
-        listViews.add(
-            BGTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-              animationController: widget.animationController,
-            ));
-        listViews.add(
-            OxyTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-              animationController: widget.animationController,
-            ));
+
+        // listViews.add(
+        //     OxyTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        //         parent: widget.animationController,
+        //         curve:
+        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        //       animationController: widget.animationController,
+        //     ));
 
         listViews.add(
             oxygen_barchartsf( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -206,48 +210,21 @@ class _DashboardsState extends State<Dashboards>
               animationController: widget.animationController,
             ));
 
+        // listViews.add(
+        //     HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        //         parent: widget.animationController,
+        //         curve:
+        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        //       animationController: widget.animationController,
+        //     ));
         listViews.add(
-            HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            heart_rate_sf_patient( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                 parent: widget.animationController,
                 curve:
                 Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
               animationController: widget.animationController,
             ));
 
-
-        listViews.add(
-          bp_chart(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-            animationController: widget.animationController,
-          ),
-        );
-
-
-        // listViews.add(
-        //   GroupedBarChartBloodPressure(
-        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        //         parent: widget.animationController,
-        //         curve:
-        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        //     animationController: widget.animationController,
-        //   ),
-        // );
-
-
-
-
-        listViews.add(
-          glucose_levels(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-            animationController: widget.animationController,
-          ),
-        );
 
 
 

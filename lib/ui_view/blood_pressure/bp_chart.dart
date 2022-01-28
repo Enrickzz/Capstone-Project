@@ -10,8 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:my_app/models/users.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../fitness_app_theme.dart';
-import '../main.dart';
+import '../../fitness_app_theme.dart';
+import '../../main.dart';
 class bp_chart extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
