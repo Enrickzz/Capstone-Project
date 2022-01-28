@@ -40,6 +40,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<ExPlan> extemp = [];
+  List<Connection> connection_list = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   String purpose = "";
   String dateCreated = "";
@@ -51,8 +52,10 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
     super.initState();
     // final User user = auth.currentUser;
     // final uid = user.uid;
+    connection_list.clear();
     extemp.clear();
-    getExercise();
+    connection_list = widget.connection_list;
+    getExercise(connection_list);
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -177,11 +180,11 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
       return "$hours:$min";
     }
   }
-  void getExercise() {
+  void getExercise(List<Connection> connections) {
     final User user = auth.currentUser;
     final uid = user.uid;
+    List<int> delete_list = [];
     String userUID = widget.userUID;
-    print("get exercise");
     final readExPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
     readExPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -198,11 +201,43 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
           }
         });
       }
-      for(var i=0;i<extemp.length/2;i++){
-        var temp = extemp[i];
-        extemp[i] = extemp[extemp.length-1-i];
-        extemp[extemp.length-1-i] = temp;
-      }
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        setState(() {
+          for(int i = 0; i < extemp.length; i++){
+            if(extemp[i].prescribedBy != uid){
+              for(int j = 0; j < connection_list.length; j++){
+                if(extemp[i].prescribedBy == connection_list[j].createdBy){
+                  if(connection_list[j].explan != "true"){
+                    /// dont add
+                    delete_list.add(i);
+                  }
+                  else{
+                    /// add
+                  }
+                }
+              }
+            }
+            // final readDoctor = databaseReference.child('users/' + extemp[i].prescribedBy + '/personal_info/');
+            // readDoctor.once().then((DataSnapshot snapshot){
+            //   Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+            //   if(temp != null){
+            //     doctor = Users.fromJson(temp);
+            //     doctor_names.add(doctor.lastname);
+            //   }
+            // });
+          }
+        });
+        delete_list.sort((a, b) => b.compareTo(a));
+        for(int i = 0; i < delete_list.length; i++){
+          extemp.removeAt(delete_list[i]);
+        }
+        for(var i=0;i<extemp.length/2;i++){
+          var temp = extemp[i];
+          extemp[i] = extemp[extemp.length-1-i];
+          extemp[extemp.length-1-i] = temp;
+        }
+      });
+
     });
   }
 }

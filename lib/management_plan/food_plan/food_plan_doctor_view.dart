@@ -58,6 +58,8 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
       setState(() {
         isLoading =false;
         print("setstate");
+        print("foodPtemp.length");
+        print(foodPtemp.length);
       });
     });
   }
@@ -186,7 +188,6 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
     final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print(snapshot.value);
       temp.forEach((jsonString) {
         // foodPtemp.add(FoodPlan.fromJson(jsonString));
         FoodPlan a = FoodPlan.fromJson(jsonString);
@@ -200,43 +201,46 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
           }
         });
       });
-      for(int i = 0; i < foodPtemp.length; i++){
-        print("CONNECTION LIST");
-        print(connection_list.length);
-        if(foodPtemp[i].prescribedBy != uid){
-          for(int j = 0; j < connection_list.length; j++){
-            if(foodPtemp[i].prescribedBy == connection_list[j].createdBy){
-              if(connection_list[j].medpres != "true"){
-                /// dont add
-                delete_list.add(i);
-              }
-              else{
-                /// add
+
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        setState(() {
+          for(int i = 0; i < foodPtemp.length; i++){
+            if(foodPtemp[i].prescribedBy != uid){
+              for(int j = 0; j < connection_list.length; j++){
+                if(foodPtemp[i].prescribedBy == connection_list[j].createdBy){
+                  if(connection_list[j].foodplan != "true"){
+                    /// dont add
+                    delete_list.add(i);
+                  }
+                  else{
+                    /// add
+                  }
+                }
               }
             }
-          }
-        }
-        final readDoctor = databaseReference.child('users/' + foodPtemp[i].prescribedBy + '/personal_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-          if(temp != null){
-            doctor = Users.fromJson(temp);
-            doctor_names.add(doctor.lastname);
-            print("lastname doctor " + doctor.lastname);
-            print("length " + doctor_names.length.toString());
+            final readDoctor = databaseReference.child('users/' + foodPtemp[i].prescribedBy + '/personal_info/');
+            readDoctor.once().then((DataSnapshot snapshot){
+              Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+              if(temp != null){
+                doctor = Users.fromJson(temp);
+                doctor_names.add(doctor.lastname);
+              }
+            });
           }
         });
-      }
-      delete_list.sort((a, b) => b.compareTo(a));
-      for(int i = 0; i < delete_list.length; i++){
-        foodPtemp.removeAt(delete_list[i]);
-      }
+        delete_list.sort((a, b) => b.compareTo(a));
+        for(int i = 0; i < delete_list.length; i++){
+          foodPtemp.removeAt(delete_list[i]);
+        }
 
-      for(var i=0;i<foodPtemp.length/2;i++){
-        var temp = foodPtemp[i];
-        foodPtemp[i] = foodPtemp[foodPtemp.length-1-i];
-        foodPtemp[foodPtemp.length-1-i] = temp;
-      }
+        for(var i=0;i<foodPtemp.length/2;i++){
+          var temp = foodPtemp[i];
+          foodPtemp[i] = foodPtemp[foodPtemp.length-1-i];
+          foodPtemp[foodPtemp.length-1-i] = temp;
+        }
+      });
+
+
     });
   }
 }

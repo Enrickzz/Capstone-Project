@@ -40,6 +40,7 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Vitals> vitalstemp = [];
+  List<Connection> connection_list = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   String purpose = "";
   String dateCreated = "";
@@ -52,8 +53,10 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
     super.initState();
     // final User user = auth.currentUser;
     // final uid = user.uid;
+    connection_list.clear();
     vitalstemp.clear();
-    getVitals();
+    connection_list = widget.connection_list;
+    getVitals(connection_list);
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -183,9 +186,10 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
       return "$hours:$min";
     }
   }
-  void getVitals() {
+  void getVitals(List<Connection> connections) {
     final User user = auth.currentUser;
     final uid = user.uid;
+    List<int> delete_list = [];
     String userUID = widget.userUID;
     final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
@@ -193,26 +197,47 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
       temp.forEach((jsonString) {
         vitalstemp.add(Vitals.fromJson(jsonString));
       });
-      for(int i = 0; i < vitalstemp.length; i++){
-        final readDoctor = databaseReference.child('users/' + vitalstemp[i].prescribedBy + '/personal_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-          if(temp != null){
-            doctor = Users.fromJson(temp);
-            doctor_names.add(doctor.lastname);
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        setState(() {
+          for(int i = 0; i < vitalstemp.length; i++){
+            if(vitalstemp[i].prescribedBy != uid){
+              for(int j = 0; j < connection_list.length; j++){
+                if(vitalstemp[i].prescribedBy == connection_list[j].createdBy){
+                  if(connection_list[j].vitals != "true"){
+                    /// dont add
+                    delete_list.add(i);
+                  }
+                  else{
+                    /// add
+                  }
+                }
+              }
+            }
+            final readDoctor = databaseReference.child('users/' + vitalstemp[i].prescribedBy + '/personal_info/');
+            readDoctor.once().then((DataSnapshot snapshot){
+              Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+              if(temp != null){
+                doctor = Users.fromJson(temp);
+                doctor_names.add(doctor.lastname);
+              }
+            });
           }
         });
-      }
-      for(var i=0;i<vitalstemp.length/2;i++){
-        var temp = vitalstemp[i];
-        vitalstemp[i] = vitalstemp[vitalstemp.length-1-i];
-        vitalstemp[vitalstemp.length-1-i] = temp;
-      }
-      for(var i=0;i<doctor_names.length/2;i++){
-        var temp = doctor_names[i];
-        doctor_names[i] = doctor_names[doctor_names.length-1-i];
-        doctor_names[doctor_names.length-1-i] = temp;
-      }
+        delete_list.sort((a, b) => b.compareTo(a));
+        for(int i = 0; i < delete_list.length; i++){
+          vitalstemp.removeAt(delete_list[i]);
+        }
+        for(var i=0;i<vitalstemp.length/2;i++){
+          var temp = vitalstemp[i];
+          vitalstemp[i] = vitalstemp[vitalstemp.length-1-i];
+          vitalstemp[vitalstemp.length-1-i] = temp;
+        }
+        for(var i=0;i<doctor_names.length/2;i++){
+          var temp = doctor_names[i];
+          doctor_names[i] = doctor_names[doctor_names.length-1-i];
+          doctor_names[doctor_names.length-1-i] = temp;
+        }
+      });
     });
   }
 
