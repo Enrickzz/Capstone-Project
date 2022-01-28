@@ -359,6 +359,7 @@ class _AppSignUpState extends State<management_plan> {
     );
   }
   void getPrivacy () {
+    List<int> delete_list = [];
     final User user = auth.currentUser;
     final uid = user.uid;
     String userUID = widget.userUID;
@@ -374,15 +375,24 @@ class _AppSignUpState extends State<management_plan> {
         readUserType.once().then((DataSnapshot usersnapshot){
           Map<String, dynamic> temp2 = jsonDecode(jsonEncode(usersnapshot.value));
           usertype = Users.fromJson(temp2);
-          if(usertype == "Doctor"){
+          if(usertype.usertype == "Doctor"){
             final readDocConnection = databaseReference.child('users/' + connections[i].uid + '/personal_info/connections/');
             readDocConnection.once().then((DataSnapshot datasnapshot){
               List<dynamic> temp3 = jsonDecode(jsonEncode(datasnapshot.value));
-              if(temp3.contains(userUID)){
                 temp3.forEach((jsonString) {
                   doctor_connections.add(Connection.fromJson2(jsonString));
                 });
-              }
+
+                // for(int i = 0; i < doctor_connections.length; i++){
+                //   if(doctor_connections[i].uid != userUID){
+                //     delete_list.add(i);
+                //   }
+                // }
+                // delete_list.sort((a, b) => b.compareTo(a));
+                // for(int i = 0; i < delete_list.length; i++){
+                //   doctor_connections.removeAt(delete_list[i]);
+                // }
+
             });
           }
         });

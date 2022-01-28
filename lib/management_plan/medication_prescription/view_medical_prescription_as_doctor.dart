@@ -49,7 +49,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
     connection_list.clear();
     prestemp.clear();
     connection_list = widget.connection_list;
-    getMedicalPrescription();
+    getMedicalPrescription(connection_list);
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -171,9 +171,9 @@ class _medication_prescriptionState extends State<medication_prescription> {
       return "$hours:$min";
     }
   }
-  void getMedicalPrescription() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
+  void getMedicalPrescription(List<Connection> connections) {
+    final User user = auth.currentUser;
+    final uid = user.uid;
     List<int> delete_list = [];
     var userUID = widget.userUID;
     final readprescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
@@ -183,17 +183,22 @@ class _medication_prescriptionState extends State<medication_prescription> {
         prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
       for(int i = 0; i < prestemp.length; i++){
-        for(int j = 0; j < connection_list.length; j++){
-          if(prestemp[i].prescribedBy == connection_list[j].createdBy){
-            if(connection_list[j].medpres != "true"){
-              /// dont add
-              delete_list.add(i);
-            }
-            else{
-              /// add
+        print("CONNECTION LIST");
+        print(connection_list.length);
+        if(prestemp[i].prescribedBy != uid){
+          for(int j = 0; j < connection_list.length; j++){
+            if(prestemp[i].prescribedBy == connection_list[j].createdBy){
+              if(connection_list[j].medpres != "true"){
+                /// dont add
+                delete_list.add(i);
+              }
+              else{
+                /// add
+              }
             }
           }
         }
+
 
         final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
         readDoctor.once().then((DataSnapshot snapshot){

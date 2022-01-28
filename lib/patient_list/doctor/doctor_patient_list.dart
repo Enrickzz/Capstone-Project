@@ -54,8 +54,8 @@ class _PatientListState extends State<PatientList>  {
   List<Connection> doctor_connections = [];
 
   List<String> uidlist = [];
-  List<Users> userlist=[];
-  List<Additional_Info> userAddInfo =[];
+  List<Users> userlist = [];
+  List<Additional_Info> userAddInfo = [];
   List names = [];
   List pp_imgs = [];
   List diseases=[];
@@ -97,6 +97,15 @@ class _PatientListState extends State<PatientList>  {
         diseases = widget.diseaselist;
         uidlist = widget.uidList;
         pp_imgs = widget.pp_img;
+        List temp = [];
+        List temp2 = [];
+        List temp3 = [];
+        temp = diseases;
+        temp2 = uidlist;
+        temp3 = pp_imgs;
+        diseases = temp.toSet().toList();
+        uidlist = temp2.toSet().toList();
+        pp_imgs = temp3.toSet().toList();
       }
       print("ASDASDASD");
     }else{
@@ -294,14 +303,22 @@ class _PatientListState extends State<PatientList>  {
                   disease_name += info.disease[j] + ", ";
                 }
               }
+              List temp3 = [];
+              temp3 = diseases;
               diseases.add(disease_name);
-              print(diseases);
+              diseases = temp3.toSet().toList();
             });
-
+            List temp = [];
+            List temp2 = [];
             names.add(patient.firstname + " " + patient.lastname);
             pp_imgs.add(patient.pp_img);
+            temp = names;
+            temp2 = pp_imgs;
+            names = temp.toSet().toList();
+            pp_imgs = temp2.toSet().toList();
           });
         }
+
       });
     });
     setState(() {

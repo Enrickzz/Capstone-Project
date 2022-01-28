@@ -19,8 +19,7 @@ class doctor_edit_management_privacy extends StatefulWidget {
   final List<Medication_Prescription> thislist;
   final String userUID;
   final String doctorUID;
-  final Connection connection;
-  doctor_edit_management_privacy({this.thislist, this.userUID, this.doctorUID, this.connection});
+  doctor_edit_management_privacy({this.thislist, this.userUID, this.doctorUID});
   @override
   _editManagementPrivacyState createState() => _editManagementPrivacyState();
 }
@@ -39,21 +38,18 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
   @override
   void initState(){
     super.initState();
-    Connection doctorconnection = widget.connection;
-    print("Connection medpres");
-    print(doctorconnection.medpres);
-    if(doctorconnection.medpres.toLowerCase() == "true"){
-      isAllowedMedicalPrescription = true;
-    }
-    if(doctorconnection.foodplan.toLowerCase() == "true"){
-      isAllowedFoodPlan = true;
-    }
-    if(doctorconnection.explan.toLowerCase() == "true"){
-      isAllowedExercisePlan = true;
-    }
-    if(doctorconnection.vitals.toLowerCase() == "true"){
-      isAllowedVitalsRecording = true;
-    }
+    // if(doctorconnection.medpres.toLowerCase() == "true"){
+    //   isAllowedMedicalPrescription = true;
+    // }
+    // if(doctorconnection.foodplan.toLowerCase() == "true"){
+    //   isAllowedFoodPlan = true;
+    // }
+    // if(doctorconnection.explan.toLowerCase() == "true"){
+    //   isAllowedExercisePlan = true;
+    // }
+    // if(doctorconnection.vitals.toLowerCase() == "true"){
+    //   isAllowedVitalsRecording = true;
+    // }
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
       });
