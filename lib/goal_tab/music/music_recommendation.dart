@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -290,7 +291,10 @@ class _DetailsPageState extends State<music_rec> {
     });
   }
   void spotify() async{
+    final FirebaseAuth auth = FirebaseAuth.instance;
     String token = "";
+    final User user = auth.currentUser;
+    final uid = user.uid;
     final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
     final readFitbit = databaseReference.child('spotifyToken/');
     await readFitbit.once().then((DataSnapshot snapshot) {

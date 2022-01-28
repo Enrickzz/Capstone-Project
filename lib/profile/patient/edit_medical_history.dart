@@ -7,6 +7,7 @@ import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/models/checkbox_state.dart';
@@ -238,9 +239,11 @@ class _MedicalHistoryState extends State<edit_medical_history> {
                         final User user = auth.currentUser;
                         final uid = user.uid;
                         final personalInfoRef = databaseReference.child('users/' + uid + '/vitals/additional_info/');
-                        personalInfoRef.update({"disease": cvdChecboxStatus, "other_disease": additionalConditionChecboxStatus, "family_disease": familyConditionCheckboxStatus});
+                        personalInfoRef.update({"disease": cvdChecboxStatus, "other_disease": additionalConditionChecboxStatus,
+                          "family_disease": familyConditionCheckboxStatus});
+                        mdhChanged newMH = new mdhChanged(cvdChecboxStatus, additionalConditionChecboxStatus, familyConditionCheckboxStatus);
                         print("Edited Medical History Successfully! " + uid);
-                        Navigator.pop(context);
+                        Navigator.pop(context, newMH);
                       } catch(e) {
                         print("you got an error! $e");
                       }

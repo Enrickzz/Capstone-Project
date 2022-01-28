@@ -961,5 +961,36 @@ class PatientIds {
     return data;
   }
 }
+class infoChanged{
+  String firstname;
+  String lastname;
+  String weight;
+  String height;
+  String birthDateInString;
 
+  infoChanged(this.firstname, this.lastname, this.weight, this.height,
+      this.birthDateInString);
+
+}
+class mdhChanged{
+  List<String> disease;
+  List<String> other_disease;
+  List<String> family_disease;
+
+  mdhChanged(this.disease, this.other_disease, this.family_disease);
+}
+class allergyChanged{
+  List<String> foodAller;
+  List<String> drugAller;
+  List<String> otherAller;
+
+  allergyChanged(this.foodAller, this.drugAller, this.otherAller);
+}
+class otherChanged{
+  String valueLifestyle;
+  String goal;
+  String valueAlc;
+
+  otherChanged(this.valueLifestyle, this.goal, this.valueAlc);
+}
 

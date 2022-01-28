@@ -87,7 +87,7 @@ class _index3State extends State<index3>
   bool isLoading = true;
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
-
+  String bday= "";
   @override
   void initState() {
     super.initState();
@@ -124,6 +124,7 @@ class _index3State extends State<index3>
     });
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
+        bday = info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString();
         isLoading = false;
         print("setstate");
       });
@@ -302,13 +303,15 @@ class _index3State extends State<index3>
                                     ),
                                     ),
                                   ).then((value) =>
-                                      Future.delayed(const Duration(milliseconds: 1500), (){
+                                      Future.delayed(const Duration(milliseconds: 800), (){
                                         setState((){
-                                          print("setstate medication prescription");
-                                          print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                          // if(value != null){
-                                          //   templist = value[0];
-                                          // }
+                                          if(value != null){
+                                            infoChanged newPI = value;
+                                            DisplayName = newPI.firstname + " " + newPI.lastname;
+                                            bday = newPI.birthDateInString;
+                                            param.weight = double.parse(newPI.weight.toString());
+                                            param.height = double.parse(newPI.height.toString());
+                                          }
                                         });
                                       }));
                                 },
@@ -366,7 +369,7 @@ class _index3State extends State<index3>
                               ),
                             ),
                             SizedBox(height: 8),
-                            Text( info.birthday.month.toString() + "/" + info.birthday.day.toString() + "/" + info.birthday.year.toString(),
+                            Text( bday,
                               style: TextStyle(
                                   fontSize:16,
                                   fontWeight: FontWeight.bold
@@ -458,7 +461,53 @@ class _index3State extends State<index3>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => edit_medical_history()),
-                                  );
+                                  ).then((value) {
+                                    Future.delayed(const Duration(milliseconds: 800), (){
+                                      setState((){
+                                        if(value != null){
+                                          disease_name="";
+                                          family_disease='';
+                                          other_disease ='';
+                                          mdhChanged newMH = value;
+                                          info.disease = newMH.disease;
+                                          info.other_disease = newMH.other_disease;
+                                          info.family_disease = newMH.family_disease;
+                                          if(info.disease[0] != "NA"){
+                                            for(int j = 0; j < info.disease.length; j++){
+                                              if(j == info.disease.length - 1){
+                                                disease_name += info.disease[j];
+                                              }
+                                              else{
+                                                disease_name += info.disease[j] + ", ";
+                                              }
+                                            }
+                                          }
+                                          /// family disease name
+                                          if(info.family_disease[0] != "NA"){
+                                            for(int j = 0; j < info.family_disease.length; j++){
+                                              if(j == info.family_disease.length - 1){
+                                                family_disease += info.family_disease[j];
+                                              }
+                                              else{
+                                                family_disease += info.family_disease[j] + ", ";
+                                              }
+                                            }
+                                          }
+                                          /// other disease name
+                                          if(info.other_disease[0] != "NA"){
+                                            for(int j = 0; j < info.other_disease.length; j++){
+                                              if(j == info.other_disease.length - 1){
+                                                other_disease += info.other_disease[j];
+                                              }
+                                              else{
+                                                other_disease += info.other_disease[j] + ", ";
+                                              }
+                                            }
+                                          }
+                                        }
+                                      });
+                                    });
+                                  });
                                 },
                                 // child: Padding(
                                 // padding: const EdgeInsets.only(left: 8),
@@ -471,15 +520,6 @@ class _index3State extends State<index3>
                                           color:Color(0xFF2633C5),
                                         )
                                     ),
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
                                   ],
                                 )
                               // )
@@ -580,7 +620,69 @@ class _index3State extends State<index3>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => edit_allergies()),
-                                  );
+                                  ).then((value) {
+                                    Future.delayed(const Duration(milliseconds: 500),(){
+                                      setState(() {
+                                        allergyChanged newA = value;
+                                        food_aller ="";
+                                        drug_aller ="";
+                                        other_aller = "";
+                                        info.foodAller = newA.foodAller;
+                                        info.drugAller = newA.drugAller;
+                                        info.otherAller = newA.otherAller;
+                                        /// food allergies
+                                        if(!info.foodAller.contains("NA")){
+                                          if(info.foodAller.length == 1){
+                                            food_aller += info.foodAller[0];
+                                          }
+                                          else{
+                                            for(int j = 0; j < info.foodAller.length; j++){
+                                              if(j == info.foodAller.length - 1){
+                                                food_aller += info.foodAller[j];
+                                              }
+                                              else{
+                                                food_aller += info.foodAller[j] + ", ";
+                                              }
+                                            }
+                                          }
+                                        }
+
+                                        /// drug allergies
+                                        if(!info.drugAller.contains("NA")){
+                                          if(info.drugAller.length == 1){
+                                            drug_aller += info.drugAller[0];
+                                          }
+                                          else{
+                                            for(int j = 0; j < info.drugAller.length; j++){
+                                              if(j == info.drugAller.length - 1){
+                                                drug_aller += info.drugAller[j];
+                                              }
+                                              else{
+                                                drug_aller += info.drugAller[j] + ", ";
+                                              }
+                                            }
+                                          }
+                                        }
+
+                                        /// other allergies
+                                        if(!info.otherAller.contains("NA")){
+                                          if(info.otherAller.length == 1){
+                                            other_aller += info.otherAller[0];
+                                          }
+                                          else{
+                                            for(int j = 0; j < info.otherAller.length; j++){
+                                              if(j == info.otherAller.length - 1){
+                                                other_aller += info.otherAller[j];
+                                              }
+                                              else{
+                                                other_aller += info.otherAller[j] + ", ";
+                                              }
+                                            }
+                                          }
+                                        }
+                                      });
+                                    });
+                                  });
                                 },
                                 // child: Padding(
                                 // padding: const EdgeInsets.only(left: 8),
@@ -593,15 +695,6 @@ class _index3State extends State<index3>
                                           color:Color(0xFF2633C5),
                                         )
                                     ),
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
                                   ],
                                 )
                               // )
@@ -708,10 +801,19 @@ class _index3State extends State<index3>
                                     ),
                                     ),
                                   ).then((value) => setState((){
-                                    print("setstate symptoms");
-                                    // listtemp= value;
                                     if(value != null){
-                                      // listtemp = value;
+                                      otherChanged newO = value;
+                                      Future.delayed(const Duration(milliseconds: 800), (){
+                                        setState(() {
+                                          if(newO.goal == null || newO.goal == ""){
+                                          }else ave_sticks = newO.goal;
+                                          if(newO.valueLifestyle == null){
+                                          }else lifestyle = newO.valueLifestyle;
+                                          if(newO.valueAlc == "null"){
+                                          }else alcohol_freq = newO.valueAlc;
+
+                                        });
+                                      });
                                     }
                                   }));
                                 },
@@ -726,15 +828,7 @@ class _index3State extends State<index3>
                                           color:Color(0xFF2633C5),
                                         )
                                     ),
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
+
                                   ],
                                 )
                               // )
@@ -820,33 +914,7 @@ class _index3State extends State<index3>
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: <Widget>[
-                        // ListTile(
-                        //   title: Text("Personal Information"),
-                        //   trailing: Icon(Icons.keyboard_arrow_right),
-                        //   onTap:(){
-                        //
-                        //   },
-                        // ),
-                        // _buildDivider(),
-                        // ListTile(
-                        //   title: Text("Medical History"),
-                        //   trailing: Icon(Icons.keyboard_arrow_right),
-                        //   onTap:(){
-                        //
-                        //   },
-                        // ),
-                        // _buildDivider(),
-                        // ListTile(
-                        //   title: Text("Doctors' Prescriptions"),
-                        //   trailing: Icon(Icons.keyboard_arrow_right),
-                        //   onTap:(){
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(builder: (context) => medication_prescription_patientView()),
-                        //     );
-                        //
-                        //   },
-                        // ),
+
                         ListTile(
                           title: Text("Doctors' Orders"),
                           trailing: Icon(Icons.keyboard_arrow_right),

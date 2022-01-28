@@ -30,12 +30,13 @@ class _editPersonalInformation extends State<edit_personal_information> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
 
+
+  final _formKey = GlobalKey<FormState>();
+
   String firstname = "";
   String lastname = "";
   String weight = "";
   String height = "";
-
-  final _formKey = GlobalKey<FormState>();
 
   //birthday
   DateTime birthDate; // instance of DateTime
@@ -44,46 +45,22 @@ class _editPersonalInformation extends State<edit_personal_information> {
   var dateValue = TextEditingController();
 
 
-
-
-  // final FirebaseAuth auth = FirebaseAuth.instance;
-  // final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-  //
-  // DateFormat format = new DateFormat("MM/dd/yyyy");
-  // int count = 1;
-  // // List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
-  // List<FoodPlan> foodplan_list = new List<FoodPlan>();
-  // String purpose = "";
-  // String food = "";
-  // String quantity_food = "0";
-  // String consumption_time = "";
-  // String important_notes = "";
-  // String prescribedBy = "";
-  // DateTime now =  DateTime.now();
-  // List<String> listFoodTime = <String>[
-  //   'Breakfast', 'Lunch','Dinner', 'Snacks'
-  // ];
-  // String valueChooseFoodTime;
-
-
-
   @override
   Widget build(BuildContext context) {
-
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
 
     return Container(
         key: _formKey,
-        color:Color(0xff757575),
+        color: Color(0xff757575),
         child: Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft:Radius.circular(20),
-                topRight:Radius.circular(20),
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
             ),
             child: Column(
@@ -104,9 +81,10 @@ class _editPersonalInformation extends State<edit_personal_information> {
                           showCursor: true,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0)),
                               borderSide: BorderSide(
-                                width:0,
+                                width: 0,
                                 style: BorderStyle.none,
                               ),
                             ),
@@ -118,8 +96,11 @@ class _editPersonalInformation extends State<edit_personal_information> {
                                 fontSize: defaultFontSize),
                             hintText: "First Name *",
                           ),
-                          validator: (val) => val.isEmpty ? 'Enter First Name' : null,
-                          onChanged: (val){
+                          validator: (val) =>
+                          val.isEmpty
+                              ? 'Enter First Name'
+                              : null,
+                          onChanged: (val) {
                             setState(() => firstname = val);
                           },
                         ),
@@ -130,9 +111,10 @@ class _editPersonalInformation extends State<edit_personal_information> {
                           showCursor: true,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0)),
                               borderSide: BorderSide(
-                                width:0,
+                                width: 0,
                                 style: BorderStyle.none,
                               ),
                             ),
@@ -144,8 +126,11 @@ class _editPersonalInformation extends State<edit_personal_information> {
                                 fontSize: defaultFontSize),
                             hintText: "Last Name *",
                           ),
-                          validator: (val) => val.isEmpty ? 'Enter Last Name' : null,
-                          onChanged: (val){
+                          validator: (val) =>
+                          val.isEmpty
+                              ? 'Enter Last Name'
+                              : null,
+                          onChanged: (val) {
                             setState(() => lastname = val);
                           },
                         ),
@@ -154,20 +139,21 @@ class _editPersonalInformation extends State<edit_personal_information> {
                   ),
                   SizedBox(height: 8),
                   GestureDetector(
-                    onTap: ()async{
-                      final datePick= await showDatePicker(
+                    onTap: () async {
+                      final datePick = await showDatePicker(
                           context: context,
                           initialDate: DateTime(1990, 1),
                           firstDate: new DateTime(1900),
                           lastDate: new DateTime.now()
                       );
-                      if(datePick!=null && datePick!=birthDate){
+                      if (datePick != null && datePick != birthDate) {
                         setState(() {
-                          birthDate=datePick;
-                          isDateSelected=true;
-
+                          birthDate = datePick;
+                          isDateSelected = true;
                           // put it here
-                          birthDateInString = "${birthDate.month}/${birthDate.day}/${birthDate.year}";
+                          birthDateInString =
+                          "${birthDate.month}/${birthDate.day}/${birthDate
+                              .year}";
                           dateValue.text = birthDateInString;
                         });
                       }
@@ -178,9 +164,10 @@ class _editPersonalInformation extends State<edit_personal_information> {
                         showCursor: false,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(10.0)),
                             borderSide: BorderSide(
-                              width:0,
+                              width: 0,
                               style: BorderStyle.none,
                             ),
                           ),
@@ -197,10 +184,13 @@ class _editPersonalInformation extends State<edit_personal_information> {
                             size: defaultIconSize,
                           ),
                         ),
-                        validator: (val) => val.isEmpty ? 'Select Birthday' : null,
-                        onChanged: (val){
+                        validator: (val) =>
+                        val.isEmpty
+                            ? 'Select Birthday'
+                            : null,
+                        onChanged: (val) {
                           print(dateValue);
-                          setState((){
+                          setState(() {
 
                           });
                         },
@@ -234,8 +224,11 @@ class _editPersonalInformation extends State<edit_personal_information> {
                           fontSize: defaultFontSize),
                       hintText: "Weight (kg) *",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Weight in KG' : null,
-                    onChanged: (val){
+                    validator: (val) =>
+                    val.isEmpty
+                        ? 'Enter Weight in KG'
+                        : null,
+                    onChanged: (val) {
                       setState(() => weight = val);
                     },
                     keyboardType: TextInputType.number,
@@ -245,7 +238,7 @@ class _editPersonalInformation extends State<edit_personal_information> {
                     // onChanged: (val){
                     //   setState(() => genderIn = val);
                     // },
-                  ),SizedBox(
+                  ), SizedBox(
                     height: 8,
                   ),
                   TextFormField(
@@ -271,8 +264,11 @@ class _editPersonalInformation extends State<edit_personal_information> {
                           fontSize: defaultFontSize),
                       hintText: "Height (cm) *",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Height in cm' : null,
-                    onChanged: (val){
+                    validator: (val) =>
+                    val.isEmpty
+                        ? 'Enter Height in cm'
+                        : null,
+                    onChanged: (val) {
                       setState(() => height = val);
                     },
                     keyboardType: TextInputType.number,
@@ -282,7 +278,7 @@ class _editPersonalInformation extends State<edit_personal_information> {
                     // onChanged: (val){
                     //   setState(() => genderIn = val);
                     // },
-                  ),SizedBox(
+                  ), SizedBox(
                     height: 8,
                   ),
                   SizedBox(height: 24.0),
@@ -295,7 +291,7 @@ class _editPersonalInformation extends State<edit_personal_information> {
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
-                        onPressed:() {
+                        onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
@@ -305,22 +301,33 @@ class _editPersonalInformation extends State<edit_personal_information> {
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
-                        onPressed:()  {
-                          try{
+                        onPressed: () {
+                          try {
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final personalInfoRef = databaseReference.child('users/' + uid + '/personal_info/');
-                            personalInfoRef.update({"firstname": firstname.toString(),"lastname": lastname.toString()});
-                            final additionalInfoRef = databaseReference.child('users/' + uid + '/vitals/additional_info/');
-                            additionalInfoRef.update({"birthday": birthDateInString});
-                            final ppRef = databaseReference.child('users/' + uid + '/physical_parameters/');
-                            ppRef.update({"height": height.toString(), "weight": weight.toString()});
-                            print("Edited Personal Info Successfully! " + uid);
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("POP HERE ==========");
-                              Navigator.pop(context);
+                            final personalInfoRef = databaseReference.child(
+                                'users/' + uid + '/personal_info/');
+                            personalInfoRef.update({
+                              "firstname": firstname.toString(),
+                              "lastname": lastname.toString()
                             });
-                          } catch(e) {
+                            final additionalInfoRef = databaseReference.child(
+                                'users/' + uid + '/vitals/additional_info/');
+                            additionalInfoRef.update(
+                                {"birthday": birthDateInString});
+                            final ppRef = databaseReference.child(
+                                'users/' + uid + '/physical_parameters/');
+                            ppRef.update({
+                              "height": height.toString(),
+                              "weight": weight.toString()
+                            });
+                            print("Edited Personal Info Successfully! " + uid);
+                            Future.delayed(const Duration(milliseconds: 1000), () {
+                              infoChanged newPI = new infoChanged(firstname, lastname, weight, height, birthDateInString);
+                              print("POP HERE ==========");
+                              Navigator.pop(context, newPI);
+                            });
+                          } catch (e) {
                             print("you got an error! $e");
                           }
                           // Navigator.pop(context);
@@ -335,5 +342,4 @@ class _editPersonalInformation extends State<edit_personal_information> {
 
     );
   }
-
 }

@@ -70,7 +70,7 @@ class _addSymptomsState extends State<edit_other_information> {
     'Extremely Active'
   ];
 
-  String valueAlcohol;
+  String valueAlcohol=null;
 
   List<String> listAlcohol = <String>[
     'Never',
@@ -279,9 +279,20 @@ class _addSymptomsState extends State<edit_other_information> {
                         final User user = auth.currentUser;
                         final uid = user.uid;
                         final personalInfoRef = databaseReference.child('users/' + uid + '/vitals/additional_info/');
-                        personalInfoRef.update({"lifestyle": valueLifestyle, "average_stick": goal, "alcohol_freq": valueAlcohol});
+                        // personalInfoRef.update({"lifestyle": valueLifestyle,
+                        //   "average_stick": goal,
+                        //   "alcohol_freq": valueAlcohol});
+                        if(valueLifestyle != null)
+                          personalInfoRef.update({"lifestyle": valueLifestyle});
+                        if(valueLifestyle != null)
+                          personalInfoRef.update({"average_stick": goal});
+                        if(valueLifestyle != null)
+                          personalInfoRef.update({"alcohol_freq": valueAlcohol});
                         print("Edited Medical History Successfully! " + uid);
-                        Navigator.pop(context, widget.thislist);
+                        otherChanged newO = new otherChanged(valueLifestyle.toString(), goal.toString(), valueAlcohol.toString());
+                        print("INFOS");
+                        print(newO.valueLifestyle + " " + newO.goal + ' ' + newO.valueAlc);
+                        Navigator.pop(context, newO);
                       } catch(e) {
                         print("you got an error! $e");
                       }
