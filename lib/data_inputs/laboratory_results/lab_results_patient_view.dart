@@ -130,10 +130,21 @@ class _lab_resultsState extends State<lab_results> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: view_lab_result(lr: labResult_list[index], index: index),
+                      child: view_lab_result(lr: labResult_list[index], index: index, thislist: labResult_list),
                     ),
                     ),
-                  );
+                  ).then((value) {
+                    if(value != null){
+                      List<Lab_Result> updatelist;
+                      updatelist = value;
+                      if(updatelist.length > labResult_list.length){
+                        labResult_list = updatelist;
+                        setState(() {
+
+                        });
+                      }
+                    }
+                  });
                 },
                 child:  Container(
                     child: (Image.network('' + labResult_list[index].imgRef) != null) ? Image.network('' + labResult_list[index].imgRef, loadingBuilder: (context, child, loadingProgress) =>

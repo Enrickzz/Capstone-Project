@@ -31,7 +31,8 @@ class view_lab_result extends StatefulWidget {
   final Lab_Result lr;
   final String imgurl;
   final int index;
-  view_lab_result({Key key, this.lr, this.imgurl, this.index});
+  final List<Lab_Result> thislist;
+  view_lab_result({Key key, this.lr, this.imgurl, this.index,this.thislist});
   @override
   viewLabResult createState() => viewLabResult();
 }
@@ -91,11 +92,8 @@ class viewLabResult extends State<view_lab_result> {
 
   @override
   void initState(){
-
-    // print("SET STATE LAB");
     print(widget.lr);
     print(widget.imgurl);
-    // downloadUrl( widget.lr.imgRef.toString());
     setPage(widget.lr.labResult_name);
     Future.delayed(const Duration(milliseconds: 1200), (){
       setState(() {
@@ -210,7 +208,13 @@ class viewLabResult extends State<view_lab_result> {
                       ElevatedButton(
                         style: style,
                         onPressed: () {
-                          _showMyDialog();
+                          labResult_list = widget.thislist;
+                          int initLeng = labResult_list.length;
+                          _showMyDialog().then((value) {
+                            if(initLeng != labResult_list.length){
+                              Navigator.pop(context, labResult_list);
+                            }
+                          });
 
 
                         },
@@ -389,21 +393,12 @@ class viewLabResult extends State<view_lab_result> {
               onPressed: () {
                 final User user = auth.currentUser;
                 final uid = user.uid;
+                labResult_list = widget.thislist;
                 int initial_length = labResult_list.length;
                 labResult_list.removeAt(widget.index);
-                // List<int> delete_list = [];
-                // for(int i = 0; i < listtemp.length; i++){
-                //   if(_selected[i]){
-                //     delete_list.add(i);
-                //   }
-                // }
-                // delete_list.sort((a,b) => b.compareTo(a));
-                // for(int i = 0; i < delete_list.length; i++){
-                //   listtemp.removeAt(delete_list[i]);
-                // }
                 /// delete fields
                 for(int i = 1; i <= initial_length; i++){
-                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + i.toString());
+                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' );
                   bpRef.remove();
                 }
                 /// write fields
@@ -424,8 +419,7 @@ class viewLabResult extends State<view_lab_result> {
                     "imgRef": labResult_list[i].imgRef.toString(),
                   });
                 }
-                Navigator.of(context).pop();
-
+                Navigator.pop(context, labResult_list);
               },
             ),
             TextButton(

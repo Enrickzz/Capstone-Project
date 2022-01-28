@@ -581,6 +581,8 @@ class _addLabResultState extends State<add_lab_results> {
                           uid = user.uid;
                           fileName = result.files.single.name;
                           file = File(path);
+                          print("DIRS this");
+                          print(path);
                           PlatformFile thisfile = result.files.first;
                           cacheFile = thisfile.path;
                           Future.delayed(const Duration(milliseconds: 1000), (){
