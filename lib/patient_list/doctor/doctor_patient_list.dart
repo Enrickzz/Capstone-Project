@@ -373,9 +373,9 @@ class _PatientListState extends State<PatientList>  {
     if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
     }else{
-      return Image.file(File(img),
-          width: 70,
-          height: 70,
+      return Image.network(img,
+          width: 50,
+          height: 50,
           fit: BoxFit.cover);
     }
   }

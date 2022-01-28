@@ -96,6 +96,8 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
         diseases = widget.diseaselist;
         uidlist = widget.uidList;
         pp_imgs = widget.pp_img;
+        print("PP IMAGES");
+        print(pp_imgs);
       }
     }else{
       getPatients();
@@ -192,13 +194,9 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
                     //   backgroundImage: NetworkImage
                     //     ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
                     // ),
-                    leading: Container(
-                      height: 50,
-                      width: 50,
-                      child: ClipOval(
-                        // child:Image.asset("assets/images/blank_person.png",)),
-                          child: checkimage(pp_imgs[index])),
-                    ),
+                    leading: ClipOval(
+                      // child:Image.asset("assets/images/blank_person.png")),
+                        child: checkimage(pp_imgs[index])),
                     title: Text(names[index],
                         style:TextStyle(
                           color: Colors.black,
@@ -378,9 +376,9 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
     if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
     }else{
-      return Image.file(File(img),
-          width: 70,
-          height: 70,
+      return Image.network(img,
+          width: 50,
+          height: 50,
           fit: BoxFit.cover);
     }
   }
