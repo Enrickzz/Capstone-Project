@@ -67,6 +67,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
   Users profile = new Users();
   String DisplayName = " ";
   String email = " ";
+  String pp_img = "";
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateTime birthdate;
   final test = DateTime(1999, 5, 18); // for test
@@ -197,11 +198,15 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                   BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
                                 ],
                               ),
+                              // child: ClipOval(
+                              //   child:Image.asset("assets/images/blank_person.png",
+                              //       width: 70,
+                              //       height: 70,
+                              //       fit: BoxFit.cover),
+                              // ),
                               child: ClipOval(
-                                child:Image.asset("assets/images/blank_person.png",
-                                    width: 70,
-                                    height: 70,
-                                    fit: BoxFit.cover),
+                                // child:Image.asset("assets/images/blank_person.png",
+                                  child: checkimage(pp_img),
                               ),
                             ),
                           ),
@@ -992,6 +997,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
       });
       DisplayName = profile.firstname + " " + profile.lastname;
       email = profile.email;
+      pp_img = profile.pp_img;
     });
   }
   void getInfo(String uid) {
@@ -1096,6 +1102,16 @@ class _index3State extends State<suppsystem_view_patient_profile>
         }
       }
     });
+  }
+  Widget checkimage(String img) {
+    if(img == null || img == "assets/images/blank_person.png"){
+      return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
+    }else{
+      return Image.file(File(img),
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover);
+    }
   }
 
 }

@@ -35,10 +35,11 @@ class MyApp extends StatelessWidget {
 }
 
 class PatientListSupportSystemView extends StatefulWidget {
-  PatientListSupportSystemView({Key key, this.title, this.nameslist, this.diseaselist, this.uidList}) : super(key: key);
+  PatientListSupportSystemView({Key key, this.title, this.nameslist, this.diseaselist, this.uidList, this.pp_img}) : super(key: key);
   final List nameslist;
   final List diseaselist;
   final List<String> uidList;
+  final List pp_img;
   final String title;
 
   @override
@@ -56,7 +57,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
   List<Users> userlist=[];
   List<Additional_Info> userAddInfo =[];
   List names = [];
-
+  List pp_img = [];
   List diseases=[];
 
   //for drawer
@@ -89,14 +90,13 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
       cardContent.add(cardData);
     }
     super.initState();
-    print("ASDASDASDASDAS");
     if(widget.nameslist != null){
       if(widget.nameslist.isNotEmpty){
         names = widget.nameslist;
         diseases = widget.diseaselist;
         uidlist = widget.uidList;
+        pp_img = widget.pp_img;
       }
-      print("ASDASDASD");
     }else{
       getPatients();
     }
@@ -185,13 +185,16 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
               child: Card(
                 child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.green,
-                      backgroundImage: NetworkImage
-                        ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
-                    ),
+                    // leading: CircleAvatar(
+                    //   radius: 25,
+                    //   backgroundColor: Colors.green,
+                    //   foregroundColor: Colors.green,
+                    //   backgroundImage: NetworkImage
+                    //     ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
+                    // ),
+                    leading: ClipOval(
+                      // child:Image.asset("assets/images/blank_person.png",
+                        child: checkimage(pp_img[index])),
                     title: Text(names[index],
                         style:TextStyle(
                           color: Colors.black,
@@ -283,7 +286,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SupportAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
+                MaterialPageRoute(builder: (context) => SupportAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist, pp_img: pp_img)),
               );
             },
           ),
@@ -333,7 +336,6 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
           final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
           readPatient.once().then((DataSnapshot snapshot){
             var temp1 = jsonDecode(jsonEncode(snapshot.value));
-            print(temp1);
             Users patient = Users.fromJson(temp1);
             //userlist.add(Users.fromJson(temp1));
             readInfo.once().then((DataSnapshot snapshot){
@@ -358,6 +360,9 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
             });
 
             names.add(patient.firstname + " " + patient.lastname);
+            pp_img.add(patient.pp_img);
+            print("PP IMG");
+            print(pp_img);
             print(names);
 
           });
@@ -370,5 +375,14 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
       print("FIXED");
     });
   }
-
+  Widget checkimage(String img) {
+    if(img == null || img == "assets/images/blank_person.png"){
+      return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
+    }else{
+      return Image.file(File(img),
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover);
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'dart:io';
 
@@ -55,7 +56,7 @@ class _PatientListState extends State<PatientList>  {
   List<Users> userlist=[];
   List<Additional_Info> userAddInfo =[];
   List names = [];
-
+  List pp_img = [];
   List diseases=[];
 
   //for drawer
@@ -185,13 +186,16 @@ class _PatientListState extends State<PatientList>  {
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Card(
               child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.green,
-                    backgroundImage: NetworkImage
-                      ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
-                  ),
+                  // leading: CircleAvatar(
+                  //   radius: 25,
+                  //   backgroundColor: Colors.green,
+                  //   foregroundColor: Colors.green,
+                  //   backgroundImage: NetworkImage
+                  //     ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
+                  // ),
+                  leading: ClipOval(
+                    // child:Image.asset("assets/images/blank_person.png",
+                      child: checkimage(pp_img[index])),
                   title: Text(names[index],
                       style:TextStyle(
                         color: Colors.black,
@@ -361,6 +365,17 @@ class _PatientListState extends State<PatientList>  {
       isLoading = false;
       print("FIXED");
     });
+  }
+
+  Widget checkimage(String img) {
+    if(img == null || img == "assets/images/blank_person.png"){
+      return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
+    }else{
+      return Image.file(File(img),
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover);
+    }
   }
 
 }
