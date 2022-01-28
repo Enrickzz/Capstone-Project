@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/discussion_board/reply_post.dart';
 import 'package:my_app/models/discussionModel.dart';
@@ -43,6 +44,7 @@ class _specific_postState extends State<specific_post>
 
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   List<Discussion> discussion_list = new List<Discussion>();
   List<Replies> reply_list = new List<Replies>();
   String title = "";
@@ -56,12 +58,21 @@ class _specific_postState extends State<specific_post>
   @override
   void initState() {
     super.initState();
+    final User user = auth.currentUser;
+    final uid = user.uid;
     discussion_list.clear();
     getDiscussion();
     getReplies();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
-        print("setstate");
+        for(int i = 0; i < reply_list.length; i++){
+          if(reply_list[i].uid == uid){
+            reply_list[i].isMe = true;
+          }
+          else{
+            reply_list[i].isMe = false;
+          }
+        }
       });
     });
   }
@@ -92,14 +103,14 @@ class _specific_postState extends State<specific_post>
           centerTitle: true,
           backgroundColor: Colors.white,
           actions: [
-            GestureDetector(
-              onTap: () {
-                _showMyDialogDelete();
-              },
-              child: Icon(
-                Icons.delete,
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     _showMyDialogDelete();
+            //   },
+            //   child: Icon(
+            //     Icons.delete,
+            //   ),
+            // ),
             SizedBox(width: 10),
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
@@ -294,7 +305,9 @@ class _specific_postState extends State<specific_post>
                                                     ),
                                                     SizedBox(height: 2.0),
                                                     Text(
-                                                      reply_list[index].replyDate + " " + reply_list[index].replyTime,
+                                                      "${reply_list[index].replyDate.month.toString().padLeft(2, "0")}/${reply_list[index].replyDate.day.toString().padLeft(2, "0")}/${reply_list[index].replyDate.year}"
+                                                          + " " +
+                                                          "${reply_list[index].replyTime.hour.toString().padLeft(2, "0")}:${reply_list[index].replyTime.minute.toString().padLeft(2, "0")}",
                                                       style: TextStyle(
                                                         fontSize: 12,
                                                       ),
@@ -306,14 +319,16 @@ class _specific_postState extends State<specific_post>
                                           ),
                                           Column(
                                             children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  _showMyDialogDelete();
-
-                                                },
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  size: 20,
+                                              Visibility(
+                                                visible: reply_list[index].isMe,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    _showMyDialogDelete(index);
+                                                  },
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    size: 20,
+                                                  ),
                                                 ),
                                               ),
                                               Container(),
@@ -386,7 +401,7 @@ class _specific_postState extends State<specific_post>
     });
   }
 
-  Future<void> _showMyDialogDelete() async {
+  Future<void> _showMyDialogDelete(int index) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -405,7 +420,29 @@ class _specific_postState extends State<specific_post>
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                String userUID = widget.userUID;
+                int initial_length = reply_list.length;
+                String discussion_index = (widget.index + 1).toString();
+                reply_list.removeAt(index);
+                /// delete fields
+                for(int i = 1; i <= initial_length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/discussion/' + discussion_index + '/replies/' + i.toString());
+                  bpRef.remove();
+                }
+                /// write fields
+                for(int i = 0; i < reply_list.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/discussion/' + discussion_index + '/replies/' + (i+1).toString());
+                  bpRef.set({
+                    "createdBy": reply_list[i].createdBy.toString(),
+                    "replyBody": reply_list[i].createdBy.toString(),
+                    "replyDate": "${reply_list[i].replyDate.month.toString().padLeft(2,"0")}/${reply_list[i].replyDate.day.toString().padLeft(2,"0")}/${reply_list[i].replyDate.year}",
+                    "replyTime": "${reply_list[i].replyTime.hour.toString().padLeft(2,"0")}:${reply_list[i].replyTime.minute.toString().padLeft(2,"0")}",
+                    "specialty": reply_list[i].specialty.toString(),
+                    "uid": reply_list[i].uid.toString(),
+                  });
+                }
+                final discussionRef = databaseReference.child('users/' + userUID + '/discussion/' + discussion_index);
+                discussionRef.update({"noOfReplies": (discussion_list[widget.index].noOfReplies-1).toString()});
                 Navigator.of(context).pop();
 
               },

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/discussion_board/create_post.dart';
@@ -46,10 +47,11 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
   final ScrollController scrollController = ScrollController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   // Users doctor = new Users();
-  // int count = 1;
+  int count = 0;
   // DateTime now =  DateTime.now();
   // String title = '';
   // String description = '';
@@ -63,11 +65,20 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
   @override
   void initState() {
     super.initState();
+    final User user = auth.currentUser;
+    final uid = user.uid;
     discussion_list.clear();
     getDiscussion();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
-        print("setstate");
+        for(int i = 0; i < discussion_list.length; i++){
+          if(discussion_list[i].uid == uid){
+            discussion_list[i].isMe = true;
+          }
+          else{
+            discussion_list[i].isMe = false;
+          }
+        }
       });
     });
 
@@ -295,14 +306,16 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                                 ),
                                               ],
                                             ),
-                                            InkWell(
-                                              onTap: () {
-                                                _showMyDialogDelete(index);
-
-                                              },
-                                              child: Icon(
-                                                Icons.delete,
-                                                size: 18,
+                                            Visibility(
+                                              visible: discussion_list[index].isMe,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete(index);
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  size: 18,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -328,8 +341,8 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
     );
   }
   void getDiscussion() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
+    final User user = auth.currentUser;
+    final uid = user.uid;
     String userUID = widget.userUID;
     final readdiscussion = databaseReference.child('users/' + userUID + '/journal/');
     readdiscussion.once().then((DataSnapshot snapshot){
