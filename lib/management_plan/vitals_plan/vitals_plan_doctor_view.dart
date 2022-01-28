@@ -27,7 +27,8 @@ class vitals_prescription_doctor_view extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
   String userUID;
-  vitals_prescription_doctor_view({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
+  final List<Connection> connection_list;
+  vitals_prescription_doctor_view({Key key, this.preslist, this.pointer, this.userUID, this.connection_list}): super(key: key);
   @override
   _vitals_management_plan_doctor_view_prescriptionState createState() => _vitals_management_plan_doctor_view_prescriptionState();
 }

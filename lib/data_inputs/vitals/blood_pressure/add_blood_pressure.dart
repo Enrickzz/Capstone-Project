@@ -107,7 +107,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                           ],
                         ),
                         Container(
-                          height: 260,
+                          height: 314,
                           padding: EdgeInsets.only(top: 20),
                           child: TabBarView(
                             children: <Widget>[
@@ -290,6 +290,195 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                       ),
                                     ),
                                   ),
+                                  SizedBox(height: 24.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      FlatButton(
+                                        child: Text(
+                                          'Save',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() async {
+                                          try{
+                                            final User user = auth.currentUser;
+                                            final uid = user.uid;
+                                            final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list');
+                                            readBP.once().then((DataSnapshot datasnapshot) {
+                                              String temp1 = datasnapshot.value.toString();
+                                              print("temp1 " + temp1);
+                                              List<String> temp = temp1.split(',');
+                                              Blood_Pressure bloodPressure;
+                                              if(datasnapshot.value == null){
+                                                if(isResting.toLowerCase() =='yes'){
+                                                  bp_status = "Active";
+                                                }
+                                                else{
+                                                  bp_status = "Resting";
+                                                }
+                                                if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
+                                                  pressure_level = "low";
+                                                  print(pressure_level);
+                                                }
+                                                else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                                  pressure_level = "normal";
+                                                  print(pressure_level);
+                                                }
+                                                else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                                  pressure_level = "elevated";
+                                                  print(pressure_level);
+                                                }
+                                                else if (int.parse(systolic_pressure) > 130  || int.parse(diastolic_pressure) > 80){
+                                                  pressure_level = "high";
+                                                  print(pressure_level);
+                                                }
+                                                final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
+                                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
+                                                print("Added medication Successfully! " + uid);
+                                              }
+                                              else{
+                                                if(isResting.toLowerCase() =='yes'){
+                                                  bp_status = "Active";
+                                                }
+                                                else{
+                                                  bp_status = "Resting";
+                                                }
+                                                if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
+                                                  pressure_level = "low";
+                                                  print(pressure_level);
+                                                }
+                                                else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                                  pressure_level = "normal";
+                                                  print(pressure_level);
+                                                }
+                                                else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                                  pressure_level = "elevated";
+                                                  print(pressure_level);
+                                                }
+                                                else if (int.parse(systolic_pressure) >= 130  || int.parse(diastolic_pressure) > 80){
+                                                  pressure_level = "high";
+                                                  print(pressure_level);
+                                                }
+                                                getBloodPressure();
+                                                Future.delayed(const Duration(milliseconds: 1500), (){
+                                                  count = bp_list.length--;
+                                                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
+                                                  bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
+                                                  print("Added Blood Pressure Successfully! " + uid);
+                                                });
+                                              }
+                                            });
+                                            Future.delayed(const Duration(milliseconds: 1000), (){
+                                              print("MEDICATION LENGTH: " + bp_list.length.toString());
+                                              String message, title;
+                                              int priority;
+                                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure,pressure_level: pressure_level, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time), bp_status: bp_status.toString()));
+                                              for(var i=0;i<bp_list.length/2;i++){
+                                                var temp = bp_list[i];
+                                                bp_list[i] = bp_list[bp_list.length-1-i];
+                                                bp_list[bp_list.length-1-i] = temp;
+                                              }
+
+                                              // recommendations / notifs
+                                              if(widget.instance =="Reminder!"){
+                                                addtoRecommendation("Your Blood Pressure is still high just like the previous recording. We have already informed your doctor and support system about this. Please seek immediate medical attention for this.",
+                                                    "High Blood Pressure",
+                                                    "3",
+                                                    "None");
+                                                if(pressure_level == "high" && bp_status =="Resting"){
+                                                  print("ADDING NOW");
+                                                  final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                                  readConnections.once().then((DataSnapshot snapshot2) {
+                                                    print(snapshot2.value);
+                                                    print("CONNECTION");
+                                                    List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                                    temp.forEach((jsonString) {
+                                                      connections.add(Connection.fromJson(jsonString)) ;
+                                                      Connection a = Connection.fromJson(jsonString);
+                                                      print(a.uid);
+                                                      addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded consecutive high blood pressure. This may require your immediate medical attention.",
+                                                          thisuser.firstname + " has consecutive high BP readings",
+                                                          "3",
+                                                          a.uid);
+                                                    });
+                                                  });
+                                                }
+                                              }
+                                              if(pressure_level == "high" && bp_status =="Resting"){
+                                                addtoRecommendation("Your Blood Pressure is quite high, we recommend that you monitor your blood pressure for the next hour as we would set an alarm for you to record your blood pressure again. If you feel unwell please seek immediate medical attention for your condition. For the meantime here is a relaxing music for you to listen to while you are taking a breather. ",
+                                                    "High Blood Pressure!",
+                                                    "2", "Spotify");
+                                                Future.delayed(const Duration(hours: 1), (){
+                                                  print("FUTURE");
+                                                  addtoNotifs("Check your Blood Pressure now", "Reminder!", "1");
+                                                });
+                                              }
+                                              if(pressure_level == "high" && bp_status =="Active"){
+                                                addtoRecommendation("Your Blood Pressure is quite high but since you just finished performing strenuous physical activities this is not immediately a cause for concern. We recommend that you take a rest and record your Blood Pressure again after an hour. For the meantime here are some soothing relaxing music to listen to while you are taking a rest.",
+                                                    "High Blood Pressure!",
+                                                    "4", "Spotify");
+                                                Future.delayed(const Duration(hours: 1), (){
+                                                  print("FUTURE");
+                                                  addtoNotifs("Check your Blood Pressure now", "Reminder!", "1");
+                                                });
+                                              }
+                                              if(pressure_level == "low"){
+                                                addtoRecommendation("Your Blood pressure is lower than the normal standards, please record your heart rate and respiratory rate as well to have a better view of your current health.",
+                                                    "Low Blood Pressure!",
+                                                    "3", "None");
+                                              }
+
+                                              //
+                                              // if(double.parse(systolic_pressure) <= 120 && double.parse(diastolic_pressure) <= 80 ){
+                                              //   // future test
+                                              //   Future.delayed(const Duration(seconds: 30), (){
+                                              //     print("FUTURE");
+                                              //     addtoNotifs("Test future add", "30 Seconds Future!", "1");
+                                              //   });
+                                              //   print("YOU ARE NORMAL");
+                                              //   Navigator.pop(context, bp_list);
+                                              // }else if(double.parse(systolic_pressure) > 120 &&  double.parse(systolic_pressure) < 130 && double.parse(diastolic_pressure) < 80 ){
+                                              //   print("YOUR BP IS ELEVATED!");
+                                              //   addtoNotifs("Blood Pressure is elevated", "Elevated BP", "1");
+                                              //   Navigator.pop(context, bp_list);
+                                              // }else if(double.parse(systolic_pressure) >= 130 &&  double.parse(systolic_pressure) < 140 && double.parse(diastolic_pressure) >= 80 && double.parse(diastolic_pressure) <= 89 ){
+                                              //   print("YOU ARE ON STAGE 1 HIGH BP");
+                                              //   addtoNotifs("Blood Pressure is on Stage 1 Alert Level", "STAGE 1 HIGH BP", "2");
+                                              //   addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
+                                              //   Navigator.pop(context, bp_list);
+                                              // }else if(double.parse(systolic_pressure) >= 140 &&  double.parse(systolic_pressure) <= 180 && double.parse(diastolic_pressure) >= 90 && double.parse(diastolic_pressure) <= 119){
+                                              //   print("YOU ARE ON STAGE 2 HIGH BP");
+                                              //   addtoNotifs("Blood Pressure is on Stage 2 Alert Level", "Stage 2 High BP", "3");
+                                              //   addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
+                                              //   Navigator.pop(context, bp_list);
+                                              // }else if(double.parse(systolic_pressure) > 180 && double.parse(diastolic_pressure) >= 120 ){
+                                              //   print("YOU ARE HYPERTENSIVE");
+                                              //   addtoNotifs("Blood Pressure has reached hypertension", "Hypertensive", "4");
+                                              //   addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
+                                              //   Navigator.pop(context, bp_list);
+                                              // }
+                                              Navigator.pop(context, bp_list);
+                                              print("POP HERE ==========");
+                                            });
+                                          } catch(e) {
+                                            print("you got an error! $e");
+                                          }
+                                          // Navigator.pop(context);
+                                        },
+                                      )
+                                    ],
+                                  ),
                                 ],
                               ),
                               Column(
@@ -323,6 +512,22 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                       },
                                     ),
                                   ),
+                                  SizedBox(height: 24.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
 
                                 ],
                               )
@@ -331,196 +536,6 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                         )
                       ],
                     ),
-                  ),
-
-                  SizedBox(height: 24.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FlatButton(
-                        child: Text(
-                          'Save',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() async {
-                          try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
-                            final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list');
-                            readBP.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              Blood_Pressure bloodPressure;
-                              if(datasnapshot.value == null){
-                                if(isResting.toLowerCase() =='yes'){
-                                  bp_status = "Active";
-                                }
-                                else{
-                                  bp_status = "Resting";
-                                }
-                                if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
-                                  pressure_level = "low";
-                                  print(pressure_level);
-                                }
-                                else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
-                                  pressure_level = "normal";
-                                  print(pressure_level);
-                                }
-                                else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
-                                  pressure_level = "elevated";
-                                  print(pressure_level);
-                                }
-                                else if (int.parse(systolic_pressure) > 130  || int.parse(diastolic_pressure) > 80){
-                                  pressure_level = "high";
-                                  print(pressure_level);
-                                }
-                                final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
-                                print("Added medication Successfully! " + uid);
-                              }
-                              else{
-                                if(isResting.toLowerCase() =='yes'){
-                                  bp_status = "Active";
-                                }
-                                else{
-                                  bp_status = "Resting";
-                                }
-                                if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
-                                  pressure_level = "low";
-                                  print(pressure_level);
-                                }
-                                else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
-                                  pressure_level = "normal";
-                                  print(pressure_level);
-                                }
-                                else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
-                                  pressure_level = "elevated";
-                                  print(pressure_level);
-                                }
-                                else if (int.parse(systolic_pressure) >= 130  || int.parse(diastolic_pressure) > 80){
-                                  pressure_level = "high";
-                                  print(pressure_level);
-                                }
-                                getBloodPressure();
-                                Future.delayed(const Duration(milliseconds: 1500), (){
-                                  count = bp_list.length--;
-                                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                  bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
-                                  print("Added Blood Pressure Successfully! " + uid);
-                                });
-                              }
-                            });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + bp_list.length.toString());
-                              String message, title;
-                              int priority;
-                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure,pressure_level: pressure_level, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time), bp_status: bp_status.toString()));
-                              for(var i=0;i<bp_list.length/2;i++){
-                                var temp = bp_list[i];
-                                bp_list[i] = bp_list[bp_list.length-1-i];
-                                bp_list[bp_list.length-1-i] = temp;
-                              }
-
-                              // recommendations / notifs
-                              if(widget.instance =="Reminder!"){
-                                addtoRecommendation("Your Blood Pressure is still high just like the previous recording. We have already informed your doctor and support system about this. Please seek immediate medical attention for this.",
-                                    "High Blood Pressure",
-                                    "3",
-                                    "None");
-                                if(pressure_level == "high" && bp_status =="Resting"){
-                                  print("ADDING NOW");
-                                  final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                                  readConnections.once().then((DataSnapshot snapshot2) {
-                                    print(snapshot2.value);
-                                    print("CONNECTION");
-                                    List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
-                                    temp.forEach((jsonString) {
-                                      connections.add(Connection.fromJson(jsonString)) ;
-                                      Connection a = Connection.fromJson(jsonString);
-                                      print(a.uid);
-                                      addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded consecutive high blood pressure. This may require your immediate medical attention.",
-                                          thisuser.firstname + " has consecutive high BP readings",
-                                          "3",
-                                          a.uid);
-                                    });
-                                  });
-                                }
-                              }
-                              if(pressure_level == "high" && bp_status =="Resting"){
-                                addtoRecommendation("Your Blood Pressure is quite high, we recommend that you monitor your blood pressure for the next hour as we would set an alarm for you to record your blood pressure again. If you feel unwell please seek immediate medical attention for your condition. For the meantime here is a relaxing music for you to listen to while you are taking a breather. ",
-                                    "High Blood Pressure!",
-                                    "2", "Spotify");
-                                Future.delayed(const Duration(hours: 1), (){
-                                  print("FUTURE");
-                                  addtoNotifs("Check your Blood Pressure now", "Reminder!", "1");
-                                });
-                              }
-                              if(pressure_level == "high" && bp_status =="Active"){
-                                addtoRecommendation("Your Blood Pressure is quite high but since you just finished performing strenuous physical activities this is not immediately a cause for concern. We recommend that you take a rest and record your Blood Pressure again after an hour. For the meantime here are some soothing relaxing music to listen to while you are taking a rest.",
-                                    "High Blood Pressure!",
-                                    "4", "Spotify");
-                                Future.delayed(const Duration(hours: 1), (){
-                                  print("FUTURE");
-                                  addtoNotifs("Check your Blood Pressure now", "Reminder!", "1");
-                                });
-                              }
-                              if(pressure_level == "low"){
-                                addtoRecommendation("Your Blood pressure is lower than the normal standards, please record your heart rate and respiratory rate as well to have a better view of your current health.",
-                                    "Low Blood Pressure!",
-                                    "3", "None");
-                              }
-
-                              //
-                              // if(double.parse(systolic_pressure) <= 120 && double.parse(diastolic_pressure) <= 80 ){
-                              //   // future test
-                              //   Future.delayed(const Duration(seconds: 30), (){
-                              //     print("FUTURE");
-                              //     addtoNotifs("Test future add", "30 Seconds Future!", "1");
-                              //   });
-                              //   print("YOU ARE NORMAL");
-                              //   Navigator.pop(context, bp_list);
-                              // }else if(double.parse(systolic_pressure) > 120 &&  double.parse(systolic_pressure) < 130 && double.parse(diastolic_pressure) < 80 ){
-                              //   print("YOUR BP IS ELEVATED!");
-                              //   addtoNotifs("Blood Pressure is elevated", "Elevated BP", "1");
-                              //   Navigator.pop(context, bp_list);
-                              // }else if(double.parse(systolic_pressure) >= 130 &&  double.parse(systolic_pressure) < 140 && double.parse(diastolic_pressure) >= 80 && double.parse(diastolic_pressure) <= 89 ){
-                              //   print("YOU ARE ON STAGE 1 HIGH BP");
-                              //   addtoNotifs("Blood Pressure is on Stage 1 Alert Level", "STAGE 1 HIGH BP", "2");
-                              //   addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
-                              //   Navigator.pop(context, bp_list);
-                              // }else if(double.parse(systolic_pressure) >= 140 &&  double.parse(systolic_pressure) <= 180 && double.parse(diastolic_pressure) >= 90 && double.parse(diastolic_pressure) <= 119){
-                              //   print("YOU ARE ON STAGE 2 HIGH BP");
-                              //   addtoNotifs("Blood Pressure is on Stage 2 Alert Level", "Stage 2 High BP", "3");
-                              //   addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
-                              //   Navigator.pop(context, bp_list);
-                              // }else if(double.parse(systolic_pressure) > 180 && double.parse(diastolic_pressure) >= 120 ){
-                              //   print("YOU ARE HYPERTENSIVE");
-                              //   addtoNotifs("Blood Pressure has reached hypertension", "Hypertensive", "4");
-                              //   addtoRecommendation("Drink 2 glasses of water right away", "Control your ass", "2");
-                              //   Navigator.pop(context, bp_list);
-                              // }
-                              Navigator.pop(context, bp_list);
-                              print("POP HERE ==========");
-                            });
-                          } catch(e) {
-                            print("you got an error! $e");
-                          }
-                          // Navigator.pop(context);
-                        },
-                      )
-                    ],
                   ),
 
                 ]

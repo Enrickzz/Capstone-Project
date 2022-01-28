@@ -45,7 +45,7 @@ class _fitbit_connectState extends State<fitbit_connect> {
   oauth2.Client _client;
   Uri _uri;
   DateTime now = DateTime.now();
-  Sleep latestSleep = new Sleep();
+  Oxygen latestSleep = new Oxygen();
 
   @override
   void initState(){
@@ -228,7 +228,7 @@ class _fitbit_connectState extends State<fitbit_connect> {
         headers: {
           'Authorization': "Bearer " + _client.credentials.accessToken
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
 
     print("Date of Sleep");

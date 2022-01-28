@@ -27,7 +27,7 @@ class time_asleep extends StatefulWidget {
 
 class _time_asleepState extends State<time_asleep> {
   final DateTime now = DateTime.now();
-  Sleep latestSleep = new Sleep();
+  Oxygen latestSleep = new Oxygen();
   Sleep_Goal sleepGoal = new Sleep_Goal();
   String time_asleep_hr = "";
   String time_asleep_min = "";
@@ -37,7 +37,7 @@ class _time_asleepState extends State<time_asleep> {
   String to_go_min = "";
   DateTime timeAsleep;
   DateTime sleepgoal;
-  List<Sleep> sleep_list = [];
+  List<Oxygen> sleep_list = [];
   List<OrdinalSales> rem=[];
   List<OrdinalSales> light=[];
   List<OrdinalSales> deep=[];
@@ -397,7 +397,7 @@ class _time_asleepState extends State<time_asleep> {
         headers: {
           'Authorization': "Bearer "+ widget.fitbitToken
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     print("LATEST SLEEP");
     print(sleep[0].dateOfSleep);
@@ -457,7 +457,7 @@ class _time_asleepState extends State<time_asleep> {
         headers: {
           'Authorization': "Bearer "+ widget.fitbitToken
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     sleep_list = sleep;
 

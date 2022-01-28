@@ -27,7 +27,8 @@ class exercise_prescription_doctor_view extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
   String userUID;
-  exercise_prescription_doctor_view({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
+  final List<Connection> connection_list;
+  exercise_prescription_doctor_view({Key key, this.preslist, this.pointer, this.userUID, this.connection_list}): super(key: key);
   @override
   _exercise_prescriptionState createState() => _exercise_prescriptionState();
 }

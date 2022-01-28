@@ -114,7 +114,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                           ],
                         ),
                         Container(
-                          height: 250,
+                          height: 313,
                           padding: EdgeInsets.only(top: 20),
                           child: TabBarView(
                             children: <Widget>[
@@ -294,6 +294,109 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                       ),
                                     ),
                                   ),
+                                  SizedBox(height: 52.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      FlatButton(
+                                        child: Text(
+                                          'Save',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() async {
+                                          if(unitStatus == "mmol/L"){
+                                            glucose = glucose * 18;
+                                          }
+                                          print(glucose.toStringAsFixed(2));
+                                          try{
+                                            final User user = auth.currentUser;
+                                            final uid = user.uid;
+                                            final readGlucose = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
+                                            readGlucose.once().then((DataSnapshot datasnapshot) {
+                                              String temp1 = datasnapshot.value.toString();
+                                              print("temp1 " + temp1);
+                                              List<String> temp = temp1.split(',');
+                                              Blood_Glucose bloodGlucose;
+                                              if(glucose < 80){
+                                                glucose_status = "low";
+                                              }
+                                              else if (glucose >= 80 && glucose <= 120){
+                                                glucose_status = "normal";
+                                              }
+                                              else if(glucose > 120){
+                                                glucose_status = "high";
+                                              }
+                                              if(datasnapshot.value == null){
+                                                final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + 0.toString());
+                                                glucoseRef.set({"glucose": glucose.toString(), "lastMeal": lastMeal.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
+                                                print("Added Blood Glucose Successfully! " + uid);
+                                              }
+                                              else{
+                                                glucose_list.clear();
+                                                getBloodGlucose();
+                                                Future.delayed(const Duration(milliseconds: 1200), (){
+                                                  count = glucose_list.length--;
+                                                  print("count " + count.toString());
+                                                  final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
+                                                  glucoseRef.set({"glucose": glucose.toString(), "lastMeal": lastMeal.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
+                                                  print("Added Blood Glucose Successfully! " + uid);
+                                                });
+
+                                              };
+
+
+                                            });
+                                            if(glucose < 80){
+                                              addtoRecommendation("Your blood sugar is lower than normal. You should speak to your physician about it and seek immediate medical attention if you feel unwell. In the meantime, have something to eat to help improve your condition.",
+                                                  "Unusually Low Blood Sugar",
+                                                  "3",
+                                                  "None");
+                                            }
+                                            if(glucose > 120 && double.parse(lastMeal.toString()) >= 2){
+                                              addtoRecommendation("Your blood sugar is higher than normal and we have already informed your doctor and support system about it. You should speak to your physician about it unless you feel unwell, then you should go to your nearest emergency room immediately",
+                                                  "Unusually High Blood Sugar",
+                                                  "3",
+                                                  "None");
+                                            }
+                                            if(glucose >120 && double.parse(lastMeal.toString()) <= 2){
+                                              addtoRecommendation("We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. Please record your blood sugar again 2 hours after your last meal. We have set an alarm to remind you to record your blood sugar later. For now please drink a glass of water and try to walk around.",
+                                                  "High Blood Sugar!",
+                                                  "2",
+                                                  "None");
+                                              Future.delayed(const Duration(hours: 1), (){
+                                                addtoNotifs("Check your Blood Sugar now", "Reminder!", "1");
+                                              });
+                                            }
+                                            Future.delayed(const Duration(milliseconds: 1000), (){
+                                              glucose_list.add(new Blood_Glucose(glucose: glucose, lastMeal: int.parse(lastMeal), bloodGlucose_status: glucose_status, bloodGlucose_date: format.parse(glucose_date), bloodGlucose_time: timeformat.parse(glucose_time)));
+                                              for(var i=0;i<glucose_list.length/2;i++){
+                                                var temp = glucose_list[i];
+                                                glucose_list[i] = glucose_list[glucose_list.length-1-i];
+                                                glucose_list[glucose_list.length-1-i] = temp;
+                                              }
+                                              print("POP HERE ==========");
+                                              Navigator.pop(context, glucose_list);
+                                            });
+
+                                          } catch(e) {
+                                            print("you got an error! $e");
+                                          }
+                                          // Navigator.pop(context);
+                                        },
+                                      )
+                                    ],
+                                  ),
 
                                 ],
                               ),
@@ -328,6 +431,22 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                       },
                                     ),
                                   ),
+                                  SizedBox(height: 24.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue,
+                                        onPressed:() {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
 
                                 ],
                               )
@@ -336,109 +455,6 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                         )
                       ],
                     ),
-                  ),
-                  SizedBox(height: 24.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FlatButton(
-                        child: Text(
-                          'Save',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() async {
-                          if(unitStatus == "mmol/L"){
-                            glucose = glucose * 18;
-                          }
-                          print(glucose.toStringAsFixed(2));
-                          try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
-                            final readGlucose = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
-                            readGlucose.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              Blood_Glucose bloodGlucose;
-                              if(glucose < 80){
-                                glucose_status = "low";
-                              }
-                              else if (glucose >= 80 && glucose <= 120){
-                                glucose_status = "normal";
-                              }
-                              else if(glucose > 120){
-                                glucose_status = "high";
-                              }
-                              if(datasnapshot.value == null){
-                                final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + 0.toString());
-                                glucoseRef.set({"glucose": glucose.toString(), "lastMeal": lastMeal.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
-                                print("Added Blood Glucose Successfully! " + uid);
-                              }
-                              else{
-                                glucose_list.clear();
-                                getBloodGlucose();
-                                Future.delayed(const Duration(milliseconds: 1200), (){
-                                  count = glucose_list.length--;
-                                  print("count " + count.toString());
-                                  final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
-                                  glucoseRef.set({"glucose": glucose.toString(), "lastMeal": lastMeal.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString()});
-                                  print("Added Blood Glucose Successfully! " + uid);
-                                });
-
-                              };
-
-
-                            });
-                            if(glucose < 80){
-                              addtoRecommendation("Your blood sugar is lower than normal. You should speak to your physician about it and seek immediate medical attention if you feel unwell. In the meantime, have something to eat to help improve your condition.",
-                                  "Unusually Low Blood Sugar",
-                                  "3",
-                                  "None");
-                            }
-                            if(glucose > 120 && double.parse(lastMeal.toString()) >= 2){
-                              addtoRecommendation("Your blood sugar is higher than normal and we have already informed your doctor and support system about it. You should speak to your physician about it unless you feel unwell, then you should go to your nearest emergency room immediately",
-                                  "Unusually High Blood Sugar",
-                                  "3",
-                                  "None");
-                            }
-                            if(glucose >120 && double.parse(lastMeal.toString()) <= 2){
-                              addtoRecommendation("We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. Please record your blood sugar again 2 hours after your last meal. We have set an alarm to remind you to record your blood sugar later. For now please drink a glass of water and try to walk around.",
-                                  "High Blood Sugar!",
-                                  "2",
-                                  "None");
-                              Future.delayed(const Duration(hours: 1), (){
-                                addtoNotifs("Check your Blood Sugar now", "Reminder!", "1");
-                              });
-                            }
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              glucose_list.add(new Blood_Glucose(glucose: glucose, lastMeal: int.parse(lastMeal), bloodGlucose_status: glucose_status, bloodGlucose_date: format.parse(glucose_date), bloodGlucose_time: timeformat.parse(glucose_time)));
-                              for(var i=0;i<glucose_list.length/2;i++){
-                                var temp = glucose_list[i];
-                                glucose_list[i] = glucose_list[glucose_list.length-1-i];
-                                glucose_list[glucose_list.length-1-i] = temp;
-                              }
-                              print("POP HERE ==========");
-                              Navigator.pop(context, glucose_list);
-                            });
-
-                          } catch(e) {
-                            print("you got an error! $e");
-                          }
-                          // Navigator.pop(context);
-                        },
-                      )
-                    ],
                   ),
 
                 ]

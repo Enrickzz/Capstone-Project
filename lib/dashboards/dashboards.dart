@@ -11,12 +11,14 @@ import 'package:my_app/ui_view/StackedBar.dart';
 import 'package:my_app/ui_view/TimeSeries.dart';
 import 'package:my_app/ui_view/VerticalBC_Target.dart';
 import 'package:my_app/ui_view/VerticalBarChart.dart';
+import 'package:my_app/ui_view/blood_glucose/blood_glucose_linechartsf_patient.dart';
 import 'package:my_app/ui_view/blood_pressure/blood_pressure_groupbarchart_sf.dart';
+import 'package:my_app/ui_view/oxygen_barchartsf.dart';
 import 'package:my_app/ui_view/water/water_view.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/body_measurement.dart';
+import 'package:my_app/ui_view/body_measurement/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
@@ -143,74 +145,6 @@ class _DashboardsState extends State<Dashboards>
         }
         listViews.add(
           TitleView(
-            titleTxt: 'Your program',
-            subTxt: 'Details',
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
-            animationController: widget.animationController,
-          ),
-        );
-
-        listViews.add(
-            BGTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-              animationController: widget.animationController,
-            ));
-        listViews.add(
-            OxyTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-              animationController: widget.animationController,
-            ));
-        listViews.add(
-            HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-              animationController: widget.animationController,
-            ));
-
-
-        listViews.add(
-          bp_chart(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-            animationController: widget.animationController,
-          ),
-        );
-
-
-        listViews.add(
-          GroupedBarChartBloodPressure(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-            animationController: widget.animationController,
-          ),
-        );
-
-
-
-
-        listViews.add(
-          glucose_levels(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-            animationController: widget.animationController,
-          ),
-        );
-        listViews.add(
-          TitleView(
             titleTxt: 'Body measurement',
             subTxt: 'Today',
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -232,35 +166,92 @@ class _DashboardsState extends State<Dashboards>
         );
         listViews.add(
           TitleView(
-            titleTxt: 'Water',
-            subTxt: 'Aqua SmartBottle',
+            titleTxt: 'Your program',
+            subTxt: 'Details',
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                 parent: widget.animationController,
                 curve:
-                Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn))),
+                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
+        listViews.add(
+            blood_glucose_sf_patient( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+
+        listViews.add(
+            BGTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+        listViews.add(
+            OxyTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+
+        listViews.add(
+            oxygen_barchartsf( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+
+        listViews.add(
+            HRTimeSeries( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ));
+
+
+        listViews.add(
+          bp_chart(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
             animationController: widget.animationController,
           ),
         );
 
+
+        // listViews.add(
+        //   GroupedBarChartBloodPressure(
+        //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        //         parent: widget.animationController,
+        //         curve:
+        //         Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        //     animationController: widget.animationController,
+        //   ),
+        // );
+
+
+
+
         listViews.add(
-          WaterView(
-            mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-                CurvedAnimation(
-                    parent: widget.animationController,
-                    curve: Interval((1 / count) * 7, 1.0,
-                        curve: Curves.fastOutSlowIn))),
-            mainScreenAnimationController: widget.animationController,
+          glucose_levels(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
           ),
         );
-        listViews.add(
-          GlassView(
-              animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-                  CurvedAnimation(
-                      parent: widget.animationController,
-                      curve: Interval((1 / count) * 8, 1.0,
-                          curve: Curves.fastOutSlowIn))),
-              animationController: widget.animationController),
-        );
+
+
+
+
       });
     });
   }
