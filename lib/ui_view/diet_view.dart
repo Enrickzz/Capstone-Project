@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +39,10 @@ class _DietViewState extends State<DietView> {
   double sugar = 0;
   DateTime today = DateTime.now();
 
+
   @override
   void initState() {
+    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
     getBFoodIntake();
     getLFoodIntake();
     getDFoodIntake();
@@ -48,7 +51,7 @@ class _DietViewState extends State<DietView> {
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         for(int i = 0; i < breakfast_list.length; i++){
-          if(breakfast_list[i].intakeDate == today){
+          if(breakfast_list[i].intakeDate == now){
             total_cal += breakfast_list[i].calories;
             cholesterol += breakfast_list[i].cholesterol;
             total_fat += breakfast_list[i].total_fat;
@@ -56,7 +59,7 @@ class _DietViewState extends State<DietView> {
           }
         }
         for(int i = 0; i < lunch_list.length; i++){
-          if(lunch_list[i].intakeDate == today){
+          if(lunch_list[i].intakeDate == now){
             total_cal += lunch_list[i].calories;
             cholesterol += lunch_list[i].cholesterol;
             total_fat += lunch_list[i].total_fat;
@@ -64,7 +67,7 @@ class _DietViewState extends State<DietView> {
           }
         }
         for(int i = 0; i < dinner_list.length; i++){
-          if(dinner_list[i].intakeDate == today){
+          if(dinner_list[i].intakeDate == now){
             total_cal += dinner_list[i].calories;
             cholesterol += dinner_list[i].cholesterol;
             total_fat += dinner_list[i].total_fat;
@@ -72,7 +75,7 @@ class _DietViewState extends State<DietView> {
           }
         }
         for(int i = 0; i < snack_list.length; i++){
-          if(snack_list[i].intakeDate == today){
+          if(snack_list[i].intakeDate == now){
             total_cal += snack_list[i].calories;
             cholesterol += snack_list[i].cholesterol;
             total_fat += snack_list[i].total_fat;
@@ -451,7 +454,7 @@ class _DietViewState extends State<DietView> {
                                     child: Row(
                                       children: <Widget>[
                                         Container(
-                                          width: ((70 / 1.2) * widget.animation.value),
+                                          width: ((70) * widget.animation.value),
                                           height: 4,
                                           decoration: BoxDecoration(
                                             gradient: LinearGradient(colors: [
@@ -470,7 +473,7 @@ class _DietViewState extends State<DietView> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 6),
                                   child: Text(
-                                    cholesterol.toStringAsFixed(1),
+                                    cholesterol.toStringAsFixed(1) + " mg",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -518,7 +521,7 @@ class _DietViewState extends State<DietView> {
                                         child: Row(
                                           children: <Widget>[
                                             Container(
-                                              width: ((70 / 2) *
+                                              width: ((70) *
                                                   widget.animationController.value),
                                               height: 4,
                                               decoration: BoxDecoration(
@@ -539,7 +542,7 @@ class _DietViewState extends State<DietView> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        sugar.toStringAsFixed(1),
+                                        sugar.toStringAsFixed(1) + " g",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -589,7 +592,7 @@ class _DietViewState extends State<DietView> {
                                         child: Row(
                                           children: <Widget>[
                                             Container(
-                                              width: ((70 / 2.5) *
+                                              width: ((70) *
                                                   widget.animationController.value),
                                               height: 4,
                                               decoration: BoxDecoration(
@@ -610,7 +613,7 @@ class _DietViewState extends State<DietView> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        total_fat.toStringAsFixed(1),
+                                        total_fat.toStringAsFixed(1) + " g",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
