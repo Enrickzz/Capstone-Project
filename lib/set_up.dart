@@ -1252,41 +1252,45 @@ class _set_upState extends State<set_up> {
 
           } else {
 
-            setState(() => currentStep += 1);
-            // if (formKeys[0].currentState.validate() && currentStep == 0) {
-            //   setState(() => currentStep += 1);
-            // }
-            // else if (currentStep == 1) {
-            //   setState(() => currentStep += 1);
-            // }
-            // else if (formKeys[2].currentState.validate() && currentStep == 2) {
-            //   setState(() => currentStep += 1);
-            // }
+            // setState(() => currentStep += 1);
+            if (formKeys[0].currentState.validate() && currentStep == 0) {
+              setState(() => currentStep += 1);
+            }
+            else if (currentStep == 1) {
+              setState(() => currentStep += 1);
+            }
+            else if (formKeys[2].currentState.validate() && currentStep == 2) {
+              setState(() => currentStep += 1);
+            }
+            else if (formKeys[3].currentState.validate() && currentStep == 3) {
+              setState(() => currentStep += 1);
+            }
 
           }
         },
         onStepTapped: (step) {
-          setState(() {
-            currentStep = step;
-          });
-          // if (formKeys[0].currentState.validate() && currentStep == 0) {
-          //   setState(() {
-          //     currentStep = step;
-          //   });
-          // }
-          // else if (currentStep == 1) {
-          //   setState(() {
-          //     currentStep = step;
-          //   });
-          // } else if (formKeys[2].currentState.validate() && currentStep == 2) {
-          //   setState(() {
-          //     currentStep = step;
-          //   });
-          // } else if (currentStep == 3) {
-          //   setState(() {
-          //     currentStep = step;
-          //   });
-          // }
+          // setState(() {
+          //   currentStep = step;
+          // });
+          if (formKeys[0].currentState.validate() && currentStep == 0) {
+            setState(() {
+              currentStep = step;
+            });
+          }
+          else if (currentStep == 1) {
+            setState(() {
+              currentStep = step;
+            });
+          } else if (formKeys[2].currentState.validate() && currentStep == 2) {
+            setState(() {
+              currentStep = step;
+            });
+          } else if (formKeys[3].currentState.validate() && currentStep == 3) {
+            setState(() {
+              currentStep = step;
+            });
+          }
+
         },
         onStepCancel:
             currentStep == 0 ? null : () => setState(() => currentStep -= 1),
