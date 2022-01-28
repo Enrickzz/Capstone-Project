@@ -1,4 +1,5 @@
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/ui_view/blood_glucose/blood_glucose_linechartsf_doctor.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
@@ -103,15 +104,14 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
         animationController: widget.animationController,
       ),
     );
+
     listViews.add(
-      cholesterol_chart(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        blood_glucose_sf_doctor( animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
+          animationController: widget.animationController,
+        ));
 
     listViews.add(
       bp_chart(

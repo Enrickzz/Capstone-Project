@@ -1,6 +1,5 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:my_app/fitness_app_theme.dart';
 
@@ -40,7 +39,7 @@ class GroupedBarChartBloodPressure extends StatelessWidget {
 
             child: charts.BarChart(
                 thisseries,
-              animate: false,
+                animate: false,
                 barGroupingType: charts.BarGroupingType.grouped,
                 behaviors: [new charts.SeriesLegend()]
             )
@@ -53,53 +52,34 @@ class GroupedBarChartBloodPressure extends StatelessWidget {
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<OrdinalSales, String>> _createSampleData() {
-    final desktopSalesData = [
-      new OrdinalSales('2014', 140),
-      new OrdinalSales('2015', 130),
-      new OrdinalSales('2016', 133),
-      new OrdinalSales('2017', 123),
-      new OrdinalSales('2018', 140),
-      new OrdinalSales('2019', 130),
-      new OrdinalSales('2020', 133),
-      new OrdinalSales('2021', 123),
-      new OrdinalSales('2022', 140),
-      new OrdinalSales('2023', 130),
-      new OrdinalSales('2024', 133),
-      new OrdinalSales('2025', 123),
+    final data = [
+      new OrdinalSales('2014', 5),
+      new OrdinalSales('2015', 25),
+      new OrdinalSales('2016', 100),
+      new OrdinalSales('2017', 75),
+      new OrdinalSales('2018', 33),
+      new OrdinalSales('2019', 80),
+      new OrdinalSales('2020', 21),
+      new OrdinalSales('2021', 77),
+      new OrdinalSales('2022', 8),
+      new OrdinalSales('2023', 12),
+      new OrdinalSales('2024', 42),
+      new OrdinalSales('2025', 70),
+      new OrdinalSales('2026', 77),
+      new OrdinalSales('2027', 55),
+      new OrdinalSales('2028', 19),
+      new OrdinalSales('2029', 66),
+      new OrdinalSales('2030', 27),
     ];
-
-    final tabletSalesData = [
-      new OrdinalSales('2014', 73),
-      new OrdinalSales('2015', 66),
-      new OrdinalSales('2016', 81),
-      new OrdinalSales('2017', 72),
-      new OrdinalSales('2018', 73),
-      new OrdinalSales('2019', 66),
-      new OrdinalSales('2020', 81),
-      new OrdinalSales('2021', 72),
-      new OrdinalSales('2022', 73),
-      new OrdinalSales('2023', 66),
-      new OrdinalSales('2024', 81),
-      new OrdinalSales('2025', 72),
-    ];
-
-
 
     return [
       new charts.Series<OrdinalSales, String>(
-        id: 'Systolic',
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: desktopSalesData,
-      ),
-      new charts.Series<OrdinalSales, String>(
-        id: 'Diastolic',
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: tabletSalesData,
-      ),
-
-
+        data: data,
+      )
     ];
   }
 }

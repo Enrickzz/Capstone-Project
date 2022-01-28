@@ -15,7 +15,7 @@ import 'package:my_app/ui_view/Sleep_StackedBarChart.dart';
 import 'package:my_app/ui_view/VerticalBC_Target.dart';
 import 'package:my_app/ui_view/VerticalBarChart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/body_measurement.dart';
+import 'package:my_app/ui_view/body_measurement/body_measurement.dart';
 import 'package:my_app/ui_view/calorie_intake.dart';
 import 'package:my_app/ui_view/cholesterol_chart.dart';
 import 'package:my_app/ui_view/diet_view.dart';
