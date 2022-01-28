@@ -162,11 +162,11 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
         )
     );
   }
-  String getDateFormatted (String date){
-    print(date);
-    var dateTime = DateTime.parse(date);
-    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
-  }
+  // String getDateFormatted (String date){
+  //   print(date);
+  //   var dateTime = DateTime.parse(date);
+  //   return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  // }
   String getTimeFormatted (String date){
     print(date);
     if(date != null){
