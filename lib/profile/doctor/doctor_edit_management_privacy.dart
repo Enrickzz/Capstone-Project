@@ -19,7 +19,8 @@ class doctor_edit_management_privacy extends StatefulWidget {
   final List<Medication_Prescription> thislist;
   final String userUID;
   final String doctorUID;
-  doctor_edit_management_privacy({this.thislist, this.userUID, this.doctorUID});
+  final Connection connection;
+  doctor_edit_management_privacy({this.thislist, this.userUID, this.doctorUID, this.connection});
   @override
   _editManagementPrivacyState createState() => _editManagementPrivacyState();
 }
@@ -36,13 +37,31 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
 
 
   @override
+  void initState(){
+    super.initState();
+    Connection doctorconnection = widget.connection;
+    print("Connection medpres");
+    print(doctorconnection.medpres);
+    if(doctorconnection.medpres.toLowerCase() == "true"){
+      isAllowedMedicalPrescription = true;
+    }
+    if(doctorconnection.foodplan.toLowerCase() == "true"){
+      isAllowedFoodPlan = true;
+    }
+    if(doctorconnection.explan.toLowerCase() == "true"){
+      isAllowedExercisePlan = true;
+    }
+    if(doctorconnection.vitals.toLowerCase() == "true"){
+      isAllowedVitalsRecording = true;
+    }
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      setState(() {
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-    String defaultFontFamily = 'Roboto-Light.ttf';
-    double defaultFontSize = 14;
-    double defaultIconSize = 17;
-
-
     return Container(
         key: _formKey,
         color:Color(0xff757575),
@@ -231,7 +250,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                         color: Colors.blue,
                         onPressed: (){
                           _showMyDialog();
-
+                          Navigator.pop(context);
                         },
 
                         // Navigator.pop(context);
@@ -398,6 +417,9 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
               child: Text('Confirm'),
               onPressed: () {
                 try{
+                  final User user = auth.currentUser;
+                  final uid = user.uid;
+                  bool check = false;
                   String userUID = widget.userUID;
                   String doctorUID = widget.doctorUID;
                   final readDoctorConnections = databaseReference.child('users/' + doctorUID + '/personal_info/connections/');
@@ -408,19 +430,24 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                     });
                     for(int i = 1; i <= connections.length; i++){
                       if(connections[i-1].uid == userUID){
-                        final doctorConnectionsRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ i.toString());
-                        doctorConnectionsRef.set({
-                          "uid": userUID,
-                          "medpres": isAllowedMedicalPrescription.toString(),
-                          "foodplan": isAllowedFoodPlan.toString(),
-                          "explan": isAllowedExercisePlan.toString(),
-                          "vitals": isAllowedVitalsRecording.toString(),
-                        });
+                        check = true;
                       }
+                    }
+                    if(check){
+                      final doctorConnectionsRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ (connections.length+1).toString());
+                      doctorConnectionsRef.set({
+                        "uid": userUID,
+                        "createdBy": uid,
+                        "medpres": isAllowedMedicalPrescription.toString(),
+                        "foodplan": isAllowedFoodPlan.toString(),
+                        "explan": isAllowedExercisePlan.toString(),
+                        "vitals": isAllowedVitalsRecording.toString(),
+                      });
                     }
 
                   });
 
+                  Navigator.pop(context);
                 } catch(e) {
                   print("you got an error! $e");
                 }

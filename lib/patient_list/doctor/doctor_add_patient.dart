@@ -624,9 +624,11 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
       final addDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/' + dcount.toString());
       addDoctorConnection.set({
         "uid": doc_connection[doc_connection.length-1].uid,
-        "dashboard": doc_connection[doc_connection.length-1].dashboard.toString(),
-        "nonhealth": doc_connection[doc_connection.length-1].nonhealth.toString(),
-        "health": doc_connection[doc_connection.length-1].health.toString(),
+        "createdBy": uid,
+        "medpres": "true",
+        "foodplan": "true",
+        "explan": "true",
+        "vitals": "true",
       });
       readPatient.once().then((DataSnapshot patientsnapshot){
         Map<String, dynamic> temp = jsonDecode(jsonEncode(patientsnapshot.value));
@@ -645,7 +647,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
     if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
     }else{
-      return Image.file(File(img),
+      return Image.network(img,
           width: 70,
           height: 70,
           fit: BoxFit.cover);

@@ -50,11 +50,12 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
   Users patient = new Users();
   bool isme = false;
 
-
   List<String> uidlist = [];
   List<Connection> connections = [];
+  List<Connection> doctor_connections = [];
   List<Users> userlist = [];
   List<Additional_Info> userAddInfo =[];
+  List<int> delete_list = [];
 
   List names = [
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
@@ -74,6 +75,15 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
     getPatients();
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
+        delete_list.sort((a, b) => b.compareTo(a));
+        for(int i = 0; i < delete_list.length; i++){
+          userlist.removeAt(delete_list[i]);
+          connections.removeAt(delete_list[i]);
+        }
+        getConnections();
+        Future.delayed(const Duration(milliseconds: 2000), (){
+          setState(() {});
+        });
         for(int i = 0; i < userlist.length; i++){
           if(userlist[i].uid == uid){
             userlist[i].isMe = true;
@@ -140,14 +150,12 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                             builder: (context) => SingleChildScrollView(child: Container(
                               padding: EdgeInsets.only(
                                   bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid),
+                              child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid, connection: doctor_connections[index]),
                             ),
                             ),
                           ).then((value) =>
                               Future.delayed(const Duration(milliseconds: 1500), (){
                                 setState((){
-                                  print("setstate medication prescription");
-                                  print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                                   if(value != null){
                                     // templist = value[0];
                                   }
@@ -179,12 +187,15 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
 
 
   void getPatients(){
+    final User user = auth.currentUser;
+    final uid = user.uid;
     String userUID = widget.userUID;
+
     final readConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
     readConnection.once().then((DataSnapshot snapshot){
       List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
       temp1.forEach((jsonString) {
-        connections.add(Connection.fromJson2(jsonString));
+        connections.add(Connection.fromJson(jsonString));
       });
       for(int i = 0; i < connections.length; i++){
         final readDoctor = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
@@ -192,13 +203,14 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
           Map<String, dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
           userlist.add(Users.fromJson(temp2));
           if(userlist[i].usertype != "Doctor"){
-            userlist.removeAt(i);
+            delete_list.add(i);
+            // userlist.removeAt(i);
           }
           else{
             names.add(userlist[i].firstname+ " " + userlist[i].lastname);
             position.add(userlist[i].specialty);
           }
-          print(names);
+
         });
       }
 
@@ -209,7 +221,37 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
         patient = Users.fromJson(temp2);
     });
 
-
   }
-
+  // void getConnections () {
+  //   Map<String, dynamic> temp;
+  //   for(int i = 0; i < userlist.length; i++){
+  //     final readDoctor = databaseReference.child('users/' + userlist[i].uid + '/personal_info/connections/');
+  //     readDoctor.once().then((DataSnapshot datasnapshot){
+  //       Map<String, dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
+  //       temp = temp2;
+  //       for(int j = 0; j < temp.length; i++){
+  //         final readDoctor2 = databaseReference.child('users/' + userlist[i].uid + '/personal_info/' + (i+1).toString());
+  //         readDoctor2.once().then((DataSnapshot snapshot){
+  //           temp.forEach((key, jsonString) {
+  //             doctor_connections.add(Connection.fromJson2(jsonString));
+  //             print(doctor_connections.toString());
+  //             print("ASDASDADASDA");
+  //             print(doctor_connections[i].medpres);
+  //           });
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+  void getConnections () {
+    for(int i = 0; i < userlist.length; i++){
+      final readDoctor = databaseReference.child('users/' + userlist[i].uid + '/personal_info/connections/');
+      readDoctor.once().then((DataSnapshot datasnapshot){
+        List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+        temp.forEach((jsonString) {
+          doctor_connections.add(Connection.fromJson2(jsonString));
+        });
+      });
+    }
+  }
 }
