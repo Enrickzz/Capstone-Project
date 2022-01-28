@@ -372,7 +372,7 @@ class _blood_glucoseState extends State<blood_glucose> {
         cells: [
           DataCell(Text(getDateFormatted(bp.bloodGlucose_date.toString()))),
           DataCell(Text(getTimeFormatted(bp.bloodGlucose_time.toString()))),
-          DataCell(Text(bp.glucose.toString() +' mg/dL', style: TextStyle(),)),
+          DataCell(Text(bp.glucose.toStringAsFixed(1) +' mg/dL', style: TextStyle(),)),
           DataCell(Text(bp.lastMeal.toString() + ' hr/s ago' , style: TextStyle(),)),
           DataCell(Text(bp.bloodGlucose_status, style: TextStyle(color: getMyColor(bp.bloodGlucose_status)),))
         ],
