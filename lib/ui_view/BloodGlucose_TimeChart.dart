@@ -47,7 +47,7 @@ class _BGTimeSeriesState extends State<BGTimeSeries> {
       padding: const EdgeInsets.only(
           left: 24, right: 24, top: 16, bottom: 18),
       child: Container(
-        height: 400,
+        height: 300,
         decoration: BoxDecoration(
           color: FitnessAppTheme.nearlyWhite,
           borderRadius: BorderRadius.only(
@@ -75,7 +75,12 @@ class _BGTimeSeriesState extends State<BGTimeSeries> {
             // should create the same type of [DateTime] as the data provided. If none
             // specified, the default creates local date time.
             dateTimeFactory: const charts.LocalDateTimeFactory(),
+            behaviors: [
+              charts.ChartTitle("Blood Glucose", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
+            ],
           ),
+
+
         ) ,
       ),
     );

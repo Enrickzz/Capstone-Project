@@ -48,9 +48,9 @@ class _blood_pressureState extends State<bp_chart> {
                   color: FitnessAppTheme.nearlyWhite,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8.0),
-                      bottomLeft: Radius.circular(68.0),
+                      bottomLeft: Radius.circular(8.0),
                       bottomRight: Radius.circular(8.0),
-                      topRight: Radius.circular(8.0)),
+                      topRight: Radius.circular(68.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                         color: FitnessAppTheme.grey.withOpacity(0.6),
@@ -90,9 +90,6 @@ class _blood_pressureState extends State<bp_chart> {
                                 tooltipBehavior: TooltipBehavior(enable: true),
 
                               ),
-                      ),
-                      SizedBox(
-                        height: 32,
                       ),
                     ],
                   ),
