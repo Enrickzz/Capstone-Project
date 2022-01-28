@@ -601,7 +601,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
     if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
     }else{
-      return Image.file(File(img),
+      return Image.network(img,
           width: 70,
           height: 70,
           fit: BoxFit.cover);

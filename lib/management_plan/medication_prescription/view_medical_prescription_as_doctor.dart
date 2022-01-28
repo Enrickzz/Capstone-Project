@@ -21,8 +21,9 @@ import 'add_medication_prescription.dart';
 class medication_prescription extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
+  final List<Connection> connection_list;
   String userUID;
-  medication_prescription({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
+  medication_prescription({Key key, this.preslist, this.pointer, this.userUID, this.connection_list}): super(key: key);
   @override
   _medication_prescriptionState createState() => _medication_prescriptionState();
 }
@@ -38,14 +39,16 @@ class _medication_prescriptionState extends State<medication_prescription> {
   int count = 1;
   Users doctor = new Users();
   List<String> doctor_names = [];
-
+  List<Connection> connection_list = [];
 
   @override
   void initState() {
     super.initState();
     // final User user = auth.currentUser;
     // final uid = user.uid;
+    connection_list.clear();
     prestemp.clear();
+    connection_list = widget.connection_list;
     getMedicalPrescription();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
@@ -171,6 +174,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
   void getMedicalPrescription() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
+    List<int> delete_list = [];
     var userUID = widget.userUID;
     final readprescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
@@ -179,6 +183,18 @@ class _medication_prescriptionState extends State<medication_prescription> {
         prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
       for(int i = 0; i < prestemp.length; i++){
+        for(int j = 0; j < connection_list.length; j++){
+          if(prestemp[i].prescribedBy == connection_list[j].createdBy){
+            if(connection_list[j].medpres != "true"){
+              /// dont add
+              delete_list.add(i);
+            }
+            else{
+              /// add
+            }
+          }
+        }
+
         final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
         readDoctor.once().then((DataSnapshot snapshot){
           Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -189,6 +205,10 @@ class _medication_prescriptionState extends State<medication_prescription> {
             print("length " + doctor_names.length.toString());
           }
         });
+      }
+      delete_list.sort((a, b) => b.compareTo(a));
+      for(int i = 0; i < delete_list.length; i++){
+        prestemp.removeAt(delete_list[i]);
       }
       for(var i=0;i<prestemp.length/2;i++){
         var temp = prestemp[i];

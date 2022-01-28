@@ -95,7 +95,7 @@ class _index3State extends State<view_patient_profile>
 
   List<Connection> connections = [];
   Connection connection = new Connection();
-  //for data privacy
+  ///for data privacy
   String canViewDataInput = "true";
   String canViewDashboard = "true";
   String canViewGoal = "true";

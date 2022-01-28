@@ -85,9 +85,11 @@ class Connection{
   String foodplan;
   String explan;
   String vitals;
+  String createdBy;
 
   Connection.fromJson2(Map<String, dynamic> json) {
     uid = json['uid'];
+    createdBy = json['createdBy'];
     medpres = json['medpres'];
     foodplan = json['foodplan'];
     explan = json['explan'];

@@ -222,7 +222,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                         color: Colors.blue,
                           onPressed: (){
                             _showMyDialog();
-
+                            Navigator.pop(context);
                           },
 
                           // Navigator.pop(context);
