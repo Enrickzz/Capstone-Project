@@ -25,7 +25,7 @@ class sleep_barchart_sf extends StatefulWidget{
   sleepScoreState createState() => sleepScoreState();
 }
 List<calorie_intake_data> finaList = new List();
-List<Sleep> sleeptmp=[];
+List<Oxygen> sleeptmp=[];
 String sleepdate1 = "";
 String sleepdate2 = "";
 String sleepdate3 = "";
@@ -135,7 +135,7 @@ class sleepScoreState extends State<sleep_barchart_sf> {
         headers: {
           'Authorization': "Bearer " + token,
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     sleeptmp = sleep;
     DateTime datesleep = DateTime.parse(sleeptmp[0].dateOfSleep);

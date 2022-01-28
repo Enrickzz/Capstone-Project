@@ -25,7 +25,7 @@ class _sleep_qualityState extends State<sleep_quality> {
   int awakecount = 0;
   int restlesscount = 0;
   int minawake = 0;
-  List<Sleep> sleep_list = [];
+  List<Oxygen> sleep_list = [];
   List<OrdinalSales> rem=[];
   List<OrdinalSales> light=[];
   List<OrdinalSales> deep=[];
@@ -232,7 +232,7 @@ class _sleep_qualityState extends State<sleep_quality> {
         headers: {
           'Authorization': "Bearer " + widget.fitbitToken,
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     sleep_list = sleep;
 

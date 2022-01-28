@@ -1,13 +1,13 @@
 class SleepMe {
-  List<Sleep> sleep;
+  List<Oxygen> sleep;
 
   SleepMe({this.sleep});
 
   SleepMe.fromJson(Map<String, dynamic> json) {
     if (json['sleep'] != null) {
-      sleep = <Sleep>[];
+      sleep = <Oxygen>[];
       json['sleep'].forEach((v) {
-        sleep.add(new Sleep.fromJson(v));
+        sleep.add(new Oxygen.fromJson(v));
       });
     }
   }
@@ -21,7 +21,7 @@ class SleepMe {
   }
 }
 
-class Sleep {
+class Oxygen {
   String dateOfSleep;
   int duration;
   int efficiency;
@@ -38,7 +38,7 @@ class Sleep {
   int timeInBed;
   String type;
 
-  Sleep(
+  Oxygen(
       {this.dateOfSleep,
         this.duration,
         this.efficiency,
@@ -55,7 +55,7 @@ class Sleep {
         this.timeInBed,
         this.type});
 
-  Sleep.fromJson(Map<String, dynamic> json) {
+  Oxygen.fromJson(Map<String, dynamic> json) {
     dateOfSleep = json['dateOfSleep'];
     duration = json['duration'];
     efficiency = json['efficiency'];

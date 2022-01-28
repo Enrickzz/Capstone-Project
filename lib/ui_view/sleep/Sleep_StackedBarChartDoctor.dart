@@ -23,7 +23,7 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChartDoctor> {
   // StackedBarChart(this.seriesList, {this.animate});
   List<charts.Series> thisseries =[];
 
-  List<Sleep> sleeptmp=[];
+  List<Oxygen> sleeptmp=[];
   bool isLoading = true;
   @override
   void initState(){
@@ -82,14 +82,14 @@ class _Sleep_StackedBarChartState extends State<Sleep_StackedBarChartDoctor> {
         headers: {
           'Authorization': "Bearer " + token,
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     sleeptmp = sleep;
     // print(response.body);
     // print("FITBIT ^ Length = " + sleep.length.toString());
   }
 
-  List<charts.Series<OrdinalSales, String>> _createSampleData(List<Sleep> sleep) {
+  List<charts.Series<OrdinalSales, String>> _createSampleData(List<Oxygen> sleep) {
     List<OrdinalSales> rem=[];
     List<OrdinalSales> light=[];
     List<OrdinalSales> deep=[];

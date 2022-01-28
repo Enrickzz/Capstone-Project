@@ -30,7 +30,7 @@ class _calorie_intakeState extends State<stacked_sleep_chart_doctor> {
   List<MySleep> _chartData=[];
   List<MySleep> _chartDataReveresed=[];
   TooltipBehavior _tooltpBehavior;
-  List<Sleep> sleeptmp=[];
+  List<Oxygen> sleeptmp=[];
   bool isLoading=true;
 
   @override
@@ -151,14 +151,14 @@ class _calorie_intakeState extends State<stacked_sleep_chart_doctor> {
         headers: {
           'Authorization': "Bearer " + token,
         });
-    List<Sleep> sleep=[];
+    List<Oxygen> sleep=[];
     sleep = SleepMe.fromJson(jsonDecode(response.body)).sleep;
     sleeptmp = sleep;
     // print(response.body);
     // print("FITBIT ^ Length = " + sleep.length.toString());
   }
 
-  List<charts.Series<OrdinalSales, String>> _createSampleData(List<Sleep> sleep) {
+  List<charts.Series<OrdinalSales, String>> _createSampleData(List<Oxygen> sleep) {
     List<OrdinalSales> rem=[];
     List<OrdinalSales> light=[];
     List<OrdinalSales> deep=[];
