@@ -44,52 +44,6 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
     ,'Heart Rate', 'Respiratory Rate'
 
   ];
-
-
-
-  // String getFrom(){
-  //   if(dateRange == null){
-  //     return 'From';
-  //   }
-  //   else{
-  //     return DateFormat('MM/dd/yyyy').format(dateRange.start);
-  //
-  //   }
-  // }
-  //
-  // String getUntil(){
-  //   if(dateRange == null){
-  //     return 'Until';
-  //   }
-  //   else{
-  //     return DateFormat('MM/dd/yyyy').format(dateRange.end);
-  //
-  //   }
-  // }
-  //
-  // Future pickDateRange(BuildContext context) async{
-  //   final initialDateRange = DateTimeRange(
-  //     start: DateTime.now(),
-  //     end: DateTime.now().add(Duration(hours:24 * 3)),
-  //   );
-  //
-  //   final newDateRange = await showDateRangePicker(
-  //     context: context,
-  //     firstDate: DateTime(DateTime.now().year - 5),
-  //     lastDate: DateTime(DateTime.now().year + 5),
-  //     initialDateRange: dateRange ?? initialDateRange,
-  //   );
-  //
-  //   if(newDateRange == null) return;
-  //
-  //   setState(() => {
-  //     dateRange = newDateRange,
-  //     startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
-  //     enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
-  //
-  //   });
-  //   print("date Range " + dateRange.toString());
-  // }
   @override
   Widget build(BuildContext context) {
 
@@ -333,8 +287,9 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                                 vitals_list[i] = vitals_list[vitals_list.length-1-i];
                                 vitals_list[vitals_list.length-1-i] = temp;
                               }
+                              Vitals newV = new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now);
                               print("POP HERE ==========");
-                              Navigator.pop(context, [vitals_list, 1]);
+                              Navigator.pop(context,newV);
                             });
                           } catch(e) {
                             print("you got an error! $e");

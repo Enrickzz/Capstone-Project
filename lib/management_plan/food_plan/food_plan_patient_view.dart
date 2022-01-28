@@ -96,7 +96,7 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
                           color: Colors.grey,
                           fontSize: 14.0,
                         )),
-                    trailing: Text("${foodPtemp[index].dateCreated.month}/${foodPtemp[index].dateCreated.day}/${foodPtemp[index].dateCreated.year}" ,
+                    trailing: Text(foodPtemp[index].dateCreated ,
                         style:TextStyle(
                           color: Colors.grey,
                         )),

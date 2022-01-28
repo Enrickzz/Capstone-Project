@@ -264,20 +264,20 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + foodplan_list.length.toString());
-                              foodplan_list.add(new FoodPlan(purpose: purpose, food: food, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
+                              foodplan_list.add(new FoodPlan(purpose: purpose, food: food, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}"));
                               for(var i=0;i<foodplan_list.length/2;i++){
                                 var temp = foodplan_list[i];
                                 foodplan_list[i] = foodplan_list[foodplan_list.length-1-i];
                                 foodplan_list[foodplan_list.length-1-i] = temp;
                               }
-                              FoodPlan addedThis = new FoodPlan(purpose: purpose, food: food, important_notes: important_notes, prescribedBy: uid, dateCreated: now);
+                              FoodPlan addedThis = new FoodPlan(doctor: doctor.lastname,purpose: purpose, food: food, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}");
                               addtoNotif("Dr. "+doctor.lastname+ " has added something to your Food management plan. Click here to view your new Food management plan. " ,
                                   "Doctor Added to your Food Plan!",
                                   "1",
                                   "Food Plan",
                                   widget.userUID);
                               print("POP HERE ==========");
-                              Navigator.pop(context, [foodplan_list, 1]);
+                              Navigator.pop(context, addedThis);
                             });
                           } catch(e) {
                             print("you got an error! $e");

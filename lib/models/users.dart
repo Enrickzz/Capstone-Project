@@ -696,16 +696,20 @@ class FoodPlan {
   String food;
   String important_notes;
   String prescribedBy;
-  DateTime dateCreated;
+  String dateCreated;
+  String doctor;
 
-  FoodPlan({this.purpose, this.food,  this.important_notes, this.prescribedBy, this.dateCreated});
+  FoodPlan({this.purpose, this.food,  this.important_notes, this.prescribedBy, this.dateCreated,this.doctor});
 
   FoodPlan.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
     food = json["food"];
     important_notes = json['important_notes'];
     prescribedBy = json['prescribedBy'];
-    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+    dateCreated = json['dateCreated'].toString();
+    if (json['doctor'] == null) {
+      doctor = "";
+    }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -758,7 +762,7 @@ class Vitals {
   Vitals.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
     type = json["type"];
-    frequency = json['frequency'];
+    frequency = int.parse(json['frequency'].toString());
     important_notes = json['important_notes'];
     prescribedBy = json['prescribedBy'];
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);

@@ -43,7 +43,7 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
   String purpose = "";
   String dateCreated = "";
   Users doctor = new Users();
-  List<String> doctor_names = [];
+  List<String> doctor_names = [""];
 
 
   @override
@@ -96,10 +96,16 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
                     ).then((value) =>
                         Future.delayed(const Duration(milliseconds: 1500), (){
                           setState((){
-                            print("setstate medication prescription");
-                            print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                             if(value != null){
-                              vitalstemp = value[0];
+                              vitalstemp.insert(0, value);
+                              doctor_names.insert(0, doctor.lastname);
+                              Future.delayed(const Duration(milliseconds: 1000),(){
+                                setState(() {
+                                  if(doctor_names.length == vitalstemp.length)
+                                  doctor_names.removeAt(1);
+                                });
+                              });
+
                             }
                           });
                         }));
@@ -127,7 +133,7 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr." + doctor_names[index],
+                    subtitle: Text("Planned by: Dr." + checkthisDoc(doctor_names[index]),
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -144,8 +150,15 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificVitalsPrescriptionViewAsDoctor(userUID: widget.userUID, index: index)),
-                      );
+                        MaterialPageRoute(builder: (context) => SpecificVitalsPrescriptionViewAsDoctor(userUID: widget.userUID, index: index, thislist: vitalstemp)),
+                      ).then((value) {
+                        if(value != null){
+                          vitalstemp = value;
+                          setState(() {
+
+                          });
+                        }
+                      });
                     }
 
                 ),
@@ -189,7 +202,20 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
           }
         });
       }
+      for(var i=0;i<vitalstemp.length/2;i++){
+        var temp = vitalstemp[i];
+        vitalstemp[i] = vitalstemp[vitalstemp.length-1-i];
+        vitalstemp[vitalstemp.length-1-i] = temp;
+      }
     });
   }
 
+}
+
+String checkthisDoc(String name) {
+  if(name == null){
+    return "";
+  }else{
+    return name;
+  }
 }

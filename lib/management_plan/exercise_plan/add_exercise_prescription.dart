@@ -244,7 +244,8 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                                 exercise_list[exercise_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
-                              ExPlan a = new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid, dateCreated: now);
+                              ExPlan a = new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid,
+                                  dateCreated: now);
 
                               Navigator.pop(context,a );
                             });

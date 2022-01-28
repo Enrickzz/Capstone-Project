@@ -217,8 +217,6 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                         onPressed:() async {
 
                           try{
-                            print("FREQUENCY");
-                            print(frequency);
                             exercise_list = widget.thislist;
                             final User user = auth.currentUser;
                             final uid = user.uid;
@@ -241,40 +239,6 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                               ExPlan newEP = exercise_list[index];
                               Navigator.pop(context, newEP);
                             });
-
-                            // final User user = auth.currentUser;
-                            // final uid = user.uid;
-                            // String userUID = widget.userUID;
-                            // final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
-                            // readFoodPlan.once().then((DataSnapshot datasnapshot) {
-                            //   String temp1 = datasnapshot.value.toString();
-                            //   print(temp1);
-                            //   if(datasnapshot.value == null){
-                            //     final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
-                            //     foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency.toString(), "intensity": intensity.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                            //     print("Added Food Plan Successfully! " + uid);
-                            //   }
-                            //   else{
-                            //     getExercise();
-                            //     Future.delayed(const Duration(milliseconds: 1000), (){
-                            //       count = exercise_list.length--;
-                            //       final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
-                            //       foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency.toString(), "intensity": intensity.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                            //       print("Added Exercise Plan Successfully! " + uid);
-                            //     });
-                            //   }
-                            // });
-                            // Future.delayed(const Duration(milliseconds: 1000), (){
-                            //   print("MEDICATION LENGTH: " + exercise_list.length.toString());
-                            //   exercise_list.add(new ExPlan(purpose: purpose, type: type,  important_notes: important_notes, prescribedBy: uid, dateCreated: now));
-                            //   for(var i=0;i<exercise_list.length/2;i++){
-                            //     var temp = exercise_list[i];
-                            //     exercise_list[i] = exercise_list[exercise_list.length-1-i];
-                            //     exercise_list[exercise_list.length-1-i] = temp;
-                            //   }
-                            //   print("POP HERE ==========");
-                            //   Navigator.pop(context, [exercise_list, 1]);
-                            // });
 
                           } catch(e) {
                             print("you got an error! $e");

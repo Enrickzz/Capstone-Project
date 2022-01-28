@@ -69,6 +69,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   String date;
   String hours,min;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -100,13 +101,12 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
     });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        isLoading = false;
         print("setstate");
       });
     });
     super.initState();
-
   }
-
   @override
   void dispose() {
     controller.dispose();
@@ -126,25 +126,12 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                   padding: EdgeInsets.only(right: 20.0),
                   child: GestureDetector(
                     onTap: () {
-                      _showMyDialogDelete();
-                      // showModalBottomSheet(context: context,
-                      //   isScrollControlled: true,
-                      //   builder: (context) => SingleChildScrollView(child: Container(
-                      //     padding: EdgeInsets.only(
-                      //         bottom: MediaQuery.of(context).viewInsets.bottom),
-                      //     child: add_supplement_prescription(thislist: supptemp),
-                      //   ),
-                      //   ),
-                      // ).then((value) =>
-                      //     Future.delayed(const Duration(milliseconds: 1500), (){
-                      //       setState((){
-                      //         print("setstate supplement prescription");
-                      //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                      //         if(value != null){
-                      //           supptemp = value[0];
-                      //         }
-                      //       });
-                      //     }));
+                      int initLeng = templist.length;
+                      _showMyDialogDelete().then((value) {
+                        if(initLeng != templist.length){
+                          Navigator.pop(context, value);
+                        }
+                      });
                     },
                     child: Icon(
                       Icons.delete,
@@ -154,246 +141,253 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
             ),
           ],
         ),
-        body:  Scrollbar(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new WillPopScope(
+          onWillPop: () async{
+            Navigator.pop(context, templist);
+            return true;
+          },
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
 
-                Column(
-                  children: [
-                    Visibility(
-                      visible: prescribedDoctor,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children:<Widget>[
-                              Expanded(
-                                child: Text( "Food Plan",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color:Color(0xFF4A6572),
-                                    )
+                  Column(
+                    children: [
+                      Visibility(
+                        visible: prescribedDoctor,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:<Widget>[
+                                Expanded(
+                                  child: Text( "Food Plan",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color:Color(0xFF4A6572),
+                                      )
+                                  ),
                                 ),
-                              ),
-                              Visibility(
-                                visible: prescribedDoctor,
-                                child: InkWell(
-                                    highlightColor: Colors.transparent,
-                                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                    onTap: () {
-                                      showModalBottomSheet(context: context,
-                                        isScrollControlled: true,
-                                        builder: (context) => SingleChildScrollView(child: Container(
-                                          padding: EdgeInsets.only(
-                                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                                          ///edit food plan
-                                          child: edit_food_prescription(userUID: widget.userUID,),
-                                        ),
-                                        ),
-                                      ).then((value) =>
-                                          Future.delayed(const Duration(milliseconds: 1500), (){
-                                            setState((){
-                                              print("setstate medication prescription");
-                                              print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-                                              if(value != null){
-                                                templist = value[0];
-                                              }
-                                            });
-                                          }));
-                                    },
-                                    // child: Padding(
-                                    // padding: const EdgeInsets.only(left: 8),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Text( "Edit",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal,
-                                              color:Color(0xFF2633C5),
+                                Visibility(
+                                  visible: prescribedDoctor,
+                                  child: InkWell(
+                                      highlightColor: Colors.transparent,
+                                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                      onTap: () {
+                                        showModalBottomSheet(context: context,
+                                          isScrollControlled: true,
+                                          builder: (context) => SingleChildScrollView(child: Container(
+                                            padding: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context).viewInsets.bottom),
+                                            ///edit food plan
+                                            child: edit_food_prescription(thislist: templist,userUID: widget.userUID, index: widget.index),
+                                          ),
+                                          ),
+                                        ).then((value) =>
+                                            Future.delayed(const Duration(milliseconds: 1500), (){
+                                              setState((){
+                                                if(value != null){
+                                                  FoodPlan newFP = value;
+                                                  important_notes = newFP.important_notes;
+                                                  food = newFP.food;
+                                                  purpose = newFP.purpose;
 
-                                            )
-                                        ),
+                                                  templist[widget.index].important_notes = important_notes;
+                                                  templist[widget.index].food = food;
+                                                  templist[widget.index].purpose = purpose;
+                                                  setState(() {
 
-                                        // SizedBox(
-                                        //   height: 38,
-                                        //   width: 26,
-                                        //   // child: Icon(
-                                        //   //   Icons.arrow_forward,
-                                        //   //   color: FitnessAppTheme.darkText,
-                                        //   //   size: 18,
-                                        //   // ),
-                                        // ),
-                                      ],
-                                    )
-                                  // )
-                                ),
-                              )
-                            ]
+                                                  });
+                                                }
+                                              });
+                                            }));
+                                      },
+                                      // child: Padding(
+                                      // padding: const EdgeInsets.only(left: 8),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text( "Edit",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.normal,
+                                                color:Color(0xFF2633C5),
+
+                                              )
+                                          ),
+                                        ],
+                                      )
+                                    // )
+                                  ),
+                                )
+                              ]
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 300,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
+                      SizedBox(height: 10.0),
+                      Container(
+                          height: 300,
+                          // height: 500, if may contact number and email
+                          // margin: EdgeInsets.only(bottom: 50),
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    child: Material(
+                                      child: Center(
+                                        child: Container(
+                                            width: 340,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 20.0)],
+                                            )
+                                        ),
                                       ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Purpose",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(purpose,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Diet Instructions",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
+                                    )),
+                                Positioned(
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(18.0),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text("Purpose",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
                                                 ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(food,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
                                               ),
-                                            ),
-
-                                            SizedBox(height: 16),
-                                            Text("Important Notes/Assessments",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(important_notes,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 150,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Planned by",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text("Dr." + prescribedBy,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Date Planned",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
+                                              SizedBox(height: 8),
+                                              Text(purpose,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
                                                 ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(dateCreated,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
                                               ),
-                                            ),
+                                              SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  Text("Diet Instructions",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(food,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
 
-                                          ]
+                                              SizedBox(height: 16),
+                                              Text("Important Notes/Assessments",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(important_notes,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+
+                                            ]
+                                        ),
                                       ),
-                                    ),
-                                  ))
-                            ]
-                        )
-                    ),
-                  ],
-                ),
+                                    ))
+                              ]
+                          )
+                      ),
+                      SizedBox(height: 10.0),
+                      Container(
+                          height: 150,
+                          // height: 500, if may contact number and email
+                          // margin: EdgeInsets.only(bottom: 50),
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                    child: Material(
+                                      child: Center(
+                                        child: Container(
+                                            width: 340,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 20.0)],
+                                            )
+                                        ),
+                                      ),
+                                    )),
+                                Positioned(
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(18.0),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text("Planned by",
+                                                style: TextStyle(
+                                                  fontSize:14,
+                                                  color:Color(0xFF363f93),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text("Dr." + prescribedBy,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  Text("Date Planned",
+                                                    style: TextStyle(
+                                                      fontSize:14,
+                                                      color:Color(0xFF363f93),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(dateCreated,
+                                                style: TextStyle(
+                                                    fontSize:16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
 
-              ],
+                                            ]
+                                        ),
+                                      ),
+                                    ))
+                              ]
+                          )
+                      ),
+                    ],
+                  ),
+
+                ],
+              ),
             ),
           ),
         )
@@ -401,40 +395,48 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
 
 
   }
-// Widget buildCopy() => Row(children: [
-//   TextField(controller: controller),
-//   IconButton(
-//       icon: Icon(Icons.content_copy),
-//       onPressed: (){
-//         FlutterClipboard.copy(text);
-//       },
-//   )
-//
-// ],)
-  void getFoodplan() {
+  void getFoodplan() async{
     final User user = auth.currentUser;
     final uid = user.uid;
     var userUID = widget.userUID;
     final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
     int index = widget.index;
-    readFoodPlan.once().then((DataSnapshot snapshot){
+    await readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        templist.add(FoodPlan.fromJson(jsonString));
+      temp.forEach((jsonString) async{
+        FoodPlan a = FoodPlan.fromJson(jsonString);
+        final readDoctor = databaseReference.child('users/' + a.prescribedBy + '/personal_info/');
+        await readDoctor.once().then((DataSnapshot snapshot){
+          print("IN DOC");
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          if(temp != null){
+            doctor = Users.fromJson(temp);
+            a.doctor = doctor.lastname;
+            templist.add(a);
+          }
+          final readDoctorName = databaseReference.child('users/' + templist[index].prescribedBy + '/personal_info/');
+          readDoctorName.once().then((DataSnapshot snapshot){
+            Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+            doctor = Users.fromJson(temp2);
+            prescribedBy = doctor.lastname + " " + doctor.firstname;
+
+            if(templist[index].prescribedBy == uid){
+              prescribedDoctor = true;
+            }
+            for(var i=0;i<templist.length/2;i++){
+              var temp = templist[i];
+              templist[i] = templist[templist.length-1-i];
+              templist[templist.length-1-i] = temp;
+            }
+            purpose = templist[index].purpose;
+            food = templist[index].food;
+            important_notes = templist[index].important_notes ;
+            dateCreated = templist[index].dateCreated;
+          });
+        });
       });
-      final readDoctorName = databaseReference.child('users/' + templist[index].prescribedBy + '/personal_info/');
-      readDoctorName.once().then((DataSnapshot snapshot){
-        Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-        doctor = Users.fromJson(temp2);
-        prescribedBy = doctor.lastname + " " + doctor.firstname;
-      });
-      if(templist[index].prescribedBy == uid){
-        prescribedDoctor = true;
-      }
-      purpose = templist[index].purpose;
-      food = templist[index].food;
-      important_notes = templist[index].important_notes ;
-      dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
+
+
     });
   }
   Future<void> _showMyDialogDelete() async {
@@ -466,40 +468,30 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                 final uid = user.uid;
                 int initial_length = templist.length;
                 templist.removeAt(widget.index);
-                // List<int> delete_list = [];
-                // for(int i = 0; i < listtemp.length; i++){
-                //   if(_selected[i]){
-                //     delete_list.add(i);
-                //   }
-                // }
-                // delete_list.sort((a,b) => b.compareTo(a));
-                // for(int i = 0; i < delete_list.length; i++){
-                //   listtemp.removeAt(delete_list[i]);
-                // }
                 /// delete fields
                 for(int i = 1; i <= initial_length; i++){
-                  final bpRef = databaseReference.child('users/' + uid + '/management_plan/foodplan/' + i.toString());
+                  final bpRef = databaseReference.child('users/' + widget.userUID + '/management_plan/foodplan/' + i.toString());
                   bpRef.remove();
                 }
                 /// write fields
                 for(int i = 0; i < templist.length; i++){
-                  final bpRef = databaseReference.child('users/' + uid + '/management_plan/foodplan/' + (i+1).toString());
+                  final bpRef = databaseReference.child('users/' + widget.userUID + '/management_plan/foodplan/' + (i+1).toString());
                   bpRef.set({
                     "purpose": templist[i].purpose.toString(),
                     "food": templist[i].food.toString(),
                     "important_notes": templist[i].important_notes.toString(),
                     "prescribedBy": templist[i].prescribedBy.toString(),
-                    "datecreated": "${templist[i].dateCreated.month.toString().padLeft(2,"0")}/${templist[i].dateCreated.day.toString().padLeft(2,"0")}/${templist[i].dateCreated.year}",
+                    "dateCreated": templist[i].dateCreated,
                   });
+                  print("MONTH");
                 }
-                Navigator.of(context).pop();
-
+                Navigator.pop(context, templist);
               },
             ),
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
             ),
           ],

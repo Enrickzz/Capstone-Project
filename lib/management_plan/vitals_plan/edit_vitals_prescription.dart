@@ -18,8 +18,9 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class edit_vitals_prescription extends StatefulWidget {
   final List<Vitals> thislist;
-  String userUID;
-  edit_vitals_prescription({this.thislist, this.userUID});
+  final String userUID;
+  final int index;
+  edit_vitals_prescription({this.thislist, this.userUID, this.index});
   @override
   _editVitalsrescriptionState createState() => _editVitalsrescriptionState();
 }
@@ -45,51 +46,6 @@ class _editVitalsrescriptionState extends State<edit_vitals_prescription> {
 
   ];
 
-
-
-  // String getFrom(){
-  //   if(dateRange == null){
-  //     return 'From';
-  //   }
-  //   else{
-  //     return DateFormat('MM/dd/yyyy').format(dateRange.start);
-  //
-  //   }
-  // }
-  //
-  // String getUntil(){
-  //   if(dateRange == null){
-  //     return 'Until';
-  //   }
-  //   else{
-  //     return DateFormat('MM/dd/yyyy').format(dateRange.end);
-  //
-  //   }
-  // }
-  //
-  // Future pickDateRange(BuildContext context) async{
-  //   final initialDateRange = DateTimeRange(
-  //     start: DateTime.now(),
-  //     end: DateTime.now().add(Duration(hours:24 * 3)),
-  //   );
-  //
-  //   final newDateRange = await showDateRangePicker(
-  //     context: context,
-  //     firstDate: DateTime(DateTime.now().year - 5),
-  //     lastDate: DateTime(DateTime.now().year + 5),
-  //     initialDateRange: dateRange ?? initialDateRange,
-  //   );
-  //
-  //   if(newDateRange == null) return;
-  //
-  //   setState(() => {
-  //     dateRange = newDateRange,
-  //     startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
-  //     enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
-  //
-  //   });
-  //   print("date Range " + dateRange.toString());
-  // }
   @override
   Widget build(BuildContext context) {
 
@@ -303,38 +259,28 @@ class _editVitalsrescriptionState extends State<edit_vitals_prescription> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
+                            vitals_list = widget.thislist;
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            String userUID = widget.userUID;
-                            final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
-                            readFoodPlan.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print(temp1);
-                              if(datasnapshot.value == null){
-                                final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
-                                vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                                print("Added Vitals Plan Successfully! " + uid);
-                              }
-                              else{
-                                getVitals();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = vitals_list.length--;
-                                  final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
-                                  vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                                  print("Added Food Plan Successfully! " + uid);
-                                });
-                              }
-                            });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + vitals_list.length.toString());
-                              vitals_list.add(new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
-                              for(var i=0;i<vitals_list.length/2;i++){
-                                var temp = vitals_list[i];
-                                vitals_list[i] = vitals_list[vitals_list.length-1-i];
-                                vitals_list[vitals_list.length-1-i] = temp;
-                              }
+                            int index = ((vitals_list.length + 1) - (widget.index+1)) ;
+                            final planRef = databaseReference.child('users/' + widget.userUID + '/management_plan/vitals_plan/' + index.toString());
+                            planRef.update({
+                              "purpose": purpose.toString(),
+                              "type": type.toString(),
+                              "important_notes": important_notes.toString(),
+                              "prescribedBy": uid,
+                              "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                            Vitals a = new Vitals();
+                            Future.delayed(const Duration(milliseconds: 1500), (){
+                              index = widget.index;
+                              vitals_list[index].purpose = purpose.toString();
+                              vitals_list[index].type = type.toString();
+                              vitals_list[index].important_notes = important_notes.toString();
+                              vitals_list[index].prescribedBy = prescribedBy.toString();
+                              vitals_list[index].dateCreated = now;
                               print("POP HERE ==========");
-                              Navigator.pop(context, [vitals_list, 1]);
+                              Vitals newV = vitals_list[index];
+                              Navigator.pop(context, newV);
                             });
                           } catch(e) {
                             print("you got an error! $e");

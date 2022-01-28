@@ -329,7 +329,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
       purpose = templist[index].purpose;
       food = templist[index].food;
       important_notes = templist[index].important_notes ;
-      dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
+      dateCreated = templist[index].dateCreated;
     });
   }
 }

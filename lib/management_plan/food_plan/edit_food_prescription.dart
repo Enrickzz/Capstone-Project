@@ -19,7 +19,8 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 class edit_food_prescription extends StatefulWidget {
   final List<FoodPlan> thislist;
   final String userUID;
-  edit_food_prescription({this.thislist, this.userUID});
+  final int index;
+  edit_food_prescription({this.thislist, this.userUID,this.index});
   @override
   _editFoodPrescriptionState createState() => _editFoodPrescriptionState();
 }
@@ -49,49 +50,6 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
   String date;
   String hours,min;
 
-  // String getFrom(){
-  //   if(dateRange == null){
-  //     return 'From';
-  //   }
-  //   else{
-  //     return DateFormat('MM/dd/yyyy').format(dateRange.start);
-  //
-  //   }
-  // }
-  //
-  // String getUntil(){
-  //   if(dateRange == null){
-  //     return 'Until';
-  //   }
-  //   else{
-  //     return DateFormat('MM/dd/yyyy').format(dateRange.end);
-  //
-  //   }
-  // }
-
-  // Future pickDateRange(BuildContext context) async{
-  //   final initialDateRange = DateTimeRange(
-  //     start: DateTime.now(),
-  //     end: DateTime.now().add(Duration(hours:24 * 3)),
-  //   );
-  //
-  //   final newDateRange = await showDateRangePicker(
-  //     context: context,
-  //     firstDate: DateTime(DateTime.now().year - 5),
-  //     lastDate: DateTime(DateTime.now().year + 5),
-  //     initialDateRange: dateRange ?? initialDateRange,
-  //   );
-  //
-  //   if(newDateRange == null) return;
-  //
-  //   setState(() => {
-  //     dateRange = newDateRange,
-  //     startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
-  //     enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
-  //
-  //   });
-  //   print("date Range " + dateRange.toString());
-  // }
   @override
   void initState(){
     getRecomm(widget.userUID);
@@ -250,44 +208,28 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
+                            foodplan_list = widget.thislist;
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            String userUID = widget.userUID;
-                            consumption_time = valueChooseFoodTime;
-                            final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
-                            readFoodPlan.once().then((DataSnapshot datasnapshot) {
-                              String temp1 = datasnapshot.value.toString();
-                              print(temp1);
-                              if(datasnapshot.value == null){
-                                final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
-                                foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "quantity_food": quantity_food.toString(), "consumption_time": consumption_time.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                                print("Added Food Plan Successfully! " + uid);
-                              }
-                              else{
-                                getFoodPlan();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = foodplan_list.length--;
-                                  final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
-                                  foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "quantity_food": quantity_food.toString(), "consumption_time": consumption_time.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                                  print("Added Food Plan Successfully! " + uid);
-                                });
-                              }
-                            });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + foodplan_list.length.toString());
-                              foodplan_list.add(new FoodPlan(purpose: purpose, food: food, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
-                              for(var i=0;i<foodplan_list.length/2;i++){
-                                var temp = foodplan_list[i];
-                                foodplan_list[i] = foodplan_list[foodplan_list.length-1-i];
-                                foodplan_list[foodplan_list.length-1-i] = temp;
-                              }
+                            int index = ((foodplan_list.length + 1) - (widget.index+1)) ;
+                            final foodplanRef = databaseReference.child('users/' + widget.userUID + '/management_plan/foodplan/' + index.toString());
+                            foodplanRef.update({
+                              "purpose": purpose.toString(),
+                              "food": food.toString(),
+                              "important_notes": important_notes.toString(),
+                              "prescribedBy": uid,
+                              "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                            Future.delayed(const Duration(milliseconds: 1500), (){
+                              index = widget.index;
+                              foodplan_list[index].purpose = purpose.toString();
+                              foodplan_list[index].food = food.toString();
+                              foodplan_list[index].important_notes = important_notes.toString();
+                              foodplan_list[index].prescribedBy = prescribedBy.toString();
+                              foodplan_list[index].dateCreated = "${now.month}/${now.day}/${now.year}";
+                              foodplan_list[index].doctor = doctor.lastname;
                               print("POP HERE ==========");
-                              addtoNotif("Dr. "+doctor.lastname+ " has updated your Food management plan. Click here to view your updated Food management plan. " ,
-                                  "Doctor Updated your Food Plan!",
-                                  "1",
-                                  "Food Plan",
-                                  widget.userUID);
-                              Navigator.pop(context, [foodplan_list, 1]);
+                              FoodPlan newFP = foodplan_list[index];
+                              Navigator.pop(context, newFP);
                             });
                           } catch(e) {
                             print("you got an error! $e");
