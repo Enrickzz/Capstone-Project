@@ -37,6 +37,7 @@ class _DietViewState extends State<DietView> {
   double cholesterol = 0;
   double total_fat = 0;
   double sugar = 0;
+  double diff = 0;
   DateTime today = DateTime.now();
 
 
@@ -81,6 +82,10 @@ class _DietViewState extends State<DietView> {
             total_fat += snack_list[i].total_fat;
             sugar += snack_list[i].sugar;
           }
+        }
+        diff = double.parse(total_cal.toString()) - burned;
+        if(diff < 0){
+          diff = 0;
         }
       });
     });
@@ -356,7 +361,7 @@ class _DietViewState extends State<DietView> {
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            total_cal.toString(),
+                                            diff.toString(),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:
@@ -369,7 +374,7 @@ class _DietViewState extends State<DietView> {
                                             ),
                                           ),
                                           Text(
-                                            'Kcal left',
+                                            'Kcal Gained',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:

@@ -95,7 +95,6 @@ class _my_meals_doctorState extends State<my_meals_doctor>
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController,
         userUID: widget.userUID,
-
       ),
     );
   }

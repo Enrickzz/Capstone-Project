@@ -37,10 +37,12 @@ class _DietViewDocState extends State<DietViewDoc> {
   double cholesterol = 0;
   double total_fat = 0;
   double sugar = 0;
+  double diff = 0;
   DateTime today = DateTime.now();
 
   @override
   void initState() {
+    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
     getBFoodIntake();
     getLFoodIntake();
     getDFoodIntake();
@@ -49,7 +51,7 @@ class _DietViewDocState extends State<DietViewDoc> {
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         for(int i = 0; i < breakfast_list.length; i++){
-          if(breakfast_list[i].intakeDate == today){
+          if(breakfast_list[i].intakeDate == now){
             total_cal += breakfast_list[i].calories;
             cholesterol += breakfast_list[i].cholesterol;
             total_fat += breakfast_list[i].total_fat;
@@ -57,7 +59,7 @@ class _DietViewDocState extends State<DietViewDoc> {
           }
         }
         for(int i = 0; i < lunch_list.length; i++){
-          if(lunch_list[i].intakeDate == today){
+          if(lunch_list[i].intakeDate == now){
             total_cal += lunch_list[i].calories;
             cholesterol += lunch_list[i].cholesterol;
             total_fat += lunch_list[i].total_fat;
@@ -65,7 +67,7 @@ class _DietViewDocState extends State<DietViewDoc> {
           }
         }
         for(int i = 0; i < dinner_list.length; i++){
-          if(dinner_list[i].intakeDate == today){
+          if(dinner_list[i].intakeDate == now){
             total_cal += dinner_list[i].calories;
             cholesterol += dinner_list[i].cholesterol;
             total_fat += dinner_list[i].total_fat;
@@ -73,12 +75,16 @@ class _DietViewDocState extends State<DietViewDoc> {
           }
         }
         for(int i = 0; i < snack_list.length; i++){
-          if(snack_list[i].intakeDate == today){
+          if(snack_list[i].intakeDate == now){
             total_cal += snack_list[i].calories;
             cholesterol += snack_list[i].cholesterol;
             total_fat += snack_list[i].total_fat;
             sugar += snack_list[i].sugar;
           }
+        }
+        diff = double.parse(total_cal.toString()) - burned;
+        if(diff < 0){
+          diff = 0;
         }
       });
     });
@@ -354,7 +360,7 @@ class _DietViewDocState extends State<DietViewDoc> {
                                         CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            total_cal.toString(),
+                                            diff.toString(),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:
@@ -367,7 +373,7 @@ class _DietViewDocState extends State<DietViewDoc> {
                                             ),
                                           ),
                                           Text(
-                                            'Kcal left',
+                                            'Kcal Gained',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:
@@ -452,7 +458,7 @@ class _DietViewDocState extends State<DietViewDoc> {
                                     child: Row(
                                       children: <Widget>[
                                         Container(
-                                          width: ((70 / 1.2) * widget.animation.value),
+                                          width: ((70) * widget.animation.value),
                                           height: 4,
                                           decoration: BoxDecoration(
                                             gradient: LinearGradient(colors: [
@@ -471,7 +477,7 @@ class _DietViewDocState extends State<DietViewDoc> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 6),
                                   child: Text(
-                                    cholesterol.toStringAsFixed(1),
+                                    cholesterol.toStringAsFixed(1) + " mg",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -519,7 +525,7 @@ class _DietViewDocState extends State<DietViewDoc> {
                                         child: Row(
                                           children: <Widget>[
                                             Container(
-                                              width: ((70 / 2) *
+                                              width: ((70) *
                                                   widget.animationController.value),
                                               height: 4,
                                               decoration: BoxDecoration(
@@ -540,7 +546,7 @@ class _DietViewDocState extends State<DietViewDoc> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        sugar.toStringAsFixed(1),
+                                        sugar.toStringAsFixed(1) + " g",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -590,7 +596,7 @@ class _DietViewDocState extends State<DietViewDoc> {
                                         child: Row(
                                           children: <Widget>[
                                             Container(
-                                              width: ((70 / 2.5) *
+                                              width: ((70) *
                                                   widget.animationController.value),
                                               height: 4,
                                               decoration: BoxDecoration(
@@ -611,7 +617,7 @@ class _DietViewDocState extends State<DietViewDoc> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        total_fat.toStringAsFixed(1),
+                                        total_fat.toStringAsFixed(1) + " g",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
