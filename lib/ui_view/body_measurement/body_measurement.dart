@@ -1,7 +1,13 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/users.dart';
 
-class BodyMeasurementView extends StatelessWidget {
+class BodyMeasurementView extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -9,15 +15,63 @@ class BodyMeasurementView extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<BodyMeasurementView> createState() => _BodyMeasurementViewState();
+}
+
+
+class _BodyMeasurementViewState extends State<BodyMeasurementView> {
+
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  Physical_Parameters pp = new Physical_Parameters();
+  DateTime now = DateTime.now();
+  final timeformat = new DateFormat("hh:mm aa");
+  String status = "overweight";
+  bool isLoading = true;
+  double weight = 0;
+  double height = 0;
+  double bmi = 0;
+
+
+  @override
+  void initState() {
+    super.initState();
+    getBMI();
+    Future.delayed(const Duration(milliseconds: 1200),() {
+      isLoading = false;
+      setState(() {
+        if(pp.bmi < 18.5){
+          status = "Underweight";
+        }
+        else if(pp.bmi >= 18.5 && pp.bmi <= 24.9){
+          status = "Normal";
+        }
+        else if(pp.bmi >= 18.5 && pp.bmi <= 24.9){
+          status = "Normal";
+        }
+        else if(pp.bmi >= 25.0 && pp.bmi <= 29.9){
+          status = "Overweight";
+        }
+        else if(pp.bmi >= 30){
+          status = "Obesity";
+        }
+        weight = pp.weight;
+        height = pp.height;
+        bmi = pp.bmi;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -38,7 +92,10 @@ class BodyMeasurementView extends StatelessWidget {
                 ),
                 child: Column(
                   children: <Widget>[
-                    Padding(
+                    isLoading
+                        ? Center(
+                      child: CircularProgressIndicator(),
+                    ): new Padding(
                       padding:
                           const EdgeInsets.only(top: 16, left: 16, right: 24),
                       child: Column(
@@ -71,7 +128,7 @@ class BodyMeasurementView extends StatelessWidget {
                                     padding: const EdgeInsets.only(
                                         left: 4, bottom: 3),
                                     child: Text(
-                                      '206.8',
+                                      weight.toStringAsFixed(1),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -85,7 +142,7 @@ class BodyMeasurementView extends StatelessWidget {
                                     padding: const EdgeInsets.only(
                                         left: 8, bottom: 8),
                                     child: Text(
-                                      'Ibs',
+                                      'Kg',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -115,7 +172,7 @@ class BodyMeasurementView extends StatelessWidget {
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Today 8:26 AM',
+                                          'Today '+ timeformat.format(now),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily:
@@ -174,7 +231,7 @@ class BodyMeasurementView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '185 cm',
+                                  height.toStringAsFixed(0)+' cm',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,
@@ -211,7 +268,7 @@ class BodyMeasurementView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '27.3 BMI',
+                                      bmi.toStringAsFixed(1) + ' BMI',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -224,7 +281,7 @@ class BodyMeasurementView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        'Overweight',
+                                        status,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -253,4 +310,15 @@ class BodyMeasurementView extends StatelessWidget {
       },
     );
   }
+  void getBMI() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readRef = databaseReference.child('users/' + uid + '/physical_parameters/');
+    readRef.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      pp = Physical_Parameters.fromJson(temp);
+    });
+  }
 }
+
+

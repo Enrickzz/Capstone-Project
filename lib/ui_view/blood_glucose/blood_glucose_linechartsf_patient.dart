@@ -19,7 +19,7 @@ import 'package:my_app/main.dart';
 class blood_glucose_sf_patient extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
-  blood_glucose_sf_patient({Key key, this.animationController, this.animation, })
+  blood_glucose_sf_patient({Key key, this.animationController, this.animation})
       : super(key: key);
 
   @override
@@ -40,8 +40,6 @@ class bloodGlucoseState extends State<blood_glucose_sf_patient> {
   void initState() {
     super.initState();
     getBloodGlucose();
-
-
     Future.delayed(const Duration(milliseconds: 1200),() {
       isLoading = false;
       setState(() {
@@ -50,6 +48,7 @@ class bloodGlucoseState extends State<blood_glucose_sf_patient> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -104,8 +103,6 @@ class bloodGlucoseState extends State<blood_glucose_sf_patient> {
                           primaryXAxis: CategoryAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             // plotOffset: 50,
-
-
                           ),
                           primaryYAxis: NumericAxis(
 
@@ -153,8 +150,6 @@ List <SalesData> getChartData(){
     final readBC = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/');
     readBC.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print("TEMPPPP");
-      print(temp);
       temp.forEach((jsonString) {
         bgtemp.add(Blood_Glucose.fromJson(jsonString));
       });

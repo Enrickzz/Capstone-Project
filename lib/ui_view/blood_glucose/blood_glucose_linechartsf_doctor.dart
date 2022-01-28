@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/Sleep.dart';
+import 'package:my_app/models/users.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -18,7 +19,8 @@ import 'package:my_app/main.dart';
 class blood_glucose_sf_doctor extends StatefulWidget{
   final AnimationController animationController;
   final Animation<double> animation;
-  blood_glucose_sf_doctor({Key key, this.animationController, this.animation, })
+  final String userUID;
+  blood_glucose_sf_doctor({Key key, this.animationController, this.animation, this.userUID})
       : super(key: key);
 
   @override
@@ -29,16 +31,20 @@ class bloodGlucoseState extends State<blood_glucose_sf_doctor> {
 
   List<SalesData> _chartData;
   TooltipBehavior _tooltipBehavior;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  List<Blood_Glucose> bgtemp = [];
   bool isLoading = true;
+
   @override
   void initState() {
-    _chartData = getChartData();
-    _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
+    getBloodGlucose();
     Future.delayed(const Duration(milliseconds: 1200),() {
       isLoading = false;
       setState(() {
-
+        _tooltipBehavior = TooltipBehavior(enable: true);
+        _chartData = getChartData();
       });
     });
   }
@@ -119,17 +125,34 @@ class bloodGlucoseState extends State<blood_glucose_sf_doctor> {
   }
 
   List <SalesData> getChartData(){
-    List <SalesData> chartData = [
-      SalesData("1/22/22", 25),
-      SalesData("1/24/22", 31),
-      SalesData("1/26/22", 23),
-      SalesData("1/27/22", 37),
-      SalesData("1/29/22", 30),
-    ];
+    List <SalesData> chartData = [];
+    List<Blood_Glucose> bg_list = [];
+    for(int i = 1; i <= bgtemp.length; i++){
+      bg_list.add(bgtemp[bgtemp.length-i]);
+      if(i == 9){
+        i = 99999;
+      }
+    }
+    bg_list = bg_list.reversed.toList();
+    for(int i = 0; i < bg_list.length; i++){
+      chartData.add(SalesData("${bg_list[i].bloodGlucose_date.month.toString().padLeft(2,"0")}/${bg_list[i].bloodGlucose_date.day.toString().padLeft(2,"0")}", bg_list[i].glucose));
 
+    }
     return chartData;
   }
-
+  void getBloodGlucose() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readBC = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/');
+    readBC.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        bgtemp.add(Blood_Glucose.fromJson(jsonString));
+      });
+      bgtemp.sort((a,b) => a.bloodGlucose_date.compareTo(b.bloodGlucose_date));
+    });
+  }
 
 
 

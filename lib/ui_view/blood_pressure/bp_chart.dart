@@ -21,7 +21,7 @@ class bp_chart extends StatefulWidget{
   @override
   _blood_pressureState createState() => _blood_pressureState();
 }
-List<LineSeries<_ChartData, num>> finalLine = new List();
+List<LineSeries<_ChartData, String>> finalLine = new List();
 List<_ChartData> finaList = new List();
 class _blood_pressureState extends State<bp_chart> {
   @override
@@ -77,19 +77,26 @@ class _blood_pressureState extends State<bp_chart> {
                                     isVisible: true,
                                     overflowMode: LegendItemOverflowMode.wrap,
                                     position: LegendPosition.top),
-                                primaryXAxis: CategoryAxis(
-                                  isVisible: false,
-                                    edgeLabelPlacement: EdgeLabelPlacement.shift,
-                                    interval: 1,
-                                    axisLabelFormatter: (AxisLabelRenderDetails details) => axis(details),
-                                    majorGridLines: const MajorGridLines(width: 0)),
+                                  primaryXAxis: CategoryAxis(
+                                    majorGridLines: MajorGridLines(width: 0),
+                                    // plotOffset: 50,
+                                  ),
+                                // primaryXAxis: CategoryAxis(
+                                //   isVisible: false,
+                                //     edgeLabelPlacement: EdgeLabelPlacement.shift,
+                                //     interval: 1,
+                                //     axisLabelFormatter: (AxisLabelRenderDetails details) => axis(details),
+                                //     majorGridLines: const MajorGridLines(width: 0)),
                                 title: ChartTitle(text: 'Blood Pressure'),
-                                primaryYAxis: NumericAxis(
-                                    labelFormat: '{value}',
-                                    interval: 30,
-                                    minimum: 40,
-                                    axisLine: const AxisLine(width: 0),
-                                    majorTickLines: const MajorTickLines(color: Colors.transparent)),
+                                  primaryYAxis: NumericAxis(
+                                  majorGridLines: MajorGridLines(width: 0),
+                                  numberFormat: NumberFormat.compact()),
+                                // primaryYAxis: NumericAxis(
+                                //     labelFormat: '{value}',
+                                //     interval: 30,
+                                //     minimum: 40,
+                                //     axisLine: const AxisLine(width: 0),
+                                //     majorTickLines: const MajorTickLines(color: Colors.transparent)),
                                 series: finalLine,
                                 tooltipBehavior: TooltipBehavior(enable: true, format: 'series.name : ' + 'point.y' ),
 
@@ -140,7 +147,7 @@ Future<void> getData() async{
       thisbp.add(new Blood_Pressure.fromJson(jsonString));
       Blood_Pressure a = new Blood_Pressure.fromJson(jsonString);
       // if(count <= 14){
-        finaList.add(new _ChartData(double.parse(count.toString()),double.parse(a.systolic_pressure), double.parse(a.diastolic_pressure)));
+        finaList.add(new _ChartData("${a.bp_date.month.toString().padLeft(2,"0")}/${a.bp_date.day.toString().padLeft(2,"0")}",double.parse(a.systolic_pressure), double.parse(a.diastolic_pressure)));
         count++;
       // }
     });
@@ -184,10 +191,10 @@ Future<void> getData() async{
   });
 }
 
-List<LineSeries<_ChartData, num>> getLine(List<_ChartData> thisList){
+List<LineSeries<_ChartData, String>> getLine(List<_ChartData> thisList){
   thisList.sort((a,b) => a.x.compareTo(b.x));
-  return  <LineSeries<_ChartData, num>>[
-    LineSeries<_ChartData, num>(
+  return  <LineSeries<_ChartData, String>>[
+    LineSeries<_ChartData, String>(
       animationDuration: 2500,
       dataSource: thisList,
       xValueMapper: (_ChartData bp, _) => bp.x,
@@ -196,7 +203,7 @@ List<LineSeries<_ChartData, num>> getLine(List<_ChartData> thisList){
       xAxisName: "Days",
       markerSettings: const MarkerSettings(isVisible: true),
     ),
-    LineSeries<_ChartData, num>(
+    LineSeries<_ChartData, String>(
       animationDuration: 2500,
       dataSource: thisList,
       name: 'Diastolic',
@@ -209,7 +216,7 @@ List<LineSeries<_ChartData, num>> getLine(List<_ChartData> thisList){
 }
 class _ChartData {
   _ChartData(this.x, this.y, this.y2);
-   double x;
+   String x;
    double y;
    double y2;
 }

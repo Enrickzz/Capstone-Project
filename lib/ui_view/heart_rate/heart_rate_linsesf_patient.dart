@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/Sleep.dart';
+import 'package:my_app/models/users.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -29,16 +30,19 @@ class bloodGlucoseState extends State<heart_rate_sf_patient> {
 
   List<SalesData> _chartData;
   TooltipBehavior _tooltipBehavior;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  List<Heart_Rate> listtemp = [];
   bool isLoading = true;
+
   @override
   void initState() {
-    _chartData = getChartData();
-    _tooltipBehavior = TooltipBehavior(enable: true);
-    super.initState();
+    getHeartRate();
     Future.delayed(const Duration(milliseconds: 1200),() {
       isLoading = false;
       setState(() {
-
+        _tooltipBehavior = TooltipBehavior(enable: true);
+        _chartData = getChartData();
       });
     });
   }
@@ -119,17 +123,33 @@ class bloodGlucoseState extends State<heart_rate_sf_patient> {
   }
 
   List <SalesData> getChartData(){
-    List <SalesData> chartData = [
-      SalesData("1/22/22", 25),
-      SalesData("1/24/22", 31),
-      SalesData("1/26/22", 23),
-      SalesData("1/27/22", 37),
-      SalesData("1/29/22", 30),
-    ];
+    List <SalesData> chartData = [];
+    List<Heart_Rate> hr_list = [];
+    for(int i = 1; i <= listtemp.length; i++){
+      hr_list.add(listtemp[listtemp.length-i]);
+      if(i == 9){
+        i = 99999;
+      }
+    }
+    hr_list = hr_list.reversed.toList();
+    for(int i = 0; i < hr_list.length; i++){
+      chartData.add(SalesData("${hr_list[i].hr_date.month.toString().padLeft(2,"0")}/${hr_list[i].hr_date.day.toString().padLeft(2,"0")}", double.parse(hr_list[i].bpm.toString())));
 
+    }
     return chartData;
   }
-
+  void getHeartRate() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBC = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/');
+    readBC.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        listtemp.add(Heart_Rate.fromJson(jsonString));
+      });
+      listtemp.sort((a,b) => a.hr_date.compareTo(b.hr_date));
+    });
+  }
 
 
 
