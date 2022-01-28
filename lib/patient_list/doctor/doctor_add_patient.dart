@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,11 +38,12 @@ class MyApp extends StatelessWidget {
 }
 
 class DoctorAddPatient extends StatefulWidget {
-  DoctorAddPatient({Key key, this.title, this.nameslist, this.diseaseList, this.uidList}) : super(key: key);
+  DoctorAddPatient({Key key, this.title, this.nameslist, this.diseaseList, this.uidList, this.pp_img}) : super(key: key);
   final List<String> uidList;
   final List nameslist;
   final List diseaseList;
   final String title;
+  final List pp_img;
 
   @override
   _DoctorAddPatientState createState() => _DoctorAddPatientState();
@@ -58,7 +60,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   TabController controller;
   String userUID = "";
   Users cuser = new Users();
-
+  Users patient = new Users();
   Additional_Info info = new Additional_Info();
   String displayName = "";
   String email = "";
@@ -78,6 +80,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   List namestemp;
   List diseasetemp;
   List<String> uidtemp;
+  List pp_img;
 
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
@@ -93,6 +96,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
     namestemp = widget.nameslist;
     diseasetemp = widget.diseaseList;
     uidtemp = widget.uidList;
+    pp_img = widget.pp_img;
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -201,7 +205,10 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                                     BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
                                   ],
                                 ),
-                                child: Icon(Icons.person_outlined, size: 50, color: Colors.blue,),
+                                child: ClipOval(
+                                  // child:Image.asset("assets/images/blank_person.png",
+                                  child: checkimage(cuser.pp_img),
+                                ),
                               ),
                             ),
                             Padding(
@@ -557,7 +564,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
     final readDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
     // final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
     final readPatientConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
-    // final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+    final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     doc_connection.clear();
     patient_connection.clear();
     bool isPatient = false;
@@ -621,11 +628,28 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
         "nonhealth": doc_connection[doc_connection.length-1].nonhealth.toString(),
         "health": doc_connection[doc_connection.length-1].health.toString(),
       });
+      readPatient.once().then((DataSnapshot patientsnapshot){
+        Map<String, dynamic> temp = jsonDecode(jsonEncode(patientsnapshot.value));
+        print(temp);
+        patient = Users.fromJson(temp);
+        pp_img.add(cuser.pp_img);
+      });
 
       namestemp.add(displayName);
       diseasetemp.add(cvdCondition);
       uidtemp.add(userUID);
     });
+  }
+
+  Widget checkimage(String img) {
+    if(img == null || img == "assets/images/blank_person.png"){
+      return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
+    }else{
+      return Image.file(File(img),
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover);
+    }
   }
 
   Future<void> _showMyDialog() async {
@@ -659,7 +683,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                   // print(namestemp.length);
                   // print('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => PatientList(nameslist: namestemp,diseaselist: diseasetemp, uidList: uidtemp,)));
+                      MaterialPageRoute(builder: (context) => PatientList(nameslist: namestemp,diseaselist: diseasetemp, uidList: uidtemp, pp_img: pp_img)));
                 });
 
               },

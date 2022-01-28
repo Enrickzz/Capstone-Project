@@ -35,11 +35,12 @@ class MyApp extends StatelessWidget {
 }
 
 class PatientList extends StatefulWidget {
-  PatientList({Key key, this.title, this.nameslist, this.diseaselist, this.uidList}) : super(key: key);
+  PatientList({Key key, this.title, this.nameslist, this.diseaselist, this.uidList, this.pp_img}) : super(key: key);
   final List nameslist;
   final List diseaselist;
   final List<String> uidList;
   final String title;
+  final List pp_img;
 
   @override
   _PatientListState createState() => _PatientListState();
@@ -56,7 +57,7 @@ class _PatientListState extends State<PatientList>  {
   List<Users> userlist=[];
   List<Additional_Info> userAddInfo =[];
   List names = [];
-  List pp_img = [];
+  List pp_imgs = [];
   List diseases=[];
 
   //for drawer
@@ -95,6 +96,7 @@ class _PatientListState extends State<PatientList>  {
         names = widget.nameslist;
         diseases = widget.diseaselist;
         uidlist = widget.uidList;
+        pp_imgs = widget.pp_img;
       }
       print("ASDASDASD");
     }else{
@@ -195,7 +197,7 @@ class _PatientListState extends State<PatientList>  {
                   // ),
                   leading: ClipOval(
                     // child:Image.asset("assets/images/blank_person.png",
-                      child: checkimage(pp_img[index])),
+                      child: checkimage(pp_imgs[index])),
                   title: Text(names[index],
                       style:TextStyle(
                         color: Colors.black,
@@ -280,7 +282,7 @@ class _PatientListState extends State<PatientList>  {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
+                MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist, pp_img: pp_imgs)),
               );
             },
           ),

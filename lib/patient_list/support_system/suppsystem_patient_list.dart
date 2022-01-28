@@ -57,7 +57,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
   List<Users> userlist=[];
   List<Additional_Info> userAddInfo =[];
   List names = [];
-  List pp_img = [];
+  List pp_imgs = [];
   List diseases=[];
 
   //for drawer
@@ -95,7 +95,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
         names = widget.nameslist;
         diseases = widget.diseaselist;
         uidlist = widget.uidList;
-        pp_img = widget.pp_img;
+        pp_imgs = widget.pp_img;
       }
     }else{
       getPatients();
@@ -194,7 +194,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
                     // ),
                     leading: ClipOval(
                       // child:Image.asset("assets/images/blank_person.png",
-                        child: checkimage(pp_img[index])),
+                        child: checkimage(pp_imgs[index])),
                     title: Text(names[index],
                         style:TextStyle(
                           color: Colors.black,
@@ -286,7 +286,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SupportAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist, pp_img: pp_img)),
+                MaterialPageRoute(builder: (context) => SupportAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist, pp_img: pp_imgs)),
               );
             },
           ),
@@ -360,9 +360,9 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
             });
 
             names.add(patient.firstname + " " + patient.lastname);
-            pp_img.add(patient.pp_img);
+            pp_imgs.add(patient.pp_img);
             print("PP IMG");
-            print(pp_img);
+            print(pp_imgs);
             print(names);
 
           });
