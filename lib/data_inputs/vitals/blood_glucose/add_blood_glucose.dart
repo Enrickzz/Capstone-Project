@@ -299,34 +299,36 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                               ),
                               Column(
                                 children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Container(
-                                        margin: EdgeInsets.only(top: 55.0),
-                                        alignment: Alignment.center,
-                                        child: Image.asset("assets/images/bgdevice.png",),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Image.asset("assets/images/bgdevice.png", height: 125,),
 
-                                      ),
-                                      Container(
-                                        child: Text(
-                                          'Connect your iHealth account',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8,),
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 16.0),
-                                        child: Image.asset(
-                                          "assets/images/ihealth.png",
-                                          width: 70,
-                                        ),
-                                      ),
-                                    ],
                                   ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Connect your iHealth device',
+                                      style: TextStyle(
+                                        fontSize: 14
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 32,),
+                                  Center(
+                                    child: ElevatedButton(
+                                      child: Text("Connect"),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color.fromRGBO(246,115,0,1),
+                                        onPrimary: Colors.white,
+                                        minimumSize: Size(100, 40),
+                                      ),
+
+                                      onPressed: (){
+                                        _showMyDialog();
+                                      },
+                                    ),
+                                  ),
+
                                 ],
                               )
                             ],
@@ -537,5 +539,36 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
       });
 
     });
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Column(
+              children:  <Widget>[
+                Text('Waiting for your device to connect...'),
+                SizedBox(height: 25,),
+                SizedBox(
+                  child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(246,115,0,1))),
+                  height: 50.0,
+                  width: 50.0,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

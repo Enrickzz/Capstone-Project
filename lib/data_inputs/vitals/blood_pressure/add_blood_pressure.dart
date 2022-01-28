@@ -88,183 +88,251 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                   SizedBox(height: 8),
                   Divider(),
                   SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          showCursor: true,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(
-                                width:0,
-                                style: BorderStyle.none,
-                              ),
+
+                  DefaultTabController(
+                    length: 2,
+                    initialIndex: 0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        TabBar(
+                          labelColor: Colors.black,
+                          tabs: <Widget>[
+                            Tab(
+                              text: "Manual Input",
                             ),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3F5),
-                            hintStyle: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize),
-                            hintText: "Systolic Pressure",
-                          ),
-                          validator: (val) => val.isEmpty ? 'Enter Systolic Pressure' : null,
-                          onChanged: (val){
-                            setState(() => systolic_pressure = val);
-                          },
+                            Tab(
+                              text: "iHealth",
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(width: 8.0),
-                      Text('/'),
-                      SizedBox(width: 8.0),
-                      Expanded(
-                        child: TextFormField(
-                          showCursor: true,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(
-                                width:0,
-                                style: BorderStyle.none,
+                        Container(
+                          height: 260,
+                          padding: EdgeInsets.only(top: 20),
+                          child: TabBarView(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          showCursor: true,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderSide: BorderSide(
+                                                width:0,
+                                                style: BorderStyle.none,
+                                              ),
+                                            ),
+                                            filled: true,
+                                            fillColor: Color(0xFFF2F3F5),
+                                            hintStyle: TextStyle(
+                                                color: Color(0xFF666666),
+                                                fontFamily: defaultFontFamily,
+                                                fontSize: defaultFontSize),
+                                            hintText: "Systolic Pressure",
+                                          ),
+                                          validator: (val) => val.isEmpty ? 'Enter Systolic Pressure' : null,
+                                          onChanged: (val){
+                                            setState(() => systolic_pressure = val);
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.0),
+                                      Text('/'),
+                                      SizedBox(width: 8.0),
+                                      Expanded(
+                                        child: TextFormField(
+                                          showCursor: true,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderSide: BorderSide(
+                                                width:0,
+                                                style: BorderStyle.none,
+                                              ),
+                                            ),
+                                            filled: true,
+                                            fillColor: Color(0xFFF2F3F5),
+                                            hintStyle: TextStyle(
+                                                color: Color(0xFF666666),
+                                                fontFamily: defaultFontFamily,
+                                                fontSize: defaultFontSize),
+                                            hintText: "Diastolic Pressure",
+                                          ),
+                                          validator: (val) => val.isEmpty ? 'Enter Diastolic Pressure' : null,
+                                          onChanged: (val){
+                                            setState(() => diastolic_pressure = val);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 16.0),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: <Widget> [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "Did you just finish exercising or performing strenuous physical activities?",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
+                                        ),
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Row(
+                                            children: [
+                                              Radio(
+                                                value: "Yes",
+                                                groupValue: isResting,
+                                                onChanged: (value){
+                                                  setState(() {
+                                                    this.isResting = value;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          Text("Yes"),
+                                          SizedBox(width: 16),
+                                          Radio(
+                                            value: "No",
+                                            groupValue: isResting,
+                                            onChanged: (value){
+                                              setState(() {
+                                                this.isResting = value;
+                                              });
+                                            },
+                                          ),
+                                          Text("No"),
+                                          SizedBox(width: 16)
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 8.0),
+                                  GestureDetector(
+                                    onTap: ()async{
+                                      await showDatePicker(
+                                        context: context,
+                                        initialDate: new DateTime.now(),
+                                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
+                                        lastDate: new DateTime.now(),
+                                      ).then((value){
+                                        if(value != null && value != bpDate){
+                                          setState(() {
+                                            bpDate = value;
+                                            isDateSelected = true;
+                                            bp_date = "${bpDate.month}/${bpDate.day}/${bpDate.year}";
+                                          });
+                                          dateValue.text = bp_date + "\r";
+                                        }
+                                      });
+
+                                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                                      await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay(
+                                            hour: TimeOfDay.now().hour,
+                                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
+                                                .toInt()),
+                                      ).then((value){
+                                        if(value != null && value != time){
+                                          setState(() {
+                                            time = value;
+                                            final hours = time.hour.toString().padLeft(2,'0');
+                                            final min = time.minute.toString().padLeft(2,'0');
+                                            bp_time = "$hours:$min";
+                                            dateValue.text += "$hours:$min";
+                                            print("data value " + dateValue.text);
+                                          });
+                                        }
+                                      });
+                                    },
+                                    child: AbsorbPointer(
+                                      child: TextFormField(
+                                        controller: dateValue,
+                                        showCursor: false,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                            borderSide: BorderSide(
+                                              width:0,
+                                              style: BorderStyle.none,
+                                            ),
+                                          ),
+                                          filled: true,
+                                          fillColor: Color(0xFFF2F3F5),
+                                          hintStyle: TextStyle(
+                                              color: Color(0xFF666666),
+                                              fontFamily: defaultFontFamily,
+                                              fontSize: defaultFontSize),
+                                          hintText: "Date and Time",
+                                          prefixIcon: Icon(
+                                            Icons.calendar_today,
+                                            color: Color(0xFF666666),
+                                            size: defaultIconSize,
+                                          ),
+                                        ),
+                                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
+                                        onChanged: (val){
+
+                                          print(dateValue);
+                                          setState((){
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3F5),
-                            hintStyle: TextStyle(
-                                color: Color(0xFF666666),
-                                fontFamily: defaultFontFamily,
-                                fontSize: defaultFontSize),
-                            hintText: "Diastolic Pressure",
-                          ),
-                          validator: (val) => val.isEmpty ? 'Enter Diastolic Pressure' : null,
-                          onChanged: (val){
-                            setState(() => diastolic_pressure = val);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget> [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          "Did you just finish exercising or performing strenuous physical activities?",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
-                        ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Radio(
-                                value: "Yes",
-                                groupValue: isResting,
-                                onChanged: (value){
-                                  setState(() {
-                                    this.isResting = value;
-                                  });
-                                },
-                              ),
+                              Column(
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Image.asset("assets/images/bpdevice.jpg", height: 125,),
+
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Connect your iHealth device',
+                                      style: TextStyle(
+                                          fontSize: 14
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 32,),
+                                  Center(
+                                    child: ElevatedButton(
+                                      child: Text("Connect"),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color.fromRGBO(246,115,0,1),
+                                        onPrimary: Colors.white,
+                                        minimumSize: Size(100, 40),
+                                      ),
+
+                                      onPressed: (){
+                                        _showMyDialog();
+                                      },
+                                    ),
+                                  ),
+
+                                ],
+                              )
                             ],
                           ),
-                          Text("Yes"),
-                          SizedBox(width: 16),
-                          Radio(
-                            value: "No",
-                            groupValue: isResting,
-                            onChanged: (value){
-                              setState(() {
-                                this.isResting = value;
-                              });
-                            },
-                          ),
-                          Text("No"),
-                          SizedBox(width: 16)
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  GestureDetector(
-                    onTap: ()async{
-                      await showDatePicker(
-                          context: context,
-                        initialDate: new DateTime.now(),
-                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
-                        lastDate: new DateTime.now(),
-                      ).then((value){
-                        if(value != null && value != bpDate){
-                          setState(() {
-                            bpDate = value;
-                            isDateSelected = true;
-                            bp_date = "${bpDate.month}/${bpDate.day}/${bpDate.year}";
-                          });
-                          dateValue.text = bp_date + "\r";
-                        }
-                      });
-
-                      final initialTime = TimeOfDay(hour:12, minute: 0);
-                      await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay(
-                            hour: TimeOfDay.now().hour,
-                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
-                                .toInt()),
-                      ).then((value){
-                        if(value != null && value != time){
-                          setState(() {
-                            time = value;
-                            final hours = time.hour.toString().padLeft(2,'0');
-                            final min = time.minute.toString().padLeft(2,'0');
-                            bp_time = "$hours:$min";
-                            dateValue.text += "$hours:$min";
-                            print("data value " + dateValue.text);
-                          });
-                        }
-                      });
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: dateValue,
-                        showCursor: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              width:0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFF2F3F5),
-                          hintStyle: TextStyle(
-                              color: Color(0xFF666666),
-                              fontFamily: defaultFontFamily,
-                              fontSize: defaultFontSize),
-                          hintText: "Date and Time",
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Color(0xFF666666),
-                            size: defaultIconSize,
-                          ),
-                        ),
-                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
-                        onChanged: (val){
-
-                          print(dateValue);
-                          setState((){
-                          });
-                        },
-                      ),
+                        )
+                      ],
                     ),
                   ),
+
                   SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -584,6 +652,37 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
       });
 
     });
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Column(
+              children:  <Widget>[
+                Text('Waiting for your device to connect...'),
+                SizedBox(height: 25,),
+                SizedBox(
+                  child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(246,115,0,1))),
+                  height: 50.0,
+                  width: 50.0,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
 }
