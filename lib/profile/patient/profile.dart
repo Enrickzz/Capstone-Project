@@ -233,7 +233,7 @@ class _index3State extends State<index3>
                             onTap: (){
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => addImage(img: File(pp_img))),
+                                MaterialPageRoute(builder: (context) => addImage(img: pp_img)),
                                 );
                             },
 
@@ -1229,7 +1229,7 @@ class _index3State extends State<index3>
     if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
     }else{
-      return Image.file(File(pp_img),
+      return Image.network(pp_img,
           width: 70,
           height: 70,
           fit: BoxFit.cover);

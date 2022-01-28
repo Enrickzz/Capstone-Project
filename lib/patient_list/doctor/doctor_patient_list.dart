@@ -195,9 +195,13 @@ class _PatientListState extends State<PatientList>  {
                   //   backgroundImage: NetworkImage
                   //     ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
                   // ),
-                  leading: ClipOval(
-                    // child:Image.asset("assets/images/blank_person.png",
-                      child: checkimage(pp_imgs[index])),
+                  leading: Container(
+                    height: 50,
+                    width: 50,
+                    child: ClipOval(
+                      // child:Image.asset("assets/images/blank_person.png",
+                        child: checkimage(pp_imgs[index])),
+                  ),
                   title: Text(names[index],
                       style:TextStyle(
                         color: Colors.black,
@@ -245,10 +249,7 @@ class _PatientListState extends State<PatientList>  {
                   MaterialPageRoute(builder: (context) => addImageDoctor(img: File(pp_img))),
                 );
               },
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1485290334039-a3c69043e517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYyOTU3NDE0MQ&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=300'),
-              ),
+              child: ClipOval(child: Image.asset("assets/images/blank_person.png", fit: BoxFit.cover))
             ),
             accountEmail: Text(doctor.email,style: TextStyle(fontSize: 12.0)),
             accountName: Text(
@@ -372,9 +373,9 @@ class _PatientListState extends State<PatientList>  {
     if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 70, height: 70,fit: BoxFit.cover);
     }else{
-      return Image.file(File(img),
-          width: 70,
-          height: 70,
+      return Image.network(img,
+          width: 50,
+          height: 50,
           fit: BoxFit.cover);
     }
   }

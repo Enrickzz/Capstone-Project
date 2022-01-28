@@ -62,7 +62,7 @@ class _glucose_levelsState extends State<glucose_levels> {
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
                         child: SfCartesianChart(
-                          title: ChartTitle(text: 'Glucose Levels Past 30 days'),
+                          title: ChartTitle(text: 'Glucose Levels Past 30 days', textStyle: TextStyle(fontSize: 14)),
                           legend: Legend(isVisible: false),
                           series: <ColumnSeries<glucose_levels_data, String>>[
                             ColumnSeries<glucose_levels_data, String>(
@@ -84,9 +84,6 @@ class _glucose_levelsState extends State<glucose_levels> {
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
                               title: AxisTitle(text: 'Glucose levels')),
                         ),
-                      ),
-                      SizedBox(
-                        height: 32,
                       ),
                     ],
                   ),
