@@ -361,9 +361,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
 
             names.add(patient.firstname + " " + patient.lastname);
             pp_imgs.add(patient.pp_img);
-            print("PP IMG");
-            print(pp_imgs);
-            print(names);
+
 
           });
         }

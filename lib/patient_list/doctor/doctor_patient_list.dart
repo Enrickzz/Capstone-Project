@@ -357,8 +357,7 @@ class _PatientListState extends State<PatientList>  {
             });
 
             names.add(patient.firstname + " " + patient.lastname);
-            print(names);
-
+            pp_imgs.add(patient.pp_img);
           });
         }
       });
