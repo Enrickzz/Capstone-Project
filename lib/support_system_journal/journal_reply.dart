@@ -268,7 +268,7 @@ class _reply_postState extends State<reply_journal> {
                                   readDiscussion.once().then((DataSnapshot discussionsnapshot) {
                                     Map<String, dynamic> temp2 = jsonDecode(jsonEncode(discussionsnapshot.value));
                                     discussion = Discussion.fromJson(temp2);
-                                    readDiscussion.update({"noOfReplies": discussion.noOfReplies+1});
+                                    readDiscussion.update({"noOfReplies": (discussion.noOfReplies+1).toString()});
                                     print("no of replies added 1 successfully");
                                   });
                                   // replyRef.set({"createdBy": doctor_name, "specialty": specialty, "replyDate": "${now.month}/${now.day}/${now.year}", "replyTime": "${now.hour}:${now.minute}", "replyBody": replyBody});
@@ -284,7 +284,7 @@ class _reply_postState extends State<reply_journal> {
                                     readDiscussion.once().then((DataSnapshot discussionsnapshot) {
                                       Map<String, dynamic> temp2 = jsonDecode(jsonEncode(discussionsnapshot.value));
                                       discussion = Discussion.fromJson(temp2);
-                                      readDiscussion.update({"noOfReplies": discussion.noOfReplies+1});
+                                      readDiscussion.update({"noOfReplies": (discussion.noOfReplies+1).toString()});
                                       print("no of replies added 1 successfully");
                                     });
                                     print("Added Journal Entry Reply Successfully! " + userUID);

@@ -276,7 +276,7 @@ class _create_postState extends State<create_post> {
                                 print("temp1 " + temp1);
                                 if(datasnapshot.value == null){
                                   final discussionRef = databaseReference.child('users/' + userUID + '/discussion/' + count.toString());
-                                  discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0, "imgRef": fileName});
+                                  discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
                                   print("Added to Discussion Board Successfully! " + userUID);
                                 }
                                 else{
@@ -285,7 +285,7 @@ class _create_postState extends State<create_post> {
                                     print(count);
                                     count = discussion_list.length--;
                                     final discussionRef = databaseReference.child('users/' + userUID + '/discussion/' + count.toString());
-                                    discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0, "imgRef": fileName});
+                                    discussionRef.set({"title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
                                     print("Added to Discussion Board Successfully! " + userUID);
                                   });
 
