@@ -198,8 +198,6 @@ class _medication_prescriptionState extends State<medication_prescription> {
             }
           }
         }
-
-
         final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
         readDoctor.once().then((DataSnapshot snapshot){
           Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));

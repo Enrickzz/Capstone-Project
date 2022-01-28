@@ -23,7 +23,8 @@ import 'package:my_app/management_plan/food_plan/specific_food_plan_doctor_view.
 class food_prescription_doctor_view extends StatefulWidget {
   final List<FoodPlan> foodplist;
   final String userUID;
-  food_prescription_doctor_view({Key key, this.foodplist, this.userUID}): super(key: key);
+  final List<Connection> connection_list;
+  food_prescription_doctor_view({Key key, this.foodplist, this.userUID, this.connection_list}): super(key: key);
   @override
   _food_prescriptionState createState() => _food_prescriptionState();
 }
@@ -39,6 +40,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
   String dateCreated = "";
   Users doctor = new Users();
   List<String> doctor_names = [];
+  List<Connection> connection_list = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   bool isPatient = false;
   bool isLoading = true;
@@ -48,9 +50,11 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
     super.initState();
     // final User user = auth.currentUser;
     // final uid = user.uid;
+    connection_list.clear();
     foodPtemp.clear();
-    getFoodPlan();
-    Future.delayed(const Duration(milliseconds: 3000), (){
+    connection_list = widget.connection_list;
+    getFoodPlan(connection_list);
+    Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
         isLoading =false;
         print("setstate");
@@ -174,22 +178,20 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
       return "$hours:$min";
     }
   }
-  void getFoodPlan() {
-    print("INFOODPLAN");
+  void getFoodPlan(List<Connection> connections) {
     final User user = auth.currentUser;
     final uid = user.uid;
+    List<int> delete_list = [];
     String userUID = widget.userUID;
     final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       print(snapshot.value);
-      int counter = 0;
       temp.forEach((jsonString) {
         // foodPtemp.add(FoodPlan.fromJson(jsonString));
         FoodPlan a = FoodPlan.fromJson(jsonString);
         final readDoctor = databaseReference.child('users/' + a.prescribedBy + '/personal_info/');
         readDoctor.once().then((DataSnapshot snapshot){
-          print("IN DOC");
           Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
           if(temp != null){
             doctor = Users.fromJson(temp);
@@ -197,8 +199,39 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
             foodPtemp.add(a);
           }
         });
-        counter++;
       });
+      for(int i = 0; i < foodPtemp.length; i++){
+        print("CONNECTION LIST");
+        print(connection_list.length);
+        if(foodPtemp[i].prescribedBy != uid){
+          for(int j = 0; j < connection_list.length; j++){
+            if(foodPtemp[i].prescribedBy == connection_list[j].createdBy){
+              if(connection_list[j].medpres != "true"){
+                /// dont add
+                delete_list.add(i);
+              }
+              else{
+                /// add
+              }
+            }
+          }
+        }
+        final readDoctor = databaseReference.child('users/' + foodPtemp[i].prescribedBy + '/personal_info/');
+        readDoctor.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          if(temp != null){
+            doctor = Users.fromJson(temp);
+            doctor_names.add(doctor.lastname);
+            print("lastname doctor " + doctor.lastname);
+            print("length " + doctor_names.length.toString());
+          }
+        });
+      }
+      delete_list.sort((a, b) => b.compareTo(a));
+      for(int i = 0; i < delete_list.length; i++){
+        foodPtemp.removeAt(delete_list[i]);
+      }
+
       for(var i=0;i<foodPtemp.length/2;i++){
         var temp = foodPtemp[i];
         foodPtemp[i] = foodPtemp[foodPtemp.length-1-i];

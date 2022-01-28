@@ -154,7 +154,7 @@ class _AppSignUpState extends State<management_plan> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => food_prescription_doctor_view(userUID: patientUID)),
+                        MaterialPageRoute(builder: (context) => food_prescription_doctor_view(userUID: patientUID, connection_list: doctor_connections)),
                       );
                     },
                     child: Container(
@@ -220,7 +220,7 @@ class _AppSignUpState extends State<management_plan> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => exercise_prescription_doctor_view(userUID: patientUID)),
+                        MaterialPageRoute(builder: (context) => exercise_prescription_doctor_view(userUID: patientUID, connection_list: doctor_connections)),
                       );
                     },
                     child: Container(
@@ -286,7 +286,7 @@ class _AppSignUpState extends State<management_plan> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => vitals_prescription_doctor_view(userUID: patientUID)),
+                        MaterialPageRoute(builder: (context) => vitals_prescription_doctor_view(userUID: patientUID, connection_list: doctor_connections)),
                       );
                     },
                     child: Container(
