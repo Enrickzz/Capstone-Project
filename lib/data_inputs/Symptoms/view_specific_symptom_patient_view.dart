@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,17 +77,19 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   void initState() {
     super.initState();
     getSymptoms();
+
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    Future.delayed(const Duration(milliseconds: 3000), (){
+      downloadUrls();
       thisSymptom = listtemp[widget.index];
       setState(() {
         print("listtemp index at " + listtemp[widget.index].symptomName.toString());
         isLoading = false;
       });
-      Future.delayed(const Duration(milliseconds: 1500), (){
+      Future.delayed(const Duration(milliseconds: 2000), (){
         setState(() {
           if(thisSymptom.recurring.toString() == "null"){
             thisSymptom.recurring[0] = "";
@@ -530,13 +533,31 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
     });
     return symptoms;
   }
-  showimg(String imgref) {
+  Widget showimg(String imgref) {
     if(imgref == "null" || imgref == null || imgref == ""){
       return Image.asset("assets/images/no-image.jpg");
     }else{
-      return Image.network(thisSymptom.imgRef.toString(), loadingBuilder: (context, child, loadingProgress) =>
+      return Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
       (loadingProgress == null) ? child : CircularProgressIndicator());
     }
+  }
+  Future <String> downloadUrls() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String downloadurl="null";
+    for(var i = 0 ; i < listtemp.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+listtemp[i].imgRef.toString());
+      if(listtemp[i].imgRef.toString() != "null"){
+        downloadurl = await ref.getDownloadURL();
+        listtemp[i].imgRef = downloadurl;
+      }
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+      isLoading = false;
+    });
+    return downloadurl;
   }
 }
 

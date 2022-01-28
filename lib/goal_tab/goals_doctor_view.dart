@@ -9,6 +9,7 @@ import 'package:my_app/goal_tab/water/my_water_doctor.dart';
 import 'package:my_app/goal_tab/weight/my_weight_doctor.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/notifications/notifications._patients.dart';
+import 'package:my_app/notifications/notifications_doctor.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -130,7 +131,7 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => notifications()),
+                  MaterialPageRoute(builder: (context) => notifications_doctor()),
                 );
               },
               child: Stack(

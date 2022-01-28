@@ -311,6 +311,7 @@ class _PatientListState extends State<PatientList>  {
             List temp = [];
             List temp2 = [];
             names.add(patient.firstname + " " + patient.lastname);
+
             pp_imgs.add(patient.pp_img);
             temp = names;
             temp2 = pp_imgs;
@@ -335,6 +336,7 @@ class _PatientListState extends State<PatientList>  {
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
       doctor = Users.fromJson(temp1);
       doctor_ppimg = doctor.pp_img;
+      pp_img = doctor.pp_img;
     });
   }
 

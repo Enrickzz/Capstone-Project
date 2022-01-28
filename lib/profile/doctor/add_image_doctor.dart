@@ -14,6 +14,8 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../../fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class addImageDoctor extends StatefulWidget {
@@ -82,7 +84,7 @@ class _AddImageState extends State<addImageDoctor> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Colors.amber.shade200,
+    backgroundColor: FitnessAppTheme.background,
     appBar: AppBar(
       iconTheme: IconThemeData(
           color: Colors.black

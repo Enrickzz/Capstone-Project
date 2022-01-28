@@ -34,8 +34,6 @@ class _meals_list_doctorState extends State<meals_list_doctor> with SingleTicker
     lunch_list.clear();
     dinner_list.clear();
     snack_list.clear();
-    print("WIDGET USERUID");
-    print(widget.userUID);
     getBFoodIntake();
     getLFoodIntake();
     getDFoodIntake();
@@ -474,10 +472,12 @@ class _meals_list_doctorState extends State<meals_list_doctor> with SingleTicker
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
+    print("AAAAAAAAAAAAAAAAAAAAA");
     print(userUID);
     final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Breakfast');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      print(temp);
       if(temp != null){
         temp.forEach((jsonString) {
           breakfast_list.add(FoodIntake.fromJson(jsonString));

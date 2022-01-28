@@ -168,7 +168,6 @@ class _MedicalHistoryState extends State<edit_medical_history> {
 
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(bottom: 30),
                       child: Text("What kind of Cardiovascular disease do you have? (choose all that applies)",
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     ),
@@ -187,7 +186,7 @@ class _MedicalHistoryState extends State<edit_medical_history> {
                     ..._getOtherCVD(),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(bottom: 30),
+                      margin: EdgeInsets.only(top: 30),
                       child: Text("Do you have any other medical conditions? (choose all that applies)",
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     ),
@@ -205,7 +204,7 @@ class _MedicalHistoryState extends State<edit_medical_history> {
                     ..._getAdditionalConditions(),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(bottom: 30),
+                      margin: EdgeInsets.only(top: 30),
                       child: Text("Any family members with medical conditions? (choose all that applies)",
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     ),

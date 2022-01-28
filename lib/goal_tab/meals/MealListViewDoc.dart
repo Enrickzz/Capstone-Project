@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/fitness_app_theme.dart';
+import 'package:my_app/goal_tab/meals/meals_list_doctor.dart';
 import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
 import 'package:my_app/models/meals_list_data.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/nutritionixApi.dart';
+import 'package:my_app/ui_view/meals/meals_list_view_doctor.dart';
 
 import '../../main.dart';
 import '../../goal_tab/meals/meals_list.dart';
@@ -29,7 +31,7 @@ List<FoodIntake> breakfast_list = [];
 List<FoodIntake> lunch_list = [];
 List<FoodIntake> dinner_list = [];
 List<FoodIntake> snack_list = [];
-
+String userUID = "";
 class _MealsListViewDocState extends State<MealsListViewDoc>
     with TickerProviderStateMixin {
   AnimationController animationController;
@@ -38,9 +40,9 @@ class _MealsListViewDocState extends State<MealsListViewDoc>
 
   @override
   void initState() {
-    print("UID =" +widget.userUID);
     animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
     super.initState();
+    userUID = widget.userUID;
     int total_bcalories = 0;
     int total_lcalories = 0;
     int total_dcalories = 0;
@@ -92,7 +94,6 @@ class _MealsListViewDocState extends State<MealsListViewDoc>
       //   print("setstate");
       // });
     });
-
   }
 
   Future<bool> getData() async {
@@ -228,7 +229,7 @@ class _MealsListViewDocState extends State<MealsListViewDoc>
   }
 }
 
-class MealsView extends StatelessWidget {
+class MealsView extends StatefulWidget {
   const MealsView(
       {Key key, this.mealsListData, this.animationController, this.animation})
       : super(key: key);
@@ -238,21 +239,26 @@ class MealsView extends StatelessWidget {
   final Animation<double> animation;
 
   @override
+  State<MealsView> createState() => _MealsViewState();
+}
+
+class _MealsViewState extends State<MealsView> {
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: InkWell(
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => meals_list()
+                  builder: (context) => meals_list_doctor(userUID: userUID)
               ));
             },
             child: Transform(
               transform: Matrix4.translationValues(
-                  100 * (1.0 - animation.value), 0.0, 0.0),
+                  100 * (1.0 - widget.animation.value), 0.0, 0.0),
               child: SizedBox(
                 width: 130,
                 child: Stack(
@@ -264,15 +270,15 @@ class MealsView extends StatelessWidget {
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                                color: HexColor(mealsListData.endColor)
+                                color: HexColor(widget.mealsListData.endColor)
                                     .withOpacity(0.6),
                                 offset: const Offset(1.1, 4.0),
                                 blurRadius: 8.0),
                           ],
                           gradient: LinearGradient(
                             colors: <HexColor>[
-                              HexColor(mealsListData.startColor),
-                              HexColor(mealsListData.endColor),
+                              HexColor(widget.mealsListData.startColor),
+                              HexColor(widget.mealsListData.endColor),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -292,7 +298,7 @@ class MealsView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                mealsListData.titleTxt,
+                                widget.mealsListData.titleTxt,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: FitnessAppTheme.fontName,
@@ -311,7 +317,7 @@ class MealsView extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        mealsListData.meals.join('\n'),
+                                        widget.mealsListData.meals.join('\n'),
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
                                           fontWeight: FontWeight.w500,
@@ -324,13 +330,13 @@ class MealsView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              mealsListData.kacl != 0
+                              widget.mealsListData.kacl != 0
                                   ? Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
                                   Text(
-                                    mealsListData.kacl.toString(),
+                                    widget.mealsListData.kacl.toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -391,7 +397,7 @@ class MealsView extends StatelessWidget {
                       child: SizedBox(
                         width: 80,
                         height: 80,
-                        child: Image.asset(mealsListData.imagePath),
+                        child: Image.asset(widget.mealsListData.imagePath),
                       ),
                     )
                   ],
