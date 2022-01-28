@@ -253,7 +253,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
                   MaterialPageRoute(builder: (context) => addImageSupport(img: File(pp_img))),
                 );
               },
-              child: Image.asset("assets/images/blank_person.png", fit: BoxFit.cover);
+              child: Image.asset("assets/images/blank_person.png", fit: BoxFit.cover)
             ),
             accountEmail: Text(supp_system.email,style: TextStyle(fontSize: 12.0)),
             accountName: Text(
