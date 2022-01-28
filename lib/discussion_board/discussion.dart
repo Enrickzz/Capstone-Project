@@ -111,8 +111,11 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
                         ),
                       ).then((value) =>
                           Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
+                            if(value != null){
+                              discussion_list.add(value);
+                              setState((){});
+                            }
+
                           }));
                     },
                     child: Icon(

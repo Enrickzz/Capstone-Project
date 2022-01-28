@@ -207,6 +207,11 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
         vitalstemp[i] = vitalstemp[vitalstemp.length-1-i];
         vitalstemp[vitalstemp.length-1-i] = temp;
       }
+      for(var i=0;i<doctor_names.length/2;i++){
+        var temp = doctor_names[i];
+        doctor_names[i] = doctor_names[doctor_names.length-1-i];
+        doctor_names[doctor_names.length-1-i] = temp;
+      }
     });
   }
 

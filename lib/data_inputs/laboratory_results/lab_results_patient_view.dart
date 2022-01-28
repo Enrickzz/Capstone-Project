@@ -219,7 +219,6 @@ class _lab_resultsState extends State<lab_results> {
         .toList();
   }
 
-
   Future <String> downloadUrls() async{
     final User user = auth.currentUser;
     final uid = user.uid;

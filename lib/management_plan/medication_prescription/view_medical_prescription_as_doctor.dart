@@ -220,6 +220,11 @@ class _medication_prescriptionState extends State<medication_prescription> {
         prestemp[i] = prestemp[prestemp.length-1-i];
         prestemp[prestemp.length-1-i] = temp;
       }
+      for(var i=0;i<doctor_names.length/2;i++){
+        var temp = doctor_names[i];
+        doctor_names[i] = doctor_names[doctor_names.length-1-i];
+        doctor_names[doctor_names.length-1-i] = temp;
+      }
     });
   }
 }

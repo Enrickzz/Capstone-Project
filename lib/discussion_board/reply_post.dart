@@ -302,7 +302,8 @@ class _reply_postState extends State<reply_post> {
                               //   reply_list[reply_list.length-1-i] = temp;
                               // }
                               print("POP HERE ==========");
-                              Navigator.pop(context, [reply_list, 1]);
+                              Replies newR = new Replies(uid: uid, createdBy: doctor_name, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody);
+                              Navigator.pop(context, newR);
                             });
 
                           } catch(e) {

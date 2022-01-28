@@ -89,9 +89,8 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
                           color: Colors.black,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
-
                         )),
-                    subtitle:        Text("Planned by: Dr."  + doctor_names[index],
+                    subtitle: Text("Planned by: Dr."  + doctor_names[index],
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -103,8 +102,6 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
                     isThreeLine: true,
                     dense: true,
                     selected: true,
-
-
                     onTap: (){
                       Navigator.push(
                         context,
@@ -151,6 +148,16 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
             doctor_names.add(doctor.lastname);
           }
         });
+      }
+      for(var i=0;i<foodPtemp.length/2;i++){
+        var temp = foodPtemp[i];
+        foodPtemp[i] = foodPtemp[foodPtemp.length-1-i];
+        foodPtemp[foodPtemp.length-1-i] = temp;
+      }
+      for(var i=0;i<doctor_names.length/2;i++){
+        var temp = doctor_names[i];
+        doctor_names[i] = doctor_names[doctor_names.length-1-i];
+        doctor_names[doctor_names.length-1-i] = temp;
       }
     });
   }

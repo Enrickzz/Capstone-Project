@@ -167,7 +167,7 @@ class _create_postState extends State<info_restaurant> {
                       SizedBox(width: 8.0),
                       Flexible(
                         child: isLoading
-                            ? Center(
+                            ?  Center(
                           child: CircularProgressIndicator(),
                         ): checkifnull(),
                       ),
@@ -371,17 +371,22 @@ class _create_postState extends State<info_restaurant> {
 
   Widget checkifnull(){
     if(details.result.openingHours != null){
-      if(details.result.openingHours.periods[0].open != null
-      && details.result.openingHours.periods[0].close != null){
-        return Text(
-          details.result.openingHours.periods[0].open.time.toString() + " - " +
-              details.result.openingHours.periods[0].close.time.toString(),
-          style: TextStyle( fontSize: 14),
-        );
+      if(details.result.openingHours.periods[0] != null
+      && details.result.openingHours.periods[0] != null){
+        if(details.result.openingHours.periods[0].open != null && details.result.openingHours.periods[0].close != null){
+          if(details.result.openingHours.periods[0].open.time != null && details.result.openingHours.periods[0].close.time != null){
+            return Text(
+              details.result.openingHours.periods[0].open.time.toString() + " - " +
+                  details.result.openingHours.periods[0].close.time.toString(),
+              style: TextStyle( fontSize: 14),
+            );
+          }
+        }
       }
     }else{
       return Text("Not Listed");
     }
+    return Text("Not Listed");
   }
   Widget checkrating(double thisrating) {
     String textRate="";

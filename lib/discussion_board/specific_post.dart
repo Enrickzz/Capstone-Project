@@ -127,8 +127,11 @@ class _specific_postState extends State<specific_post>
                         ),
                       ).then((value) =>
                           Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
+                            if(value != null){
+                              reply_list.add(value);
+                              setState((){});
+                            }
+
                           }));
                     },
                     child: Icon(
@@ -320,7 +323,7 @@ class _specific_postState extends State<specific_post>
                                           Column(
                                             children: [
                                               Visibility(
-                                                visible: reply_list[index].isMe,
+                                                visible: true,
                                                 child: InkWell(
                                                   onTap: () {
                                                     _showMyDialogDelete(index);

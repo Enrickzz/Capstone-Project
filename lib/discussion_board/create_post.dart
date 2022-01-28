@@ -208,37 +208,6 @@ class _create_postState extends State<create_post> {
                       ),
                     ],
                   ),
-                  // GestureDetector(
-                  //     child: Text(
-                  //       'Upload',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //     onTap: () async {
-                  //       final result = await FilePicker.platform.pickFiles(
-                  //         allowMultiple: false,
-                  //         // type: FileType.custom,
-                  //         // allowedExtensions: ['jpg', 'png'],
-                  //       );
-                  //       if(result == null) return;
-                  //       final FirebaseAuth auth = FirebaseAuth.instance;
-                  //       final path = result.files.single.path;
-                  //       user = auth.currentUser;
-                  //       uid = user.uid;
-                  //       fileName = result.files.single.name;
-                  //       file = File(path);
-                  //       // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                  //       //   setState(() {
-                  //       //     trythis.clear();
-                  //       //     listAll("path");
-                  //       //     Future.delayed(const Duration(milliseconds: 1000), (){
-                  //       //       Navigator.pop(context, trythis);
-                  //       //     });
-                  //       //   });
-                  //       // });
-                  //       // fileName = uid + fileName + "_lab_result" + "counter";
-                  //       //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-                  //     }
-                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -293,15 +262,15 @@ class _create_postState extends State<create_post> {
 
                               });
                             });
+
+
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              discussion_list.add(new Discussion(title: title, createdBy: createdBy, discussionDate: now, discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName));
-                              // for(var i=0;i<discussion_list.length/2;i++){
-                              //   var temp = discussion_list[i];
-                              //   discussion_list[i] = discussion_list[discussion_list.length-1-i];
-                              //   discussion_list[discussion_list.length-1-i] = temp;
-                              // }
+                              discussion_list.add(new Discussion(title: title, createdBy: createdBy, discussionDate: now,
+                                  discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName));
+                              Discussion newD = new Discussion(title: title, createdBy: createdBy, discussionDate: now,
+                                  discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName);
                               print("POP HERE ==========");
-                              Navigator.pop(context, [discussion_list, 1]);
+                              Navigator.pop(context, newD);
                             });
 
                           } catch(e) {
@@ -317,10 +286,20 @@ class _create_postState extends State<create_post> {
             )
         )
     );
+
+
+  }
+  Future <String> downloadUrl(String imagename) async{
+    final ref = FirebaseStorage.instance.ref('test/$imagename');
+    String downloadurl = await ref.getDownloadURL();
+    print ("THIS IS THE URL = "+ downloadurl);
+    thisURL = downloadurl;
+    return downloadurl;
   }
    Future <List<String>>_getDownloadLinks(List<Reference> refs) {
     return Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
   }
+
 
    Future<List<FirebaseFile>> listAll (String path) async {
      final User user = auth.currentUser;
@@ -346,13 +325,7 @@ class _create_postState extends State<create_post> {
 
 
 
-  Future <String> downloadUrl(String imagename) async{
-    final ref = FirebaseStorage.instance.ref('test/$imagename');
-    String downloadurl = await ref.getDownloadURL();
-    print ("THIS IS THE URL = "+ downloadurl);
-    thisURL = downloadurl;
-    return downloadurl;
-  }
+
   void getDiscussion() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
