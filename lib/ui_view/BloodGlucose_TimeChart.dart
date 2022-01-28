@@ -71,13 +71,20 @@ class _BGTimeSeriesState extends State<BGTimeSeries> {
           ): new charts.TimeSeriesChart(
             thisseries,
             animate: false,
-            // Optionally pass in a [DateTimeFactory] used by the chart. The factory
+              behaviors: [
+                charts.ChartTitle("Glucose", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
+              ],            // Optionally pass in a [DateTimeFactory] used by the chart. The factory
             // should create the same type of [DateTime] as the data provided. If none
             // specified, the default creates local date time.
             dateTimeFactory: const charts.LocalDateTimeFactory(),
-            behaviors: [
-              charts.ChartTitle("Blood Glucose", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
-            ],
+            domainAxis: charts.DateTimeAxisSpec(
+              tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+                day: charts.TimeFormatterSpec(
+                  format: 'dd',
+                  transitionFormat: 'dd MMM',
+                ),
+              ),
+            ),
           ),
 
 

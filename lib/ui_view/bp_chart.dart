@@ -78,22 +78,20 @@ class _blood_pressureState extends State<bp_chart> {
                                     overflowMode: LegendItemOverflowMode.wrap,
                                     position: LegendPosition.top),
                                 primaryXAxis: CategoryAxis(
-                                  isVisible: true,
+                                  isVisible: false,
                                     edgeLabelPlacement: EdgeLabelPlacement.shift,
                                     interval: 1,
                                     axisLabelFormatter: (AxisLabelRenderDetails details) => axis(details),
-                                    maximum: 7,
-                                    minimum: 0,
                                     majorGridLines: const MajorGridLines(width: 0)),
                                 title: ChartTitle(text: 'Blood Pressure'),
                                 primaryYAxis: NumericAxis(
                                     labelFormat: '{value}',
-                                    interval: 15,
-                                    minimum: 50,
+                                    interval: 30,
+                                    minimum: 40,
                                     axisLine: const AxisLine(width: 0),
                                     majorTickLines: const MajorTickLines(color: Colors.transparent)),
                                 series: finalLine,
-                                tooltipBehavior: TooltipBehavior(enable: true),
+                                tooltipBehavior: TooltipBehavior(enable: true, format: 'series.name : ' + 'point.y' ),
 
                               ),
                       ),
@@ -109,6 +107,11 @@ class _blood_pressureState extends State<bp_chart> {
   }
 }
 
+formatthis(String s) {
+  print(s);
+  return "";
+}
+
 axis(AxisLabelRenderDetails details) {
 
   // return ChartAxisLabel(returnDate(int.parse(details.value.toString())), details.textStyle);
@@ -121,6 +124,7 @@ String returnDate(String num){
   return a;
 }
 Future<void> getData() async{
+  finaList.clear();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final User user = auth.currentUser;
   final uid = user.uid;
@@ -135,14 +139,48 @@ Future<void> getData() async{
     temp.forEach((jsonString) {
       thisbp.add(new Blood_Pressure.fromJson(jsonString));
       Blood_Pressure a = new Blood_Pressure.fromJson(jsonString);
-      if(count <= 14){
+      // if(count <= 14){
         finaList.add(new _ChartData(double.parse(count.toString()),double.parse(a.systolic_pressure), double.parse(a.diastolic_pressure)));
         count++;
-      }
+      // }
     });
+    // DateTime now = DateTime.now();
+    // int start = now.day;
+    // for(var i = 0 ; i < 14; i++) {
+    //   //addchart
+    //   start = now.day - i;
+    //   bool check1 = false;
+    //   print("START HERE = " + start.toString());
+    //   print("CHECK START = " + check1.toString());
+    //   _ChartData thisData = new _ChartData(double.parse(i.toString()), 0, 0);
+    //   int divider = 1;
+    //   for(var j = 0 ; j < thisbp.length; j++){
+    //     if(start == 0) start = 30;
+    //     if(start == thisbp[j].bp_date.day){
+    //       print("BP DATE = " + thisbp[j].bp_date.day.toString());
+    //       print("START = " + start.toString());
+    //       check1 = true;
+    //       divider++;
+    //       thisData.y = thisData.y + double.parse(thisbp[j].systolic_pressure);
+    //       thisData.y2 = thisData.y2 + double.parse(thisbp[j].diastolic_pressure);
+    //     }
+    //   }
+    //   print("CHECK END = " + check1.toString());
+    //   if(check1){
+    //     thisData.y = thisData.y/divider;
+    //     thisData.y2 = thisData.y2/divider;
+    //     finaList.add(thisData);
+    //   }else{
+    //     thisData.x = null;
+    //     thisData.y = null;
+    //     thisData.y2 = null;
+    //     finaList.add(thisData);
+    //   }
+    //
+    //   print(finaList.length.toString() + "<<<<<<<");
+    // }
+
     finalLine = getLine(finaList);
-    for(var i = 0; i < finaList.length;i++){
-    }
   });
 }
 
@@ -171,7 +209,7 @@ List<LineSeries<_ChartData, num>> getLine(List<_ChartData> thisList){
 }
 class _ChartData {
   _ChartData(this.x, this.y, this.y2);
-  final double x;
-  final double y;
-  final double y2;
+   double x;
+   double y;
+   double y2;
 }
