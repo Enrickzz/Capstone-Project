@@ -249,7 +249,7 @@ class _PatientListState extends State<PatientList>  {
                   MaterialPageRoute(builder: (context) => addImageDoctor(img: File(pp_img))),
                 );
               },
-              child: Image.asset("assets/images/blank_person.png", fit: BoxFit.cover)
+              child: ClipOval(child: Image.asset("assets/images/blank_person.png", fit: BoxFit.cover))
             ),
             accountEmail: Text(doctor.email,style: TextStyle(fontSize: 12.0)),
             accountName: Text(
