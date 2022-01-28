@@ -100,6 +100,27 @@ class _recommended_mealsState extends State<recommended_meals>
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
+          actions: [
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    List<String> random = ["fish fillet","nuts", "steamed fish", "vegetables", "steamed chicken", "broccoli", "avocado", "mango", "banana", "salmon"];
+                    Random rng = new Random();
+                    setState(() {
+                      isLoading=true;
+                    });
+                    fetchNutritionix(random[rng.nextInt(random.length)]).then((value) => setState((){
+                      recommended=value;
+                      isLoading=false;
+                    }));
+                  },
+                  child: Icon(
+                      IconData(0xe514, fontFamily: 'MaterialIcons')
+                  ),
+                )
+            ),
+          ],
         ),
         body: isLoading
             ? Center(
