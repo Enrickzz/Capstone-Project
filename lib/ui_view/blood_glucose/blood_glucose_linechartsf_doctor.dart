@@ -89,7 +89,7 @@ class bloodGlucoseState extends State<blood_glucose_sf_doctor> {
                               ? Center(
                             child: CircularProgressIndicator(),
                           ): new SfCartesianChart(
-                            title: ChartTitle(text: 'Blood Glucose'),
+                            title: ChartTitle(text: 'Blood Glucose (mg/dL)'),
                             legend: Legend(isVisible: false),
                             tooltipBehavior: _tooltipBehavior,
                             series: <ChartSeries>[

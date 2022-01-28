@@ -220,11 +220,11 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
     return "$hours:$min";
   }
   Color getMyColor(int indication) {
-    if(indication < 85){
+    if(indication < 90){
       return Colors.red;
     }
-    else if(indication <= 94 && indication >= 85){
-      return Colors.orange;
+    else if(indication <= 94 && indication >= 90){
+      return Colors.blue;
 
     }
     else{
@@ -273,7 +273,10 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
 
 
       DataColumn(label: Text('Time')),
-      DataColumn(label: Text('Oxygen Level')),
+      DataColumn(label: InkWell(onTap: (){
+        showLegend();
+
+      },child: Text('Oxygen Level'))),
 
     ];
 
@@ -360,6 +363,69 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
             ),
             TextButton(
               child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> showLegend() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Oxygen Level'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                SizedBox(height: 5,),
+
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.green,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Normal')
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.blue,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Alarming')
+                  ],
+                ),
+
+
+                Row(
+                  children: [
+                    Icon(
+                      Icons.panorama_wide_angle_select_outlined,
+                      color: Colors.red,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Crtical')
+                  ],
+                )
+
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+
+            TextButton(
+              child: Text('Got it'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
