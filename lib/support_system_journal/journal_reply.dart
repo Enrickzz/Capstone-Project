@@ -263,7 +263,7 @@ class _reply_postState extends State<reply_journal> {
                                 print(temp1);
                                 if(replysnapshot.value == null){
                                   final replyRef = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() + "/replies/" + count.toString());
-                                  reply = new Replies(createdBy: doctor_name, specialty: specialty, replyDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}", replyTime: "${now.hour.toString().padLeft(2,"0")}:${now.minute.toString().padLeft(2,"0")}", replyBody: replyBody);
+                                  reply = new Replies(uid: uid, createdBy: doctor_name, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody);
                                   replyRef.update(reply.toJson());
                                   readDiscussion.once().then((DataSnapshot discussionsnapshot) {
                                     Map<String, dynamic> temp2 = jsonDecode(jsonEncode(discussionsnapshot.value));
@@ -279,7 +279,7 @@ class _reply_postState extends State<reply_journal> {
                                   Future.delayed(const Duration(milliseconds: 1000), (){
                                     count = reply_list.length--;
                                     final replyRef = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/' + count.toString());
-                                    reply = new Replies(createdBy: doctor_name, specialty: specialty, replyDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}", replyTime: "${now.hour.toString().padLeft(2,"0")}:${now.minute.toString().padLeft(2,"0")}", replyBody: replyBody);
+                                    reply = new Replies(uid: uid, createdBy: doctor_name, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody);
                                     replyRef.update(reply.toJson());
                                     readDiscussion.once().then((DataSnapshot discussionsnapshot) {
                                       Map<String, dynamic> temp2 = jsonDecode(jsonEncode(discussionsnapshot.value));
@@ -295,7 +295,7 @@ class _reply_postState extends State<reply_journal> {
                               });
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              reply_list.add(new Replies(createdBy: doctor_name, specialty: specialty, replyDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}", replyTime: "${now.hour.toString().padLeft(2,"0")}:${now.minute.toString().padLeft(2,"0")}", replyBody: replyBody));
+                              reply_list.add(new Replies(createdBy: doctor_name, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody));
                               // for(var i=0;i<reply_list.length/2;i++){
                               //   var temp = reply_list[i];
                               //   reply_list[i] = reply_list[reply_list.length-1-i];
@@ -360,7 +360,7 @@ class _reply_postState extends State<reply_journal> {
     // final uid = user.uid;
     String userUID = widget.userUID;
     int index = widget.index;
-    final readreply = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() +'/replies/');
+    final readreply = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/');
     readreply.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       print("temp");
