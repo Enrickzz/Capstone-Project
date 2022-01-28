@@ -447,6 +447,11 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
       temp.forEach((jsonString) {
         prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
+      for(var i=0;i<prestemp.length/2;i++){
+        var temp = prestemp[i];
+        prestemp[i] = prestemp[prestemp.length-1-i];
+        prestemp[prestemp.length-1-i] = temp;
+      }
       final readDoctorName = databaseReference.child('users/' + prestemp[index].prescribedBy + '/personal_info/');
       readDoctorName.once().then((DataSnapshot snapshot){
         Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
@@ -456,11 +461,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
       if(prestemp[index].prescribedBy == uid){
         prescribedDoctor = true;
       }
-      for(var i=0;i<prestemp.length/2;i++){
-        var temp = prestemp[i];
-        prestemp[i] = prestemp[prestemp.length-1-i];
-        prestemp[prestemp.length-1-i] = temp;
-      }
+
       brand_name = prestemp[index].branded_name;
       generic_name = prestemp[index].generic_name;
       dosage = prestemp[index].dosage.toString();
