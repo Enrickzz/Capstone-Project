@@ -283,7 +283,6 @@ class _my_exercisesState extends State<my_exercises>
     await readfitbitConnection.once().then((DataSnapshot snapshot) {
       var temp = jsonDecode(jsonEncode(snapshot.value));
       if(snapshot.value != null || snapshot.value != "") {
-        if(!temp.toString().contains("false")){
           listViews.add(
             steps_view(
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -294,7 +293,7 @@ class _my_exercisesState extends State<my_exercises>
               accessToken: fitbitToken,
             ),
           );
-        }
+
         listViews.add(
           TitleView(
             titleTxt: 'Your Workouts',

@@ -132,13 +132,13 @@ class _steps_viewState extends State<steps_view> {
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: CustomPaint(
-                                  painter: CurvePainter(
-                                      colors: [
-                                        FitnessAppTheme.nearlyDarkBlue,
-                                        HexColor("#8A98E8"),
-                                        HexColor("#8A98E8")
-                                      ],
-                                      angle: int.parse(steps)*.036),
+                                  // painter: CurvePainter(
+                                  //     colors: [
+                                  //       FitnessAppTheme.nearlyDarkBlue,
+                                  //       HexColor("#8A98E8"),
+                                  //       HexColor("#8A98E8")
+                                  //     ],
+                                  //     angle: int.parse(steps)*.036),
                                   child: SizedBox(
                                     width: 108,
                                     height: 108,
@@ -311,11 +311,10 @@ class _steps_viewState extends State<steps_view> {
         headers: {
           'Authorization': "Bearer $accessToken",
         });
+
     List<Activities> activities=[];
     activities = ActivitiesFitbit.fromJson(jsonDecode(result.body)).activities;
     act = activities[0];
-    print("GETFITBIT");
-    print(act.steps);
 
     if(act.distance != null){
       distance = act.distance.toString();

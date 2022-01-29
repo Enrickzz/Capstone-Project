@@ -93,7 +93,9 @@ class _my_sleepState extends State<my_sleep>
         print(temp);
         if(temp.toString().contains("false")){
           addFitbit();
+          addAllListData();
         }else{
+
           if(snapshot.value != null){
             test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
             if(test != null){
@@ -105,10 +107,11 @@ class _my_sleepState extends State<my_sleep>
                 });
               });
             }else{
-
+              addAllListData();
             }
           }else {
             createClient().then((value) {
+
               _client = value;
               test =  FitBitToken.fromJson(jsonDecode(_client.credentials.toJson()));
               final Fitbittokenref = databaseReference.child('users/' + uid + '/fitbittoken/');
@@ -273,7 +276,6 @@ class _my_sleepState extends State<my_sleep>
     await readfitbitConnection.once().then((DataSnapshot snapshot) {
       var temp = jsonDecode(jsonEncode(snapshot.value));
       if(snapshot.value != null || snapshot.value != ""){
-        if(temp.toString().contains("false")){
           listViews.add(
             fitbit_connect(
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -283,7 +285,6 @@ class _my_sleepState extends State<my_sleep>
               animationController: widget.animationController,
             ),
           );
-        }
         listViews.add(
           TitleView(
               titleTxt: 'Last Sleep',

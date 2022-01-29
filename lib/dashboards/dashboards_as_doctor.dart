@@ -144,7 +144,7 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
             parent: widget.animationController,
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,userUID: widget.userUID
+        animationController: widget.animationController
       ),
     );
 
