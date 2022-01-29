@@ -39,11 +39,13 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
      print("TOKEN");
      print(widget.fitbittoken);
      getFitbit();
-     Future.delayed(const Duration(milliseconds: 1500), () {
-       print("LENGTH SLEEP" );
-       print(sleeptmp.length);
+     Future.delayed(const Duration(milliseconds: 2000), () {
+       // print("LENGTH SLEEP" );
+       // print(sleeptmp.length);
+       if(sleeptmp != null)
        _createSampleData(sleeptmp);
        setState(() {
+         isLoading = false;
        });
      });
     // _chartData = getChartData();

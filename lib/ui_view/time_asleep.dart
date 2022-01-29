@@ -53,8 +53,10 @@ class _time_asleepState extends State<time_asleep> {
     Future.delayed(const Duration(milliseconds: 1200),(){
       setState(() {
         isLoading = false;
-        to_go_hr = sleepgoal.difference(timeAsleep).inHours.toString();
-        to_go_min = (sleepgoal.difference(timeAsleep).inMinutes % 60).toString();
+        if(sleepgoal != null || timeAsleep != null){
+          to_go_hr = sleepgoal.difference(timeAsleep).inHours.toString();
+          to_go_min = (sleepgoal.difference(timeAsleep).inMinutes % 60).toString();
+        }
         print("Set State");
       });
     });
