@@ -330,6 +330,24 @@ class _discussionState extends State<recreational_reviews>
                                           ),
                                         ),
                                         SizedBox(height: 5),
+
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.sports, color: Colors.blue,
+                                              ),
+                                              Text(
+                                                "Lifting",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
                                         // InteractiveViewer(
                                         //   clipBehavior: Clip.none,
                                         //   minScale: minScale,

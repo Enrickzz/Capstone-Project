@@ -64,6 +64,11 @@ class _create_postState extends State<add_hospital_review> {
   List<Reviews> reviews=[];
   Users thisuser;
   String date="",min="",hours="";
+
+  //borj added
+  bool doctorRecommend = false;
+  String recommendedDoctor = '';
+
   @override
   void initState(){
     DateTime a = new DateTime.now();
@@ -122,10 +127,53 @@ class _create_postState extends State<add_hospital_review> {
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
+                  SwitchListTile(
+                    title: Text('Doctor Recommendation', style: TextStyle(fontSize: 16.0)),
+                    subtitle: Text('There are outstanding health providers in this hospital', style: TextStyle(fontSize: 12.0)),
+                    secondary: Icon(Icons. person, size: 34.0, color: Colors.blue),
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    value: doctorRecommend,
+                    onChanged: (value){
+                      setState(() {
+                        doctorRecommend = value;
+
+
+                      });
+                    },
+                  ),
+                  SizedBox(height: 8.0),
+                  Visibility(
+                    visible: doctorRecommend,
+                    child: TextFormField(
+                      showCursor: true,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "Who do you recommend?",
+                      ),
+                      onChanged: (val){
+                        setState(() => recommendedDoctor = val);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+
                   TextFormField(
                     showCursor: true,
                     keyboardType: TextInputType.multiline,
-                    maxLines: 12,
+                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -182,104 +230,9 @@ class _create_postState extends State<add_hospital_review> {
                         :SizedBox.shrink(),
 
                   ),
-                  SizedBox(height: 18.0),
-                  SizedBox(height: 18.0),
-                  Visibility(visible: pic, child: SizedBox(height: 8.0)),
-                  Visibility(
-                      visible: pic,
-                      child: Container(
-                        child: Image.file(file),
-                        height:250,
-                        width: 200,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
-                            ),
-                            color: Colors.black
-                        ),
 
-                      )
-                  ),
 
-                  // SizedBox(height: 18.0),
-                  //
-                  // Column(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
-                  //     FlatButton(
-                  //       textColor: Colors.white,
-                  //       height: 60.0,
-                  //       color: Colors.cyan,
-                  //       onPressed: () async{
-                  //         final result = await FilePicker.platform.pickFiles(
-                  //           allowMultiple: false,
-                  //           // type: FileType.custom,
-                  //           // allowedExtensions: ['jpg', 'png'],
-                  //         );
-                  //         if(result == null) return;
-                  //         final FirebaseAuth auth = FirebaseAuth.instance;
-                  //         final path = result.files.single.path;
-                  //         user = auth.currentUser;
-                  //         uid = user.uid;
-                  //         fileName = result.files.single.name;
-                  //         file = File(path);
-                  //         PlatformFile thisfile = result.files.first;
-                  //         cacheFile = thisfile.path;
-                  //         Future.delayed(const Duration(milliseconds: 1000), (){
-                  //           setState(() {
-                  //             print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
-                  //             pic = true;
-                  //           });
-                  //         });
-                  //
-                  //       },
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: [
-                  //           Padding(
-                  //             padding: const EdgeInsets.all(8.0),
-                  //             child: Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                  //           ),
-                  //           Text('UPLOAD', )
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // GestureDetector(
-                  //     child: Text(
-                  //       'Upload',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //     onTap: () async {
-                  //       final result = await FilePicker.platform.pickFiles(
-                  //         allowMultiple: false,
-                  //         // type: FileType.custom,
-                  //         // allowedExtensions: ['jpg', 'png'],
-                  //       );
-                  //       if(result == null) return;
-                  //       final FirebaseAuth auth = FirebaseAuth.instance;
-                  //       final path = result.files.single.path;
-                  //       user = auth.currentUser;
-                  //       uid = user.uid;
-                  //       fileName = result.files.single.name;
-                  //       file = File(path);
-                  //       // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                  //       //   setState(() {
-                  //       //     trythis.clear();
-                  //       //     listAll("path");
-                  //       //     Future.delayed(const Duration(milliseconds: 1000), (){
-                  //       //       Navigator.pop(context, trythis);
-                  //       //     });
-                  //       //   });
-                  //       // });
-                  //       // fileName = uid + fileName + "_lab_result" + "counter";
-                  //       //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-                  //     }
-                  // ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

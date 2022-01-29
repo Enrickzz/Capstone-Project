@@ -330,6 +330,24 @@ class _discussionState extends State<hospital_reviews>
                                           ),
                                         ),
                                         SizedBox(height: 5),
+
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.person, color: Colors.blue,
+                                              ),
+                                              Text(
+                                                "Ignacio Loyola",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
                                         // InteractiveViewer(
                                         //   clipBehavior: Clip.none,
                                         //   minScale: minScale,

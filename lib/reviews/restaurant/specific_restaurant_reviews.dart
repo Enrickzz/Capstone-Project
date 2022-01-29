@@ -329,6 +329,24 @@ class _discussionState extends State<restaurant_reviews>
                                           ),
                                         ),
                                         SizedBox(height: 5),
+
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.restaurant, color: Colors.blue,
+                                              ),
+                                              Text(
+                                                "Salmon Rolls",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
                                         // InteractiveViewer(
                                         //   clipBehavior: Clip.none,
                                         //   minScale: minScale,

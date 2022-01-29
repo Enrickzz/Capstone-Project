@@ -61,7 +61,7 @@ class _create_postState extends State<add_drugstore_review> {
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   int _rating = 0;
   bool isSwitched = false;
-  String medicinesBought = '';
+
 
   int count = 0;
   List<Reviews> reviews=[];
@@ -71,6 +71,7 @@ class _create_postState extends State<add_drugstore_review> {
   //borj added
   bool medicineAvailable = false;
   String hintextt = "Reviews";
+  String medicinesBought = '';
   @override
   void initState(){
     DateTime a = new DateTime.now();

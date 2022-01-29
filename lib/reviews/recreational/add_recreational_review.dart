@@ -64,6 +64,11 @@ class _create_postState extends State<add_recreational_review> {
   List<Reviews> reviews=[];
   Users thisuser;
   String date="",min="",hours="";
+
+  //borj added
+  bool activityRecommend = false;
+  String recommendedActivity = '';
+
   @override
   void initState(){
     DateTime a = new DateTime.now();
@@ -122,10 +127,52 @@ class _create_postState extends State<add_recreational_review> {
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
+                  SwitchListTile(
+                    title: Text('Activity Recommendation', style: TextStyle(fontSize: 16.0)),
+                    subtitle: Text('There are suitable activities for CVD patients to perform', style: TextStyle(fontSize: 12.0)),
+                    secondary: Icon(Icons. sports, size: 34.0, color: Colors.blue),
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    value: activityRecommend,
+                    onChanged: (value){
+                      setState(() {
+                        activityRecommend = value;
+
+
+                      });
+                    },
+                  ),
+                  SizedBox(height: 8.0),
+                  Visibility(
+                    visible: activityRecommend,
+                    child: TextFormField(
+                      showCursor: true,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "What activity do you recommend?",
+                      ),
+                      onChanged: (val){
+                        setState(() => recommendedActivity = val);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
                     keyboardType: TextInputType.multiline,
-                    maxLines: 12,
+                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -182,27 +229,7 @@ class _create_postState extends State<add_recreational_review> {
                         :SizedBox.shrink(),
 
                   ),
-                  SizedBox(height: 18.0),
-                  SizedBox(height: 18.0),
-                  Visibility(visible: pic, child: SizedBox(height: 8.0)),
-                  Visibility(
-                      visible: pic,
-                      child: Container(
-                        child: Image.file(file),
-                        height:250,
-                        width: 200,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
-                            ),
-                            color: Colors.black
-                        ),
 
-                      )
-                  ),
 
                   // SizedBox(height: 18.0),
                   //

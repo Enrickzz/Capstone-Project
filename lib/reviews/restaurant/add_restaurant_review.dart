@@ -64,6 +64,11 @@ class _create_postState extends State<add_restaurant_review> {
   List<Reviews> reviews=[];
   Users thisuser;
   String date="",min="",hours="";
+  //borj added
+  bool foodRecommended = false;
+  String recommendedFood = '';
+
+
   @override
   void initState(){
     DateTime a = new DateTime.now();
@@ -122,10 +127,53 @@ class _create_postState extends State<add_restaurant_review> {
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
+                  SwitchListTile(
+                    title: Text('Food Recommendation', style: TextStyle(fontSize: 16.0)),
+                    subtitle: Text('There are suitable meals here for CVD patients', style: TextStyle(fontSize: 12.0)),
+                    secondary: Icon(Icons. restaurant, size: 34.0, color: Colors.blue),
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    value: foodRecommended,
+                    onChanged: (value){
+                      setState(() {
+                        foodRecommended = value;
+
+
+                      });
+                    },
+                  ),
+                  SizedBox(height: 8.0),
+                  Visibility(
+                    visible: foodRecommended,
+                    child: TextFormField(
+                      showCursor: true,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width:0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                            color: Color(0xFF666666),
+                            fontFamily: defaultFontFamily,
+                            fontSize: defaultFontSize),
+                        hintText: "What food do you recommend?",
+                      ),
+                      onChanged: (val){
+                        setState(() => recommendedFood = val);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+
                   TextFormField(
                     showCursor: true,
                     keyboardType: TextInputType.multiline,
-                    maxLines: 12,
+                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -181,27 +229,6 @@ class _create_postState extends State<add_restaurant_review> {
                         style: TextStyle(fontSize: 18))
                         :SizedBox.shrink(),
 
-                  ),
-                  SizedBox(height: 18.0),
-                  SizedBox(height: 18.0),
-                  Visibility(visible: pic, child: SizedBox(height: 8.0)),
-                  Visibility(
-                      visible: pic,
-                      child: Container(
-                        child: Image.file(file),
-                        height:250,
-                        width: 200,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
-                            ),
-                            color: Colors.black
-                        ),
-
-                      )
                   ),
 
                   // SizedBox(height: 18.0),

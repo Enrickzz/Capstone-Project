@@ -292,7 +292,7 @@ class _discussionState extends State<drugstore_reviews>
                                             ],
                                           ),
                                         ),
-                                        
+
                                         Container(
                                           width: 300,
                                           child: Text(
