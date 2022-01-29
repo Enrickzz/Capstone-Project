@@ -92,10 +92,12 @@ class _index3State extends State<suppsystem_view_patient_profile>
   String lifestyle = "";
   bool isLoading = true;
 
-  //for data privacy
-  bool canViewDataInput = true;
-  bool canViewDashboard = true;
-  bool canViewGoal = true;
+  List<Connection> connections = [];
+  Connection connection = new Connection();
+  ///for data privacy
+  String canViewDataInput = "true";
+  String canViewDashboard = "true";
+  String canViewGoal = "true";
 
 
   @override
@@ -114,6 +116,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
     String patientuid = widget.userUID;
     getProfile(patientuid);
     getInfo(patientuid);
+    getPrivacy();
     // getDisease(patientuid);
     // getAllergies(patientuid);
     // getOtherInfo(patientuid);
@@ -650,7 +653,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
                               ),
 
                               _buildDivider(),
-                            if(canViewDataInput == true) ...[
+                            if(canViewDataInput == connection.health) ...[
                               ListTile(
                                 title: Text("Data Inputs"),
                                 trailing: Icon(Icons.keyboard_arrow_right),
@@ -704,7 +707,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
                         )
                     ),
                     SizedBox(height: 30),
-                    if(canViewDashboard == true) ...[
+                    if(canViewDashboard == connection.dashboard) ...[
                       Container(
                         child: ElevatedButton(
                           child: Padding(
@@ -743,7 +746,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
 
 
                     SizedBox(height: 8),
-                    if(canViewGoal == true) ...[
+                    if(canViewGoal == connection.nonhealth) ...[
                       Container(
                         child: ElevatedButton(
                           child: Padding(
@@ -1066,6 +1069,24 @@ class _index3State extends State<suppsystem_view_patient_profile>
               other_aller += info.otherAller[j] + ", ";
             }
           }
+        }
+      }
+    });
+  }
+  void getPrivacy () {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String userUID = widget.userUID;
+    final readConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
+    readConnection.once().then((DataSnapshot snapshot){
+      List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
+      print(temp1);
+      temp1.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString));
+      });
+      for(int i = 0; i < connections.length; i++){
+        if(connections[i].uid == uid){
+          connection = connections[i];
         }
       }
     });
