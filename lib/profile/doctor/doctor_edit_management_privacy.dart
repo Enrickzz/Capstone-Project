@@ -28,6 +28,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   List<Connection> connections = [];
+  List<Connection> doctor_connection = [];
   bool isAllowedMedicalPrescription = false;
   bool isAllowedFoodPlan = false;
   bool isAllowedExercisePlan = false;
@@ -413,9 +414,11 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
               child: Text('Confirm'),
               onPressed: () {
                 try{
+                  int index = 1;
                   final User user = auth.currentUser;
                   final uid = user.uid;
                   bool check = false;
+                  bool isConnected = false;
                   String userUID = widget.userUID;
                   String doctorUID = widget.doctorUID;
                   final readDoctorConnections = databaseReference.child('users/' + doctorUID + '/personal_info/connections/');
@@ -424,21 +427,47 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                     temp1.forEach((jsonString) {
                       connections.add(Connection.fromJson2(jsonString));
                     });
+
                     for(int i = 1; i <= connections.length; i++){
                       if(connections[i-1].uid == userUID){
                         check = true;
                       }
                     }
                     if(check){
-                      final doctorConnectionsRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ (connections.length+1).toString());
-                      doctorConnectionsRef.set({
-                        "uid": userUID,
-                        "createdBy": uid,
-                        "medpres": isAllowedMedicalPrescription.toString(),
-                        "foodplan": isAllowedFoodPlan.toString(),
-                        "explan": isAllowedExercisePlan.toString(),
-                        "vitals": isAllowedVitalsRecording.toString(),
+                      final readPatientConnection = databaseReference.child('users/' + doctorUID + '/personal_info/connections/');
+                      readPatientConnection.once().then((DataSnapshot patientsnapshot) {
+                        List<dynamic> temp2 = jsonDecode(jsonEncode(patientsnapshot.value));
+                        temp2.forEach((jsonString) {
+                          doctor_connection.add(Connection.fromJson(jsonString));
+                        });
+                        for(int i = 0; i < doctor_connection.length; i++){
+                          if(uid == doctor_connection[i].createdBy){
+                            index = i;
+                            isConnected = true;
+                          }
+                        }
+                        if(!isConnected){
+                          index = doctor_connection.length;
+                        }
+                        final doctorConnectionsRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ (index).toString());
+                        doctorConnectionsRef.update({
+                          "uid": userUID,
+                          "createdBy": uid,
+                          "medpres": isAllowedMedicalPrescription.toString(),
+                          "foodplan": isAllowedFoodPlan.toString(),
+                          "explan": isAllowedExercisePlan.toString(),
+                          "vitals": isAllowedVitalsRecording.toString(),
+                        });
                       });
+
+
+                      print(connections[index-1].createdBy);
+                      print("index");
+                      print(index);
+                      print(connections.length);
+                      print(doctorUID);
+                      print(uid);
+
                     }
 
                   });

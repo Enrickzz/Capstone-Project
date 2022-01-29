@@ -71,6 +71,11 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
         }
       }
     });
+    Future.delayed(const Duration(milliseconds: 2000), (){
+      setState(() {
+
+      });
+    });
     super.initState();
   }
 
@@ -136,18 +141,6 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
           animationController: widget.animationController,
             userUID: widget.userUID
         ));
-
-
-    listViews.add(
-      BMI_Chart(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController
-      ),
-    );
-
   }
 
   Future<bool> getData() async {

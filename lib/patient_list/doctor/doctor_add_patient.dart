@@ -609,9 +609,9 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 
         addPatientConnection.set({
           "uid": patient_connection[patient_connection.length-1].uid,
-          "dashboard": patient_connection[patient_connection.length-1].dashboard.toString(),
-          "nonhealth": patient_connection[patient_connection.length-1].nonhealth.toString(),
-          "health": patient_connection[patient_connection.length-1].health.toString(),
+          "dashboard": "false",
+          "nonhealth": "false",
+          "health": "false",
         });
       });
 

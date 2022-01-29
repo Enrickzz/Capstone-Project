@@ -27,9 +27,9 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   List<Connection> connections = [];
-  bool isAllowedDashboard = true;
-  bool isAllowedNonHealth = true;
-  bool isAllowedDataInputs = true;
+  bool isAllowedDashboard = false;
+  bool isAllowedNonHealth = false;
+  bool isAllowedDataInputs = false;
   bool showDisclaimer = false;
 
   @override
