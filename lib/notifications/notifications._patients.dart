@@ -17,7 +17,7 @@ import 'package:my_app/models/GooglePlaces.dart';
 import 'package:my_app/models/OnePlace.dart';
 import 'package:my_app/models/Reviews.dart';
 import 'package:my_app/reviews/info_place.dart';
-import 'package:my_app/reviews/info_restaurant.dart';
+import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';

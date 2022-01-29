@@ -8,7 +8,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/nutritionixApi.dart';
-import 'package:my_app/reviews/info_restaurant.dart';
+import 'package:my_app/reviews/drugstore/info_drugstore.dart';
+import 'package:my_app/reviews/hospital/info_hospital.dart';
+import 'package:my_app/reviews/recreational/info_recreational.dart';
+import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import '../additional_data_collection.dart';
@@ -205,7 +208,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId), type: "drugstore"),
+                            child: info_drugstore(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId), type: "drugstore"),
                           ),
                           ),
                         ).then((value) =>
@@ -316,7 +319,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  hospitals[index], thisrating: checkrating2(hospitals[index].placeId), type: "hospital"),
+                            child: info_hospital(this_info:  hospitals[index], thisrating: checkrating2(hospitals[index].placeId), type: "hospital"),
                           ),
                           ),
                         ).then((value) =>
@@ -427,7 +430,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  recreations[index],thisrating: checkrating2(recreations[index].placeId), type: "recreation"),
+                            child: info_recreational(this_info:  recreations[index],thisrating: checkrating2(recreations[index].placeId), type: "recreation"),
                           ),
                           ),
                         ).then((value) =>

@@ -5,9 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/discussion_board/create_post.dart';
 import 'package:my_app/models/GooglePlaces.dart';
-import 'package:my_app/models/OnePlace.dart';
 import 'package:my_app/models/Reviews.dart';
 import 'package:my_app/models/spotify.dart';
+import 'package:my_app/reviews/recreational/add_recreational_review.dart';
 import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
@@ -29,16 +29,14 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import '../../fitness_app_theme.dart';
-import 'restaurant/add_restaurant_review.dart';
+import '../../../fitness_app_theme.dart';
+import '../restaurant/add_restaurant_review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import 'add_review.dart';
-
-class specific_reviews extends StatefulWidget {
-  final Result2 thisPlace;
+class recreational_reviews extends StatefulWidget {
+  final Results thisPlace;
   final String type;
-  specific_reviews({Key key,this.thisPlace, this.type});
+  recreational_reviews({Key key,this.thisPlace, this.type});
   @override
   _discussionState createState() => _discussionState();
 }
@@ -46,7 +44,7 @@ class specific_reviews extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
-class _discussionState extends State<specific_reviews>
+class _discussionState extends State<recreational_reviews>
     with TickerProviderStateMixin {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
@@ -103,10 +101,12 @@ class _discussionState extends State<specific_reviews>
                         builder: (context) => SingleChildScrollView(child: Container(
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
-                          child: add_review(thisPlace: widget.thisPlace,type: widget.type ),
+                          // child: add_medication(thislist: medtemp),
+                          child: add_recreational_review(thisPlace: widget.thisPlace,type: widget.type ),
                         ),
                         ),
                       ).then((value) {
+
                         Future.delayed(const Duration(milliseconds: 1500), (){
                           if(value != null){
                             getReviews2(value.toString());

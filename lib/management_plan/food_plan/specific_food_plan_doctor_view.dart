@@ -423,11 +423,11 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
             if(templist[index].prescribedBy == uid){
               prescribedDoctor = true;
             }
-            for(var i=0;i<templist.length/2;i++){
-              var temp = templist[i];
-              templist[i] = templist[templist.length-1-i];
-              templist[templist.length-1-i] = temp;
-            }
+            // for(var i=0;i<templist.length/2;i++){
+            //   var temp = templist[i];
+            //   templist[i] = templist[templist.length-1-i];
+            //   templist[templist.length-1-i] = temp;
+            // }
             purpose = templist[index].purpose;
             food = templist[index].food;
             important_notes = templist[index].important_notes ;
@@ -436,7 +436,11 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
         });
       });
 
-
+      // for(var i=0;i<templist.length/2;i++){
+      //   var temp = templist[i];
+      //   templist[i] = templist[templist.length-1-i];
+      //   templist[templist.length-1-i] = temp;
+      // }
     });
   }
   Future<void> _showMyDialogDelete() async {

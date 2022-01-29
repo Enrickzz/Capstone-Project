@@ -7,7 +7,7 @@ import 'package:my_app/discussion_board/create_post.dart';
 import 'package:my_app/models/GooglePlaces.dart';
 import 'package:my_app/models/Reviews.dart';
 import 'package:my_app/models/spotify.dart';
-import 'package:my_app/reviews/info_restaurant.dart';
+import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
@@ -28,7 +28,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import '../../fitness_app_theme.dart';
+import '../../../fitness_app_theme.dart';
 import 'add_restaurant_review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 

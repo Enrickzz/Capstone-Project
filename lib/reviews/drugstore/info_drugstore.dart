@@ -17,11 +17,10 @@ import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/models/GooglePlaces.dart';
-import 'package:my_app/models/OnePlace.dart';
 import 'package:my_app/models/specific_info_places.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/reviews/drugstore/specific_drugstore_reviews.dart';
 import 'package:my_app/reviews/restaurant/specific_restaurant_reviews.dart';
-import 'package:my_app/reviews/specific_reviews.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
@@ -32,17 +31,17 @@ import 'package:my_app/widgets/rating.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 
-class info_place extends StatefulWidget {
+class info_drugstore extends StatefulWidget {
   final List<FirebaseFile> files;
-  info_place({Key key, this.files, this.this_info, this.thisrating,this.type});
-  final Result2 this_info;
+  info_drugstore({Key key, this.files, this.this_info, this.thisrating,this.type});
+  final Results this_info;
   final double thisrating;
   final String type;
   @override
   _create_postState createState() => _create_postState();
 }
 final _formKey = GlobalKey<FormState>();
-class _create_postState extends State<info_place> {
+class _create_postState extends State<info_drugstore> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   var path;
@@ -69,13 +68,9 @@ class _create_postState extends State<info_place> {
 
   SpecificInfo details= new SpecificInfo();
   bool isLoading = true;
-  String imgurl="";
+
   @override
   void initState(){
-    if(widget.this_info.photos == null)
-      imgurl="";
-    else imgurl = widget.this_info.photos[0].photoReference;
-
     getspecifics(widget.this_info.placeId);
     super.initState();
   }
@@ -110,7 +105,7 @@ class _create_postState extends State<info_place> {
                   SizedBox(height: 8.0),
                   Divider(),
                   Container(
-                    child: _displayMedia(imgurl),
+                    child: _displayMedia(widget.this_info.photos.photoReference),
                     height:250,
                     width: 200,
                     decoration: BoxDecoration(
@@ -173,7 +168,7 @@ class _create_postState extends State<info_place> {
                       SizedBox(width: 8.0),
                       Flexible(
                         child: isLoading
-                            ? Center(
+                            ?  Center(
                           child: CircularProgressIndicator(),
                         ): checkifnull(),
                       ),
@@ -194,7 +189,7 @@ class _create_postState extends State<info_place> {
                   Visibility(
                       visible: pic,
                       child: Container(
-                        child: _displayMedia(imgurl),
+                        child: _displayMedia(widget.this_info.photos.photoReference),
                         height:250,
                         width: 300,
                         decoration: BoxDecoration(
@@ -300,7 +295,7 @@ class _create_postState extends State<info_place> {
                           onPressed:() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => specific_reviews(thisPlace: widget.this_info, type: widget.type)),
+                              MaterialPageRoute(builder: (context) => drugstore_reviews(thisPlace: widget.this_info, type: widget.type)),
                             );
                           },
                         ),
@@ -362,15 +357,12 @@ class _create_postState extends State<info_place> {
     return downloadurl;
   }
   Widget _displayMedia(String media) {
-    if(media == "") {
+    if(media == "photoref") {
       print("PHOTOREF ITO ");
       return Image.asset("assets/images/no-image.jpg");
     }
     else{
-      String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
-          media+
-          "&sensor=false&maxheight=300&maxwidth=300&key=AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
-      return Image.network(replace,
+      return Image.network(media,
         errorBuilder: (context, error, stackTrace) {
           return Image.asset("assets/images/no-image.jpg");
         },fit: BoxFit.cover,);
@@ -380,17 +372,22 @@ class _create_postState extends State<info_place> {
 
   Widget checkifnull(){
     if(details.result.openingHours != null){
-      if(details.result.openingHours.periods[0].open != null
-          && details.result.openingHours.periods[0].close != null){
-        return Text(
-          details.result.openingHours.periods[0].open.time.toString() + " - " +
-              details.result.openingHours.periods[0].close.time.toString(),
-          style: TextStyle( fontSize: 14),
-        );
+      if(details.result.openingHours.periods[0] != null
+          && details.result.openingHours.periods[0] != null){
+        if(details.result.openingHours.periods[0].open != null && details.result.openingHours.periods[0].close != null){
+          if(details.result.openingHours.periods[0].open.time != null && details.result.openingHours.periods[0].close.time != null){
+            return Text(
+              details.result.openingHours.periods[0].open.time.toString() + " - " +
+                  details.result.openingHours.periods[0].close.time.toString(),
+              style: TextStyle( fontSize: 14),
+            );
+          }
+        }
       }
     }else{
       return Text("Not Listed");
     }
+    return Text("Not Listed");
   }
   Widget checkrating(double thisrating) {
     String textRate="";
