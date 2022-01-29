@@ -294,6 +294,19 @@ class _my_exercisesState extends State<my_exercises>
             ),
           );
 
+          listViews.add(
+            TitleView(
+              titleTxt: 'Exercise Plans',
+              subTxt: 'View',
+              redirect: 10,
+              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                  parent: widget.animationController,
+                  curve:
+                  Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+            ),
+          );
+
         listViews.add(
           TitleView(
             titleTxt: 'Your Workouts',
@@ -327,6 +340,8 @@ class _my_exercisesState extends State<my_exercises>
             mainScreenAnimationController: widget.animationController,
           ),
         );
+
+
 
       }
     });
