@@ -167,10 +167,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      body: isLoading
-          ? Center(
-        child: CircularProgressIndicator(),
-      ): new TabBarView(
+      body: new TabBarView(
         controller: controller,
         children: [
           DefaultTabController(
@@ -193,6 +190,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                 Expanded(
                   child: TabBarView(
                     children: <Widget>[
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      ):
                       ListView.builder(
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         itemCount: drugstores.length,
@@ -299,6 +300,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                           );
                         },
                       ) ,
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      ):
                       ListView.builder(
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         itemCount: drugstores.length,
@@ -431,6 +436,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                 Expanded(
                   child: TabBarView(
                     children: <Widget>[
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      ):
                       ListView.builder(
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         itemCount: hospitals.length,
@@ -542,6 +551,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                           );
                         },
                       ) ,
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      ):
                       ListView.builder(
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         itemCount: hospitals.length,
@@ -679,6 +692,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                 Expanded(
                   child: TabBarView(
                     children: <Widget>[
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      ):
                       ListView.builder(
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         itemCount: recreations.length,
@@ -769,6 +786,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                           );
                         },
                       ) ,
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      ):
                       ListView.builder(
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         itemCount: recreations.length,
@@ -885,6 +906,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                 Expanded(
                   child: TabBarView(
                     children: <Widget>[
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      ):
                       ListView.builder(
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         itemCount: restaurants.length,
@@ -996,6 +1021,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                           );
                         },
                       ) ,
+                      isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      ):
                       ListView.builder(
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         itemCount: restaurants.length,
