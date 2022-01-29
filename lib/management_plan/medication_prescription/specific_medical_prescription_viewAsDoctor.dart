@@ -92,7 +92,8 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
     startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
     endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
     dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
-    getPrescibedBy();
+    prescribedBy = prestemp[index].doctor_name;
+    // getPrescibedBy();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");

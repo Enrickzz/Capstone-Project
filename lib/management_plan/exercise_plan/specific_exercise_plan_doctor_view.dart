@@ -72,12 +72,21 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
   @override
   void initState() {
     super.initState();
-    templist.clear();
-    getExplan();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
+
+    // getExplan();
+    templist.clear();
+    templist = widget.thislist;
+    int index = widget.index;
+    purpose = templist[index].purpose;
+    type = templist[index].type;
+    important_notes = templist[index].important_notes ;
+    dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
+    prescribedBy = templist[index].doctor_name;
+
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");

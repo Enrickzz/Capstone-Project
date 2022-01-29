@@ -52,6 +52,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
 
   List<String> uidlist = [];
   List<Connection> connections = [];
+  List<Connection> doctorconnections = [];
   List<Users> userlist = [];
   List<Additional_Info> userAddInfo =[];
   List<int> delete_list = [];
@@ -145,7 +146,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                             builder: (context) => SingleChildScrollView(child: Container(
                               padding: EdgeInsets.only(
                                   bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid),
+                              child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid, connection: doctorconnections[index]),
                             ),
                             ),
                           ).then((value) =>
@@ -185,12 +186,14 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
     final User user = auth.currentUser;
     final uid = user.uid;
     String userUID = widget.userUID;
-
+    Users usertype = new Users();
+    List<int> listdelete = [];
     final readConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
     readConnection.once().then((DataSnapshot snapshot){
       List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
       temp1.forEach((jsonString) {
         connections.add(Connection.fromJson(jsonString));
+
       });
       for(int i = 0; i < connections.length; i++){
         final readDoctor = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
@@ -205,10 +208,36 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
             names.add(userlist[i].firstname+ " " + userlist[i].lastname);
             position.add(userlist[i].specialty);
           }
-
         });
       }
+      for(int i = 0; i < connections.length; i++){
+        final readUsertype = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
+        readUsertype.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp4 = jsonDecode(jsonEncode(snapshot.value));
+          usertype = Users.fromJson(temp4);
+          if(usertype.usertype == "Doctor"){
+            final readDoctorConnection = databaseReference.child('users/' + connections[i].uid + '/personal_info/connections/');
+            readDoctorConnection.once().then((DataSnapshot datasnapshot){
+              List<dynamic> temp3 = jsonDecode(jsonEncode(datasnapshot.value));
+              if(datasnapshot.value != null){
+                temp3.forEach((jsonString) {
+                  if(jsonString.toString().contains(userUID)){
+                    doctorconnections.add(Connection.fromJson2(jsonString));
+                  }
+                });
+              }
 
+              if(connections[i].uid != doctorconnections[i].createdBy){
+                listdelete.add(i);
+              }
+            });
+          }
+        });
+      }
+      listdelete.sort((a, b) => b.compareTo(a));
+      for(int i = 0; i < listdelete.length; i++){
+        doctorconnections.removeAt(listdelete[i]);
+      }
     });
     final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
     readPatient.once().then((DataSnapshot snapshot){

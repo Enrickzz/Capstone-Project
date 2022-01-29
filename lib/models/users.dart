@@ -323,8 +323,9 @@ class Medication_Prescription{
   String prescription_unit;
   String prescribedBy;
   DateTime datecreated;
+  String doctor_name;
 
-  Medication_Prescription({this.generic_name, this.branded_name,this.dosage, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit, this.prescribedBy, this.datecreated});
+  Medication_Prescription({this.generic_name, this.branded_name,this.dosage, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit, this.prescribedBy, this.datecreated, this.doctor_name});
 
   Medication_Prescription.fromJson(Map<String, dynamic> json) {
     generic_name = json['generic_name'];
@@ -337,6 +338,7 @@ class Medication_Prescription{
     prescription_unit = json['medical_prescription_unit'];
     prescribedBy = json['prescribedBy'];
     datecreated = format.parse(json['datecreated']);
+    doctor_name = json['doctor_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -700,8 +702,9 @@ class FoodPlan {
   String prescribedBy;
   String dateCreated;
   String doctor;
+  String doctor_name;
 
-  FoodPlan({this.purpose, this.food,  this.important_notes, this.prescribedBy, this.dateCreated,this.doctor});
+  FoodPlan({this.purpose, this.food,  this.important_notes, this.prescribedBy, this.dateCreated,this.doctor, this.doctor_name});
 
   FoodPlan.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
@@ -712,6 +715,7 @@ class FoodPlan {
     if (json['doctor'] == null) {
       doctor = "";
     }
+    doctor_name = json["doctor_name"];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -730,8 +734,9 @@ class ExPlan {
   String important_notes;
   String prescribedBy;
   DateTime dateCreated;
+  String doctor_name;
 
-  ExPlan({this.purpose, this.type,  this.important_notes, this.prescribedBy, this.dateCreated});
+  ExPlan({this.purpose, this.type,  this.important_notes, this.prescribedBy, this.dateCreated, this.doctor_name});
 
   ExPlan.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
@@ -739,6 +744,7 @@ class ExPlan {
     important_notes = json['important_notes'];
     prescribedBy = json['prescribedBy'];
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+    doctor_name = json['doctor_name'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -758,8 +764,9 @@ class Vitals {
   String important_notes;
   String prescribedBy;
   DateTime dateCreated;
+  String doctor_name;
 
-  Vitals({this.purpose, this.type, this.frequency, this.important_notes, this.prescribedBy, this.dateCreated});
+  Vitals({this.purpose, this.type, this.frequency, this.important_notes, this.prescribedBy, this.dateCreated, this.doctor_name});
 
   Vitals.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
@@ -768,6 +775,7 @@ class Vitals {
     important_notes = json['important_notes'];
     prescribedBy = json['prescribedBy'];
     dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+    doctor_name = json["doctor_name"];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

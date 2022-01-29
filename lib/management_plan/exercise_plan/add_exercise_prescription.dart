@@ -213,16 +213,24 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
+                            String doctor_name = "";
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
+                            final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+                            Users doctor = new Users();
+                            readDoctor.once().then((DataSnapshot snapshot) {
+                              Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+                              doctor = Users.fromJson(temp);
+                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                            });
                             final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print(temp1);
                               if(datasnapshot.value == null){
                                 final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
-                                foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
                                 print("Added Food Plan Successfully! " + uid);
                               }
                               else{
@@ -230,14 +238,14 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = exercise_list.length--;
                                   final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
-                                  foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                  foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
                                   print("Added Exercise Plan Successfully! " + uid);
                                 });
                               }
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + exercise_list.length.toString());
-                              exercise_list.add(new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid, dateCreated: now));
+                              exercise_list.add(new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name));
                               for(var i=0;i<exercise_list.length/2;i++){
                                 var temp = exercise_list[i];
                                 exercise_list[i] = exercise_list[exercise_list.length-1-i];
@@ -245,7 +253,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                               }
                               print("POP HERE ==========");
                               ExPlan a = new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid,
-                                  dateCreated: now);
+                                  dateCreated: now, doctor_name: doctor_name);
 
                               Navigator.pop(context,a );
                             });
@@ -272,8 +280,6 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
     final readprescription = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print("temp");
-      print(temp);
       temp.forEach((jsonString) {
         exercise_list.add(ExPlan.fromJson(jsonString));
       });

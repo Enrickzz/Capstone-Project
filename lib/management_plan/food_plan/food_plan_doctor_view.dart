@@ -135,7 +135,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle: Text("Planned by: Dr." + checkthisDoc(foodPtemp[index].doctor),
+                    subtitle: Text("Planned by: Dr." + foodPtemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -150,7 +150,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsDoctor(userUID: widget.userUID, index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsDoctor(thispres: foodPtemp, userUID: widget.userUID, index: index)),
                       ).then((value) {
                         if(value != null){
                           foodPtemp = value;
@@ -218,14 +218,14 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                 }
               }
             }
-            final readDoctor = databaseReference.child('users/' + foodPtemp[i].prescribedBy + '/personal_info/');
-            readDoctor.once().then((DataSnapshot snapshot){
-              Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-              if(temp != null){
-                doctor = Users.fromJson(temp);
-                doctor_names.add(doctor.lastname);
-              }
-            });
+            // final readDoctor = databaseReference.child('users/' + foodPtemp[i].prescribedBy + '/personal_info/');
+            // readDoctor.once().then((DataSnapshot snapshot){
+            //   Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+            //   if(temp != null){
+            //     doctor = Users.fromJson(temp);
+            //     doctor_names.add(doctor.lastname);
+            //   }
+            // });
           }
         });
         delete_list.sort((a, b) => b.compareTo(a));

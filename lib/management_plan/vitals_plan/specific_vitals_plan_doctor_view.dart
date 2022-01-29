@@ -76,7 +76,7 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
     type = templist[widget.index].type;
     frequency = templist[widget.index].frequency.toString();
     important_notes = templist[widget.index].important_notes;
-    prescribedBy = "";
+    prescribedBy = templist[widget.index].doctor_name;
     dateCreated = "${templist[widget.index].dateCreated.month}/${templist[widget.index].dateCreated.day}/${templist[widget.index].dateCreated.year}";
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
@@ -86,8 +86,6 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
     templist = widget.thislist;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
-        templist = widget.thislist;
-        prescribedBy = doctor.lastname;
         print("setstate");
       });
     });

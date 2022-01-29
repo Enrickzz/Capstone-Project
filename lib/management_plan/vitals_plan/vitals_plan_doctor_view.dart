@@ -137,7 +137,7 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle: Text("Planned by: Dr." + checkthisDoc(doctor_names[index]),
+                    subtitle: Text("Planned by: Dr." + vitalstemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,

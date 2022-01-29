@@ -257,16 +257,23 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
+                            String doctor_name = "";
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
+                            final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+                            Users doctor = new Users();
+                            readDoctor.once().then((DataSnapshot snapshot) {
+                              Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+                              doctor = Users.fromJson(temp);
+                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                            });
                             final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
-                              print(temp1);
                               if(datasnapshot.value == null){
                                 final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
-                                vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
                                 print("Added Vitals Plan Successfully! " + uid);
                               }
                               else{
@@ -274,20 +281,20 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = vitals_list.length--;
                                   final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
-                                  vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                  vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
                                   print("Added Food Plan Successfully! " + uid);
                                 });
                               }
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + vitals_list.length.toString());
-                              vitals_list.add(new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now));
+                              vitals_list.add(new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name));
                               for(var i=0;i<vitals_list.length/2;i++){
                                 var temp = vitals_list[i];
                                 vitals_list[i] = vitals_list[vitals_list.length-1-i];
                                 vitals_list[vitals_list.length-1-i] = temp;
                               }
-                              Vitals newV = new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now);
+                              Vitals newV = new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name);
                               print("POP HERE ==========");
                               Navigator.pop(context,newV);
                             });

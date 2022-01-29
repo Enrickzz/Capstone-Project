@@ -122,11 +122,11 @@ class _medication_prescriptionState extends State<medication_prescription> {
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Prescribed by: Dr." + checkthisDoc(doctor_names[index]),
-                        style:TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14.0,
-                        )),
+                    subtitle:        Text("Prescribed by: Dr." + prestemp[index].doctor_name),
+                        // style:TextStyle(
+                        //   color: Colors.grey,
+                        //   fontSize: 14.0,
+                        // )),
                     trailing: Text("${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}",
                         style:TextStyle(
                           color: Colors.grey,
@@ -184,7 +184,9 @@ class _medication_prescriptionState extends State<medication_prescription> {
       });
       for(int i = 0; i < prestemp.length; i++){
         print("CONNECTION LIST");
-        print(connection_list.length);
+        print(prestemp[i].prescribedBy);
+        /// add doctor name
+        doctor_names.add(prestemp[i].doctor_name);
         if(prestemp[i].prescribedBy != uid){
           for(int j = 0; j < connection_list.length; j++){
             if(prestemp[i].prescribedBy == connection_list[j].createdBy){
@@ -198,16 +200,18 @@ class _medication_prescriptionState extends State<medication_prescription> {
             }
           }
         }
-        final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-          if(temp != null){
-            doctor = Users.fromJson(temp);
-            doctor_names.add(doctor.lastname);
-            print("lastname doctor " + doctor.lastname);
-            print("length " + doctor_names.length.toString());
-          }
-        });
+        // final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
+        // readDoctor.once().then((DataSnapshot datasnapshot){
+        //   Map<String, dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+        //   if(temp != null){
+        //     doctor = Users.fromJson(temp);
+        //     prestemp[i].doctor_name = doctor.lastname;
+        //     doctor_names.add(doctor.lastname);
+        //     print("PRESCRIBED BY " + prestemp[i].doctor_name);
+        //     print("lastname doctor " + doctor.lastname);
+        //     print("length " + doctor_names.length.toString());
+        //   }
+        // });
       }
       delete_list.sort((a, b) => b.compareTo(a));
       for(int i = 0; i < delete_list.length; i++){

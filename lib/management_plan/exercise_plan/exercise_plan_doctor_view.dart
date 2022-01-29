@@ -131,7 +131,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr." + doctor_names[index],
+                    subtitle:        Text("Planned by: Dr." + extemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,

@@ -667,20 +667,27 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                         color: Colors.blue,
                         onPressed:() async {
                           try{
+                            String doctor_name = "";
                             /// DOCTOR
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             /// PATIENT
                             var userUID = widget.userUID;
                             datecreated = format.format(now);
+                            final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+                            Users doctor = new Users();
+                            readDoctor.once().then((DataSnapshot snapshot) {
+                              Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+                              doctor = Users.fromJson(temp);
+                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                            });
                             final readPrescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list');
                             readPrescription.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
-                              print("temp1 " + temp1);
                               Medication_Prescription prescription;
                               if(datasnapshot.value == null){
                                 final prescriptionRef = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/' + count.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString()});
+                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString(), "doctor_name": doctor_name});
                                 print("if Added Medication Prescription Successfully! " + userUID);
                               }
                               else{
@@ -688,7 +695,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = prescription_list.length--;
                                   final prescriptionRef = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/' + count.toString());
-                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString()});
+                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString(), "doctor_name": doctor_name});
                                   print("else Added Medication Prescription Successfully! " + userUID);
                                 });
 
@@ -697,14 +704,14 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + prescription_list.length.toString());
-                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated)));
+                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name));
                               for(var i=0;i<prescription_list.length/2;i++){
                                 var temp = prescription_list[i];
                                 prescription_list[i] = prescription_list[prescription_list.length-1-i];
                                 prescription_list[prescription_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
-                              Medication_Prescription newPres = new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated));
+                              Medication_Prescription newPres = new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name);
                               Navigator.pop(context, newPres);
                             });
 

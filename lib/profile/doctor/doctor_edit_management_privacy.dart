@@ -19,7 +19,9 @@ class doctor_edit_management_privacy extends StatefulWidget {
   final List<Medication_Prescription> thislist;
   final String userUID;
   final String doctorUID;
-  doctor_edit_management_privacy({this.thislist, this.userUID, this.doctorUID});
+  final Connection connection;
+  final int index;
+  doctor_edit_management_privacy({this.thislist, this.userUID, this.doctorUID, this.connection, this.index});
   @override
   _editManagementPrivacyState createState() => _editManagementPrivacyState();
 }
@@ -39,18 +41,26 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
   @override
   void initState(){
     super.initState();
-    // if(doctorconnection.medpres.toLowerCase() == "true"){
-    //   isAllowedMedicalPrescription = true;
-    // }
-    // if(doctorconnection.foodplan.toLowerCase() == "true"){
-    //   isAllowedFoodPlan = true;
-    // }
-    // if(doctorconnection.explan.toLowerCase() == "true"){
-    //   isAllowedExercisePlan = true;
-    // }
-    // if(doctorconnection.vitals.toLowerCase() == "true"){
-    //   isAllowedVitalsRecording = true;
-    // }
+    Connection doctorconnection = widget.connection;
+    if(doctorconnection != null){
+      print("AAAAAAAAAAAAAAAAAAAAAA");
+      print(widget.index);
+      print(doctorconnection.createdBy);
+      print(doctorconnection.medpres);
+      if(doctorconnection.medpres.toLowerCase() == "true"){
+        isAllowedMedicalPrescription = true;
+      }
+      if(doctorconnection.foodplan.toLowerCase() == "true"){
+        isAllowedFoodPlan = true;
+      }
+      if(doctorconnection.explan.toLowerCase() == "true"){
+        isAllowedExercisePlan = true;
+      }
+      if(doctorconnection.vitals.toLowerCase() == "true"){
+        isAllowedVitalsRecording = true;
+      }
+    }
+
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
       });
@@ -450,7 +460,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                           index = doctor_connection.length;
                         }
                         final doctorConnectionsRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ (index).toString());
-                        doctorConnectionsRef.update({
+                        doctorConnectionsRef.set({
                           "uid": userUID,
                           "createdBy": uid,
                           "medpres": isAllowedMedicalPrescription.toString(),

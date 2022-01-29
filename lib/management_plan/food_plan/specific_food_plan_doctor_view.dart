@@ -40,8 +40,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificFoodPrescriptionViewAsDoctor extends StatefulWidget {
-  SpecificFoodPrescriptionViewAsDoctor({Key key, this.title, this.userUID, this.index}) : super(key: key);
+  SpecificFoodPrescriptionViewAsDoctor({Key key, this.title, this.userUID, this.index, this.thispres}) : super(key: key);
   final String title;
+  final List<FoodPlan> thispres;
   String userUID;
   int index;
   @override
@@ -93,12 +94,19 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
         doctor = Users.fromJson(temp);
       });
     });
-    templist.clear();
-    getFoodplan();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
+    templist.clear();
+    templist = widget.thispres;
+    int index = widget.index;
+    // getFoodplan();
+    purpose = templist[index].purpose;
+    food = templist[index].food;
+    important_notes = templist[index].important_notes ;
+    dateCreated = templist[index].dateCreated;
+    prescribedBy = templist[index].doctor_name;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         isLoading = false;
@@ -436,11 +444,11 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
         });
       });
 
-      // for(var i=0;i<templist.length/2;i++){
-      //   var temp = templist[i];
-      //   templist[i] = templist[templist.length-1-i];
-      //   templist[templist.length-1-i] = temp;
-      // }
+      for(var i=0;i<templist.length/2;i++){
+        var temp = templist[i];
+        templist[i] = templist[templist.length-1-i];
+        templist[templist.length-1-i] = temp;
+      }
     });
   }
   Future<void> _showMyDialogDelete() async {
