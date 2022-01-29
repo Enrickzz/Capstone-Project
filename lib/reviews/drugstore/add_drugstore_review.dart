@@ -159,32 +159,6 @@ class _create_postState extends State<add_drugstore_review> {
                     },
                   ),
                   SizedBox(height: 8.0),
-                  // Visibility(
-                  //   visible: medicineAvailable,
-                  //   child: TextFormField(
-                  //     showCursor: true,
-                  //     keyboardType: TextInputType.multiline,
-                  //     decoration: InputDecoration(
-                  //       border: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //         borderSide: BorderSide(
-                  //           width:0,
-                  //           style: BorderStyle.none,
-                  //         ),
-                  //       ),
-                  //       filled: true,
-                  //       fillColor: Color(0xFFF2F3F5),
-                  //       hintStyle: TextStyle(
-                  //           color: Color(0xFF666666),
-                  //           fontFamily: defaultFontFamily,
-                  //           fontSize: defaultFontSize),
-                  //       hintText: "What medicine did you purchase here?",
-                  //     ),
-                  //     onChanged: (val){
-                  //       setState(() => medicinesBought = val);
-                  //     },
-                  //   ),
-                  // ),
                   Visibility(
                     visible: medicineAvailable,
                     child: DropdownButtonFormField(
@@ -389,9 +363,19 @@ class _create_postState extends State<add_drugstore_review> {
                             readReview.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
-                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date",
-                                  "reviewTime": "$hours:$min", "special": valueChooseMedicineSupplement});
+                                addReview.set({"added_by": uid,
+                                  "placeid": widget.thisPlace.placeId,
+                                  "user_name": thisuser.firstname+" "
+                                    +thisuser.lastname,
+                                  "review": description,
+                                  "rating": _rating,
+                                  "recommend": isSwitched,
+                                  "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min",
+                                  "special": valueChooseMedicineSupplement,
+                                  "place_loc": widget.thisPlace.formattedAddress,
+                                  "place_name": widget.thisPlace.name
+                                });
                                 NotifyPatients(widget.thisPlace);
                               }else{
                                 List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
@@ -402,16 +386,27 @@ class _create_postState extends State<add_drugstore_review> {
                                 count = reviews.length--;
                                 print("count " + count.toString());
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
-                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date",
-                                  "reviewTime": "$hours:$min", "special": valueChooseMedicineSupplement});
+                                addReview.set({"added_by": uid,
+                                  "placeid": widget.thisPlace.placeId,
+                                  "user_name": thisuser.firstname+" "
+                                    +thisuser.lastname,
+                                  "review": description,
+                                  "rating": _rating,
+                                  "recommend": isSwitched,
+                                  "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min",
+                                  "special": valueChooseMedicineSupplement,
+                                  "place_loc": widget.thisPlace.formattedAddress,
+                                  "place_name": widget.thisPlace.name
+                                });
 
                                 NotifyPatients(widget.thisPlace);
                               }
                             });
                             Reviews newR = new Reviews(added_by: uid, placeid: widget.thisPlace.placeId,
                             review: description, user_name: thisuser.firstname+" " +thisuser.lastname, rating: _rating, reviewDate: DateFormat("MM/dd/yyyy").parse(date),
-                            reviewTime: DateFormat("hh:mm").parse("$hours:$min"), recommend: isSwitched, special: valueChooseMedicineSupplement);
+                            reviewTime: DateFormat("hh:mm").parse("$hours:$min"), recommend: isSwitched, special: valueChooseMedicineSupplement
+                            ,place_loc: widget.thisPlace.formattedAddress, place_name:  widget.thisPlace.name);
                             Navigator.pop(context, newR);
                           }catch(e){
                             print("Error");

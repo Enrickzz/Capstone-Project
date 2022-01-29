@@ -4,6 +4,8 @@ class Reviews{
   String review;
   String user_name;
   String placeid;
+  String place_name;
+  String place_loc;
   int rating;
   bool recommend;
   DateTime reviewDate;
@@ -11,7 +13,7 @@ class Reviews{
   String special;
 
 
-  Reviews({this.placeid, this.reviewDate, this.reviewTime, this.user_name, this.added_by, this.review, this.rating, this.recommend,this.special});
+  Reviews({this.placeid,this.place_name,this.place_loc, this.reviewDate, this.reviewTime, this.user_name, this.added_by, this.review, this.rating, this.recommend,this.special});
 
   Reviews.fromJson(Map<String, dynamic> json) {
     added_by = json['added_by'];
@@ -25,6 +27,12 @@ class Reviews{
     if(json['special'] != null){
       special = json['special'];
     }else special ="";
+    if(json['place_name'] != null){
+      place_name = json['place_name'];
+    }else place_name ="";
+    if(json['place_loc'] != null){
+      place_loc = json['place_loc'];
+    }else place_loc ="";
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +47,12 @@ class Reviews{
     data['reviewTime'] = this.reviewTime;
     if (this.special != null) {
       data['special'] = this.special;
+    }
+    if (this.place_name != null) {
+      data['place_name'] = this.place_name;
+    }
+    if (this.place_loc != null) {
+      data['place_loc'] = this.place_loc;
     }
     return data;
   }

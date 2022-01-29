@@ -328,8 +328,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
-
-                                                  if ( reviewsrecomm[index].recommend) ...[
+                                                  if (reviewsrecomm[index].recommend) ...[
                                                     Icon(
                                                       Icons.thumb_up_alt_sharp, color: Colors.green,
                                                     ),
@@ -360,6 +359,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                                                   ),
                                                                 ),
                                                                 SizedBox(width: 10),
+
                                                                 Text(
                                                                   getDateFormatted(reviewsrecomm[index].reviewDate.toString()) +  " " +
                                                                       getTimeFormatted(reviewsrecomm[index].reviewTime.toString()),
@@ -403,7 +403,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                             ],
                                           ),
                                         ),
-
+                                        checkPlaceName(reviewsrecomm[index].place_name),
+                                        SizedBox(width: 10),
+                                        checkPlaceLoc(reviewsrecomm[index].place_loc),
+                                        SizedBox(width: 10),
                                         Container(
                                           width: 300,
                                           child: Text(
@@ -1455,6 +1458,32 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
             ],
           ),
         );
+    }
+  }
+  Widget checkPlaceName(String check){
+    if(check =="" || check == null){
+      return Text("Wala pang place name DB prob");
+    }else{
+      return Text(
+        check.toString()+"",
+        style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold
+        ),
+      );
+    }
+  }
+  Widget checkPlaceLoc(String check){
+    if(check =="" || check == null){
+      return Text("Wala pang place loc DB prob");
+    }else{
+      return Text(
+        check.toString()+"",
+        style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold
+        ),
+      );
     }
   }
 }
