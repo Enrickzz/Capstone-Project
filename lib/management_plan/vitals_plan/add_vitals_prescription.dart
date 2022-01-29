@@ -114,7 +114,7 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Which Vital:",
+                      hintText: "Vital",
                     ),
                     isExpanded: true,
                     value: type,
@@ -132,6 +132,9 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                     },
                     ).toList(),
                   ),
+
+                  SizedBox(height: 16.0),
+
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget> [
@@ -213,6 +216,7 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                   SizedBox(height: 8.0),
 
                   TextFormField(
+                    maxLines: 6,
                     showCursor: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(

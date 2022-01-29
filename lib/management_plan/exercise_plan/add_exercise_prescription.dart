@@ -36,11 +36,14 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
   String startdate;
   String enddate;
   String purpose = "";
-  String type = "";
+  String type;
   String intensity = "";
   String important_notes = "";
   String prescribedBy = "";
   DateTime now =  DateTime.now();
+  List<String> listExercise = <String>[
+    'Body weights', 'Cardio', 'Cycle', 'Stretching', 'Treadmill'
+  ];
 
   String getFrom(){
     if(dateRange == null){
@@ -139,10 +142,8 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                     },
                   ),
                   SizedBox(height: 8),
-                  TextFormField(
-                    showCursor: true,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 6,
+
+                  DropdownButtonFormField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -157,19 +158,56 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Activity/Exercise Instructions",
+                      hintText: "Exercise/Activity",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter Type of Workout' : null,
-                    onChanged: (val){
-                      setState(() => type = val);
+                    isExpanded: true,
+                    value: type,
+                    onChanged: (newValue){
+                      setState(() {
+                        type = newValue;
+                      });
+
                     },
+                    items: listExercise.map((valueItem){
+                      return DropdownMenuItem(
+                        value: valueItem,
+                        child: Text(valueItem),
+                      );
+                    },
+                    ).toList(),
                   ),
 
+                  SizedBox(height: 8),
 
-                  SizedBox(height: 8.0),
+                  // TextFormField(
+                  //   showCursor: true,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //       borderSide: BorderSide(
+                  //         width:0,
+                  //         style: BorderStyle.none,
+                  //       ),
+                  //     ),
+                  //     filled: true,
+                  //     fillColor: Color(0xFFF2F3F5),
+                  //     hintStyle: TextStyle(
+                  //         color: Color(0xFF666666),
+                  //         fontFamily: defaultFontFamily,
+                  //         fontSize: defaultFontSize),
+                  //     hintText: "Activity/Exercise Instructions",
+                  //   ),
+                  //   validator: (val) => val.isEmpty ? 'Enter Type of Workout' : null,
+                  //   onChanged: (val){
+                  //     setState(() => type = val);
+                  //   },
+                  // ),
+                  //
+                  // SizedBox(height: 8.0),
 
                   TextFormField(
                     showCursor: true,
+                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
