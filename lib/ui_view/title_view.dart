@@ -15,6 +15,7 @@ import 'package:my_app/goal_tab/weight/weight_list_doctor_view.dart';
 import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
 import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
 import 'package:my_app/goal_tab/weight/weight_list_support_view.dart';
+import 'package:my_app/management_plan/exercise_plan/exercise_plan_patient_view.dart';
 import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 import 'package:my_app/goal_tab/exercises/exercise_screen.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
@@ -210,6 +211,13 @@ class TitleView extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => sleep_score()),
+                                  );
+                                }
+                                else if (redirect == 10) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => exercise_prescription_patient_view()),
                                   );
                                 }
                               },
