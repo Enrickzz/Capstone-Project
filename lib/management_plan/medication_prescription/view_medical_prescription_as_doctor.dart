@@ -137,7 +137,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor(thispres: prestemp[index],userUID: widget.userUID, index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsDoctor(thispres: prestemp,userUID: widget.userUID, index: index)),
                       ).then((value) {
                         if(value != null){
                           print("length b4 = " + prestemp.length.toString());

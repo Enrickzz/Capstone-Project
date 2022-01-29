@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
 class SpecificPrescriptionViewAsDoctor extends StatefulWidget {
   SpecificPrescriptionViewAsDoctor({Key key, this.title, this.userUID, this.index, this.thispres}) : super(key: key);
   final String title;
-  final Medication_Prescription thispres;
+  final List<Medication_Prescription> thispres;
   String userUID;
   int index;
   @override
@@ -79,7 +79,20 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
     controller.addListener(() {
       setState(() {});
     });
-    getPrescription();
+    // getPrescription();
+
+    prestemp = widget.thispres;
+    int index = widget.index;
+    brand_name = prestemp[index].branded_name;
+    generic_name = prestemp[index].generic_name;
+    dosage = prestemp[index].dosage.toString();
+    unit = prestemp[index].prescription_unit.toString();
+    frequency = prestemp[index].intake_time;
+    special_instruction = prestemp[index].special_instruction;
+    startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
+    endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
+    dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
+    getPrescibedBy();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -382,7 +395,7 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
                                                 ),
                                               ),
                                               SizedBox(height: 8),
-                                              Text("Dr." + prescribedBy,
+                                              Text("Dr. " + prescribedBy,
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     fontWeight: FontWeight.bold
@@ -471,6 +484,15 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
       startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
       endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
       dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
+    });
+  }
+  void getPrescibedBy(){
+    int index = widget.index;
+    final readDoctorName = databaseReference.child('users/' + prestemp[index].prescribedBy + '/personal_info/');
+    readDoctorName.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+      doctor = Users.fromJson(temp2);
+      prescribedBy = doctor.firstname + " " + doctor.lastname;
     });
   }
   Future<void> _showMyDialogDelete() async {
