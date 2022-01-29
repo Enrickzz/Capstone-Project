@@ -46,6 +46,15 @@ class _recommended_mealsState extends State<recommended_meals>
         recommended=value;
         isLoading=false;
       }));
+    }else{
+      recommended = widget.mealsrecommendation;
+      print(recommended.length.toString() + "<<<<<");
+      Future.delayed(const Duration(milliseconds: 1200), (){
+        setState(() {
+          recommended = widget.mealsrecommendation;
+          isLoading=false;
+        });
+      });
     }
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
@@ -75,10 +84,6 @@ class _recommended_mealsState extends State<recommended_meals>
       }
     });
     super.initState();
-    recommended.clear();
-    setState(() {
-      
-    });
   }
 
   Future<bool> getData() async {

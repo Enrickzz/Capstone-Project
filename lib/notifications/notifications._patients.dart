@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_app/data_inputs/vitals/blood_glucose/add_blood_glucose.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure/add_blood_pressure.dart';
 import 'package:my_app/data_inputs/vitals/heart_rate/add_heart_rate.dart';
 import 'package:my_app/data_inputs/vitals/oxygen_saturation/add_o2_saturation.dart';
@@ -30,6 +31,9 @@ import '../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class notifications extends StatefulWidget {
+  const notifications({Key key, this.animationController}) : super(key: key);
+
+  final AnimationController animationController;
   @override
   _notificationsState createState() => _notificationsState();
 }
@@ -137,8 +141,9 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                               ],
                             ),
                             onTap: (){
+
                               Future.delayed(const Duration(milliseconds: 1000), (){
-                                if(notif.title == "Reminder!" && notif.category == "bprecommend"){
+                                if(notif.title == "Reminder!" && notif.redirect == "Blood Pressure"){
                                   showModalBottomSheet(context: context,
                                     isScrollControlled: true,
                                     builder: (context) => SingleChildScrollView(child: Container(
@@ -170,6 +175,30 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
                                       // child: add_medication(thislist: medtemp),
                                       child: add_o2_saturation(instance: "Recommend"),
+                                    ),
+                                    ),
+                                  );
+                                }
+                                if(notif.title == "Reminder!" && notif.category == "oxygen"){
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      // child: add_medication(thislist: medtemp),
+                                      child: add_o2_saturation(instance: "Recommend"),
+                                    ),
+                                    ),
+                                  );
+                                }
+                                if(notif.title == "Reminder!" && notif.redirect == "Glucose"){
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      // child: add_medication(thislist: medtemp),
+                                      child: add_blood_glucose(instance: "Recommend"),
                                     ),
                                     ),
                                   );
@@ -238,41 +267,72 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                             Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
                           }
                           Future.delayed(const Duration(milliseconds: 2000), (){
+                            if(recomm.redirect ==  "Food - Hemoglobin" && recomm.title == "Low Hemoglobin!"){
+                              List<String> query = ["Spinach", "Legumes", "Brocolli"];
+                              var rng = new Random();
+                              fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
+                              });
+                            }
+                            if(recomm.redirect ==   "Food - Cholesterol" && recomm.title == "High Cholesterol!"){
+                              List<String> query = ["Tuna", "Walnuts", "Salmon"];
+                              var rng = new Random();
+                              fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
+                              });
+                            }
+                            if(recomm.redirect ==   "Food - Cholesterol" && recomm.title == "High Cholesterol!"){
+                              List<String> query = ["Tuna", "Walnuts", "Salmon"];
+                              var rng = new Random();
+                              fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
+                              });
+                            }
+                            if(recomm.redirect ==   "Food - Potassium" && recomm.title == "Low Potassium!"){
+                              List<String> query = ["Spinach", "Banana", "Beef"];
+                              var rng = new Random();
+                              fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
+                              });
+                            }
+                            if(recomm.redirect ==   "Food - Glucose" && recomm.title == "Unusually Low Blood Sugar"){
+                              List<String> query = ["Candy", "Banana", "Peanut Butter"];
+                              var rng = new Random();
+                              fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
+                              });
+                            }
                             if(recomm.redirect == "food_intake"){
                               if(recomm.title == "Meals too fatty!"){
                                 List<String> query = ["Fish", "Lean Meat", "Vegetables"];
                                 var rng = new Random();
                                 fetchNutritionix(query[rng.nextInt(query.length)]);
-                                Future.delayed(const Duration(milliseconds: 1500),(){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
                                 });
                               }else if (recomm.title == "Too much cholesterol!" ){
                                 List<String> query = ["Avocado", "Salmon", "Dark Chocolate"];
                                 var rng = new Random();
-                                fetchNutritionix(query[rng.nextInt(query.length)]);
-                                Future.delayed(const Duration(milliseconds: 1500),(){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
                                 });
                               }else if (recomm.title == "Salty food!" ){
                                 List<String> query = ["Banana", "Tuna", "Salad"];
                                 var rng = new Random();
-                                fetchNutritionix(query[rng.nextInt(query.length)]);
-                                Future.delayed(const Duration(milliseconds: 1500),(){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
                                 });
                               }else if (recomm.title == "Too much salt!" ){
                                 List<String> query = ["Banana", "Tuna", "Salad"];
                                 var rng = new Random();
-                                fetchNutritionix(query[rng.nextInt(query.length)]);
-                                Future.delayed(const Duration(milliseconds: 1500),(){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
                                 });
                               }else if (recomm.title == "Had Coffee?" ){
                                 List<String> query = ["Green Tea", "Hot Tea", "Black Tea"];
                                 var rng = new Random();
-                                fetchNutritionix(query[rng.nextInt(query.length)]);
-                                Future.delayed(const Duration(milliseconds: 1500),(){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: foodrecomm)));
+                                fetchNutritionix(query[rng.nextInt(query.length)]).then((value) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => recommended_meals(mealsrecommendation: value, animationController: widget.animationController)));
                                 });
                               }else if (recomm.title == "Too much Sugar!" ){
 

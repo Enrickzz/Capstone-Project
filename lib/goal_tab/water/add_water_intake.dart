@@ -49,6 +49,20 @@ class add_waterIntakeState extends State<add_water_intake> {
   var dateValue = TextEditingController();
   List <bool> isSelected = [true, false];
 
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String isResting = 'yes';
+  String date;
+  String hours,min;
+  Users thisuser = new Users();
+  List<Connection> connections = new List<Connection>();
+
+  @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -222,27 +236,6 @@ class add_waterIntakeState extends State<add_water_intake> {
                     ),
                   ),
                   SizedBox(height: 24.0),
-                  // DropdownButton(
-                  //   hint: Text("Select items:"),
-                  //   dropdownColor: Colors.grey,
-                  //   icon: Icon(Icons.arrow_drop_down),
-                  //   iconSize: 36,
-                  //   style: TextStyle(
-                  //     color: Colors.black,
-                  //   ),
-                  //   value: valueChoose,
-                  //   onChanged:(value) {
-                  //     setState(() {
-                  //       valueChoose = value;
-                  //     });
-                  //   },
-                  //   items: degrees.map((valueItem) {
-                  //     return DropdownMenuItem(
-                  //         value: valueItem,
-                  //         child: Text(valueItem),
-                  //     );
-                  //   })
-                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -281,12 +274,46 @@ class add_waterIntakeState extends State<add_water_intake> {
                                 }
                                 else{
                                   getWaterIntake();
+                                  double total_water = 0;
+                                  DateTime now = DateTime.now();
+                                  String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
                                   Future.delayed(const Duration(milliseconds: 1000), (){
+                                    for(int i=0; i < waterintake_list.length; i++){
+                                      String datecreated = "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}";
+                                      if(datenow == datecreated){
+                                        total_water += waterintake_list[i].water_intake;
+                                      }
+                                    }
+                                    total_water = total_water + water_intake;
                                     count = waterintake_list.length--;
                                     final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
                                     waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
                                     print("Added Water Intake Successfully! " + uid);
                                   });
+
+                                  if(total_water >= 1500){
+                                    final readAddinf = databaseReference.child("users/"+ uid+"/vitals/additional_info");
+                                    readAddinf.once().then((DataSnapshot snapshot) {
+                                      Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+                                      bool check2 = false;
+                                      print(snapshot.value);
+                                      for(var i = 0; i < userInfo.other_disease.length; i++){
+                                        if(userInfo.other_disease[i].contains("Heart Failure")) check2 = true;
+                                      }
+                                      for(var i = 0 ; i < userInfo.disease.length ; i++ ){
+                                        if(userInfo.disease[i].contains("Heart Failure") ){
+                                          check2 = true;
+                                        }
+                                      }
+                                      if(check2 ==true ){
+                                        addtoRecommendation("The recommended daily water intake for patients with congestive heart failure is 1500 milliliter a day. You have already exceeded the threshold for today. Please limit your water intake for the rest of the day.",
+                                            "Limit your water",
+                                            "3",
+                                            "None",
+                                            "Immediate");
+                                      }
+                                    });
+                                  }
                                 }
                                 readWaterGoal.once().then((DataSnapshot weightgoalsnapshot) {
                                   Map<String, dynamic> temp3 = jsonDecode(jsonEncode(weightgoalsnapshot.value));
@@ -319,6 +346,85 @@ class add_waterIntakeState extends State<add_water_intake> {
             )
         )
     );
+  }
+  void getNotifs2(String uid) {
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null)
+        temp.forEach((jsonString) {
+          notifsList.add(RecomAndNotif.fromJson(jsonString));
+        });
+    });
+  }
+  void addtoNotif(String message, String title, String priority,String uid, String redirect){
+    print ("ADDED TO NOTIFICATIONS");
+    getNotifs2(uid);
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "heartrate", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "heartrate", "redirect": redirect});
+      }
+    });
+  }
+  void addtoRecommendation(String message, String title, String priority, String redirect,String category){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final notifref = databaseReference.child('users/' + uid + '/recommendations/');
+    getRecomm();
+    notifref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
+        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": category, "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
+        notifRef.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority,
+          "rec_time": "$hours:$min", "rec_date": date, "category": category, "redirect": redirect});
+      }
+    });
+  }
+  void getRecomm() {
+    recommList.clear();
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+    });
   }
   void getWaterIntake() {
     final User user = auth.currentUser;

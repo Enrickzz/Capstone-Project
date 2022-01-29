@@ -314,6 +314,12 @@ class _addFoodIntakeState extends State<add_food_intake> {
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/'+ valueChooseFoodTime+ "/");
+                            String checkeddate="";
+                            if(isDateSelected){
+                              checkeddate = intake_date;
+                            }else{
+                              checkeddate = "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}";
+                            }
                             readFoodIntake.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print(temp1);
@@ -345,6 +351,7 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                 total_sodium *= double.parse(serving_size);
 
 
+
                                 foodintakeRef.set({
                                   "img": widget.heroTag,
                                   "foodName": widget.foodName,
@@ -359,9 +366,59 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                   "serving_size": serving_size,
                                   "food_unit": valueFoodUnit,
                                   "mealtype": valueChooseFoodTime,
-                                  "intakeDate": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
+                                  "intakeDate": checkeddate,
                                 });
                                 print("Added Food Intake Successfully! " + uid);
+                                //recom
+                                if(total_sugar >= 32){
+                                  addtoRecommendation("We have detected that you have eaten a meal that contains a high amount of sugar. We recommend that you drink a glass of water to ensure and walk around so you won’t reach hyperglycemia.",
+                                      "Too much Sugar!",
+                                      "3",
+                                      "food_intake");
+                                }
+                                if(widget.foodName.toString().toLowerCase().contains("coffee") == true){
+                                  addtoRecommendation("Please refrain from drinking caffeine as it is detrimental to patients with Arrhythmia. Next time please consider drinking tea instead.",
+                                      "Had Coffee?",
+                                      "3",
+                                      "food_intake");
+                                }
+                                if(total_sodium >= 1500){
+                                  addtoRecommendation("We recommend that you limit your intake of salty foods for today as you have consumed more than 1500mg of sodium for today. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
+                                      "Too much salt!",
+                                      "3",
+                                      "food_intake");
+                                }
+                                if(double.parse(widget.sodium) >= 600){
+                                  addtoRecommendation("You have eaten a meal with high amounts of sodium, to compensate for this we recommend that you drink 2 glasses of water and eat potassium rich-foods for your next meal. Click here to view food recommendations.",
+                                      "Salty food!",
+                                      "3",
+                                      "food_intake");
+                                }
+                                if(total_cholesterol >= 300){
+                                  addtoRecommendation("We recommend that you limit your intake of high cholesterol containing foods for the day as you have already consumed past the 300mg threshold for cholesterol. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
+                                      "Too much cholesterol!",
+                                      "3",
+                                      "food_intake");
+                                }
+                                if(total_tfat > (total_calories*.3)){
+                                  addtoRecommendation("We recommend that you limit your intake of high fat containing foods for the day. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
+                                      "Meals to fatty!",
+                                      "3",
+                                      "food_intake");
+                                }
+                                List<String> alcohol = ["Whiskey", "Gin", "Vodka", "beer", "Tequila", "Wine",];
+                                bool alc = false;
+                                for(var i=0;i < alcohol.length ; i++){
+                                  if(widget.foodName.toString().toLowerCase().contains(alcohol[i])){
+                                    alc = true;
+                                  }
+                                }
+                                if(alc == true){
+                                  addtoRecommendation("We strongly advise you to not consume alcoholic beverages as this is detrimental to your heart condition.",
+                                      "Stop Drinking Alcohol",
+                                      "3",
+                                      "food_intake");
+                                }
                               }
                               else{
                                 getFoodIntake();
@@ -385,7 +442,7 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                     "serving_size": serving_size,
                                     "food_unit": valueFoodUnit,
                                     "mealtype": valueChooseFoodTime,
-                                    "intakeDate": "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
+                                    "intakeDate": checkeddate,
                                   });
                                   print("Added Food Intake Successfully! " + uid);
                                 });
@@ -406,63 +463,14 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                   serving_size: double.parse(serving_size),
                                   food_unit: valueFoodUnit,
                                   mealtype: valueChooseFoodTime,
-                                  intakeDate: "${now.month.toString().padLeft(2,"0")}/${now.day.toString().padLeft(2,"0")}/${now.year}",
+                                  intakeDate: checkeddate,
                               ));
                               for(var i=0;i<foodintake_list.length/2;i++){
                                 var temp = foodintake_list[i];
                                 foodintake_list[i] = foodintake_list[foodintake_list.length-1-i];
                                 foodintake_list[foodintake_list.length-1-i] = temp;
                               }
-                              //recom
-                              if(total_sugar >= 32){
-                                addtoRecommendation("We have detected that you have eaten a meal that contains a high amount of sugar. We recommend that you drink a glass of water to ensure and walk around so you won’t reach hyperglycemia.",
-                                    "Too much Sugar!",
-                                    "3",
-                                    "food_intake");
-                              }
-                              if(widget.foodName.toString().toLowerCase().contains("coffee") == true){
-                                addtoRecommendation("Please refrain from drinking caffeine as it is detrimental to patients with Arrhythmia. Next time please consider drinking tea instead.",
-                                    "Had Coffee?",
-                                    "3",
-                                    "food_intake");
-                              }
-                              if(total_sodium >= 1500){
-                                addtoRecommendation("We recommend that you limit your intake of salty foods for today as you have consumed more than 1500mg of sodium for today. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
-                                    "Too much salt!",
-                                    "3",
-                                    "food_intake");
-                              }
-                              if(double.parse(widget.sodium) >= 600){
-                                addtoRecommendation("You have eaten a meal with high amounts of sodium, to compensate for this we recommend that you drink 2 glasses of water and eat potassium rich-foods for your next meal. Click here to view food recommendations.",
-                                    "Salty food!",
-                                    "3",
-                                    "food_intake");
-                              }
-                              if(total_cholesterol >= 300){
-                                addtoRecommendation("We recommend that you limit your intake of high cholesterol containing foods for the day as you have already consumed past the 300mg threshold for cholesterol. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
-                                    "Too much cholesterol!",
-                                    "3",
-                                    "food_intake");
-                              }
-                              if(total_tfat > (total_calories*.3)){
-                                addtoRecommendation("We recommend that you limit your intake of high fat containing foods for the day. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
-                                    "Meals to fatty!",
-                                    "3",
-                                    "food_intake");
-                              }
-                              List<String> alcohol = ["Whiskey", "Gin", "Vodka", "beer", "Tequila", "Wine",];
-                              bool alc = false;
-                              for(var i=0;i < alcohol.length ; i++){
-                                if(widget.foodName.toString().toLowerCase().contains(alcohol[i])){
-                                  alc = true;
-                                }
-                              }
-                              if(alc == true){
-                                addtoRecommendation("We strongly advise you to not consume alcoholic beverages as this is detrimental to your heart condition.",
-                                    "Stop Drinking Alcohol",
-                                    "3",
-                                    "food_intake");
-                              }
+
                               print("POP HERE ==========");
                               Navigator.pop(context, [foodintake_list, 1]);
                             });

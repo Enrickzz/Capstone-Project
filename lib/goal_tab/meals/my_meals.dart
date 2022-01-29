@@ -234,7 +234,7 @@ class _my_mealsState extends State<my_meals>
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => notifications()),
+                                    MaterialPageRoute(builder: (context) => notifications(animationController: widget.animationController)),
                                   );
                                 },
                                 child: Stack(

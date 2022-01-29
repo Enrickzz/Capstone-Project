@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cron/cron.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ import '../../medicine_intake/medication_patient_view.dart';
 
 class add_blood_glucose extends StatefulWidget {
   final List<Blood_Glucose> thislist;
-  add_blood_glucose({this.thislist});
+  add_blood_glucose({this.thislist,this.instance});
+  final String instance;
   @override
   _add_blood_glucoseState createState() => _add_blood_glucoseState();
 }
@@ -358,25 +360,44 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
 
                                             });
                                             if(glucose < 80){
+                                              glucose_status = "low";
+                                            }
+                                            else if (glucose >= 80 && glucose <= 120){
+                                              glucose_status = "normal";
+                                            }
+                                            else if(glucose > 120){
+                                              glucose_status = "high";
+                                            }
+                                            if(glucose < 80){
                                               addtoRecommendation("Your blood sugar is lower than normal. You should speak to your physician about it and seek immediate medical attention if you feel unwell. In the meantime, have something to eat to help improve your condition.",
                                                   "Unusually Low Blood Sugar",
                                                   "3",
-                                                  "None");
+                                                  "Food - Glucose");
                                             }
                                             if(glucose > 120 && double.parse(lastMeal.toString()) >= 2){
-                                              addtoRecommendation("Your blood sugar is higher than normal and we have already informed your doctor and support system about it. You should speak to your physician about it unless you feel unwell, then you should go to your nearest emergency room immediately",
+                                              addtoRecommendation("Your blood sugar is higher than normal and we have already informed your doctor and support system about it. "
+                                                  "You should speak to your physician about it unless you feel unwell, then you should go to your nearest emergency room immediately",
                                                   "Unusually High Blood Sugar",
                                                   "3",
                                                   "None");
                                             }
+                                            void schedG() async{
+                                              print("SCHED THIS");
+                                              final cron = Cron()
+                                                ..schedule(Schedule.parse('* * */2 * * * '), () {
+                                                  addtoNotif("Check your Glucose again now. Click me to check now!", "Reminder!", "1", uid, "Glucose");
+                                                  print("after 1 hr");
+                                                });
+                                              await Future.delayed(Duration( hours: 2, minutes: 3));
+                                              await cron.close();
+                                            }
                                             if(glucose >120 && double.parse(lastMeal.toString()) <= 2){
-                                              addtoRecommendation("We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. Please record your blood sugar again 2 hours after your last meal. We have set an alarm to remind you to record your blood sugar later. For now please drink a glass of water and try to walk around.",
+                                              addtoRecommendation("We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. "
+                                                  "Please record your blood sugar again 2 hours after your last meal. We have set an alarm to remind you to record your blood sugar later. For now please drink a glass of water and try to walk around.",
                                                   "High Blood Sugar!",
                                                   "2",
                                                   "None");
-                                              Future.delayed(const Duration(hours: 1), (){
-                                                addtoNotifs("Check your Blood Sugar now", "Reminder!", "1");
-                                              });
+                                              schedG();
                                             }
                                             Future.delayed(const Duration(milliseconds: 1000), (){
                                               glucose_list.add(new Blood_Glucose(glucose: glucose, lastMeal: int.parse(lastMeal), bloodGlucose_status: glucose_status, bloodGlucose_date: format.parse(glucose_date), bloodGlucose_time: timeformat.parse(glucose_time)));
@@ -471,6 +492,35 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         glucose_list.add(Blood_Glucose.fromJson(jsonString));
+      });
+    });
+  }
+  void addtoNotif(String message, String title, String priority,String uid, String redirect){
+    print ("ADDED TO NOTIFICATIONS");
+    getNotifs3(uid);
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "heartrate", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "heartrate", "redirect": redirect});
+
+      }
+    });
+  }
+  void getNotifs3(String uid) {
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }

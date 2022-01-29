@@ -95,8 +95,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () async {
-                  isLoading = true;
-
+                  setState(() {
+                    isLoading = true;
+                  });
                   _serviceEnabled = await location.serviceEnabled();
                   if (!_serviceEnabled) {
                     _serviceEnabled = await location.requestService();
@@ -121,23 +122,11 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
 
                   _isGetLocation ? print('Location: ${_locationData.latitude}, ${_locationData.longitude}'):print("wala");
 
-                  Places("${_locationData.latitude}, ${_locationData.longitude}");
-
-                  // setState(() {
-                  //   _isListenLocation = true;
-                  // });
-                  //
-                  // StreamBuilder(
-                  //   stream: location.onLocationChanged,
-                  //     builder: (context,snapshot) {
-                  //       if(snapshot.connectionState != ConnectionState.waiting)
-                  //         {
-                  //           var data = snapshot.data as locs.LocationData;
-                  //           print('Location: ${data.latitude}/${data.longitude}');
-                  //         }
-                  //     });
-
-
+                  Places("${_locationData.latitude}, ${_locationData.longitude}").then((value) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  });
                   },
                   child: Icon(
                     IconData(0xe2dc, fontFamily: 'MaterialIcons')
@@ -612,9 +601,6 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     final uid = user.uid;
     String a;
     String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
-
-
-
     String
     //loc = "16.03599037979812, 120.33470282456094",
     loc = query,
@@ -674,6 +660,13 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
       }
     }
+    setState(() {
+      print("NAGSETSTATE SA CALL NG SHIT");
+      isLoading = false;
+    });
+    return gplaces;
+  }
+  Future<bool> getReviews() async{
     for (var i = 0; i < drugstores.length;i++){
       final readReviews = databaseReference.child('reviews/' + drugstores[i].placeId+"/");
       await readReviews.once().then((DataSnapshot snapshot){
@@ -725,11 +718,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         }
       });
     }
-    setState(() {
-      print("NAGSETSTATE SA CALL NG SHIT");
-      isLoading = false;
-    });
-    return gplaces;
+    return true;
   }
   Widget _displayMedia(String media) {
     if(media == "photoref") {
