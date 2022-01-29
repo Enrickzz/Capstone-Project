@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_app/data_inputs/medicine_intake/add_medication.dart';
 import 'package:my_app/data_inputs/vitals/blood_glucose/add_blood_glucose.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure/add_blood_pressure.dart';
 import 'package:my_app/data_inputs/vitals/heart_rate/add_heart_rate.dart';
@@ -141,7 +142,18 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                               ],
                             ),
                             onTap: (){
-
+                              if(notif.title == "Take your meds!"){
+                                showModalBottomSheet(context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) => SingleChildScrollView(child: Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                                    // child: add_medication(thislist: medtemp),
+                                    child: add_medication(instance: "Recommend"),
+                                  ),
+                                  ),
+                                );
+                              }
                               Future.delayed(const Duration(milliseconds: 1000), (){
                                 if(notif.title == "Reminder!" && notif.redirect == "Blood Pressure"){
                                   showModalBottomSheet(context: context,
@@ -163,18 +175,6 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
                                       // child: add_medication(thislist: medtemp),
                                       child: add_heart_rate(instance: "Recommend"),
-                                    ),
-                                    ),
-                                  );
-                                }
-                                if(notif.title == "Reminder!" && notif.category == "oxygen"){
-                                  showModalBottomSheet(context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => SingleChildScrollView(child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      // child: add_medication(thislist: medtemp),
-                                      child: add_o2_saturation(instance: "Recommend"),
                                     ),
                                     ),
                                   );

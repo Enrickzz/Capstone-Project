@@ -22,7 +22,9 @@ import 'package:http/http.dart' as http;
 import '../dialogs/policy_dialog.dart';
 import '../fitness_app_theme.dart';
 
+import 'data_inputs/medicine_intake/add_medication.dart';
 import 'models/Reviews.dart';
+import 'models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class places extends StatefulWidget {
@@ -48,12 +50,19 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   locs.PermissionStatus _permissionGranted;
   locs.LocationData _locationData;
   bool _isListenLocation=false, _isGetLocation=false;
+  List<Medication_Prescription> medical_list = [];
+  List<Supplement_Prescription> supplement_list = [];
+  List<listMeds> medical_name = [];
+  List<listMeds> mySupplements =[];
+  List<Reviews> reviewsrecomm=[];
 
   @override
   void initState() {
     super.initState();
     reviews.clear();
-    // Places("asd");
+    getSupplementName();
+    getPrescriptionGName();
+    getPrescriptionBName();
     controller = TabController(length: 4, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -123,9 +132,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   _isGetLocation ? print('Location: ${_locationData.latitude}, ${_locationData.longitude}'):print("wala");
 
                   Places("${_locationData.latitude}, ${_locationData.longitude}").then((value) {
-                    setState(() {
-                      isLoading = false;
-                    });
+
                   });
                   },
                   child: Icon(
@@ -240,27 +247,12 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                         ),
                                         Row(
                                           children: [
-                                            // Icon(
-                                            //   Icons.local_phone_outlined, size: 12,
-                                            // ),
-                                            // SizedBox(width: 8.0),
                                             Flexible(
                                               child: Text(
                                                 'See more..',
                                                 style: TextStyle(color: Colors.black, fontSize: 12),
                                               ),
                                             ),
-                                            // SizedBox(width: 20.0),
-                                            // Icon(
-                                            //   Icons.access_time_sharp, size: 12,
-                                            // ),
-                                            // SizedBox(width: 8.0),
-                                            // Flexible(
-                                            //   child: Text(
-                                            //     '6am - 6pm',
-                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                            //   ),
-                                            // ),
                                           ],
                                         ),
                                       ],
@@ -304,111 +296,135 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                           ? Center(
                         child: CircularProgressIndicator(),
                       ):
+                      /// REVIEWS NEARBY
                       ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        itemCount: drugstores.length,
-                        itemBuilder: (context, index){
-                          return Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
-                            child: Card(
-                              child: ListTile(
-                                  title: Padding(
-                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                                    child: Text(""+drugstores[index].name,
-                                        style:TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.bold,
-
-                                        )),
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: reviewsrecomm.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
+                              child: GestureDetector(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [BoxShadow(
+                                          color: Colors.black26.withOpacity(0.05),
+                                          offset: Offset(0.0,6.0),
+                                          blurRadius: 10.0,
+                                          spreadRadius: 0.10
+                                      )]
                                   ),
-                                  subtitle:
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        checkrating(drugstores[index].placeId),
-                                        SizedBox(width: 8.0),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.location_on, size: 15,
-                                              color: Colors.red,
-                                            ),
-                                            SizedBox(width: 4.0),
-                                            Flexible(
-                                              child: Text(
-                                                ''+drugstores[index].formattedAddress,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Container(
+                                          height: 70,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Row(
+                                                children: <Widget>[
+
+                                                  if ( reviewsrecomm[index].recommend) ...[
+                                                    Icon(
+                                                      Icons.thumb_up_alt_sharp, color: Colors.green,
+                                                    ),
+                                                  ] else ...[
+                                                    Icon(
+                                                      Icons.thumb_down_alt_sharp, color: Colors.red,
+                                                    ),
+                                                  ],
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: <Widget>[
+
+
+                                                        Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Row(
+                                                              children: <Widget>[
+                                                                Text(
+                                                                  reviewsrecomm[index].user_name,
+                                                                  style: TextStyle(
+                                                                      fontSize: 14,
+                                                                      fontWeight: FontWeight.bold
+                                                                  ),
+                                                                ),
+                                                                SizedBox(width: 10),
+                                                                Text(
+                                                                  getDateFormatted(reviewsrecomm[index].reviewDate.toString()) +  " " +
+                                                                      getTimeFormatted(reviewsrecomm[index].reviewTime.toString()),
+                                                                  style: TextStyle(
+                                                                    fontSize: 12,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            SizedBox(height: 2,),
+                                                            RatingBar(
+                                                              initialRating:  double.parse(reviewsrecomm[index].rating.toString()),
+                                                              direction: Axis.horizontal,
+                                                              allowHalfRating: true,
+                                                              itemCount: 5,
+                                                              ignoreGestures: true,
+                                                              itemSize: 15.0,
+                                                              onRatingUpdate: (rating) {
+                                                                print(rating);
+                                                              },
+                                                              ratingWidget: RatingWidget(
+                                                                  full: Icon(Icons.star, color: Colors.orange),
+                                                                  half: Icon(
+                                                                    Icons.star_half,
+                                                                    color: Colors.orange,
+                                                                  ),
+                                                                  empty: Icon(
+                                                                    Icons.star_outline,
+                                                                    color: Colors.orange,
+                                                                  )),
+                                                            ),
+
+                                                          ],
+                                                        )
+
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            SizedBox(height: 30.0),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                        Row(
-                                          children: [
-                                            // Icon(
-                                            //   Icons.local_phone_outlined, size: 12,
-                                            // ),
-                                            // SizedBox(width: 8.0),
-                                            Flexible(
-                                              child: Text(
-                                                'See more..',
-                                                style: TextStyle(color: Colors.black, fontSize: 12),
-                                              ),
+
+                                        Container(
+                                          width: 300,
+                                          child: Text(
+                                            reviewsrecomm[index].review,
+                                            style: TextStyle(
+                                              fontSize: 14,
                                             ),
-                                            // SizedBox(width: 20.0),
-                                            // Icon(
-                                            //   Icons.access_time_sharp, size: 12,
-                                            // ),
-                                            // SizedBox(width: 8.0),
-                                            // Flexible(
-                                            //   child: Text(
-                                            //     '6am - 6pm',
-                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                            //   ),
-                                            // ),
-                                          ],
+
+                                          ),
                                         ),
+                                        SizedBox(height: 5),
+                                        checkRev(reviewsrecomm[index].special),
+
+                                        SizedBox(height: 5),
                                       ],
                                     ),
                                   ),
-
-                                  trailing: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10), // Image border
-                                    child: Container(
-                                        height: 70.0,
-                                        width: 70.0,// Image radius
-                                        child: _displayMedia(drugstores[index].photos.photoReference)
-                                    ),
-                                  ),
-                                  isThreeLine: false,
-                                  selected: true,
-                                  onTap: () {
-                                    showModalBottomSheet(context: context,
-                                      isScrollControlled: true,
-                                      builder: (context) => SingleChildScrollView(child: Container(
-                                        padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                                        // child: add_medication(thislist: medtemp),
-                                        child: info_drugstore(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId), type: "drugstore"),
-                                      ),
-                                      ),
-                                    ).then((value) =>
-                                        Future.delayed(const Duration(milliseconds: 1500), (){
-                                          setState((){
-                                          });
-                                        }));
-                                  }
-
+                                ),
                               ),
-
-                            ),
-                          );
-                        },
+                            );
+                          }
                       ) ,
                     ],
                   ),
@@ -491,27 +507,6 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                                 style: TextStyle(color: Colors.black, fontSize: 12),
                                               ),
                                             ),
-                                            // Icon(
-                                            //   Icons.local_phone_outlined, size: 12,
-                                            // ),
-                                            // SizedBox(width: 8.0),
-                                            // Flexible(
-                                            //   child: Text(
-                                            //     '7655-1701',
-                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                            //   ),
-                                            // ),
-                                            // SizedBox(width: 20.0),
-                                            // Icon(
-                                            //   Icons.access_time_sharp, size: 12,
-                                            // ),
-                                            // SizedBox(width: 8.0),
-                                            // Flexible(
-                                            //   child: Text(
-                                            //     '7am - 10pm',
-                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                            //   ),
-                                            // ),
                                           ],
                                         ),
                                       ],
@@ -1076,27 +1071,6 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                                 style: TextStyle(color: Colors.black, fontSize: 12),
                                               ),
                                             )
-                                            // Icon(
-                                            //   Icons.local_phone_outlined, size: 12,
-                                            // ),
-                                            // SizedBox(width: 8.0),
-                                            // Flexible(
-                                            //   child: Text(
-                                            //     '7655-1701',
-                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                            //   ),
-                                            // ),
-                                            // SizedBox(width: 20.0),
-                                            // Icon(
-                                            //   Icons.access_time_sharp, size: 12,
-                                            // ),
-                                            // SizedBox(width: 8.0),
-                                            // Flexible(
-                                            //   child: Text(
-                                            //     '7am - 10pm',
-                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                            //   ),
-                                            // ),
                                           ],
                                         ),
                                       ],
@@ -1212,11 +1186,86 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
       }
     }
-    setState(() {
-      print("NAGSETSTATE SA CALL NG SHIT");
-      isLoading = false;
+    getReviews().then((value) {
+      reviewRecs();
+      setState(() {
+        print("NAGSETSTATE SA CALL NG SHIT");
+        isLoading = false;
+      });
     });
     return gplaces;
+  }
+  void reviewRecs(){
+    print("REVIEWRECS");
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    for(var i = 0; i < reviews.length; i++){
+      for(var j = 0; j < drugstores.length; j++){
+        if(reviews[i].placeid == drugstores[j].placeId){
+          for(var k = 0 ; k < medical_name.length; k++){
+            if(medical_name[k].name == reviews[i].special){
+              ///checks if meds is in patient db
+              // if(reviews[i].added_by != uid){
+                reviewsrecomm.add(reviews[i]);
+                print("REVIEW FOUND" + reviews[i].user_name);
+              // }
+            }
+          }
+        }
+      }
+    }
+  }
+  void getPrescriptionBName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
+    readprescription.once().then((DataSnapshot snapshot){
+      int bcount = 0;
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          medical_list.add(Medication_Prescription.fromJson(jsonString));
+          // medical_name.add(medical_list[bcount].branded_name);
+          medical_name.add(new listMeds(medical_list[bcount].generic_name, medical_list[bcount].dosage.toString(), medical_list[bcount].prescription_unit));
+
+          bcount++;
+        });
+      }
+
+    });
+  }
+  void getPrescriptionGName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
+    readprescription.once().then((DataSnapshot snapshot){
+      int gcount = 0;
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        medical_list.add(Medication_Prescription.fromJson(jsonString));
+        //medical_name.add(medical_list[gcount].generic_name);
+        //medical_name.add(new listMeds(medical_list[gcount].generic_name, medical_list[gcount].dosage.toString(), medical_list[gcount].prescription_unit));
+        gcount++;
+      });
+    });
+  }
+  void getSupplementName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
+    readsupplement.once().then((DataSnapshot snapshot){
+      int suppcount = 0;
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          supplement_list.add(Supplement_Prescription.fromJson(jsonString));
+          // medical_name.add(supplement_list[suppcount].supplement_name);
+          medical_name.add(new listMeds(supplement_list[suppcount].supplement_name, supplement_list[suppcount].dosage.toString(), supplement_list[suppcount].prescription_unit));
+
+          suppcount++;
+        });
+      }
+    });
   }
   Future<bool> getReviews() async{
     for (var i = 0; i < drugstores.length;i++){
@@ -1374,6 +1423,38 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         "",
         style: TextStyle(color: Colors.black, fontSize: 12),
       );
+    }
+  }
+  String getDateFormatted (String date){
+    var dateTime = DateTime.parse(date);
+    return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
+  }
+  String getTimeFormatted (String date){
+    print(date);
+    var dateTime = DateTime.parse(date);
+    var hours = dateTime.hour.toString().padLeft(2, "0");
+    var min = dateTime.minute.toString().padLeft(2, "0");
+    return "$hours:$min";
+  }
+  Widget checkRev(String special) {
+    if(special == ""){
+      return Text("");
+    }else{
+      return
+        Container(
+          child: Row(
+            children: [
+              Icon(
+                Icons.medication_outlined, color: Colors.blue,
+              ),
+              Text(special, style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold
+              ),
+              ),
+            ],
+          ),
+        );
     }
   }
 }

@@ -18,7 +18,8 @@ import '../../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_medication extends StatefulWidget {
   final List<Medication> thislist;
-  add_medication({this.thislist});
+  add_medication({this.thislist, this.instance});
+  final String instance;
   @override
   _addMedicationState createState() => _addMedicationState();
 }

@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/data_inputs/medicine_intake/add_medication.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
@@ -62,7 +63,8 @@ class _create_postState extends State<add_drugstore_review> {
   int _rating = 0;
   bool isSwitched = false;
 
-
+  String valueChooseMedicineSupplement;
+  List<listMeds> listMedicineSupplement =[];
   int count = 0;
   List<Reviews> reviews=[];
   Users thisuser;
@@ -72,8 +74,15 @@ class _create_postState extends State<add_drugstore_review> {
   bool medicineAvailable = false;
   String hintextt = "Reviews";
   String medicinesBought = '';
+
+  List<Medication_Prescription> medical_list = [];
+  List<Supplement_Prescription> supplement_list = [];
+  List<listMeds> medical_name = [];
   @override
   void initState(){
+    getSupplementName();
+    getPrescriptionGName();
+    getPrescriptionBName();
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");
@@ -91,9 +100,9 @@ class _create_postState extends State<add_drugstore_review> {
       thisuser = Users.fromJson3(temp1);
       print(thisuser);
       Future.delayed(const Duration(milliseconds: 2000),(){
-        print("this user\n"+thisuser.firstname);
-        print(thisuser.firstname + " " + thisuser.lastname);
-
+        setState(() {
+          listMedicineSupplement = medical_name;
+        });
       });
     });
     super.initState();
@@ -150,11 +159,35 @@ class _create_postState extends State<add_drugstore_review> {
                     },
                   ),
                   SizedBox(height: 8.0),
+                  // Visibility(
+                  //   visible: medicineAvailable,
+                  //   child: TextFormField(
+                  //     showCursor: true,
+                  //     keyboardType: TextInputType.multiline,
+                  //     decoration: InputDecoration(
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //         borderSide: BorderSide(
+                  //           width:0,
+                  //           style: BorderStyle.none,
+                  //         ),
+                  //       ),
+                  //       filled: true,
+                  //       fillColor: Color(0xFFF2F3F5),
+                  //       hintStyle: TextStyle(
+                  //           color: Color(0xFF666666),
+                  //           fontFamily: defaultFontFamily,
+                  //           fontSize: defaultFontSize),
+                  //       hintText: "What medicine did you purchase here?",
+                  //     ),
+                  //     onChanged: (val){
+                  //       setState(() => medicinesBought = val);
+                  //     },
+                  //   ),
+                  // ),
                   Visibility(
                     visible: medicineAvailable,
-                    child: TextFormField(
-                      showCursor: true,
-                      keyboardType: TextInputType.multiline,
+                    child: DropdownButtonFormField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -169,13 +202,26 @@ class _create_postState extends State<add_drugstore_review> {
                             color: Color(0xFF666666),
                             fontFamily: defaultFontFamily,
                             fontSize: defaultFontSize),
-                        hintText: "What medicine did you purchase here?",
+                        hintText: "Medicine/Supplement: ",
                       ),
-                      onChanged: (val){
-                        setState(() => medicinesBought = val);
+                      isExpanded: true,
+                      value: valueChooseMedicineSupplement,
+                      onChanged: (newValue){
+                        setState(() {
+                          valueChooseMedicineSupplement = newValue;
+                          print("NEW VALUE " + newValue);
+                        });
                       },
+                      items: listMedicineSupplement.map((valueItem){
+                        return DropdownMenuItem(
+                            value: valueItem.name,
+                            child: Text(valueItem.name)
+                        );
+                      },
+                      ).toList(),
                     ),
-                  ),
+                  )
+                  ,
                   SizedBox(height: 12.0),
                   TextFormField(
                     showCursor: true,
@@ -345,7 +391,7 @@ class _create_postState extends State<add_drugstore_review> {
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
                                 addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
                                     +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date",
-                                  "reviewTime": "$hours:$min"});
+                                  "reviewTime": "$hours:$min", "special": valueChooseMedicineSupplement});
                                 NotifyPatients(widget.thisPlace);
                               }else{
                                 List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
@@ -358,11 +404,15 @@ class _create_postState extends State<add_drugstore_review> {
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
                                 addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
                                     +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date",
-                                  "reviewTime": "$hours:$min" });
+                                  "reviewTime": "$hours:$min", "special": valueChooseMedicineSupplement});
+
                                 NotifyPatients(widget.thisPlace);
                               }
                             });
-                            Navigator.pop(context, widget.thisPlace.placeId);
+                            Reviews newR = new Reviews(added_by: uid, placeid: widget.thisPlace.placeId,
+                            review: description, user_name: thisuser.firstname+" " +thisuser.lastname, rating: _rating, reviewDate: DateFormat("MM/dd/yyyy").parse(date),
+                            reviewTime: DateFormat("hh:mm").parse("$hours:$min"), recommend: isSwitched, special: valueChooseMedicineSupplement);
+                            Navigator.pop(context, newR);
                           }catch(e){
                             print("Error");
                           }
@@ -378,6 +428,58 @@ class _create_postState extends State<add_drugstore_review> {
             )
         )
     );
+  }
+  void getPrescriptionBName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
+    readprescription.once().then((DataSnapshot snapshot){
+      int bcount = 0;
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          medical_list.add(Medication_Prescription.fromJson(jsonString));
+          // medical_name.add(medical_list[bcount].branded_name);
+          medical_name.add(new listMeds(medical_list[bcount].generic_name, medical_list[bcount].dosage.toString(), medical_list[bcount].prescription_unit));
+
+          bcount++;
+        });
+      }
+
+    });
+  }
+  void getPrescriptionGName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
+    readprescription.once().then((DataSnapshot snapshot){
+      int gcount = 0;
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        medical_list.add(Medication_Prescription.fromJson(jsonString));
+        //medical_name.add(medical_list[gcount].generic_name);
+        //medical_name.add(new listMeds(medical_list[gcount].generic_name, medical_list[gcount].dosage.toString(), medical_list[gcount].prescription_unit));
+        gcount++;
+      });
+    });
+  }
+  void getSupplementName() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
+    readsupplement.once().then((DataSnapshot snapshot){
+      int suppcount = 0;
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null){
+        temp.forEach((jsonString) {
+          supplement_list.add(Supplement_Prescription.fromJson(jsonString));
+          // medical_name.add(supplement_list[suppcount].supplement_name);
+          medical_name.add(new listMeds(supplement_list[suppcount].supplement_name, supplement_list[suppcount].dosage.toString(), supplement_list[suppcount].prescription_unit));
+
+          suppcount++;
+        });
+      }
+    });
   }
   void NotifyPatients(Results placeobj) async{
     final User user = auth.currentUser;
@@ -400,15 +502,17 @@ class _create_postState extends State<add_drugstore_review> {
           var readUsers = databaseReference.child('users/'+plist[i].id+"/personal_info");
           readUsers.once().then((DataSnapshot snapshot2) {
             var temp2 = jsonDecode(jsonEncode(snapshot2.value));
-            Users thisUser = Users.fromJson2(temp2);
-            print("ADD RECOMMENDATIONS TO "+ thisUser.firstname + " << " + thisUser.uid);
-            if(plist[i].id != loggedId){
-              addtoRecommendation("Another Heartistant CVD user has recommended "+placeobj.name+", a "+ widget.type+", "
-                  "which is suitable for other CVD patients. Click here to view",
-                  "Peer Recommendation!",
-                  "1",
-                  placeobj.placeId,
-                  plist[i].id);
+            if(temp2 != null){
+              Users thisUser = Users.fromJson2(temp2);
+              print("ADD RECOMMENDATIONS TO "+ thisUser.firstname + " << " + thisUser.uid);
+              if(plist[i].id != loggedId){
+                addtoRecommendation("Another Heartistant CVD user has recommended "+placeobj.name+", a "+ widget.type+", "
+                    "which is suitable for other CVD patients. Click here to view",
+                    "Peer Recommendation!",
+                    "1",
+                    placeobj.placeId,
+                    plist[i].id);
+              }
             }
           });
         }

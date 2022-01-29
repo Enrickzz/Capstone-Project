@@ -106,14 +106,18 @@ class _discussionState extends State<drugstore_reviews>
                         ),
                         ),
                       ).then((value) {
-
-                        Future.delayed(const Duration(milliseconds: 1500), (){
-                          if(value != null){
-                            getReviews2(value.toString());
-                          }
-                          setState((){
+                        if(value!= null){
+                          setState(() {
+                            reviews.insert(0, value);
                           });
-                        });
+                        }
+                        // Future.delayed(const Duration(milliseconds: 1500), (){
+                        //   if(value != null){
+                        //     getReviews2(value.toString());
+                        //   }
+                        //   setState((){
+                        //   });
+                        // });
                       });
                     },
                     child: Icon(
@@ -304,38 +308,9 @@ class _discussionState extends State<drugstore_reviews>
                                           ),
                                         ),
                                         SizedBox(height: 5),
-                                        
-                                        Container(
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.medication_outlined, color: Colors.blue,
-                                              ),
-                                              Text(
-                                                "Betablocker",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        // InteractiveViewer(
-                                        //   clipBehavior: Clip.none,
-                                        //   minScale: minScale,
-                                        //   maxScale: maxScale,
-                                        //   child: AspectRatio(
-                                        //     aspectRatio: 1,
-                                        //     child: ClipRRect(
-                                        //       borderRadius: BorderRadius.circular(20),
-                                        //       child: Image.asset('assets/images/body.PNG'
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // ),
+                                        checkRev(reviews[index].special),
 
+                                        SizedBox(height: 5),
                                       ],
                                     ),
                                   ),
@@ -400,6 +375,11 @@ class _discussionState extends State<drugstore_reviews>
         reviews.add(Reviews.fromJson(jsonString));
         print(reviews.length.toString()+ "<<<<<<<<<<<");
       });
+      for(var i=0;i<reviews.length/2;i++){
+        var temp = reviews[i];
+        reviews[i] = reviews[reviews.length-1-i];
+        reviews[reviews.length-1-i] = temp;
+      }
     });
 
     //SPOTIFY SHIT
@@ -423,4 +403,26 @@ class _discussionState extends State<drugstore_reviews>
 
   }
 
+}
+
+Widget checkRev(String special) {
+  if(special == ""){
+    return Text("");
+  }else{
+    return
+      Container(
+        child: Row(
+          children: [
+            Icon(
+            Icons.medication_outlined, color: Colors.blue,
+          ),
+            Text(special, style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold
+              ),
+            ),
+          ],
+        ),
+      );
+  }
 }

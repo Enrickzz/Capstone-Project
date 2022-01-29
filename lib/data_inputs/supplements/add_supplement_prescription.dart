@@ -378,11 +378,12 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                             readPrescription.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
-                              List<String> temp = temp1.split(',');
-                              Medication_Prescription prescription;
                               if(datasnapshot.value == null){
                                 final prescriptionRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + count.toString());
-                                prescriptionRef.set({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                prescriptionRef.set({"supplement_name": supplement_name.toString(),
+                                  "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(),
+                                  "medical_prescription_unit": prescription_unit,
+                                  "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                 print("Added Supplement Prescription Successfully! " + uid);
                               }
                               else{
@@ -390,7 +391,11 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = supplement_list.length--;
                                   final prescriptionRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + count.toString());
-                                  prescriptionRef.set({"supplement_name": supplement_name.toString(), "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(), "medical_prescription_unit": prescription_unit, "dateCreated": "${now.month}/${now.day}/${now.year}"});
+                                  prescriptionRef.set({"supplement_name": supplement_name.toString(),
+                                    "intake_time": quantity.toString(),
+                                    "supp_dosage": supp_dosage.toString(),
+                                    "medical_prescription_unit": prescription_unit,
+                                    "dateCreated": "${now.month}/${now.day}/${now.year}"});
                                   print("Added Supplement Prescription Successfully! " + uid);
                                 });
 

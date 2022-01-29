@@ -8,8 +8,10 @@ class Reviews{
   bool recommend;
   DateTime reviewDate;
   DateTime reviewTime;
+  String special;
 
-  Reviews({this.added_by, this.review, this.rating, this.recommend, this.placeid});
+
+  Reviews({this.placeid, this.reviewDate, this.reviewTime, this.user_name, this.added_by, this.review, this.rating, this.recommend,this.special});
 
   Reviews.fromJson(Map<String, dynamic> json) {
     added_by = json['added_by'];
@@ -20,6 +22,9 @@ class Reviews{
     recommend = json['recommend'];
     reviewDate = DateFormat("MM/dd/yyyy").parse(json['reviewDate']);
     reviewTime = DateFormat("hh:mm").parse(json['reviewTime']);
+    if(json['special'] != null){
+      special = json['special'];
+    }else special ="";
   }
 
   Map<String, dynamic> toJson() {
@@ -32,6 +37,9 @@ class Reviews{
     data['recommend'] = this.recommend;
     data['reviewDate'] = this.reviewDate;
     data['reviewTime'] = this.reviewTime;
+    if (this.special != null) {
+      data['special'] = this.special;
+    }
     return data;
   }
 }
