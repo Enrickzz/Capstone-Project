@@ -130,7 +130,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   });
 
                   _isGetLocation ? print('Location: ${_locationData.latitude}, ${_locationData.longitude}'):print("wala");
-
+                  setState(() {
+                    reviewsrecomm.clear();
+                  });
                   Places("${_locationData.latitude}, ${_locationData.longitude}").then((value) {
 
                   });
@@ -298,7 +300,6 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                       ):
                       /// REVIEWS NEARBY
                       ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: reviewsrecomm.length,
                           itemBuilder: (context, index) {
@@ -1189,6 +1190,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
       }
     }
+    reviews.clear();
     getReviews().then((value) {
       reviewRecs();
       setState(() {
