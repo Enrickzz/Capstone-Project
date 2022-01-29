@@ -56,8 +56,10 @@ class _MealsListViewState extends State<MealsListView>
     getLFoodIntake();
     getDFoodIntake();
     getSFoodIntake();
+    print("init");
 
-    Future.delayed(const Duration(milliseconds: 1000), (){
+    Future.delayed(const Duration(milliseconds: 3300), (){
+
       bmeal.clear();
       lmeal.clear();
       dmeal.clear();
@@ -78,6 +80,7 @@ class _MealsListViewState extends State<MealsListView>
         total_scalories += snack_list[i].calories;
         smeal.add(snack_list[i].foodName);
       }
+      print(breakfast_list);
 
       mealsListData[0].kacl = total_bcalories;
       mealsListData[1].kacl = total_lcalories;
@@ -88,10 +91,14 @@ class _MealsListViewState extends State<MealsListView>
       mealsListData[2].meals = dmeal;
       mealsListData[3].meals = smeal;
 
-
-      // setState(() {
-      //   print("setstate");
-      // });
+      for(var i = 0 ; i < mealsListData.length; i++){
+        for(var j = 0 ; j < mealsListData[i].meals.length; j++){
+          print(mealsListData[i].kacl.toString() + " " + mealsListData[i].meals[j]);
+        }
+      }
+      setState(() {
+        print("setstate here");
+      });
     });
 
   }
@@ -347,8 +354,12 @@ class MealsView extends StatelessWidget {
   }
 }
 DateTime today = DateTime.now();
-String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+
+String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
 void getBFoodIntake() {
+  String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+
+  print("DATE NOW\n$now" );
   final User user = auth.currentUser;
   final uid = user.uid;
   final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
@@ -361,6 +372,7 @@ void getBFoodIntake() {
       });
       for(int i = 0; i < intake.length; i++){
         if(intake[i].intakeDate == now){
+          print(now + "  " +intake[i].intakeDate );
           breakfast_list.add(intake[i]);
         }
       }
@@ -368,6 +380,8 @@ void getBFoodIntake() {
   });
 }
 void getLFoodIntake() {
+  String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+
   final User user = auth.currentUser;
   final uid = user.uid;
   final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
@@ -387,6 +401,8 @@ void getLFoodIntake() {
   });
 }
 void getDFoodIntake() {
+  String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+
   final User user = auth.currentUser;
   final uid = user.uid;
   final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
@@ -406,6 +422,8 @@ void getDFoodIntake() {
   });
 }
 void getSFoodIntake() {
+  String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+
   final User user = auth.currentUser;
   final uid = user.uid;
   final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');

@@ -727,7 +727,7 @@ class _DietViewState extends State<DietView> {
       }
     });
   }
-  void getFitbit() {
+  Future<bool> getFitbit() async{
     DateTime a = DateTime.now();
     String y = a.year.toString(), m = a.month.toString(), d = a.day.toString();
     Activities act = new Activities();
@@ -736,7 +736,7 @@ class _DietViewState extends State<DietView> {
     FitBitToken test;
     String accessToken = "";
     final readFitbit = databaseReference.child('users/' + uid + "/fitbittoken/");
-    readFitbit.once().then((DataSnapshot snapshot) {
+    await readFitbit.once().then((DataSnapshot snapshot) async{
       print("SNAPSHOT");
       print(snapshot.value);
       if (snapshot.value != null) {
@@ -747,21 +747,28 @@ class _DietViewState extends State<DietView> {
           accessToken = test.accessToken;
         }
       }
-    });
-    Future.delayed(const Duration(milliseconds: 1200), ()  {
-      setState(() async {
         var result = await http.get(Uri.parse("https://api.fitbit.com/1/user/-/activities/list.json?sort=asc&offset=0&limit=1&beforeDate=$y-$m-$d"),
             headers: {
               'Authorization': "Bearer $accessToken",
             });
         List<Activities> activities=[];
-        activities = ActivitiesFitbit.fromJson(jsonDecode(result.body)).activities;
-        act = activities[0];
-        if(act.calories != null){
-          burned = act.calories;
+        if(result.statusCode == 200){
+          activities = ActivitiesFitbit.fromJson(jsonDecode(result.body)).activities;
+          act = activities[0];
+          setState(() {
+            if(act.calories != null){
+              burned = act.calories;
+            }
+          });
         }
-      });
+        setState(() {
+
+        });
     });
+    Future.delayed(const Duration(milliseconds: 1200), ()  {
+
+    });
+    return true;
   }
 }
 
