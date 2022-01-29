@@ -113,8 +113,9 @@ class _water_intake_chartState extends State<water_intake_chart> {
               thisseries,
               animate: false,
               behaviors: [
+
                 charts.ChartTitle("Daily Water Intake", titleStyleSpec: charts.TextStyleSpec(color: charts.Color.black, fontSize: 16)),
-                charts.RangeAnnotation([charts.LineAnnotationSegment(goal, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.black), startLabel: '' , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
+                charts.RangeAnnotation([charts.LineAnnotationSegment(goal, charts.RangeAnnotationAxisType.measure,  color: charts.ColorUtil.fromDartColor(Colors.greenAccent), startLabel: 'goal'  , labelAnchor: charts.AnnotationLabelAnchor.middle, labelDirection: charts.AnnotationLabelDirection.horizontal)], layoutPaintOrder: 10)
               ],
               // Set a bar label decorator.
               // Example configuring different styles for inside/outside:
