@@ -84,6 +84,11 @@ class _addFoodIntakeState extends State<add_food_intake> {
   double total_calories = 0;
   double total_tfat = 0;
   @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
 
     String defaultFontFamily = 'Roboto-Light.ttf';
@@ -501,9 +506,12 @@ class _addFoodIntakeState extends State<add_food_intake> {
     final readBP = databaseReference.child('users/' + uid + '/recommendations/');
     readBP.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        recommList.add(RecomAndNotif.fromJson(jsonString));
-      });
+      if(temp !=null){
+        temp.forEach((jsonString) {
+          recommList.add(RecomAndNotif.fromJson(jsonString));
+        });
+      }
+
     });
   }
   void initNotif() {

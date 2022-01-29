@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/nutritionixApi.dart';
@@ -386,27 +387,6 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
                                 )
-                                // Icon(
-                                //   Icons.local_phone_outlined, size: 12,
-                                // ),
-                                // SizedBox(width: 8.0),
-                                // Flexible(
-                                //   child: Text(
-                                //     '7655-1701',
-                                //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                //   ),
-                                // ),
-                                // SizedBox(width: 20.0),
-                                // Icon(
-                                //   Icons.access_time_sharp, size: 12,
-                                // ),
-                                // SizedBox(width: 8.0),
-                                // Flexible(
-                                //   child: Text(
-                                //     '7am - 10pm',
-                                //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ],
@@ -563,16 +543,42 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   }
 
   Future<List<Results>> Places(String query) async{
+    bool servicestatus = await Geolocator.isLocationServiceEnabled();
+    LocationPermission permission = await Geolocator.checkPermission();
+    Position position;
+    String long="", lat="";
+    if(servicestatus){
+      print("GPS service is enabled");
+      position = await Geolocator.getCurrentPosition();
+        print("ASD");
+        long = position.longitude.toString();
+        lat = position.latitude.toString();
+    }else{
+      print("GPS service is disabled.");
+    }
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('Location permissions are denied');
+      }else if(permission == LocationPermission.deniedForever){
+        print("'Location permissions are permanently denied");
+      }else{
+        print("GPS Location service is granted");
+      }
+    }else{
+      print("GPS Location permission granted.");
+    }
     final User user = auth.currentUser;
     final uid = user.uid;
     String a;
     String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
     String
     //loc = "16.03599037979812, 120.33470282456094",
-    loc = "14.589281719512666, 121.03772954435867",
+    loc = position.longitude.toString() + ", " + position.latitude.toString(),
         radius ="2000",
         type="drugstore",
         query1= "Drugstore";
+    print(loc + " <<<<<<<");
 
     var drugstorres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=$query1&key=$key&location=$loc&radius=$radius&type=$type"));
     var hospitalres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=hospital"));

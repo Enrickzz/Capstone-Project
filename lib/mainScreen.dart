@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cron/cron.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -96,28 +97,17 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
   List<Respiratory_Rate> respiratory_list = new List<Respiratory_Rate>();
   @override
   void initState() {
+
     checkwater();
     initNotif();
-    DateTime a = new DateTime.now();
-    String sa= a.toString();
-    sa = sa.substring(0,sa.indexOf(" "));
-    print("DATE TIME " + DateTime.parse("$sa 10:00:00").toString() );
-    DateTime am10 = DateTime.parse("$sa 10:00:00");
-    DateTime pm2 = DateTime.parse("$sa 14:00:00");
-    DateTime pm9 = DateTime.parse("$sa 21:00:00");
-    DateTime pm8 = DateTime.parse("$sa 20:00:00");
-    print("DATES");
-    print(am10.toString());print(pm2.toString());print(pm9.toString());
+
     Future.delayed(const Duration(milliseconds: 1200), (){
       if(thisuser.usertype == "Patient"){
-        getMedication();getHeartRate();getBloodPressure();getRespirations();
-        Future.delayed(const Duration(milliseconds: 1500),(){
-          checkVitals();
-          print("look "+sa+" " + bptemp[0].bp_date.toString());
-
-        });
-        schedulefood(am10);schedulefood(pm2);schedulefood(pm9);schedulefood(pm8);
-        total_waterCheck();
+        getMedication();
+        getHeartRate();
+        getBloodPressure();
+        getRespirations();
+        schedule();
       }
     });
     tabIconsList.forEach((TabIconData tab) {
@@ -293,50 +283,55 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
       });
     });
   }
-  void scheduledWater() async{
-    ScheduledTimer example2;
-    example2 = await ScheduledTimer(
-        id: 'example2',
-        onExecute: () {
-          total_waterCheck();
-          example2.schedule(DateTime.now().add(Duration(minutes: 30)));
-        },
-        defaultScheduledTime: DateTime.now(),
-        onMissedSchedule: () {
-          example2.execute();
-        });
-  }
-  void schedulefood(DateTime thistime) async{
-    ScheduledTimer example1;
-    print("SCHEDULE FOOD NOTIF");
-    DateTime a = new DateTime.now();
-    String sa= a.toString();
-    sa = sa.substring(0,sa.indexOf(" "));
-    DateTime am10 = DateTime.parse("$sa 10:00:00");
-    DateTime pm2 = DateTime.parse("$sa 14:00:00");
-    DateTime pm9 = DateTime.parse("$sa 21:00:00");
-    DateTime pm8 = DateTime.parse("$sa 20:00:00");
-     example1 = await ScheduledTimer(
-        id: 'example1',
-        onExecute: () {
-          print('Execute Scheduled add');
-          if(sa == "10:00:00"){
-            addNotifsall(1);
-          }
-          if(sa == "14:00:00"){
-            addNotifsall(2);
-          }
-          if(sa == "21:00:00"){
-            addNotifsall(3);
-          }
-          if(sa == "21:00:00"){
-            addNotifsall(4);
-          }
-        },
-        defaultScheduledTime: thistime,
-        onMissedSchedule: () {
-          example1.execute();
-        });
+  void schedule() {
+    print("SCHED ALL");
+    final bfast = Cron()
+      ..schedule(Schedule.parse("0 10 * * *"), () {
+        print("bfast CHECK");
+        addtoNotifs("We notice that you have not recorded any meal for your breakfast today.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+            "Eat Breakfast!",
+            "2", "10:00:00");
+        notifySS(1);
+      });
+     // Future.delayed(Duration(seconds: 20));
+     // bfast.close();
+    final lunch = Cron()
+      ..schedule(Schedule.parse("0 14 * * *"), () {
+        print("lunch CHECK");
+        addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+            "Eat Lunch!",
+            "2", "10:00:00");
+        notifySS(2);
+      });
+     // Future.delayed(Duration(seconds: 20));
+     // lunch.close();
+    final dinner = Cron()
+      ..schedule(Schedule.parse("0 21 * * *"), () {
+        print("dinner CHECK");
+        addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+            "Eat Dinner!",
+            "2", "10:00:00");
+        notifySS(3);
+      });
+     // Future.delayed(Duration(seconds: 20));
+     // dinner.close();
+    final meds = Cron()
+      ..schedule(Schedule.parse("0 20 * * *"), () {
+        print("meds CHECK");
+        addtoNotifs("We notice that you have not recorded your medicine intake for your doctor’s prescribed medicine for today. We advise you to take your prescribed medicine and record your medicine intake in the Heartistant Application.",
+            "Take your meds!",
+            "3","$hours:$min");
+        notifySS(4);
+      });
+     // Future.delayed(Duration(seconds: 20));
+     // meds.close();
+    final vital = Cron()
+      ..schedule(Schedule.parse("8-11 * * * *"), () {
+        print("VITALS CHECK");
+        checkVitals();
+      });
+     // Future.delayed(Duration(seconds: 20));
+     // vital.close();
   }
   void addtoNotif(String message, String title, String priority,String uid, String redirect){
       print ("ADDED TO NOTIFICATIONS");
@@ -367,28 +362,9 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
       });
     });
   }
-  void addNotifsall(int check){
+  void notifySS(int check){
     final User user = auth.currentUser;
     final uid = user.uid;
-
-    if(check == 1){
-      addtoNotifs("We notice that you have not recorded any meal for your breakfast today.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-          "Eat Breakfast!",
-          "2", "10:00:00");
-    }else if( check == 2){
-      addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-          "Eat Lunch!",
-          "2", "10:00:00");
-    }else if( check == 3){
-      addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-          "Eat Dinner!",
-          "2", "10:00:00");
-    }else if(check == 4){
-      addtoNotifs("We notice that you have not recorded your medicine intake for your doctor’s prescribed medicine for today. We advise you to take your prescribed medicine and record your medicine intake in the Heartistant Application.",
-          "Take your meds!",
-          "3","$hours:$min");
-    }
-    print("ADDING NOW");
     final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
     readConnections.once().then((DataSnapshot snapshot2) {
       print(snapshot2.value);
@@ -620,7 +596,9 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
     String sa= a.toString();
     sa = sa.substring(0,sa.indexOf(" "));
     if(bptemp[0] != null && hrtemp[0] != null &&  respiratory_list[0] != null){
-      String bpd=bptemp[0].bp_date.toString(),hrd=hrtemp[0].hr_date.toString(),resd=respiratory_list[0].bpm_date.toString();
+      String bpd=bptemp[0].bp_date.toString(),
+          hrd=hrtemp[0].hr_date.toString(),
+          resd=respiratory_list[0].bpm_date.toString();
       bpd = bpd.substring(0,bpd.indexOf(" "));
       hrd = hrd.substring(0,hrd.indexOf(" "));
       resd = resd.substring(0,resd.indexOf(" "));

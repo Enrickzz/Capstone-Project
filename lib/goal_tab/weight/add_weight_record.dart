@@ -234,27 +234,6 @@ class add_weightState extends State<add_weight_record> {
                     ),
                   ),
                   SizedBox(height: 24.0),
-                  // DropdownButton(
-                  //   hint: Text("Select items:"),
-                  //   dropdownColor: Colors.grey,
-                  //   icon: Icon(Icons.arrow_drop_down),
-                  //   iconSize: 36,
-                  //   style: TextStyle(
-                  //     color: Colors.black,
-                  //   ),
-                  //   value: valueChoose,
-                  //   onChanged:(value) {
-                  //     setState(() {
-                  //       valueChoose = value;
-                  //     });
-                  //   },
-                  //   items: degrees.map((valueItem) {
-                  //     return DropdownMenuItem(
-                  //         value: valueItem,
-                  //         child: Text(valueItem),
-                  //     );
-                  //   })
-                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -343,11 +322,14 @@ class add_weightState extends State<add_weight_record> {
                                     readAddinf.once().then((DataSnapshot snapshot) {
                                       Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
                                       bool check2 = false;
+                                      print(snapshot.value);
                                       for(var i = 0; i < userInfo.other_disease.length; i++){
-                                        if(userInfo.other_disease[i] == "Congestive Heart Failure") check2 == true;
+                                        if(userInfo.other_disease[i].contains("Heart Failure")) check2 = true;
                                       }
                                       for(var i = 0 ; i < userInfo.disease.length ; i++ ){
-                                        if(userInfo.disease[i] == "Congestive Heart Failure") check2 == true;
+                                        if(userInfo.disease[i].contains("Heart Failure") ){
+                                          check2 = true;
+                                        }
                                       }
                                       if(check2 == true){
                                         addtoRecommendation("We have notified your doctor regarding your sudden weight change. This can be a sign of the progression of your heart failure and must be attended to by your doctor.",
@@ -429,6 +411,7 @@ class add_weightState extends State<add_weight_record> {
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
     readBP.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      if(temp != null)
       temp.forEach((jsonString) {
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });

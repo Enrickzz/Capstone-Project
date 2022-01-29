@@ -15,8 +15,11 @@ import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
+import 'package:scheduled_timer/scheduled_timer.dart';
 import '../../laboratory_results/lab_results_patient_view.dart';
 import '../../medicine_intake/medication_patient_view.dart';
+import 'package:cron/cron.dart';
+
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_heart_rate extends StatefulWidget {
@@ -269,57 +272,30 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + 0.toString());
                                 if(isResting.toLowerCase() =='yes'){
                                   hr_status = "Active";
+                                  print(hr_status + "<<< STATUS");
                                 }
                                 else{
                                   hr_status = "Resting";
+                                  print(hr_status + "<<< STATUS");
                                 }
                                 heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
                                 print("Added Heart Rate Successfully! " + uid);
 
                               }
                               else{
-                                // String tempbeats = "";
-                                // String tempisResting;
-                                // String tempHeartRateDate;
-                                // String tempHeartRateTime;
-                                // print(temp.length);
-                                // for(var i = 0; i < temp.length; i++){
-                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                //   List<String> splitFull = full.split(" ");
-                                //     switch(i%4){
-                                //       case 0: {
-                                //         print("2nd switch i = " + i.toString() + splitFull.last);
-                                //         tempHeartRateTime = splitFull.last;
-                                //       }
-                                //       break;
-                                //       case 1: {
-                                //         print("2nd switch i = " + i.toString() + splitFull.last);
-                                //         tempbeats = splitFull.last;
-                                //       }
-                                //       break;
-                                //       case 2: {
-                                //         print("2nd switch i = " + i.toString() + splitFull.last);
-                                //         tempisResting = splitFull.last;
-                                //       }
-                                //       break;
-                                //       case 3: {
-                                //         print("2nd switch i = " + i.toString() + splitFull.last);
-                                //         tempHeartRateDate = splitFull.last;
-                                //         heartRate = new Heart_Rate(bpm: int.parse(tempbeats), hr_status: tempisResting, hr_date: format.parse(tempHeartRateDate), hr_time: timeformat.parse(tempHeartRateTime));
-                                //         heartRate_list.add(heartRate);
-                                //       }
-                                //       break;
-                                //     }
-                                // }
                                 getHeartRate();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = heartRate_list.length--;
                                   print("count " + count.toString());
                                   if(isResting.toLowerCase() =='yes'){
                                     hr_status = "Active";
+                                    print(hr_status + "<<< STATUS");
+
                                   }
                                   else{
                                     hr_status = "Resting";
+                                    print(hr_status + "<<< STATUS");
+
                                   }
                                   final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
                                   heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
@@ -374,6 +350,26 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 });
                               }
                             }
+                            print(beats.toString() + "<<<< BEATS");
+                            if(isResting.toLowerCase() =='yes'){
+                              hr_status = "Active";
+                              print(hr_status + "<<< STATUS");
+
+                            }
+                            else{
+                              hr_status = "Resting";
+                              print(hr_status + "<<< STATUS");
+                            }
+                            void schedHRtake() async{
+                              print("SCHED THIS");
+                              final cron = Cron()
+                                ..schedule(Schedule.parse('* * */1 * * * '), () {
+                                  addtoNotif("Check your Heart Rate again now now. Click me to check now!", "Reminder!", "1", uid, "HeartRate");
+                                  print("after 1 hr");
+                                });
+                              await Future.delayed(Duration( hours: 1, minutes: 3));
+                              await cron.close();
+                            }
                             if(beats < 40){
                               addtoNotif("Your Heart Rate is alarming which is why we have already notified your doctor and support system regarding this. Please remain calm at all times and seek immediate medical attention.",
                                   "High Heart Rate!",
@@ -401,9 +397,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                   "Heart Rate is High!",
                                   "2",
                                   uid, "Spotify");
-                              Future.delayed(const Duration(hours: 1), (){
-                                addtoNotif("Check your Heart Rate now", "Reminder!", "1", uid, "HeartRate");
-                              });
+                              schedHRtake();
                             }
                             if(beats > 100 && hr_status == "Active"){
                               addtoRecommendation("Your heart rate seems a bit high but since you just finished exercising. If you feel unwell please don’t hesitate to seek immediate medical attention. We recommend that you record your heart rate again after an hour as we would be setting a reminder for you to do so. For the meantime please listen to some soothing music while you take a rest and relax yourself.",

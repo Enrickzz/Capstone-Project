@@ -279,19 +279,21 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                               }
                             }
                             if(recomm.title == "Peer Recommendation!"){
-                              getPlace(recomm.redirect);
-                              getReview(recomm.redirect);
-                              Future.delayed(const Duration(), (){
+                              getPlace(recomm.redirect).then((value) {
+                                Result2 val = value;
                                 showModalBottomSheet(context: context,
                                   isScrollControlled: true,
-                                  builder: (context) => SingleChildScrollView(child: Container(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                                    // child: add_medication(thislist: medtemp),
-                                    child: info_place(this_info:  thisPlace, thisrating: checkrating2(thisPlace.placeId), type: type),
-                                  ),
+                                  builder: (context) => SingleChildScrollView(
+                                    child: Container(
+                                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                    child: info_place(this_info:  val, thisrating: checkrating2(val.placeId), type: type)
+                                    )
                                   ),
                                 );
+                              });
+                              // getReview(recomm.redirect);
+                              Future.delayed(const Duration(milliseconds: 1200), (){
+                                print("DELAYED");
                               });
                             }
                           });
@@ -343,7 +345,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       }
     });
   }
-  void getPlace(String placeid) async{
+  Future<Result2> getPlace(String placeid) async{
     String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
     String
     loc = "14.589281719512666, 121.03772954435867",
@@ -357,6 +359,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
     thisPlace = a;
     print("THIS IS A ");
     print(a.name);
+    return a;
     //a = Results.fromJson(jsonDecode(placeRead.body));
   }
   double checkrating2(String placeid){

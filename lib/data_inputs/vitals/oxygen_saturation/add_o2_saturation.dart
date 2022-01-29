@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cron/cron.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -304,6 +305,16 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
 
                                             });
                                             //RECOMMEND AND NOTIFS
+                                            void schedOxy() async{
+                                              print("SCHED OXY");
+                                              final cron = Cron()
+                                                ..schedule(Schedule.parse('* */30 * * * * '), () {
+                                                  addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen");
+                                                  print("ADD");
+                                                });
+                                              await Future.delayed(Duration(  minutes: 35));
+                                              await cron.close();
+                                            }
                                             if(widget.instance =="Reminder!"){
                                               if(spo2 < 95){
                                                 addtoNotif("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. Please remain calm and stay composed and continue to monitor your other vitals such as blood pressure and heart rate.",
@@ -311,24 +322,23 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                     "3",
                                                     uid,
                                                     "None");
-                                              }
-                                              print("ADDING NOW");
-                                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                                              readConnections.once().then((DataSnapshot snapshot2) {
-                                                print(snapshot2.value);
-                                                print("CONNECTION");
-                                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
-                                                temp.forEach((jsonString) {
-                                                  connections.add(Connection.fromJson(jsonString)) ;
-                                                  Connection a = Connection.fromJson(jsonString);
-                                                  print(a.uid);
-                                                  addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a consistent oxygen rate between 90 - 95 and requires your medical attention",
-                                                      thisuser.firstname + " has consecutive low SPO2 readings",
-                                                      "3",
-                                                      a.uid,
-                                                      "None");
+                                                final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                                readConnections.once().then((DataSnapshot snapshot2) {
+                                                  print(snapshot2.value);
+                                                  print("CONNECTION");
+                                                  List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                                  temp.forEach((jsonString) {
+                                                    connections.add(Connection.fromJson(jsonString)) ;
+                                                    Connection a = Connection.fromJson(jsonString);
+                                                    print(a.uid);
+                                                    addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a consistent oxygen rate between 90 - 95 and requires your medical attention",
+                                                        thisuser.firstname + " has consecutive low SPO2 readings",
+                                                        "3",
+                                                        a.uid,
+                                                        "None");
+                                                  });
                                                 });
-                                              });
+                                              }
                                             }
                                             if(spo2 < 90){
                                               addtoRecommendation("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. You or someone else near you must administer an immediate oxygen supply as your body is lacking oxygen right now. ",
@@ -359,9 +369,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                   "2",
                                                   uid,
                                                   "Spotify");
-                                              Future.delayed(const Duration(minutes: 30), (){
-                                                addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen");
-                                              });
+                                              schedOxy();
                                             }
 
                                             Future.delayed(const Duration(milliseconds: 1000), (){
