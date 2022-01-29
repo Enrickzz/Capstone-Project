@@ -627,7 +627,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
             TextButton(
               child: Text('Confirm'),
               onPressed: () {
-                addtoNotif(support.lastname+ " signed up as a member for of your support system.He/She can now start seeing your personal health data and other aspects of your health management." ,
+                addtoNotif(support.firstname +" "+ support.lastname+ " signed up as a member for of your support system.He/She can now start seeing your personal health data and other aspects of your health management." ,
                     support.lastname + " added you!",
                     "1",
                     "Support System Add",
