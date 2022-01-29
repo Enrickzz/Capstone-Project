@@ -5,9 +5,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart' as locs;
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/GooglePlaces.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/reviews/drugstore/info_drugstore.dart';
 import 'package:my_app/reviews/hospital/info_hospital.dart';
@@ -20,7 +21,7 @@ import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import '../dialogs/policy_dialog.dart';
 import '../fitness_app_theme.dart';
-import 'models/GooglePlaces.dart';
+
 import 'models/Reviews.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -41,17 +42,25 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   List<Results> drugstores=[], hospitals=[], restaurants=[], recreations=[];
   List<Reviews> reviews =[];
   bool isLoading = true;
+
+  locs.Location location = new locs.Location();
+  bool _serviceEnabled;
+  locs.PermissionStatus _permissionGranted;
+  locs.LocationData _locationData;
+  bool _isListenLocation=false, _isGetLocation=false;
+
   @override
   void initState() {
     super.initState();
     reviews.clear();
-    Places("asd");
+    // Places("asd");
     controller = TabController(length: 4, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
+        isLoading = false;
       });
     });
   }
@@ -81,6 +90,62 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                 color: Colors.black
             )
         ),
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () async {
+                  isLoading = true;
+
+                  _serviceEnabled = await location.serviceEnabled();
+                  if (!_serviceEnabled) {
+                    _serviceEnabled = await location.requestService();
+                    if (!_serviceEnabled) {
+                      return;
+                    }
+                  }
+
+                  _permissionGranted = await location.hasPermission();
+                  if (_permissionGranted == locs.PermissionStatus.denied) {
+                    _permissionGranted = await location.requestPermission();
+                    if (_permissionGranted != locs.PermissionStatus.granted) {
+                      return;
+                    }
+                  }
+
+                  _locationData = await location.getLocation();
+
+                  setState(() {
+                    _isGetLocation = true;
+                  });
+
+                  _isGetLocation ? print('Location: ${_locationData.latitude}, ${_locationData.longitude}'):print("wala");
+
+                  Places("${_locationData.latitude}, ${_locationData.longitude}");
+
+                  // setState(() {
+                  //   _isListenLocation = true;
+                  // });
+                  //
+                  // StreamBuilder(
+                  //   stream: location.onLocationChanged,
+                  //     builder: (context,snapshot) {
+                  //       if(snapshot.connectionState != ConnectionState.waiting)
+                  //         {
+                  //           var data = snapshot.data as locs.LocationData;
+                  //           print('Location: ${data.latitude}/${data.longitude}');
+                  //         }
+                  //     });
+
+
+                  },
+                  child: Icon(
+                    IconData(0xe2dc, fontFamily: 'MaterialIcons')
+                ),
+
+              )
+          ),
+        ],
         centerTitle: true,
         backgroundColor: Colors.white,
         bottom: TabBar(
@@ -543,38 +608,17 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   }
 
   Future<List<Results>> Places(String query) async{
-    bool servicestatus = await Geolocator.isLocationServiceEnabled();
-    LocationPermission permission = await Geolocator.checkPermission();
-    Position position;
-    String long="", lat="";
-    if(servicestatus){
-      print("GPS service is enabled");
-      position = await Geolocator.getCurrentPosition();
-        print("ASD");
-        long = position.longitude.toString();
-        lat = position.latitude.toString();
-    }else{
-      print("GPS service is disabled.");
-    }
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        print('Location permissions are denied');
-      }else if(permission == LocationPermission.deniedForever){
-        print("'Location permissions are permanently denied");
-      }else{
-        print("GPS Location service is granted");
-      }
-    }else{
-      print("GPS Location permission granted.");
-    }
     final User user = auth.currentUser;
     final uid = user.uid;
     String a;
     String key = "AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk";
+
+
+
     String
     //loc = "16.03599037979812, 120.33470282456094",
-    loc = position.longitude.toString() + ", " + position.latitude.toString(),
+    loc = query,
+
         radius ="2000",
         type="drugstore",
         query1= "Drugstore";
