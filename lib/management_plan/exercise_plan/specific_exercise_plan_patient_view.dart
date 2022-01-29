@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'package:my_app/additional_data_collection.dart';
@@ -18,7 +19,7 @@ import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
-
+import 'package:http/http.dart' as http;
 
 
 
@@ -39,13 +40,14 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificExercisePrescriptionViewAsPatient extends StatefulWidget {
-  SpecificExercisePrescriptionViewAsPatient({Key key, this.title, this.index}) : super(key: key);
-
+  SpecificExercisePrescriptionViewAsPatient({Key key, this.title, this.index, this.thislist}) : super(key: key);
+  final List<ExPlan> thislist;
   final String title;
   int index;
   @override
   _SpecificExercisePrescriptionViewAsPatientState createState() => _SpecificExercisePrescriptionViewAsPatientState();
 }
+List<ExercisesTest> listexercises=[];
 
 class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExercisePrescriptionViewAsPatient> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
@@ -69,14 +71,26 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
   @override
   void initState() {
     super.initState();
-    templist.clear();
-    getExplan();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
+    // getExplan();
+    templist.clear();
+    templist = widget.thislist;
+    int index = widget.index;
+    purpose = templist[index].purpose;
+    type = templist[index].type;
+    important_notes = templist[index].important_notes ;
+    dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
+    prescribedBy = templist[index].doctor_name;
+    getExercises(templist[index].type).then((value) => setState((){
+      listexercises=value;
+      FocusScope.of(context).requestFocus(FocusNode());
+    }));
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        print(listexercises[0].exerciseName);
         print("setstate");
       });
     });
@@ -194,6 +208,13 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
                                             ),
                                             SizedBox(height: 8),
                                             Text(important_notes,
+                                              style: TextStyle(
+                                                  fontSize:16,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text("ADD SHIT\n @BORJ & @GIAN\n" + listexercises[0].exerciseName,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -319,5 +340,50 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
       important_notes = templist[index].important_notes ;
       dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     });
+  }
+  Future<List<ExercisesTest>> getExercises(String query) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readExRx = databaseReference.child('ExRxToken/');
+    String token = "";
+    List<ExercisesTest> exers=[];
+
+    await readExRx.once().then((DataSnapshot snapshot) {
+      if(snapshot.value != null || snapshot.value != ""){
+        token = snapshot.value.toString();
+      }
+    });
+    var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+        headers: {
+          'Authorization': "Bearer $token",
+        });
+    if(response.statusCode == 500 || response.statusCode == 401){
+      var trytoken = await http.post(Uri.parse("http://204.235.60.194/consumer/login"),body: {
+        "username": "louisexrx",
+        "password": "xHj4vNnb"
+      });
+      token = trytoken.body.toString();
+      token = token.replaceAll("{", "").replaceAll("}", "").replaceAll("token", "").replaceAll('"', "").replaceAll(":", "").replaceAll(" ", "").replaceAll("\n", "").replaceAll("/", "");
+
+      var updateexrx = databaseReference;
+      print('UPDATING');
+      updateexrx.update({"ExRxToken/": token});
+      var response1 = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+          headers: {
+            'Authorization': "Bearer $token",
+          });
+      exers = ExRxTest.fromJson(jsonDecode(response1.body)).exercises;
+      listexercises= exers;
+      return exers;
+    }else{
+      print("STATUS\n"+response.statusCode.toString());
+      var response2 = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+          headers: {
+            'Authorization': "Bearer $token",
+          });
+      exers = ExRxTest.fromJson(jsonDecode(response2.body)).exercises;
+      listexercises= exers;
+      return exers;
+    }
   }
 }

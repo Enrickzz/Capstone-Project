@@ -95,7 +95,7 @@ class _vitals_management_plan_patient_view_prescriptionState extends State<vital
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr." + doctor_names[index],
+                    subtitle:        Text("Planned by: Dr." + vitalstemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -110,7 +110,7 @@ class _vitals_management_plan_patient_view_prescriptionState extends State<vital
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificVitalsPrescriptionViewAsPatient(index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificVitalsPrescriptionViewAsPatient(thislist: vitalstemp, index: index)),
                       );
                     }
 
@@ -144,16 +144,7 @@ class _vitals_management_plan_patient_view_prescriptionState extends State<vital
       temp.forEach((jsonString) {
         vitalstemp.add(Vitals.fromJson(jsonString));
       });
-      for(int i = 0; i < vitalstemp.length; i++){
-        final readDoctor = databaseReference.child('users/' + vitalstemp[i].prescribedBy + '/personal_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-          if(temp != null){
-            doctor = Users.fromJson(temp);
-            doctor_names.add(doctor.lastname);
-          }
-        });
-      }
+      vitalstemp = vitalstemp.reversed.toList();
     });
   }
 }

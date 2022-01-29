@@ -38,7 +38,6 @@ class _exercise_prescriptionState extends State<exercise_prescription_patient_vi
   List<ExPlan> extemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   Users doctor = new Users();
-  List<String> doctor_names = [];
 
   @override
   void initState() {
@@ -92,7 +91,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_patient_vi
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Planned by: Dr."  + doctor_names[index],
+                    subtitle:        Text("Planned by: Dr."  + extemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -109,7 +108,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_patient_vi
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificExercisePrescriptionViewAsPatient(index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificExercisePrescriptionViewAsPatient(thislist: extemp, index: index)),
                       );
                     }
 
@@ -144,16 +143,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_patient_vi
       temp.forEach((jsonString) {
         extemp.add(ExPlan.fromJson(jsonString));
       });
-      for(int i = 0; i < extemp.length; i++){
-        final readDoctor = databaseReference.child('users/' + extemp[i].prescribedBy + '/personal_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-          if(temp != null){
-            doctor = Users.fromJson(temp);
-            doctor_names.add(doctor.lastname);
-          }
-        });
-      }
+      extemp = extemp.reversed.toList();
     });
   }
 }

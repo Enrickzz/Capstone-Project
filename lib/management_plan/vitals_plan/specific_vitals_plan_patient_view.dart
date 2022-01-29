@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificVitalsPrescriptionViewAsPatient extends StatefulWidget {
-  SpecificVitalsPrescriptionViewAsPatient({Key key, this.title, this.index}) : super(key: key);
-
+  SpecificVitalsPrescriptionViewAsPatient({Key key, this.title, this.index, this.thislist}) : super(key: key);
+  final List<Vitals> thislist;
   final String title;
   int index;
   @override
@@ -68,12 +68,20 @@ class _SpecificVitalsPrescriptionViewAsPatientState extends State<SpecificVitals
   @override
   void initState() {
     super.initState();
-    templist.clear();
-    getFoodplan();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
+    templist.clear();
+    templist = widget.thislist;
+    int index = widget.index;
+    // getFoodplan();
+    purpose = templist[index].purpose;
+    type = templist[index].type;
+    frequency = templist[index].frequency.toString();
+    important_notes = templist[index].important_notes ;
+    dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
+    prescribedBy = templist[index].doctor_name;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");

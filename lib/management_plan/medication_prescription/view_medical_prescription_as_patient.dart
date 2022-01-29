@@ -34,8 +34,6 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Medication_Prescription> prestemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
-  Users doctor = new Users();
-  List<String> doctor_names = [];
 
   @override
   void initState() {
@@ -89,7 +87,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Prescribed by: Dr." + doctor_names[index],
+                    subtitle:        Text("Prescribed by: Dr." + prestemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -104,7 +102,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsPatient(index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsPatient(thislist: prestemp, index: index)),
                       );
                     }
 
@@ -138,16 +136,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
       temp.forEach((jsonString) {
         prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
-      for(int i = 0; i < prestemp.length; i++){
-        final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-          if(temp != null){
-            doctor = Users.fromJson(temp);
-            doctor_names.add(doctor.lastname);
-          }
-        });
-      }
+      prestemp = prestemp.reversed.toList();
     });
   }
 }

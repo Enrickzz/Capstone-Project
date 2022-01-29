@@ -367,8 +367,6 @@ class Exercise_screen_state extends State<ExerciseScreen>
     List<ExercisesTest> exers=[];
 
     await readExRx.once().then((DataSnapshot snapshot) {
-      print("EXRX TOKEN");
-      print(snapshot.value);
       if(snapshot.value != null || snapshot.value != ""){
         token = snapshot.value.toString();
       }
@@ -377,9 +375,6 @@ class Exercise_screen_state extends State<ExerciseScreen>
         headers: {
           'Authorization': "Bearer $token",
         });
-
-    print("STATUS");
-    print(response.statusCode);
     if(response.statusCode == 500 || response.statusCode == 401){
       var trytoken = await http.post(Uri.parse("http://204.235.60.194/consumer/login"),body: {
         "username": "louisexrx",
@@ -387,7 +382,7 @@ class Exercise_screen_state extends State<ExerciseScreen>
       });
       token = trytoken.body.toString();
       token = token.replaceAll("{", "").replaceAll("}", "").replaceAll("token", "").replaceAll('"', "").replaceAll(":", "").replaceAll(" ", "").replaceAll("\n", "").replaceAll("/", "");
-      print("THIS IS TOKEN = " + token);
+
       var updateexrx = databaseReference;
       print('UPDATING');
       updateexrx.update({"ExRxToken/": token});
@@ -396,10 +391,6 @@ class Exercise_screen_state extends State<ExerciseScreen>
             'Authorization': "Bearer $token",
           });
       exers = ExRxTest.fromJson(jsonDecode(response1.body)).exercises;
-      for(var i =0; i < exers.length; i++){
-        print("EXER NAME = "  + exers[i].exerciseName);
-        print("IMG = " + exers[i].largImg1);
-      }
       listexercises= exers;
       return exers;
     }else{
@@ -409,15 +400,8 @@ class Exercise_screen_state extends State<ExerciseScreen>
             'Authorization': "Bearer $token",
           });
       exers = ExRxTest.fromJson(jsonDecode(response2.body)).exercises;
-      print("EXERS LENGTH " + exers.length.toString());
-      for(var i =0; i < exers.length; i++){
-        print("EXER NAME = "  + exers[i].exerciseName);
-        print("IMG = " + exers[i].largImg1);
-      }
       listexercises= exers;
       return exers;
     }
-
-
   }
 }

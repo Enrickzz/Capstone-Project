@@ -39,8 +39,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificPrescriptionViewAsPatient extends StatefulWidget {
-  SpecificPrescriptionViewAsPatient({Key key, this.title, this.index}) : super(key: key);
+  SpecificPrescriptionViewAsPatient({Key key, this.title, this.index, this.thislist}) : super(key: key);
   final String title;
+  final List<Medication_Prescription> thislist;
   int index;
   @override
   _SpecificPrescriptionViewAsPatientState createState() => _SpecificPrescriptionViewAsPatientState();
@@ -78,7 +79,19 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
     controller.addListener(() {
       setState(() {});
     });
-    getPrescription();
+    // getPrescription();
+    prestemp = widget.thislist;
+    int index = widget.index;
+    brand_name = prestemp[index].branded_name;
+    generic_name = prestemp[index].generic_name;
+    dosage = prestemp[index].dosage.toString();
+    unit = prestemp[index].prescription_unit.toString();
+    frequency = prestemp[index].intake_time;
+    special_instruction = prestemp[index].special_instruction;
+    startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
+    endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
+    dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
+    prescribedBy = prestemp[index].doctor_name;
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -355,12 +368,6 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
       temp.forEach((jsonString) {
         prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
-      final readDoctorName = databaseReference.child('users/' + prestemp[index].prescribedBy + '/personal_info/');
-      readDoctorName.once().then((DataSnapshot snapshot){
-        Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-        doctor = Users.fromJson(temp2);
-        prescribedBy = doctor.lastname + " " + doctor.firstname;
-      });
       brand_name = prestemp[index].branded_name;
       generic_name = prestemp[index].generic_name;
       dosage = prestemp[index].dosage.toString();
@@ -370,6 +377,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
       startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
       endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
       dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
+      prescribedBy = prestemp[index].doctor_name;
     });
   }
 }

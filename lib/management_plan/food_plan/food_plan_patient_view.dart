@@ -36,8 +36,6 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<FoodPlan> foodPtemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
-  Users doctor = new Users();
-  List<String> doctor_names = [];
 
   @override
   void initState() {
@@ -90,7 +88,7 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
                         )),
-                    subtitle: Text("Planned by: Dr."  + doctor_names[index],
+                    subtitle: Text("Planned by: Dr."  + foodPtemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -105,7 +103,7 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsPatient(index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsPatient(thislist: foodPtemp,index: index)),
                       );
                     }
 
@@ -139,25 +137,10 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
       temp.forEach((jsonString) {
         foodPtemp.add(FoodPlan.fromJson(jsonString));
       });
-      for(int i = 0; i < foodPtemp.length; i++){
-        final readDoctor = databaseReference.child('users/' + foodPtemp[i].prescribedBy + '/personal_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-          if(temp != null){
-            doctor = Users.fromJson(temp);
-            doctor_names.add(doctor.lastname);
-          }
-        });
-      }
       for(var i=0;i<foodPtemp.length/2;i++){
         var temp = foodPtemp[i];
         foodPtemp[i] = foodPtemp[foodPtemp.length-1-i];
         foodPtemp[foodPtemp.length-1-i] = temp;
-      }
-      for(var i=0;i<doctor_names.length/2;i++){
-        var temp = doctor_names[i];
-        doctor_names[i] = doctor_names[doctor_names.length-1-i];
-        doctor_names[doctor_names.length-1-i] = temp;
       }
     });
   }
