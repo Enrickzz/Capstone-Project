@@ -219,27 +219,13 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                             ),
                             Row(
                               children: [
-                                // Icon(
-                                //   Icons.local_phone_outlined, size: 12,
-                                // ),
-                                // SizedBox(width: 8.0),
+                               
                                 Flexible(
                                   child: Text(
                                     'See more..',
                                     style: TextStyle(color: Colors.black, fontSize: 12),
                                   ),
                                 ),
-                                // SizedBox(width: 20.0),
-                                // Icon(
-                                //   Icons.access_time_sharp, size: 12,
-                                // ),
-                                // SizedBox(width: 8.0),
-                                // Flexible(
-                                //   child: Text(
-                                //     '6am - 6pm',
-                                //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ],
