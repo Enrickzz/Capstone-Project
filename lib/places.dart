@@ -173,410 +173,947 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       ): new TabBarView(
         controller: controller,
         children: [
-          ListView.builder(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: drugstores.length,
-            itemBuilder: (context, index){
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
-                child: Card(
-                  child: ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text(""+drugstores[index].name,
-                            style:TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-
-                            )),
-                      ),
-                      subtitle:
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            checkrating(drugstores[index].placeId),
-                            SizedBox(width: 8.0),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on, size: 15,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(width: 4.0),
-                                Flexible(
-                                  child: Text(
-                                    ''+drugstores[index].formattedAddress,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
-                                  ),
-                                ),
-                                SizedBox(height: 30.0),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                               
-                                Flexible(
-                                  child: Text(
-                                    'See more..',
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      trailing: ClipRRect(
-                        borderRadius: BorderRadius.circular(10), // Image border
-                        child: Container(
-                          height: 70.0,
-                          width: 70.0,// Image radius
-                          child: _displayMedia(drugstores[index].photos.photoReference)
-                        ),
-                      ),
-                      isThreeLine: false,
-                      selected: true,
-                      onTap: () {
-                        showModalBottomSheet(context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(child: Container(
-                            padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                            // child: add_medication(thislist: medtemp),
-                            child: info_drugstore(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId), type: "drugstore"),
-                          ),
-                          ),
-                        ).then((value) =>
-                            Future.delayed(const Duration(milliseconds: 1500), (){
-                              setState((){
-                              });
-                            }));
-                      }
-
-                  ),
-
+          DefaultTabController(
+            length: 2,
+            initialIndex: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TabBar(
+                  labelColor: Colors.black,
+                  tabs: <Widget>[
+                    Tab(
+                      text: "Locations Nearby",
+                    ),
+                    Tab(
+                      text: "Reviews Nearby",
+                    )
+                  ],
                 ),
-              );
-            },
-          ) ,
-          ListView.builder(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: hospitals.length,
-            itemBuilder: (context, index){
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
-                child: Card(
-                  child: ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text(""+hospitals[index].name,
-                            style:TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
+                Expanded(
+                  child: TabBarView(
+                    children: <Widget>[
+                      ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        itemCount: drugstores.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                            child: Card(
+                              child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Text(""+drugstores[index].name,
+                                        style:TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
 
-                            )),
-                      ),
-                      subtitle:
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            checkrating(hospitals[index].placeId),
-                            SizedBox(width: 8.0),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on, size: 15,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(width: 8.0),
-                                Flexible(
-                                  child: Text(
-                                    ''+hospitals[index].formattedAddress,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
+                                        )),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    'See more..',
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        checkrating(drugstores[index].placeId),
+                                        SizedBox(width: 8.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on, size: 15,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 4.0),
+                                            Flexible(
+                                              child: Text(
+                                                ''+drugstores[index].formattedAddress,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                            SizedBox(height: 30.0),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            // Icon(
+                                            //   Icons.local_phone_outlined, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            Flexible(
+                                              child: Text(
+                                                'See more..',
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                            // SizedBox(width: 20.0),
+                                            // Icon(
+                                            //   Icons.access_time_sharp, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '6am - 6pm',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                // Icon(
-                                //   Icons.local_phone_outlined, size: 12,
-                                // ),
-                                // SizedBox(width: 8.0),
-                                // Flexible(
-                                //   child: Text(
-                                //     '7655-1701',
-                                //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                //   ),
-                                // ),
-                                // SizedBox(width: 20.0),
-                                // Icon(
-                                //   Icons.access_time_sharp, size: 12,
-                                // ),
-                                // SizedBox(width: 8.0),
-                                // Flexible(
-                                //   child: Text(
-                                //     '7am - 10pm',
-                                //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                //   ),
-                                // ),
-                              ],
+
+                                  trailing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Image border
+                                    child: Container(
+                                        height: 70.0,
+                                        width: 70.0,// Image radius
+                                        child: _displayMedia(drugstores[index].photos.photoReference)
+                                    ),
+                                  ),
+                                  isThreeLine: false,
+                                  selected: true,
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: add_medication(thislist: medtemp),
+                                        child: info_drugstore(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId), type: "drugstore"),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                          });
+                                        }));
+                                  }
+
+                              ),
+
                             ),
-                          ],
-                        ),
-                      ),
+                          );
+                        },
+                      ) ,
+                      ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        itemCount: drugstores.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                            child: Card(
+                              child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Text(""+drugstores[index].name,
+                                        style:TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
 
-                      trailing: ClipRRect(
-                        borderRadius: BorderRadius.circular(10), // Image border
-                        child: Container(
-                          height: 70.0,
-                          width: 70.0,// Image radius
-                          child: _displayMedia(hospitals[index].photos.photoReference)
-                        ),
-                      ),
-                      isThreeLine: false,
-                      selected: true,
-                      onTap: () {
-                        showModalBottomSheet(context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(child: Container(
-                            padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                            // child: add_medication(thislist: medtemp),
-                            child: info_hospital(this_info:  hospitals[index], thisrating: checkrating2(hospitals[index].placeId), type: "hospital"),
-                          ),
-                          ),
-                        ).then((value) =>
-                            Future.delayed(const Duration(milliseconds: 1500), (){
-                              setState((){
-                              });
-                            }));
-                      }
+                                        )),
+                                  ),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        checkrating(drugstores[index].placeId),
+                                        SizedBox(width: 8.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on, size: 15,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 4.0),
+                                            Flexible(
+                                              child: Text(
+                                                ''+drugstores[index].formattedAddress,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                            SizedBox(height: 30.0),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            // Icon(
+                                            //   Icons.local_phone_outlined, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            Flexible(
+                                              child: Text(
+                                                'See more..',
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                            // SizedBox(width: 20.0),
+                                            // Icon(
+                                            //   Icons.access_time_sharp, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '6am - 6pm',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
 
+                                  trailing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Image border
+                                    child: Container(
+                                        height: 70.0,
+                                        width: 70.0,// Image radius
+                                        child: _displayMedia(drugstores[index].photos.photoReference)
+                                    ),
+                                  ),
+                                  isThreeLine: false,
+                                  selected: true,
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: add_medication(thislist: medtemp),
+                                        child: info_drugstore(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId), type: "drugstore"),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                          });
+                                        }));
+                                  }
+
+                              ),
+
+                            ),
+                          );
+                        },
+                      ) ,
+                    ],
                   ),
-
+                )
+              ],
+            ),
+          ),
+          DefaultTabController(
+            length: 2,
+            initialIndex: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TabBar(
+                  labelColor: Colors.black,
+                  tabs: <Widget>[
+                    Tab(
+                      text: "Locations Nearby",
+                    ),
+                    Tab(
+                      text: "Reviews Nearby",
+                    )
+                  ],
                 ),
-              );
-            },
-          ) ,
-          ListView.builder(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: recreations.length,
-            itemBuilder: (context, index){
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
-                child: Card(
-                  child: ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text(recreations[index].name,
-                            style:TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
+                Expanded(
+                  child: TabBarView(
+                    children: <Widget>[
+                      ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        itemCount: hospitals.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                            child: Card(
+                              child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Text(""+hospitals[index].name,
+                                        style:TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
 
-                            )),
-                      ),
-                      subtitle:
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            checkrating(recreations[index].placeId),
-                            SizedBox(width: 8.0),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on, size: 15,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(width: 8.0),
-                                Flexible(
-                                  child: Text(
-                                    recreations[index].formattedAddress,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
+                                        )),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    'See more..',
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        checkrating(hospitals[index].placeId),
+                                        SizedBox(width: 8.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on, size: 15,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 8.0),
+                                            Flexible(
+                                              child: Text(
+                                                ''+hospitals[index].formattedAddress,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                'See more..',
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                            // Icon(
+                                            //   Icons.local_phone_outlined, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '7655-1701',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                            // SizedBox(width: 20.0),
+                                            // Icon(
+                                            //   Icons.access_time_sharp, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '7am - 10pm',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                )
-                              ],
+
+                                  trailing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Image border
+                                    child: Container(
+                                        height: 70.0,
+                                        width: 70.0,// Image radius
+                                        child: _displayMedia(hospitals[index].photos.photoReference)
+                                    ),
+                                  ),
+                                  isThreeLine: false,
+                                  selected: true,
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: add_medication(thislist: medtemp),
+                                        child: info_hospital(this_info:  hospitals[index], thisrating: checkrating2(hospitals[index].placeId), type: "hospital"),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                          });
+                                        }));
+                                  }
+
+                              ),
+
                             ),
-                          ],
-                        ),
-                      ),
+                          );
+                        },
+                      ) ,
+                      ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        itemCount: hospitals.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                            child: Card(
+                              child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Text(""+hospitals[index].name,
+                                        style:TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
 
-                      trailing: ClipRRect(
-                        borderRadius: BorderRadius.circular(10), // Image border
-                        child: Container(
-                          height: 70.0,
-                          width: 70.0,// Image radius
-                          child: _displayMedia(recreations[index].photos.photoReference)
-                        ),
-                      ),
-                      isThreeLine: false,
-                      selected: true,
-                      onTap: () {
-                        showModalBottomSheet(context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(child: Container(
-                            padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                            // child: add_medication(thislist: medtemp),
-                            child: info_recreational(this_info:  recreations[index],thisrating: checkrating2(recreations[index].placeId), type: "recreation"),
-                          ),
-                          ),
-                        ).then((value) =>
-                            Future.delayed(const Duration(milliseconds: 1500), (){
-                              setState((){
-                              });
-                            }));
-                      }
+                                        )),
+                                  ),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        checkrating(hospitals[index].placeId),
+                                        SizedBox(width: 8.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on, size: 15,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 8.0),
+                                            Flexible(
+                                              child: Text(
+                                                ''+hospitals[index].formattedAddress,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                'See more..',
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                            // Icon(
+                                            //   Icons.local_phone_outlined, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '7655-1701',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                            // SizedBox(width: 20.0),
+                                            // Icon(
+                                            //   Icons.access_time_sharp, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '7am - 10pm',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
 
+                                  trailing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Image border
+                                    child: Container(
+                                        height: 70.0,
+                                        width: 70.0,// Image radius
+                                        child: _displayMedia(hospitals[index].photos.photoReference)
+                                    ),
+                                  ),
+                                  isThreeLine: false,
+                                  selected: true,
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: add_medication(thislist: medtemp),
+                                        child: info_hospital(this_info:  hospitals[index], thisrating: checkrating2(hospitals[index].placeId), type: "hospital"),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                          });
+                                        }));
+                                  }
+
+                              ),
+
+                            ),
+                          );
+                        },
+                      ) ,
+                    ],
                   ),
-
+                )
+              ],
+            ),
+          ),
+          DefaultTabController(
+            length: 2,
+            initialIndex: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TabBar(
+                  labelColor: Colors.black,
+                  tabs: <Widget>[
+                    Tab(
+                      text: "Locations Nearby",
+                    ),
+                    Tab(
+                      text: "Reviews Nearby",
+                    )
+                  ],
                 ),
-              );
-            },
-          ) ,
-          ListView.builder(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            itemCount: restaurants.length,
-            itemBuilder: (context, index){
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
-                child: Card(
-                  child: ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                        child: Text(restaurants[index].name,
-                            style:TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
+                Expanded(
+                  child: TabBarView(
+                    children: <Widget>[
+                      ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        itemCount: recreations.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                            child: Card(
+                              child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Text(recreations[index].name,
+                                        style:TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
 
-                            )),
-                      ),
-                      subtitle:
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            checkrating(restaurants[index].placeId),
-                            SizedBox(width: 8.0),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on, size: 15,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(width: 8.0),
-                                Flexible(
-                                  child: Text(
-                                    restaurants[index].formattedAddress,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
+                                        )),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    'See more..',
-                                    style: TextStyle(color: Colors.black, fontSize: 12),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        checkrating(recreations[index].placeId),
+                                        SizedBox(width: 8.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on, size: 15,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 8.0),
+                                            Flexible(
+                                              child: Text(
+                                                recreations[index].formattedAddress,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                'See more..',
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                )
-                                // Icon(
-                                //   Icons.local_phone_outlined, size: 12,
-                                // ),
-                                // SizedBox(width: 8.0),
-                                // Flexible(
-                                //   child: Text(
-                                //     '7655-1701',
-                                //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                //   ),
-                                // ),
-                                // SizedBox(width: 20.0),
-                                // Icon(
-                                //   Icons.access_time_sharp, size: 12,
-                                // ),
-                                // SizedBox(width: 8.0),
-                                // Flexible(
-                                //   child: Text(
-                                //     '7am - 10pm',
-                                //     style: TextStyle(color: Colors.black, fontSize: 12),
-                                //   ),
-                                // ),
-                              ],
+
+                                  trailing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Image border
+                                    child: Container(
+                                        height: 70.0,
+                                        width: 70.0,// Image radius
+                                        child: _displayMedia(recreations[index].photos.photoReference)
+                                    ),
+                                  ),
+                                  isThreeLine: false,
+                                  selected: true,
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: add_medication(thislist: medtemp),
+                                        child: info_recreational(this_info:  recreations[index],thisrating: checkrating2(recreations[index].placeId), type: "recreation"),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                          });
+                                        }));
+                                  }
+
+                              ),
+
                             ),
-                          ],
-                        ),
-                      ),
+                          );
+                        },
+                      ) ,
+                      ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        itemCount: recreations.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                            child: Card(
+                              child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Text(recreations[index].name,
+                                        style:TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
 
-                      trailing: ClipRRect(
-                        borderRadius: BorderRadius.circular(10), // Image border
-                        child: Container(
-                          height: 70.0,
-                          width: 70.0,// Image radius
-                          child: _displayMedia(restaurants[index].photos.photoReference)
-                        ),
-                      ),
-                      isThreeLine: false,
-                      selected: true,
-                      onTap: () {
-                        showModalBottomSheet(context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(child: Container(
-                            padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                            // child: add_medication(thislist: medtemp),
-                            child: info_restaurant(this_info:  restaurants[index], thisrating: checkrating2(restaurants[index].placeId), type: "restaurant"),
-                          ),
-                          ),
-                        ).then((value) =>
-                            Future.delayed(const Duration(milliseconds: 1500), (){
-                              setState((){
-                              });
-                            }));
-                      }
+                                        )),
+                                  ),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        checkrating(recreations[index].placeId),
+                                        SizedBox(width: 8.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on, size: 15,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 8.0),
+                                            Flexible(
+                                              child: Text(
+                                                recreations[index].formattedAddress,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                'See more..',
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
 
+                                  trailing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Image border
+                                    child: Container(
+                                        height: 70.0,
+                                        width: 70.0,// Image radius
+                                        child: _displayMedia(recreations[index].photos.photoReference)
+                                    ),
+                                  ),
+                                  isThreeLine: false,
+                                  selected: true,
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: add_medication(thislist: medtemp),
+                                        child: info_recreational(this_info:  recreations[index],thisrating: checkrating2(recreations[index].placeId), type: "recreation"),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                          });
+                                        }));
+                                  }
+
+                              ),
+
+                            ),
+                          );
+                        },
+                      ) ,
+                    ],
                   ),
-
+                )
+              ],
+            ),
+          ),
+          DefaultTabController(
+            length: 2,
+            initialIndex: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TabBar(
+                  labelColor: Colors.black,
+                  tabs: <Widget>[
+                    Tab(
+                      text: "Locations Nearby",
+                    ),
+                    Tab(
+                      text: "Reviews Nearby",
+                    )
+                  ],
                 ),
-              );
-            },
-          ) ,
+                Expanded(
+                  child: TabBarView(
+                    children: <Widget>[
+                      ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        itemCount: restaurants.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                            child: Card(
+                              child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Text(restaurants[index].name,
+                                        style:TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
+
+                                        )),
+                                  ),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        checkrating(restaurants[index].placeId),
+                                        SizedBox(width: 8.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on, size: 15,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 8.0),
+                                            Flexible(
+                                              child: Text(
+                                                restaurants[index].formattedAddress,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                'See more..',
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            )
+                                            // Icon(
+                                            //   Icons.local_phone_outlined, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '7655-1701',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                            // SizedBox(width: 20.0),
+                                            // Icon(
+                                            //   Icons.access_time_sharp, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '7am - 10pm',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  trailing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Image border
+                                    child: Container(
+                                        height: 70.0,
+                                        width: 70.0,// Image radius
+                                        child: _displayMedia(restaurants[index].photos.photoReference)
+                                    ),
+                                  ),
+                                  isThreeLine: false,
+                                  selected: true,
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: add_medication(thislist: medtemp),
+                                        child: info_restaurant(this_info:  restaurants[index], thisrating: checkrating2(restaurants[index].placeId), type: "restaurant"),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                          });
+                                        }));
+                                  }
+
+                              ),
+
+                            ),
+                          );
+                        },
+                      ) ,
+                      ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        itemCount: restaurants.length,
+                        itemBuilder: (context, index){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                            child: Card(
+                              child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Text(restaurants[index].name,
+                                        style:TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
+
+                                        )),
+                                  ),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        checkrating(restaurants[index].placeId),
+                                        SizedBox(width: 8.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on, size: 15,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 8.0),
+                                            Flexible(
+                                              child: Text(
+                                                restaurants[index].formattedAddress,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                'See more..',
+                                                style: TextStyle(color: Colors.black, fontSize: 12),
+                                              ),
+                                            )
+                                            // Icon(
+                                            //   Icons.local_phone_outlined, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '7655-1701',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                            // SizedBox(width: 20.0),
+                                            // Icon(
+                                            //   Icons.access_time_sharp, size: 12,
+                                            // ),
+                                            // SizedBox(width: 8.0),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     '7am - 10pm',
+                                            //     style: TextStyle(color: Colors.black, fontSize: 12),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  trailing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Image border
+                                    child: Container(
+                                        height: 70.0,
+                                        width: 70.0,// Image radius
+                                        child: _displayMedia(restaurants[index].photos.photoReference)
+                                    ),
+                                  ),
+                                  isThreeLine: false,
+                                  selected: true,
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        // child: add_medication(thislist: medtemp),
+                                        child: info_restaurant(this_info:  restaurants[index], thisrating: checkrating2(restaurants[index].placeId), type: "restaurant"),
+                                      ),
+                                      ),
+                                    ).then((value) =>
+                                        Future.delayed(const Duration(milliseconds: 1500), (){
+                                          setState((){
+                                          });
+                                        }));
+                                  }
+
+                              ),
+
+                            ),
+                          );
+                        },
+                      ) ,
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+
         ],
       ),
     );
