@@ -471,12 +471,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                       child: Material(
                         child: Ink.image(
                           image: NetworkImage(item.urlImage),
-                          fit: BoxFit.cover,
-                          child: InkWell(
-                            onTap: (){
-
-                            },
-                          ),),
+                          fit: BoxFit.cover,),
                       )
 
                   )

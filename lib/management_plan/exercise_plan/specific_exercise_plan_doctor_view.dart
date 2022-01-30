@@ -38,6 +38,18 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+class CardItem{
+  final String urlImage;
+  final String foodName;
+  final String calories;
+
+  const CardItem({
+    this.urlImage,
+    this.foodName,
+    this.calories
+
+  });
+}
 
 class SpecificExercisePrescriptionViewAsDoctor extends StatefulWidget {
     SpecificExercisePrescriptionViewAsDoctor({Key key, this.title, this.userUID, this.index,this.thislist}) : super(key: key);
@@ -68,6 +80,46 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
   String prescribedBy = "";
   String dateCreated = "";
   bool prescribedDoctor = false;
+
+  List<CardItem> items=[
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Pasta',
+        calories: '200g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Fries',
+        calories: '120g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Burger',
+        calories: '152g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Sinigang',
+        calories: '120g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Steak',
+        calories: '100g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Pasta',
+        calories: '200g'
+
+    ),
+
+  ];
 
   @override
   void initState() {
@@ -220,7 +272,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                       ),
                       SizedBox(height: 10.0),
                       Container(
-                          height: 350,
+                          height: 250,
                           // height: 500, if may contact number and email
                           // margin: EdgeInsets.only(bottom: 50),
                           child: Stack(
@@ -303,6 +355,23 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                           )
                       ),
                       SizedBox(height: 10.0),
+
+                      Container(
+                        height: 250,
+                        child: ListView.separated(
+                          padding: EdgeInsets.all(16),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 6,
+                          separatorBuilder: (context, _) => SizedBox(width: 12,),
+                          itemBuilder: (context, index) => buildCard(items[index]),
+
+
+
+                        ),
+
+
+
+                      ),
                       Container(
                           height: 150,
                           // height: 500, if may contact number and email
@@ -383,6 +452,44 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
 
 
   }
+  Widget buildCard(CardItem item) => Container(
+    width: 200,
+    child:Column(
+        children: [
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 4 / 3,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Material(
+                        child: Ink.image(
+                          image: NetworkImage(item.urlImage),
+                          fit: BoxFit.cover,),
+                      )
+
+                  )
+
+              )
+
+          ),
+          Text(
+            item.foodName,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+
+          ),
+
+          Text(
+            item.calories,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+
+          ),
+
+
+
+        ]
+    ),
+
+  );
 // Widget buildCopy() => Row(children: [
 //   TextField(controller: controller),
 //   IconButton(
