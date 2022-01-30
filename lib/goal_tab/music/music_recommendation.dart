@@ -313,7 +313,10 @@ class _DetailsPageState extends State<music_rec> {
     await readFitbit.once().then((DataSnapshot snapshot) async{
       print("SPOTIFY TOKEN");
       print(snapshot.value);
-      FitBitToken test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+      FitBitToken test = new FitBitToken();
+      if(snapshot.value != null){
+        test = FitBitToken.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+      }
       if(test.accessToken != null || test.accessToken != ""){
         token = test.accessToken;
       }
