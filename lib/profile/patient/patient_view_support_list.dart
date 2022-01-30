@@ -139,8 +139,6 @@ class _SupportSystemListState extends State<SupportSystemList>  {
                           ).then((value) =>
                               Future.delayed(const Duration(milliseconds: 1500), (){
                                 setState((){
-                                  print("setstate medication prescription");
-                                  print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
                                   if(value != null){
                                     // templist = value[0];
                                   }

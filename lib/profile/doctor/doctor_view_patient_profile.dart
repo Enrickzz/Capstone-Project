@@ -123,7 +123,7 @@ class _index3State extends State<view_patient_profile>
     // getDisease(patientuid);
     // getAllergies(patientuid);
     // getOtherInfo(patientuid);
-    Future.delayed(const Duration(milliseconds: 3000), (){
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         isLoading = false;
       });
@@ -730,7 +730,7 @@ class _index3State extends State<view_patient_profile>
                         )
                     ),
                     SizedBox(height: 30),
-                    if(canViewDashboard == connection.dashboard) ...[
+                    if(canViewDashboard == connection.dashboard || connection.dashboard =="true") ...[
                       Container(
                         child: ElevatedButton(
                           child: Padding(
@@ -990,10 +990,14 @@ class _index3State extends State<view_patient_profile>
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
         profile = Users.fromJson(temp);
+        print("PROFILE NAME");
+        print(profile.firstname);
+        print(widget.userUID);
       });
       DisplayName = profile.firstname + " " + profile.lastname;
       email = profile.email;
       pp_img = profile.pp_img;
+
     });
   }
   void getInfo(String uid) {

@@ -59,6 +59,8 @@ class _PatientListState extends State<PatientList>  {
   List names = [];
   List pp_imgs = [];
   List diseases=[];
+  List<String> unique_uidlist = [];
+
 
   //for drawer
   var imagesVisible = true;
@@ -114,7 +116,13 @@ class _PatientListState extends State<PatientList>  {
       isLoading = true;
     }
     Future.delayed(const Duration(milliseconds: 2000), (){
+      var distinctIds = uidlist.toSet().toList();
       setState(() {
+        uidlist = distinctIds;
+        print("UIDS");
+        for(var i = 0; i < uidlist.length; i++){
+          print(uidlist[i] + " index $i");
+        }
         isLoading = false;
       });
 
@@ -234,7 +242,14 @@ class _PatientListState extends State<PatientList>  {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist, pp_img: pp_imgs)),
-              );
+              ).then((value) {
+                if(value != null){
+                  setState(() {
+                    uidlist.add(value);
+                  });
+                }
+
+              });
             },
           ),
 
@@ -311,7 +326,9 @@ class _PatientListState extends State<PatientList>  {
             List temp = [];
             List temp2 = [];
             names.add(patient.firstname + " " + patient.lastname);
-
+            // for(var i = 0; i < uidlist.length; i++){
+            //   if(uidlist[i] )
+            // }
             pp_imgs.add(patient.pp_img);
             temp = names;
             temp2 = pp_imgs;
