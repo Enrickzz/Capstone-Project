@@ -265,6 +265,7 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
+                            String vital_type = "";
                             final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
                             Users doctor = new Users();
                             readDoctor.once().then((DataSnapshot snapshot) {
@@ -279,9 +280,49 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                                 final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
                                 vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
                                 print("Added Vitals Plan Successfully! " + uid);
+                                final connectionRef = databaseReference.child('users/' + userUID + '/vitals_connection/');
+                                if(type == "Blood Pressure"){
+                                  vital_type = "bloodpressure";
+                                }
+                                else if(type == "Blood Glucose"){
+                                  vital_type = "bloodglucose";
+                                }
+                                else if(type == "Heart Rate"){
+                                  vital_type = "heartrate";
+                                }
+                                else if(type == "Respiratory Rate"){
+                                  vital_type = "respiratoryrate";
+                                }
+                                else if(type == "Oxygen Saturation"){
+                                  vital_type = "oxygensaturation";
+                                }
+                                else if(type == "Body Temperature"){
+                                  vital_type = "bodytemperature";
+                                }
+                                connectionRef.update({"$vital_type": "true"});
                               }
                               else{
                                 getVitals();
+                                final connectionRef = databaseReference.child('users/' + userUID + '/vitals_connection/');
+                                if(type == "Blood Pressure"){
+                                  vital_type = "bloodpressure";
+                                }
+                                else if(type == "Blood Glucose"){
+                                  vital_type = "bloodglucose";
+                                }
+                                else if(type == "Heart Rate"){
+                                  vital_type = "heartrate";
+                                }
+                                else if(type == "Respiratory Rate"){
+                                  vital_type = "respiratoryrate";
+                                }
+                                else if(type == "Oxygen Saturation"){
+                                  vital_type = "oxygensaturation";
+                                }
+                                else if(type == "Body Temperature"){
+                                  vital_type = "bodytemperature";
+                                }
+                                connectionRef.update({"$vital_type": "true"});
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = vitals_list.length--;
                                   final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());

@@ -96,7 +96,36 @@ class Connection{
     vitals = json['vitals'];
   }
 }
+class Vitals_Connection {
 
+  Vitals_Connection({
+    this.uid,
+    this.bloodpressure,
+    this.bloodglucose,
+    this.heartrate,
+    this.respiratoryrate,
+    this.oxygensaturation,
+    this.bodytemperature,
+  });
+
+  String uid;
+  String bloodpressure;
+  String bloodglucose;
+  String heartrate;
+  String respiratoryrate;
+  String oxygensaturation;
+  String bodytemperature;
+
+  Vitals_Connection.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
+    bloodpressure = json['bloodpressure'];
+    bloodglucose = json['bloodglucose'];
+    heartrate = json['heartrate'];
+    respiratoryrate = json['respiratoryrate'];
+    oxygensaturation = json['oxygensaturation'];
+    bodytemperature = json['bodytemperature'];
+  }
+}
 class Additional_Info {
   DateTime birthday = new DateTime.now();
   String gender;

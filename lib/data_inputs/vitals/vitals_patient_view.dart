@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -56,13 +58,22 @@ class _AppSignUpState extends State<vitals> {
   List<Respiratory_Rate> rlist = new List<Respiratory_Rate>();
 
   //vitals visibility
-  bool blood_pressure_visibility = false;
-  bool heart_rate_visibility = false;
-  bool body_temp_visibility = false;
-  bool blood_glucose_visibility = false;
-  bool respiratory_rate_visibility = false;
-  bool oxygen_saturation_visibility = false;
+  bool isBloodPressureVisible = false;
+  bool isHeartRateVisible = false;
+  bool isBodyTemperatureVisible = false;
+  bool isBloodGlucoseVisible = false;
+  bool isRespiratoryRateVisible = false;
+  bool isOxygenSaturationVisible = false;
 
+  @override
+  void initState(){
+    super.initState();
+    getVitalsConnection();
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      setState(() {
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +140,7 @@ class _AppSignUpState extends State<vitals> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Visibility(
-                    visible: blood_pressure_visibility,
+                    visible: isBloodPressureVisible,
                     child: GestureDetector(
                       onTap:(){
                         Navigator.push(
@@ -204,7 +215,7 @@ class _AppSignUpState extends State<vitals> {
                     ),
                   ),
                   Visibility(
-                    visible: heart_rate_visibility,
+                    visible: isHeartRateVisible,
                     child: GestureDetector(
                       onTap:(){
                         Navigator.push(
@@ -273,7 +284,7 @@ class _AppSignUpState extends State<vitals> {
                     ),
                   ),
                   Visibility(
-                    visible: body_temp_visibility,
+                    visible: isBodyTemperatureVisible,
                     child: GestureDetector(
                       onTap:(){
                         Navigator.push(
@@ -342,7 +353,7 @@ class _AppSignUpState extends State<vitals> {
                     ),
                   ),
                   Visibility(
-                    visible: blood_glucose_visibility,
+                    visible: isBloodGlucoseVisible,
                     child: GestureDetector(
                       onTap:(){
                         Navigator.push(
@@ -411,7 +422,7 @@ class _AppSignUpState extends State<vitals> {
                     ),
                   ),
                   Visibility(
-                    visible: respiratory_rate_visibility,
+                    visible: isRespiratoryRateVisible,
                     child: GestureDetector(
                       onTap:(){
                         Navigator.push(
@@ -480,7 +491,7 @@ class _AppSignUpState extends State<vitals> {
                     ),
                   ),
                   Visibility(
-                    visible: oxygen_saturation_visibility,
+                    visible: isOxygenSaturationVisible,
                     child: GestureDetector(
                       onTap:(){
                         Navigator.push(
@@ -621,5 +632,33 @@ class _AppSignUpState extends State<vitals> {
         ),
       ),
     );
+  }
+  void getVitalsConnection (){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final vitalsConnectionRef = databaseReference.child('users/' + uid + '/vitals_connection/');
+    Vitals_Connection vitals_connection;
+    vitalsConnectionRef.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      vitals_connection = Vitals_Connection.fromJson(temp);
+      if(vitals_connection.bloodpressure == "true"){
+        isBloodPressureVisible = true;
+      }
+      if(vitals_connection.bloodglucose == "true"){
+        isBloodGlucoseVisible = true;
+      }
+      if(vitals_connection.heartrate == "true"){
+        isHeartRateVisible = true;
+      }
+      if(vitals_connection.respiratoryrate == "true"){
+        isRespiratoryRateVisible = true;
+      }
+      if(vitals_connection.oxygensaturation == "true"){
+        isOxygenSaturationVisible = true;
+      }
+      if(vitals_connection.bodytemperature == "true"){
+        isBodyTemperatureVisible = true;
+      }
+    });
   }
 }
