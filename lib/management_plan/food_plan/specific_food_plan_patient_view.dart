@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,13 +34,25 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SpecificFoodPrescriptionViewAsPatient(title: 'Flutter Demo Home Page'),
+      home: SpecificFoodPrescriptionViewAsPatien(title: 'Flutter Demo Home Page'),
     );
   }
 }
+class CardItem{
+  final String urlImage;
+  final String foodName;
+  final String calories;
 
-class SpecificFoodPrescriptionViewAsPatient extends StatefulWidget {
-  SpecificFoodPrescriptionViewAsPatient({Key key, this.title, this.index, this.thislist}) : super(key: key);
+  const CardItem({
+    this.urlImage,
+    this.foodName,
+    this.calories
+
+  });
+}
+
+class SpecificFoodPrescriptionViewAsPatien extends StatefulWidget {
+  SpecificFoodPrescriptionViewAsPatien({Key key, this.title, this.index, this.thislist}) : super(key: key);
   final List<FoodPlan> thislist;
   final String title;
   int index;
@@ -47,7 +60,7 @@ class SpecificFoodPrescriptionViewAsPatient extends StatefulWidget {
   _SpecificFoodPrescriptionViewAsDoctorState createState() => _SpecificFoodPrescriptionViewAsDoctorState();
 }
 
-class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPrescriptionViewAsPatient> with SingleTickerProviderStateMixin {
+class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPrescriptionViewAsPatien> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -63,6 +76,48 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   String important_notes = "";
   String prescribedBy = "";
   String dateCreated = "";
+
+  List<CardItem> items=[
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Pasta',
+        calories: '200g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Fries',
+        calories: '120g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Burger',
+        calories: '152g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Sinigang',
+        calories: '120g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Steak',
+        calories: '100g'
+
+    ),
+    CardItem(
+        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
+        foodName: 'Pasta',
+        calories: '200g'
+
+    ),
+
+  ];
+
+
 
   @override
   void initState() {
@@ -97,204 +152,246 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Food Plan'),
-        ),
-        body:  Scrollbar(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
+      appBar: AppBar(
+        title: Text('Food Plan'),
+      ),
+      body:SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
 
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:<Widget>[
-                            Expanded(
-                              child: Text( "Food Plan",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color:Color(0xFF4A6572),
-                                  )
-                              ),
-                            ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:<Widget>[
+                        Expanded(
+                          child: Text( "Food Plan",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color:Color(0xFF4A6572),
+                              )
+                          ),
+                        ),
 
-                          ]
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 300,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Purpose of Plan",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(purpose,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Food List",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(food.toString(),
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-
-
-
-                                            SizedBox(height: 16),
-                                            Text("Important Notes/Assessments",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(important_notes,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                        height: 150,
-                        // height: 500, if may contact number and email
-                        // margin: EdgeInsets.only(bottom: 50),
-                        child: Stack(
-                            children: [
-                              Positioned(
-                                  child: Material(
-                                    child: Center(
-                                      child: Container(
-                                          width: 340,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 20.0)],
-                                          )
-                                      ),
-                                    ),
-                                  )),
-                              Positioned(
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Planned by",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text("Dr." + prescribedBy,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                            SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                Text("Date Planned",
-                                                  style: TextStyle(
-                                                    fontSize:14,
-                                                    color:Color(0xFF363f93),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(dateCreated,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-
-                                          ]
-                                      ),
-                                    ),
-                                  ))
-                            ]
-                        )
-                    ),
-                  ],
+                      ]
+                  ),
                 ),
+                SizedBox(height: 10.0),
+                Container(
+                    height: 230,
+                    // height: 500, if may contact number and email
+                    // margin: EdgeInsets.only(bottom: 50),
+                    child: Stack(
+                        children: [
+                          Positioned(
+                              child: Material(
+                                child: Center(
+                                  child: Container(
+                                      width: 340,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey.withOpacity(0.5),
+                                              blurRadius: 20.0)],
+                                      )
+                                  ),
+                                ),
+                              )),
+                          Positioned(
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Purpose",
+                                          style: TextStyle(
+                                            fontSize:14,
+                                            color:Color(0xFF363f93),
+                                          ),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(purpose,
+                                          style: TextStyle(
+                                              fontSize:16,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
 
+
+                                        SizedBox(height: 16),
+                                        Text("Important Notes/Assessments",
+                                          style: TextStyle(
+                                            fontSize:14,
+                                            color:Color(0xFF363f93),
+                                          ),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(important_notes,
+                                          style: TextStyle(
+                                              fontSize:16,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+
+                                      ]
+                                  ),
+                                ),
+                              ))
+                        ]
+                    )
+                ),
+                SizedBox(height: 10.0),
+                Container(
+                  height: 250,
+                  child: ListView.separated(
+                    padding: EdgeInsets.all(16),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 6,
+                    separatorBuilder: (context, _) => SizedBox(width: 12,),
+                    itemBuilder: (context, index) => buildCard(items[index]),
+
+
+
+                  ),
+
+
+
+                ),
+                Container(
+                    height: 150,
+                    // height: 500, if may contact number and email
+                    // margin: EdgeInsets.only(bottom: 50),
+                    child: Stack(
+                        children: [
+                          Positioned(
+                              child: Material(
+                                child: Center(
+                                  child: Container(
+                                      width: 340,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey.withOpacity(0.5),
+                                              blurRadius: 20.0)],
+                                      )
+                                  ),
+                                ),
+                              )),
+                          Positioned(
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Planned by",
+                                          style: TextStyle(
+                                            fontSize:14,
+                                            color:Color(0xFF363f93),
+                                          ),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text("Dr." + prescribedBy,
+                                          style: TextStyle(
+                                              fontSize:16,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                        Row(
+                                          children: [
+                                            Text("Date Planned",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                color:Color(0xFF363f93),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(dateCreated,
+                                          style: TextStyle(
+                                              fontSize:16,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+
+                                      ]
+                                  ),
+                                ),
+                              ))
+                        ]
+                    )
+                ),
               ],
-            ),
-          ),
-        )
+            )
+
+          ],
+
+        ),
+      ),
+
+
     );
 
 
+
   }
+  Widget buildCard(CardItem item) => Container(
+    width: 200,
+    child:Column(
+        children: [
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 4 / 3,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Material(
+                        child: Ink.image(
+                          image: NetworkImage(item.urlImage),
+                          fit: BoxFit.cover,
+                          child: InkWell(
+                            onTap: (){
+
+                            },
+                          ),),
+                      )
+
+                  )
+
+              )
+
+          ),
+          Text(
+            item.foodName,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+
+          ),
+
+          Text(
+            item.calories,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+
+          ),
+
+
+
+        ]
+    ),
+
+  );
+
 // Widget buildCopy() => Row(children: [
 //   TextField(controller: controller),
 //   IconButton(
