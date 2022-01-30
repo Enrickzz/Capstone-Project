@@ -43,13 +43,18 @@ class _DietViewState extends State<DietView> {
 
   @override
   void initState() {
-    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    String now = today.month.toString() + "/" + today.day.toString()+"/"+today.year.toString();
     getBFoodIntake();
     getLFoodIntake();
     getDFoodIntake();
     getSFoodIntake();
     getFitbit();
-    Future.delayed(const Duration(milliseconds: 2000), (){
+    Future.delayed(const Duration(milliseconds: 3000), (){
+      print("LIST LENGTHS");
+      print(breakfast_list.length);
+      print(lunch_list.length);
+      print(dinner_list.length);
+      print(snack_list.length);
       setState(() {
         for(int i = 0; i < breakfast_list.length; i++){
           if(breakfast_list[i].intakeDate == now){
@@ -87,7 +92,13 @@ class _DietViewState extends State<DietView> {
         if(diff < 0){
           diff = 0;
         }
+        print("TOTALS");
+        print(total_cal);
+        print(cholesterol);
+        print(total_fat);
+        print(sugar);
       });
+
     });
     super.initState();
   }
@@ -650,7 +661,7 @@ class _DietViewState extends State<DietView> {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
-    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    String now = today.month.toString() + "/" + today.day.toString()+"/"+today.year.toString();
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       List<FoodIntake> intake = [];
@@ -664,13 +675,14 @@ class _DietViewState extends State<DietView> {
           }
         }
       }
+      print("BDONE");
     });
   }
   void getLFoodIntake() {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
-    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    String now = today.month.toString() + "/" + today.day.toString()+"/"+today.year.toString();
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       List<FoodIntake> intake = [];
@@ -684,13 +696,15 @@ class _DietViewState extends State<DietView> {
           }
         }
       }
+      print("LDONE");
+
     });
   }
   void getDFoodIntake() {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
-    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    String now = today.month.toString() + "/" + today.day.toString()+"/"+today.year.toString();
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       List<FoodIntake> intake = [];
@@ -704,13 +718,15 @@ class _DietViewState extends State<DietView> {
           }
         }
       }
+      print("DDONE");
+
     });
   }
   void getSFoodIntake() {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
-    String now = "${today.month.toString().padLeft(2,"0")}/${today.day.toString().padLeft(2,"0")}/${today.year}";
+    String now = today.month.toString() + "/" + today.day.toString()+"/"+today.year.toString();
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       List<FoodIntake> intake = [];
@@ -723,8 +739,9 @@ class _DietViewState extends State<DietView> {
             snack_list.add(intake[i]);
           }
         }
-
       }
+      print("SDONE");
+
     });
   }
   Future<bool> getFitbit() async{
