@@ -130,14 +130,16 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   });
 
                   _isGetLocation ? print('Location: ${_locationData.latitude}, ${_locationData.longitude}'):print("wala");
+
                   setState(() {
                     reviewsrecomm.clear();
                   });
+
                   Places("${_locationData.latitude}, ${_locationData.longitude}").then((value) {
 
                   });
-                  },
-                  child: Icon(
+                },
+                child: Icon(
                     IconData(0xe2dc, fontFamily: 'MaterialIcons')
                 ),
 
@@ -204,7 +206,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: CircularProgressIndicator(),
                       ):
                       ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
                         itemCount: drugstores.length,
                         itemBuilder: (context, index){
                           return Container(
@@ -300,134 +302,261 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                       ):
                       /// REVIEWS NEARBY
                       ListView.builder(
-                          shrinkWrap: true,
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
                           itemCount: reviewsrecomm.length,
                           itemBuilder: (context, index) {
                             return Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
-                              child: GestureDetector(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      boxShadow: [BoxShadow(
-                                          color: Colors.black26.withOpacity(0.05),
-                                          offset: Offset(0.0,6.0),
-                                          blurRadius: 10.0,
-                                          spreadRadius: 0.10
-                                      )]
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+                              child: Card(
+                                child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                                    child: Row(
+                                      children: [
+
+                                        Flexible(
+                                          child: RichText(
+                                            text: TextSpan(
+                                              // Here is the explicit parent TextStyle
+                                              style: new TextStyle(
+                                                fontSize: 14.0,
+                                                color: Colors.black,
+
+                                              ),
+                                              children: <TextSpan>[
+                                                new TextSpan(text: reviewsrecomm[index].user_name,  style: new TextStyle(fontWeight: FontWeight.bold)),
+                                                new TextSpan(text: " reviewed "),
+                                                new TextSpan(text: checkPlaceNameString(reviewsrecomm[index].place_name),  style: new TextStyle(fontWeight: FontWeight.bold)),
+                                                new TextSpan(text: " located at "),
+                                                new TextSpan(text: checkPlaceLocString(reviewsrecomm[index].place_loc),  style: new TextStyle(fontWeight: FontWeight.bold)),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
+                                  subtitle:
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Container(
-                                          height: 70,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Row(
-                                                children: <Widget>[
-                                                  if (reviewsrecomm[index].recommend) ...[
-                                                    Icon(
-                                                      Icons.thumb_up_alt_sharp, color: Colors.green,
-                                                    ),
-                                                  ] else ...[
-                                                    Icon(
-                                                      Icons.thumb_down_alt_sharp, color: Colors.red,
-                                                    ),
-                                                  ],
-
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 8.0),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: <Widget>[
-
-
-                                                        Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Row(
-                                                              children: <Widget>[
-                                                                Text(
-                                                                  reviewsrecomm[index].user_name,
-                                                                  style: TextStyle(
-                                                                      fontSize: 14,
-                                                                      fontWeight: FontWeight.bold
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: 10),
-
-                                                                Text(
-                                                                  getDateFormatted(reviewsrecomm[index].reviewDate.toString()) +  " " +
-                                                                      getTimeFormatted(reviewsrecomm[index].reviewTime.toString()),
-                                                                  style: TextStyle(
-                                                                    fontSize: 12,
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 2,),
-                                                            RatingBar(
-                                                              initialRating:  double.parse(reviewsrecomm[index].rating.toString()),
-                                                              direction: Axis.horizontal,
-                                                              allowHalfRating: true,
-                                                              itemCount: 5,
-                                                              ignoreGestures: true,
-                                                              itemSize: 15.0,
-                                                              onRatingUpdate: (rating) {
-                                                                print(rating);
-                                                              },
-                                                              ratingWidget: RatingWidget(
-                                                                  full: Icon(Icons.star, color: Colors.orange),
-                                                                  half: Icon(
-                                                                    Icons.star_half,
-                                                                    color: Colors.orange,
-                                                                  ),
-                                                                  empty: Icon(
-                                                                    Icons.star_outline,
-                                                                    color: Colors.orange,
-                                                                  )),
-                                                            ),
-
-                                                          ],
-                                                        )
-
-                                                      ],
-                                                    ),
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            RatingBar(
+                                              initialRating:  double.parse(reviewsrecomm[index].rating.toString()),
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              ignoreGestures: true,
+                                              itemSize: 14.0,
+                                              onRatingUpdate: (rating) {
+                                                print(rating);
+                                              },
+                                              ratingWidget: RatingWidget(
+                                                  full: Icon(Icons.star, color: Colors.orange),
+                                                  half: Icon(
+                                                    Icons.star_half,
+                                                    color: Colors.orange,
                                                   ),
-                                                ],
+                                                  empty: Icon(
+                                                    Icons.star_outline,
+                                                    color: Colors.orange,
+                                                  )),
+                                            ),
+                                            SizedBox(width: 10.0),
+                                            if (reviewsrecomm[index].recommend) ...[
+                                              Icon(
+                                                Icons.thumb_up_alt_sharp, color: Colors.green, size: 15,
+                                              ),
+                                            ] else ...[
+                                              Icon(
+                                                Icons.thumb_down_alt_sharp, color: Colors.red, size: 15,
                                               ),
                                             ],
+                                          ],
+                                        ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                          getDateFormatted(reviewsrecomm[index].reviewDate.toString()) +  "   " +
+                                              getTimeFormatted(reviewsrecomm[index].reviewTime.toString()),
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey,
                                           ),
                                         ),
-                                        checkPlaceName(reviewsrecomm[index].place_name),
-                                        SizedBox(width: 10),
-                                        checkPlaceLoc(reviewsrecomm[index].place_loc),
-                                        SizedBox(width: 10),
+                                        SizedBox(height: 12),
                                         Container(
-                                          width: 300,
+
                                           child: Text(
                                             reviewsrecomm[index].review,
                                             style: TextStyle(
-                                              fontSize: 14,
+                                                fontSize: 14,
+                                                color: Colors.black
                                             ),
 
                                           ),
                                         ),
-                                        SizedBox(height: 5),
+                                        SizedBox(height: 6),
                                         checkRev(reviewsrecomm[index].special),
-
-                                        SizedBox(height: 5),
                                       ],
                                     ),
                                   ),
+
+                                  isThreeLine: false,
+                                  selected: true,
+                                  // onTap: () {
+                                  // showModalBottomSheet(context: context,
+                                  //   isScrollControlled: true,
+                                  //   builder: (context) => SingleChildScrollView(child: Container(
+                                  //     padding: EdgeInsets.only(
+                                  //         bottom: MediaQuery.of(context).viewInsets.bottom),
+                                  //     // child: add_medication(thislist: medtemp),
+                                  //     child: info_drugstore(this_info:  drugstores[index], thisrating: checkrating2(drugstores[index].placeId), type: "drugstore"),
+                                  //   ),
+                                  //   ),
+                                  // ).then((value) =>
+                                  //     Future.delayed(const Duration(milliseconds: 1500), (){
+                                  //       setState((){
+                                  //       });
+                                  //     }));
+                                  // }
+
                                 ),
+
                               ),
                             );
+
+
+
+                            // return Container(
+                            //   margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
+                            //   child: GestureDetector(
+                            //     child: Container(
+                            //       decoration: BoxDecoration(
+                            //           color: Colors.white,
+                            //           borderRadius: BorderRadius.circular(10.0),
+                            //           boxShadow: [BoxShadow(
+                            //               color: Colors.black26.withOpacity(0.05),
+                            //               offset: Offset(0.0,6.0),
+                            //               blurRadius: 10.0,
+                            //               spreadRadius: 0.10
+                            //           )]
+                            //       ),
+                            //       child: Padding(
+                            //         padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
+                            //         child: Column(
+                            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //           children: <Widget>[
+                            //             Container(
+                            //               height: 70,
+                            //               child: Row(
+                            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //                 children: <Widget>[
+                            //                   Row(
+                            //                     children: <Widget>[
+                            //                       if (reviewsrecomm[index].recommend) ...[
+                            //                         Icon(
+                            //                           Icons.thumb_up_alt_sharp, color: Colors.green,
+                            //                         ),
+                            //                       ] else ...[
+                            //                         Icon(
+                            //                           Icons.thumb_down_alt_sharp, color: Colors.red,
+                            //                         ),
+                            //                       ],
+                            //
+                            //                       Padding(
+                            //                         padding: const EdgeInsets.only(left: 8.0),
+                            //                         child: Column(
+                            //                           crossAxisAlignment: CrossAxisAlignment.start,
+                            //                           mainAxisAlignment: MainAxisAlignment.center,
+                            //                           children: <Widget>[
+                            //
+                            //
+                            //                             Column(
+                            //                               crossAxisAlignment: CrossAxisAlignment.start,
+                            //                               children: [
+                            //                                 Row(
+                            //                                   children: <Widget>[
+                            //                                     Text(
+                            //                                       reviewsrecomm[index].user_name,
+                            //                                       style: TextStyle(
+                            //                                           fontSize: 14,
+                            //                                           fontWeight: FontWeight.bold
+                            //                                       ),
+                            //                                     ),
+                            //                                     SizedBox(width: 10),
+                            //
+                            //                                     Text(
+                            //                                       getDateFormatted(reviewsrecomm[index].reviewDate.toString()) +  " " +
+                            //                                           getTimeFormatted(reviewsrecomm[index].reviewTime.toString()),
+                            //                                       style: TextStyle(
+                            //                                         fontSize: 12,
+                            //                                       ),
+                            //                                     )
+                            //                                   ],
+                            //                                 ),
+                            //                                 SizedBox(height: 2,),
+                            //                                 RatingBar(
+                            //                                   initialRating:  double.parse(reviewsrecomm[index].rating.toString()),
+                            //                                   direction: Axis.horizontal,
+                            //                                   allowHalfRating: true,
+                            //                                   itemCount: 5,
+                            //                                   ignoreGestures: true,
+                            //                                   itemSize: 15.0,
+                            //                                   onRatingUpdate: (rating) {
+                            //                                     print(rating);
+                            //                                   },
+                            //                                   ratingWidget: RatingWidget(
+                            //                                       full: Icon(Icons.star, color: Colors.orange),
+                            //                                       half: Icon(
+                            //                                         Icons.star_half,
+                            //                                         color: Colors.orange,
+                            //                                       ),
+                            //                                       empty: Icon(
+                            //                                         Icons.star_outline,
+                            //                                         color: Colors.orange,
+                            //                                       )),
+                            //                                 ),
+                            //
+                            //                               ],
+                            //                             )
+                            //
+                            //                           ],
+                            //                         ),
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             checkPlaceName(reviewsrecomm[index].place_name),
+                            //             SizedBox(width: 10),
+                            //             checkPlaceLoc(reviewsrecomm[index].place_loc),
+                            //             SizedBox(width: 10),
+                            //             Container(
+                            //               width: 300,
+                            //               child: Text(
+                            //                 reviewsrecomm[index].review,
+                            //                 style: TextStyle(
+                            //                   fontSize: 14,
+                            //                 ),
+                            //
+                            //               ),
+                            //             ),
+                            //             SizedBox(height: 5),
+                            //             checkRev(reviewsrecomm[index].special),
+                            //
+                            //             SizedBox(height: 5),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
                           }
                       ) ,
                     ],
@@ -461,7 +590,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: CircularProgressIndicator(),
                       ):
                       ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
                         itemCount: hospitals.length,
                         itemBuilder: (context, index){
                           return Container(
@@ -555,7 +684,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: CircularProgressIndicator(),
                       ):
                       ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
                         itemCount: hospitals.length,
                         itemBuilder: (context, index){
                           return Container(
@@ -696,7 +825,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: CircularProgressIndicator(),
                       ):
                       ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
                         itemCount: recreations.length,
                         itemBuilder: (context, index){
                           return Container(
@@ -790,7 +919,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: CircularProgressIndicator(),
                       ):
                       ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
                         itemCount: recreations.length,
                         itemBuilder: (context, index){
                           return Container(
@@ -910,7 +1039,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: CircularProgressIndicator(),
                       ):
                       ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
                         itemCount: restaurants.length,
                         itemBuilder: (context, index){
                           return Container(
@@ -1025,7 +1154,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                         child: CircularProgressIndicator(),
                       ):
                       ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
                         itemCount: restaurants.length,
                         itemBuilder: (context, index){
                           return Container(
@@ -1190,6 +1319,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
         // print(drugstores[i].photos.photoReference + "<<<<<<<<<<<<<<<<<<");
       }
     }
+
     reviews.clear();
     getReviews().then((value) {
       reviewRecs();
@@ -1211,8 +1341,8 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
             if(medical_name[k].name == reviews[i].special){
               ///checks if meds is in patient db
               // if(reviews[i].added_by != uid){
-                reviewsrecomm.add(reviews[i]);
-                print("REVIEW FOUND" + reviews[i].user_name);
+              reviewsrecomm.add(reviews[i]);
+              print("REVIEW FOUND" + reviews[i].user_name);
               // }
             }
           }
@@ -1333,12 +1463,12 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     }
     else{
       return Image.network(media,
-        errorBuilder: (context, error, stackTrace) {
-          return Image.asset("assets/images/no-image.jpg");
-        },fit: BoxFit.cover);
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset("assets/images/no-image.jpg");
+          },fit: BoxFit.cover);
     }
 
-    }
+  }
   Widget checkrating(String placeid) {
     double thisrating=0;
     String textRate="";
@@ -1454,7 +1584,8 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
               ),
               Text(special, style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black
               ),
               ),
             ],
@@ -1475,6 +1606,15 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       );
     }
   }
+
+  String checkPlaceNameString(String check){
+    if(check =="" || check == null){
+      return "Wala pang place name DB prob";
+    }else{
+      return check.toString();
+
+    }
+  }
   Widget checkPlaceLoc(String check){
     if(check =="" || check == null){
       return Text("Wala pang place loc DB prob");
@@ -1488,4 +1628,13 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       );
     }
   }
+
+  String checkPlaceLocString(String check){
+    if(check =="" || check == null){
+      return "Wala pang place loc DB prob";
+    }else{
+      return check.toString();
+    }
+  }
+
 }
