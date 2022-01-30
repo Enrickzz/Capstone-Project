@@ -201,7 +201,7 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                        height: 260,
+                        height: 300,
                         // height: 500, if may contact number and email
                         // margin: EdgeInsets.only(bottom: 50),
                         child: Stack(

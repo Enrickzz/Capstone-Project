@@ -79,14 +79,14 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
 
   List<CardItem> items=[
     CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Pasta',
+        urlImage: 'https://www.nipponexpress.com/press/report/img/06-Nov-20-1.jpeg',
+        foodName: 'Banana',
         calories: '200g'
 
     ),
     CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Fries',
+        urlImage: 'https://www.onceuponachef.com/images/2018/02/pan-seared-salmon--850x700.jpg',
+        foodName: 'Salmon',
         calories: '120g'
 
     ),
