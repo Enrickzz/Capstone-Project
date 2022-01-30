@@ -24,8 +24,8 @@ class patient_edit_vitals_visibility extends StatefulWidget {
 }
 final _formKey = GlobalKey<FormState>();
 class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibility> {
-  // final FirebaseAuth auth = FirebaseAuth.instance;
-  // final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   // List<Connection> connections = [];
   bool isBloodPressureVisible = false;
   bool isBloodGlucoseVisible = false;
@@ -38,23 +38,11 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
   @override
   void initState(){
     super.initState();
-    // Connection doctorconnection = widget.connection;
-    // if(doctorconnection.dashboard.toLowerCase() == "false"){
-    //   isAllowedDashboard = false;
-    // }
-    // if(doctorconnection.nonhealth.toLowerCase() == "false"){
-    //   isAllowedNonHealth = false;
-    // }
-    // if(doctorconnection.health.toLowerCase() == "false"){
-    //   isAllowedDataInputs = false;
-    // }
-    // if(isAllowedDashboard == false || isAllowedNonHealth == false || isAllowedDataInputs == false){
-    //   showDisclaimer = true;
-    // }
-    // Future.delayed(const Duration(milliseconds: 1000), (){
-    //   setState(() {
-    //   });
-    // });
+    getVitalsConnection();
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      setState(() {
+      });
+    });
   }
 
   @override
@@ -94,7 +82,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
                         showDashboardInfo();
-
                       },
                     ),
                     controlAffinity: ListTileControlAffinity.trailing,
@@ -102,8 +89,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                     onChanged: (value){
                       setState(() {
                         isBloodPressureVisible = value;
-
-
                       });
                     },
                   ),
@@ -117,7 +102,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
                         showNonHealthDataInfo();
-
                       },
                     ),
                     controlAffinity: ListTileControlAffinity.trailing,
@@ -125,8 +109,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                     onChanged: (value){
                       setState(() {
                         isHeartRateVisible = value;
-
-
                       });
                     },
                   ),
@@ -139,7 +121,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
                         showDataInputs();
-
                       },
                     ),
                     controlAffinity: ListTileControlAffinity.trailing,
@@ -147,9 +128,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                     onChanged: (value){
                       setState(() {
                         isBodyTemperatureVisible = value;
-
-
-
                       });
                     },
                   ),
@@ -161,7 +139,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
                         showDataInputs();
-
                       },
                     ),
                     controlAffinity: ListTileControlAffinity.trailing,
@@ -169,9 +146,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                     onChanged: (value){
                       setState(() {
                         isBloodGlucoseVisible = value;
-
-
-
                       });
                     },
                   ),
@@ -183,7 +157,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
                         showDataInputs();
-
                       },
                     ),
                     controlAffinity: ListTileControlAffinity.trailing,
@@ -191,9 +164,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                     onChanged: (value){
                       setState(() {
                         isRespiratoryRateVisible = value;
-
-
-
                       });
                     },
                   ),
@@ -213,9 +183,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
                     onChanged: (value){
                       setState(() {
                         isOxygenSaturationVisible = value;
-
-
-
                       });
                     },
                   ),
@@ -585,34 +552,22 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
             TextButton(
               child: Text('Confirm'),
               onPressed: () {
-                // try{
-                //   final User user = auth.currentUser;
-                //   final uid = user.uid;
-                //   final readPatientConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                //   Connection doctorconnection = widget.connection;
-                //   readPatientConnection.once().then((DataSnapshot snapshot) {
-                //     List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
-                //     temp1.forEach((jsonString) {
-                //       connections.add(Connection.fromJson(jsonString));
-                //     });
-                //     for(int i = 1; i <= connections.length; i++){
-                //       if(connections[i-1].uid == doctorconnection.uid){
-                //         final doctorConnectionsRef = databaseReference.child('users/' + uid + '/personal_info/connections/'+ i.toString());
-                //         doctorConnectionsRef.update({
-                //           "uid": doctorconnection.uid,
-                //           "dashboard": isAllowedDashboard.toString(),
-                //           "nonhealth": isAllowedNonHealth.toString(),
-                //           "health": isAllowedDataInputs.toString(),
-                //         });
-                //       }
-                //     }
-                //   });
-                //   Navigator.pop(context);
-                //
-                //
-                // } catch(e) {
-                //   print("you got an error! $e");
-                // }
+                try{
+                  final User user = auth.currentUser;
+                  final uid = user.uid;
+                  final vitalsConnectionRef = databaseReference.child('users/' + uid + '/vitals_connection/');
+                  vitalsConnectionRef.update({
+                    "bloodpressure": isBloodPressureVisible.toString(),
+                    "bloodglucose": isBloodGlucoseVisible.toString(),
+                    "heartrate": isHeartRateVisible.toString(),
+                    "respiratoryrate": isRespiratoryRateVisible.toString(),
+                    "oxygensaturation": isOxygenSaturationVisible.toString(),
+                    "bodytemperature": isBodyTemperatureVisible.toString(),
+                  });
+                  Navigator.pop(context);
+                } catch(e) {
+                  print("you got an error! $e");
+                }
 
 
                 // Future.delayed(const Duration(milliseconds: 2000), (){
@@ -634,6 +589,34 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
         );
       },
     );
+  }
+  void getVitalsConnection (){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final vitalsConnectionRef = databaseReference.child('users/' + uid + '/vitals_connection/');
+    Vitals_Connection vitals_connection;
+    vitalsConnectionRef.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      vitals_connection = Vitals_Connection.fromJson(temp);
+      if(vitals_connection.bloodpressure == "true"){
+        isBloodPressureVisible = true;
+      }
+      if(vitals_connection.bloodglucose == "true"){
+        isBloodGlucoseVisible = true;
+      }
+      if(vitals_connection.heartrate == "true"){
+        isHeartRateVisible = true;
+      }
+      if(vitals_connection.respiratoryrate == "true"){
+        isRespiratoryRateVisible = true;
+      }
+      if(vitals_connection.oxygensaturation == "true"){
+        isOxygenSaturationVisible = true;
+      }
+      if(vitals_connection.bodytemperature == "true"){
+        isBodyTemperatureVisible = true;
+      }
+    });
   }
 
 }

@@ -1093,6 +1093,7 @@ class _set_upState extends State<set_up> {
                 final fitbitRef = databaseReference.child('users/' + uid + '/fitbit_connection/');
                 final spotifyRef = databaseReference.child('users/' + uid + '/spotify_connection/');
                 final ihealthRef = databaseReference.child('users/' + uid + '/ihealth_connection/');
+                final vitalsConnectionRef = databaseReference.child('users/' + uid + '/vitals_connection/');
                 final stressRef = databaseReference.child('users/' + uid + '/goal/stress_goal/');
                 bool diseasecheck = false;
                 bool otherdiseasecheck = false;
@@ -1216,6 +1217,7 @@ class _set_upState extends State<set_up> {
                 fitbitRef.set({"isConnected": false});
                 spotifyRef.set({"isConnected": false});
                 ihealthRef.set({"isConnected": false});
+                vitalsConnectionRef.set({"uid": uid, "bloodpressure": "true", "bloodglucose": "true","heartrate": "true","respiratoryrate": "true","oxygensaturation": "true","bodytemperature": "true"});
                 print("Completed " + uid);
               });
 
