@@ -51,12 +51,15 @@ class Exercise_screen_state extends State<ExerciseScreen>
   String search="";
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
-
-
+  bool isLoading = true;
   double topBarOpacity = 0.0;
   @override
   void initState() {
-
+    Future.delayed(const Duration(milliseconds: 2500),(){
+      setState(() {
+        isLoading=false;
+      });
+    });
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -173,21 +176,21 @@ class Exercise_screen_state extends State<ExerciseScreen>
                               ),
                             ),
                             onPressed: () async{
-                              await getExercises(search).then((value) => setState((){
-                                listexercises=value;
-                                FocusScope.of(context).requestFocus(FocusNode());
-                              }));
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await getExercises(search).then((value) =>
+                                  setState((){
+                                    if(value != null ){
+                                      listexercises=value;
+                                      isLoading = false;
+                                    }
+                                  }));
 
                               final queryParameters = {
                                 'exercisename': '$search',
                               };
-                              // var uri =
-                              // Uri.https('204.235.60.194', 'exrxapi/v1/allinclusive/exercises?', queryParameters);
-                              // var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$search"),
-                              //     headers: {
-                              //   'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8yMDQuMjM1LjYwLjE5NFwvZnVzaW9cL3B1YmxpY1wvaW5kZXgucGhwIiwic3ViIjoiNDhiZmE2OTItYzIyZi01NmM1LThjYzYtNjEyZjBjZjZhZTViIiwiaWF0IjoxNjM5OTg1MDc1LCJleHAiOjE2Mzk5ODg2NzUsIm5hbWUiOiJsb3Vpc2V4cngifQ.y277OFo5gHGma1jCKU022ofm9ouDLsEdHgkRsdzyqJ0",
-                              // });
-                              // print("THIS\n" +response.body.toString());
+
                             },
                           ),
                         ]
@@ -195,7 +198,10 @@ class Exercise_screen_state extends State<ExerciseScreen>
               )
           ),
         ),
-        body: ListView.builder(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new ListView.builder(
           padding: EdgeInsets.fromLTRB(0, 25, 0, 90),
           itemCount: listexercises.length,
           itemBuilder: (context, index){

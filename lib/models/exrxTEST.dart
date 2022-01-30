@@ -32,15 +32,16 @@ class ExRxTest {
           if(i>1){
             String a = tempArr1[i];
             tempNew = tempNew + "{"+ tempArr1[i].replaceFirst((i).toString()+":", "", a.length-3);
+            print(tempNew);
           }
         }
         tempArr1.removeAt(0);
-        tempArr1.removeAt(1);
+        // tempArr1.removeAt(1);
+        print(tempArr1);
         for(var i = 1 ; i < tempArr1.length;i++){
           String splitthis = tempArr1[i].replaceAll("}", "").replaceAll("]", "");
+          print(splitthis);
           String cleanthis = splitthis.substring(0, splitthis.length-3);
-
-          List<String> splitarr= cleanthis.split(",");
           instructionsPreparationtemp = getThisLabel(cleanthis,"Instructions_Preparation:", "Instructions_Execution:" );
           instructionsExecutiontemp= getThisLabel(cleanthis, "Instructions_Execution:", "Small_Img_1");
           imagephoto = getThisLabel(cleanthis, "Larg_Img_1:", "Larg_Img_2");
