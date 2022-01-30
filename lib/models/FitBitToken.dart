@@ -19,7 +19,9 @@ class FitBitToken {
     refreshToken = json['refreshToken'];
     idToken = json['idToken'].toString();
     tokenEndpoint = json['tokenEndpoint'];
-    scopes = json['scopes'].cast<String>();
+    if(json['scopes'] != null){
+      scopes = json['scopes'].cast<String>();
+    }else scopes = new List();
     expiration =int.parse( json['expiration'].toString());
   }
 
@@ -31,6 +33,9 @@ class FitBitToken {
     data['tokenEndpoint'] = this.tokenEndpoint;
     data['scopes'] = this.scopes;
     data['expiration'] = this.expiration;
+    if (this.scopes != null) {
+      data['scopes'] = this.scopes;
+    }
     return data;
   }
 }
