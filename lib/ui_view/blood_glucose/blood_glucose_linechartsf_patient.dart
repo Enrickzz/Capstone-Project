@@ -89,6 +89,7 @@ class bloodGlucoseState extends State<blood_glucose_sf_patient> {
                             ? Center(
                           child: CircularProgressIndicator(),
                         ): new SfCartesianChart(
+                          plotAreaBorderWidth: 0,
                           title: ChartTitle(text: 'Blood Glucose (mg/dL)'),
                           legend: Legend(isVisible: false),
                           tooltipBehavior: _tooltipBehavior,
@@ -98,7 +99,10 @@ class bloodGlucoseState extends State<blood_glucose_sf_patient> {
                             xValueMapper: (SalesData sales, _) => sales.date,
                             yValueMapper: (SalesData sales, _) => sales.sales,
                             dataLabelSettings: DataLabelSettings(isVisible: false),
-                            enableTooltip: true)
+                            enableTooltip: true,
+                                markerSettings: MarkerSettings(
+                                    isVisible: true
+                                ))
                           ],
                           primaryXAxis: CategoryAxis(
                             majorGridLines: MajorGridLines(width: 0),
@@ -107,8 +111,49 @@ class bloodGlucoseState extends State<blood_glucose_sf_patient> {
                           primaryYAxis: NumericAxis(
 
                               majorGridLines: MajorGridLines(width: 0),
-                              numberFormat: NumberFormat.compact()),
+                              numberFormat: NumberFormat.compact(),
+                              plotBands: <PlotBand>[
+                                // PlotBand(
+                                //   isVisible: true,
+                                //   start: 120,
+                                //   end: 120,
+                                //   borderWidth: 1,
+                                //
+                                //   borderColor: Colors.red,
+                                // ),
+                                PlotBand(
+
+                                    text: 'High',
+                                    textAngle: 0,
+                                    start: 120,
+                                    end: 120,
+                                    textStyle: TextStyle(color: Colors.deepOrange, fontSize: 16),
+                                    borderColor: Colors.red,
+                                    borderWidth: 1
+                                ),
+                                PlotBand(
+
+                                    text: 'Low',
+                                    textAngle: 0,
+                                    start: 80,
+                                    end: 80,
+                                    textStyle: TextStyle(color: Colors.blue, fontSize: 16),
+                                    borderColor: Colors.blue,
+                                    borderWidth: 1
+                                ),
+                                // PlotBand(
+                                //   isVisible: true,
+                                //   start: 80,
+                                //   end: 80,
+                                //   borderWidth: 1,
+                                //   borderColor: Colors.blue,
+                                // )
+                              ]
+                          ),
+
+
                         ),
+
 
 
                           // primaryXAxis: NumericAxis,

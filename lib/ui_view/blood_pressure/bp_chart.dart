@@ -81,22 +81,11 @@ class _blood_pressureState extends State<bp_chart> {
                                     majorGridLines: MajorGridLines(width: 0),
                                     // plotOffset: 50,
                                   ),
-                                // primaryXAxis: CategoryAxis(
-                                //   isVisible: false,
-                                //     edgeLabelPlacement: EdgeLabelPlacement.shift,
-                                //     interval: 1,
-                                //     axisLabelFormatter: (AxisLabelRenderDetails details) => axis(details),
-                                //     majorGridLines: const MajorGridLines(width: 0)),
+
                                 title: ChartTitle(text: 'Blood Pressure'),
                                   primaryYAxis: NumericAxis(
                                   majorGridLines: MajorGridLines(width: 0),
                                   numberFormat: NumberFormat.compact()),
-                                // primaryYAxis: NumericAxis(
-                                //     labelFormat: '{value}',
-                                //     interval: 30,
-                                //     minimum: 40,
-                                //     axisLine: const AxisLine(width: 0),
-                                //     majorTickLines: const MajorTickLines(color: Colors.transparent)),
                                 series: finalLine,
                                 tooltipBehavior: TooltipBehavior(enable: true, format: 'series.name : ' + 'point.y' ),
 

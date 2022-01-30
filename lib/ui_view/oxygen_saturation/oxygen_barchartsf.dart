@@ -121,7 +121,30 @@ class oxygenSaturationState extends State<oxygen_barchartsf> {
                           primaryYAxis: NumericAxis(
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
                               title: AxisTitle(text: 'Oxygen Saturation'),
-                              minimum: 30),
+                              minimum: 30,
+                              plotBands: <PlotBand>[
+                                // PlotBand(
+                                //   isVisible: true,
+                                //   start: 120,
+                                //   end: 120,
+                                //   borderWidth: 1,
+                                //
+                                //   borderColor: Colors.red,
+                                // ),
+                                PlotBand(
+
+                                    text: 'Normal',
+                                    textAngle: 0,
+                                    start: 95,
+                                    end: 95,
+                                    textStyle: TextStyle(color: Colors.green, fontSize: 22),
+                                    borderColor: Colors.green,
+                                    borderWidth: 1
+                                ),
+
+
+                              ]
+                          ),
                         ),
                       ),
                       SizedBox(
