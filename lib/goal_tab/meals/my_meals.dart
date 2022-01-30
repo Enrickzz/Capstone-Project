@@ -107,8 +107,8 @@ class _my_mealsState extends State<my_meals>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Recommended Meals',
-        subTxt: 'View Meals',
+        titleTxt: 'My Meal Plan',
+        subTxt: 'View Plan',
         redirect: 7,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,

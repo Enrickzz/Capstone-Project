@@ -203,7 +203,7 @@ class TitleView extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => recommended_meals(animationController: animationController)),
+                                        builder: (context) => food_prescription_patient_view()),
                                   );
                                 }
                                 else if (redirect == 9) {
