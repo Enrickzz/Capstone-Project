@@ -287,7 +287,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               SizedBox(height: 16),
                                               Row(
                                                 children: [
-                                                  Text("Diet Instructions",
+                                                  Text("Food List",
                                                     style: TextStyle(
                                                       fontSize:14,
                                                       color:Color(0xFF363f93),

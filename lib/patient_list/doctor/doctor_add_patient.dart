@@ -673,7 +673,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
             TextButton(
               child: Text('Confirm'),
               onPressed: () {
-                addtoNotif("Dr. "+doctor.lastname+ " has added you as his/her patient they can now start seeing your personal health data and can start creating management plans for you." ,
+                addtoNotif("Dr. "+doctor.lastname+ " has added you as his/her patient he/she can start viewing your data once you grant them access in your Manage Healthcare Team" ,
                     "Dr. " + doctor.lastname + " added you!",
                     "1",
                     "Doctor Add",

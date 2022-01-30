@@ -80,7 +80,7 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
               child: Card(
                 child: ListTile(
                     leading: Icon(Icons.medication_outlined ),
-                    title: Text("Brand Name: " + prestemp[index].branded_name ,
+                    title: Text(prestemp[index].generic_name + " (" +prestemp[index].branded_name+")",
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,

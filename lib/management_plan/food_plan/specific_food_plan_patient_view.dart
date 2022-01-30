@@ -171,10 +171,11 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
+
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                Text("Eat more of",
+                                                Text("Food List",
                                                   style: TextStyle(
                                                     fontSize:14,
                                                     color:Color(0xFF363f93),
@@ -189,20 +190,9 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                                   fontWeight: FontWeight.bold
                                               ),
                                             ),
-                                            SizedBox(height: 16),
-                                            Text("Eat during",
-                                              style: TextStyle(
-                                                fontSize:14,
-                                                color:Color(0xFF363f93),
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(consumption_time,
-                                              style: TextStyle(
-                                                  fontSize:16,
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
+
+
+
                                             SizedBox(height: 16),
                                             Text("Important Notes/Assessments",
                                               style: TextStyle(
