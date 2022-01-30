@@ -196,16 +196,12 @@ class _fitbit_connectState extends State<fitbit_connect> {
                               final uid = user.uid;
                               final Fitbittokenref = databaseReference.child('users/' + uid + '/fitbittoken/');
                               Fitbittokenref.set({"accessToken": test.accessToken, "refreshToken": test.refreshToken, "idToken": test.idToken,
-                                                  "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
+                                "tokenEndpoint": test.tokenEndpoint, "scopes": test.scopes, "expiration": test.expiration});
+                              print(_client.credentials.accessToken);
                               final readfitbitConnection = databaseReference.child('users/' + uid + '/fitbit_connection/');
                               readfitbitConnection.set({"isConnected": true});
                               getLatestSleep();
                             });
-                            // fitbit API here
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
-                            final fitbitRef = databaseReference.child('users/' + uid + '/fitbit_connection/');
-                            fitbitRef.update({"isConnected": "true"});
                             setState(() {
                               print("setstate");
                             });
