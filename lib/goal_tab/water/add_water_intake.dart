@@ -271,27 +271,9 @@ class add_waterIntakeState extends State<add_water_intake> {
                                   final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
                                   waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
                                   print("Added Water Intake Successfully! " + uid);
-                                }
-                                else{
-                                  getWaterIntake();
-                                  double total_water = 0;
-                                  DateTime now = DateTime.now();
-                                  String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
-                                  Future.delayed(const Duration(milliseconds: 1000), (){
-                                    for(int i=0; i < waterintake_list.length; i++){
-                                      String datecreated = "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}";
-                                      if(datenow == datecreated){
-                                        total_water += waterintake_list[i].water_intake;
-                                      }
-                                    }
-                                    total_water = total_water + water_intake;
-                                    count = waterintake_list.length--;
-                                    final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
-                                    waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
-                                    print("Added Water Intake Successfully! " + uid);
-                                  });
 
-                                  if(total_water >= 1500){
+                                  if(water_intake >= 1500){
+                                    print(">1500");
                                     final readAddinf = databaseReference.child("users/"+ uid+"/vitals/additional_info");
                                     readAddinf.once().then((DataSnapshot snapshot) {
                                       Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
@@ -314,6 +296,50 @@ class add_waterIntakeState extends State<add_water_intake> {
                                       }
                                     });
                                   }
+                                }
+                                else{
+                                  getWaterIntake();
+                                  double total_water = 0;
+                                  DateTime now = DateTime.now();
+                                  String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
+                                  Future.delayed(const Duration(milliseconds: 1000), (){
+                                    for(int i=0; i < waterintake_list.length; i++){
+                                      String datecreated = "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}";
+                                      if(datenow == datecreated){
+                                        total_water += waterintake_list[i].water_intake;
+                                      }
+                                    }
+                                    total_water = total_water + water_intake;
+                                    count = waterintake_list.length--;
+                                    final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
+                                    waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
+                                    print("Added Water Intake Successfully! " + uid);
+                                    if(total_water >= 1500){
+                                      print(">1500");
+                                      final readAddinf = databaseReference.child("users/"+ uid+"/vitals/additional_info");
+                                      readAddinf.once().then((DataSnapshot snapshot) {
+                                        Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+                                        bool check2 = false;
+                                        print(snapshot.value);
+                                        for(var i = 0; i < userInfo.other_disease.length; i++){
+                                          if(userInfo.other_disease[i].contains("Heart Failure")) check2 = true;
+                                        }
+                                        for(var i = 0 ; i < userInfo.disease.length ; i++ ){
+                                          if(userInfo.disease[i].contains("Heart Failure") ){
+                                            check2 = true;
+                                          }
+                                        }
+                                        if(check2 ==true ){
+                                          addtoRecommendation("The recommended daily water intake for patients with congestive heart failure is 1500 milliliter a day. You have already exceeded the threshold for today. Please limit your water intake for the rest of the day.",
+                                              "Limit your water",
+                                              "3",
+                                              "None",
+                                              "Immediate");
+                                        }
+                                      });
+                                    }
+                                  });
+
                                 }
                                 readWaterGoal.once().then((DataSnapshot weightgoalsnapshot) {
                                   Map<String, dynamic> temp3 = jsonDecode(jsonEncode(weightgoalsnapshot.value));

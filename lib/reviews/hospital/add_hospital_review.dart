@@ -272,7 +272,7 @@ class _create_postState extends State<add_hospital_review> {
                                   "special": recommendedDoctor,
                                   "place_loc": widget.thisPlace.formattedAddress,
                                   "place_name": widget.thisPlace.name});
-                                NotifyPatients(widget.thisPlace);
+                                // NotifyPatients(widget.thisPlace);
                               }else{
                                 List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
                                 temp.forEach((jsonString) {
@@ -294,7 +294,7 @@ class _create_postState extends State<add_hospital_review> {
                                   "special": recommendedDoctor,
                                   "place_loc": widget.thisPlace.formattedAddress,
                                   "place_name": widget.thisPlace.name});
-                                NotifyPatients(widget.thisPlace);
+                                // NotifyPatients(widget.thisPlace);
                               }
                             });
                             Reviews newR = new Reviews(added_by: uid, placeid: widget.thisPlace.placeId,
