@@ -70,6 +70,12 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
   @override
   void initState() {
     super.initState();
+    controller = TabController(length: 2, vsync: this);
+    controller.addListener(() {
+      setState(() {});
+    });
+    final User user = auth.currentUser;
+    final uid = user.uid;
     templist.clear();
     templist = widget.thislist;
     purpose = templist[widget.index].purpose;
@@ -78,12 +84,11 @@ class _SpecificVitalsPrescriptionViewAsDoctorState extends State<SpecificVitalsP
     important_notes = templist[widget.index].important_notes;
     prescribedBy = templist[widget.index].doctor_name;
     dateCreated = "${templist[widget.index].dateCreated.month}/${templist[widget.index].dateCreated.day}/${templist[widget.index].dateCreated.year}";
-    controller = TabController(length: 2, vsync: this);
-    controller.addListener(() {
-      setState(() {});
-    });
-    getFoodplan();
-    templist = widget.thislist;
+    if(templist[widget.index].prescribedBy == uid){
+      prescribedDoctor = true;
+    }
+    // getFoodplan();
+
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");

@@ -80,7 +80,8 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
       setState(() {});
     });
     // getPrescription();
-
+    final User user = auth.currentUser;
+    final uid = user.uid;
     prestemp = widget.thispres;
     int index = widget.index;
     brand_name = prestemp[index].branded_name;
@@ -93,6 +94,9 @@ class _SpecificPrescriptionViewAsDoctorState extends State<SpecificPrescriptionV
     endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
     dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
     prescribedBy = prestemp[index].doctor_name;
+    if(prestemp[index].prescribedBy == uid){
+      prescribedDoctor = true;
+    }
     // getPrescibedBy();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {

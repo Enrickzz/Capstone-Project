@@ -34,7 +34,6 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
   // List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
   List<FoodPlan> foodplan_list = new List<FoodPlan>();
   String purpose = "";
-  String food = "";
   String quantity_food = "0";
   String consumption_time = "";
   String important_notes = "";
@@ -56,7 +55,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
   String hours,min;
 
   TextEditingController _nameController;
-  static List<String> foodList = [null];
+  static List<String> foodList = [];
 
   // String getFrom(){
   //   if(dateRange == null){
@@ -104,6 +103,8 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
 
   @override
   void initState(){
+    foodList.clear();
+    foodList.add(null);
     getRecomm(widget.userUID);
     getNotifs(widget.userUID);
     initNotif();
@@ -266,10 +267,11 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                             final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
-                              print(temp1);
+                              print("AAAAAAAAAAAAAAAAA");
+                              print(foodList.toString());
                               if(datasnapshot.value == null){
                                 final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
-                                foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
+                                foodplanRef.set({"purpose": purpose.toString(), "food": foodList, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
                                 print("Added Food Plan Successfully! " + uid);
                               }
                               else{
@@ -277,20 +279,20 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = foodplan_list.length--;
                                   final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
-                                  foodplanRef.set({"purpose": purpose.toString(), "food": food.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
+                                  foodplanRef.set({"purpose": purpose.toString(), "food": foodList, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
                                   print("Added Food Plan Successfully! " + uid);
                                 });
                               }
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + foodplan_list.length.toString());
-                              foodplan_list.add(new FoodPlan(purpose: purpose, food: food, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}", doctor_name: doctor_name));
+                              foodplan_list.add(new FoodPlan(purpose: purpose, food: foodList, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}", doctor_name: doctor_name));
                               for(var i=0;i<foodplan_list.length/2;i++){
                                 var temp = foodplan_list[i];
                                 foodplan_list[i] = foodplan_list[foodplan_list.length-1-i];
                                 foodplan_list[foodplan_list.length-1-i] = temp;
                               }
-                              FoodPlan addedThis = new FoodPlan(doctor: doctor.lastname,purpose: purpose, food: food, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}", doctor_name: doctor_name);
+                              FoodPlan addedThis = new FoodPlan(doctor: doctor.lastname,purpose: purpose, food: foodList, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}", doctor_name: doctor_name);
                               addtoNotif("Dr. "+doctor.lastname+ " has added something to your Food management plan. Click here to view your new Food management plan. " ,
                                   "Doctor Added to your Food Plan!",
                                   "1",
@@ -419,8 +421,6 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
     final readFood = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
     readFood.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print("temp");
-      print(temp);
       temp.forEach((jsonString) {
         foodplan_list.add(FoodPlan.fromJson(jsonString));
       });
@@ -474,13 +474,13 @@ class _FoodTextFieldsState extends State<FoodTextFields> {
   @override
   Widget build(BuildContext context) {
 
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   _nameControllerFoods.text = _AllergiesState.foodList[widget.index] ?? '';
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _nameControllerFoods.text = _addFoodPrescriptionState.foodList[widget.index] ?? '';
+    });
 
     return TextFormField(
       controller: _nameControllerFoods,
-      // onChanged: (v) => _set_upState.foodList[widget.index] = v,
+      onChanged: (v) => _addFoodPrescriptionState.foodList[widget.index] = v,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),

@@ -493,6 +493,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       temp.forEach((jsonString) {
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
+      notifsList = notifsList.reversed.toList();
     });
   }
   void deleteOneRecom(int index) async{
@@ -539,6 +540,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       temp.forEach((jsonString) {
         recommList.add(RecomAndNotif.fromJson(jsonString));
       });
+      recommList = recommList.reversed.toList();
     });
   }
   Future<List<Common>> fetchNutritionix(String thisquery) async {

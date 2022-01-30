@@ -65,7 +65,7 @@ class _journalState extends State<journal_list_doctor_view> with TickerProviderS
   void initState() {
     super.initState();
     discussion_list.clear();
-    getDiscussion();
+    getJournal();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -330,11 +330,11 @@ class _journalState extends State<journal_list_doctor_view> with TickerProviderS
 
     );
   }
-  void getDiscussion() {
+  void getJournal() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
+    final readdiscussion = databaseReference.child('users/' + userUID + '/journal/');
     readdiscussion.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

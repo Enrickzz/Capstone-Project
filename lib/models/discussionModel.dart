@@ -4,6 +4,7 @@ class Discussion {
 
   String title;
   String createdBy;
+  String dp_img;
   String uid;
   DateTime discussionDate;
   DateTime discussionTime;
@@ -16,6 +17,7 @@ class Discussion {
   Discussion({
     this.title,
     this.createdBy,
+    this.dp_img,
     this.discussionDate,
     this.discussionTime,
     this.discussionBody,
@@ -30,6 +32,7 @@ class Discussion {
     uid = json['uid'];
     title = json['title'];
     createdBy = json['createdBy'];
+    dp_img = json['dp_img'];
     discussionDate = DateFormat("MM/dd/yyyy").parse(json['discussionDate']);
     discussionTime = DateFormat("hh:mm").parse(json['discussionTime']);
     discussionBody = json['discussionBody'];

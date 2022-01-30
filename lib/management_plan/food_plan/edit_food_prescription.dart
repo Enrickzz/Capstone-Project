@@ -35,7 +35,7 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
   // List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
   List<FoodPlan> foodplan_list = new List<FoodPlan>();
   String purpose = "";
-  String food = "";
+  List<String> food = [];
   String quantity_food = "0";
   String consumption_time = "";
   String important_notes = "";
@@ -133,31 +133,31 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                     },
                   ),
                   SizedBox(height: 8),
-                  TextFormField(
-                    showCursor: true,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 6,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(
-                          width:0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF2F3F5),
-                      hintStyle: TextStyle(
-                          color: Color(0xFF666666),
-                          fontFamily: defaultFontFamily,
-                          fontSize: defaultFontSize),
-                      hintText: "Diet Plan",
-                    ),
-                    validator: (val) => val.isEmpty ? 'Enter Food' : null,
-                    onChanged: (val){
-                      setState(() => food = val);
-                    },
-                  ),
+                  // TextFormField(
+                  //   showCursor: true,
+                  //   keyboardType: TextInputType.multiline,
+                  //   maxLines: 6,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //       borderSide: BorderSide(
+                  //         width:0,
+                  //         style: BorderStyle.none,
+                  //       ),
+                  //     ),
+                  //     filled: true,
+                  //     fillColor: Color(0xFFF2F3F5),
+                  //     hintStyle: TextStyle(
+                  //         color: Color(0xFF666666),
+                  //         fontFamily: defaultFontFamily,
+                  //         fontSize: defaultFontSize),
+                  //     hintText: "Diet Plan",
+                  //   ),
+                  //   validator: (val) => val.isEmpty ? 'Enter Food' : null,
+                  //   onChanged: (val){
+                  //     setState(() => food = val);
+                  //   },
+                  // ),
 
 
 
@@ -222,7 +222,7 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                             Future.delayed(const Duration(milliseconds: 1500), (){
                               index = widget.index;
                               foodplan_list[index].purpose = purpose.toString();
-                              foodplan_list[index].food = food.toString();
+                              // foodplan_list[index].food = food.toString();
                               foodplan_list[index].important_notes = important_notes.toString();
                               foodplan_list[index].prescribedBy = prescribedBy.toString();
                               foodplan_list[index].dateCreated = "${now.month}/${now.day}/${now.year}";

@@ -60,7 +60,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   List<FoodPlan> templist = [];
   Users doctor = new Users();
   String purpose = "";
-  String food = "";
+  List<String> food = [];
   String consumption_time = "";
   String important_notes = "";
   String prescribedBy = "";
@@ -107,6 +107,9 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
     important_notes = templist[index].important_notes ;
     dateCreated = templist[index].dateCreated;
     prescribedBy = templist[index].doctor_name;
+    if(templist[index].prescribedBy == uid){
+      prescribedDoctor = true;
+    }
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         isLoading = false;
@@ -293,7 +296,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                                 ],
                                               ),
                                               SizedBox(height: 8),
-                                              Text(food,
+                                              Text(food.toString(),
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     fontWeight: FontWeight.bold
@@ -427,7 +430,6 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
             Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
             doctor = Users.fromJson(temp2);
             prescribedBy = doctor.lastname + " " + doctor.firstname;
-
             if(templist[index].prescribedBy == uid){
               prescribedDoctor = true;
             }
@@ -443,12 +445,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
           });
         });
       });
-
-      for(var i=0;i<templist.length/2;i++){
-        var temp = templist[i];
-        templist[i] = templist[templist.length-1-i];
-        templist[templist.length-1-i] = temp;
-      }
+      templist = templist.reversed.toList();
     });
   }
   Future<void> _showMyDialogDelete() async {

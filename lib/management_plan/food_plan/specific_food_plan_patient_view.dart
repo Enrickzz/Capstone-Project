@@ -58,7 +58,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   List<FoodPlan> templist = [];
   Users doctor = new Users();
   String purpose = "";
-  String food = "";
+  List<String> food = [];
   String consumption_time = "";
   String important_notes = "";
   String prescribedBy = "";
@@ -183,7 +183,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(food,
+                                            Text(food.toString(),
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -334,7 +334,6 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
         prescribedBy = doctor.lastname + " " + doctor.firstname;
       });
       purpose = templist[index].purpose;
-      food = templist[index].food;
       important_notes = templist[index].important_notes ;
       dateCreated = templist[index].dateCreated;
     });

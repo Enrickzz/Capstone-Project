@@ -41,9 +41,9 @@ class _set_upState extends State<set_up> {
   TextEditingController _nameControllerFoods;
   TextEditingController _nameControllerDrugs;
   TextEditingController _nameControllerOthers;
-  static List<String> foodList = [null];
-  static List<String> drugList = [null];
-  static List<String> otherList = [null];
+  static List<String> foodList = [];
+  static List<String> drugList = [];
+  static List<String> otherList = [];
 
   /// goal weight
   bool isSwitched = false;
@@ -85,6 +85,12 @@ class _set_upState extends State<set_up> {
   @override
   void initState() {
     super.initState();
+    foodList.clear();
+    foodList.add(null);
+    drugList.clear();
+    drugList.add(null);
+    otherList.clear();
+    otherList.add(null);
     _nameController = TextEditingController();
   }
   @override

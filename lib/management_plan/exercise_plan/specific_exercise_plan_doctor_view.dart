@@ -76,7 +76,8 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
     controller.addListener(() {
       setState(() {});
     });
-
+    final User user = auth.currentUser;
+    final uid = user.uid;
     // getExplan();
     templist.clear();
     templist = widget.thislist;
@@ -86,6 +87,9 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
     important_notes = templist[index].important_notes ;
     dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     prescribedBy = templist[index].doctor_name;
+    if(templist[index].prescribedBy == uid){
+      prescribedDoctor = true;
+    }
 
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {

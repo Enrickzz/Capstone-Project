@@ -697,7 +697,7 @@ class RecomAndNotif {
 
 class FoodPlan {
   String purpose;
-  String food;
+  List<String> food;
   String important_notes;
   String prescribedBy;
   String dateCreated;
@@ -708,7 +708,7 @@ class FoodPlan {
 
   FoodPlan.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
-    food = json["food"];
+    food = json['food'].cast<String>();
     important_notes = json['important_notes'];
     prescribedBy = json['prescribedBy'];
     dateCreated = json['dateCreated'].toString();
