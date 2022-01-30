@@ -71,10 +71,51 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     controller.addListener(() {
       setState(() {});
     });
-    Future.delayed(const Duration(milliseconds: 1000), (){
+    firstins().then((value) {
       setState(() {
-        isLoading = false;
       });
+    });
+    // Future.delayed(const Duration(milliseconds: 1000), (){
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    // });
+  }
+
+  Future<bool> firstins() async{
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return true;
+      }else return false;
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == locs.PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != locs.PermissionStatus.granted) {
+        return true;
+      }else return false;
+    }
+
+    _locationData = await location.getLocation();
+
+    setState(() {
+      _isGetLocation = true;
+    });
+
+    _isGetLocation ? print('Location: ${_locationData.latitude}, ${_locationData.longitude}'):print("wala");
+
+    setState(() {
+      reviewsRecommDrug.clear();
+      reviewsRecommHospital.clear();
+      reviewsRecommRecreation.clear();
+      reviewsRecommRestaurant.clear();
+    });
+
+    Places("${_locationData.latitude}, ${_locationData.longitude}").then((value) {
+
     });
   }
 
