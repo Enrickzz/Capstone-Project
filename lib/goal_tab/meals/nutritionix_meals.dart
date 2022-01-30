@@ -12,8 +12,9 @@ import '../../fitness_app_theme.dart';
 import 'detailsPage.dart';
 
 class nutritionix_meals extends StatefulWidget {
-  const nutritionix_meals({Key key, this.animationController}) : super(key: key);
+  const nutritionix_meals({Key key, this.animationController, this.search}) : super(key: key);
   final AnimationController animationController;
+  final String search;
   @override
   _nutritionix_mealsState createState() => _nutritionix_mealsState();
 }
@@ -35,7 +36,8 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
   double topBarOpacity = 0.0;
   @override
   void initState() {
-
+    print("widget.animationController");
+    print(widget.animationController);
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -66,8 +68,18 @@ class _nutritionix_mealsState extends State<nutritionix_meals>
     });
     super.initState();
     result.clear();
-    setState(() {
-      
+    if(widget.search != null){
+      fetchNutritionix(widget.search).then((value) => setState((){
+        result=value;
+        print("RESULT LENGTH");
+        print(result.length);
+        FocusScope.of(context).requestFocus(FocusNode());
+      }));
+    }
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        print("setstate");
+      });
     });
   }
 

@@ -22,9 +22,10 @@ import 'package:my_app/management_plan/food_plan/specific_food_plan_patient_view
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class exercise_prescription_patient_view extends StatefulWidget {
+  final AnimationController animationController;
   final List<Medication_Prescription> preslist;
   final int pointer;
-  exercise_prescription_patient_view({Key key, this.preslist, this.pointer}): super(key: key);
+  exercise_prescription_patient_view({Key key,this.animationController, this.preslist, this.pointer}): super(key: key);
   @override
   _exercise_prescriptionState createState() => _exercise_prescriptionState();
 }
@@ -108,7 +109,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_patient_vi
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificExercisePrescriptionViewAsPatient(thislist: extemp, index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificExercisePrescriptionViewAsPatient(animationController: widget.animationController, thislist: extemp, index: index)),
                       );
                     }
 

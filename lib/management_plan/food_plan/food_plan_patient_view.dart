@@ -23,7 +23,8 @@ import 'package:my_app/management_plan/food_plan/specific_food_plan_patient_view
 class food_prescription_patient_view extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
-  food_prescription_patient_view({Key key, this.preslist, this.pointer}): super(key: key);
+  final AnimationController animationController;
+  food_prescription_patient_view({Key key, this.preslist, this.pointer, this.animationController}): super(key: key);
   @override
   _food_prescriptionState createState() => _food_prescriptionState();
 }
@@ -44,6 +45,8 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
     final uid = user.uid;
     foodPtemp.clear();
     getFoodPlan();
+    print("widget.animationController");
+    print(widget.animationController);
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -103,7 +106,7 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsPatien(thislist: foodPtemp,index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsPatien(thislist: foodPtemp,index: index, animationController: widget.animationController)),
                       );
                     }
 

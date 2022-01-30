@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/management_plan/exercise_plan/edit_exercise_plan.dart';
+import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'package:my_app/additional_data_collection.dart';
@@ -19,7 +20,7 @@ import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
-
+import 'package:http/http.dart' as http;
 
 
 
@@ -61,7 +62,7 @@ class SpecificExercisePrescriptionViewAsDoctor extends StatefulWidget {
   @override
   _SpecificExercisePrescriptionViewAsDoctorState createState() => _SpecificExercisePrescriptionViewAsDoctorState();
 }
-
+List<ExercisesTest> listexercises=[];
 class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExercisePrescriptionViewAsDoctor> with SingleTickerProviderStateMixin {
   TextEditingController mytext = TextEditingController();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
@@ -80,46 +81,9 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
   String prescribedBy = "";
   String dateCreated = "";
   bool prescribedDoctor = false;
+  String exerciselist = "";
 
-  List<CardItem> items=[
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Pasta',
-        calories: '200g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Fries',
-        calories: '120g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Burger',
-        calories: '152g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Sinigang',
-        calories: '120g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Steak',
-        calories: '100g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Pasta',
-        calories: '200g'
-
-    ),
-
-  ];
+  List<CardItem> items=[];
 
   @override
   void initState() {
@@ -142,6 +106,19 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
     if(templist[index].prescribedBy == uid){
       prescribedDoctor = true;
     }
+    getExercises(templist[index].type).then((value) => setState((){
+      listexercises=value;
+      FocusScope.of(context).requestFocus(FocusNode());
+      for(int i = 0; i < listexercises.length; i++){
+        items.insert(0, CardItem(urlImage: listexercises[i].largImg1, foodName: listexercises[i].exerciseName));
+        if(listexercises.length != i+1){
+          exerciselist += listexercises[i].exerciseName + ", ";
+        }
+        else{
+          exerciselist += listexercises[i].exerciseName;
+        }
+      }
+    }));
 
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
@@ -361,7 +338,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                         child: ListView.separated(
                           padding: EdgeInsets.all(16),
                           scrollDirection: Axis.horizontal,
-                          itemCount: 6,
+                          itemCount: items.length,
                           separatorBuilder: (context, _) => SizedBox(width: 12,),
                           itemBuilder: (context, index) => buildCard(items[index]),
 
@@ -463,7 +440,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                       borderRadius: BorderRadius.circular(40),
                       child: Material(
                         child: Ink.image(
-                          image: NetworkImage(item.urlImage),
+                          image: NetworkImage("https:" + item.urlImage),
                           fit: BoxFit.cover,),
                       )
 
@@ -475,12 +452,6 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
           Text(
             item.foodName,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-
-          ),
-
-          Text(
-            item.calories,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
 
           ),
 
@@ -584,6 +555,51 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
         );
       },
     );
+  }
+  Future<List<ExercisesTest>> getExercises(String query) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readExRx = databaseReference.child('ExRxToken/');
+    String token = "";
+    List<ExercisesTest> exers=[];
+
+    await readExRx.once().then((DataSnapshot snapshot) {
+      if(snapshot.value != null || snapshot.value != ""){
+        token = snapshot.value.toString();
+      }
+    });
+    var response = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+        headers: {
+          'Authorization': "Bearer $token",
+        });
+    if(response.statusCode == 500 || response.statusCode == 401 || response.statusCode == 400){
+      var trytoken = await http.post(Uri.parse("http://204.235.60.194/consumer/login"),body: {
+        "username": "louisexrx",
+        "password": "xHj4vNnb"
+      });
+      token = trytoken.body.toString();
+      token = token.replaceAll("{", "").replaceAll("}", "").replaceAll("token", "").replaceAll('"', "").replaceAll(":", "").replaceAll(" ", "").replaceAll("\n", "").replaceAll("/", "");
+
+      var updateexrx = databaseReference;
+      print('UPDATING');
+      updateexrx.update({"ExRxToken/": token});
+      var response1 = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+          headers: {
+            'Authorization': "Bearer $token",
+          });
+      exers = ExRxTest.fromJson(jsonDecode(response1.body)).exercises;
+      listexercises= exers;
+      return exers;
+    }else{
+      print("STATUS\n"+response.statusCode.toString());
+      var response2 = await http.get(Uri.parse("http://204.235.60.194/exrxapi/v1/allinclusive/exercises?exercisename=$query"),
+          headers: {
+            'Authorization': "Bearer $token",
+          });
+      exers = ExRxTest.fromJson(jsonDecode(response2.body)).exercises;
+      listexercises= exers;
+      return exers;
+    }
   }
 }
 

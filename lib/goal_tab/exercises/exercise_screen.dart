@@ -31,8 +31,9 @@ import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
 
 class ExerciseScreen extends StatefulWidget {
-  const ExerciseScreen({Key key, this.animationController}) : super(key: key);
+  const ExerciseScreen({Key key, this.animationController, this.search}) : super(key: key);
   final AnimationController animationController;
+  final String search;
   @override
   Exercise_screen_state createState() => Exercise_screen_state();
 }
@@ -55,6 +56,15 @@ class Exercise_screen_state extends State<ExerciseScreen>
   double topBarOpacity = 0.0;
   @override
   void initState() {
+    if(widget.search != null){
+      getExercises(widget.search).then((value) =>
+          setState((){
+            if(value != null ){
+              listexercises=value;
+              isLoading = false;
+            }
+          }));
+    }
     Future.delayed(const Duration(milliseconds: 2500),(){
       setState(() {
         isLoading=false;
