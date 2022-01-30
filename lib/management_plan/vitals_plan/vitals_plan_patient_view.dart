@@ -27,7 +27,8 @@ import 'package:my_app/management_plan/vitals_plan/specific_vitals_plan_doctor_v
 class vitals_prescription_patient_view extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
-  vitals_prescription_patient_view({Key key, this.preslist, this.pointer}): super(key: key);
+  final String userUID;
+  vitals_prescription_patient_view({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
   @override
   _vitals_management_plan_patient_view_prescriptionState createState() => _vitals_management_plan_patient_view_prescriptionState();
 }
@@ -136,9 +137,10 @@ class _vitals_management_plan_patient_view_prescriptionState extends State<vital
     }
   }
   void getVitals() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodPlan = databaseReference.child('users/' + uid + '/management_plan/vitals_plan/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

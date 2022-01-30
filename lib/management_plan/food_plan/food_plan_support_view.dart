@@ -25,7 +25,8 @@ class food_prescription_support_view extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
   final AnimationController animationController;
-  food_prescription_support_view({Key key, this.preslist, this.pointer, this.animationController}): super(key: key);
+  final String userUID;
+  food_prescription_support_view({Key key, this.preslist, this.pointer, this.animationController, this.userUID}): super(key: key);
   @override
   _food_prescriptionState createState() => _food_prescriptionState();
 }
@@ -46,8 +47,6 @@ class _food_prescriptionState extends State<food_prescription_support_view> {
     final uid = user.uid;
     foodPtemp.clear();
     getFoodPlan();
-    print("widget.animationController");
-    print(widget.animationController);
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -133,9 +132,10 @@ class _food_prescriptionState extends State<food_prescription_support_view> {
     }
   }
   void getFoodPlan() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readFoodPlan = databaseReference.child('users/' + uid + '/management_plan/foodplan/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

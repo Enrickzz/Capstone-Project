@@ -90,7 +90,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => medication_prescription_suppView()),
+                        MaterialPageRoute(builder: (context) => medication_prescription_suppView(userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -156,7 +156,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => food_prescription_support_view(animationController: widget.animationController)),
+                        MaterialPageRoute(builder: (context) => food_prescription_support_view(animationController: widget.animationController, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -222,7 +222,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => exercise_prescription_supp_view(animationController: widget.animationController)),
+                        MaterialPageRoute(builder: (context) => exercise_prescription_supp_view(animationController: widget.animationController, userUID: widget.userUID)),
                       );
                     },
                     child: Container(
@@ -289,7 +289,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => vitals_prescription_patient_view()),
+                        MaterialPageRoute(builder: (context) => vitals_prescription_patient_view(userUID: widget.userUID)),
                       );
                     },
                     child: Container(

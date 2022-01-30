@@ -45,8 +45,6 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
     final uid = user.uid;
     foodPtemp.clear();
     getFoodPlan();
-    print("widget.animationController");
-    print(widget.animationController);
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");

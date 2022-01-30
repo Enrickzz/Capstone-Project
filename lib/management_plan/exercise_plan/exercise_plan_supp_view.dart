@@ -26,7 +26,8 @@ class exercise_prescription_supp_view extends StatefulWidget {
   final AnimationController animationController;
   final List<Medication_Prescription> preslist;
   final int pointer;
-  exercise_prescription_supp_view({Key key,this.animationController, this.preslist, this.pointer}): super(key: key);
+  final String userUID;
+  exercise_prescription_supp_view({Key key,this.animationController, this.preslist, this.pointer, this.userUID}): super(key: key);
   @override
   _exercise_prescriptionState createState() => _exercise_prescriptionState();
 }
@@ -136,10 +137,10 @@ class _exercise_prescriptionState extends State<exercise_prescription_supp_view>
     }
   }
   void getExercise() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    print("get exercise");
-    final readExPlan = databaseReference.child('users/' + uid + '/management_plan/exercise_prescription/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readExPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
     readExPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

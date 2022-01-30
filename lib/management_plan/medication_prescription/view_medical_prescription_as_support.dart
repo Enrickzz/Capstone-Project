@@ -22,7 +22,8 @@ import 'package:my_app/management_plan/medication_prescription/add_medication_pr
 class medication_prescription_suppView extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
-  medication_prescription_suppView({Key key, this.preslist, this.pointer}): super(key: key);
+  final String userUID;
+  medication_prescription_suppView({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
   @override
   _medication_prescriptionPatientViewState createState() => _medication_prescriptionPatientViewState();
 }
@@ -129,9 +130,10 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
     }
   }
   void getMedicalPrescription() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readprescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

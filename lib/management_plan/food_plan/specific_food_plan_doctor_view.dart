@@ -126,7 +126,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
       fetchNutritionix(templist[index].food[i]).then((value) => setState((){
         result=value;
         FocusScope.of(context).requestFocus(FocusNode());
-        items.insert(0, CardItem(urlImage: result[i].photo.thumb, foodName: result[i].foodName, calories: result[i].servingWeightGrams));
+        items.insert(0, CardItem(urlImage: result[i].photo.thumb, foodName: result[i].foodName, calories: result[i].getCalories().toStringAsFixed(0) + " kcal"));
       }));
     }
     Future.delayed(const Duration(milliseconds: 1500), (){
