@@ -262,8 +262,12 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                             type = "recreation";
                           }
                           print("TYPE = " + type);
-                          if(recomm.redirect == "Spotify"){
+                          if(recomm.title == "Palpitations" || recomm.title == "Chest Pain"  || recomm.title == "Headache"){
                             print("Here");
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
+                          }
+
+                          if(recomm.redirect == "Spotify"){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
                           }
                           Future.delayed(const Duration(milliseconds: 2000), (){
