@@ -95,6 +95,7 @@ class _PatientListState extends State<PatientList>  {
     super.initState();
     if(widget.nameslist != null){
       if(widget.nameslist.isNotEmpty){
+        print("WIDGET NAMES NOT EMPTY");
         names = widget.nameslist;
         diseases = widget.diseaselist;
         uidlist = widget.uidList;
@@ -111,6 +112,7 @@ class _PatientListState extends State<PatientList>  {
       }
       print("ASDASDASD");
     }else{
+      pp_imgs.clear();
       getPatients();
 
       isLoading = true;
@@ -119,6 +121,16 @@ class _PatientListState extends State<PatientList>  {
       var distinctIds = uidlist.toSet().toList();
       setState(() {
         uidlist = distinctIds;
+        //names = names.toSet().toList();
+        // pp_imgs = pp_imgs.toSet().toList();
+        for(var i = 0; i < names.length-1;i++){
+          if(names[i] == names[i+1]){
+            names.removeAt(i+1);
+            pp_imgs.removeAt(i+1);
+          }
+        }
+        print("LENGTGHS PP AND NAMES");
+        print(pp_imgs.length); print(names.length);
         print("UIDS");
         for(var i = 0; i < uidlist.length; i++){
           print(uidlist[i] + " index $i");
@@ -301,6 +313,18 @@ class _PatientListState extends State<PatientList>  {
             print(temp1);
             Users patient = Users.fromJson(temp1);
             //userlist.add(Users.fromJson(temp1));
+            // names.add(patient.firstname + " " + patient.lastname);
+            // bool exists = false;
+            names.add(patient.firstname + " " + patient.lastname);
+            pp_imgs.add(patient.pp_img.toString());
+            // String thisname = patient.firstname + " " + patient.lastname;
+            // for(var i = 0 ; i < names.length; i++){
+            //   if(names[i].toString().toLowerCase().contains(thisname.toLowerCase())){
+            //     names.add(patient.firstname + " " + patient.lastname);
+            //     pp_imgs.add(patient.pp_img.toString());
+            //
+            //   }
+            // }
             readInfo.once().then((DataSnapshot snapshot){
               var temp2 = jsonDecode(jsonEncode(snapshot.value));
               print(temp2);
@@ -325,18 +349,11 @@ class _PatientListState extends State<PatientList>  {
             });
             List temp = [];
             List temp2 = [];
-            names.add(patient.firstname + " " + patient.lastname);
-            // for(var i = 0; i < uidlist.length; i++){
-            //   if(uidlist[i] )
-            // }
-            pp_imgs.add(patient.pp_img);
+
             temp = names;
             temp2 = pp_imgs;
-            names = temp.toSet().toList();
-            pp_imgs = temp2.toSet().toList();
           });
         }
-
       });
     });
     setState(() {
