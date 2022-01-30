@@ -66,6 +66,7 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
   String important_notes = "";
   String prescribedBy = "";
   String dateCreated = "";
+  String exerciselist = "";
 
 
   @override
@@ -88,6 +89,14 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
       listexercises=value;
       FocusScope.of(context).requestFocus(FocusNode());
     }));
+    for(int i = 0; i < listexercises.length; i++){
+      if(listexercises.length != i+1){
+        exerciselist += listexercises[i].exerciseName + ", ";
+      }
+      else{
+        exerciselist += listexercises[i].exerciseName;
+      }
+    }
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print(listexercises[0].exerciseName);
@@ -214,7 +223,14 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("ADD SHIT\n @BORJ & @GIAN\n" + listexercises[0].exerciseName,
+                                            Text("Possible Exercises",
+                                              style: TextStyle(
+                                                fontSize:14,
+                                                color:Color(0xFF363f93),
+                                              ),
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text(exerciselist,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
