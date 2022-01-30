@@ -53,6 +53,7 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
   final AuthService _auth = AuthService();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
+  bool isLoading = true;
   // Users doctor = new Users();
   // int count = 1;
   // DateTime now =  DateTime.now();
@@ -69,6 +70,7 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
     getDiscussion();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        isLoading = false;
         print("setstate");
       });
     });
@@ -131,7 +133,10 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
         body:  Scrollbar(
           child: SingleChildScrollView(
             padding: EdgeInsets.fromLTRB(24, 28, 24, 28),
-            child: Column(
+            child: isLoading
+                ? Center(
+              child: CircularProgressIndicator(),
+            ): new Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -216,9 +221,8 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
-                                                  CircleAvatar(
-                                                    backgroundImage: AssetImage('assets/images/heart_icon.png'),
-                                                    radius: 22,
+                                                  ClipOval(
+                                                      child: checkimage(discussion_list[index].dp_img)
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets.only(left: 8.0),
@@ -389,5 +393,15 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
         );
       },
     );
+  }
+  Widget checkimage(String img) {
+    if(img == null || img == "assets/images/blank_person.png"){
+      return Image.asset("assets/images/blank_person.png", width: 50, height: 50,fit: BoxFit.cover);
+    }else{
+      return Image.network(img,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover);
+    }
   }
 }

@@ -186,7 +186,7 @@ class _journalState extends State<journal_list_doctor_view> with TickerProviderS
                                       context,
                                       MaterialPageRoute(
                                         // builder: (context) => specific_post_doctor_patient_view(userUID: widget.userUID, index: index)
-                                          builder: (context) => specific_journal_doctor_view( index: index)
+                                          builder: (context) => specific_journal_doctor_view(userUID: widget.userUID,index: index)
 
                                       )
                                   );

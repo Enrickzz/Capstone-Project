@@ -63,6 +63,7 @@ class _specific_postState extends State<specific_post_suppsystem_view>
     final User user = auth.currentUser;
     final uid = user.uid;
     discussion_list.clear();
+    reply_list.clear();
     getDiscussion();
     getReplies();
     Future.delayed(const Duration(milliseconds: 1500), (){
@@ -399,12 +400,9 @@ class _specific_postState extends State<specific_post_suppsystem_view>
     // final uid = user.uid;
     String userUID = widget.userUID;
     int index = widget.index;
-    print("INDEX");
-    print(index);
     final readReplies = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/');
     readReplies.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print(temp);
       temp.forEach((jsonString) {
         reply_list.add(Replies.fromJson(jsonString));
       });
