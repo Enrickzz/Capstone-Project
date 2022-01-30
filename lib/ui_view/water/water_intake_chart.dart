@@ -142,7 +142,8 @@ class _water_intake_chartState extends State<water_intake_chart> {
     final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
     final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
     DateTime today = DateTime.now();
-    DateTime firstDayOfTheweek = today.subtract(new Duration(days: today.weekday));
+    // DateTime firstDayOfTheweek = today.subtract(new Duration(days: today.weekday));
+    DateTime firstDayOfTheweek = new DateTime(today.year, today.month, today.day - today.weekday % 7);
     DateTime lastDayOfTheweek = firstDayOfTheweek.add(new Duration(days: 6));
     readWaterIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -154,8 +155,12 @@ class _water_intake_chartState extends State<water_intake_chart> {
       });
       goal = water_goal.water_goal;
       for(int i = 0; i< waterintake_list.length; i++){
-        if(firstDayOfTheweek.isBefore(waterintake_list[i].dateCreated) && lastDayOfTheweek.isAfter(waterintake_list[i].dateCreated)){
-          switch(waterintake_list[i].dateCreated.weekday){
+        print("waterintake_list[i].dateCreated.weekday");
+        print(firstDayOfTheweek);
+        print(lastDayOfTheweek);
+        DateTime dateCreated = DateTime(waterintake_list[i].dateCreated.year, waterintake_list[i].dateCreated.month, waterintake_list[i].dateCreated.day, waterintake_list[i].timeCreated.hour, waterintake_list[i].timeCreated.minute);
+        if(firstDayOfTheweek.isBefore(dateCreated) && lastDayOfTheweek.isAfter(dateCreated)){
+          switch(dateCreated.weekday){
             case 1:
               monday += waterintake_list[i].water_intake;
               break;
