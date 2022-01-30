@@ -168,7 +168,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Purpose",
+                      hintText: "Purpose of Plan",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Purpose' : null,
                     onChanged: (val){
@@ -494,7 +494,7 @@ class _FoodTextFieldsState extends State<FoodTextFields> {
         hintStyle: TextStyle(
             color: Color(0xFF666666),
             fontSize: 14),
-        hintText: "Enter food",
+        hintText: "Food",
       ),
       validator: (f){
         if(f.trim().isEmpty) return 'Please enter something';

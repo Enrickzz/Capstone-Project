@@ -132,7 +132,7 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Purpose of plan",
+                      hintText: "Purpose of Plan",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Purpose Field' : null,
                     onChanged: (val){
@@ -143,7 +143,6 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                   TextFormField(
                     showCursor: true,
                     keyboardType: TextInputType.multiline,
-                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -158,7 +157,7 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Exercise/Activity Plan",
+                      hintText: "Type of Exercise/Activity",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Type of Workout' : null,
                     onChanged: (val){
@@ -173,6 +172,7 @@ class _editExercisePrescriptionState extends State<edit_exercise_prescription> {
 
                   TextFormField(
                     showCursor: true,
+                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),

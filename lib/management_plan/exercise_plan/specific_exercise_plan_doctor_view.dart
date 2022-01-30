@@ -248,7 +248,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                                         child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text("Purpose",
+                                              Text("Purpose of Plan",
                                                 style: TextStyle(
                                                   fontSize:14,
                                                   color:Color(0xFF363f93),
@@ -264,7 +264,7 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                                               SizedBox(height: 16),
                                               Row(
                                                 children: [
-                                                  Text("Exercise/Activity Plan",
+                                                  Text("Type of Exercise/Activity",
                                                     style: TextStyle(
                                                       fontSize:14,
                                                       color:Color(0xFF363f93),

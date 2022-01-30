@@ -134,7 +134,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Purpose of plan",
+                      hintText: "Purpose of Plan",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Purpose Field' : null,
                     onChanged: (val){
@@ -158,7 +158,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Exercise/Activity",
+                      hintText: "Type of Exercise/Activity",
                     ),
                     isExpanded: true,
                     value: type,
