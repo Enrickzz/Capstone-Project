@@ -50,6 +50,9 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
   String date;
   String hours,min;
 
+  TextEditingController _nameController;
+  static List<String> foodList = [null];
+
   @override
   void initState(){
     getRecomm(widget.userUID);
@@ -125,7 +128,7 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                           color: Color(0xFF666666),
                           fontFamily: defaultFontFamily,
                           fontSize: defaultFontSize),
-                      hintText: "Purpose",
+                      hintText: "Purpose of Plan",
                     ),
                     validator: (val) => val.isEmpty ? 'Enter Purpose' : null,
                     onChanged: (val){
@@ -159,12 +162,13 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
                   //   },
                   // ),
 
-
+                  ..._getFood(),
 
                   SizedBox(height: 8.0),
 
                   TextFormField(
                     showCursor: true,
+                    maxLines: 6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -246,6 +250,49 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
 
     );
   }
+
+  List<Widget> _getFood(){
+    List<Widget> foodsTextFields = [];
+    for(int i=0; i<foodList.length; i++){
+      foodsTextFields.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6.0),
+            child: Row(
+              children: [
+                Expanded(child: FoodTextFields(i)),
+                SizedBox(width: 16,),
+                // we need add button at last friends row
+                _addRemoveButtonFood(i == foodList.length-1, i),
+              ],
+            ),
+          )
+      );
+    }
+    return foodsTextFields;
+  }
+
+  Widget _addRemoveButtonFood(bool add, int index){
+    return InkWell(
+      onTap: (){
+        if(add){
+          // add new text-fields at the top of all friends textfields
+          foodList.insert(0, null);
+        }
+        else foodList.removeAt(index);
+        setState((){});
+      },
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          color: (add) ? Colors.blue : Colors.red,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
+      ),
+    );
+  }
+
   void addtoNotif(String message, String title, String priority,String redirect, String uid){
     print ("ADDED TO NOTIFICATIONS");
     final ref = databaseReference.child('users/' + uid + '/notifications/');
@@ -299,4 +346,61 @@ class _editFoodPrescriptionState extends State<edit_food_prescription> {
       });
     });
   }
+}
+
+class FoodTextFields extends StatefulWidget {
+  final int index;
+  FoodTextFields(this.index);
+  @override
+  _FoodTextFieldsState createState() => _FoodTextFieldsState();
+}
+
+class _FoodTextFieldsState extends State<FoodTextFields> {
+  TextEditingController _nameControllerFoods;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameControllerFoods = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameControllerFoods.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _nameControllerFoods.text = _editFoodPrescriptionState.foodList[widget.index] ?? '';
+    });
+
+    return TextFormField(
+      controller: _nameControllerFoods,
+      onChanged: (v) => _editFoodPrescriptionState.foodList[widget.index] = v,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+        filled: true,
+        fillColor: Color(0xFFF2F3F5),
+        hintStyle: TextStyle(
+            color: Color(0xFF666666),
+            fontSize: 14),
+        hintText: "Food",
+      ),
+      validator: (f){
+        if(f.trim().isEmpty) return 'Please enter something';
+        return null;
+      },
+    );
+  }
+
+
 }

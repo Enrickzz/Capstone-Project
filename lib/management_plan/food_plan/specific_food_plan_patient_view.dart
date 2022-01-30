@@ -158,7 +158,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                                       child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text("Purpose",
+                                            Text("Purpose of Plan",
                                               style: TextStyle(
                                                 fontSize:14,
                                                 color:Color(0xFF363f93),
