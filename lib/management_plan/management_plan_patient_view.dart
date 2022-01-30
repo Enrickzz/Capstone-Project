@@ -23,7 +23,8 @@ import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 import 'exercise_plan/exercise_plan_patient_view.dart';
 import 'vitals_plan/vitals_plan_patient_view.dart';
 class management_plan_patient_view extends StatefulWidget {
-
+  final AnimationController animationController;
+  management_plan_patient_view({Key key, this.animationController}): super(key: key);
   @override
   _AppSignUpState createState() => _AppSignUpState();
 }
@@ -151,7 +152,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => food_prescription_patient_view()),
+                        MaterialPageRoute(builder: (context) => food_prescription_patient_view(animationController: widget.animationController)),
                       );
                     },
                     child: Container(
@@ -217,7 +218,7 @@ class _AppSignUpState extends State<management_plan_patient_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => exercise_prescription_patient_view()),
+                        MaterialPageRoute(builder: (context) => exercise_prescription_patient_view(animationController: widget.animationController)),
                       );
                     },
                     child: Container(

@@ -7,6 +7,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
+import 'package:my_app/goal_tab/exercises/exercise_screen.dart';
+import 'package:my_app/goal_tab/exercises/view_exrx.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
@@ -53,10 +55,12 @@ class CardItem{
 }
 
 class SpecificExercisePrescriptionViewAsPatient extends StatefulWidget {
-  SpecificExercisePrescriptionViewAsPatient({Key key, this.title, this.index, this.thislist}) : super(key: key);
+  SpecificExercisePrescriptionViewAsPatient({Key key,this.animationController, this.title, this.index, this.thislist}) : super(key: key);
+  final AnimationController animationController;
   final List<ExPlan> thislist;
   final String title;
   int index;
+
   @override
   _SpecificExercisePrescriptionViewAsPatientState createState() => _SpecificExercisePrescriptionViewAsPatientState();
 }
@@ -81,45 +85,7 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
   String dateCreated = "";
   String exerciselist = "";
 
-  List<CardItem> items=[
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Pasta',
-        calories: '200g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Fries',
-        calories: '120g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Burger',
-        calories: '152g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Sinigang',
-        calories: '120g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Steak',
-        calories: '100g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Pasta',
-        calories: '200g'
-
-    ),
-
-  ];
+  List<CardItem> items=[];
 
 
   @override
@@ -131,6 +97,7 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
     });
     // getExplan();
     templist.clear();
+    items.clear();
     templist = widget.thislist;
     int index = widget.index;
     purpose = templist[index].purpose;
@@ -138,21 +105,23 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
     important_notes = templist[index].important_notes ;
     dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     prescribedBy = templist[index].doctor_name;
+
     getExercises(templist[index].type).then((value) => setState((){
       listexercises=value;
       FocusScope.of(context).requestFocus(FocusNode());
+      for(int i = 0; i < listexercises.length; i++){
+        items.insert(0, CardItem(urlImage: listexercises[i].largImg1, foodName: listexercises[i].exerciseName));
+        if(listexercises.length != i+1){
+          exerciselist += listexercises[i].exerciseName + ", ";
+        }
+        else{
+          exerciselist += listexercises[i].exerciseName;
+        }
+      }
     }));
-    for(int i = 0; i < listexercises.length; i++){
-      if(listexercises.length != i+1){
-        exerciselist += listexercises[i].exerciseName + ", ";
-      }
-      else{
-        exerciselist += listexercises[i].exerciseName;
-      }
-    }
+
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
-        print(listexercises[0].exerciseName);
         print("setstate");
       });
     });
@@ -303,7 +272,7 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
                       child: ListView.separated(
                         padding: EdgeInsets.all(16),
                         scrollDirection: Axis.horizontal,
-                        itemCount: 6,
+                        itemCount: items.length,
                         separatorBuilder: (context, _) => SizedBox(width: 12,),
                         itemBuilder: (context, index) => buildCard(items[index]),
 
@@ -404,11 +373,15 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
                       borderRadius: BorderRadius.circular(40),
                       child: Material(
                         child: Ink.image(
-                          image: NetworkImage(item.urlImage),
+                          image: NetworkImage("https:" + item.urlImage),
                           fit: BoxFit.cover,
                           child: InkWell(
                             onTap: (){
-
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ExerciseScreen(animationController: widget.animationController, search: templist[widget.index].type)),
+                              );
                             },
                           ),),
                       )
@@ -424,11 +397,11 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
 
           ),
 
-          Text(
-            item.calories,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-
-          ),
+          // Text(
+          //   item.calories,
+          //   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          //
+          // ),
 
 
 
@@ -485,7 +458,7 @@ class _SpecificExercisePrescriptionViewAsPatientState extends State<SpecificExer
         headers: {
           'Authorization': "Bearer $token",
         });
-    if(response.statusCode == 500 || response.statusCode == 401){
+    if(response.statusCode == 500 || response.statusCode == 401 || response.statusCode == 400){
       var trytoken = await http.post(Uri.parse("http://204.235.60.194/consumer/login"),body: {
         "username": "louisexrx",
         "password": "xHj4vNnb"

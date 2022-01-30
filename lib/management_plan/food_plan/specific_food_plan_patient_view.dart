@@ -8,7 +8,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
+import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'package:my_app/additional_data_collection.dart';
@@ -19,7 +21,7 @@ import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
-
+import 'package:http/http.dart' as http;
 
 
 
@@ -52,10 +54,11 @@ class CardItem{
 }
 
 class SpecificFoodPrescriptionViewAsPatien extends StatefulWidget {
-  SpecificFoodPrescriptionViewAsPatien({Key key, this.title, this.index, this.thislist}) : super(key: key);
+  SpecificFoodPrescriptionViewAsPatien({Key key, this.title, this.index, this.thislist, this.animationController}) : super(key: key);
   final List<FoodPlan> thislist;
   final String title;
   int index;
+  final AnimationController animationController;
   @override
   _SpecificFoodPrescriptionViewAsDoctorState createState() => _SpecificFoodPrescriptionViewAsDoctorState();
 }
@@ -72,50 +75,13 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   Users doctor = new Users();
   String purpose = "";
   List<String> food = [];
+  List<Common> result = [];
   String consumption_time = "";
   String important_notes = "";
   String prescribedBy = "";
   String dateCreated = "";
 
-  List<CardItem> items=[
-    CardItem(
-        urlImage: 'https://www.nipponexpress.com/press/report/img/06-Nov-20-1.jpeg',
-        foodName: 'Banana',
-        calories: '200g'
-
-    ),
-    CardItem(
-        urlImage: 'https://www.onceuponachef.com/images/2018/02/pan-seared-salmon--850x700.jpg',
-        foodName: 'Salmon',
-        calories: '120g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Burger',
-        calories: '152g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Sinigang',
-        calories: '120g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Steak',
-        calories: '100g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Pasta',
-        calories: '200g'
-
-    ),
-
-  ];
+  List<CardItem> items=[];
 
 
 
@@ -135,8 +101,16 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
     important_notes = templist[index].important_notes;
     dateCreated = templist[index].dateCreated;
     prescribedBy = templist[index].doctor_name;
+    for(int i = 0; i < templist[index].food.length; i++){
+      fetchNutritionix(templist[index].food[i]).then((value) => setState((){
+        result=value;
+        FocusScope.of(context).requestFocus(FocusNode());
+        items.insert(0, CardItem(urlImage: result[i].photo.thumb, foodName: result[i].foodName, calories: result[i].servingWeightGrams));
+      }));
+    }
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
+        // items = items.reversed.toList();
         print("setstate");
       });
     });
@@ -145,7 +119,6 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   @override
   void dispose() {
     controller.dispose();
-
     super.dispose();
   }
 
@@ -255,9 +228,9 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                   child: ListView.separated(
                     padding: EdgeInsets.all(16),
                     scrollDirection: Axis.horizontal,
-                    itemCount: 6,
+                    itemCount: items.length,
                     separatorBuilder: (context, _) => SizedBox(width: 12,),
-                    itemBuilder: (context, index) => buildCard(items[index]),
+                    itemBuilder: (context, index) => buildCard(items[index], index),
 
 
 
@@ -348,7 +321,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
 
 
   }
-  Widget buildCard(CardItem item) => Container(
+  Widget buildCard(CardItem item, int index) => Container(
     width: 200,
     child:Column(
         children: [
@@ -363,7 +336,11 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                           fit: BoxFit.cover,
                           child: InkWell(
                             onTap: (){
-
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => nutritionix_meals(animationController: widget.animationController, search: templist[widget.index].food[index])),
+                              );
                             },
                           ),),
                       )
@@ -424,5 +401,37 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
       important_notes = templist[index].important_notes ;
       dateCreated = templist[index].dateCreated;
     });
+  }
+  Future<List<Common>> fetchNutritionix(String thisquery) async {
+    var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
+    Map<String, String> headers = {
+      "x-app-id": "f4507302",
+      "x-app-key": "6db30b5553ddddbb5e2543a32c2d58de",
+      "x-remote-user-id": "0",
+    };
+    // String query = '{ "query" : "chicken noodle soup" }';
+
+    // http.Response response = await http.post(url, headers: headers, body: query);
+    List<FullNutrients> temp;
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: {
+        'query': '$thisquery',
+        'detailed': "true",
+      },
+    );
+
+    if(response.statusCode == 200){
+      String data = response.body;
+      final parsedJson = jsonDecode(data);
+      print(parsedJson);
+      final food = nutritionixApi.fromJson(parsedJson);
+      print("NUTRITIONIX SEARCH = $thisquery SUCCESS");
+      return food.common;
+    }
+    else{
+      print("response status code is " + response.statusCode.toString());
+    }
   }
 }

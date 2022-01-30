@@ -46,7 +46,6 @@ import 'add_image.dart';
 
 class index3 extends StatefulWidget {
   const index3({Key key, this.animationController}) : super(key: key);
-
   final AnimationController animationController;
   @override
   _index3State createState() => _index3State();
@@ -921,7 +920,7 @@ class _index3State extends State<index3>
                           onTap:(){
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => management_plan_patient_view()),
+                              MaterialPageRoute(builder: (context) => management_plan_patient_view(animationController: widget.animationController)),
                             );
 
                           },

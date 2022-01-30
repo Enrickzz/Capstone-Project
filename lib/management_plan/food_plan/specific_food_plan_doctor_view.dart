@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/management_plan/food_plan/edit_food_prescription.dart';
+import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'package:my_app/additional_data_collection.dart';
@@ -19,7 +20,7 @@ import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/edit_medication_prescription.dart';
-
+import 'package:http/http.dart' as http;
 
 
 
@@ -73,6 +74,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   Users doctor = new Users();
   String purpose = "";
   List<String> food = [];
+  List<Common> result = [];
   String consumption_time = "";
   String important_notes = "";
   String prescribedBy = "";
@@ -84,45 +86,7 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
   String hours,min;
   bool isLoading = true;
 
-  List<CardItem> items=[
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Pasta',
-        calories: '200g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Fries',
-        calories: '120g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Burger',
-        calories: '152g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Sinigang',
-        calories: '120g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Steak',
-        calories: '100g'
-
-    ),
-    CardItem(
-        urlImage:'https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-Spinach-Pasta-V2-bowl.jpg',
-        foodName: 'Pasta',
-        calories: '200g'
-
-    ),
-
-  ];
+  List<CardItem> items=[];
 
   @override
   void initState() {
@@ -130,13 +94,9 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
     getNotifs(widget.userUID);
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
-    print("THIS DATE");
     TimeOfDay time = TimeOfDay.now();
     hours = time.hour.toString().padLeft(2,'0');
     min = time.minute.toString().padLeft(2,'0');
-    print("DATE = " + date);
-    print("TIME = " + "$hours:$min");
-
     final User user = auth.currentUser;
     final uid = user.uid;
     final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
@@ -161,6 +121,13 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
     prescribedBy = templist[index].doctor_name;
     if(templist[index].prescribedBy == uid){
       prescribedDoctor = true;
+    }
+    for(int i = 0; i < templist[index].food.length; i++){
+      fetchNutritionix(templist[index].food[i]).then((value) => setState((){
+        result=value;
+        FocusScope.of(context).requestFocus(FocusNode());
+        items.insert(0, CardItem(urlImage: result[i].photo.thumb, foodName: result[i].foodName, calories: result[i].servingWeightGrams));
+      }));
     }
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
@@ -367,12 +334,9 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
                         child: ListView.separated(
                           padding: EdgeInsets.all(16),
                           scrollDirection: Axis.horizontal,
-                          itemCount: 6,
+                          itemCount: items.length,
                           separatorBuilder: (context, _) => SizedBox(width: 12,),
                           itemBuilder: (context, index) => buildCard(items[index]),
-
-
-
                         ),
 
 
@@ -639,6 +603,38 @@ class _SpecificFoodPrescriptionViewAsDoctorState extends State<SpecificFoodPresc
         recommList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
+  }
+  Future<List<Common>> fetchNutritionix(String thisquery) async {
+    var url = Uri.parse("https://trackapi.nutritionix.com/v2/search/instant");
+    Map<String, String> headers = {
+      "x-app-id": "f4507302",
+      "x-app-key": "6db30b5553ddddbb5e2543a32c2d58de",
+      "x-remote-user-id": "0",
+    };
+    // String query = '{ "query" : "chicken noodle soup" }';
+
+    // http.Response response = await http.post(url, headers: headers, body: query);
+    List<FullNutrients> temp;
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: {
+        'query': '$thisquery',
+        'detailed': "true",
+      },
+    );
+
+    if(response.statusCode == 200){
+      String data = response.body;
+      final parsedJson = jsonDecode(data);
+      print(parsedJson);
+      final food = nutritionixApi.fromJson(parsedJson);
+      print("NUTRITIONIX SEARCH = $thisquery SUCCESS");
+      return food.common;
+    }
+    else{
+      print("response status code is " + response.statusCode.toString());
+    }
   }
 }
 
