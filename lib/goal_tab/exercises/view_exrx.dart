@@ -19,6 +19,7 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 // import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 
@@ -161,7 +162,7 @@ class _view_exrxState extends State<view_exrx> {
                   SizedBox(height: 8),
                   Text(widget.exercise.instructionsExecution),
                   SizedBox(height: 8),
-                  Text("Go to link",
+                  Text("Reference",
                     style: TextStyle(
                       fontSize:15,
                       fontWeight: FontWeight.bold,
@@ -169,7 +170,13 @@ class _view_exrxState extends State<view_exrx> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text(widget.exercise.uRL),
+                  InkWell(
+                      child: Text(widget.exercise.uRL),
+                    onTap: () async{
+                      String url = widget.exercise.uRL;
+                      if (await canLaunch(url)) launch(url);
+                    },
+                  ),
 
                   SizedBox(height: 24.0),
                   Row(

@@ -352,6 +352,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "9.2.0"
+  full_screen_image:
+    dependency: "direct main"
+    description:
+      name: full_screen_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   gender_picker:
     dependency: "direct main"
     description:

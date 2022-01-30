@@ -23,6 +23,7 @@ import 'lab_results_patient_view.dart';
 import '../medicine_intake/medication_patient_view.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:full_screen_image/full_screen_image.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -135,24 +136,34 @@ class viewLabResult extends State<view_lab_result> {
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
-                  Container(
-                    child: (Image.network('' + widget.lr.imgRef) != null) ? Image.network('' +widget.lr.imgRef, loadingBuilder: (context, child, loadingProgress) =>
-                    (loadingProgress == null) ? child : CircularProgressIndicator(),
-                      errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
-                    height:190,
-                    width: 190,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        color: Colors.black
+                  FullScreenWidget(
+                    child: Container(
+                      child: (Image.network('' + widget.lr.imgRef) != null) ? Image.network('' +widget.lr.imgRef, loadingBuilder: (context, child, loadingProgress) =>
+                      (loadingProgress == null) ? child : CircularProgressIndicator(),
+                        errorBuilder: (context, error, stackTrace) => Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover), fit: BoxFit.cover, ) : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover),
+                      height:190,
+                      width: 190,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          color: Colors.black
+                      ),
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text("Lab Result Type: \n"+widget.lr.labResult_name),
+                  Text("Lab Result Type: ",
+                    style: TextStyle(
+                      fontSize:15,
+                      fontWeight: FontWeight.bold,
+                      color:Color(0xFF363f93),
+                    ),
+                  ),
+                  SizedBox(height: 5,),
+                  Text(widget.lr.labResult_name),
                   Visibility(visible: otherLabResultCheck, child: SizedBox(height: 8.0)),
 
                   Visibility(
@@ -196,9 +207,26 @@ class viewLabResult extends State<view_lab_result> {
                   ),
 
                   SizedBox(height: 8.0),
-                  Text("Note:\n"+widget.lr.labResult_note),
-                  SizedBox(height: 8.0),
-                  Text("Date and Time: \n"+ getDateFormatted(widget.lr.labResult_date.toString()) +"at "
+
+                  Text("Note: ",
+                    style: TextStyle(
+                      fontSize:15,
+                      fontWeight: FontWeight.bold,
+                      color:Color(0xFF363f93),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(widget.lr.labResult_note),
+                  SizedBox(height: 12.0),
+                  Text("Date and Time: ",
+                    style: TextStyle(
+                      fontSize:15,
+                      fontWeight: FontWeight.bold,
+                      color:Color(0xFF363f93),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(""+ getDateFormatted(widget.lr.labResult_date.toString()) +"at "
                       + getTimeFormatted(widget.lr.labResult_time.toString())) ,
                   SizedBox(height: 18.0),
                   Column(

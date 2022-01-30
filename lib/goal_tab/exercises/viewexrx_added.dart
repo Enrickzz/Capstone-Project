@@ -167,6 +167,16 @@ class _view_exrx_addedState extends State<view_exrx_added> {
                     children: <Widget>[
                       FlatButton(
                         child: Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Colors.blue,
+                        onPressed:() {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text(
                           'Remove from my list',
                           style: TextStyle(color: Colors.white),
                         ),
@@ -216,26 +226,8 @@ class _view_exrx_addedState extends State<view_exrx_added> {
                           // });
                         },
                       ),
-                      FlatButton(
-                        child: Text(
-                          'Log Workout',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FlatButton(
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue,
-                        onPressed:() {
-                          Navigator.pop(context);
-                        },
-                      ),
+
+
                     ],
                   ),
 
