@@ -56,6 +56,7 @@ class _specific_postState extends State<specific_post_suppsystem_view>
   String noOfReply = "";
   String img = "";
   bool prescribedDoctor = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -76,6 +77,8 @@ class _specific_postState extends State<specific_post_suppsystem_view>
             reply_list[i].isMe = false;
           }
         }
+        isLoading = false;
+
       });
     });
   }
@@ -141,7 +144,10 @@ class _specific_postState extends State<specific_post_suppsystem_view>
             ),
           ],
         ),
-        body: Scrollbar(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new Scrollbar(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
