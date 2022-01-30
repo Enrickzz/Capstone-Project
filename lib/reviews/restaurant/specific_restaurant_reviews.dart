@@ -65,7 +65,12 @@ class _discussionState extends State<restaurant_reviews>
   double topBarOpacity = 0.0;
   @override
   void initState() {
-    getReviews();
+    reviews.clear();
+    getReviews().then((value) {
+      setState(() {
+        print(reviews.length.toString() + "<<< LENGTH" );
+      });
+    });
     super.initState();
   }
 
@@ -105,14 +110,11 @@ class _discussionState extends State<restaurant_reviews>
                         ),
                         ),
                       ).then((value) {
-
-                        Future.delayed(const Duration(milliseconds: 1500), (){
-                          if(value != null){
-                            getReviews2(value.toString());
-                          }
-                          setState((){
+                        if(value != null){
+                          setState(() {
+                            reviews.insert(0, value);
                           });
-                        });
+                        }
                       });
                     },
                     child: Icon(
@@ -153,22 +155,6 @@ class _discussionState extends State<restaurant_reviews>
                                 // padding: const EdgeInsets.only(left: 8),
                                 child: Row(
                                   children: <Widget>[
-                                    // Text( "Edit",
-                                    //     style: TextStyle(
-                                    //       fontSize: 16,
-                                    //       fontWeight: FontWeight.normal,
-                                    //       color:Color(0xFF2633C5),
-                                    //     )
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
                                   ],
                                 )
                               // )
@@ -191,22 +177,6 @@ class _discussionState extends State<restaurant_reviews>
                             return Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
                               child: GestureDetector(
-                                // onTap: () {
-                                //   showModalBottomSheet(context: context,
-                                //     isScrollControlled: true,
-                                //     builder: (context) => SingleChildScrollView(child: Container(
-                                //       padding: EdgeInsets.only(
-                                //           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                //       // child: add_medication(thislist: medtemp),
-                                //       child: info_restaurant(),
-                                //     ),
-                                //     ),
-                                //   ).then((value) =>
-                                //       Future.delayed(const Duration(milliseconds: 1500), (){
-                                //         setState((){
-                                //         });
-                                //       }));
-                                // },
                                 child: Container(
 
                                   decoration: BoxDecoration(
@@ -270,14 +240,14 @@ class _discussionState extends State<restaurant_reviews>
                                                                 Text(
                                                                   reviews[index].user_name,
                                                                   style: TextStyle(
-                                                                    fontSize: 14,
-                                                                    fontWeight: FontWeight.bold
+                                                                      fontSize: 14,
+                                                                      fontWeight: FontWeight.bold
                                                                   ),
                                                                 ),
                                                                 SizedBox(width: 10),
                                                                 Text(
                                                                   getDateFormatted(reviews[index].reviewDate.toString()) +  " " +
-                                                                  getTimeFormatted(reviews[index].reviewTime.toString()),
+                                                                      getTimeFormatted(reviews[index].reviewTime.toString()),
                                                                   style: TextStyle(
                                                                     fontSize: 12,
                                                                   ),
@@ -329,23 +299,7 @@ class _discussionState extends State<restaurant_reviews>
                                           ),
                                         ),
                                         SizedBox(height: 5),
-
-                                        Container(
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.restaurant, color: Colors.blue,
-                                              ),
-                                              Text(
-                                                "Salmon Rolls",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        checkRev(reviews[index].special),
                                         SizedBox(height: 5),
                                         // InteractiveViewer(
                                         //   clipBehavior: Clip.none,
@@ -380,6 +334,31 @@ class _discussionState extends State<restaurant_reviews>
       ),
 
     );
+
+  }
+  Widget checkRev(String special){
+    print(special);
+    if(special == ""){
+      return Text("");
+    }else{
+      return Container(
+        child: Row(
+          children: [
+            Icon(
+              Icons.restaurant, color: Colors.blue,
+            ),
+            Text(
+              special.toString()+"",
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Text("");
   }
   String getDateFormatted (String date){
     var dateTime = DateTime.parse(date);
@@ -413,7 +392,7 @@ class _discussionState extends State<restaurant_reviews>
     });
 
   }
-  void getReviews() async{
+  Future<bool> getReviews() async{
     final User user = auth.currentUser;
     final uid = user.uid;
     // var userUID = widget.userUID;
@@ -442,10 +421,9 @@ class _discussionState extends State<restaurant_reviews>
     //   print("$i. "+tracks[i].name +"  url: " + tracks[i].externalUrls.spotify + "  image: " + tracks[i].album.images[0].url);
     // }
 
-    setState(() {
-      print("Tapos na get reviews");
-    });
+    return true;
 
   }
+
 
 }

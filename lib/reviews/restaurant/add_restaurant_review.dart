@@ -86,10 +86,10 @@ class _create_postState extends State<add_restaurant_review> {
       // print(snapshot.value);
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
       thisuser = Users.fromJson3(temp1);
-      print(thisuser);
       Future.delayed(const Duration(milliseconds: 2000),(){
-        print("this user\n"+thisuser.firstname);
-        print(thisuser.firstname + " " + thisuser.lastname);
+        setState(() {
+
+        });
 
       });
     });
@@ -335,10 +335,20 @@ class _create_postState extends State<add_restaurant_review> {
                             readReview.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
-                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date",
-                                  "reviewTime": "$hours:$min"});
-                                NotifyPatients(widget.thisPlace);
+                                addReview.set({"added_by": uid,
+                                  "placeid": widget.thisPlace.placeId,
+                                  "user_name": thisuser.firstname+" "
+                                      +thisuser.lastname,
+                                  "review": description,
+                                  "rating": _rating,
+                                  "recommend": isSwitched,
+                                  "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min",
+                                  "special": recommendedFood,
+                                  "place_loc": widget.thisPlace.formattedAddress,
+                                  "place_name": widget.thisPlace.name
+                                });
+                                // NotifyPatients(widget.thisPlace);
                               }else{
                                 List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
                                 temp.forEach((jsonString) {
@@ -348,13 +358,27 @@ class _create_postState extends State<add_restaurant_review> {
                                 count = reviews.length--;
                                 print("count " + count.toString());
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
-                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date",
-                                  "reviewTime": "$hours:$min" });
-                                NotifyPatients(widget.thisPlace);
+                                addReview.set({"added_by": uid,
+                                  "placeid": widget.thisPlace.placeId,
+                                  "user_name": thisuser.firstname+" "
+                                      +thisuser.lastname,
+                                  "review": description,
+                                  "rating": _rating,
+                                  "recommend": isSwitched,
+                                  "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min",
+                                  "special": recommendedFood.toString(),
+                                  "place_loc": widget.thisPlace.formattedAddress,
+                                  "place_name": widget.thisPlace.name
+                                });
+                                // NotifyPatients(widget.thisPlace);
                               }
                             });
-                            Navigator.pop(context, widget.thisPlace.placeId);
+                            Reviews newR = new Reviews(added_by: uid, placeid: widget.thisPlace.placeId,
+                                review: description, user_name: thisuser.firstname+" " +thisuser.lastname, rating: _rating, reviewDate: DateFormat("MM/dd/yyyy").parse(date),
+                                reviewTime: DateFormat("hh:mm").parse("$hours:$min"), recommend: isSwitched, special: recommendedFood
+                                ,place_loc: widget.thisPlace.formattedAddress, place_name:  widget.thisPlace.name);
+                            Navigator.pop(context, newR);
                           }catch(e){
                             print("Error");
                           }
@@ -392,15 +416,17 @@ class _create_postState extends State<add_restaurant_review> {
           var readUsers = databaseReference.child('users/'+plist[i].id+"/personal_info");
           readUsers.once().then((DataSnapshot snapshot2) {
             var temp2 = jsonDecode(jsonEncode(snapshot2.value));
-            Users thisUser = Users.fromJson2(temp2);
-            print("ADD RECOMMENDATIONS TO "+ thisUser.firstname + " << " + thisUser.uid);
-            if(plist[i].id != loggedId){
-              addtoRecommendation("Another Heartistant CVD user has recommended "+placeobj.name+", a "+ widget.type+", "
-                  "which is suitable for other CVD patients. Click here to view",
-                  "Peer Recommendation!",
-                  "1",
-                  placeobj.placeId,
-                  plist[i].id);
+            if(temp2 != null){
+              Users thisUser = Users.fromJson2(temp2);
+              print("ADD RECOMMENDATIONS TO "+ thisUser.firstname + " << " + thisUser.uid);
+              if(plist[i].id != loggedId){
+                addtoRecommendation("Another Heartistant CVD user has recommended "+placeobj.name+", a "+ widget.type+", "
+                    "which is suitable for other CVD patients. Click here to view",
+                    "Peer Recommendation!",
+                    "1",
+                    placeobj.placeId,
+                    plist[i].id);
+              }
             }
           });
         }
@@ -447,10 +473,14 @@ class _create_postState extends State<add_restaurant_review> {
     recommList.clear();
     final readBP = databaseReference.child('users/' + uid + '/recommendations/');
     readBP.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        recommList.add(RecomAndNotif.fromJson(jsonString));
-      });
+      if(snapshot.value != null){
+        List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+
+        temp.forEach((jsonString) {
+          recommList.add(RecomAndNotif.fromJson(jsonString));
+        });
+      }
+
     });
   }
   void addtoRecommendation(String message, String title, String priority,String redirect, String uid) async {

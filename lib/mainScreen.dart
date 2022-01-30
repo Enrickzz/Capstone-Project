@@ -300,7 +300,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
         print("lunch CHECK");
         addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
             "Eat Lunch!",
-            "2", "10:00:00");
+            "2", "14:00:00");
         notifySS(2);
       });
      // Future.delayed(Duration(seconds: 20));
@@ -310,7 +310,7 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
         print("dinner CHECK");
         addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
             "Eat Dinner!",
-            "2", "10:00:00");
+            "2", "21:00:00");
         notifySS(3);
       });
      // Future.delayed(Duration(seconds: 20));

@@ -7,6 +7,7 @@ import 'package:my_app/discussion_board/create_post.dart';
 import 'package:my_app/models/GooglePlaces.dart';
 import 'package:my_app/models/Reviews.dart';
 import 'package:my_app/models/spotify.dart';
+import 'package:my_app/reviews/drugstore/specific_drugstore_reviews.dart';
 import 'package:my_app/reviews/recreational/add_recreational_review.dart';
 import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
@@ -106,14 +107,11 @@ class _discussionState extends State<recreational_reviews>
                         ),
                         ),
                       ).then((value) {
-
-                        Future.delayed(const Duration(milliseconds: 1500), (){
-                          if(value != null){
-                            getReviews2(value.toString());
-                          }
-                          setState((){
+                        if(value != null) {
+                          setState(() {
+                            reviews.insert(0, value);
                           });
-                        });
+                        }
                       });
                     },
                     child: Icon(
@@ -331,22 +329,7 @@ class _discussionState extends State<recreational_reviews>
                                         ),
                                         SizedBox(height: 5),
 
-                                        Container(
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.sports, color: Colors.blue,
-                                              ),
-                                              Text(
-                                                "Lifting",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        checkRev(reviews[index].special),
                                         SizedBox(height: 5),
                                         // InteractiveViewer(
                                         //   clipBehavior: Clip.none,
@@ -447,6 +430,28 @@ class _discussionState extends State<recreational_reviews>
       print("Tapos na get reviews");
     });
 
+  }
+  Widget checkRev(String special){
+    if(special == ""){
+      return Text("");
+    }else{
+      return Container(
+        child: Row(
+          children: [
+            Icon(
+              Icons.sports, color: Colors.blue,
+            ),
+            Text(
+              special,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
 }

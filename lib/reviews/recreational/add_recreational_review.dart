@@ -230,83 +230,6 @@ class _create_postState extends State<add_recreational_review> {
 
                   ),
 
-
-                  // SizedBox(height: 18.0),
-                  //
-                  // Column(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
-                  //     FlatButton(
-                  //       textColor: Colors.white,
-                  //       height: 60.0,
-                  //       color: Colors.cyan,
-                  //       onPressed: () async{
-                  //         final result = await FilePicker.platform.pickFiles(
-                  //           allowMultiple: false,
-                  //           // type: FileType.custom,
-                  //           // allowedExtensions: ['jpg', 'png'],
-                  //         );
-                  //         if(result == null) return;
-                  //         final FirebaseAuth auth = FirebaseAuth.instance;
-                  //         final path = result.files.single.path;
-                  //         user = auth.currentUser;
-                  //         uid = user.uid;
-                  //         fileName = result.files.single.name;
-                  //         file = File(path);
-                  //         PlatformFile thisfile = result.files.first;
-                  //         cacheFile = thisfile.path;
-                  //         Future.delayed(const Duration(milliseconds: 1000), (){
-                  //           setState(() {
-                  //             print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
-                  //             pic = true;
-                  //           });
-                  //         });
-                  //
-                  //       },
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: [
-                  //           Padding(
-                  //             padding: const EdgeInsets.all(8.0),
-                  //             child: Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                  //           ),
-                  //           Text('UPLOAD', )
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // GestureDetector(
-                  //     child: Text(
-                  //       'Upload',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //     onTap: () async {
-                  //       final result = await FilePicker.platform.pickFiles(
-                  //         allowMultiple: false,
-                  //         // type: FileType.custom,
-                  //         // allowedExtensions: ['jpg', 'png'],
-                  //       );
-                  //       if(result == null) return;
-                  //       final FirebaseAuth auth = FirebaseAuth.instance;
-                  //       final path = result.files.single.path;
-                  //       user = auth.currentUser;
-                  //       uid = user.uid;
-                  //       fileName = result.files.single.name;
-                  //       file = File(path);
-                  //       // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                  //       //   setState(() {
-                  //       //     trythis.clear();
-                  //       //     listAll("path");
-                  //       //     Future.delayed(const Duration(milliseconds: 1000), (){
-                  //       //       Navigator.pop(context, trythis);
-                  //       //     });
-                  //       //   });
-                  //       // });
-                  //       // fileName = uid + fileName + "_lab_result" + "counter";
-                  //       //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-                  //     }
-                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -335,10 +258,19 @@ class _create_postState extends State<add_recreational_review> {
                             readReview.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
-                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date",
-                                  "reviewTime": "$hours:$min"});
-                                NotifyPatients(widget.thisPlace);
+                                addReview.set({"added_by": uid,
+                                  "placeid": widget.thisPlace.placeId,
+                                  "user_name": thisuser.firstname+" "
+                                      +thisuser.lastname,
+                                  "review": description,
+                                  "rating": _rating,
+                                  "recommend": isSwitched,
+                                  "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min",
+                                  "special": recommendedActivity,
+                                  "place_loc": widget.thisPlace.formattedAddress,
+                                  "place_name": widget.thisPlace.name
+                                });
                               }else{
                                 List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
                                 temp.forEach((jsonString) {
@@ -348,13 +280,26 @@ class _create_postState extends State<add_recreational_review> {
                                 count = reviews.length--;
                                 print("count " + count.toString());
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
-                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date",
-                                  "reviewTime": "$hours:$min" });
-                                NotifyPatients(widget.thisPlace);
+                                addReview.set({"added_by": uid,
+                                  "placeid": widget.thisPlace.placeId,
+                                  "user_name": thisuser.firstname+" "
+                                      +thisuser.lastname,
+                                  "review": description,
+                                  "rating": _rating,
+                                  "recommend": isSwitched,
+                                  "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min",
+                                  "special": recommendedActivity,
+                                  "place_loc": widget.thisPlace.formattedAddress,
+                                  "place_name": widget.thisPlace.name
+                                });
                               }
                             });
-                            Navigator.pop(context, widget.thisPlace.placeId);
+                            Reviews newR = new Reviews(added_by: uid, placeid: widget.thisPlace.placeId,
+                                review: description, user_name: thisuser.firstname+" " +thisuser.lastname, rating: _rating, reviewDate: DateFormat("MM/dd/yyyy").parse(date),
+                                reviewTime: DateFormat("hh:mm").parse("$hours:$min"), recommend: isSwitched, special: recommendedActivity
+                                ,place_loc: widget.thisPlace.formattedAddress, place_name:  widget.thisPlace.name);
+                            Navigator.pop(context, newR);
                           }catch(e){
                             print("Error");
                           }

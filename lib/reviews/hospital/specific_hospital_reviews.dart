@@ -106,14 +106,11 @@ class _discussionState extends State<hospital_reviews>
                         ),
                         ),
                       ).then((value) {
-
-                        Future.delayed(const Duration(milliseconds: 1500), (){
-                          if(value != null){
-                            getReviews2(value.toString());
-                          }
-                          setState((){
+                        if(value != null){
+                          setState(() {
+                            reviews.insert(0, value);
                           });
-                        });
+                        }
                       });
                     },
                     child: Icon(
@@ -154,22 +151,6 @@ class _discussionState extends State<hospital_reviews>
                                 // padding: const EdgeInsets.only(left: 8),
                                 child: Row(
                                   children: <Widget>[
-                                    // Text( "Edit",
-                                    //     style: TextStyle(
-                                    //       fontSize: 16,
-                                    //       fontWeight: FontWeight.normal,
-                                    //       color:Color(0xFF2633C5),
-                                    //     )
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 38,
-                                    //   width: 26,
-                                    //   // child: Icon(
-                                    //   //   Icons.arrow_forward,
-                                    //   //   color: FitnessAppTheme.darkText,
-                                    //   //   size: 18,
-                                    //   // ),
-                                    // ),
                                   ],
                                 )
                               // )
@@ -192,22 +173,6 @@ class _discussionState extends State<hospital_reviews>
                             return Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
                               child: GestureDetector(
-                                // onTap: () {
-                                //   showModalBottomSheet(context: context,
-                                //     isScrollControlled: true,
-                                //     builder: (context) => SingleChildScrollView(child: Container(
-                                //       padding: EdgeInsets.only(
-                                //           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                //       // child: add_medication(thislist: medtemp),
-                                //       child: info_restaurant(),
-                                //     ),
-                                //     ),
-                                //   ).then((value) =>
-                                //       Future.delayed(const Duration(milliseconds: 1500), (){
-                                //         setState((){
-                                //         });
-                                //       }));
-                                // },
                                 child: Container(
 
                                   decoration: BoxDecoration(
@@ -330,23 +295,7 @@ class _discussionState extends State<hospital_reviews>
                                           ),
                                         ),
                                         SizedBox(height: 5),
-
-                                        Container(
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.person, color: Colors.blue,
-                                              ),
-                                              Text(
-                                                "Ignacio Loyola",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        checkRev(reviews[index].special),
                                         SizedBox(height: 5),
                                         // InteractiveViewer(
                                         //   clipBehavior: Clip.none,
@@ -426,6 +375,11 @@ class _discussionState extends State<hospital_reviews>
         reviews.add(Reviews.fromJson(jsonString));
         print(reviews.length.toString()+ "<<<<<<<<<<<");
       });
+      for(var i=0;i<reviews.length/2;i++){
+        var temp = reviews[i];
+        reviews[i] = reviews[reviews.length-1-i];
+        reviews[reviews.length-1-i] = temp;
+      }
     });
 
     //SPOTIFY SHIT
@@ -449,4 +403,25 @@ class _discussionState extends State<hospital_reviews>
 
   }
 
+}
+Widget checkRev(String special) {
+  if(special == ""){
+    return Text("");
+  }else{
+    return
+      Container(
+        child: Row(
+          children: [
+            Icon(
+              Icons.person, color: Colors.blue,
+            ),
+            Text(special, style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold
+            ),
+            ),
+          ],
+        ),
+      );
+  }
 }

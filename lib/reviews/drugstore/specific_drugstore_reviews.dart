@@ -111,13 +111,6 @@ class _discussionState extends State<drugstore_reviews>
                             reviews.insert(0, value);
                           });
                         }
-                        // Future.delayed(const Duration(milliseconds: 1500), (){
-                        //   if(value != null){
-                        //     getReviews2(value.toString());
-                        //   }
-                        //   setState((){
-                        //   });
-                        // });
                       });
                     },
                     child: Icon(
@@ -381,21 +374,6 @@ class _discussionState extends State<drugstore_reviews>
         reviews[reviews.length-1-i] = temp;
       }
     });
-
-    //SPOTIFY SHIT
-
-    // String query = "relaxing";
-    // var rng = new Random();
-    // var response = await http.get(Uri.parse("https://api.spotify.com/v1/search?q=$query&type=track&market=PH&limit=50"),
-    //     headers: {
-    //       'Authorization': "Bearer BQCO7TP4X7V2hpB3Ph9N6VLMvq7gdwDgNZaEjc5yqFFgmgnepbTJnqE6SaXg774148NnKrPTvmHzD45-W2ekCYjvSehIy87JYlr48DKL8DlKaRyeCFCZZ6w86Kub0imHf8PfcFY6ohf4r6z0OU6VTGoA",
-    //     });
-    // List<Items> tracks =[];
-    // tracks = Spotify.fromJson(jsonDecode(response.body)).tracks.items;
-    // print("SPOTIFY ITEMS = " +tracks.length.toString() );
-    // for(var i = 0; i < tracks.length; i ++){
-    //   print("$i. "+tracks[i].name +"  url: " + tracks[i].externalUrls.spotify + "  image: " + tracks[i].album.images[0].url);
-    // }
 
     setState(() {
       print("Tapos na get reviews");

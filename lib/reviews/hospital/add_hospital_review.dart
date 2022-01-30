@@ -261,9 +261,17 @@ class _create_postState extends State<add_hospital_review> {
                             readReview.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+0.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
-                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched, "reviewDate": "$date",
-                                  "reviewTime": "$hours:$min"});
+                                addReview.set({"added_by": uid,
+                                  "placeid": widget.thisPlace.placeId,
+                                  "user_name": thisuser.firstname+" "
+                                    +thisuser.lastname,
+                                  "review": description,
+                                  "rating": _rating, "recommend": isSwitched,
+                                  "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min",
+                                  "special": recommendedDoctor,
+                                  "place_loc": widget.thisPlace.formattedAddress,
+                                  "place_name": widget.thisPlace.name});
                                 NotifyPatients(widget.thisPlace);
                               }else{
                                 List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
@@ -274,13 +282,26 @@ class _create_postState extends State<add_hospital_review> {
                                 count = reviews.length--;
                                 print("count " + count.toString());
                                 final addReview = databaseReference.child('reviews/'+ widget.thisPlace.placeId+"/"+count.toString());
-                                addReview.set({"added_by": uid,"placeid": widget.thisPlace.placeId, "user_name": thisuser.firstname+" "
-                                    +thisuser.lastname, "review": description, "rating": _rating, "recommend": isSwitched,"reviewDate": "$date",
-                                  "reviewTime": "$hours:$min" });
+                                addReview.set({"added_by": uid,
+                                  "placeid": widget.thisPlace.placeId,
+                                  "user_name": thisuser.firstname+" "
+                                    +thisuser.lastname,
+                                  "review": description,
+                                  "rating": _rating,
+                                  "recommend": isSwitched,
+                                  "reviewDate": "$date",
+                                  "reviewTime": "$hours:$min",
+                                  "special": recommendedDoctor,
+                                  "place_loc": widget.thisPlace.formattedAddress,
+                                  "place_name": widget.thisPlace.name});
                                 NotifyPatients(widget.thisPlace);
                               }
                             });
-                            Navigator.pop(context, widget.thisPlace.placeId);
+                            Reviews newR = new Reviews(added_by: uid, placeid: widget.thisPlace.placeId,
+                                review: description, user_name: thisuser.firstname+" " +thisuser.lastname, rating: _rating, reviewDate: DateFormat("MM/dd/yyyy").parse(date),
+                                reviewTime: DateFormat("hh:mm").parse("$hours:$min"), recommend: isSwitched, special: recommendedDoctor
+                                ,place_loc: widget.thisPlace.formattedAddress, place_name:  widget.thisPlace.name);
+                            Navigator.pop(context, newR);
                           }catch(e){
                             print("Error");
                           }

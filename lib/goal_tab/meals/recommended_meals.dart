@@ -139,16 +139,16 @@ class _recommended_mealsState extends State<recommended_meals>
               child: InkWell(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => DetailsPage(heroTag:(""+widget.mealsrecommendation[index].photo.thumb).toString(),
-                          foodName: StringUtils.capitalize(widget.mealsrecommendation[index].foodName),
-                          weight: widget.mealsrecommendation[index].getGrams().toString(),
-                          calories: widget.mealsrecommendation[index].getCalories().round().toString(),
-                          cholesterol: widget.mealsrecommendation[index].getCholesterol().round().toString(),
-                          total_fat: widget.mealsrecommendation[index].getTotalFat().round().toString(),
-                          sugar: widget.mealsrecommendation[index].getSugar().round().toString(),
-                          protein: widget.mealsrecommendation[index].getProtein().round().toString(),
-                          potassium: widget.mealsrecommendation[index].getPotassium().round().toString(),
-                          sodium: widget.mealsrecommendation[index].getSodium().round().toString(),
+                      builder: (context) => DetailsPage(heroTag:(""+recommended[index].photo.thumb).toString(),
+                          foodName: StringUtils.capitalize(recommended[index].foodName),
+                          weight: recommended[index].getGrams().toString(),
+                          calories: recommended[index].getCalories().round().toString(),
+                          cholesterol: recommended[index].getCholesterol().round().toString(),
+                          total_fat: recommended[index].getTotalFat().round().toString(),
+                          sugar: recommended[index].getSugar().round().toString(),
+                          protein: recommended[index].getProtein().round().toString(),
+                          potassium: recommended[index].getPotassium().round().toString(),
+                          sodium: recommended[index].getSodium().round().toString(),
                         )
                   ));
                 },
