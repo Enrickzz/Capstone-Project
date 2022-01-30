@@ -29,7 +29,6 @@ import 'exercises/exercise_screen.dart';
 import '../bottom_navigation_view/bottom_bar_view.dart';
 import '../goal_tab/meals/my_meals.dart';
 import '../goal_tab/meals/meals_list.dart';
-import 'my_stress.dart';
 
 class goals extends StatefulWidget {
   const goals({Key key, this.animationController}) : super(key: key);
@@ -54,7 +53,7 @@ class _goalsState extends State<goals>
     color: FitnessAppTheme.background,
   );
 
-  final List<String> tabs = ['My Meals', 'My Exercises', 'My Weight', 'My Water', 'My Sleep', 'My Stress' ];
+  final List<String> tabs = ['My Meals', 'My Exercises', 'My Weight', 'My Water', 'My Sleep'];
   TabController controller;
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
 
@@ -66,7 +65,7 @@ class _goalsState extends State<goals>
     super.initState();
     getNotifs();
     getRecomm();
-    controller = TabController(length: 6, vsync: this);
+    controller = TabController(length: 5, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
@@ -196,11 +195,6 @@ class _goalsState extends State<goals>
               width: 24,
               height:24,),
             ),
-            Tab(
-              text: 'My Stress', icon: Image.asset('assets/fitness_app/stress.png',
-              width: 24,
-              height:24,),
-            ),
           ],
         ),
       ),
@@ -212,7 +206,6 @@ class _goalsState extends State<goals>
           tabBody = my_weight(animationController: animationController),
           tabBody = my_water(animationController: animationController),
           tabBody = my_sleep(animationController: animationController),
-          tabBody = my_stress(animationController: animationController),
         ],
       ),
     );
