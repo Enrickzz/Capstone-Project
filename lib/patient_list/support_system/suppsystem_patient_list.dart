@@ -249,7 +249,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => addImageSupport(img: pp_img)),
+                  MaterialPageRoute(builder: (context) => addImageSupport(img: ss_ppimg)),
                 );
               },
               child: ClipOval(child: checkimage(ss_ppimg))

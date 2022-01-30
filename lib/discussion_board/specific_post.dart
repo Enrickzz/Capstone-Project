@@ -53,6 +53,7 @@ class _specific_postState extends State<specific_post>
   String doctor_name = "";
   String body = "";
   String noOfReply = "";
+  String dp_img = "";
   bool prescribedDoctor = false;
 
   @override
@@ -171,9 +172,8 @@ class _specific_postState extends State<specific_post>
                             children: <Widget>[
                               Row(
                                 children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundImage: AssetImage('assets/images/heart_icon.png'),
-                                    radius: 22,
+                                  ClipOval(
+                                      child: checkimage(dp_img)
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
@@ -274,9 +274,8 @@ class _specific_postState extends State<specific_post>
                                         children: <Widget>[
                                           Row(
                                             children: <Widget>[
-                                              CircleAvatar(
-                                                backgroundImage: AssetImage('assets/images/heart_icon.png'),
-                                                radius: 18,
+                                              ClipOval(
+                                                  child: checkimage(reply_list[index].dp_img)
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(left: 8.0),
@@ -388,6 +387,7 @@ class _specific_postState extends State<specific_post>
       time = "${discussion_list[index].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[index].discussionTime.minute.toString().padLeft(2,"0")}";
       body = discussion_list[index].discussionBody;
       noOfReply = discussion_list[index].noOfReplies.toString();
+      dp_img = discussion_list[index].dp_img;
     });
   }
   void getReplies() {
@@ -460,5 +460,15 @@ class _specific_postState extends State<specific_post>
         );
       },
     );
+  }
+  Widget checkimage(String img) {
+    if(img == null || img == "assets/images/blank_person.png" || img == "null"){
+      return Image.asset("assets/images/blank_person.png", width: 50, height: 50,fit: BoxFit.cover);
+    }else{
+      return Image.network(img,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover);
+    }
   }
 }

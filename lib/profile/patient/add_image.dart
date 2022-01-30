@@ -188,7 +188,7 @@ class _AddImageState extends State<addImage> {
         onPressed: onClicked,
       );
   Widget checkimage(String img) {
-    if(img == null || img == ""){
+    if(img == null || img == "assets/images/blank_person.png"){
       return Image.asset("assets/images/blank_person.png", width: 150, height: 150,fit: BoxFit.cover);
     }else{
       return Image.network(img,

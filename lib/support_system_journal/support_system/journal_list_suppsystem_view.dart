@@ -223,9 +223,8 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
-                                                  CircleAvatar(
-                                                    backgroundImage: AssetImage('assets/images/heart_icon.png'),
-                                                    radius: 22,
+                                                  ClipOval(
+                                                      child: checkimage(discussion_list[index].dp_img)
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets.only(left: 8.0),
@@ -406,5 +405,15 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
         );
       },
     );
+  }
+  Widget checkimage(String img) {
+    if(img == null || img == "assets/images/blank_person.png"){
+      return Image.asset("assets/images/blank_person.png", width: 50, height: 50,fit: BoxFit.cover);
+    }else{
+      return Image.network(img,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover);
+    }
   }
 }

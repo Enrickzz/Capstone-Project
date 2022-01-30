@@ -73,6 +73,7 @@ class _AddImageState extends State<addImageSupport> {
     super.initState();
     if(widget.img != null){
       image = widget.img;
+      print(image);
     }
     Future.delayed(const Duration(milliseconds: 1200), (){
       setState(() {

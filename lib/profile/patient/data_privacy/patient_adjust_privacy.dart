@@ -36,14 +36,17 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
   void initState(){
     super.initState();
     Connection doctorconnection = widget.connection;
-    if(doctorconnection.dashboard.toLowerCase() == "false"){
-      isAllowedDashboard = false;
+    print("doctorconnection.uid");
+    print(doctorconnection.uid);
+    print(doctorconnection.dashboard);
+    if(doctorconnection.dashboard.toLowerCase() == "true"){
+      isAllowedDashboard = true;
     }
-    if(doctorconnection.nonhealth.toLowerCase() == "false"){
-      isAllowedNonHealth = false;
+    if(doctorconnection.nonhealth.toLowerCase() == "true"){
+      isAllowedNonHealth = true;
     }
-    if(doctorconnection.health.toLowerCase() == "false"){
-      isAllowedDataInputs = false;
+    if(doctorconnection.health.toLowerCase() == "true"){
+      isAllowedDataInputs = true;
     }
     if(isAllowedDashboard == false || isAllowedNonHealth == false || isAllowedDataInputs == false){
       showDisclaimer = true;

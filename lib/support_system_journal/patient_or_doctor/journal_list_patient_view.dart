@@ -335,7 +335,7 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
     final User user = auth.currentUser;
     final uid = user.uid;
     // String userUID = widget.userUID;
-    final readdiscussion = databaseReference.child('users/' + uid + '/discussion/');
+    final readdiscussion = databaseReference.child('users/' + uid + '/journal/');
     readdiscussion.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

@@ -47,6 +47,7 @@ class _create_postState extends State<create_journal> {
   String thisURL;
   String title = '';
   String description = '';
+  String dp_img = '';
   List<Discussion> discussion_list = new List<Discussion>();
 
 
@@ -273,12 +274,12 @@ class _create_postState extends State<create_journal> {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
                               doctor = Users.fromJson(temp);
                               createdBy = doctor.firstname + " " + doctor.lastname;
+                              dp_img = doctor.pp_img;
                               readDiscussion.once().then((DataSnapshot datasnapshot) {
                                 String temp1 = datasnapshot.value.toString();
-                                print("temp1 " + temp1);
                                 if(datasnapshot.value == null){
                                   final discussionRef = databaseReference.child('users/' + userUID + '/journal/' + count.toString());
-                                  discussionRef.set({"uid": uid.toString(), "title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
+                                  discussionRef.set({"uid": uid.toString(), "title": title, "createdBy": createdBy,"dp_img": dp_img,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
                                   print("Added to Journal Entry Successfully! " + userUID);
                                 }
                                 else{
@@ -287,7 +288,7 @@ class _create_postState extends State<create_journal> {
                                     print(count);
                                     count = discussion_list.length--;
                                     final discussionRef = databaseReference.child('users/' + userUID + '/journal/' + count.toString());
-                                    discussionRef.set({"uid": uid.toString(), "title": title, "createdBy": createdBy,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
+                                    discussionRef.set({"uid": uid.toString(), "title": title, "createdBy": createdBy,"dp_img": dp_img,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
                                     print("Added to Journal Entry Successfully! " + userUID);
                                   });
 
@@ -296,7 +297,7 @@ class _create_postState extends State<create_journal> {
                               });
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              discussion_list.add(new Discussion(uid: uid, title: title, createdBy: createdBy, discussionDate: now, discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName));
+                              discussion_list.add(new Discussion(uid: uid, title: title, createdBy: createdBy, dp_img: dp_img, discussionDate: now, discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName));
                               // for(var i=0;i<discussion_list.length/2;i++){
                               //   var temp = discussion_list[i];
                               //   discussion_list[i] = discussion_list[discussion_list.length-1-i];

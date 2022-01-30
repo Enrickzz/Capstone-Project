@@ -57,6 +57,7 @@ class Discussion {
 class Replies {
   String uid;
   String createdBy;
+  String dp_img;
   String specialty;
   DateTime replyDate;
   DateTime replyTime;
@@ -66,6 +67,7 @@ class Replies {
   Replies({
         this.uid,
         this.createdBy,
+        this.dp_img,
         this.specialty,
         this.replyDate,
         this.replyTime,
@@ -75,6 +77,7 @@ class Replies {
   Replies.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     createdBy = json['createdBy'];
+    dp_img = json['dp_img'];
     specialty = json['specialty'];
     replyDate = DateFormat("MM/dd/yyyy").parse(json['replyDate']);
     replyTime = DateFormat("hh:mm").parse(json['replyTime']);
@@ -85,6 +88,7 @@ class Replies {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['uid'] = this.uid;
     data['createdBy'] = this.createdBy;
+    data['dp_img'] = this.dp_img;
     data['specialty'] = this.specialty;
     data['replyDate'] = DateFormat("MM/dd/yyyy").format(this.replyDate);
     data['replyTime'] = DateFormat("hh:mm").format(this.replyTime);
