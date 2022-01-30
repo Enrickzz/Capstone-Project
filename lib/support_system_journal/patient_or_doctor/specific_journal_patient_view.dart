@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/discussion_board/reply_post.dart';
 import 'package:my_app/models/discussionModel.dart';
@@ -43,25 +44,30 @@ class _specific_postState extends State<specific_journal_patient_view>
   double topBarOpacity = 0.0;
 
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   final AuthService _auth = AuthService();
   List<Discussion> discussion_list = new List<Discussion>();
   List<Replies> reply_list = new List<Replies>();
-  // String title = "";
-  // String date = "";
-  // String time = "";
-  // String doctor_name = "";
-  // String body = "";
-  // String noOfReply = "";
-  // bool prescribedDoctor = false;
+  String title = "";
+  String date = "";
+  String time = "";
+  String doctor_name = "";
+  String body = "";
+  String noOfReply = "";
+  String img = "";
+  bool prescribedDoctor = false;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    // discussion_list.clear();
-    // getDiscussion();
-    // getReplies();
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    discussion_list.clear();
+    reply_list.clear();
+    getDiscussion();
+    getReplies();
+    Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
+        isLoading = false;
         print("setstate");
       });
     });
@@ -95,33 +101,36 @@ class _specific_postState extends State<specific_journal_patient_view>
           actions: [
 
             SizedBox(width: 10),
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(context: context,
-                        isScrollControlled: true,
-                        builder: (context) => SingleChildScrollView(child: Container(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          // child: add_medication(thislist: medtemp),
-                          child: reply_journal(userUID: widget.userUID, index: widget.index),
-                        ),
-                        ),
-                      ).then((value) =>
-                          Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
-                          }));
-                    },
-                    child: Icon(
-                      Icons.reply,
-                    )
-                )
-            ),
+            // Padding(
+            //     padding: EdgeInsets.only(right: 20.0),
+            //     child: GestureDetector(
+            //         onTap: () {
+            //           showModalBottomSheet(context: context,
+            //             isScrollControlled: true,
+            //             builder: (context) => SingleChildScrollView(child: Container(
+            //               padding: EdgeInsets.only(
+            //                   bottom: MediaQuery.of(context).viewInsets.bottom),
+            //               // child: add_medication(thislist: medtemp),
+            //               child: reply_journal(userUID: widget.userUID, index: widget.index),
+            //             ),
+            //             ),
+            //           ).then((value) =>
+            //               Future.delayed(const Duration(milliseconds: 1500), (){
+            //                 setState((){
+            //                 });
+            //               }));
+            //         },
+            //         child: Icon(
+            //           Icons.reply,
+            //         )
+            //     )
+            // ),
           ],
         ),
-        body: Scrollbar(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new Scrollbar(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,9 +160,8 @@ class _specific_postState extends State<specific_journal_patient_view>
                             children: <Widget>[
                               Row(
                                 children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundImage: AssetImage('assets/images/heart_icon.png'),
-                                    radius: 22,
+                                  ClipOval(
+                                      child: checkimage(img)
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
@@ -163,7 +171,7 @@ class _specific_postState extends State<specific_journal_patient_view>
                                       children: <Widget>[
                                         Container(
                                           child: Text(
-                                            'Sheila Borja',
+                                            doctor_name,
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -173,7 +181,7 @@ class _specific_postState extends State<specific_journal_patient_view>
 
                                         SizedBox(height: 2.0),
                                         Text(
-                                          "01/09/2022 06:09" ,
+                                          date + " " + time ,
                                           style: TextStyle(
                                             fontSize: 12,
                                           ),
@@ -189,7 +197,7 @@ class _specific_postState extends State<specific_journal_patient_view>
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 15.0),
                           child: Text(
-                            "BP reading alarming?",
+                            title,
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.black.withOpacity(0.8),
@@ -198,7 +206,7 @@ class _specific_postState extends State<specific_journal_patient_view>
                           ),
                         ),
                         Text(
-                          "GG lods ang taas ng BP niya",
+                          body,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
@@ -212,7 +220,7 @@ class _specific_postState extends State<specific_journal_patient_view>
                   padding: EdgeInsets.only(left: 24.0, top: 20.0, bottom: 10.0),
                   child: Text(
                     // "Replies (" + noOfReply + ")",
-                    "Replies (1)",
+                    "Replies ("+ noOfReply +")",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -228,7 +236,7 @@ class _specific_postState extends State<specific_journal_patient_view>
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             // itemCount: reply_list.length,
-                            itemCount: 1,
+                            itemCount: reply_list.length,
                             // discussion_list[widget.index].noOfReplies,
                             itemBuilder: (context, index) {
                               return Container(
@@ -256,9 +264,8 @@ class _specific_postState extends State<specific_journal_patient_view>
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
-                                                  CircleAvatar(
-                                                    backgroundImage: AssetImage('assets/images/heart_icon.png'),
-                                                    radius: 18,
+                                                  ClipOval(
+                                                      child: checkimage(reply_list[index].dp_img)
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets.only(left: 8.0),
@@ -271,7 +278,7 @@ class _specific_postState extends State<specific_journal_patient_view>
                                                             children: [
                                                               Text(
                                                                 // "Dr. " + reply_list[index].createdBy,
-                                                                "Ryan Borja",
+                                                                reply_list[index].createdBy,
                                                                 style: TextStyle(
                                                                   fontSize: 16,
                                                                   fontWeight: FontWeight.bold,
@@ -284,7 +291,7 @@ class _specific_postState extends State<specific_journal_patient_view>
                                                         Container(
                                                           child: Text(
                                                             // reply_list[index].specialty,
-                                                            "Support System",
+                                                            reply_list[index].specialty,
                                                             style: TextStyle(
                                                               fontSize: 14,
                                                             ),
@@ -293,7 +300,9 @@ class _specific_postState extends State<specific_journal_patient_view>
                                                         SizedBox(height: 2.0),
                                                         Text(
                                                           // reply_list[index].replyDate + " " + reply_list[index].replyTime,
-                                                          "01/11/2022 6:09",
+                                                          "${reply_list[index].replyDate.month.toString().padLeft(2, "0")}/${reply_list[index].replyDate.day.toString().padLeft(2, "0")}/${reply_list[index].replyDate.year}"
+                                                              + " " +
+                                                              "${reply_list[index].replyTime.hour.toString().padLeft(2, "0")}:${reply_list[index].replyTime.minute.toString().padLeft(2, "0")}",
                                                           style: TextStyle(
                                                             fontSize: 12,
                                                           ),
@@ -317,7 +326,7 @@ class _specific_postState extends State<specific_journal_patient_view>
                                           padding: const EdgeInsets.symmetric(vertical: 2.0),
                                           child: Text(
                                             // reply_list[index].replyBody,
-                                            "GG talaga lods sad",
+                                            reply_list[index].replyBody,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -343,39 +352,40 @@ class _specific_postState extends State<specific_journal_patient_view>
     );
   }
 
-  // void getDiscussion() {
-  //   // final User user = auth.currentUser;
-  //   // final uid = user.uid;
-  //   String userUID = widget.userUID;
-  //   int index = widget.index;
-  //   final readdiscussion = databaseReference.child('users/' + userUID + '/discussion/');
-  //   readdiscussion.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       discussion_list.add(Discussion.fromJson(jsonString));
-  //     });
-  //
-  //     title = discussion_list[index].title;
-  //     doctor_name = discussion_list[index].createdBy;
-  //     date = "${discussion_list[index].discussionDate.month.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.day.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.year}";
-  //     time = "${discussion_list[index].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[index].discussionTime.minute.toString().padLeft(2,"0")}";
-  //     body = discussion_list[index].discussionBody;
-  //     noOfReply = discussion_list[index].noOfReplies.toString();
-  //   });
-  // }
-  // void getReplies() {
-  //   // final User user = auth.currentUser;
-  //   // final uid = user.uid;
-  //   String userUID = widget.userUID;
-  //   int index = widget.index;
-  //   final readReplies = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() +'/replies/');
-  //   readReplies.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       reply_list.add(Replies.fromJson(jsonString));
-  //     });
-  //   });
-  // }
+  void getDiscussion() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    // String userUID = widget.userUID;
+    int index = widget.index;
+    final readdiscussion = databaseReference.child('users/' + uid + '/journal/');
+    readdiscussion.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        discussion_list.add(Discussion.fromJson(jsonString));
+      });
+
+      title = discussion_list[index].title;
+      doctor_name = discussion_list[index].createdBy;
+      date = "${discussion_list[index].discussionDate.month.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.day.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.year}";
+      time = "${discussion_list[index].discussionTime.hour.toString().padLeft(2,"0")}:${discussion_list[index].discussionTime.minute.toString().padLeft(2,"0")}";
+      body = discussion_list[index].discussionBody;
+      noOfReply = discussion_list[index].noOfReplies.toString();
+      img = discussion_list[index].dp_img.toString();
+    });
+  }
+  void getReplies() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    // String userUID = widget.userUID;
+    int index = widget.index;
+    final readReplies = databaseReference.child('users/' + uid + '/journal/'+ (index + 1).toString() +'/replies/');
+    readReplies.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        reply_list.add(Replies.fromJson(jsonString));
+      });
+    });
+  }
 
   Future<void> _showMyDialogDelete() async {
     return showDialog<void>(
@@ -411,5 +421,15 @@ class _specific_postState extends State<specific_journal_patient_view>
         );
       },
     );
+  }
+  Widget checkimage(String img) {
+    if(img == null || img == "assets/images/blank_person.png" || img == "null"){
+      return Image.asset("assets/images/blank_person.png", width: 50, height: 50,fit: BoxFit.cover);
+    }else{
+      return Image.network(img,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover);
+    }
   }
 }
