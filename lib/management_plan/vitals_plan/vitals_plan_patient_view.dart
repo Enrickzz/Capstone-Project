@@ -137,10 +137,10 @@ class _vitals_management_plan_patient_view_prescriptionState extends State<vital
     }
   }
   void getVitals() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    // String userUID = widget.userUID;
+    final readFoodPlan = databaseReference.child('users/' + uid + '/management_plan/vitals_plan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
