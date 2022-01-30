@@ -44,7 +44,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
   List<String> listExercise = <String>[
     'Jog','Treadmill', 'Walk', 'Toe Tap', 'Bicycling', 'Lunge',
     'Jumping Jack',  'Lateral Shuffle', 'High Knee Run',
-    
+
   ];
 
   String getFrom(){

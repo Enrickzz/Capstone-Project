@@ -12,6 +12,7 @@ import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
 import 'package:my_app/goal_tab/goals_doctor_view.dart';
 import 'package:my_app/goal_tab/goals_support_view.dart';
 import 'package:my_app/goal_tab/meals/my_meals.dart';
+import 'package:my_app/management_plan/management_plan_supp_view.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
@@ -646,7 +647,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                 onTap:(){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => management_plan(userUID: widget.userUID)),
+                                    MaterialPageRoute(builder: (context) => management_plan_supp_view(userUID: widget.userUID)),
                                   );
 
                                 },
