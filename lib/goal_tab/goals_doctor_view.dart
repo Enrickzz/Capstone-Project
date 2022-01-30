@@ -17,7 +17,6 @@ import '../../fitness_app_theme.dart';
 import '../goal_tab/meals/my_meals.dart';
 import 'exercises/my_exercises_doctor.dart';
 import 'meals/my_meals.dart';
-import 'my_stress.dart';
 
 class goals_doctor_view extends StatefulWidget {
   const goals_doctor_view({Key key, this.animationController, this.userUID}) : super(key: key);
@@ -43,7 +42,7 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
     color: FitnessAppTheme.background,
   );
 
-  final List<String> tabs = ["Patient's Meals", "Patient's Exercises", "Patient's Weight", "Patient's Water", "Patient's Sleep", "Patient's Stress" ];
+  final List<String> tabs = ["Patient's Meals", "Patient's Exercises", "Patient's Weight", "Patient's Water", "Patient's Sleep"];
   TabController controller;
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
 
@@ -53,7 +52,7 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
   void initState() {
     super.initState();
 
-    controller = TabController(length: 6, vsync: this);
+    controller = TabController(length: 5, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
@@ -183,11 +182,6 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
               width: 24,
               height:24,),
             ),
-            Tab(
-              text: "Patient's Stress", icon: Image.asset("assets/fitness_app/stress.png",
-              width: 24,
-              height:24,),
-            ),
           ],
         ),
       ),
@@ -199,7 +193,6 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
           tabBody = my_weight_doctor(animationController: animationController, userUID: widget.userUID),
           tabBody = my_water_doctor(animationController: animationController, userUID: widget.userUID),
           tabBody = my_sleep_doctor(animationController: animationController,userUID: widget.userUID),
-          tabBody = my_stress(animationController: animationController),
         ],
       ),
     );
