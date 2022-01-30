@@ -299,16 +299,7 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
                                                 ),
                                               ],
                                             ),
-                                            InkWell(
-                                              onTap: () {
-                                                _showMyDialogDelete(index);
 
-                                              },
-                                              child: Icon(
-                                                Icons.delete,
-                                                size: 18,
-                                              ),
-                                            ),
                                           ],
                                         )
                                       ],

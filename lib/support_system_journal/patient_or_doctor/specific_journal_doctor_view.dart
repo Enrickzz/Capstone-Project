@@ -305,16 +305,7 @@ class _specific_postState extends State<specific_journal_doctor_view>
                                               ),
                                               Column(
                                                 children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      _showMyDialogDelete();
 
-                                                    },
-                                                    child: Icon(
-                                                      Icons.delete,
-                                                      size: 20,
-                                                    ),
-                                                  ),
                                                   Container(),
                                                   Container()
                                                 ],
