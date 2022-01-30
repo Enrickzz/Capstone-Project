@@ -10,6 +10,7 @@ import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/management_plan/food_plan/specific_food_plan_patinet_test.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsDoctor.dart';
@@ -103,7 +104,7 @@ class _food_prescriptionState extends State<food_prescription_patient_view> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsPatient(thislist: foodPtemp,index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificFoodPrescriptionViewAsPatientTestOnly(thislist: foodPtemp,index: index)),
                       );
                     }
 
