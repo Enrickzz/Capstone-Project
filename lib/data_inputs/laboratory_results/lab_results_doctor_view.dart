@@ -23,7 +23,8 @@ import '../medicine_intake/add_medication.dart';
 
 class lab_results_doctor_view extends StatefulWidget {
   final List<FirebaseFile> files;
-  lab_results_doctor_view({Key key, this.files});
+  final String userUID;
+  lab_results_doctor_view({Key key, this.files,this.userUID});
   @override
   _lab_resultsState createState() => _lab_resultsState();
 }
@@ -132,10 +133,8 @@ class _lab_resultsState extends State<lab_results_doctor_view> {
   }
 
   Future<List<FirebaseFile>> listAll (String path) async {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    print("UID = " + uid);
-    final ref = FirebaseStorage.instance.ref('test/' + uid +"/");
+
+    final ref = FirebaseStorage.instance.ref('test/' + widget.userUID +"/");
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);
     //print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
@@ -153,10 +152,7 @@ class _lab_resultsState extends State<lab_results_doctor_view> {
         .toList();
   }
   Future<List<FirebaseFile>> listOne (String path, String filename) async {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    print("UID = " + uid);
-    final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+filename);
+    final ref = FirebaseStorage.instance.ref('test/' + widget.userUID +"/"+filename);
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);
     //print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
@@ -177,11 +173,9 @@ class _lab_resultsState extends State<lab_results_doctor_view> {
 
 
   Future <String> downloadUrls() async{
-    final User user = auth.currentUser;
-    final uid = user.uid;
     String downloadurl;
     for(var i = 0 ; i < labResult_list.length; i++){
-      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+labResult_list[i].imgRef);
+      final ref = FirebaseStorage.instance.ref('test/' + widget.userUID + "/"+labResult_list[i].imgRef);
       downloadurl = await ref.getDownloadURL();
       labResult_list[i].imgRef = downloadurl;
       print ("THIS IS THE URL = at index $i "+ downloadurl);
@@ -190,9 +184,7 @@ class _lab_resultsState extends State<lab_results_doctor_view> {
     return downloadurl;
   }
   void getLabResult() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readlabresult = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/');
+    final readlabresult = databaseReference.child('users/' + widget.userUID + '/vitals/health_records/labResult_list/');
     readlabresult.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

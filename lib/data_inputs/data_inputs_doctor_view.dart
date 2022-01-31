@@ -433,7 +433,7 @@ class _AppSignUpState extends State<data_inputs_doctor_view> {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => lab_results_doctor_view()),
+                        MaterialPageRoute(builder: (context) => lab_results_doctor_view(userUID: widget.userUID,)),
                       );
                     },
                     child: Container(
