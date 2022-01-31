@@ -373,7 +373,7 @@ class _DashboardsState extends State<Dashboards>
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => notifications()),
+                                    MaterialPageRoute(builder: (context) => notifications(animationController: widget.animationController,)),
                                   );
                                 },
                                 child: Stack(

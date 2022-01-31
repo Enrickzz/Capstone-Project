@@ -380,6 +380,21 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                   "Unusually High Blood Sugar",
                                                   "3",
                                                   "None");
+                                              final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                              readConnections.once().then((DataSnapshot snapshot2) {
+                                                print(snapshot2.value);
+                                                print("CONNECTION");
+                                                List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                                temp.forEach((jsonString) {
+                                                  connections.add(Connection.fromJson(jsonString)) ;
+                                                  Connection a = Connection.fromJson(jsonString);
+                                                  print(a.uid);
+                                                  addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded consecutive high blood pressure. This may require your immediate medical attention.",
+                                                      thisuser.firstname + " has consecutive high BP readings",
+                                                      "3",
+                                                      a.uid);
+                                                });
+                                              });
                                             }
                                             void schedG() async{
                                               print("SCHED THIS");
@@ -564,6 +579,36 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         recommList.add(RecomAndNotif.fromJson(jsonString));
+      });
+    });
+  }
+  void addtoNotif2(String message, String title, String priority,String uid){
+    print ("ADDED TO NOTIFICATIONS");
+    getNotifs2(uid);
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    String redirect = "";
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+
+      }
+    });
+  }
+  void getNotifs2(String uid) {
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }

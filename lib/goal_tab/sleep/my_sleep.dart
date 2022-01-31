@@ -466,7 +466,7 @@ class _my_sleepState extends State<my_sleep>
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => notifications()),
+                                    MaterialPageRoute(builder: (context) => notifications(animationController: widget.animationController)),
                                   );
                                 },
                                 child: Stack(

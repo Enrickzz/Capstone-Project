@@ -47,11 +47,11 @@ class _recommended_mealsState extends State<recommended_meals>
         isLoading=false;
       }));
     }else{
+      // recommended = widget.mealsrecommendation;
       recommended = widget.mealsrecommendation;
       print(recommended.length.toString() + "<<<<<");
       Future.delayed(const Duration(milliseconds: 1200), (){
         setState(() {
-          recommended = widget.mealsrecommendation;
           isLoading=false;
         });
       });
@@ -132,7 +132,7 @@ class _recommended_mealsState extends State<recommended_meals>
           child: CircularProgressIndicator(),
         ): new ListView.builder(
           padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
-          itemCount: 5,
+          itemCount: recommended.length,
           itemBuilder: (context, index){
             return SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),

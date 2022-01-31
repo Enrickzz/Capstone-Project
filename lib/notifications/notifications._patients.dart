@@ -591,10 +591,11 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       final food = nutritionixApi.fromJson(parsedJson);
       print("NUTRITIONIX SEARCH = $thisquery SUCCESS");
       foodrecomm = food.common;
-      return food.common;
+      return foodrecomm;
     }
     else{
       print("response status code is " + response.statusCode.toString());
+      return foodrecomm;
     }
   }
 }

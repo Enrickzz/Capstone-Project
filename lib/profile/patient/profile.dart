@@ -181,7 +181,7 @@ class _index3State extends State<index3>
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => notifications()),
+                    MaterialPageRoute(builder: (context) => notifications(animationController: widget.animationController)),
                   );
                 },
                 child: Stack(

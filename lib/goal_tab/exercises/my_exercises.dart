@@ -487,7 +487,7 @@ class _my_exercisesState extends State<my_exercises>
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => notifications()),
+                                    MaterialPageRoute(builder: (context) => notifications(animationController: widget.animationController)),
                                   );
                                 },
                                 child: Stack(
