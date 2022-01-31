@@ -43,13 +43,6 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
     super.initState();
     Connection doctorconnection = widget.connection;
     if(doctorconnection != null){
-      print("AAAAAAAAAAAAAAAAAAAAAA");
-      print(widget.index);
-      print(doctorconnection.createdBy);
-      print(doctorconnection.medpres);
-      print(doctorconnection.foodplan);
-      print(doctorconnection.explan);
-      print(doctorconnection.vitals);
       if(doctorconnection.medpres.toLowerCase() == "true"){
         isAllowedMedicalPrescription = true;
       }
@@ -258,12 +251,10 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                         ),
                         color: Colors.blue,
                         onPressed: (){
-                          _showMyDialog();
-                          // Navigator.pop(context);
+                          _showMyDialog().then((value){
+                            Navigator.pop(context);
+                          });
                         },
-
-                        // Navigator.pop(context);
-
                       )
                     ],
                   ),
@@ -475,6 +466,27 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                           "explan": isAllowedExercisePlan.toString(),
                           "vitals": isAllowedVitalsRecording.toString(),
                         });
+                        List<Connection> coDocConnections=[];
+                        int counter = 0;
+                        final coDocAccChange = databaseReference.child('users/' + widget.doctorUID + '/personal_info/connections/');
+                        coDocAccChange.once().then((DataSnapshot snapshot2) {
+                          List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot2.value));
+                          temp1.forEach((jsonString2) {
+                            counter++;
+                            Connection one = new Connection.fromJson2(jsonDecode(jsonEncode(jsonString2)));
+                            if(one.createdBy == uid && one.uid == widget.userUID){
+                              final coDocChangeAcc = databaseReference.child('users/' + widget.doctorUID + '/personal_info/connections/'+ counter.toString());
+                              coDocChangeAcc.update({
+                                "medpres": isAllowedMedicalPrescription.toString(),
+                                "foodplan": isAllowedFoodPlan.toString(),
+                                "explan": isAllowedExercisePlan.toString(),
+                                "vitals": isAllowedVitalsRecording.toString(),
+                              });
+                            }
+                          });
+
+                        });
+
                       });
                     }
                   });
@@ -483,13 +495,6 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                 } catch(e) {
                   print("you got an error! $e");
                 }
-                // Future.delayed(const Duration(milliseconds: 2000), (){
-                //   print(namestemp.length);
-                //   print('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
-                //   Navigator.pushReplacement(context,
-                //       MaterialPageRoute(builder: (context) => PatientList(nameslist: namestemp,diseaselist: diseasetemp, uidList: uidtemp,)));
-                // });
-
               },
             ),
             TextButton(
