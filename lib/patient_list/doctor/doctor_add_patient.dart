@@ -644,10 +644,10 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
           addDoctorConnection.set({
             "uid": userUID,
             "createdBy": uid,
-            "medpres": "true",
-            "foodplan": "true",
-            "explan": "true",
-            "vitals": "true",
+            "medpres": "false",
+            "foodplan": "false",
+            "explan": "false",
+            "vitals": "false",
           });
         }
       });
