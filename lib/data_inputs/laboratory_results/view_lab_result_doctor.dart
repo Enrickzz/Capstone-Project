@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -19,6 +21,7 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'lab_results_patient_view.dart';
 import '../medicine_intake/medication_patient_view.dart';
 import 'package:my_app/storage_service.dart';
@@ -59,7 +62,8 @@ class viewLabResultDoctorView extends State<view_lab_result_doctor_view> {
   TimeOfDay time;
   var dateValue = TextEditingController();
   List<FirebaseFile> trythis =[];
-
+  final ButtonStyle style =
+  ElevatedButton.styleFrom(textStyle: const TextStyle(fontFamily:'Montserrat',fontSize: 20));
   //added by borj
   String valueChooseLabResult;
   List<String> listLabResult = <String>[
@@ -223,6 +227,43 @@ class viewLabResultDoctorView extends State<view_lab_result_doctor_view> {
                   Text(""+ getDateFormatted(widget.lr.labResult_date.toString()) +"at "
                       + getTimeFormatted(widget.lr.labResult_time.toString())) ,
                   SizedBox(height: 18.0),
+                  ElevatedButton(
+                    style: style,
+                    onPressed: () async{
+                      Map<Permission, PermissionStatus> statuses = await [
+                        Permission.storage,
+                        //add more permission to request here.
+                      ].request();
+                      if(statuses[Permission.storage].isGranted){
+                        var dir = await DownloadsPathProvider.downloadsDirectory;
+                        if(dir != null){
+                          String fname = widget.lr.imgRef;
+                          fname = fname.replaceAll("https://firebasestorage.googleapis.com/v0/b/capstone-heart-disease.appspot.com/o/test%2FLT8LwM7cKiTht29miQUOpSy1Eyy2%2F", "");
+                          fname = fname.substring(0,fname.indexOf("?"));
+                          print("final");
+                          print(fname);
+                          String savename = fname;
+                          String savePath = dir.path + "/$savename";
+                          print(savePath);
+                          //output:  /storage/emulated/0/Download/banner.png
+
+                          try {
+                            await Dio().download(
+                                widget.lr.imgRef,
+                                savePath,
+                                onReceiveProgress: (received, total) {
+                                });
+                            print("File is saved to download folder.");
+                          } on DioError catch (e) {
+                            print(e.message);
+                          }
+                        }
+                      }else{
+                        print("No permission to read and write.");
+                      }
+                    },
+                    child: const Text('Download'),
+                  )
 
                 ]
             )
