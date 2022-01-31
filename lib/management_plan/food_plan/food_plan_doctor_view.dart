@@ -202,13 +202,12 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
         });
       });
 
-      Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           for(int i = 0; i < foodPtemp.length; i++){
             if(foodPtemp[i].prescribedBy != uid){
-              for(int j = 0; j < connection_list.length; j++){
-                if(foodPtemp[i].prescribedBy == connection_list[j].createdBy){
-                  if(connection_list[j].foodplan != "true"){
+              for(int j = 0; j < connections.length; j++){
+                if(foodPtemp[i].prescribedBy == connections[j].createdBy){
+                  if(connections[j].foodplan != "true"){
                     /// dont add
                     delete_list.add(i);
                   }
@@ -238,7 +237,6 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
           foodPtemp[i] = foodPtemp[foodPtemp.length-1-i];
           foodPtemp[foodPtemp.length-1-i] = temp;
         }
-      });
 
 
     });

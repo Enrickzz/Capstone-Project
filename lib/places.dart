@@ -1274,10 +1274,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
           for(var k = 0 ; k < medical_name.length; k++){
             if(medical_name[k].name == reviews[i].special){
               ///checks if meds is in patient db
-              // if(reviews[i].added_by != uid){
+              if(reviews[i].added_by != uid){
               reviewsRecommDrug.add(reviews[i]);
               print("REVIEW FOUND" + reviews[i].user_name);
-              // }
+              }
             }
           }
         }
@@ -1287,9 +1287,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       for(var i = 0; i < reviews.length; i++){
         for(var j = 0; j < hospitals.length; j++){
           if(reviews[i].placeid == hospitals[j].placeId){
-            // if(reviews[i].added_by != uid){
+            if(reviews[i].added_by != uid){
             reviewsRecommHospital.add(reviews[i]);
-            //}
+            }
           }
         }
       }
@@ -1298,9 +1298,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       for(var i = 0; i < reviews.length; i++){
         for(var j = 0; j < recreations.length; j++){
           if(reviews[i].placeid == recreations[j].placeId){
-            // if(reviews[i].added_by != uid){
+            if(reviews[i].added_by != uid){
             reviewsRecommRecreation.add(reviews[i]);
-            //}
+            }
           }
         }
       }
@@ -1308,9 +1308,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       for(var i = 0; i < reviews.length; i++){
         for(var j = 0; j < restaurants.length; j++){
           if(reviews[i].placeid == restaurants[j].placeId){
-            // if(reviews[i].added_by != uid){
+            if(reviews[i].added_by != uid){
             reviewsRecommRestaurant.add(reviews[i]);
-            //}
+            }
           }
         }
       }
