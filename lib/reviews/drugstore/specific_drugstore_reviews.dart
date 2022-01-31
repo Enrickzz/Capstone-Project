@@ -384,7 +384,7 @@ class _discussionState extends State<drugstore_reviews>
 }
 
 Widget checkRev(String special) {
-  if(special == ""){
+  if(special == "" || special == null){
     return Text("");
   }else{
     return
