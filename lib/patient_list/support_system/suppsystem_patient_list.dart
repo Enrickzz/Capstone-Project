@@ -195,9 +195,13 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
                     //   backgroundImage: NetworkImage
                     //     ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
                     // ),
-                    leading: ClipOval(
-                      // child:Image.asset("assets/images/blank_person.png")),
-                        child: checkimage(pp_imgs[index])),
+                    leading: Container(
+                      height: 50,
+                      width: 50,
+                      child: ClipOval(
+                        // child:Image.asset("assets/images/blank_person.png")),
+                          child: checkimage(pp_imgs[index])),
+                    ),
                     title: Text(names[index],
                         style:TextStyle(
                           color: Colors.black,
