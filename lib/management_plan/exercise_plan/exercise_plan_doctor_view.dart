@@ -201,13 +201,12 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
           }
         });
       }
-      Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           for(int i = 0; i < extemp.length; i++){
             if(extemp[i].prescribedBy != uid){
-              for(int j = 0; j < connection_list.length; j++){
-                if(extemp[i].prescribedBy == connection_list[j].createdBy){
-                  if(connection_list[j].explan != "true"){
+              for(int j = 0; j < connections.length; j++){
+                if(extemp[i].prescribedBy == connections[j].createdBy){
+                  if(connections[j].explan != "true"){
                     /// dont add
                     delete_list.add(i);
                   }
@@ -238,6 +237,5 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
         }
       });
 
-    });
   }
 }

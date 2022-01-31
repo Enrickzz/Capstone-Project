@@ -197,13 +197,12 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
       temp.forEach((jsonString) {
         vitalstemp.add(Vitals.fromJson(jsonString));
       });
-      Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           for(int i = 0; i < vitalstemp.length; i++){
             if(vitalstemp[i].prescribedBy != uid){
-              for(int j = 0; j < connection_list.length; j++){
-                if(vitalstemp[i].prescribedBy == connection_list[j].createdBy){
-                  if(connection_list[j].vitals != "true"){
+              for(int j = 0; j < connections.length; j++){
+                if(vitalstemp[i].prescribedBy == connections[j].createdBy){
+                  if(connections[j].vitals != "true"){
                     /// dont add
                     delete_list.add(i);
                   }
@@ -237,7 +236,6 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
           doctor_names[i] = doctor_names[doctor_names.length-1-i];
           doctor_names[doctor_names.length-1-i] = temp;
         }
-      });
     });
   }
 

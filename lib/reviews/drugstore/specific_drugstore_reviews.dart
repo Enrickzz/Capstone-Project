@@ -346,13 +346,11 @@ class _discussionState extends State<drugstore_reviews>
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         reviews.add(Reviews.fromJson(jsonString));
-        print(reviews.length.toString()+ "<<<<<<<<<<<");
       });
     });
 
 
     setState(() {
-      print("Tapos na get reviews");
     });
 
   }
