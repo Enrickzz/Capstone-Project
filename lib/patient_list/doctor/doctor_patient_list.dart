@@ -308,30 +308,16 @@ class _PatientListState extends State<PatientList>  {
         for(int i = 0; i < uidlist.length; i++){
           final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
           final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
-          readPatient.once().then((DataSnapshot snapshot){
-            var temp1 = jsonDecode(jsonEncode(snapshot.value));
-            print(temp1);
+          readPatient.once().then((DataSnapshot pshot){
+            var temp1 = jsonDecode(jsonEncode(pshot.value));
             Users patient = Users.fromJson(temp1);
             //userlist.add(Users.fromJson(temp1));
-            // names.add(patient.firstname + " " + patient.lastname);
-            // bool exists = false;
-            names.add(patient.firstname + " " + patient.lastname);
-            pp_imgs.add(patient.pp_img.toString());
-            // String thisname = patient.firstname + " " + patient.lastname;
-            // for(var i = 0 ; i < names.length; i++){
-            //   if(names[i].toString().toLowerCase().contains(thisname.toLowerCase())){
-            //     names.add(patient.firstname + " " + patient.lastname);
-            //     pp_imgs.add(patient.pp_img.toString());
-            //
-            //   }
-            // }
-            readInfo.once().then((DataSnapshot snapshot){
-              var temp2 = jsonDecode(jsonEncode(snapshot.value));
-              print(temp2);
+
+            readInfo.once().then((DataSnapshot infoshot){
+              var temp2 = jsonDecode(jsonEncode(infoshot.value));
               //userAddInfo.add(Additional_Info.fromJson(temp2));
               String disease_name = "";
               Additional_Info info = Additional_Info.fromJson4(temp2);
-              print(info.disease.length);
               for(int j = 0; j < info.disease.length; j++){
                 if(j == info.disease.length - 1){
                   print("if statement " + info.disease[j]);

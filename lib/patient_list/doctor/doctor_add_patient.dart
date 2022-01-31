@@ -506,86 +506,224 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   void addPatient() {
     final User user = auth.currentUser;
     final uid = user.uid;
+    /// connection ni doctor a
     final readDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
     // final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
+    /// connection ni patient
     final readPatientConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
     final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+    /// doc_connection = current doctor's connection
     doc_connection.clear();
     patient_connection.clear();
     bool isPatient = false;
     bool isDoctor = false;
+    Users temp_doctor = new Users();
+    List<int> doctor_index = [];
+    int count = 0;
+    /// doctor_connection = patient's list of doctors
+    List<Connection> doctor_connection = [];
+    List<String> doctor_uid = [];
     /// read doctor connections
     readDoctorConnection.once().then((DataSnapshot datasnapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
-      if(datasnapshot.value != null){
+      if(temp != null){
         temp.forEach((jsonString) {
-          doc_connection.add(Connection.fromJson(jsonString));
+          doc_connection.add(Connection.fromJson2(jsonString));
         });
         for(int i = 0; i < doc_connection.length; i++){
           if(doc_connection[i].uid == userUID){
-            print("same patient detected");
             isPatient = true;
           }
         }
-        dcount = doc_connection.length+1;
       }
-
-      /// read patient connections
-      readPatientConnection.once().then((DataSnapshot snapshot){
-        List<dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-        if(snapshot.value != null){
-          temp2.forEach((jsonString) {
-            patient_connection.add(Connection.fromJson(jsonString));
-          });
-          for(int i = 0; i < patient_connection.length; i++){
-            if(patient_connection[i].uid == uid){
-              print("same patient detected");
-              isDoctor = true;
+        if(!isPatient){
+          readPatientConnection.once().then((DataSnapshot snapshot){
+            List<dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+            if(snapshot.value != null){
+              temp2.forEach((jsonString) {
+                patient_connection.add(Connection.fromJson(jsonString));
+                pcount = patient_connection.length+1;
+              });
             }
+
+          for(int j = 0; j < patient_connection.length; j++){
+            ///check if user is doctor
+            final readPatientUsers = databaseReference.child('users/' + patient_connection[j].uid + '/personal_info/');
+            readPatientUsers.once().then((DataSnapshot snap){
+              Map<String, dynamic> temp3 = jsonDecode(jsonEncode(snap.value));
+              temp_doctor = Users.fromJson(temp3);
+              if(temp_doctor.usertype == "Doctor"){
+                doctor_index.add(j);
+              }
+            });
           }
-          pcount = patient_connection.length+1;
+          Future.delayed(const Duration(milliseconds: 1000), (){
+            doctor_index.sort((a,b) => a.compareTo(b));
+            for(int j = 0; j < patient_connection.length; j++){
+              /// patient_connection[j].uid = doctor's uids from patient
+              print("AAAAAAAAAAAAAAAAAAAAA");
+              print(doctor_index[count]);
+              print(j);
+              if(doctor_index[count] == j){
+                // final readAllDoctorConnection = databaseReference.child('users/' + patient_connection[j].uid + '/personal_info/connections/');
+                // readAllDoctorConnection.once().then((DataSnapshot snap){
+                //   List<dynamic> temp4 = jsonDecode(jsonEncode(snap.value));
+                //   temp4.forEach((jsonString) {
+                //     doctor_connection.add(Connection.fromJson2(jsonString));
+                //   });
+                // });
+                doctor_uid.add(patient_connection[j].uid);
+                count++;
+              }
+            }
+          });
+            Future.delayed(const Duration(milliseconds: 2000), () {
+              /// write data to other doctors that is connected to patient
+              for (int k = 0; k < doctor_uid.length; k++) {
+                List<Connection> temp_connection = [];
+                final readDoctorConnection = databaseReference.child('users/' + doctor_uid[k] + '/personal_info/connections/');
+                readDoctorConnection.once().then((DataSnapshot snap) {
+                  List<dynamic> temp4 = jsonDecode(jsonEncode(snap.value));
+                  temp4.forEach((jsonString) {
+                    temp_connection.add(Connection.fromJson2(jsonString));
+                  });
+                  print("doctor_uid[k]");
+                  print(doctor_uid[k]);
+                  final writeDoctorConnection = databaseReference.child(
+                      'users/' + doctor_uid[k] + '/personal_info/connections/' +
+                          (temp_connection.length + 1).toString());
+                  writeDoctorConnection.set({
+                    "uid": userUID,
+                    "createdBy": uid,
+                    "medpres": "false",
+                    "foodplan": "false",
+                    "explan": "false",
+                    "vitals": "false",
+                  });
+                });
+              }
+            });
+            List<Connection> temp_connection = [];
+            Future.delayed(const Duration(milliseconds: 3000), (){
+              for(int k = 0; k < doctor_uid.length; k++){
+                print("DOCTOR UID");
+                print(doctor_uid[k]);
+                final readDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                readDoctorConnection.once().then((DataSnapshot snap) {
+                  List<dynamic> temp4 = jsonDecode(jsonEncode(snap.value));
+                  temp4.forEach((jsonString) {
+                    temp_connection.add(Connection.fromJson2(jsonString));
+                  });
+                  print(temp_connection.length);
+                    final writeDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/' + (temp_connection.length+1).toString());
+                    writeDoctorConnection.set({
+                      "uid": userUID,
+                      "createdBy": doctor_uid[k],
+                      "medpres": "false",
+                      "foodplan": "false",
+                      "explan": "false",
+                      "vitals": "false",
+                    });
+                });
+              }
+            });
+
+          });
         }
-        if(isDoctor == false){
-          patientConnection.uid = uid;
-          patient_connection.add(patientConnection);
-          print("doctor added successfully");
+
+      Future.delayed(const Duration(milliseconds: 2000), (){
+        if(!isPatient || doc_connection.isEmpty){
+          final addPatientConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/' + pcount.toString());
+          addPatientConnection.set({
+            "uid": uid,
+            "dashboard": "false",
+            "nonhealth": "false",
+            "health": "false",
+          });
+          final addDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/' + (doc_connection.length+1).toString());
+          addDoctorConnection.set({
+            "uid": userUID,
+            "createdBy": uid,
+            "medpres": "true",
+            "foodplan": "true",
+            "explan": "true",
+            "vitals": "true",
+          });
         }
-        final addPatientConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/' + pcount.toString());
-
-        addPatientConnection.set({
-          "uid": patient_connection[patient_connection.length-1].uid,
-          "dashboard": "false",
-          "nonhealth": "false",
-          "health": "false",
-        });
       });
 
-      if(isPatient == false){
-        docConnection.uid = userUID;
-        doc_connection.add(docConnection);
-        print("patient added successfully");
-      }
-
-      final addDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/' + dcount.toString());
-      addDoctorConnection.set({
-        "uid": doc_connection[doc_connection.length-1].uid,
-        "createdBy": uid,
-        "medpres": "true",
-        "foodplan": "true",
-        "explan": "true",
-        "vitals": "true",
-      });
-      readPatient.once().then((DataSnapshot patientsnapshot){
-        Map<String, dynamic> temp = jsonDecode(jsonEncode(patientsnapshot.value));
-        print(temp);
-        patient = Users.fromJson(temp);
-        pp_img.add(cuser.pp_img);
-      });
-
-      namestemp.add(displayName);
-      diseasetemp.add(cvdCondition);
-      uidtemp.add(userUID);
     });
+    // readDoctorConnection.once().then((DataSnapshot datasnapshot){
+    //   List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+    //   if(datasnapshot.value != null){
+    //     temp.forEach((jsonString) {
+    //       doc_connection.add(Connection.fromJson(jsonString));
+    //     });
+    //     for(int i = 0; i < doc_connection.length; i++){
+    //       if(doc_connection[i].uid == userUID){
+    //         print("same patient detected");
+    //         isPatient = true;
+    //       }
+    //     }
+    //     dcount = doc_connection.length+1;
+    //   }
+    //
+    //   /// read patient connections
+    //   readPatientConnection.once().then((DataSnapshot snapshot){
+    //     List<dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+    //     if(snapshot.value != null){
+    //       temp2.forEach((jsonString) {
+    //         patient_connection.add(Connection.fromJson(jsonString));
+    //       });
+    //       for(int i = 0; i < patient_connection.length; i++){
+    //         if(patient_connection[i].uid == uid){
+    //           print("same patient detected");
+    //           isDoctor = true;
+    //         }
+    //       }
+    //       pcount = patient_connection.length+1;
+    //     }
+    //     if(isDoctor == false){
+    //       patientConnection.uid = uid;
+    //       patient_connection.add(patientConnection);
+    //       print("doctor added successfully");
+    //     }
+    //     final addPatientConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/' + pcount.toString());
+    //
+    //     addPatientConnection.set({
+    //       "uid": patient_connection[patient_connection.length-1].uid,
+    //       "dashboard": "false",
+    //       "nonhealth": "false",
+    //       "health": "false",
+    //     });
+    //   });
+    //
+    //   if(isPatient == false){
+    //     docConnection.uid = userUID;
+    //     doc_connection.add(docConnection);
+    //     print("patient added successfully");
+    //   }
+    //
+    //   final addDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/' + dcount.toString());
+    //   addDoctorConnection.set({
+    //     "uid": doc_connection[doc_connection.length-1].uid,
+    //     "createdBy": uid,
+    //     "medpres": "true",
+    //     "foodplan": "true",
+    //     "explan": "true",
+    //     "vitals": "true",
+    //   });
+    //   readPatient.once().then((DataSnapshot patientsnapshot){
+    //     Map<String, dynamic> temp = jsonDecode(jsonEncode(patientsnapshot.value));
+    //     print(temp);
+    //     patient = Users.fromJson(temp);
+    //     pp_img.add(cuser.pp_img);
+    //   });
+    //
+    //   namestemp.add(displayName);
+    //   diseasetemp.add(cvdCondition);
+    //   uidtemp.add(userUID);
+    // });
   }
 
   Widget checkimage(String img) {

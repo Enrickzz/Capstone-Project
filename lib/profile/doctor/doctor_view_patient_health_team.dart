@@ -49,13 +49,14 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   Users patient = new Users();
   bool isme = false;
-
+  List<Connection> doctor_connection = [];
   List<String> uidlist = [];
   List<Connection> connections = [];
   List<Connection> doctorconnections = [];
   List<Users> userlist = [];
   List<Additional_Info> userAddInfo =[];
   List<int> delete_list = [];
+  Connection target_connection;
 
   List names = [
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
@@ -146,7 +147,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                             builder: (context) => SingleChildScrollView(child: Container(
                               padding: EdgeInsets.only(
                                   bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid, connection: doctorconnections[index]),
+                              child: doctor_edit_management_privacy(userUID: widget.userUID, doctorUID: userlist[index].uid,index: index, connection: doctorconnections[index]),
                             ),
                             ),
                           ).then((value) =>
@@ -193,7 +194,6 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
       List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
       temp1.forEach((jsonString) {
         connections.add(Connection.fromJson(jsonString));
-
       });
       for(int i = 0; i < connections.length; i++){
         final readDoctor = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
@@ -216,18 +216,26 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
           Map<String, dynamic> temp4 = jsonDecode(jsonEncode(snapshot.value));
           usertype = Users.fromJson(temp4);
           if(usertype.usertype == "Doctor"){
-            final readDoctorConnection = databaseReference.child('users/' + connections[i].uid + '/personal_info/connections/');
+            //connections[i].uid is list of doctor uid
+            final readDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
             readDoctorConnection.once().then((DataSnapshot datasnapshot){
               List<dynamic> temp3 = jsonDecode(jsonEncode(datasnapshot.value));
               if(datasnapshot.value != null){
                 temp3.forEach((jsonString) {
                   if(jsonString.toString().contains(userUID)){
+                  // if(jsonString.toString().contains(userUID) && !jsonString.toString().contains(uid)){
                     doctorconnections.add(Connection.fromJson2(jsonString));
                   }
+
                 });
+                for(int i = 0; i < doctorconnections.length; i++){
+                  print("CHECK DOCTOR CONNECTION");
+                  print(doctorconnections[i].createdBy);
+                }
               }
 
               if(connections[i].uid != doctorconnections[i].createdBy){
+                print("LIST DELETE ADD");
                 listdelete.add(i);
               }
             });
@@ -244,8 +252,23 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
       Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
         patient = Users.fromJson(temp2);
     });
-
+    // List<Connection> templist = [];
+    // for(int i = 0; i < doctorconnections.length; i++){
+    //   if(doctorconnections[i].createdBy == uid){
+    //     templist.add(doctorconnections[i]);
+    //   }
+    // }
+    // Future.delayed(const Duration(milliseconds: 1000), (){
+    //   for(int i = 0; i < doctorconnections.length; i++){
+    //     if(doctorconnections[i].createdBy != uid){
+    //       templist.add(doctorconnections[i]);
+    //     }
+    //   }
+    //   doctorconnections = templist;
+    // });
   }
+
+
   // void getConnections () {
   //   Map<String, dynamic> temp;
   //   for(int i = 0; i < userlist.length; i++){

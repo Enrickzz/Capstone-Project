@@ -171,6 +171,64 @@ class _medication_prescriptionState extends State<medication_prescription> {
       return "$hours:$min";
     }
   }
+  // void getMedicalPrescription(List<Connection> connections) {
+  //   final User user = auth.currentUser;
+  //   final uid = user.uid;
+  //   List<int> delete_list = [];
+  //   var userUID = widget.userUID;
+  //   final readprescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
+  //   readprescription.once().then((DataSnapshot snapshot){
+  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+  //     temp.forEach((jsonString) {
+  //       prestemp.add(Medication_Prescription.fromJson(jsonString));
+  //     });
+  //     for(int i = 0; i < prestemp.length; i++){
+  //       print("CONNECTION LIST");
+  //       print(prestemp[i].prescribedBy);
+  //       /// add doctor name
+  //       doctor_names.add(prestemp[i].doctor_name);
+  //       if(prestemp[i].prescribedBy != uid){
+  //         for(int j = 0; j < connection_list.length; j++){
+  //           if(prestemp[i].prescribedBy == connection_list[j].createdBy){
+  //             if(connection_list[j].medpres != "true"){
+  //               /// dont add
+  //               delete_list.add(i);
+  //             }
+  //             else{
+  //               /// add
+  //             }
+  //           }
+  //         }
+  //       }
+  //       // final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
+  //       // readDoctor.once().then((DataSnapshot datasnapshot){
+  //       //   Map<String, dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+  //       //   if(temp != null){
+  //       //     doctor = Users.fromJson(temp);
+  //       //     prestemp[i].doctor_name = doctor.lastname;
+  //       //     doctor_names.add(doctor.lastname);
+  //       //     print("PRESCRIBED BY " + prestemp[i].doctor_name);
+  //       //     print("lastname doctor " + doctor.lastname);
+  //       //     print("length " + doctor_names.length.toString());
+  //       //   }
+  //       // });
+  //     }
+  //     delete_list.sort((a, b) => b.compareTo(a));
+  //     for(int i = 0; i < delete_list.length; i++){
+  //       prestemp.removeAt(delete_list[i]);
+  //     }
+  //     for(var i=0;i<prestemp.length/2;i++){
+  //       var temp = prestemp[i];
+  //       prestemp[i] = prestemp[prestemp.length-1-i];
+  //       prestemp[prestemp.length-1-i] = temp;
+  //     }
+  //     for(var i=0;i<doctor_names.length/2;i++){
+  //       var temp = doctor_names[i];
+  //       doctor_names[i] = doctor_names[doctor_names.length-1-i];
+  //       doctor_names[doctor_names.length-1-i] = temp;
+  //     }
+  //   });
+  // }
   void getMedicalPrescription(List<Connection> connections) {
     final User user = auth.currentUser;
     final uid = user.uid;
@@ -183,14 +241,12 @@ class _medication_prescriptionState extends State<medication_prescription> {
         prestemp.add(Medication_Prescription.fromJson(jsonString));
       });
       for(int i = 0; i < prestemp.length; i++){
-        print("CONNECTION LIST");
-        print(prestemp[i].prescribedBy);
         /// add doctor name
         doctor_names.add(prestemp[i].doctor_name);
         if(prestemp[i].prescribedBy != uid){
-          for(int j = 0; j < connection_list.length; j++){
-            if(prestemp[i].prescribedBy == connection_list[j].createdBy){
-              if(connection_list[j].medpres != "true"){
+          for(int j = 0; j < connections.length; j++){
+            if(prestemp[i].prescribedBy == connections[j].createdBy){
+              if(connections[j].medpres != "true"){
                 /// dont add
                 delete_list.add(i);
               }
@@ -200,6 +256,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
             }
           }
         }
+
         // final readDoctor = databaseReference.child('users/' + prestemp[i].prescribedBy + '/personal_info/');
         // readDoctor.once().then((DataSnapshot datasnapshot){
         //   Map<String, dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
@@ -213,20 +270,25 @@ class _medication_prescriptionState extends State<medication_prescription> {
         //   }
         // });
       }
+      delete_list = delete_list.toSet().toList();
       delete_list.sort((a, b) => b.compareTo(a));
+
       for(int i = 0; i < delete_list.length; i++){
         prestemp.removeAt(delete_list[i]);
       }
-      for(var i=0;i<prestemp.length/2;i++){
-        var temp = prestemp[i];
-        prestemp[i] = prestemp[prestemp.length-1-i];
-        prestemp[prestemp.length-1-i] = temp;
-      }
-      for(var i=0;i<doctor_names.length/2;i++){
-        var temp = doctor_names[i];
-        doctor_names[i] = doctor_names[doctor_names.length-1-i];
-        doctor_names[doctor_names.length-1-i] = temp;
-      }
+      prestemp = prestemp.reversed.toList();
+      doctor_names = doctor_names.reversed.toList();
+
+      // for(var i=0;i<prestemp.length/2;i++){
+      //   var temp = prestemp[i];
+      //   prestemp[i] = prestemp[prestemp.length-1-i];
+      //   prestemp[prestemp.length-1-i] = temp;
+      // }
+      // for(var i=0;i<doctor_names.length/2;i++){
+      //   var temp = doctor_names[i];
+      //   doctor_names[i] = doctor_names[doctor_names.length-1-i];
+      //   doctor_names[doctor_names.length-1-i] = temp;
+      // }
     });
   }
 }

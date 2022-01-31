@@ -47,6 +47,9 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
       print(widget.index);
       print(doctorconnection.createdBy);
       print(doctorconnection.medpres);
+      print(doctorconnection.foodplan);
+      print(doctorconnection.explan);
+      print(doctorconnection.vitals);
       if(doctorconnection.medpres.toLowerCase() == "true"){
         isAllowedMedicalPrescription = true;
       }
@@ -60,7 +63,6 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
         isAllowedVitalsRecording = true;
       }
     }
-
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
       });
@@ -430,44 +432,58 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                   bool check = false;
                   bool isConnected = false;
                   String userUID = widget.userUID;
+                  /// doctorUID = doctor B
+                  /// uid = doctor A
                   String doctorUID = widget.doctorUID;
-                  final readDoctorConnections = databaseReference.child('users/' + doctorUID + '/personal_info/connections/');
+                  final readDoctorConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
                   readDoctorConnections.once().then((DataSnapshot snapshot) {
                     List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
                     temp1.forEach((jsonString) {
+                      /// connections = doctor B's all connection = doctor_connection
                       connections.add(Connection.fromJson2(jsonString));
                     });
-
+                    /// check if patient is in the list
                     for(int i = 1; i <= connections.length; i++){
                       if(connections[i-1].uid == userUID){
                         check = true;
                       }
                     }
                     if(check){
-                      final readPatientConnection = databaseReference.child('users/' + doctorUID + '/personal_info/connections/');
+                      final readPatientConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
                       readPatientConnection.once().then((DataSnapshot patientsnapshot) {
                         List<dynamic> temp2 = jsonDecode(jsonEncode(patientsnapshot.value));
                         temp2.forEach((jsonString) {
-                          doctor_connection.add(Connection.fromJson(jsonString));
+                          doctor_connection.add(Connection.fromJson2(jsonString));
                         });
                         for(int i = 0; i < doctor_connection.length; i++){
-                          if(uid == doctor_connection[i].createdBy){
-                            index = i;
+                          /// if doctor a = pag nakagawa na
+                          /// check if meron nang existing connection with doctor A
+                          if(doctorUID == doctor_connection[i].createdBy){
+                            index = i+1;
                             isConnected = true;
                           }
                         }
                         if(!isConnected){
-                          index = doctor_connection.length;
+                          index = doctor_connection.length+1;
                         }
-                        final doctorConnectionsRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ (index).toString());
+                        final doctorConnectionsRef = databaseReference.child('users/' + uid + '/personal_info/connections/'+ (index).toString());
                         doctorConnectionsRef.set({
                           "uid": userUID,
-                          "createdBy": uid,
+                          "createdBy": doctorUID,
                           "medpres": isAllowedMedicalPrescription.toString(),
                           "foodplan": isAllowedFoodPlan.toString(),
                           "explan": isAllowedExercisePlan.toString(),
                           "vitals": isAllowedVitalsRecording.toString(),
                         });
+                        // final selfconnectionRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ (index).toString());
+                        // doctorConnectionsRef.set({
+                        //   "uid": userUID,
+                        //   "createdBy": uid,
+                        //   "medpres": false.toString(),
+                        //   "foodplan": false.toString(),
+                        //   "explan": false.toString(),
+                        //   "vitals": false.toString(),
+                        // });
                       });
 
 
