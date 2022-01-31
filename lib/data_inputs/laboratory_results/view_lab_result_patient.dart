@@ -27,6 +27,7 @@ import '../medicine_intake/medication_patient_view.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:full_screen_image/full_screen_image.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 

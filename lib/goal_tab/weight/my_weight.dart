@@ -19,6 +19,7 @@ import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/weight/weight_trend.dart';
 import 'package:my_app/ui_view/weight/weight_progress.dart';
+import 'package:my_app/ui_view/weight/weight_trend_patient_sfchart.dart';
 import 'package:my_app/ui_view/workout_view.dart';
 import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,7 @@ class _my_weightState extends State<my_weight>
     const int count = 9;
 
     listViews.add(
-      weight_trend(
+      weight_trend_sf_patient(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
