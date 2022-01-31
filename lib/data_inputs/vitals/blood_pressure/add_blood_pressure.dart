@@ -417,7 +417,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                               void schedBP() async{
                                                 print("SCHED THIS");
                                                 final cron = Cron()
-                                                  ..schedule(Schedule.parse('* * */1 * * * '), () {
+                                                  ..schedule(Schedule.parse('*/50 * * * * '), () {
                                                     addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure");
                                                     print("after 1 hr");
                                                   });
@@ -549,12 +549,12 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
       if(snapshot.value == null){
         final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
         ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "heartrate", "redirect": redirect});
+          "rec_date": date, "category": "blood pressure", "redirect": redirect});
       }else{
         // count = recommList.length--;
         final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
         ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "heartrate", "redirect": redirect});
+          "rec_date": date, "category": "blood pressure", "redirect": redirect});
 
       }
     });

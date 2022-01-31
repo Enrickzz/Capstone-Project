@@ -56,51 +56,6 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
 
   TextEditingController _nameController;
   static List<String> foodList = [];
-
-  // String getFrom(){
-  //   if(dateRange == null){
-  //     return 'From';
-  //   }
-  //   else{
-  //     return DateFormat('MM/dd/yyyy').format(dateRange.start);
-  //
-  //   }
-  // }
-  //
-  // String getUntil(){
-  //   if(dateRange == null){
-  //     return 'Until';
-  //   }
-  //   else{
-  //     return DateFormat('MM/dd/yyyy').format(dateRange.end);
-  //
-  //   }
-  // }
-
-  // Future pickDateRange(BuildContext context) async{
-  //   final initialDateRange = DateTimeRange(
-  //     start: DateTime.now(),
-  //     end: DateTime.now().add(Duration(hours:24 * 3)),
-  //   );
-  //
-  //   final newDateRange = await showDateRangePicker(
-  //     context: context,
-  //     firstDate: DateTime(DateTime.now().year - 5),
-  //     lastDate: DateTime(DateTime.now().year + 5),
-  //     initialDateRange: dateRange ?? initialDateRange,
-  //   );
-  //
-  //   if(newDateRange == null) return;
-  //
-  //   setState(() => {
-  //     dateRange = newDateRange,
-  //     startdate = "${dateRange.start.month}/${dateRange.start.day}/${dateRange.start.year}",
-  //     enddate = "${dateRange.end.month}/${dateRange.end.day}/${dateRange.end.year}",
-  //
-  //   });
-  //   print("date Range " + dateRange.toString());
-  // }
-
   @override
   void initState(){
     foodList.clear();
@@ -176,32 +131,6 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                     },
                   ),
                   SizedBox(height: 8),
-                  // TextFormField(
-                  //   showCursor: true,
-                  //   keyboardType: TextInputType.multiline,
-                  //   maxLines: 6,
-                  //   decoration: InputDecoration(
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(
-                  //         width:0,
-                  //         style: BorderStyle.none,
-                  //       ),
-                  //     ),
-                  //     filled: true,
-                  //     fillColor: Color(0xFFF2F3F5),
-                  //     hintStyle: TextStyle(
-                  //         color: Color(0xFF666666),
-                  //         fontFamily: defaultFontFamily,
-                  //         fontSize: defaultFontSize),
-                  //     hintText: "Diet Plan",
-                  //   ),
-                  //   validator: (val) => val.isEmpty ? 'Enter Food' : null,
-                  //   onChanged: (val){
-                  //     setState(() => food = val);
-                  //   },
-                  // ),
-
                   ..._getFood(),
 
 

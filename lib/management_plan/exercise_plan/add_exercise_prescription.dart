@@ -90,6 +90,18 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
     });
     print("date Range " + dateRange.toString());
   }
+
+
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  List<RecomAndNotif> recommList = new List<RecomAndNotif>();
+  String date;
+  String hours,min;
+  Users doctor = new Users();
+  @override
+  void initState(){
+    initNotif();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -181,32 +193,6 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
 
                   SizedBox(height: 8),
 
-                  // TextFormField(
-                  //   showCursor: true,
-                  //   decoration: InputDecoration(
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(
-                  //         width:0,
-                  //         style: BorderStyle.none,
-                  //       ),
-                  //     ),
-                  //     filled: true,
-                  //     fillColor: Color(0xFFF2F3F5),
-                  //     hintStyle: TextStyle(
-                  //         color: Color(0xFF666666),
-                  //         fontFamily: defaultFontFamily,
-                  //         fontSize: defaultFontSize),
-                  //     hintText: "Activity/Exercise Instructions",
-                  //   ),
-                  //   validator: (val) => val.isEmpty ? 'Enter Type of Workout' : null,
-                  //   onChanged: (val){
-                  //     setState(() => type = val);
-                  //   },
-                  // ),
-                  //
-                  // SizedBox(height: 8.0),
-
                   TextFormField(
                     showCursor: true,
                     maxLines: 6,
@@ -295,6 +281,12 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                               ExPlan a = new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid,
                                   dateCreated: now, doctor_name: doctor_name);
 
+                              addtoNotif("Dr. "+doctor.lastname+ " has added something to your exercise management plan. Click here to view your new Food management plan. " ,
+                                  "Doctor Added to your Exercise Plan!",
+                                  "1",
+                                  "Exercise Plan",
+                                  widget.userUID);
+                              print("POP HERE ==========");
                               Navigator.pop(context,a );
                             });
 
@@ -312,6 +304,43 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
         )
 
     );
+  }
+  void addtoNotif(String message, String title, String priority,String redirect, String uid){
+    print ("ADDED TO NOTIFICATIONS");
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    ref.once().then((DataSnapshot snapshot) {
+      if(snapshot.value == null){
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+      }else{
+        // count = recommList.length--;
+        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          "rec_date": date, "category": "notification", "redirect": redirect});
+
+      }
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        doctor = Users.fromJson(temp);
+      });
+    });
   }
   void getExercise() {
     // final User user = auth.currentUser;

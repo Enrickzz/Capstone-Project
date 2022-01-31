@@ -15,6 +15,10 @@ import 'package:my_app/database.dart';
 import 'package:my_app/goal_tab/meals/recommended_meals.dart';
 import 'package:my_app/goal_tab/music/music_recommendation.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/management_plan/exercise_plan/exercise_plan_patient_view.dart';
+import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
+import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
+import 'package:my_app/management_plan/vitals_plan/vitals_plan_patient_view.dart';
 import 'package:my_app/models/GooglePlaces.dart';
 import 'package:my_app/models/OnePlace.dart';
 import 'package:my_app/models/Reviews.dart';
@@ -142,6 +146,19 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                               ],
                             ),
                             onTap: (){
+                              if(notif.title.toString().toLowerCase().contains("added to your food plan")){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => food_prescription_patient_view(animationController: widget.animationController)));
+                              }
+                              if(notif.title.toString().toLowerCase().contains("added to your exercise plan")){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => exercise_prescription_patient_view(animationController: widget.animationController)));
+                              }
+                              if(notif.title.toString().toLowerCase().contains("added to your medication plan")){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => medication_prescription_patientView()));
+                              }
+                              if(notif.title.toString().toLowerCase().contains("added to your vitals plan")){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => vitals_prescription_patient_view()));
+                              }
+
                               if(notif.title == "Take your meds!"){
                                 showModalBottomSheet(context: context,
                                   isScrollControlled: true,
