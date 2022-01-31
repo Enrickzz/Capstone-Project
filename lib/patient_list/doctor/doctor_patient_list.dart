@@ -311,10 +311,12 @@ class _PatientListState extends State<PatientList>  {
           readPatient.once().then((DataSnapshot pshot){
             var temp1 = jsonDecode(jsonEncode(pshot.value));
             Users patient = Users.fromJson(temp1);
-            //userlist.add(Users.fromJson(temp1));
+            names.add(patient.firstname + " " + patient.lastname);
+            pp_imgs.add(patient.pp_img.toString());
+            readInfo.once().then((DataSnapshot snapshot){
+              var temp2 = jsonDecode(jsonEncode(snapshot.value));
+              print(temp2);
 
-            readInfo.once().then((DataSnapshot infoshot){
-              var temp2 = jsonDecode(jsonEncode(infoshot.value));
               //userAddInfo.add(Additional_Info.fromJson(temp2));
               String disease_name = "";
               Additional_Info info = Additional_Info.fromJson4(temp2);

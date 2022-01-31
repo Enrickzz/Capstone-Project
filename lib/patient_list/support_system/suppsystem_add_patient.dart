@@ -564,10 +564,10 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
         final addPatientConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/' + pcount.toString());
 
         addPatientConnection.set({
-          "uid": patient_connection[patient_connection.length-1].uid,
-          "dashboard": patient_connection[patient_connection.length-1].dashboard.toString(),
-          "nonhealth": patient_connection[patient_connection.length-1].nonhealth.toString(),
-          "health": patient_connection[patient_connection.length-1].health.toString(),
+          "uid": uid,
+          "dashboard": "false",
+          "nonhealth": "false",
+          "health": "false",
         });
       });
 
@@ -579,10 +579,10 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
 
       final addDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/' + dcount.toString());
       addDoctorConnection.set({
-        "uid": doc_connection[doc_connection.length-1].uid,
-        "dashboard": doc_connection[doc_connection.length-1].dashboard.toString(),
-        "nonhealth": doc_connection[doc_connection.length-1].nonhealth.toString(),
-        "health": doc_connection[doc_connection.length-1].health.toString(),
+        "uid": userUID,
+        "dashboard": "false",
+        "nonhealth": "false",
+        "health": "false",
       });
       readPatient.once().then((DataSnapshot patientsnapshot){
         Map<String, dynamic> temp = jsonDecode(jsonEncode(patientsnapshot.value));

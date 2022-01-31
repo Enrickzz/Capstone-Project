@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/discussion_board/create_post.dart';
@@ -37,6 +38,7 @@ class discussion extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 List<Common> result = [];
 List<double> calories = [];
+final FirebaseAuth auth = FirebaseAuth.instance;
 class _discussionState extends State<discussion> with TickerProviderStateMixin {
 
   String search="";
@@ -53,7 +55,7 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
   String description = '';
   List<Discussion> discussion_list = new List<Discussion>();
   bool prescribedDoctor = false;
-
+  final uid = auth.currentUser.uid;
 
   double topBarOpacity = 0.0;
   @override
@@ -307,16 +309,19 @@ class _discussionState extends State<discussion> with TickerProviderStateMixin {
                                               ),
                                             ],
                                           ),
-                                          InkWell(
-                                            onTap: () {
-                                              _showMyDialogDelete();
+                                          if(discussion_list[index].createdBy == uid)... [
+                                            InkWell(
+                                              onTap: () {
+                                                _showMyDialogDelete();
 
-                                            },
-                                            child: Icon(
-                                              Icons.delete,
-                                              size: 18,
+                                              },
+                                              child: Icon(
+                                                Icons.delete,
+                                                size: 18,
+                                              ),
                                             ),
-                                          ),
+                                          ]
+
                                         ],
                                       )
                                     ],
