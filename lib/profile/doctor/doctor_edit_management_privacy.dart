@@ -259,7 +259,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                         color: Colors.blue,
                         onPressed: (){
                           _showMyDialog();
-                          Navigator.pop(context);
+                          // Navigator.pop(context);
                         },
 
                         // Navigator.pop(context);
@@ -475,27 +475,8 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                           "explan": isAllowedExercisePlan.toString(),
                           "vitals": isAllowedVitalsRecording.toString(),
                         });
-                        // final selfconnectionRef = databaseReference.child('users/' + doctorUID + '/personal_info/connections/'+ (index).toString());
-                        // doctorConnectionsRef.set({
-                        //   "uid": userUID,
-                        //   "createdBy": uid,
-                        //   "medpres": false.toString(),
-                        //   "foodplan": false.toString(),
-                        //   "explan": false.toString(),
-                        //   "vitals": false.toString(),
-                        // });
                       });
-
-
-                      print(connections[index-1].createdBy);
-                      print("index");
-                      print(index);
-                      print(connections.length);
-                      print(doctorUID);
-                      print(uid);
-
                     }
-
                   });
 
                   Navigator.pop(context);

@@ -57,7 +57,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
   List<Additional_Info> userAddInfo =[];
   List<int> delete_list = [];
   Connection target_connection;
-
+  int tryCount = 0;
   List names = [
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
     // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
@@ -67,6 +67,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
     // "Cardiologist", "Endocrinologist", 'Endocrinologist', "Cardiologist",
     // "Endocrinologist", "Cardiologist", 'Endocrinologist', "Cardiologist", 'Endocrinologist', "Cardiologist"
   ];
+  bool isLoading = true;
 
   @override
   void initState(){
@@ -74,12 +75,42 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
     final User user = auth.currentUser;
     final uid = user.uid;
     getPatients();
-    Future.delayed(const Duration(milliseconds: 1000), (){
-      setState(() {
-        delete_list.sort((a, b) => b.compareTo(a));
-        for(int i = 0; i < delete_list.length; i++){
-          userlist.removeAt(delete_list[i]);
-          connections.removeAt(delete_list[i]);
+    Future.delayed(const Duration(milliseconds: 2000), (){
+        List<Connection> tempConn=[];
+        print("SETSTATE LENGTH");
+        print(tryCount.toString());
+        doctorconnections.length = tryCount;
+        print(doctorconnections.length);
+
+        // delete_list.sort((a, b) => b.compareTo(a));
+        // for(int i = 0; i < delete_list.length; i++){
+        //   userlist.removeAt(delete_list[i]);
+        //   connections.removeAt(delete_list[i]);
+        // }
+        // for(int i = 0; i < userlist.length; i++){
+        //   if(userlist[i].uid == uid){
+        //     userlist[i].isMe = true;
+        //   }
+        //   else{
+        //     userlist[i].isMe = false;
+        //   }
+        // }
+        // userlist.clear();
+        for(var i = 0 ; i < doctorconnections.length; i++){
+          getname(doctorconnections[i].createdBy).then((value) {
+            Users addme = value;
+            print("LOOP $i + " + addme.firstname + " " + addme.lastname );
+            print(addme.specialty);
+            String addname = addme.firstname + " " + addme.lastname;
+            names.add(addname);
+            print(names.length);
+            position.add(addme.specialty);
+            if(addme.uid == uid){
+              addme.isMe=true;
+            }else addme.isMe= false;
+            userlist.add(addme);
+          });
+          print(doctorconnections[i].createdBy + " \t" + doctorconnections[i].uid);
         }
         for(int i = 0; i < userlist.length; i++){
           if(userlist[i].uid == uid){
@@ -89,7 +120,11 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
             userlist[i].isMe = false;
           }
         }
-      });
+        Future.delayed(const Duration(milliseconds: 2000), (){
+          setState(() {
+            isLoading=false;
+          });
+        });
     });
   }
 
@@ -109,7 +144,10 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
 
           ],
         ),
-        body: ListView.builder(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new  ListView.builder(
             itemCount: names.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
@@ -124,7 +162,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                     backgroundImage: NetworkImage
                       ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
                   ),
-                  title: Text(names[index],
+                  title: Text(names[index].toString(),
                       style:TextStyle(
                         color: Colors.black,
                         fontSize: 14.0,
@@ -182,69 +220,68 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
 
   }
 
+  Future<Users> getname(String idLooped) async{
+    final readname = databaseReference.child('users/' + idLooped + '/personal_info/');
+    Users ret;
+    await readname.once().then((DataSnapshot snapshot) {
+      Map<String, dynamic> jsonName = jsonDecode(jsonEncode(snapshot.value));
+      Users thisName = Users.fromJson(jsonName);
+      print(thisName.firstname + "<<<<<<<<" + thisName.lastname);
+      ret = thisName;
+    });
+    return ret;
 
+  }
   void getPatients(){
     final User user = auth.currentUser;
     final uid = user.uid;
     String userUID = widget.userUID;
     Users usertype = new Users();
     List<int> listdelete = [];
+    connections.clear();
     final readConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
     readConnection.once().then((DataSnapshot snapshot){
       List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
       temp1.forEach((jsonString) {
         connections.add(Connection.fromJson(jsonString));
       });
-      for(int i = 0; i < connections.length; i++){
-        final readDoctor = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
-        readDoctor.once().then((DataSnapshot datasnapshot){
-          Map<String, dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
-          userlist.add(Users.fromJson(temp2));
-          if(userlist[i].usertype != "Doctor"){
-            delete_list.add(i);
-            // userlist.removeAt(i);
-          }
-          else{
-            names.add(userlist[i].firstname+ " " + userlist[i].lastname);
-            position.add(userlist[i].specialty);
-          }
-        });
-      }
+      // for(int i = 0; i < connections.length; i++){
+      //   final readDoctor = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
+      //   readDoctor.once().then((DataSnapshot datasnapshot){
+      //     Map<String, dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
+      //     userlist.add(Users.fromJson(temp2));
+      //     if(userlist[i].usertype != "Doctor"){
+      //       delete_list.add(i);
+      //       // userlist.removeAt(i);
+      //     }
+      //     else{
+      //       // names.add(userlist[i].firstname+ " " + userlist[i].lastname);
+      //       // position.add(userlist[i].specialty);
+      //     }
+      //   });
+      // }
       for(int i = 0; i < connections.length; i++){
         final readUsertype = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
+        final readDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
         readUsertype.once().then((DataSnapshot snapshot){
+          readDoctorConnection.once().then((DataSnapshot datasnapshot){
           Map<String, dynamic> temp4 = jsonDecode(jsonEncode(snapshot.value));
           usertype = Users.fromJson(temp4);
           if(usertype.usertype == "Doctor"){
+            tryCount++;
             //connections[i].uid is list of doctor uid
-            final readDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
-            readDoctorConnection.once().then((DataSnapshot datasnapshot){
               List<dynamic> temp3 = jsonDecode(jsonEncode(datasnapshot.value));
               if(datasnapshot.value != null){
                 temp3.forEach((jsonString) {
                   if(jsonString.toString().contains(userUID)){
-                  // if(jsonString.toString().contains(userUID) && !jsonString.toString().contains(uid)){
                     doctorconnections.add(Connection.fromJson2(jsonString));
                   }
 
                 });
-                for(int i = 0; i < doctorconnections.length; i++){
-                  print("CHECK DOCTOR CONNECTION");
-                  print(doctorconnections[i].createdBy);
-                }
               }
-
-              if(connections[i].uid != doctorconnections[i].createdBy){
-                print("LIST DELETE ADD");
-                listdelete.add(i);
-              }
-            });
-          }
+            }
+          });
         });
-      }
-      listdelete.sort((a, b) => b.compareTo(a));
-      for(int i = 0; i < listdelete.length; i++){
-        doctorconnections.removeAt(listdelete[i]);
       }
     });
     final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
@@ -252,70 +289,5 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
       Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
         patient = Users.fromJson(temp2);
     });
-    // List<Connection> templist = [];
-    // for(int i = 0; i < doctorconnections.length; i++){
-    //   if(doctorconnections[i].createdBy == uid){
-    //     templist.add(doctorconnections[i]);
-    //   }
-    // }
-    // Future.delayed(const Duration(milliseconds: 1000), (){
-    //   for(int i = 0; i < doctorconnections.length; i++){
-    //     if(doctorconnections[i].createdBy != uid){
-    //       templist.add(doctorconnections[i]);
-    //     }
-    //   }
-    //   doctorconnections = templist;
-    // });
   }
-
-
-  // void getConnections () {
-  //   Map<String, dynamic> temp;
-  //   for(int i = 0; i < userlist.length; i++){
-  //     final readDoctor = databaseReference.child('users/' + userlist[i].uid + '/personal_info/connections/');
-  //     readDoctor.once().then((DataSnapshot datasnapshot){
-  //       Map<String, dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
-  //       temp = temp2;
-  //       for(int j = 0; j < temp.length; i++){
-  //         final readDoctor2 = databaseReference.child('users/' + userlist[i].uid + '/personal_info/' + (i+1).toString());
-  //         readDoctor2.once().then((DataSnapshot snapshot){
-  //           temp.forEach((key, jsonString) {
-  //             doctor_connections.add(Connection.fromJson2(jsonString));
-  //             print(doctor_connections.toString());
-  //             print("ASDASDADASDA");
-  //             print(doctor_connections[i].medpres);
-  //           });
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
-
-  // void getConnections () {
-  //   Users user = new Users();
-  //   List<int> delete_list = [];
-  //   for(int i = 0; i < userlist.length; i++){
-  //     final readDoctor = databaseReference.child('users/' + userlist[i].uid + '/personal_info/connections/');
-  //     readDoctor.once().then((DataSnapshot datasnapshot){
-  //       List<dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
-  //       temp2.forEach((jsonString) {
-  //         doctor_connections.add(Connection.fromJson(jsonString));
-  //       });
-  //       final readUserType = databaseReference.child('users/' + doctor_connections[i].uid + '/personal_info/');
-  //       readUserType.once().then((DataSnapshot snapshot){
-  //         List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //         temp.forEach((jsonString) {
-  //           user = Users.fromJson(jsonString);
-  //         });
-  //         if(user.usertype != "Doctor"){
-  //           delete_list.add(i);
-  //         }
-  //       });
-  //     });
-  //   }
-  //   delete_list.sort((a, b) => b.compareTo(a));
-  //   for(int i = 0; i < delete_list.length; i++){
-  //     doctor_connections.removeAt(delete_list[i]);
-  //   }
-  // }
 }
