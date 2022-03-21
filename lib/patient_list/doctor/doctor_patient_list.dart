@@ -114,27 +114,34 @@ class _PatientListState extends State<PatientList>  {
     }else{
       pp_imgs.clear();
       getPatients();
-
       isLoading = true;
     }
     Future.delayed(const Duration(milliseconds: 2000), (){
-      var distinctIds = uidlist.toSet().toList();
+      // var distinctIds = uidlist.toSet().toList();
       setState(() {
-        uidlist = distinctIds;
-        //names = names.toSet().toList();
+        // uidlist = distinctIds;
+        // names = names.toSet().toList();
         // pp_imgs = pp_imgs.toSet().toList();
-        for(var i = 0; i < names.length-1;i++){
-          if(names[i] == names[i+1]){
-            names.removeAt(i+1);
-            pp_imgs.removeAt(i+1);
-          }
-        }
-        print("LENGTGHS PP AND NAMES");
-        print(pp_imgs.length); print(names.length);
-        print("UIDS");
-        for(var i = 0; i < uidlist.length; i++){
-          print(uidlist[i] + " index $i");
-        }
+        // for(var i = 0; i < names.length-1;i++){
+        //   if(names[i] == names[i+1]){
+        //     deletelist.add(i+1);
+        //     // names.removeAt(i+1);
+        //     // pp_imgs.removeAt(i+1);
+        //   }
+        // }
+        // deletelist.sort((a,b) =>a.compareTo(b));
+        // for(var i = 0; i < deletelist.length; i++){
+        //   if(i == deletelist[i]){
+        //     names.removeAt(deletelist[i]);
+        //     pp_imgs.removeAt(deletelist[i]);
+        //   }
+        // }
+        // print("LENGTGHS PP AND NAMES");
+        // print(pp_imgs.length); print(names.length); print(uidlist.length);
+        // print("UIDS");
+        // for(var i = 0; i < uidlist.length; i++){
+        //   print(uidlist[i] + " index $i");
+        // }
         isLoading = false;
       });
 
@@ -305,6 +312,10 @@ class _PatientListState extends State<PatientList>  {
         for(int i = 0; i < doctor_connections.length; i++){
           uidlist.add(doctor_connections[i].uid);
         }
+        print("AAAAAAAAAAAAAAAAAAAA" + uidlist.length.toString());
+        var uidtemp = uidlist.toSet().toList();
+        uidlist = uidtemp;
+        print("AAAAAAAAAAAAAAAAAAAA" + uidlist.length.toString());
         for(int i = 0; i < uidlist.length; i++){
           final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
           final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
