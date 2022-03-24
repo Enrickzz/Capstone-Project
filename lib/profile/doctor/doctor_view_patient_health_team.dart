@@ -74,6 +74,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
     super.initState();
     final User user = auth.currentUser;
     final uid = user.uid;
+    bool duplicate = false;
     getPatients();
     Future.delayed(const Duration(milliseconds: 2000), (){
         List<Connection> tempConn=[];
@@ -97,21 +98,31 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
         // }
         // userlist.clear();
         for(var i = 0 ; i < doctorconnections.length; i++){
+          duplicate = false;
           getname(doctorconnections[i].createdBy).then((value) {
             Users addme = value;
+            for(var j = 0; j <names.length; j++){
+              if(names[j].toString().contains(addme.firstname) && names[j].toString().contains(addme.lastname)){
+                duplicate = true;
+              }
+            }
             print("LOOP $i + " + addme.firstname + " " + addme.lastname );
             print(addme.specialty);
             String addname = addme.firstname + " " + addme.lastname;
-            names.add(addname);
-            print(names.length);
-            position.add(addme.specialty);
-            if(addme.uid == uid){
-              addme.isMe=true;
-            }else addme.isMe= false;
-            userlist.add(addme);
+            if(!duplicate){
+              names.add(addname);
+              print(names.length);
+              position.add(addme.specialty);
+              if(addme.uid == uid){
+                addme.isMe=true;
+              }else addme.isMe= false;
+              userlist.add(addme);
+            }
           });
           print(doctorconnections[i].createdBy + " \t" + doctorconnections[i].uid);
         }
+        var temp = names.toSet().toList();
+        names = temp;
         for(int i = 0; i < userlist.length; i++){
           if(userlist[i].uid == uid){
             userlist[i].isMe = true;
