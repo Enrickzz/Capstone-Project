@@ -153,7 +153,7 @@ class _calorie_intakeState extends State<stacked_sleep_chart> {
   }
    void getFitbit() async {
      String token = widget.fitbittoken;
-     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=7"),
+     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-30&sort=desc&offset=0&limit=7"),
          headers: {
            'Authorization': "Bearer " + token,
          });
