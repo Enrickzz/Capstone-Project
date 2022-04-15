@@ -246,8 +246,28 @@ class _medication_prescriptionState extends State<medication_prescription> {
           doctor_names.add(prestemp[i].doctor_name);
           if(prestemp[i].prescribedBy != uid){
             for(int j = 0; j < connections.length; j++){
-              if(prestemp[i].prescribedBy == connections[j].createdBy){
-                if(connections[j].medpres != "true"){
+              print("*************************");
+              print("HEREREEE");
+              print(prestemp[i].prescribedBy);
+              print(connections[j].doctor1);
+              print(uid);
+              print(connections[j].doctor2);
+              if(prestemp[i].prescribedBy == connections[j].doctor1 && uid == connections[j].doctor2){
+                if(connections[j].medpres1 != "true"){
+                  /// dont add
+                  delete_list.add(i);
+                }
+                else{
+                  /// add
+                }
+              }
+              print("*************************");
+              print(prestemp[i].prescribedBy);
+              print(connections[j].doctor2);
+              print(uid);
+              print(connections[j].doctor1);
+              if(prestemp[i].prescribedBy == connections[j].doctor2 && uid == connections[j].doctor1){
+                if(connections[j].medpres2 != "true"){
                   /// dont add
                   delete_list.add(i);
                 }

@@ -205,8 +205,17 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
           for(int i = 0; i < extemp.length; i++){
             if(extemp[i].prescribedBy != uid){
               for(int j = 0; j < connections.length; j++){
-                if(extemp[i].prescribedBy == connections[j].createdBy){
-                  if(connections[j].explan != "true"){
+                if(extemp[i].prescribedBy == connections[j].doctor1 && uid == connections[j].doctor2){
+                  if(connections[j].explan1 != "true"){
+                    /// dont add
+                    delete_list.add(i);
+                  }
+                  else{
+                    /// add
+                  }
+                }
+                if(extemp[i].prescribedBy == connections[j].doctor2 && uid == connections[j].doctor1){
+                  if(connections[j].explan2 != "true"){
                     /// dont add
                     delete_list.add(i);
                   }

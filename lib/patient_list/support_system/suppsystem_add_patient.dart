@@ -73,8 +73,8 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
   String otherCondition = "";
   List<Connection> doc_connection = [];
   List<Connection> patient_connection = [];
-  Connection docConnection = new Connection(uid: "", dashboard: "true", nonhealth: "true", health: "true");
-  Connection patientConnection = new Connection(uid: "", dashboard: "true", nonhealth: "true", health: "true");
+  Connection docConnection = new Connection(doctor1: "", dashboard: "true", nonhealth: "true", health: "true");
+  Connection patientConnection = new Connection(doctor1: "", dashboard: "true", nonhealth: "true", health: "true");
   int pcount = 1;
   int dcount = 1;
 
@@ -533,7 +533,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
           doc_connection.add(Connection.fromJson(jsonString));
         });
         for(int i = 0; i < doc_connection.length; i++){
-          if(doc_connection[i].uid == userUID){
+          if(doc_connection[i].doctor1 == userUID){
             print("same patient detected");
             isPatient = true;
           }
@@ -549,7 +549,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
             patient_connection.add(Connection.fromJson(jsonString));
           });
           for(int i = 0; i < patient_connection.length; i++){
-            if(patient_connection[i].uid == uid){
+            if(patient_connection[i].doctor1 == uid){
               print("same patient detected");
               isDoctor = true;
             }
@@ -557,7 +557,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
           pcount = patient_connection.length+1;
         }
         if(isDoctor == false){
-          patientConnection.uid = uid;
+          patientConnection.doctor1 = uid;
           patient_connection.add(patientConnection);
           print("doctor added successfully");
         }
@@ -572,7 +572,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
       });
 
       if(isPatient == false){
-        docConnection.uid = userUID;
+        docConnection.doctor1 = userUID;
         doc_connection.add(docConnection);
         print("patient added successfully");
       }

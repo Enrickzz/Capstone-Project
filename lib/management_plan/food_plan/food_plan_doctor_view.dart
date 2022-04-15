@@ -54,12 +54,10 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
     foodPtemp.clear();
     connection_list = widget.connection_list;
     getFoodPlan(connection_list);
-    Future.delayed(const Duration(milliseconds: 1000), (){
+    Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         isLoading =false;
         print("setstate");
-        print("foodPtemp.length");
-        print(foodPtemp.length);
       });
     });
   }
@@ -192,8 +190,8 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
         // foodPtemp.add(FoodPlan.fromJson(jsonString));
         FoodPlan a = FoodPlan.fromJson(jsonString);
         final readDoctor = databaseReference.child('users/' + a.prescribedBy + '/personal_info/');
-        readDoctor.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+        readDoctor.once().then((DataSnapshot snap){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snap.value));
           if(temp != null){
             doctor = Users.fromJson(temp);
             a.doctor = doctor.lastname;
@@ -201,13 +199,24 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
           }
         });
       });
-
+      Future.delayed(const Duration(milliseconds: 1000), (){
         setState(() {
+          print(foodPtemp.length);
+          print(uid);
           for(int i = 0; i < foodPtemp.length; i++){
             if(foodPtemp[i].prescribedBy != uid){
               for(int j = 0; j < connections.length; j++){
-                if(foodPtemp[i].prescribedBy == connections[j].createdBy){
-                  if(connections[j].foodplan != "true"){
+                if(foodPtemp[i].prescribedBy == connections[j].doctor1 && uid == connections[j].doctor2){
+                  if(connections[j].foodplan1 != "true"){
+                    /// dont add
+                    delete_list.add(i);
+                  }
+                  else{
+                    /// add
+                  }
+                }
+                if(foodPtemp[i].prescribedBy == connections[j].doctor2 && uid == connections[j].doctor1){
+                  if(connections[j].foodplan2 != "true"){
                     /// dont add
                     delete_list.add(i);
                   }
@@ -217,17 +226,11 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
                 }
               }
             }
-            // final readDoctor = databaseReference.child('users/' + foodPtemp[i].prescribedBy + '/personal_info/');
-            // readDoctor.once().then((DataSnapshot snapshot){
-            //   Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-            //   if(temp != null){
-            //     doctor = Users.fromJson(temp);
-            //     doctor_names.add(doctor.lastname);
-            //   }
-            // });
           }
         });
+        delete_list = delete_list.toSet().toList();
         delete_list.sort((a, b) => b.compareTo(a));
+
         for(int i = 0; i < delete_list.length; i++){
           foodPtemp.removeAt(delete_list[i]);
         }
@@ -237,8 +240,7 @@ class _food_prescriptionState extends State<food_prescription_doctor_view> {
           foodPtemp[i] = foodPtemp[foodPtemp.length-1-i];
           foodPtemp[foodPtemp.length-1-i] = temp;
         }
-
-
+      });
     });
   }
 }

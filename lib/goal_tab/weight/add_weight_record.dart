@@ -345,11 +345,11 @@ class add_weightState extends State<add_weight_record> {
                                           temp.forEach((jsonString) {
                                             connections.add(Connection.fromJson(jsonString)) ;
                                             Connection a = Connection.fromJson(jsonString);
-                                            print(a.uid);
+                                            print(a.doctor1);
                                             addtoNotif("Your <type> "+thisuser.firstname+" "+ thisuser.lastname + " who has heart failure has recorded a drastic change in weight. He/she may require your immediate medical attention.",
                                                 thisuser.firstname + " has recorded drastic weight changes",
                                                 "3",
-                                                a.uid,
+                                                a.doctor1,
                                                 "None");
                                           });
                                         });

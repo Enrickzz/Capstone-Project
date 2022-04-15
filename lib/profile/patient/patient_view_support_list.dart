@@ -186,7 +186,7 @@ class _SupportSystemListState extends State<SupportSystemList>  {
           connections.add(Connection.fromJson(jsonString));
         });
         for(int i = 0; i < connections.length; i++){
-          uidlist.add(connections[i].uid);
+          uidlist.add(connections[i].doctor1);
         }
         print(uidlist);
         for(int i = 0; i < uidlist.length; i++){

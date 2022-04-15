@@ -99,7 +99,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
         // userlist.clear();
         for(var i = 0 ; i < doctorconnections.length; i++){
           duplicate = false;
-          getname(doctorconnections[i].createdBy).then((value) {
+          getname(doctorconnections[i].doctor1).then((value) {
             Users addme = value;
             for(var j = 0; j <names.length; j++){
               if(names[j].toString().contains(addme.firstname) && names[j].toString().contains(addme.lastname)){
@@ -119,7 +119,6 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
               userlist.add(addme);
             }
           });
-          print(doctorconnections[i].createdBy + " \t" + doctorconnections[i].uid);
         }
         var temp = names.toSet().toList();
         names = temp;
@@ -141,6 +140,8 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
 
   @override
   Widget build(BuildContext context) {
+    final User user = auth.currentUser;
+    final uid = user.uid;
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -272,8 +273,9 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
       //   });
       // }
       for(int i = 0; i < connections.length; i++){
-        final readUsertype = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
-        final readDoctorConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
+        print(connections[i].doctor1);
+        final readUsertype = databaseReference.child('users/' + connections[i].doctor1 + '/personal_info/');
+        final readDoctorConnection = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/');
         readUsertype.once().then((DataSnapshot snapshot){
           readDoctorConnection.once().then((DataSnapshot datasnapshot){
           Map<String, dynamic> temp4 = jsonDecode(jsonEncode(snapshot.value));
@@ -284,10 +286,9 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
               List<dynamic> temp3 = jsonDecode(jsonEncode(datasnapshot.value));
               if(datasnapshot.value != null){
                 temp3.forEach((jsonString) {
-                  if(jsonString.toString().contains(userUID)){
+                  // if(jsonString.toString().contains(userUID)){
                     doctorconnections.add(Connection.fromJson2(jsonString));
-                  }
-
+                  // }
                 });
               }
             }

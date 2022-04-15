@@ -31,31 +31,72 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   List<Connection> connections = [];
   List<Connection> doctor_connection = [];
+  Connection curr_connection;
+  String doctor1 = "";
+  String doctor2 = "";
   bool isAllowedMedicalPrescription = false;
   bool isAllowedFoodPlan = false;
   bool isAllowedExercisePlan = false;
   bool isAllowedVitalsRecording = false;
   bool showDisclaimer = false;
-
+  int index = 1;
 
   @override
   void initState(){
     super.initState();
     Connection doctorconnection = widget.connection;
-    if(doctorconnection != null){
-      if(doctorconnection.medpres.toLowerCase() == "true"){
-        isAllowedMedicalPrescription = true;
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    var userUID = widget.userUID;
+    String doctorUID = widget.doctorUID;
+    final readDoctorConnection = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/');
+    readDoctorConnection.once().then((DataSnapshot datasnapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+      if(datasnapshot.value != null){
+        temp.forEach((jsonString) {
+          // if(jsonString.toString().contains(userUID)){
+          connections.add(Connection.fromJson2(jsonString));
+          // }
+        });
       }
-      if(doctorconnection.foodplan.toLowerCase() == "true"){
-        isAllowedFoodPlan = true;
+      for(var i = 0; i < connections.length; i++){
+        if((connections[i].doctor1 == uid && connections[i].doctor2 == doctorUID) || (connections[i].doctor2 == uid && connections[i].doctor1 == doctorUID)){
+          curr_connection = connections[i];
+          index = i + 1;
+        }
       }
-      if(doctorconnection.explan.toLowerCase() == "true"){
-        isAllowedExercisePlan = true;
+      if(curr_connection != null){
+        if(curr_connection.doctor1 == uid){
+          if(curr_connection.medpres1.toLowerCase() == "true"){
+            isAllowedMedicalPrescription = true;
+          }
+          if(curr_connection.foodplan1.toLowerCase() == "true"){
+            isAllowedFoodPlan = true;
+          }
+          if(curr_connection.explan1.toLowerCase() == "true"){
+            isAllowedExercisePlan = true;
+          }
+          if(curr_connection.vitals1.toLowerCase() == "true"){
+            isAllowedVitalsRecording = true;
+          }
+        }
+        if(curr_connection.doctor2 == uid){
+          if(curr_connection.medpres2.toLowerCase() == "true"){
+            isAllowedMedicalPrescription = true;
+          }
+          if(curr_connection.foodplan2.toLowerCase() == "true"){
+            isAllowedFoodPlan = true;
+          }
+          if(curr_connection.explan2.toLowerCase() == "true"){
+            isAllowedExercisePlan = true;
+          }
+          if(curr_connection.vitals2.toLowerCase() == "true"){
+            isAllowedVitalsRecording = true;
+          }
+        }
       }
-      if(doctorconnection.vitals.toLowerCase() == "true"){
-        isAllowedVitalsRecording = true;
-      }
-    }
+    });
+
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {
       });
@@ -417,7 +458,7 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
               child: Text('Confirm'),
               onPressed: () {
                 try{
-                  int index = 1;
+
                   final User user = auth.currentUser;
                   final uid = user.uid;
                   bool check = false;
@@ -425,71 +466,24 @@ class _editManagementPrivacyState extends State<doctor_edit_management_privacy> 
                   String userUID = widget.userUID;
                   /// doctorUID = doctor B
                   /// uid = doctor A
-                  String doctorUID = widget.doctorUID;
-                  final readDoctorConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                  readDoctorConnections.once().then((DataSnapshot snapshot) {
-                    List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
-                    temp1.forEach((jsonString) {
-                      /// connections = doctor B's all connection = doctor_connection
-                      connections.add(Connection.fromJson2(jsonString));
-                    });
-                    /// check if patient is in the list
-                    for(int i = 1; i <= connections.length; i++){
-                      if(connections[i-1].uid == userUID){
-                        check = true;
-                      }
-                    }
-                    if(check){
-                      final readPatientConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                      readPatientConnection.once().then((DataSnapshot patientsnapshot) {
-                        List<dynamic> temp2 = jsonDecode(jsonEncode(patientsnapshot.value));
-                        temp2.forEach((jsonString) {
-                          doctor_connection.add(Connection.fromJson2(jsonString));
-                        });
-                        for(int i = 0; i < doctor_connection.length; i++){
-                          /// if doctor a = pag nakagawa na
-                          /// check if meron nang existing connection with doctor A
-                          if(doctorUID == doctor_connection[i].createdBy){
-                            index = i+1;
-                            isConnected = true;
-                          }
-                        }
-                        if(!isConnected){
-                          index = doctor_connection.length+1;
-                        }
-                        final doctorConnectionsRef = databaseReference.child('users/' + uid + '/personal_info/connections/'+ (index).toString());
-                        doctorConnectionsRef.set({
-                          "uid": userUID,
-                          "createdBy": doctorUID,
-                          "medpres": isAllowedMedicalPrescription.toString(),
-                          "foodplan": isAllowedFoodPlan.toString(),
-                          "explan": isAllowedExercisePlan.toString(),
-                          "vitals": isAllowedVitalsRecording.toString(),
-                        });
-                        List<Connection> coDocConnections=[];
-                        int counter = 0;
-                        final coDocAccChange = databaseReference.child('users/' + widget.doctorUID + '/personal_info/connections/');
-                        coDocAccChange.once().then((DataSnapshot snapshot2) {
-                          List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot2.value));
-                          temp1.forEach((jsonString2) {
-                            counter++;
-                            Connection one = new Connection.fromJson2(jsonDecode(jsonEncode(jsonString2)));
-                            if(one.createdBy == uid && one.uid == widget.userUID){
-                              final coDocChangeAcc = databaseReference.child('users/' + widget.doctorUID + '/personal_info/connections/'+ counter.toString());
-                              coDocChangeAcc.update({
-                                "medpres": isAllowedMedicalPrescription.toString(),
-                                "foodplan": isAllowedFoodPlan.toString(),
-                                "explan": isAllowedExercisePlan.toString(),
-                                "vitals": isAllowedVitalsRecording.toString(),
-                              });
-                            }
-                          });
-
-                        });
-
+                    if(curr_connection.doctor1 == uid){
+                      final doctorConnectionsRef = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/'+ (index).toString());
+                      doctorConnectionsRef.update({
+                        "medpres1": isAllowedMedicalPrescription.toString(),
+                        "foodplan1": isAllowedFoodPlan.toString(),
+                        "explan1": isAllowedExercisePlan.toString(),
+                        "vitals1": isAllowedVitalsRecording.toString(),
                       });
                     }
-                  });
+                    if(curr_connection.doctor2 == uid){
+                      final doctorConnectionsRef = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/'+ (index).toString());
+                      doctorConnectionsRef.update({
+                        "medpres2": isAllowedMedicalPrescription.toString(),
+                        "foodplan2": isAllowedFoodPlan.toString(),
+                        "explan2": isAllowedExercisePlan.toString(),
+                        "vitals2": isAllowedVitalsRecording.toString(),
+                      });
+                    }
 
                   Navigator.pop(context);
                 } catch(e) {

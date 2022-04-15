@@ -439,11 +439,11 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                     temp.forEach((jsonString) {
                                                       connections.add(Connection.fromJson(jsonString)) ;
                                                       Connection a = Connection.fromJson(jsonString);
-                                                      print(a.uid);
+                                                      print(a.doctor1);
                                                       addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded consecutive high blood pressure. This may require your immediate medical attention.",
                                                           thisuser.firstname + " has consecutive high BP readings",
                                                           "3",
-                                                          a.uid);
+                                                          a.doctor1);
                                                     });
                                                   });
                                                 }

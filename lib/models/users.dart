@@ -53,20 +53,34 @@ class Users {
   }
 
 }
+class Uid{
+  Uid({
+    this.uid
+  });
+  String uid;
+  Uid.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
+  }
+}
 class Connection{
 
   Connection({
-    this.uid,
+    this.doctor1,
     this.dashboard,
     this.nonhealth,
     this.health,
-    this.medpres,
-    this.foodplan,
-    this.explan,
-    this.vitals,
+
+    this.medpres1,
+    this.medpres2,
+    this.foodplan1,
+    this.foodplan2,
+    this.explan1,
+    this.explan2,
+    this.vitals1,
+    this.vitals2,
   });
 
-  String uid;
+  String doctor1;
 
   /// patient to doctor
   String dashboard;
@@ -74,26 +88,34 @@ class Connection{
   String health;
 
   Connection.fromJson(Map<String, dynamic> json) {
-    uid = json['uid'];
+    doctor1 = json['uid'];
     dashboard = json['dashboard'];
     nonhealth = json['nonhealth'];
     health = json['health'];
   }
 
   /// doctor to doctor
-  String medpres;
-  String foodplan;
-  String explan;
-  String vitals;
-  String createdBy;
+  String medpres1;
+  String foodplan1;
+  String explan1;
+  String vitals1;
+  String medpres2;
+  String foodplan2;
+  String explan2;
+  String vitals2;
+  String doctor2;
 
   Connection.fromJson2(Map<String, dynamic> json) {
-    uid = json['uid'];
-    createdBy = json['createdBy'];
-    medpres = json['medpres'];
-    foodplan = json['foodplan'];
-    explan = json['explan'];
-    vitals = json['vitals'];
+    doctor1 = json['doctor1'];
+    doctor2 = json['doctor2'];
+    medpres1 = json['medpres1'];
+    foodplan1 = json['foodplan1'];
+    explan1 = json['explan1'];
+    vitals1 = json['vitals1'];
+    medpres2 = json['medpres2'];
+    foodplan2 = json['foodplan2'];
+    explan2 = json['explan2'];
+    vitals2 = json['vitals2'];
   }
 }
 class Vitals_Connection {

@@ -330,11 +330,11 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                   temp.forEach((jsonString) {
                                                     connections.add(Connection.fromJson(jsonString)) ;
                                                     Connection a = Connection.fromJson(jsonString);
-                                                    print(a.uid);
+                                                    print(a.doctor1);
                                                     addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a consistent oxygen rate between 90 - 95 and requires your medical attention",
                                                         thisuser.firstname + " has consecutive low SPO2 readings",
                                                         "3",
-                                                        a.uid,
+                                                        a.doctor1,
                                                         "None");
                                                   });
                                                 });
@@ -354,11 +354,11 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                 temp.forEach((jsonString) {
                                                   connections.add(Connection.fromJson(jsonString)) ;
                                                   Connection a = Connection.fromJson(jsonString);
-                                                  print(a.uid);
+                                                  print(a.doctor1);
                                                   addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a oxygen rate of 90 and requires your immediate medical attention",
                                                       thisuser.firstname + " has low SPO2 readings",
                                                       "3",
-                                                      a.uid,
+                                                      a.doctor1,
                                                       "None");
                                                 });
                                               });

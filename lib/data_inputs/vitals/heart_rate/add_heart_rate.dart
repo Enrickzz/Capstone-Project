@@ -310,11 +310,11 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                       temp.forEach((jsonString) {
                                         connections.add(Connection.fromJson(jsonString)) ;
                                         Connection a = Connection.fromJson(jsonString);
-                                        print(a.uid);
+                                        print(a.doctor1);
                                         addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a very low heart rate and requires your immediate medical attention",
                                             thisuser.firstname + " has very low heart rate!",
                                             "3",
-                                            a.uid, "None");
+                                            a.doctor1, "None");
                                       });
                                     });
                                   }
@@ -340,11 +340,11 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                   temp.forEach((jsonString) {
                                     connections.add(Connection.fromJson(jsonString)) ;
                                     Connection a = Connection.fromJson(jsonString);
-                                    print(a.uid);
+                                    print(a.doctor1);
                                     addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a high heart rate and requires your immediate medical attention",
                                         thisuser.firstname + " has consecutive high heart rate readings",
                                         "3",
-                                        a.uid,
+                                        a.doctor1,
                                         "None");
                                   });
                                 });
@@ -384,11 +384,11 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 temp.forEach((jsonString) {
                                   connections.add(Connection.fromJson(jsonString)) ;
                                   Connection a = Connection.fromJson(jsonString);
-                                  print(a.uid);
+                                  print(a.doctor1);
                                   addtoNotif("Your <type> "+ thisuser.firstname+ " has recorded a very low heart rate and requires your immediate medical attention",
                                       thisuser.firstname + " has very low heart rate!",
                                       "3",
-                                      a.uid, "None");
+                                      a.doctor1, "None");
                                 });
                               });
                             }

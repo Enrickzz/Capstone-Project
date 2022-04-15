@@ -1086,7 +1086,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
         connections.add(Connection.fromJson(jsonString));
       });
       for(int i = 0; i < connections.length; i++){
-        if(connections[i].uid == uid){
+        if(connections[i].doctor1 == uid){
           connection = connections[i];
         }
       }

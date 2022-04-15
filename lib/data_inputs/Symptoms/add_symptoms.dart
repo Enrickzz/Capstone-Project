@@ -727,10 +727,10 @@ class _addSymptomsState extends State<add_symptoms> {
                             temp.forEach((jsonString) {
                               connections.add(Connection.fromJson(jsonString)) ;
                               Connection a = Connection.fromJson(jsonString);
-                              print(a.uid);
+                              print(a.doctor1);
                               addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe chest pains. He/she requires your immediate attention.",
                                   "Persistent Chest Pain",
-                                  "4", a.uid);
+                                  "4", a.doctor1);
                             });
                           });
                           addtoRecommendation("We have notified your doctors regarding your experiences of severe Chest Tightness. This can be a sign of a possible heart attack. Please seek immediate medical attention to address this symptom. If you have any prescriptions for Chest Pains please take them now. For the meantime you can sit, stay calm, and rest with the help of this soothing song.",
@@ -748,10 +748,10 @@ class _addSymptomsState extends State<add_symptoms> {
                             temp.forEach((jsonString) {
                               connections.add(Connection.fromJson(jsonString)) ;
                               Connection a = Connection.fromJson(jsonString);
-                              print(a.uid);
+                              print(a.doctor1);
                               addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe headache. He/she requires your immediate attention.",
                                 "Headaches",
-                                "2", a.uid,);
+                                "2", a.doctor1,);
                             });
                           });
                           addtoRecommendation("We have notified your doctors regarding your experiences of a severe headache. This can be a sign of the progression of your CVD condition. Please seek immediate medical attention to address this symptom. For the meantime you can sit, stay calm, and rest with the help of this soothing song.",
@@ -768,10 +768,10 @@ class _addSymptomsState extends State<add_symptoms> {
                             temp.forEach((jsonString) {
                               connections.add(Connection.fromJson(jsonString)) ;
                               Connection a = Connection.fromJson(jsonString);
-                              print(a.uid);
+                              print(a.doctor1);
                               addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe pain. He/she requires your immediate attention.",
                                 "Pain",
-                                "3", a.uid,);
+                                "3", a.doctor1,);
                             });
                           });
                           addtoRecommendation("We have notified your doctor and support system regarding the occurrence of severe pain. For the meantime Rest and elevate the painful area. Alternate between ice packs to reduce inflammation and heat to improve blood flow. Please seek immediate medical attention if the pain becomes unbearable and take pain relievers if necessary.",
@@ -788,10 +788,10 @@ class _addSymptomsState extends State<add_symptoms> {
                             temp.forEach((jsonString) {
                               connections.add(Connection.fromJson(jsonString)) ;
                               Connection a = Connection.fromJson(jsonString);
-                              print(a.uid);
+                              print(a.doctor1);
                               addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing shortness of breath. He/she may require your immediate attention.",
                                 "Pain",
-                                "1", a.uid,);
+                                "1", a.doctor1,);
                             });
                           });
                         }

@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:my_app/goal_tab/meals/MealListViewDoc.dart';
 import 'package:my_app/notifications/notifications_doctor.dart';
 import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_edit_management_privacy.dart';
@@ -55,6 +56,7 @@ class _PatientListState extends State<PatientList>  {
 
   List<String> uidlist = [];
   List<Users> userlist = [];
+  List<Uid> patient_list = [];
   List<Additional_Info> userAddInfo = [];
   List names = [];
   List pp_imgs = [];
@@ -110,7 +112,7 @@ class _PatientListState extends State<PatientList>  {
         uidlist = temp2.toSet().toList();
         pp_imgs = temp3.toSet().toList();
       }
-      print("ASDASDASD");
+
     }else{
       pp_imgs.clear();
       getPatients();
@@ -300,22 +302,20 @@ class _PatientListState extends State<PatientList>  {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
-    final readDoctorConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+    final readPatientList = databaseReference.child('users/' + uid + '/personal_info/patient_list/');
     await readDoctor.once().then((DataSnapshot snapshot){
       var temp1 = jsonDecode(jsonEncode(snapshot.value));
+      print(temp1);
       doctor = Users.fromJson(temp1);
-      readDoctorConnections.once().then((DataSnapshot datasnapshot){
+      readPatientList.once().then((DataSnapshot datasnapshot){
         List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+        print(temp);
         temp.forEach((jsonString) {
-          doctor_connections.add(Connection.fromJson2(jsonString));
+          patient_list.add(Uid.fromJson(jsonString));
         });
-        for(int i = 0; i < doctor_connections.length; i++){
-          uidlist.add(doctor_connections[i].uid);
+        for(var i = 0; i < patient_list.length; i++){
+          uidlist.add(patient_list[i].uid);
         }
-        print("AAAAAAAAAAAAAAAAAAAA" + uidlist.length.toString());
-        var uidtemp = uidlist.toSet().toList();
-        uidlist = uidtemp;
-        print("AAAAAAAAAAAAAAAAAAAA" + uidlist.length.toString());
         for(int i = 0; i < uidlist.length; i++){
           final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
           final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');

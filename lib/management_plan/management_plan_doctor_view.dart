@@ -371,12 +371,12 @@ class _AppSignUpState extends State<management_plan> {
         connections.add(Connection.fromJson(jsonString));
       });
       for(int i = 0; i < connections.length; i++){
-        final readUserType = databaseReference.child('users/'+ connections[i].uid + '/personal_info/');
+        final readUserType = databaseReference.child('users/'+ connections[i].doctor1 + '/personal_info/');
         readUserType.once().then((DataSnapshot usersnapshot){
           Map<String, dynamic> temp2 = jsonDecode(jsonEncode(usersnapshot.value));
           usertype = Users.fromJson(temp2);
           if(usertype.usertype == "Doctor"){
-            final readDocConnection = databaseReference.child('users/' + uid + '/personal_info/connections/');
+            final readDocConnection = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/');
             readDocConnection.once().then((DataSnapshot datasnapshot){
               List<dynamic> temp3 = jsonDecode(jsonEncode(datasnapshot.value));
                 temp3.forEach((jsonString) {

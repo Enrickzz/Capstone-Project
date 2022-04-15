@@ -201,8 +201,17 @@ class _vitals_management_plan_doctor_view_prescriptionState extends State<vitals
           for(int i = 0; i < vitalstemp.length; i++){
             if(vitalstemp[i].prescribedBy != uid){
               for(int j = 0; j < connections.length; j++){
-                if(vitalstemp[i].prescribedBy == connections[j].createdBy){
-                  if(connections[j].vitals != "true"){
+                if(vitalstemp[i].prescribedBy == connections[j].doctor1 && uid == connections[j].doctor2){
+                  if(connections[j].vitals1 != "true"){
+                    /// dont add
+                    delete_list.add(i);
+                  }
+                  else{
+                    /// add
+                  }
+                }
+                if(vitalstemp[i].prescribedBy == connections[j].doctor2 && uid == connections[j].doctor1){
+                  if(connections[j].vitals2 != "true"){
                     /// dont add
                     delete_list.add(i);
                   }

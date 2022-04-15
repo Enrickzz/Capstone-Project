@@ -44,7 +44,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
     super.initState();
     Connection doctorconnection = widget.connection;
     print("doctorconnection.uid");
-    print(doctorconnection.uid);
+    print(doctorconnection.doctor1);
     print(doctorconnection.dashboard);
     if(doctorconnection.dashboard.toLowerCase() == "true"){
       isAllowedDashboard = true;
@@ -554,10 +554,10 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                       connections.add(Connection.fromJson(jsonString));
                     });
                     for(int i = 1; i <= connections.length; i++){
-                      if(connections[i-1].uid == doctorconnection.uid){
+                      if(connections[i-1].doctor1 == doctorconnection.doctor1){
                         final doctorConnectionsRef = databaseReference.child('users/' + uid + '/personal_info/connections/'+ i.toString());
                         doctorConnectionsRef.update({
-                          "uid": doctorconnection.uid,
+                          "uid": doctorconnection.doctor1,
                           "dashboard": isAllowedDashboard.toString(),
                           "nonhealth": isAllowedNonHealth.toString(),
                           "health": isAllowedDataInputs.toString(),
@@ -566,7 +566,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                           addtoNotif2("Your <type> "+ thisuser.firstname+ " has changed your access settings.",
                               thisuser.firstname + " changed access!",
                               "2",
-                              connections[i-1].uid);
+                              connections[i-1].doctor1);
                         }
                       }
                     }

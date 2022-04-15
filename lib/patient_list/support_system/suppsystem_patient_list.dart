@@ -333,7 +333,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
           supp_connections.add(Connection.fromJson2(jsonString));
         });
         for(int i = 0; i < supp_connections.length; i++){
-          uidlist.add(supp_connections[i].uid);
+          uidlist.add(supp_connections[i].doctor1);
         }
         for(int i = 0; i < uidlist.length; i++){
           final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');

@@ -373,8 +373,8 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
       temp.forEach((jsonString) {
         connections.add(Connection.fromJson(jsonString)) ;
         Connection a = Connection.fromJson(jsonString);
-        print(a.uid);
-        var readUser = databaseReference.child("users/" + a.uid + "");
+        print(a.doctor1);
+        var readUser = databaseReference.child("users/" + a.doctor1 + "");
         Users checkSS = new Users();
         readUser.once().then((DataSnapshot snapshot){
           Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -386,25 +386,25 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
               addtoNotif("Your <type> "+ thisuser.firstname+ " has not recorded any meal for their breakfast today.We advise you to remind " +thisuser.firstname + " to eat breakfast and record his/her food intake in the Heartistant Application.",
                   thisuser.firstname + " has not had Breakfast",
                   "3",
-                  a.uid,
+                  a.doctor1,
                   "Support food management");
             }else if( check == 2){
               addtoNotif("Your <type> "+ thisuser.firstname+ " has not recorded any meal for their lunch.We advise you to remind " +thisuser.firstname + " to eat breakfast and record his/her food intake in the Heartistant Application.",
                   thisuser.firstname + " has not had Lunch",
                   "3",
-                  a.uid,
+                  a.doctor1,
                   "Support food management");
             }else if( check == 3){
               addtoNotif("Your <type> "+ thisuser.firstname+ " has not recorded any meal for their dinner.We advise you to remind " +thisuser.firstname + " to eat breakfast and record his/her food intake in the Heartistant Application.",
                   thisuser.firstname + " has not had Dinner",
                   "3",
-                  a.uid,
+                  a.doctor1,
                   "Support food management");
             }else if( check == 4){
               addtoNotif("Your <type> "+ thisuser.firstname+ " has not taken medicines.We advise you to remind " +thisuser.firstname + " to take the medications and record his/her medication intake in the Heartistant Application.",
                   thisuser.firstname + " has not taken Medications",
                   "3",
-                  a.uid,
+                  a.doctor1,
                   "Support medicine management");
             }
           }
@@ -620,11 +620,11 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
             temp.forEach((jsonString) {
               connections.add(Connection.fromJson(jsonString)) ;
               Connection a = Connection.fromJson(jsonString);
-              print(a.uid);
+              print(a.doctor1);
               addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " has recorded vitals which suggest that he/she could be having a Triple A internal bleeding or Hypovolemic Shock. This requires your immediate medical attention",
                   "Possible Triple A Bleeding or Hypovolemic Shock",
                   "3",
-                  a.uid,
+                  a.doctor1,
                   "None");
             });
           });
