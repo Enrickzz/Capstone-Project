@@ -461,37 +461,7 @@ class _addSymptomsState extends State<add_symptoms> {
                 ),
               ],
             ),
-            // GestureDetector(
-            //     child: Text(
-            //       'Upload',
-            //       style: TextStyle(color: Colors.black),
-            //     ),
-            //     onTap: () async {
-            //       final result = await FilePicker.platform.pickFiles(
-            //         allowMultiple: false,
-            //         // type: FileType.custom,
-            //         // allowedExtensions: ['jpg', 'png'],
-            //       );
-            //       if(result == null) return;
-            //       final FirebaseAuth auth = FirebaseAuth.instance;
-            //       final path = result.files.single.path;
-            //       user = auth.currentUser;
-            //       uid = user.uid;
-            //       fileName = result.files.single.name;
-            //       file = File(path);
-            //       // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-            //       //   setState(() {
-            //       //     trythis.clear();
-            //       //     listAll("path");
-            //       //     Future.delayed(const Duration(milliseconds: 1000), (){
-            //       //       Navigator.pop(context, trythis);
-            //       //     });
-            //       //   });
-            //       // });
-            //       // fileName = uid + fileName + "_lab_result" + "counter";
-            //       //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-            //     }
-            // ),
+
             GestureDetector(
               onTap: ()async{
                 await showDatePicker(

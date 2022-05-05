@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +57,14 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   int quantity = 1;
 
   DateTimeRange dateRange;
+
+  //for upload image
+  bool pic = false;
+  String cacheFile="";
+  File file = new File("path");
+  User user;
+  var uid, fileName;
+
 
   String getFrom(){
     if(dateRange == null){
@@ -524,6 +534,70 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                       setState(() => special_instruction = val);
                     },
                   ),
+                  SizedBox(height: 18.0),
+                  Visibility(visible: pic, child: SizedBox(height: 8.0)),
+                  Visibility(
+                      visible: pic,
+                      child: Container(
+                        child: Image.file(file),
+                        height:250,
+                        width: 200,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                            color: Colors.black
+                        ),
+
+                      )
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FlatButton(
+                        textColor: Colors.white,
+                        height: 60.0,
+                        color: Colors.cyan,
+                        onPressed: () async{
+                          final result = await FilePicker.platform.pickFiles(
+                            allowMultiple: false,
+                            // type: FileType.custom,
+                            // allowedExtensions: ['jpg', 'png'],
+                          );
+                          if(result == null) return;
+                          final FirebaseAuth auth = FirebaseAuth.instance;
+                          final path = result.files.single.path;
+                          user = auth.currentUser;
+                          uid = user.uid;
+                          fileName = result.files.single.name;
+                          file = File(path);
+                          PlatformFile thisfile = result.files.first;
+                          cacheFile = thisfile.path;
+                          Future.delayed(const Duration(milliseconds: 1000), (){
+                            setState(() {
+                              print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
+                              pic = true;
+                            });
+                          });
+
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.camera_alt_rounded, color: Colors.white,),
+                            ),
+                            Text('UPLOAD', )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
                   SizedBox(height: 24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -346,6 +346,7 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                           )
                       ),
                       SizedBox(height: 10.0),
+
                       Visibility(
                         visible: hasImage,
                         child: InteractiveViewer(

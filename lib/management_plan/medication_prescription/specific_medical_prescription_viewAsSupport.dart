@@ -358,6 +358,14 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
 //   )
 //
 // ],)
+  Widget showimg(String imgref) {
+    if(imgref == "null" || imgref == null || imgref == ""){
+      return Image.asset("assets/images/no-image.jpg");
+    }else{
+      return Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
+      (loadingProgress == null) ? child : CircularProgressIndicator());
+    }
+  }
   void getPrescription() {
     final User user = auth.currentUser;
     final uid = user.uid;
