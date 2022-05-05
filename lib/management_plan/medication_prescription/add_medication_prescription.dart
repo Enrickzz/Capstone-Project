@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -640,34 +641,41 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               Medication_Prescription prescription;
                               if(datasnapshot.value == null){
                                 final prescriptionRef = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/' + count.toString());
-                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString(), "doctor_name": doctor_name});
+                                prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString(), "doctor_name": doctor_name, "imgRef": fileName.toString()});
                                 print("if Added Medication Prescription Successfully! " + userUID);
                               }
                               else{
+                                prescription_list.clear();
                                 getMedicalPrescription();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = prescription_list.length--;
-                                  final prescriptionRef = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/' + count.toString());
-                                  prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString(), "doctor_name": doctor_name});
-                                  print("else Added Medication Prescription Successfully! " + userUID);
+                                  downloadUrls();
+                                  Future.delayed(const Duration(milliseconds: 1000), (){
+                                    count = prescription_list.length--;
+                                    final prescriptionRef = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/' + count.toString());
+                                    prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString(), "doctor_name": doctor_name, "imgRef": fileName.toString()});
+                                    print("else Added Medication Prescription Successfully! " + userUID);
+                                  });
                                 });
-
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               print("MEDICATION LENGTH: " + prescription_list.length.toString());
-                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name));
+                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name, imgRef: fileName));
                               for(var i=0;i<prescription_list.length/2;i++){
                                 var temp = prescription_list[i];
                                 prescription_list[i] = prescription_list[prescription_list.length-1-i];
                                 prescription_list[prescription_list.length-1-i] = temp;
                               }
                               print("POP HERE ==========");
+                              if(fileName != null){
+                                FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                                });
+                              }
                               Medication_Prescription newPres = new Medication_Prescription(generic_name: generic_name,
                                   branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate),
                                   enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction,
-                                  prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name);
+                                  prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name, imgRef: fileName);
                               addtoNotif("Dr. "+doctor.lastname+ " has added something to your medication management plan. Click here to view your new Food management plan. " ,
                                   "Doctor Added to your Medication Plan!",
                                   "1",
@@ -737,5 +745,23 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
         prescription_list.add(Medication_Prescription.fromJson(jsonString));
       });
     });
+  }
+  Future <String> downloadUrls() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String downloadurl="null";
+    for(var i = 0 ; i < prescription_list.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+prescription_list[i].imgRef.toString());
+      if(prescription_list[i].imgRef.toString() != "null" ){
+        downloadurl = await ref.getDownloadURL();
+        prescription_list[i].imgRef = downloadurl;
+      }
+
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+    });
+    return downloadurl;
   }
 }

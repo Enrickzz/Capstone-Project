@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,18 +59,12 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
   List<Medication_Prescription> prestemp = [];
   Medication_Prescription prescription = new Medication_Prescription();
   Users doctor = new Users();
-  String generic_name = "";
-  String dosage = "";
-  String unit = "";
-  String frequency = "";
-  String special_instruction = "";
-  String startDate = "";
-  String endDate = "";
-  String prescribedBy = "";
-  String dateCreated = "";
-  String brand_name = "";
+  final double minScale = 1;
+  final double maxScale = 1.5;
+  bool hasImage = true;
 
-
+  Medication_Prescription thisPrescription;
+  bool isLoading=true;
 
   @override
   void initState() {
@@ -79,19 +74,17 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
     controller.addListener(() {
       setState(() {});
     });
-    // getPrescription();
-    prestemp = widget.thislist;
-    int index = widget.index;
-    brand_name = prestemp[index].branded_name;
-    generic_name = prestemp[index].generic_name;
-    dosage = prestemp[index].dosage.toString();
-    unit = prestemp[index].prescription_unit.toString();
-    frequency = prestemp[index].intake_time;
-    special_instruction = prestemp[index].special_instruction;
-    startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
-    endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
-    dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
-    prescribedBy = prestemp[index].doctor_name;
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      prestemp = widget.thislist;
+      downloadUrls();
+      thisPrescription = prestemp[widget.index];
+      getPrescibedBy();
+      setState(() {
+        isLoading = false;
+      });
+    });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -112,7 +105,9 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
         appBar: AppBar(
           title: Text('Doctor Prescriptions'),
         ),
-        body:  Scrollbar(
+        body: isLoading ? Center(
+            child: CircularProgressIndicator(),
+          ): new Scrollbar(
           child: SingleChildScrollView(
             padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
             child: Column(
@@ -177,7 +172,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(brand_name,
+                                            Text(thisPrescription.branded_name,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -191,7 +186,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(generic_name,
+                                            Text(thisPrescription.generic_name,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -209,7 +204,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(dosage + " " + unit,
+                                            Text(thisPrescription.dosage.toString() + " " + thisPrescription.prescription_unit,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -223,7 +218,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(frequency,
+                                            Text(thisPrescription.intake_time,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -237,7 +232,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(special_instruction,
+                                            Text(thisPrescription.special_instruction,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -251,7 +246,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(startDate + ' - ' + endDate,
+                                            Text("${thisPrescription.startdate.month}/${thisPrescription.startdate.day}/${thisPrescription.startdate.year}" + ' - ' + "${thisPrescription.enddate.month}/${thisPrescription.enddate.day}/${thisPrescription.enddate.year}",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -263,6 +258,21 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                   ))
                             ]
                         )
+                    ),
+                    Visibility(
+                      visible: hasImage,
+                      child: InteractiveViewer(
+                        clipBehavior: Clip.none,
+                        minScale: minScale,
+                        maxScale: maxScale,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: showimg(thisPrescription.imgRef),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(height: 10.0),
                     Container(
@@ -301,7 +311,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Dr." + prescribedBy,
+                                            Text("Dr." + thisPrescription.prescribedBy,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -319,7 +329,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text(dateCreated,
+                                            Text("${thisPrescription.datecreated.month}/${thisPrescription.datecreated.day}/${thisPrescription.datecreated.year}",
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -366,26 +376,53 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
       (loadingProgress == null) ? child : CircularProgressIndicator());
     }
   }
-  void getPrescription() {
+  // void getPrescription() {
+  //   final User user = auth.currentUser;
+  //   final uid = user.uid;
+  //   final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
+  //   int index = widget.index;
+  //   readprescription.once().then((DataSnapshot snapshot){
+  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+  //     temp.forEach((jsonString) {
+  //       prestemp.add(Medication_Prescription.fromJson(jsonString));
+  //     });
+  //     brand_name = prestemp[index].branded_name;
+  //     generic_name = prestemp[index].generic_name;
+  //     dosage = prestemp[index].dosage.toString();
+  //     unit = prestemp[index].prescription_unit.toString();
+  //     frequency = prestemp[index].intake_time;
+  //     special_instruction = prestemp[index].special_instruction;
+  //     startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
+  //     endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
+  //     dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
+  //     prescribedBy = prestemp[index].doctor_name;
+  //   });
+  // }
+  void getPrescibedBy(){
+    int index = widget.index;
+    final readDoctorName = databaseReference.child('users/' + prestemp[index].prescribedBy + '/personal_info/');
+    readDoctorName.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
+      doctor = Users.fromJson(temp2);
+      thisPrescription.prescribedBy = doctor.firstname;
+    });
+  }
+  Future <String> downloadUrls() async{
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
-    int index = widget.index;
-    readprescription.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        prestemp.add(Medication_Prescription.fromJson(jsonString));
-      });
-      brand_name = prestemp[index].branded_name;
-      generic_name = prestemp[index].generic_name;
-      dosage = prestemp[index].dosage.toString();
-      unit = prestemp[index].prescription_unit.toString();
-      frequency = prestemp[index].intake_time;
-      special_instruction = prestemp[index].special_instruction;
-      startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
-      endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
-      dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
-      prescribedBy = prestemp[index].doctor_name;
+    String downloadurl="null";
+    for(var i = 0 ; i < prestemp.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+prestemp[i].imgRef.toString());
+      if(prestemp[i].imgRef.toString() != "null"){
+        downloadurl = await ref.getDownloadURL();
+        prestemp[i].imgRef = downloadurl;
+      }
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+      isLoading = false;
     });
+    return downloadurl;
   }
 }

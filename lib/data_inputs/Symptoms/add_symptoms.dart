@@ -606,7 +606,6 @@ class _addSymptomsState extends State<add_symptoms> {
                         print("filename = " + fileName.toString());
                         if(fileName != null){
                           FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-
                           });
                         }
 

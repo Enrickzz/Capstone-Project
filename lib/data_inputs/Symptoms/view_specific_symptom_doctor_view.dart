@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +60,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
   final double minScale = 1;
   final double maxScale = 1.5;
   bool hasImage = true;
-
+  Symptom thisSymptom;
   List<Symptom> listtemp = [];
   // Symptom listtemp = new Symptom();
   String symptomName = "";
@@ -69,18 +70,31 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
   String symptomTime = "";
   String symptomTrigger = "";
   List<String> recurring = [""];
+  bool isLoading=true;
 
   @override
   void initState() {
     super.initState();
+    getSymptoms();
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
-    getMedicineIntake();
-    Future.delayed(const Duration(milliseconds: 1500), (){
+
+    Future.delayed(const Duration(milliseconds: 3000), (){
+      downloadUrls();
+      thisSymptom = listtemp[widget.index];
       setState(() {
-        print("setstate");
+        print("listtemp index at " + listtemp[widget.index].symptomName.toString());
+        isLoading = false;
+      });
+      Future.delayed(const Duration(milliseconds: 2000), (){
+        setState(() {
+          if(thisSymptom.recurring.toString() == "null"){
+            thisSymptom.recurring[0] = "";
+          }
+          print("setstate");
+        });
       });
     });
   }
@@ -88,7 +102,6 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
   @override
   void dispose() {
     controller.dispose();
-
     super.dispose();
   }
 
@@ -97,9 +110,16 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
     return Scaffold(
         appBar: AppBar(
           title: Text('My Symptom'),
-
         ),
-        body:  Scrollbar(
+        body: WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, listtemp);
+            return true;
+          },
+          child:  isLoading
+              ? Center(
+            child: CircularProgressIndicator(),
+          ): new Scrollbar(
           child: SingleChildScrollView(
             padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
             child: Column(
@@ -115,7 +135,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text(symptomName,
+                              child: Text(thisSymptom.symptomName,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -164,7 +184,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(intensityLvl,
+                                            Text(thisSymptom.intensityLvl.toString(),
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -178,7 +198,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Text(symptomFelt,
+                                            Text(thisSymptom.symptomFelt,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -196,8 +216,8 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            if (symptomTrigger.toString() != "") ...[
-                                              Text(symptomTrigger,
+                                            if (thisSymptom.symptomTrigger != null && thisSymptom.symptomTrigger.isNotEmpty) ...[
+                                              Text(thisSymptom.symptomTrigger,
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     fontWeight: FontWeight.bold
@@ -214,7 +234,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                             SizedBox(height: 16),
                                             Row(
                                               children: [
-                                                if (recurring[0].toString() != "") ...[
+                                                if (thisSymptom.recurring != null) ...[
                                                   Text("Recurring",
                                                     style: TextStyle(
                                                       fontSize:14,
@@ -225,15 +245,17 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            if (recurring[0].toString() != "") ...[
-                                              Text(recurring.toString(),
+                                            if (thisSymptom.recurring != null) ...[
+                                              Text(thisSymptom.recurring.toString(),
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     fontWeight: FontWeight.bold
                                                 ),
                                               ),
                                             ],
+                                            SizedBox(height: 16),
 
+                                            SizedBox(height: 8),
 
 
 
@@ -254,8 +276,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
                           aspectRatio: 1,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.asset('assets/images/body.PNG'
-                            ),
+                            child: showimg(thisSymptom.imgRef),
                           ),
                         ),
                       ),
@@ -325,6 +346,7 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
             ),
           ),
         )
+      )
     );
 
 
@@ -339,35 +361,73 @@ class _SpecificSymptomViewAsDoctorState extends State<SpecificSymptomViewAsDocto
 //   )
 //
 // ],)
-  void getMedicineIntake() {
+  List<Symptom> getSymptoms() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
-    var userUID = widget.userUID;
+    String userUID = widget.userUID;
     final readsymptom = databaseReference.child('users/' + userUID + '/vitals/health_records/symptoms_list/');
-    int index = widget.index;
+    List<Symptom> symptoms = [];
+    symptoms.clear();
     readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      //print("this is temp : "+temp.toString());
+      print("pasok here");
       temp.forEach((jsonString) {
-        listtemp.add(Symptom.fromJson(jsonString));
-        // final readDoctorName = databaseReference.child('users/' + medication.prescribedBy + '/personal_info/');
-        // readDoctorName.once().then((DataSnapshot snapshot){
-        //   Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-        //   print(temp2);
-        //   doctor = Users.fromJson(temp2);
-        //   prescribedBy = doctor.lastname + " " + doctor.firstname;
-        // });
-      });
-      symptomName = listtemp[index].symptomName;
-      intensityLvl = listtemp[index].intensityLvl.toString();
-      symptomFelt = listtemp[index].symptomFelt;
-      symptomDate = "${listtemp[index].symptomDate.month.toString().padLeft(2, "0")}/${listtemp[index].symptomDate.day.toString().padLeft(2, "0")}/${listtemp[index].symptomDate.year}";
-      symptomTime = "${listtemp[index].symptomTime.hour.toString().padLeft(2, "0")}:${listtemp[index].symptomTime.minute.toString().padLeft(2, "0")}";
-      symptomTrigger = listtemp[index].symptomTrigger;
-      if(listtemp[index].recurring != null){
-        for(int i = 0; i < listtemp[index].recurring.length; i++){
-          recurring.add(listtemp[index].recurring[i]);
+        if(!jsonString.toString().contains("recurring")){
+          symptoms.add(Symptom.fromJson2(jsonString));
+          listtemp.add(Symptom.fromJson2(jsonString));
         }
+        else{
+          symptoms.add(Symptom.fromJson(jsonString));
+          listtemp.add(Symptom.fromJson(jsonString));
+        }
+
+        //print(symptoms[0].symptomName);
+        //print("symptoms length " + symptoms.length.toString());
+      });
+      for(var i=0;i<listtemp.length/2;i++){
+        var temp = listtemp[i];
+        listtemp[i] = listtemp[listtemp.length-1-i];
+        listtemp[listtemp.length-1-i] = temp;
       }
+      symptomName = listtemp[widget.index].symptomName;
+      intensityLvl =  listtemp[widget.index].intensityLvl.toString();
+      symptomFelt =  listtemp[widget.index].symptomFelt;
+      symptomDate =  listtemp[widget.index].symptomDate.toString();
+      symptomTime =  listtemp[widget.index].symptomTime.toString();
+      symptomTrigger =  listtemp[widget.index].symptomTrigger;
+      recurring =  listtemp[widget.index].recurring;
     });
+
+    setState(() {
+    });
+    return symptoms;
+  }
+  Widget showimg(String imgref) {
+    if(imgref == "null" || imgref == null || imgref == ""){
+      return Image.asset("assets/images/no-image.jpg");
+    }else{
+      return Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
+      (loadingProgress == null) ? child : CircularProgressIndicator());
+    }
+  }
+  Future <String> downloadUrls() async{
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    String downloadurl="null";
+    for(var i = 0 ; i < listtemp.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + userUID + "/"+listtemp[i].imgRef.toString());
+      if(listtemp[i].imgRef.toString() != "null"){
+        downloadurl = await ref.getDownloadURL();
+        listtemp[i].imgRef = downloadurl;
+      }
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+      isLoading = false;
+    });
+    return downloadurl;
   }
 }
