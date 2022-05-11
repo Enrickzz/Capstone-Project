@@ -19,6 +19,7 @@ import 'package:my_app/models/checkbox_state.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
+import '../../emergency_contact.dart';
 import '../../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_symptoms extends StatefulWidget {
@@ -764,6 +765,12 @@ class _addSymptomsState extends State<add_symptoms> {
                             });
                           });
                         }
+
+                        if (intesity_lvl > 7) {
+                          _showMyDialog();
+                          Navigator.pop(context);
+                        }
+
                         Future.delayed(const Duration(milliseconds: 1000), (){
                           Symptom newsymp = new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl,
                               symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date),
@@ -821,6 +828,45 @@ class _addSymptomsState extends State<add_symptoms> {
       ),
     ),
   );
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Emergency'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Would you like to contact a nearby hospital for immediate medical assistance?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => emergency_contact()),
+                );
+
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 
 
@@ -955,3 +1001,5 @@ class _addSymptomsState extends State<add_symptoms> {
   }
 
 }
+
+

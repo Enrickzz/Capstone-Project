@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_app/emergency_contact.dart';
 import 'package:my_app/goal_tab/music/music_recommendation.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_patient_view.dart';
 import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
@@ -243,12 +244,12 @@ class _AppSignInState extends State<AppSignIn> {
               alignment: Alignment.center,
               child: GestureDetector(
 
-                  // onTap: (){
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => blood_pressure_chart()),
-                  //   );
-                  // },
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => emergency_contact()),
+                    );
+                  },
                   child: Image.asset("assets/images/heartistant_logo.png", width: 280, height: 180,)),
 
             ),
