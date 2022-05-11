@@ -766,23 +766,25 @@ class _addSymptomsState extends State<add_symptoms> {
                           });
                         }
 
-                        if (intesity_lvl > 7) {
-                          _showMyDialog();
-                          Navigator.pop(context);
-                        }
-
                         Future.delayed(const Duration(milliseconds: 1000), (){
                           Symptom newsymp = new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl,
                               symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date),
                               symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
                               recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: fileName);
                           print("SYMPTOMS UPDATE LENGTH = " + symptoms_list.length.toString());
+
                           Navigator.pop(context, newsymp);
                         });
                       });
 
                     } catch(e) {
                       print("you got an error! $e");
+                    }
+
+                    if (intesity_lvl > 7) {
+
+                      Navigator.pop(context);
+                      _showEmergencyDialog();
                     }
 
                   },
@@ -829,7 +831,9 @@ class _addSymptomsState extends State<add_symptoms> {
     ),
   );
 
-  Future<void> _showMyDialog() async {
+
+
+  Future<void> _showEmergencyDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

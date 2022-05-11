@@ -449,7 +449,7 @@ class _create_postState extends State<info_drugstore> {
   }
   Future<SpecificInfo> getspecifics(String id) async{
 
-    var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&key=AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk"));
+    var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&key=AIzaSyBdsIB60l6ng_0Fh1kdvFMSVwmwjgJvXmo"));
     details = SpecificInfo.fromJson(jsonDecode(response.body));
 
     print(details.result.placeId);
