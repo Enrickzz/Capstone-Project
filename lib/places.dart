@@ -1207,7 +1207,6 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
     var recreationres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?query=recreational&key=$key&location=$loc&radius=$radius&type=recreation"));
     var restaurantsres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=restaurant"));
     // var restaurantsres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=16.03599037979812, 120.33470282456094&radius=1000&key=AIzaSyBFsY_boEXrduN5Huw0f_eY88JDhWwiDrk&type=restaurant"));
-
     List<Results> gplaces=[];
     gplaces = GooglePlaces.fromJson(jsonDecode(drugstorres.body)).results;
     drugstores = gplaces;

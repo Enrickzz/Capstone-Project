@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/models/specific_info_places.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +35,8 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
   final FirebaseAuth auth = FirebaseAuth.instance;
   TabController controller;
   List<String> generate =  List<String>.generate(100, (index) => "$index ror");
+  List<Results> hospitals=[];
+  List<EmergencyHotlines> eh_list=[];
 
   bool isLoading = true;
   locs.Location location = new locs.Location();
@@ -70,13 +76,15 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
 
     setState(() {
       _isGetLocation = true;
-      isLoading = false;
     });
 
     _isGetLocation ? print('Location: ${_locationData.latitude}, ${_locationData.longitude}'):print("wala");
 
     Places("${_locationData.latitude}, ${_locationData.longitude}").then((value) {
 
+      setState(() {
+        isLoading = false;
+      });
     });
 
   }
@@ -120,7 +128,7 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
             child: Scrollbar(
               child: ListView.builder(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 100),
-                itemCount: 10,
+                itemCount: eh_list.length,
                 itemBuilder: (context, index){
                   return Container(
                     width: MediaQuery.of(context).size.width,
@@ -129,7 +137,7 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
                       child: ListTile(
                           title: Padding(
                             padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                            child: Text("Las Pinas Medical Center",
+                            child: Text(eh_list[index].name,
                                 style:TextStyle(
                                   color: Colors.black,
                                   fontSize: 14.0,
@@ -153,7 +161,7 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
                                     SizedBox(width: 4.0),
                                     Flexible(
                                       child: Text(
-                                        "88016791",
+                                        eh_list[index].number,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(color: Colors.black, fontSize: 12),
                                       ),
@@ -170,7 +178,7 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
                             child: Container(
                                 height: 50.0,
                                 width: 50.0,// Image radius
-                                child: Image.asset("assets/images/labresults.jpg")
+                                child: _displayMedia(eh_list[index].photo)
                             ),
                           ),
                           isThreeLine: false,
@@ -195,46 +203,10 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
                   );
                 },
               ) ,
-              // child: ListView.separated(
-              //     physics: ClampingScrollPhysics(),
-              //     padding: EdgeInsets.all(8.0),
-              //     itemCount: 10,
-              //     itemBuilder: (context, index) {
-              //       return ListTile(
-              //         leading: Container(
-              //             height: 40,
-              //             width: 40,
-              //             decoration: BoxDecoration(image:DecorationImage(image: AssetImage('assets/images/heart_icon.png'), fit: BoxFit.contain))
-              //         ),
-              //         title: Text('Las Pinas Medical Center', style: TextStyle(fontSize: 14.0)),
-              //         subtitle: Text('88059381', style: TextStyle(fontSize: 13.0)),
-              //         trailing: ElevatedButton(
-              //
-              //           child: Padding(
-              //             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              //             child: Text('Call', style: TextStyle(fontSize: 14,  color: Colors.white),
-              //             ),
-              //           ),
-              //
-              //           onPressed: () async{
-              //             // launch('tel://$number');
-              //             await FlutterPhoneDirectCaller.callNumber(number);
-              //           },
-              //         ),
-              //         // onTap: (){
-              //         //
-              //         // },
-              //       );
-              //     },
-              //     separatorBuilder: (context, index) {
-              //       return Divider();
-              //     }
-              // ),
             ),
           ),
     );
   }
-
   Future<List<Results>> Places(String query) async{
     final User user = auth.currentUser;
     final uid = user.uid;
@@ -243,11 +215,29 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
     String
     //loc = "16.03599037979812, 120.33470282456094",
     loc = query,
-
-        radius ="2000",
-        type="drugstore",
-        query1= "Drugstore";
+        radius ="2000";
     print(loc + " <<<<<<<");
+    var hospitalres = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$key&location=$loc&radius=$radius&type=hospital"));
+    hospitals = GooglePlaces.fromJson(jsonDecode(hospitalres.body)).results;
+
+    for(var i = 0 ; i < hospitals.length; i++){
+      if(hospitals[i].photos != "photoref"){
+        String replace = "https://maps.googleapis.com/maps/api/place/photo?photoreference=" +
+            hospitals[i].photos.photoReference+
+            "&sensor=false&maxheight=300&maxwidth=300&key=$key";
+        hospitals[i].photos.photoReference = replace;
+      }
+      SpecificInfo details= new SpecificInfo();
+      String hID= hospitals[i].placeId.toString();
+      var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/details/json?place_id=$hID&key=AIzaSyBdsIB60l6ng_0Fh1kdvFMSVwmwjgJvXmo"));
+      details = SpecificInfo.fromJson(jsonDecode(response.body));
+      print(details.result.placeId + "\n" + details.result.formattedPhoneNumber + "<<<<<<");
+      if(details.result.formattedPhoneNumber.toString() != "N/A"){
+        eh_list.add(new EmergencyHotlines(details.result.name, details.result.formattedPhoneNumber, hospitals[i].photos.photoReference));
+      }else print("else");
+    }
+
+
 
 
   }
@@ -265,5 +255,13 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
     }
 
   }
+
+
+}
+class EmergencyHotlines{
+  String name;
+  String number;
+  String photo;
+  EmergencyHotlines(this.name, this.number,this.photo);
 
 }

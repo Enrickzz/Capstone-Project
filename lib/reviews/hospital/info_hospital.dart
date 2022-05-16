@@ -51,7 +51,6 @@ class _create_postState extends State<info_hospital> {
   String thisURL;
   String title = '';
   String description = '';
-
   List<FirebaseFile> trythis =[];
   String thisIMG="";
 
@@ -447,6 +446,8 @@ class _create_postState extends State<info_hospital> {
       );
     }
   }
+
+
   Future<SpecificInfo> getspecifics(String id) async{
 
     var response = await http.get(Uri.parse("https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&key=AIzaSyBdsIB60l6ng_0Fh1kdvFMSVwmwjgJvXmo"));
