@@ -14,6 +14,7 @@ import 'package:my_app/ui_view/VerticalBarChart.dart';
 import 'package:my_app/ui_view/blood_glucose/blood_glucose_linechartsf_patient.dart';
 import 'package:my_app/ui_view/blood_pressure/blood_pressure_groupbarchart_sf.dart';
 import 'package:my_app/ui_view/heart_rate/heart_rate_linsesf_patient.dart';
+import 'package:my_app/ui_view/new_records.dart';
 import 'package:my_app/ui_view/oxygen_saturation/oxygen_barchartsf.dart';
 import 'package:my_app/ui_view/water/water_view.dart';
 import 'package:my_app/services/auth.dart';

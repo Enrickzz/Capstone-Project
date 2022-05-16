@@ -3,6 +3,7 @@ import 'package:my_app/ui_view/blood_glucose/blood_glucose_linechartsf_doctor.da
 import 'package:my_app/ui_view/blood_pressure/bp_chart_doctor.dart';
 import 'package:my_app/ui_view/body_measurement/body_measurement_doctor_view.dart';
 import 'package:my_app/ui_view/heart_rate/heart_rate_linesf_doctor.dart';
+import 'package:my_app/ui_view/new_records.dart';
 import 'package:my_app/ui_view/oxygen_saturation/oxygen_barchartsf_doctor.dart';
 import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
@@ -101,6 +102,15 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
             Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
         userUID: widget.userUID
+      ),
+    );
+    listViews.add(
+      new_records(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
       ),
     );
     listViews.add(
