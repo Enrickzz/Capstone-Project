@@ -193,7 +193,7 @@ class _emergency_contactState extends State<emergency_contact> with SingleTicker
 
                         onPressed: () async{
                           // launch('tel://$number');
-                          await FlutterPhoneDirectCaller.callNumber(number);
+                          await FlutterPhoneDirectCaller.callNumber(eh_list[index].number);
                         },
                       ),
 

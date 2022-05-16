@@ -38,7 +38,7 @@ class SupportSystemList extends StatefulWidget {
   @override
   _SupportSystemListState createState() => _SupportSystemListState();
 }
-class _SupportSystemListState extends State<SupportSystemList>  {
+class _SupportSystemListState extends State<SupportSystemList> with SingleTickerProviderStateMixin  {
 
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -60,13 +60,26 @@ class _SupportSystemListState extends State<SupportSystemList>  {
     // "Doctor", "Support System", 'Doctor', "Support System", 'Doctor', "Doctor"
   ];
 
+  final List<String> tabs = ['Doctors', 'Support Systems'];
+  TabController controller;
+
   @override
   void initState(){
     super.initState();
     getPatients();
+    controller = TabController(length: 2, vsync: this);
+    controller.addListener(() {
+      setState(() {});
+    });
     Future.delayed(const Duration(milliseconds: 1000), (){
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -81,6 +94,20 @@ class _SupportSystemListState extends State<SupportSystemList>  {
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
+          bottom: TabBar(
+            controller: controller,
+            indicatorColor: Colors.grey,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            tabs:<Widget>[
+              Tab(
+                text: 'Doctors',
+              ),
+              Tab(
+                text: 'Support Systems',
+              ),
+            ],
+          ),
           actions: [
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
@@ -100,70 +127,148 @@ class _SupportSystemListState extends State<SupportSystemList>  {
             ),
           ],
         ),
-        body: ListView.builder(
-            itemCount: names.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) =>Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: Card(
-                child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.green,
-                      backgroundImage: NetworkImage
-                        ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
-                    ),
-                    title: Text(names[index],
-                        style:TextStyle(
-                          color: Colors.black,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-
-                        )),
-                    subtitle:        Text(position[index],
-                        style:TextStyle(
-                          color: Colors.grey,
-                        )),
-                    trailing: GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(context: context,
-                            isScrollControlled: true,
-                            builder: (context) => SingleChildScrollView(child: Container(
-                              padding: EdgeInsets.only(
-                                  bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: patient_edit_privacy(connection: connections[index]),
+        body: TabBarView(
+          controller: controller,
+          children: [
+            Container(
+              child: Scrollbar(
+                child: ListView.builder(
+                    itemCount: names.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) =>Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                      child: Card(
+                        child: ListTile(
+                            leading: CircleAvatar(
+                              radius: 25,
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.green,
+                              backgroundImage: NetworkImage
+                                ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
                             ),
+                            title: Text(names[index],
+                                style:TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+
+                                )),
+                            subtitle:        Text(position[index],
+                                style:TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            trailing: GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: patient_edit_privacy(connection: connections[index]),
+                                    ),
+                                    ),
+                                  ).then((value) =>
+                                      Future.delayed(const Duration(milliseconds: 1500), (){
+                                        setState((){
+                                          if(value != null){
+                                            // templist = value[0];
+                                          }
+                                        });
+                                      }));
+                                },
+                                child: Icon(Icons.admin_panel_settings_rounded )
                             ),
-                          ).then((value) =>
-                              Future.delayed(const Duration(milliseconds: 1500), (){
-                                setState((){
-                                  if(value != null){
-                                    // templist = value[0];
-                                  }
-                                });
-                              }));
-                        },
-                        child: Icon(Icons.admin_panel_settings_rounded )
-                    ),
-                    isThreeLine: true,
-                    dense: true,
-                    selected: true,
+                            isThreeLine: true,
+                            dense: true,
+                            selected: true,
 
 
-                    // onTap: () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => view_patient_profile(patientUID: uidlist[index])),
-                    //   );
-                    // }
+                            // onTap: () {
+                            //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(builder: (context) => view_patient_profile(patientUID: uidlist[index])),
+                            //   );
+                            // }
+
+                        ),
+
+                      ),
+                    )
 
                 ),
-
               ),
-            )
+            ),
+            Container(
+              child: Scrollbar(
+                child: ListView.builder(
+                    itemCount: names.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) =>Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                      child: Card(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.green,
+                            backgroundImage: NetworkImage
+                              ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
+                          ),
+                          title: Text(names[index],
+                              style:TextStyle(
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
 
+                              )),
+                          subtitle:        Text(position[index],
+                              style:TextStyle(
+                                color: Colors.grey,
+                              )),
+                          trailing: GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) => SingleChildScrollView(child: Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                                    child: patient_edit_privacy(connection: connections[index]),
+                                  ),
+                                  ),
+                                ).then((value) =>
+                                    Future.delayed(const Duration(milliseconds: 1500), (){
+                                      setState((){
+                                        if(value != null){
+                                          // templist = value[0];
+                                        }
+                                      });
+                                    }));
+                              },
+                              child: Icon(Icons.admin_panel_settings_rounded )
+                          ),
+                          isThreeLine: true,
+                          dense: true,
+                          selected: true,
+
+
+                          // onTap: () {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(builder: (context) => view_patient_profile(patientUID: uidlist[index])),
+                          //   );
+                          // }
+
+                        ),
+
+                      ),
+                    )
+
+                ),
+              ),
+            ),
+          ],
         )
 
 
