@@ -46,6 +46,8 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
     'Jumping Jack',  'Lateral Shuffle', 'High Knee Run',
 
   ];
+  bool checkboxValue = false;
+  String reason_notification = "";
 
   String getFrom(){
     if(dateRange == null){
@@ -216,6 +218,57 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                     onChanged: (val){
                       setState(() => important_notes = val);
                     },
+                  ),
+                  FormField<bool>(
+                    builder: (state) {
+                      return Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Checkbox(
+                                  value: checkboxValue,
+                                  onChanged: (bool b) {
+                                    setState(() {
+                                      checkboxValue = b;
+                                    });
+                                  }),
+                              Text("Notify lead doctor"),
+                            ],
+                          ),
+
+                        ],
+                      );
+                    },
+                  ),
+                  Visibility(
+                    visible: checkboxValue,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          showCursor: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Reason for notifying",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter reason for notifying' : null,
+                          onChanged: (val){
+                            setState(() => reason_notification = val);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 24.0),
                   Row(

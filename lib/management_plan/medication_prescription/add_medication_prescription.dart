@@ -5,12 +5,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/dialogs/policy_dialog.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -46,6 +48,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   double dosage = 0;
   String intake_time = "";
   String special_instruction = "";
+  String reason_notification = "";
   String prescription_unit = "mL";
   int count = 1;
   List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
@@ -56,6 +59,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   double _currentSliderValue = 1;
   List <bool> isSelected = [true, false, false, false, false];
   int quantity = 1;
+  bool checkboxValue = false;
 
   DateTimeRange dateRange;
 
@@ -510,7 +514,6 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                       ),
                     ],
                   ),
-
                   SizedBox(height: 8.0),
                   TextFormField(
                     showCursor: true,
@@ -597,6 +600,58 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(height: 8.0),
+                  FormField<bool>(
+                    builder: (state) {
+                      return Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Checkbox(
+                                  value: checkboxValue,
+                                  onChanged: (bool b) {
+                                    setState(() {
+                                      checkboxValue = b;
+                                    });
+                                  }),
+                              Text("Notify lead doctor"),
+                            ],
+                          ),
+
+                        ],
+                      );
+                    },
+                  ),
+                  Visibility(
+                    visible: checkboxValue,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          showCursor: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Reason for notifying",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter reason for notifying' : null,
+                          onChanged: (val){
+                            setState(() => reason_notification = val);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
 
                   SizedBox(height: 24.0),
