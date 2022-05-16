@@ -12,6 +12,7 @@ import 'package:my_app/data_inputs/vitals/oxygen_saturation/o2_saturation_patien
 import 'package:my_app/data_inputs/vitals/respiratory_rate/respiratory_rate_patient_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
+import 'package:my_app/management_plan/lab_plan/lab_plan_doctor_view.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
@@ -335,6 +336,72 @@ class _AppSignUpState extends State<management_plan> {
                                       ),
                                       Text(
                                           'Vitals Recording',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => lab_prescription_doctor_view(userUID: patientUID, connection_list: doctor_connections)),
+                      );
+                    },
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                        height: 140,
+                        child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset('assets/images/labresults.jpg',
+                                      fit: BoxFit.cover
+                                  ),
+                                ),
+                              ),
+                              Positioned (
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)
+                                        ),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.7),
+                                              Colors.transparent
+                                            ]
+                                        )
+                                    )
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          'Laboratory Records',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18
