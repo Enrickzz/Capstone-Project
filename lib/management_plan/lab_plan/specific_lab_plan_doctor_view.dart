@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -67,6 +68,14 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
   String prescribedBy = "";
   String dateCreated = "";
   bool prescribedDoctor = false;
+
+  final double minScale = 1;
+  final double maxScale = 1.5;
+  bool hasImage = true;
+
+  //prescription image change this later paki change nalang
+  Medication_Prescription thisPrescription;
+  bool isLoading=true;
 
   @override
   void initState() {
@@ -290,6 +299,22 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
                               ]
                           )
                       ),
+
+                      Visibility(
+                        visible: hasImage,
+                        child: InteractiveViewer(
+                          clipBehavior: Clip.none,
+                          minScale: minScale,
+                          maxScale: maxScale,
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: showimg(thisPrescription.imgRef),
+                            ),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 10.0),
                       Container(
                           height: 150,
@@ -370,6 +395,14 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
     );
 
 
+  }
+  Widget showimg(String imgref) {
+    if(imgref == "null" || imgref == null || imgref == ""){
+      return Image.asset("assets/images/no-image.jpg");
+    }else{
+      return Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
+      (loadingProgress == null) ? child : CircularProgressIndicator());
+    }
   }
   void getFoodplan() {
     final User user = auth.currentUser;
@@ -458,5 +491,6 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
       },
     );
   }
+
 }
 

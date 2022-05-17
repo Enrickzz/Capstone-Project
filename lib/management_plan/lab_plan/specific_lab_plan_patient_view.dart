@@ -64,6 +64,14 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
   String prescribedBy = "";
   String dateCreated = "";
 
+  final double minScale = 1;
+  final double maxScale = 1.5;
+  bool hasImage = true;
+
+  //prescription image change this later
+  Medication_Prescription thisPrescription;
+  bool isLoading=true;
+
 
   @override
   void initState() {
@@ -201,6 +209,21 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
                             ]
                         )
                     ),
+                    Visibility(
+                      visible: hasImage,
+                      child: InteractiveViewer(
+                        clipBehavior: Clip.none,
+                        minScale: minScale,
+                        maxScale: maxScale,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: showimg(thisPrescription.imgRef),
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 10.0),
                     Container(
                         height: 150,
@@ -280,6 +303,14 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
     );
 
 
+  }
+  Widget showimg(String imgref) {
+    if(imgref == "null" || imgref == null || imgref == ""){
+      return Image.asset("assets/images/no-image.jpg");
+    }else{
+      return Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
+      (loadingProgress == null) ? child : CircularProgressIndicator());
+    }
   }
 // Widget buildCopy() => Row(children: [
 //   TextField(controller: controller),

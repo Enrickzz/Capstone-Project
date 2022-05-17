@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ class _addLabRequestState extends State<add_lab_request> {
   String type;
   String important_notes = "";
   String prescribedBy = "";
+  String reason_notification = "";
   DateTimeRange dateRange;
   DateTime now =  DateTime.now();
   List<String> listLabResult = <String>[
@@ -53,6 +56,15 @@ class _addLabRequestState extends State<add_lab_request> {
   String date;
   String hours,min;
   Users doctor = new Users();
+
+  //for upload image
+  bool pic = false;
+  String cacheFile="";
+  File file = new File("path");
+  User user;
+  var uid, fileName;
+
+  bool checkboxValue = false;
 
   @override
   void initState(){
@@ -149,6 +161,121 @@ class _addLabRequestState extends State<add_lab_request> {
                     onChanged: (val){
                       setState(() => important_notes = val);
                     },
+                  ),
+
+                  Visibility(visible: pic, child: SizedBox(height: 8.0)),
+                  Visibility(
+                      visible: pic,
+                      child: Container(
+                        child: Image.file(file),
+                        height:250,
+                        width: 200,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                            color: Colors.black
+                        ),
+
+                      )
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FlatButton(
+                        textColor: Colors.white,
+                        height: 60.0,
+                        color: Colors.cyan,
+                        onPressed: () async{
+                          final result = await FilePicker.platform.pickFiles(
+                            allowMultiple: false,
+                            // type: FileType.custom,
+                            // allowedExtensions: ['jpg', 'png'],
+                          );
+                          if(result == null) return;
+                          final FirebaseAuth auth = FirebaseAuth.instance;
+                          final path = result.files.single.path;
+                          user = auth.currentUser;
+                          uid = user.uid;
+                          fileName = result.files.single.name;
+                          file = File(path);
+                          PlatformFile thisfile = result.files.first;
+                          cacheFile = thisfile.path;
+                          Future.delayed(const Duration(milliseconds: 1000), (){
+                            setState(() {
+                              print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
+                              pic = true;
+                            });
+                          });
+
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.camera_alt_rounded, color: Colors.white,),
+                            ),
+                            Text('UPLOAD', )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
+                  FormField<bool>(
+                    builder: (state) {
+                      return Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Checkbox(
+                                  value: checkboxValue,
+                                  onChanged: (bool b) {
+                                    setState(() {
+                                      checkboxValue = b;
+                                    });
+                                  }),
+                              Text("Notify lead doctor"),
+                            ],
+                          ),
+
+                        ],
+                      );
+                    },
+                  ),
+                  Visibility(
+                    visible: checkboxValue,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          showCursor: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                width:0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3F5),
+                            hintStyle: TextStyle(
+                                color: Color(0xFF666666),
+                                fontFamily: defaultFontFamily,
+                                fontSize: defaultFontSize),
+                            hintText: "Reason for notifying",
+                          ),
+                          validator: (val) => val.isEmpty ? 'Enter reason for notifying' : null,
+                          onChanged: (val){
+                            setState(() => reason_notification = val);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 24.0),
                   Row(
