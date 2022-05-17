@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
 import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/profile/patient/data_privacy/patient_adjust_privacy.dart';
+import 'package:my_app/profile/patient/select_lead_doctor.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -116,6 +117,25 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
             ],
           ),
           actions: [
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(context: context,
+                  isScrollControlled: true,
+                  builder: (context) => SingleChildScrollView(child: Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: select_lead_doctor(),
+                  ),
+                  ),
+                ).then((value) {
+                });
+              },
+              child: ImageIcon(
+                AssetImage('assets/images/lead.png'),
+                size: 20,
+              ),
+            ),
+            SizedBox(width: 10),
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
