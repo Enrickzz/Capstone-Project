@@ -161,10 +161,24 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                                   fontWeight: FontWeight.bold,
 
                                 )),
-                            subtitle:        Text(d_position[index],
-                                style:TextStyle(
-                                  color: Colors.grey,
-                                )),
+                            subtitle:        Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(d_position[index],
+                                    style:TextStyle(
+                                      color: Colors.grey,
+                                    )),
+                                SizedBox(height: 3,),
+                                Visibility(
+                                  visible: true,
+                                  child: Text("Lead doctor",
+                                      style:TextStyle(
+                                        color: Colors.grey,
+                                      )),
+                                ),
+                              ],
+                            ),
+
                             trailing: GestureDetector(
                                 onTap: () {
                                   showModalBottomSheet(context: context,
