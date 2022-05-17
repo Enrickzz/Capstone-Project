@@ -171,7 +171,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                                 SizedBox(height: 3,),
                                 Visibility(
                                   visible: true,
-                                  child: Text("Lead doctor",
+                                  child: Text("Lead Doctor",
                                       style:TextStyle(
                                         color: Colors.grey,
                                       )),
