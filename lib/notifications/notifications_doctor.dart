@@ -195,8 +195,8 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
+    notifsList = notifsList.reversed.toList();
   }
-
 }
 
 String checktype(String usertype) {

@@ -13,6 +13,7 @@ import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/notifTest.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../../notifications/notifications._patients.dart';
@@ -380,7 +381,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                 });
                                               }
                                             });
-                                            Future.delayed(const Duration(milliseconds: 1000), (){
+                                            Future.delayed(const Duration(milliseconds: 1000), () async{
                                               print("MEDICATION LENGTH: " + bp_list.length.toString());
                                               String message, title;
                                               int priority;
@@ -414,16 +415,16 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                               }
                                               // recommendations / notifs
 
-                                              void schedBP() async{
-                                                print("SCHED THIS");
-                                                final cron = Cron()
-                                                  ..schedule(Schedule.parse('*/50 * * * * '), () {
-                                                    addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure");
-                                                    print("after 1 hr");
-                                                  });
-                                                await Future.delayed(Duration( hours: 1, minutes: 3));
-                                                await cron.close();
-                                              }
+                                              // void schedBP() async{
+                                              //   print("SCHED THIS");
+                                              //   final cron = Cron()
+                                              //     ..schedule(Schedule.parse('*/50 * * * * '), () {
+                                              //       addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure");
+                                              //       print("after 1 hr");
+                                              //     });
+                                              //   await Future.delayed(Duration( hours: 1, minutes: 3));
+                                              //   await cron.close();
+                                              // }
                                               if(widget.instance =="Reminder!"){
                                                 addtoRecommendation("Your Blood Pressure is still high just like the previous recording. We have already informed your doctor and support system about this. Please seek immediate medical attention for this.",
                                                     "High Blood Pressure",
@@ -452,13 +453,23 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                 addtoRecommendation("Your Blood Pressure is quite high, we recommend that you monitor your blood pressure for the next hour as we would set an alarm for you to record your blood pressure again. If you feel unwell please seek immediate medical attention for your condition. For the meantime here is a relaxing music for you to listen to while you are taking a breather. ",
                                                     "High Blood Pressure!",
                                                     "2", "Spotify");
-                                                schedBP();
+                                                //sched needs new entry notif reference schedBP();
+                                                NotificationService ns = NotificationService("BLOOD PRESSURE");
+                                                await ns.init().then((value) async {
+                                                  await ns.scheduleNotifications(5);
+                                                });
+                                                // schedBP();
                                               }
                                               if(pressure_level == "high" && bp_status =="Active"){
                                                 addtoRecommendation("Your Blood Pressure is quite high but since you just finished performing strenuous physical activities this is not immediately a cause for concern. We recommend that you take a rest and record your Blood Pressure again after an hour. For the meantime here are some soothing relaxing music to listen to while you are taking a rest.",
                                                     "High Blood Pressure!",
                                                     "4", "Spotify");
-                                                schedBP();
+                                                //sched needs new entry notif reference schedBP();
+                                                NotificationService ns = NotificationService("BLOOD PRESSURE");
+                                                await ns.init().then((value) async {
+                                                  await ns.scheduleNotifications(5);
+                                                });
+                                                // schedBP();
                                               }
                                               if(pressure_level == "low"){
                                                 addtoRecommendation("Your Blood pressure is lower than the normal standards, please record your heart rate and respiratory rate as well to have a better view of your current health.",

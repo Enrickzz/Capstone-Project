@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/notifTest.dart';
 import 'package:my_app/ui_view/BloodGlucose_TimeChart.dart';
 import 'package:my_app/ui_view/HeartRate_TimeChart.dart';
 import 'package:my_app/ui_view/Oxygen_TimeChart.dart';
@@ -149,6 +150,8 @@ class _DashboardsState extends State<Dashboards>
           TitleView(
             titleTxt: 'Body measurement',
             subTxt: 'Today',
+            redirect: 11,
+
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                 parent: widget.animationController,
                 curve:
