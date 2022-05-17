@@ -44,18 +44,25 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   Users patient = new Users();
-
   List<String> uidlist = [];
   List<Users> userlist=[];
   List<Additional_Info> userAddInfo =[];
   List<Connection> connections = [];
 
-  List names = [
+  List d_names = [
+    //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
+    // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
+  ];
+  List ss_names = [
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
     // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
   ];
 
-  List position = [
+  List d_position = [
+    // "Doctor", "Doctor", 'Support System', "Coronary Heart Disease",
+    // "Doctor", "Support System", 'Doctor', "Support System", 'Doctor', "Doctor"
+  ];
+  List ss_position = [
     // "Doctor", "Doctor", 'Support System', "Coronary Heart Disease",
     // "Doctor", "Support System", 'Doctor', "Support System", 'Doctor', "Doctor"
   ];
@@ -133,7 +140,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
             Container(
               child: Scrollbar(
                 child: ListView.builder(
-                    itemCount: names.length,
+                    itemCount: d_names.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) =>Container(
                       width: MediaQuery.of(context).size.width,
@@ -147,14 +154,14 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                               backgroundImage: NetworkImage
                                 ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
                             ),
-                            title: Text(names[index],
+                            title: Text(d_names[index],
                                 style:TextStyle(
                                   color: Colors.black,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.bold,
 
                                 )),
-                            subtitle:        Text(position[index],
+                            subtitle:        Text(d_position[index],
                                 style:TextStyle(
                                   color: Colors.grey,
                                 )),
@@ -202,7 +209,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
             Container(
               child: Scrollbar(
                 child: ListView.builder(
-                    itemCount: names.length,
+                    itemCount: ss_names.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) =>Container(
                       width: MediaQuery.of(context).size.width,
@@ -216,14 +223,14 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                             backgroundImage: NetworkImage
                               ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
                           ),
-                          title: Text(names[index],
+                          title: Text(ss_names[index],
                               style:TextStyle(
                                 color: Colors.black,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold,
 
                               )),
-                          subtitle:        Text(position[index],
+                          subtitle:        Text(ss_position[index],
                               style:TextStyle(
                                 color: Colors.grey,
                               )),
@@ -303,12 +310,14 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
             print(temp3);
             Users doctor = Users.fromJson(temp3);
             if(doctor.usertype != "Family member / Caregiver"){
-              position.add(doctor.specialty);
+              d_names.add(doctor.firstname + " " + doctor.lastname);
+              d_position.add(doctor.specialty);
             }
             else{
-              position.add("Family member / Caregiver");
+              ss_names.add(doctor.firstname + " " + doctor.lastname);
+              ss_position.add("Family member / Caregiver");
             }
-            names.add(doctor.firstname + " " + doctor.lastname);
+
           });
         }
       });
