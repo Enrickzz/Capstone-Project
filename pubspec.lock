@@ -321,6 +321,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      name: flutter_local_notifications
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "8.2.0"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.1"
   flutter_login_facebook:
     dependency: "direct main"
     description:
@@ -654,7 +668,7 @@ packages:
     source: hosted
     version: "3.1.0"
   plugin_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
@@ -826,6 +840,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.3"
+  timezone:
+    dependency: "direct main"
+    description:
+      name: timezone
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.0"
   typed_data:
     dependency: transitive
     description:

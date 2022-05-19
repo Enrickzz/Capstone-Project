@@ -40,7 +40,7 @@ class _lab_management_plan_patient_view_prescriptionState extends State<lab_pres
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Vitals> vitalstemp = [];
+  List<Lab_Plan> labplantemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   Users doctor = new Users();
   List<String> doctor_names = [];
@@ -50,8 +50,8 @@ class _lab_management_plan_patient_view_prescriptionState extends State<lab_pres
     super.initState();
     final User user = auth.currentUser;
     final uid = user.uid;
-    vitalstemp.clear();
-    getVitals();
+    labplantemp.clear();
+    getLabPlan();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -82,7 +82,7 @@ class _lab_management_plan_patient_view_prescriptionState extends State<lab_pres
 
         ),
         body: ListView.builder(
-            itemCount: vitalstemp.length,
+            itemCount: labplantemp.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
               width: MediaQuery.of(context).size.width,
@@ -90,19 +90,19 @@ class _lab_management_plan_patient_view_prescriptionState extends State<lab_pres
               child: Card(
                 child: ListTile(
                     leading: Icon(Icons.document_scanner_outlined),
-                    title: Text("Kind of Lab result",
+                    title: Text(labplantemp[index].type,
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle:        Text("Requested by: Dr." + vitalstemp[index].doctor_name,
+                    subtitle:        Text("Requested by: Dr." + labplantemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
                         )),
-                    trailing: Text("${vitalstemp[index].dateCreated.month}/${vitalstemp[index].dateCreated.day}/${vitalstemp[index].dateCreated.year}",
+                    trailing: Text("${labplantemp[index].dateCreated.month}/${labplantemp[index].dateCreated.day}/${labplantemp[index].dateCreated.year}",
                         style:TextStyle(
                           color: Colors.grey,
                         )),
@@ -112,7 +112,7 @@ class _lab_management_plan_patient_view_prescriptionState extends State<lab_pres
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificLabRequestViewAsPatient(thislist: vitalstemp, index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificLabRequestViewAsPatient(thislist: labplantemp, index: index)),
                       );
                     }
 
@@ -137,17 +137,17 @@ class _lab_management_plan_patient_view_prescriptionState extends State<lab_pres
       return "$hours:$min";
     }
   }
-  void getVitals() {
+  void getLabPlan() {
     final User user = auth.currentUser;
     final uid = user.uid;
     // String userUID = widget.userUID;
-    final readFoodPlan = databaseReference.child('users/' + uid + '/management_plan/vitals_plan/');
+    final readFoodPlan = databaseReference.child('users/' + uid + '/management_plan/lab_plan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        vitalstemp.add(Vitals.fromJson(jsonString));
+        labplantemp.add(Lab_Plan.fromJson(jsonString));
       });
-      vitalstemp = vitalstemp.reversed.toList();
+      labplantemp = labplantemp.reversed.toList();
     });
   }
 }

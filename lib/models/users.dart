@@ -78,6 +78,8 @@ class Connection{
     this.explan2,
     this.vitals1,
     this.vitals2,
+    this.labplan1,
+    this.labplan2
   });
 
   String doctor1;
@@ -99,11 +101,14 @@ class Connection{
   String foodplan1;
   String explan1;
   String vitals1;
+  String labplan1;
   String medpres2;
   String foodplan2;
   String explan2;
   String vitals2;
+  String labplan2;
   String doctor2;
+
 
   Connection.fromJson2(Map<String, dynamic> json) {
     doctor1 = json['doctor1'];
@@ -112,10 +117,12 @@ class Connection{
     foodplan1 = json['foodplan1'];
     explan1 = json['explan1'];
     vitals1 = json['vitals1'];
+    labplan1 = json['labplan1'];
     medpres2 = json['medpres2'];
     foodplan2 = json['foodplan2'];
     explan2 = json['explan2'];
     vitals2 = json['vitals2'];
+    labplan2 = json['labplan2'];
   }
 }
 class Vitals_Connection {
@@ -839,6 +846,27 @@ class Vitals {
     data['prescribedBy'] = this.prescribedBy;
     data['dateCreated'] = this.dateCreated;
     return data;
+  }
+}
+class Lab_Plan {
+  String reason_notification;
+  String type;
+  String important_notes;
+  String prescribedBy;
+  DateTime dateCreated;
+  String doctor_name;
+  String imgRef;
+
+  Lab_Plan({this.reason_notification, this.type, this.important_notes, this.prescribedBy, this.dateCreated, this.doctor_name, this.imgRef});
+
+  Lab_Plan.fromJson(Map<String, dynamic> json) {
+    reason_notification = json['Notify_Reason'];
+    type = json["type"];
+    important_notes = json['important_notes'];
+    prescribedBy = json['prescribedBy'];
+    dateCreated = DateFormat("MM/dd/yyyy").parse(json['dateCreated']);
+    doctor_name = json["doctor_name"];
+    imgRef = json["imgRef"];
   }
 }
 class Weight_Goal {

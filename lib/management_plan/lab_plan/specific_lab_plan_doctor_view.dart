@@ -46,7 +46,7 @@ class SpecificLabRequestViewAsDoctor extends StatefulWidget {
   final String title;
   String userUID;
   int index;
-  List<Vitals> thislist;
+  List<Lab_Plan> thislist;
   @override
   _SpecificLabRequestViewAsDoctorState createState() => _SpecificLabRequestViewAsDoctorState();
 }
@@ -59,7 +59,7 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Vitals> templist = [];
+  List<Lab_Plan> templist = [];
   Users doctor = new Users();
   String purpose = "";
   String type = "";
@@ -67,6 +67,7 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
   String important_notes = "";
   String prescribedBy = "";
   String dateCreated = "";
+  String imgRef = "";
   bool prescribedDoctor = false;
 
   final double minScale = 1;
@@ -74,7 +75,7 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
   bool hasImage = true;
 
   //prescription image change this later paki change nalang
-  Medication_Prescription thisPrescription;
+  Lab_Plan thisLabPlan;
   bool isLoading=true;
 
   @override
@@ -88,9 +89,8 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
     final uid = user.uid;
     templist.clear();
     templist = widget.thislist;
-    purpose = templist[widget.index].purpose;
+    thisLabPlan = templist[widget.index];
     type = templist[widget.index].type;
-    frequency = templist[widget.index].frequency.toString();
     important_notes = templist[widget.index].important_notes;
     prescribedBy = templist[widget.index].doctor_name;
     dateCreated = "${templist[widget.index].dateCreated.month}/${templist[widget.index].dateCreated.day}/${templist[widget.index].dateCreated.year}";
@@ -196,9 +196,7 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
                                                 prescribedBy = newV.prescribedBy;
                                                 dateCreated = "${newV.dateCreated.month}/${newV.dateCreated.day}/${newV.dateCreated.year}";
 
-                                                templist[widget.index].purpose =purpose;
                                                 templist[widget.index].type = type;
-                                                templist[widget.index].frequency = int.parse(frequency.toString());
                                                 templist[widget.index].important_notes = important_notes;
                                                 templist[widget.index].prescribedBy =prescribedBy;
                                                 templist[widget.index].dateCreated =  newV.dateCreated;
@@ -266,7 +264,7 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
                                                 ),
                                               ),
                                               SizedBox(height: 8),
-                                              Text("Plagay dito kind ng lab test",
+                                              Text(type,
                                                 style: TextStyle(
                                                     fontSize:16,
                                                     fontWeight: FontWeight.bold
@@ -310,7 +308,7 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
                             aspectRatio: 1,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
-                              child: showimg(thisPrescription.imgRef),
+                              child: showimg(thisLabPlan.imgRef),
                             ),
                           ),
                         ),
@@ -404,17 +402,18 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
       (loadingProgress == null) ? child : CircularProgressIndicator());
     }
   }
-  void getFoodplan() {
+
+  void getLabPlan() {
     final User user = auth.currentUser;
     final uid = user.uid;
     var userUID = widget.userUID;
-    final readVitals = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
+    final readVitals = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/');
     int index = widget.index;
-    List<Vitals> temp1 = [];
+    List<Lab_Plan> temp1 = [];
     readVitals.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        temp1.add(Vitals.fromJson(jsonString));
+        temp1.add(Lab_Plan.fromJson(jsonString));
       });
       for(var i=0;i<temp1.length/2;i++){
         var temp = temp1[i];
@@ -430,11 +429,10 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
       if(temp1[index].prescribedBy == uid){
         prescribedDoctor = true;
       }
-      purpose = temp1[index].purpose;
       type = temp1[index].type;
-      frequency = temp1[index].frequency.toString();
       important_notes = temp1[index].important_notes ;
       dateCreated = "${temp1[index].dateCreated.month}/${temp1[index].dateCreated.day}/${temp1[index].dateCreated.year}";
+      imgRef = temp1[index].imgRef;
     });
   }
   Future<void> _showMyDialogDelete() async {
@@ -462,19 +460,18 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
                 templist.removeAt(widget.index);
                 /// delete fields
                 for(int i = 1; i <= initial_length; i++){
-                  final bpRef = databaseReference.child('users/' + widget.userUID + '/management_plan/vitals_plan/' + i.toString());
+                  final bpRef = databaseReference.child('users/' + widget.userUID + '/management_plan/lab_plan/' + i.toString());
                   bpRef.remove();
                 }
                 /// write fields
                 for(int i = 0; i < templist.length; i++){
-                  final bpRef = databaseReference.child('users/' + widget.userUID + '/management_plan/vitals_plan/' + (i+1).toString());
+                  final bpRef = databaseReference.child('users/' + widget.userUID + '/management_plan/lab_plan/' + (i+1).toString());
                   bpRef.set({
-                    "purpose": templist[i].purpose.toString(),
                     "type": templist[i].type.toString(),
-                    "frequency": templist[i].frequency.toString(),
                     "important_notes": templist[i].important_notes.toString(),
                     "prescribedBy": templist[i].prescribedBy.toString(),
                     "dateCreated": "${templist[i].dateCreated.month.toString().padLeft(2,"0")}/${templist[i].dateCreated.day.toString().padLeft(2,"0")}/${templist[i].dateCreated.year}",
+                    "imgRef": templist[i].imgRef.toString(),
                   });
                 }
                 Navigator.pop(context, templist);

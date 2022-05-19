@@ -41,7 +41,7 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Vitals> vitalstemp = [];
+  List<Lab_Plan> labplantemp = [];
   List<Connection> connection_list = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   String purpose = "";
@@ -56,9 +56,9 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
     // final User user = auth.currentUser;
     // final uid = user.uid;
     connection_list.clear();
-    vitalstemp.clear();
+    labplantemp.clear();
     connection_list = widget.connection_list;
-    getVitals(connection_list);
+    getLabPlan(connection_list);
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -96,18 +96,18 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
                       builder: (context) => SingleChildScrollView(child: Container(
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: add_lab_request(thislist: vitalstemp, userUID: widget.userUID),
+                        child: add_lab_request(thislist: labplantemp, userUID: widget.userUID),
                       ),
                       ),
                     ).then((value) =>
                         Future.delayed(const Duration(milliseconds: 1500), (){
                           setState((){
                             if(value != null){
-                              vitalstemp.insert(0, value);
+                              labplantemp.insert(0, value);
                               doctor_names.insert(0, doctor.lastname);
                               Future.delayed(const Duration(milliseconds: 1000),(){
                                 setState(() {
-                                  if(doctor_names.length == vitalstemp.length)
+                                  if(doctor_names.length == labplantemp.length)
                                     doctor_names.removeAt(1);
                                 });
                               });
@@ -124,7 +124,7 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
           ],
         ),
         body: ListView.builder(
-            itemCount: vitalstemp.length,
+            itemCount: labplantemp.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
               width: MediaQuery.of(context).size.width,
@@ -132,19 +132,19 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
               child: Card(
                 child: ListTile(
                     leading: Icon(Icons.document_scanner_outlined),
-                    title: Text("Kind of Lab result lagay dito",
+                    title: Text(labplantemp[index].type,
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
 
                         )),
-                    subtitle: Text("Requested by: Dr." + vitalstemp[index].doctor_name,
+                    subtitle: Text("Requested by: Dr." + labplantemp[index].doctor_name,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
                         )),
-                    trailing: Text("${vitalstemp[index].dateCreated.month}/${vitalstemp[index].dateCreated.day}/${vitalstemp[index].dateCreated.year}",
+                    trailing: Text("${labplantemp[index].dateCreated.month}/${labplantemp[index].dateCreated.day}/${labplantemp[index].dateCreated.year}",
                         style:TextStyle(
                           color: Colors.grey,
                         )),
@@ -156,10 +156,10 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificLabRequestViewAsDoctor(userUID: widget.userUID, index: index, thislist: vitalstemp)),
+                        MaterialPageRoute(builder: (context) => SpecificLabRequestViewAsDoctor(userUID: widget.userUID, index: index, thislist: labplantemp)),
                       ).then((value) {
                         if(value != null){
-                          vitalstemp = value;
+                          labplantemp = value;
                           setState(() {
 
                           });
@@ -188,22 +188,22 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
       return "$hours:$min";
     }
   }
-  void getVitals(List<Connection> connections) {
+  void getLabPlan(List<Connection> connections) {
     final User user = auth.currentUser;
     final uid = user.uid;
     List<int> delete_list = [];
     String userUID = widget.userUID;
-    final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
+    final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/');
     readFoodPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        vitalstemp.add(Vitals.fromJson(jsonString));
+        labplantemp.add(Lab_Plan.fromJson(jsonString));
       });
       setState(() {
-        for(int i = 0; i < vitalstemp.length; i++){
-          if(vitalstemp[i].prescribedBy != uid){
+        for(int i = 0; i < labplantemp.length; i++){
+          if(labplantemp[i].prescribedBy != uid){
             for(int j = 0; j < connections.length; j++){
-              if(vitalstemp[i].prescribedBy == connections[j].doctor1 && uid == connections[j].doctor2){
+              if(labplantemp[i].prescribedBy == connections[j].doctor1 && uid == connections[j].doctor2){
                 if(connections[j].vitals1 != "true"){
                   /// dont add
                   delete_list.add(i);
@@ -212,7 +212,7 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
                   /// add
                 }
               }
-              if(vitalstemp[i].prescribedBy == connections[j].doctor2 && uid == connections[j].doctor1){
+              if(labplantemp[i].prescribedBy == connections[j].doctor2 && uid == connections[j].doctor1){
                 if(connections[j].vitals2 != "true"){
                   /// dont add
                   delete_list.add(i);
@@ -223,7 +223,7 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
               }
             }
           }
-          final readDoctor = databaseReference.child('users/' + vitalstemp[i].prescribedBy + '/personal_info/');
+          final readDoctor = databaseReference.child('users/' + labplantemp[i].prescribedBy + '/personal_info/');
           readDoctor.once().then((DataSnapshot snapshot){
             Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
             if(temp != null){
@@ -235,12 +235,12 @@ class _lab_management_plan_doctor_view_prescriptionState extends State<lab_presc
       });
       delete_list.sort((a, b) => b.compareTo(a));
       for(int i = 0; i < delete_list.length; i++){
-        vitalstemp.removeAt(delete_list[i]);
+        labplantemp.removeAt(delete_list[i]);
       }
-      for(var i=0;i<vitalstemp.length/2;i++){
-        var temp = vitalstemp[i];
-        vitalstemp[i] = vitalstemp[vitalstemp.length-1-i];
-        vitalstemp[vitalstemp.length-1-i] = temp;
+      for(var i=0;i<labplantemp.length/2;i++){
+        var temp = labplantemp[i];
+        labplantemp[i] = labplantemp[labplantemp.length-1-i];
+        labplantemp[labplantemp.length-1-i] = temp;
       }
       for(var i=0;i<doctor_names.length/2;i++){
         var temp = doctor_names[i];

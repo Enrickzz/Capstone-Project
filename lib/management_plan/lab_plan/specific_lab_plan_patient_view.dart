@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
 
 class SpecificLabRequestViewAsPatient extends StatefulWidget {
   SpecificLabRequestViewAsPatient({Key key, this.title, this.index, this.thislist}) : super(key: key);
-  final List<Vitals> thislist;
+  final List<Lab_Plan> thislist;
   final String title;
   int index;
   @override
@@ -55,11 +55,9 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Vitals> templist = [];
+  List<Lab_Plan> templist = [];
   Users doctor = new Users();
-  String purpose = "";
   String type = "";
-  String frequency = "";
   String important_notes = "";
   String prescribedBy = "";
   String dateCreated = "";
@@ -69,7 +67,7 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
   bool hasImage = true;
 
   //prescription image change this later
-  Medication_Prescription thisPrescription;
+  Lab_Plan thisPrescription;
   bool isLoading=true;
 
 
@@ -83,10 +81,9 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
     templist.clear();
     templist = widget.thislist;
     int index = widget.index;
+    thisPrescription = templist[index];
     // getFoodplan();
-    purpose = templist[index].purpose;
     type = templist[index].type;
-    frequency = templist[index].frequency.toString();
     important_notes = templist[index].important_notes ;
     dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     prescribedBy = templist[index].doctor_name;
@@ -180,7 +177,7 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
                                               ],
                                             ),
                                             SizedBox(height: 8),
-                                            Text("Lagay dito yung kind of lab result",
+                                            Text(type,
                                               style: TextStyle(
                                                   fontSize:16,
                                                   fontWeight: FontWeight.bold
@@ -325,12 +322,12 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
   void getFoodplan() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readVitals = databaseReference.child('users/' + uid + '/management_plan/vitals_plan/');
+    final readVitals = databaseReference.child('users/' + uid + '/management_plan/lab_plan/');
     int index = widget.index;
     readVitals.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        templist.add(Vitals.fromJson(jsonString));
+        templist.add(Lab_Plan.fromJson(jsonString));
       });
       final readDoctorName = databaseReference.child('users/' + templist[index].prescribedBy + '/personal_info/');
       readDoctorName.once().then((DataSnapshot snapshot){
@@ -338,9 +335,7 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
         doctor = Users.fromJson(temp2);
         prescribedBy = doctor.lastname + " " + doctor.firstname;
       });
-      purpose = templist[index].purpose;
       type = templist[index].type;
-      frequency = templist[index].frequency.toString();
       important_notes = templist[index].important_notes ;
       dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     });

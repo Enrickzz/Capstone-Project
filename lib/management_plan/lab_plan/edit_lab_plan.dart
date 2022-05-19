@@ -17,7 +17,7 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class edit_lab_request extends StatefulWidget {
-  final List<Vitals> thislist;
+  final List<Lab_Plan> thislist;
   final String userUID;
   final int index;
   edit_lab_request({this.thislist, this.userUID, this.index});
@@ -31,7 +31,7 @@ class _editLabRequestState extends State<edit_lab_request> {
 
   DateFormat format = new DateFormat("MM/dd/yyyy");
   int count = 1;
-  List<Vitals> vitals_list = new List<Vitals>();
+  List<Lab_Plan> labplan_list = new List<Lab_Plan>();
 
   String purpose = "";
   int frequency = 1;
@@ -162,10 +162,10 @@ class _editLabRequestState extends State<edit_lab_request> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            vitals_list = widget.thislist;
+                            labplan_list = widget.thislist;
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            int index = ((vitals_list.length + 1) - (widget.index+1)) ;
+                            int index = ((labplan_list.length + 1) - (widget.index+1)) ;
                             final planRef = databaseReference.child('users/' + widget.userUID + '/management_plan/vitals_plan/' + index.toString());
                             planRef.update({
                               "purpose": purpose.toString(),
@@ -176,13 +176,12 @@ class _editLabRequestState extends State<edit_lab_request> {
                             Vitals a = new Vitals();
                             Future.delayed(const Duration(milliseconds: 1500), (){
                               index = widget.index;
-                              vitals_list[index].purpose = purpose.toString();
-                              vitals_list[index].type = type.toString();
-                              vitals_list[index].important_notes = important_notes.toString();
-                              vitals_list[index].prescribedBy = prescribedBy.toString();
-                              vitals_list[index].dateCreated = now;
+                              labplan_list[index].type = type.toString();
+                              labplan_list[index].important_notes = important_notes.toString();
+                              labplan_list[index].prescribedBy = prescribedBy.toString();
+                              labplan_list[index].dateCreated = now;
                               print("POP HERE ==========");
-                              Vitals newV = vitals_list[index];
+                              Lab_Plan newV = labplan_list[index];
                               Navigator.pop(context, newV);
                             });
                           } catch(e) {
@@ -204,13 +203,11 @@ class _editLabRequestState extends State<edit_lab_request> {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readVitals = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
+    final readVitals = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/');
     readVitals.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print("temp");
-      print(temp);
       temp.forEach((jsonString) {
-        vitals_list.add(Vitals.fromJson(jsonString));
+        labplan_list.add(Lab_Plan.fromJson(jsonString));
       });
     });
   }

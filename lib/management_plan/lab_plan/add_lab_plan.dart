@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +20,7 @@ import 'package:my_app/management_plan/medication_prescription/view_medical_pres
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_lab_request extends StatefulWidget {
-  final List<Vitals> thislist;
+  final List<Lab_Plan> thislist;
   String userUID;
   add_lab_request({this.thislist, this.userUID});
   @override
@@ -32,9 +33,9 @@ class _addLabRequestState extends State<add_lab_request> {
 
   DateFormat format = new DateFormat("MM/dd/yyyy");
   int count = 1;
-  List<Vitals> vitals_list = new List<Vitals>();
+  List<Lab_Plan> labplan_list = new List<Lab_Plan>();
 
-  String purpose = "";
+  String purpose = " ";
   int frequency = 1;
   String type;
   String important_notes = "";
@@ -303,7 +304,6 @@ class _addLabRequestState extends State<add_lab_request> {
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
-                            String vital_type = "";
                             final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
                             Users doctor = new Users();
                             readDoctor.once().then((DataSnapshot snapshot) {
@@ -311,78 +311,45 @@ class _addLabRequestState extends State<add_lab_request> {
                               doctor = Users.fromJson(temp);
                               doctor_name = doctor.firstname + " " + doctor.lastname;
                             });
-                            final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
+                            final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               if(datasnapshot.value == null){
-                                final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
-                                vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
-                                print("Added Vitals Plan Successfully! " + uid);
-                                final connectionRef = databaseReference.child('users/' + userUID + '/vitals_connection/');
-                                if(type == "Blood Pressure"){
-                                  vital_type = "bloodpressure";
-                                }
-                                else if(type == "Blood Glucose"){
-                                  vital_type = "bloodglucose";
-                                }
-                                else if(type == "Heart Rate"){
-                                  vital_type = "heartrate";
-                                }
-                                else if(type == "Respiratory Rate"){
-                                  vital_type = "respiratoryrate";
-                                }
-                                else if(type == "Oxygen Saturation"){
-                                  vital_type = "oxygensaturation";
-                                }
-                                else if(type == "Body Temperature"){
-                                  vital_type = "bodytemperature";
-                                }
-                                connectionRef.update({"$vital_type": "true"});
+                                final labplanRef = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/' + count.toString());
+                                labplanRef.set({"Notify_Reason": reason_notification.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name, "imgRef": fileName.toString()});
+                                print("Added Lab Plan Successfully! " + uid);
                               }
                               else{
-                                getVitals();
-                                final connectionRef = databaseReference.child('users/' + userUID + '/vitals_connection/');
-                                if(type == "Blood Pressure"){
-                                  vital_type = "bloodpressure";
-                                }
-                                else if(type == "Blood Glucose"){
-                                  vital_type = "bloodglucose";
-                                }
-                                else if(type == "Heart Rate"){
-                                  vital_type = "heartrate";
-                                }
-                                else if(type == "Respiratory Rate"){
-                                  vital_type = "respiratoryrate";
-                                }
-                                else if(type == "Oxygen Saturation"){
-                                  vital_type = "oxygensaturation";
-                                }
-                                else if(type == "Body Temperature"){
-                                  vital_type = "bodytemperature";
-                                }
-                                connectionRef.update({"$vital_type": "true"});
+                                getLabPlan();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = vitals_list.length--;
-                                  final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
-                                  vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
-                                  print("Added Food Plan Successfully! " + uid);
+                                  downloadUrls();
+                                  Future.delayed(const Duration(milliseconds: 1000), (){
+                                    count = labplan_list.length--;
+                                    final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/' + count.toString());
+                                    vitalsRef.set({"Notify_Reason": reason_notification.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name, "imgRef": fileName.toString()});
+                                    print("Added Lab Plan Successfully! " + uid);
+                                  });
                                 });
                               }
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + vitals_list.length.toString());
-                              vitals_list.add(new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name));
-                              for(var i=0;i<vitals_list.length/2;i++){
-                                var temp = vitals_list[i];
-                                vitals_list[i] = vitals_list[vitals_list.length-1-i];
-                                vitals_list[vitals_list.length-1-i] = temp;
+                              print("MEDICATION LENGTH: " + labplan_list.length.toString());
+                              labplan_list.add(new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name, imgRef: fileName));
+                              for(var i=0;i<labplan_list.length/2;i++){
+                                var temp = labplan_list[i];
+                                labplan_list[i] = labplan_list[labplan_list.length-1-i];
+                                labplan_list[labplan_list.length-1-i] = temp;
                               }
-                              Vitals newV = new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name);
-                              addtoNotif("Dr. "+doctor.lastname+ " has added something to your vitals management plan. Click here to view your new Food management plan. " ,
-                                  "Doctor Added to your Vitals Plan!",
-                                  "1",
-                                  "Vitals Plan",
-                                  widget.userUID);
+                              if(fileName != null){
+                                FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                                });
+                              }
+                              Lab_Plan newV = new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name, imgRef: fileName);
+                              // addtoNotif("Dr. "+doctor.lastname+ " has added something to your vitals management plan. Click here to view your new Food management plan. " ,
+                              //     "Doctor Added to your Vitals Plan!",
+                              //     "1",
+                              //     "Vitals Plan",
+                              //     widget.userUID);
                               Navigator.pop(context,newV);
                             });
                           } catch(e) {
@@ -437,18 +404,34 @@ class _addLabRequestState extends State<add_lab_request> {
       });
     });
   }
-  void getVitals() {
+  void getLabPlan() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readVitals = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
-    readVitals.once().then((DataSnapshot snapshot){
+    final readLabPlan = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/');
+    readLabPlan.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      print("temp");
-      print(temp);
       temp.forEach((jsonString) {
-        vitals_list.add(Vitals.fromJson(jsonString));
+        labplan_list.add(Lab_Plan.fromJson(jsonString));
       });
     });
+  }
+  Future <String> downloadUrls() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String downloadurl="null";
+    for(var i = 0 ; i < labplan_list.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+labplan_list[i].imgRef.toString());
+      if(labplan_list[i].imgRef.toString() != "null" ){
+        downloadurl = await ref.getDownloadURL();
+        labplan_list[i].imgRef = downloadurl;
+      }
+
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+    });
+    return downloadurl;
   }
 }
