@@ -19,7 +19,6 @@ import 'package:my_app/management_plan/exercise_plan/exercise_plan_patient_view.
 import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 import 'package:my_app/goal_tab/exercises/exercise_screen.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
-import 'package:my_app/notifTest.dart';
 
 class TitleView extends StatelessWidget {
 
@@ -31,12 +30,10 @@ class TitleView extends StatelessWidget {
   final Animation<double> animation;
   final String userUID;
   final String fitbitToken;
-  final NotificationService notificationService;
 
 
   const TitleView(
       {Key key,
-        this.notificationService,
         this.fitbitToken,
         this.userUID,
         this.titleTxt: "",
@@ -97,14 +94,6 @@ class TitleView extends StatelessWidget {
                                 ),
                               ),
                               onTap: () async{
-                                print("REDIRECT");
-                                NotificationService ns = NotificationService("bp");
-                                await ns.init().then((value) async {
-                                  await ns.scheduleNotifications(5);
-                                });
-
-
-
                                 if (redirect == 1) {
                                   Navigator.push(
                                     context,

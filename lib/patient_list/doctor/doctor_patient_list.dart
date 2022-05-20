@@ -93,6 +93,9 @@ class _PatientListState extends State<PatientList>  {
         'supportingText': supportingText,
       };
       cardContent.add(cardData);
+      setState(() {
+
+      });
     }
     super.initState();
     if(widget.nameslist != null){
@@ -118,33 +121,10 @@ class _PatientListState extends State<PatientList>  {
       getPatients();
       isLoading = true;
     }
-    Future.delayed(const Duration(milliseconds: 2000), (){
-      // var distinctIds = uidlist.toSet().toList();
+    isLoading = true;
+    Future.delayed(const Duration(milliseconds: 3000), (){
       setState(() {
-        // uidlist = distinctIds;
-        // names = names.toSet().toList();
-        // pp_imgs = pp_imgs.toSet().toList();
-        // for(var i = 0; i < names.length-1;i++){
-        //   if(names[i] == names[i+1]){
-        //     deletelist.add(i+1);
-        //     // names.removeAt(i+1);
-        //     // pp_imgs.removeAt(i+1);
-        //   }
-        // }
-        // deletelist.sort((a,b) =>a.compareTo(b));
-        // for(var i = 0; i < deletelist.length; i++){
-        //   if(i == deletelist[i]){
-        //     names.removeAt(deletelist[i]);
-        //     pp_imgs.removeAt(deletelist[i]);
-        //   }
-        // }
-        // print("LENGTGHS PP AND NAMES");
-        // print(pp_imgs.length); print(names.length); print(uidlist.length);
-        // print("UIDS");
-        // for(var i = 0; i < uidlist.length; i++){
-        //   print(uidlist[i] + " index $i");
-        // }
-        isLoading = false;
+        print("SETSTATE");
       });
 
     });
@@ -354,10 +334,11 @@ class _PatientListState extends State<PatientList>  {
           });
         }
       });
-    });
-    setState(() {
-      isLoading = false;
-      print("FIXED");
+    }).then((value) {
+      setState(() {
+        isLoading = false;
+        print("FIXED");
+      });
     });
   }
 

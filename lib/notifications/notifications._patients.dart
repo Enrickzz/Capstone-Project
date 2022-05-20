@@ -184,6 +184,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                                     ),
                                   );
                                 }
+                                print("===" + notif.title +"\n"+notif.category);
                                 if(notif.title == "Reminder!" && notif.category == "heartrate"){
                                   showModalBottomSheet(context: context,
                                     isScrollControlled: true,
@@ -227,10 +228,11 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                         onDismissed: (direction){
                           setState(() {
                             notifsList.removeAt(index);
+                            deleteOneNotif(index);
+                            // deleteOneNotif(index);
                           });
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Notification dismissed')));
-                          deleteOneNotif(index);
 
                         },
                       );
@@ -384,10 +386,10 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                       onDismissed: (direction){
                         setState(() {
                           recommList.removeAt(index);
+                          deleteOneRecom(index);
                         });
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text('Recommendaiton dismissed')));
-                        deleteOneRecom(index);
                       },
                     );
                   },
@@ -483,8 +485,9 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
           int counter2 = 0;
           print("THIS ONE");
           print(datasnapshot);
+          List<RecomAndNotif> temp = notifsList.reversed.toList();
           temp.forEach((jsonString) {
-            RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
+            RecomAndNotif a = temp[counter2];
             final exerRef = databaseReference.child('users/' + uid + '/notifications/' + counter2.toString());
             exerRef.set({
               "id": counter2.toString(),
@@ -532,8 +535,9 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
           int counter2 = 0;
           print("THIS ONE");
           print(datasnapshot);
+          List<RecomAndNotif> temp = recommList.reversed.toList();
           temp.forEach((jsonString) {
-            RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
+            RecomAndNotif a = temp[counter2];
             final exerRef = databaseReference.child('users/' + uid + '/recommendations/' + counter2.toString());
             exerRef.set({
               "message": a.message,

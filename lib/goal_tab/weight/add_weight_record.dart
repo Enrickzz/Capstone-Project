@@ -254,6 +254,7 @@ class add_weightState extends State<add_weight_record> {
                         ),
                         color: Colors.blue,
                         onPressed: (){
+
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
@@ -269,6 +270,35 @@ class add_weightState extends State<add_weight_record> {
                                 pp = Physical_Parameters.fromJson(temp);
                                 bmi = current_weight / ((pp.height * 0.01) * (pp.height * 0.01));
 
+                                double bmi_double = bmi;
+                                print(bmi_double.toString() + "<<<<<<<<< THIS");
+                                if (bmi_double < 18.5){
+                                  addtoRecommendation("We recommend that you change your goals to GAIN more weight.",
+                                      "Eat more!",
+                                      "2",
+                                      "None",
+                                      "Immediate");
+                                }else if(bmi_double >= 18.5 && bmi_double <= 24.9){
+                                 //normal
+                                }else if(bmi_double >= 25 && bmi_double <= 29.9){
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight",
+                                      "Get fit!",
+                                      "2",
+                                      "None",
+                                      "Immediate");
+                                }else if(bmi_double >= 30 && bmi_double <= 34.9){
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight",
+                                      "Get your weight down!",
+                                      "3",
+                                      "None",
+                                      "Immediate");
+                                }else if(bmi_double > 35){
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight",
+                                      "Consult with your Doctor!",
+                                      "3",
+                                      "None",
+                                      "Immediate");
+                                }
                               if(datasnapshot.value == null){
                                 final weightRef = databaseReference.child('users/' + uid + '/goal/weight/' + count.toString());
                                 weightRef.set({"weight": current_weight.toStringAsFixed(1),"bmi": bmi.toStringAsFixed(1) , "dateCreated": weight_date,"timeCreated": weight_time});

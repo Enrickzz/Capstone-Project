@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/LocalNotifications.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
 import 'package:my_app/data_inputs/vitals/heart_rate/heart_rate_patient_view.dart';
 import 'package:my_app/database.dart';
@@ -360,16 +361,16 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               hr_status = "Resting";
                               print(hr_status + "<<< STATUS");
                             }
-                            void schedHRtake() async{
-                              print("SCHED THIS");
-                              final cron = Cron()
-                                ..schedule(Schedule.parse('* * */1 * * * '), () {
-                                  addtoNotif("Check your Heart Rate again now now. Click me to check now!", "Reminder!", "1", uid, "HeartRate");
-                                  print("after 1 hr");
-                                });
-                              await Future.delayed(Duration( hours: 1, minutes: 3));
-                              await cron.close();
-                            }
+                            // void schedHRtake() async{
+                            //   print("SCHED THIS");
+                            //   final cron = Cron()
+                            //     ..schedule(Schedule.parse('* * */1 * * * '), () {
+                            //       addtoNotif("Check your Heart Rate again now now. Click me to check now!", "Reminder!", "1", uid, "HeartRate");
+                            //       print("after 1 hr");
+                            //     });
+                            //   await Future.delayed(Duration( hours: 1, minutes: 3));
+                            //   await cron.close();
+                            // }
                             if(beats < 40){
                               addtoNotif("Your Heart Rate is alarming which is why we have already notified your doctor and support system regarding this. Please remain calm at all times and seek immediate medical attention.",
                                   "High Heart Rate!",
@@ -397,7 +398,11 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                   "Heart Rate is High!",
                                   "2",
                                   uid, "Spotify");
-                              schedHRtake();
+                              NotificationService ns = NotificationService("hr");
+                              await ns.init().then((value) async {
+                                await ns.scheduleNotifications(Duration(hours: 2));
+                              });
+                              // schedHRtake();
                             }
                             if(beats > 100 && hr_status == "Active"){
                               addtoRecommendation("Your heart rate seems a bit high but since you just finished exercising. If you feel unwell please don’t hesitate to seek immediate medical attention. We recommend that you record your heart rate again after an hour as we would be setting a reminder for you to do so. For the meantime please listen to some soothing music while you take a rest and relax yourself.",

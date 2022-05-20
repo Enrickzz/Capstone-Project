@@ -9,11 +9,11 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/LocalNotifications.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/notifTest.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../../notifications/notifications._patients.dart';
@@ -419,7 +419,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                               //   print("SCHED THIS");
                                               //   final cron = Cron()
                                               //     ..schedule(Schedule.parse('*/50 * * * * '), () {
-                                              //       addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure");
+                                                    addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure");
                                               //       print("after 1 hr");
                                               //     });
                                               //   await Future.delayed(Duration( hours: 1, minutes: 3));
@@ -454,9 +454,9 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                     "High Blood Pressure!",
                                                     "2", "Spotify");
                                                 //sched needs new entry notif reference schedBP();
-                                                NotificationService ns = NotificationService("BLOOD PRESSURE");
+                                                NotificationService ns = NotificationService("bp");
                                                 await ns.init().then((value) async {
-                                                  await ns.scheduleNotifications(5);
+                                                  await ns.scheduleNotifications(Duration(hours: 1));
                                                 });
                                                 // schedBP();
                                               }
@@ -465,9 +465,9 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                     "High Blood Pressure!",
                                                     "4", "Spotify");
                                                 //sched needs new entry notif reference schedBP();
-                                                NotificationService ns = NotificationService("BLOOD PRESSURE");
+                                                NotificationService ns = NotificationService("bp");
                                                 await ns.init().then((value) async {
-                                                  await ns.scheduleNotifications(5);
+                                                  await ns.scheduleNotifications(Duration(hours: 1));
                                                 });
                                                 // schedBP();
                                               }

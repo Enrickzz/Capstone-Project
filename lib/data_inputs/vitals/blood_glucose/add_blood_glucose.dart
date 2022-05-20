@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/LocalNotifications.dart';
 import 'package:my_app/data_inputs/vitals/blood_glucose/blood_glucose_patient_view.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
 import 'package:my_app/database.dart';
@@ -396,23 +397,27 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                 });
                                               });
                                             }
-                                            void schedG() async{
-                                              print("SCHED THIS");
-                                              final cron = Cron()
-                                                ..schedule(Schedule.parse('* * */2 * * * '), () {
-                                                  addtoNotif("Check your Glucose again now. Click me to check now!", "Reminder!", "1", uid, "Glucose");
-                                                  print("after 1 hr");
-                                                });
-                                              await Future.delayed(Duration( hours: 2, minutes: 3));
-                                              await cron.close();
-                                            }
+                                            // void schedG() async{
+                                            //   print("SCHED THIS");
+                                            //   final cron = Cron()
+                                            //     ..schedule(Schedule.parse('* * */2 * * * '), () {
+                                            //       addtoNotif("Check your Glucose again now. Click me to check now!", "Reminder!", "1", uid, "Glucose");
+                                            //       print("after 1 hr");
+                                            //     });
+                                            //   await Future.delayed(Duration( hours: 2, minutes: 3));
+                                            //   await cron.close();
+                                            // }
                                             if(glucose >120 && double.parse(lastMeal.toString()) <= 2){
                                               addtoRecommendation("We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. "
                                                   "Please record your blood sugar again 2 hours after your last meal. We have set an alarm to remind you to record your blood sugar later. For now please drink a glass of water and try to walk around.",
                                                   "High Blood Sugar!",
                                                   "2",
                                                   "None");
-                                              schedG();
+                                              NotificationService ns = NotificationService("bg");
+                                              await ns.init().then((value) async {
+                                                await ns.scheduleNotifications(Duration(hours: 2));
+                                              });
+                                              // schedG();
                                             }
                                             Future.delayed(const Duration(milliseconds: 1000), (){
                                               glucose_list.add(new Blood_Glucose(glucose: glucose, lastMeal: int.parse(lastMeal), bloodGlucose_status: glucose_status, bloodGlucose_date: format.parse(glucose_date), bloodGlucose_time: timeformat.parse(glucose_time)));

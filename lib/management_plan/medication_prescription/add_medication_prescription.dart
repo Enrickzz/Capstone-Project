@@ -736,6 +736,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                   "1",
                                   "Medication Plan",
                                   widget.userUID);
+
                               Navigator.pop(context, newPres);
                             });
 

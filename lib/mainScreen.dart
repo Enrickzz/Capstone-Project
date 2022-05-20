@@ -4,6 +4,7 @@ import 'package:cron/cron.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/LocalNotifications.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/places.dart';
@@ -283,38 +284,44 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
       });
     });
   }
-  void schedule() {
+  void schedule() async{
     print("SCHED ALL");
-    final bfast = Cron()
-      ..schedule(Schedule.parse("0 10 * * *"), () {
-        print("bfast CHECK");
-        addtoNotifs("We notice that you have not recorded any meal for your breakfast today.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-            "Eat Breakfast!",
-            "2", "10:00:00");
-        notifySS(1);
-      });
-     // Future.delayed(Duration(seconds: 20));
-     // bfast.close();
-    final lunch = Cron()
-      ..schedule(Schedule.parse("0 14 * * *"), () {
-        print("lunch CHECK");
-        addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-            "Eat Lunch!",
-            "2", "14:00:00");
-        notifySS(2);
-      });
-     // Future.delayed(Duration(seconds: 20));
-     // lunch.close();
-    final dinner = Cron()
-      ..schedule(Schedule.parse("0 21 * * *"), () {
-        print("dinner CHECK");
-        addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-            "Eat Dinner!",
-            "2", "21:00:00");
-        notifySS(3);
-      });
-     // Future.delayed(Duration(seconds: 20));
-     // dinner.close();
+    NotificationService ns = NotificationService("schedFood");
+    // ns.cancelAllNotifications();
+    await ns.init().then((value) async {
+      await ns.scheduleNotifications(Duration(seconds: 1));
+    });
+
+    // final bfast = Cron()
+    //   ..schedule(Schedule.parse("0 10 * * *"), () {
+    //     print("bfast CHECK");
+    //     addtoNotifs("We notice that you have not recorded any meal for your breakfast today.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+    //         "Eat Breakfast!",
+    //         "2", "10:00:00");
+    //     notifySS(1);
+    //   });
+    //  // Future.delayed(Duration(seconds: 20));
+    //  // bfast.close();
+    // final lunch = Cron()
+    //   ..schedule(Schedule.parse("0 14 * * *"), () {
+    //     print("lunch CHECK");
+    //     addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+    //         "Eat Lunch!",
+    //         "2", "14:00:00");
+    //     notifySS(2);
+    //   });
+    //  // Future.delayed(Duration(seconds: 20));
+    //  // lunch.close();
+    // final dinner = Cron()
+    //   ..schedule(Schedule.parse("0 21 * * *"), () {
+    //     print("dinner CHECK");
+    //     addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+    //         "Eat Dinner!",
+    //         "2", "21:00:00");
+    //     notifySS(3);
+    //   });
+    //  // Future.delayed(Duration(seconds: 20));
+    //  // dinner.close();
     final meds = Cron()
       ..schedule(Schedule.parse("0 20 * * *"), () {
         print("meds CHECK");
@@ -323,8 +330,8 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
             "3","$hours:$min");
         notifySS(4);
       });
-     // Future.delayed(Duration(seconds: 20));
-     // meds.close();
+    //  // Future.delayed(Duration(seconds: 20));
+    //  // meds.close();
     final vital = Cron()
       ..schedule(Schedule.parse("8-11 * * * *"), () {
         print("VITALS CHECK");
@@ -451,50 +458,50 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
     String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
     readWaterGoal.once().then((DataSnapshot snapshot){
       readWater.once().then((DataSnapshot datasnapshot) {
-        Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-        water_goal = Water_Goal.fromJson(temp);
-        waterintake_goal = water_goal.water_goal;
-        List<dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
-        temp2.forEach((jsonString) {
-          waterintake_list.add(WaterIntake.fromJson(jsonString));
-        });
-        for(int i=0; i < waterintake_list.length; i++){
-          String datecreated = "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}";
-          if(datenow == datecreated){
-            total_water += waterintake_list[i].water_intake;
-          }
-        }
-        waterpercentage = double.parse((total_water/ waterintake_goal * 100).toStringAsFixed(1));
-        if(waterpercentage > 100){
-          waterpercentage = 100;
-        }
-        /// getting the latest water
-        var latestDate;
-        List<WaterIntake> timesortwater = [];
-        waterintake_list.sort((a,b) => a.dateCreated.compareTo(b.dateCreated));
-        if(waterintake_list.length != 1){
-          if(waterintake_list[waterintake_list.length-1].dateCreated == waterintake_list[waterintake_list.length-2].dateCreated){
-            latestDate = waterintake_list[waterintake_list.length-1].dateCreated;
-            for(int i = 0; i < waterintake_list.length; i++){
-              if(waterintake_list[i].dateCreated == latestDate){
-                timesortwater.add(waterintake_list[i]);
-              }
+        if (datasnapshot != null) {
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          water_goal = Water_Goal.fromJson(temp);
+          waterintake_goal = water_goal.water_goal;
+          List<dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
+          temp2.forEach((jsonString) {
+            waterintake_list.add(WaterIntake.fromJson(jsonString));
+          });
+          for(int i=0; i < waterintake_list.length; i++){
+            String datecreated = "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}";
+            if(datenow == datecreated){
+              total_water += waterintake_list[i].water_intake;
             }
-            timesortwater.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
-            lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
-            readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+          }
+          waterpercentage = double.parse((total_water/ waterintake_goal * 100).toStringAsFixed(1));
+          if(waterpercentage > 100){
+            waterpercentage = 100;
+          }
+          /// getting the latest water
+          var latestDate;
+          List<WaterIntake> timesortwater = [];
+          waterintake_list.sort((a,b) => a.dateCreated.compareTo(b.dateCreated));
+          if(waterintake_list.length != 1){
+            if(waterintake_list[waterintake_list.length-1].dateCreated == waterintake_list[waterintake_list.length-2].dateCreated){
+              latestDate = waterintake_list[waterintake_list.length-1].dateCreated;
+              for(int i = 0; i < waterintake_list.length; i++){
+                if(waterintake_list[i].dateCreated == latestDate){
+                  timesortwater.add(waterintake_list[i]);
+                }
+              }
+              timesortwater.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
+              lastDrink = "${timesortwater[timesortwater.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${timesortwater[timesortwater.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+              readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+            }
+            else{
+              timesortwater = waterintake_list;
+              readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+            }
           }
           else{
-            timesortwater = waterintake_list;
-            readWaterGoal.update({"current_water": timesortwater[timesortwater.length-1].water_intake.toStringAsFixed(1)});
+            lastDrink = "${waterintake_list[waterintake_list.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${waterintake_list[waterintake_list.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
+
           }
         }
-        else{
-          lastDrink = "${waterintake_list[waterintake_list.length-1].timeCreated.hour.toString().padLeft(2,'0')}:${waterintake_list[waterintake_list.length-1].timeCreated.minute.toString().padLeft(2,'0')}";
-
-        }
-
-
       });
     });
   }

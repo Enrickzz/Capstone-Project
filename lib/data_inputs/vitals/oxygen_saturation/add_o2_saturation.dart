@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/LocalNotifications.dart';
 import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -305,16 +306,16 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
 
                                             });
                                             //RECOMMEND AND NOTIFS
-                                            void schedOxy() async{
-                                              print("SCHED OXY");
-                                              final cron = Cron()
-                                                ..schedule(Schedule.parse('* */30 * * * * '), () {
-                                                  addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen");
-                                                  print("ADD");
-                                                });
-                                              await Future.delayed(Duration(  minutes: 35));
-                                              await cron.close();
-                                            }
+                                            // void schedOxy() async{
+                                            //   print("SCHED OXY");
+                                            //   final cron = Cron()
+                                            //     ..schedule(Schedule.parse('* */30 * * * * '), () {
+                                            //       addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen");
+                                            //       print("ADD");
+                                            //     });
+                                            //   await Future.delayed(Duration(  minutes: 35));
+                                            //   await cron.close();
+                                            // }
                                             if(widget.instance =="Reminder!"){
                                               if(spo2 < 95){
                                                 addtoNotif("We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. Please remain calm and stay composed and continue to monitor your other vitals such as blood pressure and heart rate.",
@@ -369,7 +370,11 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                   "2",
                                                   uid,
                                                   "Spotify");
-                                              schedOxy();
+                                              NotificationService ns = NotificationService("oxy");
+                                              await ns.init().then((value) async {
+                                                await ns.scheduleNotifications(Duration(minutes: 30));
+                                              });
+                                              // schedOxy();
                                             }
 
                                             Future.delayed(const Duration(milliseconds: 1000), (){
