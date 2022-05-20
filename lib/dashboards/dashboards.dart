@@ -149,8 +149,6 @@ class _DashboardsState extends State<Dashboards>
           TitleView(
             titleTxt: 'Body measurement',
             subTxt: 'Today',
-            redirect: 11,
-
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                 parent: widget.animationController,
                 curve:
