@@ -372,7 +372,6 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                   pressure_level = "high";
                                                   print(pressure_level);
                                                 }
-                                                getBloodPressure();
                                                 Future.delayed(const Duration(milliseconds: 1500), (){
                                                   count = bp_list.length--;
                                                   final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
@@ -685,6 +684,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
     });
   }
   void initNotif() {
+    getBloodPressure();
+
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");

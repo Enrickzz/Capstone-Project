@@ -42,6 +42,11 @@ class _add_respiratory_rateState extends State<add_respiratory_rate> {
   TimeOfDay time;
   List<Respiratory_Rate> repiratory_list=[];
   var dateValue = TextEditingController();
+  @override
+  void initState(){
+    getRespirations();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +229,6 @@ class _add_respiratory_rateState extends State<add_respiratory_rate> {
 
                                 print("Added repiratory rate Successfully! " + uid);
                               }else{
-                                getRespirations();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = repiratory_list.length;
                                   final respiratoryRef = databaseReference.child('users/' + uid + '/vitals/health_records/respiratoryRate_list/' + count.toString());
@@ -264,6 +268,7 @@ class _add_respiratory_rateState extends State<add_respiratory_rate> {
     );
   }
   List<Respiratory_Rate> getRespirations() {
+    repiratory_list.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/respiratoryRate_list/');

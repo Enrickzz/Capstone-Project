@@ -306,7 +306,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                             final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
-                              print(temp1);
+                              // print(temp1);
                               if(datasnapshot.value == null){
                                 final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
                                 foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
@@ -340,11 +340,27 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                                   "Exercise Plan",
                                   widget.userUID);
                               print("POP HERE ==========");
+                              //ADD NOTIFS TO DOCTORS BEFORE POPPING
+                              final connections = databaseReference.child('users/' + userUID + '/personal_info/connections/' );
+                              connections.once().then((DataSnapshot snapConnections) {
+                                List<dynamic> temp = jsonDecode(jsonEncode(snapConnections.value));
+                                List<Connection> userDoctors = new List<Connection>();
+                                temp.forEach((jsonString) {
+                                  userDoctors.add(Connection.fromJson(jsonString));
+                                });
+                                print(userDoctors.length.toString() + "<<<< DR LENGTH");
+                                //ADD NOTIF LOGIC =
+
+                              });
+
                               Navigator.pop(context,a );
                             });
 
                           } catch(e) {
                             print("you got an error! $e");
+                          }
+                          if (checkboxValue == true ){
+
                           }
                           // Navigator.pop(context);
                         },

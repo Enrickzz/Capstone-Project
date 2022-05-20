@@ -284,7 +284,6 @@ class _add_heart_rateState extends State<add_heart_rate> {
 
                               }
                               else{
-                                getHeartRate();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = heartRate_list.length--;
                                   print("count " + count.toString());
@@ -448,6 +447,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
     }
   }
   void getHeartRate() {
+    heartRate_list.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
     final readHR = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/');
@@ -516,6 +516,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
     });
   }
   void initNotif() {
+    getHeartRate();
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");

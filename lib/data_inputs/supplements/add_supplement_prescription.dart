@@ -387,7 +387,6 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                                 print("Added Supplement Prescription Successfully! " + uid);
                               }
                               else{
-                                getSupplementPrescription();
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = supplement_list.length--;
                                   final prescriptionRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + count.toString());

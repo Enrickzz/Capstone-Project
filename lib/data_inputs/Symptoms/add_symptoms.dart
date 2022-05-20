@@ -117,8 +117,6 @@ class _addSymptomsState extends State<add_symptoms> {
   @override
   void initState(){
     initNotif();
-
-    symptoms_list.clear();
     super.initState();
   }
 
@@ -574,7 +572,6 @@ class _addSymptomsState extends State<add_symptoms> {
 
                         }
                         else{
-                          symptoms_list.clear();
                           getSymptoms();
                           Future.delayed(const Duration(milliseconds: 2000), (){
                             downloadUrls();
@@ -982,6 +979,7 @@ class _addSymptomsState extends State<add_symptoms> {
     });
   }
   void initNotif() {
+    getSymptoms();
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");

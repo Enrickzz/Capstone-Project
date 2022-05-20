@@ -109,7 +109,9 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
         getBloodPressure();
         getRespirations();
         schedule();
-      }
+      }Future.delayed(const Duration(milliseconds: 3000),(){
+        print(bptemp[0].pressure_level.toString() + "\n"+ hrtemp[0].bpm.toString() + "\n" + respiratory_list[0].bpm.toString() + "vitals checking" );
+      });
     });
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
@@ -602,6 +604,8 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
     DateTime a = new DateTime.now();
     String sa= a.toString();
     sa = sa.substring(0,sa.indexOf(" "));
+    print(bptemp[0].pressure_level.toString() + "\n"+ hrtemp[0].bpm.toString() + "\n" + respiratory_list[0].bpm.toString() + "vitals checking" );
+
     if(bptemp[0] != null && hrtemp[0] != null &&  respiratory_list[0] != null){
       String bpd=bptemp[0].bp_date.toString(),
           hrd=hrtemp[0].hr_date.toString(),
@@ -609,7 +613,9 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
       bpd = bpd.substring(0,bpd.indexOf(" "));
       hrd = hrd.substring(0,hrd.indexOf(" "));
       resd = resd.substring(0,resd.indexOf(" "));
+      print(bptemp[0].pressure_level.toString() + "\n"+ hrtemp[0].bpm.toString() + "\n" + respiratory_list[0].bpm.toString() + "vitals checking" );
       if(bpd == sa && hrd == sa && bpd == sa){
+        print("IN 1");
         if(bptemp[0].pressure_level == "low" && hrtemp[0].bpm > 100 && respiratory_list[0].bpm >20 ){
           addtoRecommendation("We recommend that you seek immediate medical attention as your Low Blood Pressure together with your High Heart Rate and Respiratory Rate suggests that you may have internal bleedings. We have already informed your doctor and support system about this.",
               "Possible Triple A Bleeding or Hypovolemic Shock",

@@ -259,36 +259,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                 print("Added Oxygen Saturation Successfully! " + uid);
                                               }
                                               else{
-                                                // String tempOxygen = "";
-                                                // String tempOxygenStatus = "";
-                                                // String tempOxygenDate = "";
-                                                // String tempOxygenTime = "";
-                                                //
-                                                // for(var i = 0; i < temp.length; i++){
-                                                //   String full = temp[i].replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "");
-                                                //   List<String> splitFull = full.split(" ");
-                                                //   switch(i%4){
-                                                //     case 0: {
-                                                //       tempOxygen = splitFull.last;
-                                                //     }
-                                                //     break;
-                                                //     case 1: {
-                                                //       tempOxygenDate = splitFull.last;
-                                                //     }
-                                                //     break;
-                                                //     case 2: {
-                                                //       tempOxygenStatus = splitFull.last;
-                                                //     }
-                                                //     break;
-                                                //     case 3: {
-                                                //       tempOxygenTime = splitFull.last;
-                                                //       oxygen = new Oxygen_Saturation(oxygen_saturation: int.parse(tempOxygen),oxygen_status: tempOxygenStatus, os_date: format.parse(tempOxygenDate), os_time: timeformat.parse(tempOxygenTime));
-                                                //       oxygen_list.add(oxygen);
-                                                //     }
-                                                //     break;
-                                                //   }
-                                                // }
-                                                getOxygenSaturation();
+
                                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                                   count = oxygen_list.length--;
                                                   print("count " + count.toString());
@@ -464,6 +435,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
     );
   }
   void getOxygenSaturation() {
+    oxygen_list.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
     final readOS = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/');
@@ -532,6 +504,8 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
     });
   }
   void initNotif() {
+    getOxygenSaturation();
+
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");

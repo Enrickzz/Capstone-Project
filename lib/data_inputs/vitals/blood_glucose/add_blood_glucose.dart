@@ -346,8 +346,6 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                 print("Added Blood Glucose Successfully! " + uid);
                                               }
                                               else{
-                                                glucose_list.clear();
-                                                getBloodGlucose();
                                                 Future.delayed(const Duration(milliseconds: 1200), (){
                                                   count = glucose_list.length--;
                                                   print("count " + count.toString());
@@ -505,6 +503,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
     );
   }
   void getBloodGlucose() {
+    glucose_list.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
     final readBC = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/');
@@ -636,6 +635,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
     });
   }
   void initNotif() {
+    getBloodGlucose();
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");
