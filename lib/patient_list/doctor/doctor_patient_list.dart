@@ -99,6 +99,7 @@ class _PatientListState extends State<PatientList>  {
     }
     super.initState();
     if(widget.nameslist != null){
+
       if(widget.nameslist.isNotEmpty){
         print("WIDGET NAMES NOT EMPTY");
         names = widget.nameslist;
@@ -111,20 +112,24 @@ class _PatientListState extends State<PatientList>  {
         temp = diseases;
         temp2 = uidlist;
         temp3 = pp_imgs;
-        diseases = temp.toSet().toList();
         uidlist = temp2.toSet().toList();
         pp_imgs = temp3.toSet().toList();
       }
-
     }else{
       pp_imgs.clear();
       getPatients();
       isLoading = true;
     }
-    isLoading = true;
-    Future.delayed(const Duration(milliseconds: 3000), (){
+
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
-        print("SETSTATE");
+        for(int i = 0; i < names.length; i++){
+          print(names[i]);
+        }
+        for(int i = 0; i < diseases.length; i++){
+          print(diseases[i]);
+        }
+        isLoading = false;
       });
 
     });
@@ -324,7 +329,6 @@ class _PatientListState extends State<PatientList>  {
               List temp3 = [];
               temp3 = diseases;
               diseases.add(disease_name);
-              diseases = temp3.toSet().toList();
             });
             List temp = [];
             List temp2 = [];

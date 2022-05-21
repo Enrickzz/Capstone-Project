@@ -16,8 +16,9 @@ import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class select_lead_doctor extends StatefulWidget {
-  final List<Medication> thislist;
-  select_lead_doctor({this.thislist, this.instance});
+  final List<dynamic> d_names;
+  final List<String> d_uid;
+  select_lead_doctor({this.d_names, this.d_uid, this.instance});
   final String instance;
   @override
   _selectLeadDoctorState createState() => _selectLeadDoctorState();
@@ -27,42 +28,23 @@ final _formKey = GlobalKey<FormState>();
 class _selectLeadDoctorState extends State<select_lead_doctor> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
-
-  String medicine_name = '';
-  String medicine_type = 'Liquid';
-  double medicine_dosage = 0;
-  double hint_dosage = 0;
-  String hint_unit = "";
-  String medicine_unit = "mL";
-  DateTime medicineDate;
-  String medicine_date = (new DateTime.now()).toString();
-  String medicine_time;
-  bool isDateSelected= false;
-  int count = 1;
-  int picked = 0;
-  List<Medication> medication_list = new List<Medication>();
-  DateFormat format = new DateFormat("MM/dd/yyyy");
-  DateFormat timeformat = new DateFormat("hh:mm");
-  TimeOfDay time;
-  List<Medication_Prescription> medical_list = [];
-  List<Supplement_Prescription> supplement_list = [];
-  List<listMeds> medical_name = [];
-  List <bool> isSelected = [false];
-
+  int index = 0;
+  List<String> d_uid;
+  List<dynamic> d_names;
 
   var dateValue = TextEditingController();
   String valueChooseMedicineSupplement;
-  List<listMeds> listMedicineSupplement =[];
+  List<String> listMedicineSupplement =[];
 
   @override
   void initState() {
     super.initState();
-    getSupplementName();
-    getPrescriptionGName();
-    getPrescriptionBName();
-
+    d_names = widget.d_names;
+    d_uid = widget.d_uid;
     Future.delayed(const Duration(milliseconds: 1000), (){
-      listMedicineSupplement = medical_name;
+      for(int i = 0; i < d_names.length; i++){
+        listMedicineSupplement.add(d_names[i].toString());
+      }
       print("list medicine supplement length " + listMedicineSupplement.length.toString());
       setState(() {
         print("setstate");
@@ -123,34 +105,12 @@ class _selectLeadDoctorState extends State<select_lead_doctor> {
                     onChanged: (newValue){
                       setState(() {
                         valueChooseMedicineSupplement = newValue;
-                        print("NEW VALUE " + newValue);
-                        // picked = listMedicineSupplement.indexOf(newValue);
-                        for(int i = 0; i < medical_name.length; i++){
-                          if(medical_name[i].name == newValue){
-                            hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
-                            medicine_dosage = double.parse(medical_name[i].dosage);
-                            medicine_unit = medical_name[i].unit.toString();
-                          }
-                          else if (medical_name[i].name == newValue){
-                            hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
-                            medicine_dosage = double.parse(medical_name[i].dosage);
-
-                            medicine_unit = medical_name[i].unit.toString();
-                          }
-                        }
-                        for(int i = 0; i < medical_name.length; i++){
-                          if(medical_name[i].name == newValue){
-                            hint_unit = medical_name[i].dosage + " " + medical_name[i].unit;
-                            medicine_dosage = double.parse(medical_name[i].dosage);
-                            medicine_unit = medical_name[i].unit.toString();
-                          }
-                        }
                       });
                     },
                     items: listMedicineSupplement.map((valueItem){
                       return DropdownMenuItem(
-                          value: valueItem.name,
-                          child: Text(valueItem.name)
+                          value: valueItem,
+                          child: Text(valueItem)
                       );
                     },
                     ).toList(),
@@ -166,7 +126,7 @@ class _selectLeadDoctorState extends State<select_lead_doctor> {
                         ),
                         color: Colors.blue,
                         onPressed:() {
-                          Navigator.pop(context, widget.thislist);
+                          Navigator.pop(context);
                         },
                       ),
                       FlatButton(
@@ -179,55 +139,21 @@ class _selectLeadDoctorState extends State<select_lead_doctor> {
                           try{
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
-                            readMedication.once().then((DataSnapshot datasnapshot) {
-                              if(datasnapshot.value == null){
-                                final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
-                                medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(),"medicine_unit": medicine_unit.toString(),  "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
-                                print("Added medication Successfully! " + uid);
+                            final readLeadDoc = databaseReference.child('users/' + uid + '/personal_info/');
+                            for(int i = 0; i < d_names.length; i++){
+                              if(d_names[i] == valueChooseMedicineSupplement){
+                                index = i;
                               }
-                              else{
-                                getMedication();
-                                Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = medication_list.length--;
-                                  final medicationRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + count.toString());
-                                  medicationRef.set({"medicine_name": valueChooseMedicineSupplement.toString(), "medicine_type": medicine_type.toString(),"medicine_unit": medicine_unit.toString(), "medicine_dosage": medicine_dosage.toString(), "medicine_date": medicine_date.toString(), "medicine_time": medicine_time.toString()});
-                                  print("Added Symptom Successfully! " + uid);
-                                });
-                              }
+                            }
+                            readLeadDoc.once().then((DataSnapshot datasnapshot) {
+                              final leaddocRef = databaseReference.child('users/' + uid + '/personal_info/');
+                              leaddocRef.update({"lead_doctor": d_uid[index]});
+                              print("Updated Lead Doctor! " + uid);
                             });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              print("MEDICATION LENGTH: " + medication_list.length.toString());
-                              medication_list.add(new Medication(medicine_name: valueChooseMedicineSupplement, medicine_type: medicine_type
-                                  , medicine_unit: medicine_unit, medicine_dosage: medicine_dosage
-                                  , medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time)));
-
-                              for(var i=0;i<medication_list.length/2;i++){
-                                var temp = medication_list[i];
-                                medication_list[i] = medication_list[medication_list.length-1-i];
-                                medication_list[medication_list.length-1-i] = temp;
-                              }
-                              for(var i = 0; i < medication_list.length; i++){
-                                print(medication_list[i].medicine_name);
-                              }
-                              print("POP HERE ==========");
-                              Medication newMed = new Medication(medicine_name: valueChooseMedicineSupplement, medicine_type: medicine_type
-                                  , medicine_unit: medicine_unit, medicine_dosage: medicine_dosage
-                                  , medicine_date: format.parse(medicine_date), medicine_time: timeformat.parse(medicine_time));
-                              Navigator.pop(context, newMed);
-                            });
-                            // print("POP HERE ========== MEDICATION");
-                            // Navigator.pop(context,medication_list);
-                            // Navigator.pushReplacement(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => medication()),
-                            // );
-
-
                           } catch(e) {
                             print("you got an error! $e");
                           }
-                          // Navigator.pop(context);
+                          Navigator.pop(context, d_uid[index]);
                         },
                       )
                     ],
@@ -239,75 +165,5 @@ class _selectLeadDoctorState extends State<select_lead_doctor> {
 
     );
   }
-  void getMedication() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readmedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/');
-    readmedication.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        medication_list.add(Medication.fromJson(jsonString));
-      });
-    });
-  }
-  void getPrescriptionGName() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
-    readprescription.once().then((DataSnapshot snapshot){
-      int gcount = 0;
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        medical_list.add(Medication_Prescription.fromJson(jsonString));
-        //medical_name.add(medical_list[gcount].generic_name);
-        //medical_name.add(new listMeds(medical_list[gcount].generic_name, medical_list[gcount].dosage.toString(), medical_list[gcount].prescription_unit));
-        gcount++;
-      });
-    });
-  }
-  void getPrescriptionBName() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
-    readprescription.once().then((DataSnapshot snapshot){
-      int bcount = 0;
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      if(temp != null){
-        temp.forEach((jsonString) {
-          medical_list.add(Medication_Prescription.fromJson(jsonString));
-          // medical_name.add(medical_list[bcount].branded_name);
-          medical_name.add(new listMeds(medical_list[bcount].generic_name, medical_list[bcount].dosage.toString(), medical_list[bcount].prescription_unit));
-
-          bcount++;
-        });
-      }
-
-    });
-  }
-  void getSupplementName() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
-    readsupplement.once().then((DataSnapshot snapshot){
-      int suppcount = 0;
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      if(temp != null){
-        temp.forEach((jsonString) {
-          supplement_list.add(Supplement_Prescription.fromJson(jsonString));
-          // medical_name.add(supplement_list[suppcount].supplement_name);
-          medical_name.add(new listMeds(supplement_list[suppcount].supplement_name, supplement_list[suppcount].dosage.toString(), supplement_list[suppcount].prescription_unit));
-
-          suppcount++;
-        });
-      }
-    });
-  }
-
 }
-class listMeds{
-  String name;
-  String dosage;
-  String unit;
 
-  listMeds(this.name, this.dosage, this.unit);
-}

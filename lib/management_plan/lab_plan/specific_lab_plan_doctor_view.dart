@@ -89,6 +89,7 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
     final uid = user.uid;
     templist.clear();
     templist = widget.thislist;
+    downloadUrls();
     thisLabPlan = templist[widget.index];
     type = templist[widget.index].type;
     important_notes = templist[widget.index].important_notes;
@@ -488,6 +489,23 @@ class _SpecificLabRequestViewAsDoctorState extends State<SpecificLabRequestViewA
       },
     );
   }
-
+  Future <String> downloadUrls() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String downloadurl="null";
+    for(var i = 0 ; i < templist.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+templist[i].imgRef.toString());
+      if(templist[i].imgRef.toString() != "null"){
+        downloadurl = await ref.getDownloadURL();
+        templist[i].imgRef = downloadurl;
+      }
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+      isLoading = false;
+    });
+    return downloadurl;
+  }
 }
 

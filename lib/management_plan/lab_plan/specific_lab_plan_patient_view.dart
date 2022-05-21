@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,6 +81,7 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
     });
     templist.clear();
     templist = widget.thislist;
+    downloadUrls();
     int index = widget.index;
     thisPrescription = templist[index];
     // getFoodplan();
@@ -339,5 +341,23 @@ class _SpecificLabRequestViewAsPatientState extends State<SpecificLabRequestView
       important_notes = templist[index].important_notes ;
       dateCreated = "${templist[index].dateCreated.month}/${templist[index].dateCreated.day}/${templist[index].dateCreated.year}";
     });
+  }
+  Future <String> downloadUrls() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    String downloadurl="null";
+    for(var i = 0 ; i < templist.length; i++){
+      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+templist[i].imgRef.toString());
+      if(templist[i].imgRef.toString() != "null"){
+        downloadurl = await ref.getDownloadURL();
+        templist[i].imgRef = downloadurl;
+      }
+      print ("THIS IS THE URL = at index $i "+ downloadurl);
+    }
+    //String downloadurl = await ref.getDownloadURL();
+    setState(() {
+      isLoading = false;
+    });
+    return downloadurl;
   }
 }

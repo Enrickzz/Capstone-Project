@@ -45,6 +45,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   Users patient = new Users();
+  List<bool> islead = [];
   List<String> uidlist = [];
   List<Users> userlist=[];
   List<Additional_Info> userAddInfo =[];
@@ -54,6 +55,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
     // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
   ];
+  List<String> d_uid = [];
   List ss_names = [
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
     // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
@@ -124,10 +126,24 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                   builder: (context) => SingleChildScrollView(child: Container(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: select_lead_doctor(),
+                    child: select_lead_doctor(d_names: d_names, d_uid: d_uid),
                   ),
                   ),
-                ).then((value) {
+                ).then((value) async {
+                  print("VALLLUEE");
+                  print(value);
+                  if(value != null){
+                    for(int i = 0; i < d_uid.length; i++){
+                      if(value == d_uid[i]){
+                        islead[i] = true;
+                      }
+                      else{
+                        islead[i] = false;
+                      }
+                    }
+                  }
+
+                    setState(() {});
                 });
               },
               child: ImageIcon(
@@ -190,7 +206,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                                     )),
                                 SizedBox(height: 3,),
                                 Visibility(
-                                  visible: true,
+                                  visible: islead[index],
                                   child: Text("Lead Doctor",
                                       style:TextStyle(
                                         color: Colors.grey,
@@ -340,12 +356,22 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
           // final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
           readDoctor.once().then((DataSnapshot snapshot){
             var temp3 = jsonDecode(jsonEncode(snapshot.value));
-            print("temp3");
-            print(temp3);
             Users doctor = Users.fromJson(temp3);
             if(doctor.usertype != "Family member / Caregiver"){
               d_names.add(doctor.firstname + " " + doctor.lastname);
+              d_uid.add(doctor.uid);
               d_position.add(doctor.specialty);
+              print("ISLEEEEEEEEEEEEEEAD");
+              print("HUUUU" + patient.leaddoctor);
+              print(doctor.uid);
+              if(patient.leaddoctor == doctor.uid){
+                islead.add(true);
+              }
+              else{
+                islead.add(false);
+              }
+
+              print(islead);
             }
             else{
               ss_names.add(doctor.firstname + " " + doctor.lastname);

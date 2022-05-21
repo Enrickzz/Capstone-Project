@@ -556,6 +556,9 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
 
       if(!isDoctor){
         /// write d2d connection in patient
+        final leaddocRef = databaseReference.child('users/' + userUID + '/personal_info/');
+        leaddocRef.update({"lead_doctor": uid});
+        print("Updated Lead Doctor! " + uid);
         Future.delayed(const Duration(milliseconds: 2000), () {
           final readDoctorConnection = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/');
           List<Connection> temp_dcon = [];
@@ -623,10 +626,11 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
               "nonhealth": "false",
               "health": "false",
             });
-            final addDoctorList = databaseReference.child('users/' + uid + '/personal_info/patient_list/' + plistcount.toString());
+            final addDoctorList = databaseReference.child('users/' + uid + '/personal_info/patient_list/' + (plistcount+1).toString());
             addDoctorList.set({
               "uid": userUID,
             });
+            print("AAAAAAAAAAAAAAAAGHHHHHHHHHHHHH");
         });
       }
 
