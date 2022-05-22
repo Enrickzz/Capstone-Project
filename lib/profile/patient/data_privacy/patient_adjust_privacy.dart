@@ -43,9 +43,6 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
     initNotif();
     super.initState();
     Connection doctorconnection = widget.connection;
-    print("doctorconnection.uid");
-    print(doctorconnection.doctor1);
-    print(doctorconnection.dashboard);
     if(doctorconnection.dashboard.toLowerCase() == "true"){
       isAllowedDashboard = true;
     }

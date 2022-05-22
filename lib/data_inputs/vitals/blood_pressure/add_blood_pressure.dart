@@ -346,7 +346,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                   print(pressure_level);
                                                 }
                                                 final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
+                                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString(), "new_bp": true});
                                                 print("Added medication Successfully! " + uid);
                                               }
                                               else{
@@ -375,7 +375,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                 Future.delayed(const Duration(milliseconds: 1500), (){
                                                   count = bp_list.length--;
                                                   final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                                  bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString()});
+                                                  bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString(), "new_bp": true});
                                                   print("Added Blood Pressure Successfully! " + uid);
                                                 });
                                               }

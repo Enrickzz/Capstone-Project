@@ -279,7 +279,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                   hr_status = "Resting";
                                   print(hr_status + "<<< STATUS");
                                 }
-                                heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
+                                heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString(), "new_hr": true});
                                 print("Added Heart Rate Successfully! " + uid);
 
                               }
@@ -298,7 +298,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
 
                                   }
                                   final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
-                                  heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString()});
+                                  heartRateRef.set({"HR_bpm": beats.toString(), "hr_status": hr_status, "hr_date": heartRate_date.toString(), "hr_time": heartRate_time.toString(), "new_hr": true});
                                   print("Added Heart Rate Successfully! " + uid);
                                   if(beats < 40){
                                     print("ADDING NOW");

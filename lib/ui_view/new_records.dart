@@ -3,34 +3,58 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/HealthApiToken.dart';
+import 'package:my_app/models/users.dart';
 import 'dart:math' as math;
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:http/http.dart' as http;
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'meals/meals_list_view.dart';
+
 class new_records extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
+  final String userUID;
 
   const new_records(
-      {Key key, this.animationController, this.animation})
+      {Key key, this.animationController, this.animation, this.userUID})
       : super(key: key);
 
   @override
-  State<new_records> createState() => _new_recordsState();
+  _new_recordsState createState() => _new_recordsState();
 }
 
 class _new_recordsState extends State<new_records> {
 
-  bool newbloodpressure = true;
+  bool newbloodpressure = false;
   bool newbloodglucose = false;
-  bool newoxygensaturation = true;
+  bool newoxygensaturation = false;
   bool newheartrate = false;
+  List<Blood_Pressure> bp_list = [];
+  List<Blood_Glucose> bg_list = [];
+  List<Oxygen_Saturation> o2_list = [];
+  List<Heart_Rate> hr_list = [];
+
+  @override
+  void initState() {
+    super.initState();
+    bp_list.clear();
+    bg_list.clear();
+    o2_list.clear();
+    hr_list.clear();
+    getHeartRate();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+      });
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,5 +171,143 @@ class _new_recordsState extends State<new_records> {
       },
     );
   }
+  void getHeartRate() {
+    // final User user = auth.currentUser;
+    // final uid = user.uid;
+    String userUID = widget.userUID;
+    final readHR = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/');
+    final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/bp_list/');
+    final glucoseRef = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/');
+    final oxygenRef = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/');
+    readHR.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        hr_list.add(Heart_Rate.fromJson(jsonString));
+      });
+      if(hr_list != null){
+        for(int i = 0; i < hr_list.length; i++){
+          if(hr_list[i].new_hr != null){
+            if(hr_list[i].new_hr == true){
+              newheartrate = hr_list[i].new_hr;
+            }
+            final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/' + i.toString());
+            bpRef.update({"HR_bpm": hr_list[i].bpm.toString(), "hr_status": hr_list[i].hr_status, "hr_date": hr_list[i].hr_date.toString(), "hr_time": hr_list[i].hr_time.toString(), "new_hr": false});
+          }
+        }
+      }
+    });
+    bpRef.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        bp_list.add(Blood_Pressure.fromJson(jsonString));
+      });
+      if(bp_list != null){
+        for(int i = 0; i < bp_list.length; i++){
+          if(bp_list[i].new_bp != null){
+            if(bp_list[i].new_bp == true){
+              newbloodpressure = bp_list[i].new_bp;
+            }
+            final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/bp_list/' + i.toString());
+            bpRef.update({"systolic_pressure": bp_list[i].systolic_pressure.toString(), "diastolic_pressure": bp_list[i].diastolic_pressure.toString(),"pressure_level": bp_list[i].pressure_level.toString(),  "bp_date": bp_list[i].bp_date.toString(), "bp_time":bp_list[i].bp_time.toString(), "bp_status": bp_list[i].bp_status.toString(), "new_bp": false});
+          }
+        }
+      }
+    });
+    glucoseRef.once().then((DataSnapshot bgsnapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(bgsnapshot.value));
+      temp.forEach((jsonString) {
+        bg_list.add(Blood_Glucose.fromJson(jsonString));
+      });
+      if(bg_list != null){
+        for(int i = 0; i < bg_list.length; i++){
+          if(bg_list[i].new_glucose != null){
+            if(bg_list[i].new_glucose == true){
+              newbloodglucose = bg_list[i].new_glucose;
+            }
+            final bgRef = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/' + i.toString());
+            bgRef.update({"glucose": bg_list[i].glucose.toString(), "lastMeal": bg_list[i].lastMeal.toString(),"glucose_status": bg_list[i].bloodGlucose_status.toString(), "bloodGlucose_date": bg_list[i].bloodGlucose_date.toString(), "bloodGlucose_time": bg_list[i].bloodGlucose_time.toString(), "new_glucose": false});
+          }
+        }
+      }
+    });
+
+    oxygenRef.once().then((DataSnapshot o2snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(o2snapshot.value));
+      temp.forEach((jsonString) {
+        o2_list.add(Oxygen_Saturation.fromJson(jsonString));
+      });
+      if(o2_list != null){
+        for(int i = 0; i < o2_list.length; i++){
+          if(o2_list[i].new_o2 != null){
+            if(o2_list[i].new_o2 == true){
+              newoxygensaturation = o2_list[i].new_o2;
+            }
+            final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/' + i.toString());
+            bpRef.update({"oxygen_saturation": o2_list[i].oxygen_saturation.toString(),"oxygen_status": o2_list[i].oxygen_status.toString(), "os_date": o2_list[i].os_date.toString(), "os_time": o2_list[i].os_time.toString(), "new_o2": false});
+          }
+        }
+      }
+    });
+  }
+  // void getNewRecord() {
+  //   // final User user = auth.currentUser;
+  //   // final uid = user.uid;
+  //   String userUID = widget.userUID;
+  //   final readHR = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/');
+  //   final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/bp_list/');
+  //   final glucoseRef = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/');
+  //   final oxygenRef = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/');
+  //   readHR.once().then((DataSnapshot snapshot){
+  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+  //     temp.forEach((jsonString) {
+  //       hr_list.add(Heart_Rate.fromJson(jsonString));
+  //     });
+  //   });
+    // readHR.once().then((DataSnapshot snapshot){
+    //   List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    //   temp.forEach((jsonString) {
+    //     hr_list.add(Heart_Rate.fromJson(jsonString));
+    //   });
+    // });
+    // bpRef.once().then((DataSnapshot bpsnapshot){
+    //   List<dynamic> temp = jsonDecode(jsonEncode(bpsnapshot.value));
+    //   temp.forEach((jsonString) {
+    //     bp_list.add(Blood_Pressure.fromJson(jsonString));
+    //   });
+    // });
+    // glucoseRef.once().then((DataSnapshot bgsnapshot){
+    //   List<dynamic> temp = jsonDecode(jsonEncode(bgsnapshot.value));
+    //   temp.forEach((jsonString) {
+    //     bg_list.add(Blood_Glucose.fromJson(jsonString));
+    //   });
+    // });
+    //
+    // oxygenRef.once().then((DataSnapshot o2snapshot){
+    //   List<dynamic> temp = jsonDecode(jsonEncode(o2snapshot.value));
+    //   temp.forEach((jsonString) {
+    //     o2_list.add(Oxygen_Saturation.fromJson(jsonString));
+    //   });
+    // });
+  //
+  //
+  //   if(hr_list[hr_list.length-1].new_hr != null){
+  //     newheartrate = hr_list[hr_list.length-1].new_hr;
+  //   }
+  //   if(hr_list[hr_list.length-1].new_hr != null){
+  //     newbloodpressure = bp_list[bp_list.length-1].new_bp;
+  //   }
+  //   if(hr_list[hr_list.length-1].new_hr != null){
+  //     newbloodglucose = bg_list[bg_list.length-1].new_glucose;
+  //   }
+  //   if(hr_list[hr_list.length-1].new_hr != null){
+  //     newoxygensaturation = o2_list[o2_list.length-1].new_o2;
+  //   }
+  //
+  //   print("HHHHHHHHHHHHHHHERE");
+  //   print(newheartrate);
+  //   print(newbloodpressure);
+  //   print(newbloodglucose);
+  //   print(newoxygensaturation);
+  // }
 }
 

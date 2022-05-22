@@ -523,6 +523,7 @@ class Blood_Pressure {
   DateTime bp_date;
   DateTime bp_time;
   String bp_status;
+  bool new_bp;
 
   Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure,this.pressure_level, this.bp_date, this.bp_time, this.bp_status});
 
@@ -533,6 +534,7 @@ class Blood_Pressure {
     bp_date = DateFormat("MM/dd/yyyy").parse(json['bp_date']);
     bp_time = DateFormat("hh:mm").parse(json['bp_time']);
     bp_status = json['bp_status'];
+    new_bp = json['new_bp'];
   }
 
   Map<String, dynamic> toJson() {
@@ -553,6 +555,7 @@ class Heart_Rate {
   String hr_status;
   DateTime hr_date;
   DateTime hr_time;
+  bool new_hr;
 
   Heart_Rate({this.bpm, this.hr_status,this.hr_date, this.hr_time});
 
@@ -561,6 +564,7 @@ class Heart_Rate {
     hr_status = json['hr_status'];
     hr_date = DateFormat("MM/dd/yyyy").parse(json['hr_date']);
     hr_time = DateFormat("hh:mm").parse(json['hr_time']);
+    new_hr = json['new_hr'];
   }
 
   Map<String, dynamic> toJson() {
@@ -608,6 +612,7 @@ class Oxygen_Saturation {
   String oxygen_status;
   DateTime os_date;
   DateTime os_time;
+  bool new_o2;
 
   Oxygen_Saturation({this.oxygen_saturation,this.oxygen_status, this.os_date, this.os_time});
 
@@ -616,6 +621,7 @@ class Oxygen_Saturation {
     oxygen_status = json['oxygen_status'];
     os_date = DateFormat("MM/dd/yyyy").parse(json['os_date']);
     os_time = DateFormat("hh:mm").parse(json['os_time']);
+    new_o2 = json['new_o2'];
   }
 
   Map<String, dynamic> toJson() {
@@ -676,6 +682,7 @@ class Blood_Glucose {
   String bloodGlucose_status = "";
   DateTime bloodGlucose_date;
   DateTime bloodGlucose_time;
+  bool new_glucose;
 
   Blood_Glucose({this.glucose, this.lastMeal, this.bloodGlucose_status, this.bloodGlucose_date, this.bloodGlucose_time});
 
@@ -685,6 +692,7 @@ class Blood_Glucose {
     bloodGlucose_status = json['glucose_status'];
     bloodGlucose_date = DateFormat("MM/dd/yyyy").parse(json['bloodGlucose_date']);
     bloodGlucose_time = DateFormat("hh:mm").parse(json['bloodGlucose_time']);
+    new_glucose = json['new_glucose'];
   }
 
   Map<String, dynamic> toJson() {
