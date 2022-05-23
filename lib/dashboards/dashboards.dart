@@ -129,22 +129,24 @@ class _DashboardsState extends State<Dashboards>
           }else{
           }
         }
-        var temp2 = jsonDecode(jsonEncode(snapshot2.value));
-        print("SPOTIFY = " + temp2.toString());
-        if(snapshot2.value != null || snapshot2.value != ""){
-          if(temp2.toString().contains("false")){
-            listViews.add(
-              spotify_connect(
-                animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                    parent: widget.animationController,
-                    curve:
-                    Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-                animationController: widget.animationController,
-              ),
-            );
-          }else{
-          }
-        }
+
+        // var temp2 = jsonDecode(jsonEncode(snapshot2.value));
+        // print("SPOTIFY = " + temp2.toString());
+        // if(snapshot2.value != null || snapshot2.value != ""){
+        //   if(temp2.toString().contains("false")){
+        //     listViews.add(
+        //       spotify_connect(
+        //         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        //             parent: widget.animationController,
+        //             curve:
+        //             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        //         animationController: widget.animationController,
+        //       ),
+        //     );
+        //   }else{
+        //   }
+        // }
+
         listViews.add(
           TitleView(
             titleTxt: 'Body measurement',
