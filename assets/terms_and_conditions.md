@@ -4,7 +4,7 @@ By downloading or using the app, these terms will automatically apply to you –
 
 Heartistant is committed to ensuring that the app is as useful and efficient as possible. For that reason, we reserve the right to make changes to the app or to charge for its services, at any time and for any reason. We will never charge you for the app or its services without making it very clear to you exactly what you’re paying for.
 
-The CVD App app stores and processes personal data that you have provided to us, to provide our Service. It’s your responsibility to keep your phone and access to the app secure. We therefore recommend that you do not jailbreak or root your phone, which is the process of removing software restrictions and limitations imposed by the official operating system of your device. It could make your phone vulnerable to malware/viruses/malicious programs, compromise your phone’s security features and it could mean that the CVD App app won’t work properly or at all.
+Heartistant stores and processes personal data that you have provided to us, to provide our Service. It’s your responsibility to keep your phone and access to the app secure. We therefore recommend that you do not jailbreak or root your phone, which is the process of removing software restrictions and limitations imposed by the official operating system of your device. It could make your phone vulnerable to malware/viruses/malicious programs, compromise your phone’s security features and it could mean that Heartistant won’t work properly or at all.
 
 The app does use third-party services that declare their Terms and Conditions.
 
@@ -13,6 +13,8 @@ Link to Terms and Conditions of third-party service providers used by the app
 *   [Google Play Services](https://policies.google.com/terms)
 *   [Google Analytics for Firebase](https://firebase.google.com/terms/analytics)
 *   [Facebook](https://www.facebook.com/legal/terms/plain_text_terms)
+*   [Fitbit](https://www.fitbit.com/global/us/legal/terms-of-service)
+*   [iHealth](https://ihealthlabs.com/pages/terms-and-conditions)
 
 You should be aware that there are certain things that Heartistant will not take responsibility for. Certain functions of the app will require the app to have an active internet connection. The connection can be Wi-Fi or provided by your mobile network provider, but Heartistant cannot take responsibility for the app not working at full functionality if you don’t have access to Wi-Fi, and you don’t have any of your data allowance left.
 
@@ -22,7 +24,7 @@ Along the same lines, Heartistant cannot always take responsibility for the way 
 
 With respect to Heartistant’s responsibility for your use of the app, when you’re using the app, it’s important to bear in mind that although we endeavor to ensure that it is updated and correct at all times, we do rely on third parties to provide information to us so that we can make it available to you. Heartistant accepts no liability for any loss, direct or indirect, you experience as a result of relying wholly on this functionality of the app.
 
-At some point, we may wish to update the app. The app is currently available on Android & iOS – the requirements for the both systems(and for any additional systems we decide to extend the availability of the app to) may change, and you’ll need to download the updates if you want to keep using the app. Heartistant does not promise that it will always update the app so that it is relevant to you and/or works with the Android & iOS version that you have installed on your device. However, you promise to always accept updates to the application when offered to you, We may also wish to stop providing the app, and may terminate use of it at any time without giving notice of termination to you. Unless we tell you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must stop using the app, and (if needed) delete it from your device.
+At some point, we may wish to update the app. The app is currently available on Android – the requirements for the system(and for any additional systems we decide to extend the availability of the app to) may change, and you’ll need to download the updates if you want to keep using the app. Heartistant does not promise that it will always update the app so that it is relevant to you and/or works with the Android version that you have installed on your device. However, you promise to always accept updates to the application when offered to you, We may also wish to stop providing the app, and may terminate use of it at any time without giving notice of termination to you. Unless we tell you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must stop using the app, and (if needed) delete it from your device.
 
 **HEARTISTANT - PRIVACY STATEMENT**
 
@@ -44,12 +46,12 @@ Information collected and held by Heartistant is subjected to the Data Privacy A
 HEARTISTANT collects and holds information relating to CVD patient's health and non-health data which are needed to create a dashboard and health record of their personal condition. This information includes patient's personal data such as name, age, email, birthday, weight, height, and other physical data. The health data may include, but not limited to the following data:
 
 * Health vitals
-* Medicne Intake Record
+* Medicine Intake Record
 * Fitbit activity record
 * Lab results
 * Food Intake
 
-HEARTISTANT also collects and holds information relating to the CVD patient's doctor particularly their management plans for the patients which may include, but not limited to the following data:
+Heartistant also collects and holds information relating to the CVD patient's doctor particularly their management plans for the patients which may include, but not limited to the following data:
 
 * Exercise Plan
 * Medical Prescription
@@ -87,4 +89,4 @@ These terms and conditions are effective as of 2022-10-07
 
 **Contact Us**
 
-If you have any questions or suggestions about our Terms and Conditions, do not hesitate to contact us at cvdapp@gmail.com.
+If you have any questions or suggestions about our Terms and Conditions, do not hesitate to contact us at heartistant@gmail.com.
