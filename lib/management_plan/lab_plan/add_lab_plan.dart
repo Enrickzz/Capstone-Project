@@ -350,6 +350,7 @@ class _addLabRequestState extends State<add_lab_request> {
                               //     "1",
                               //     "Vitals Plan",
                               //     widget.userUID);
+                              notifyLead(userUID, reason_notification, doctor.lastname,"Lab Results");
                               Navigator.pop(context,newV);
                             });
                           } catch(e) {
@@ -366,6 +367,20 @@ class _addLabRequestState extends State<add_lab_request> {
         )
 
     );
+  }
+  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
+    final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
+    connections.once().then((DataSnapshot snapConnections) {
+      String temp = jsonDecode(jsonEncode(snapConnections.value));
+      String lead_doc = temp.toString();
+      //ADD NOTIF LOGIC =
+      addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
+          "Doctor Added to your $planType Plan!",
+          "1",
+          "Exercise Plan",
+          lead_doc);
+    });
+    //notifyLead(userUID, reason_notification, doctor.lastname, "Exer");
   }
   void addtoNotif(String message, String title, String priority,String redirect, String uid){
     print ("ADDED TO NOTIFICATIONS");

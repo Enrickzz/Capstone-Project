@@ -281,6 +281,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                                   "Food Plan",
                                   widget.userUID);
                               print("POP HERE ==========");
+                              notifyLead(userUID, reason_notification, doctor.lastname, "Food");
                               Navigator.pop(context, addedThis);
                             });
                           } catch(e) {
@@ -297,6 +298,20 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
         )
 
     );
+  }
+  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
+    final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
+    connections.once().then((DataSnapshot snapConnections) {
+      String temp = jsonDecode(jsonEncode(snapConnections.value));
+      String lead_doc = temp.toString();
+      //ADD NOTIF LOGIC =
+      addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
+          "Doctor Added to your $planType Plan!",
+          "1",
+          "Exercise Plan",
+          lead_doc);
+    });
+    //notifyLead(userUID, reason_notification, doctor.lastname, "Exer");
   }
   List<Widget> _getFood(){
     List<Widget> foodsTextFields = [];
