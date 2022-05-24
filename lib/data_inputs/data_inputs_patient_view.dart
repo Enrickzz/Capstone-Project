@@ -167,7 +167,7 @@ class _AppSignUpState extends State<data_inputs> {
                                         width: 10,
                                       ),
                                       Text(
-                                          'Recorded Vitals',
+                                          'Vitals',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18

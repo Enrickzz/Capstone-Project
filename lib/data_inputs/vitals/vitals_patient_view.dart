@@ -89,7 +89,7 @@ class _AppSignUpState extends State<vitals> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text('Recorded Vitals', style: TextStyle(
+        title: const Text('Vitals', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
