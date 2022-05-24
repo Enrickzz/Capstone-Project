@@ -271,6 +271,7 @@ class _heart_rate_doctorState extends State<heart_rate_doctor_view> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 35,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,

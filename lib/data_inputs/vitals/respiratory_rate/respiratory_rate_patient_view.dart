@@ -267,6 +267,7 @@ class _respiratory_rateState extends State<respiratory_rate> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 50,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,

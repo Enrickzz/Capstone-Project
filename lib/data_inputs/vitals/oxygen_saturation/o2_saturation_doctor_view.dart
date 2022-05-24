@@ -242,6 +242,7 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 60,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,

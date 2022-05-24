@@ -295,6 +295,7 @@ class _o2_saturationState extends State<o2_saturation> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 60,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,

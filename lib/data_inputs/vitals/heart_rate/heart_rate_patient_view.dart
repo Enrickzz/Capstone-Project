@@ -267,6 +267,7 @@ class _heart_rateState extends State<heart_rate> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 35,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,

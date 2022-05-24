@@ -189,6 +189,7 @@ class _blood_pressureState extends State<blood_pressure> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 35,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,
@@ -220,7 +221,7 @@ class _blood_pressureState extends State<blood_pressure> {
 
 
       DataColumn(label: Text('Time')),
-      DataColumn(label: Text('Blood Pressure')),
+      DataColumn(label: Text('BP')),
       DataColumn(label: Text('Implication')),
       DataColumn(label: Text('Status'))
 

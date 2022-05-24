@@ -277,6 +277,7 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 35,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,

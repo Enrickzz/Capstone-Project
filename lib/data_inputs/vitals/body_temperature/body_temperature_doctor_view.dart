@@ -192,6 +192,7 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 35,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,

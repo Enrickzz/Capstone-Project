@@ -306,6 +306,7 @@ class _blood_glucoseState extends State<blood_glucose> {
       sortAscending: _isSortAsc,
       dividerThickness: 5,
       dataRowHeight: 80,
+      columnSpacing: 35,
       showBottomBorder: true,
       headingTextStyle: TextStyle(
           fontWeight: FontWeight.bold,
@@ -338,7 +339,7 @@ class _blood_glucoseState extends State<blood_glucose> {
 
       DataColumn(label: Text('Time')),
       DataColumn(label: Text('Blood Glucose')),
-      DataColumn(label: Text('last meal')),
+      DataColumn(label: Text('Last Meal')),
       DataColumn(label: Text('Implication'))
 
     ];
