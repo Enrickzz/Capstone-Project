@@ -340,18 +340,21 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                                   "Exercise Plan",
                                   widget.userUID);
                               print("POP HERE ==========");
-                              //ADD NOTIFS TO DOCTORS BEFORE POPPING
-                              final connections = databaseReference.child('users/' + userUID + '/personal_info/connections/' );
-                              connections.once().then((DataSnapshot snapConnections) {
-                                List<dynamic> temp = jsonDecode(jsonEncode(snapConnections.value));
-                                List<Connection> userDoctors = new List<Connection>();
-                                temp.forEach((jsonString) {
-                                  userDoctors.add(Connection.fromJson(jsonString));
-                                });
-                                print(userDoctors.length.toString() + "<<<< DR LENGTH");
-                                //ADD NOTIF LOGIC =
-
-                              });
+                              notifyLead(userUID, reason_notification, doctor.lastname, "Exercise");
+                              // //ADD NOTIFS TO DOCTORS BEFORE POPPING
+                              // final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
+                              // connections.once().then((DataSnapshot snapConnections) {
+                              //   String temp = jsonDecode(jsonEncode(snapConnections.value));
+                              //   String lead_doc = temp.toString();
+                              //
+                              //   print(lead_doc + "<<<< DR ");
+                              //   //ADD NOTIF LOGIC =
+                              //   addtoNotif("Dr. "+doctor.lastname+ " has added something to your patient's exercise management plan. He notes: "+reason_notification ,
+                              //       "Doctor Added to your Exercise Plan!",
+                              //       "1",
+                              //       "Exercise Plan",
+                              //       lead_doc);
+                              // });
 
                               Navigator.pop(context,a );
                             });
@@ -373,6 +376,20 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
         )
 
     );
+  }
+  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
+    final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
+    connections.once().then((DataSnapshot snapConnections) {
+      String temp = jsonDecode(jsonEncode(snapConnections.value));
+      String lead_doc = temp.toString();
+      //ADD NOTIF LOGIC =
+      addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
+          "Doctor Added to your $planType Plan!",
+          "1",
+          "Exercise Plan",
+          lead_doc);
+    });
+    //notifyLead(userUID, reason_notification, doctor.lastname);
   }
   void addtoNotif(String message, String title, String priority,String redirect, String uid){
     print ("ADDED TO NOTIFICATIONS");
