@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cron/cron.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,6 +55,9 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   String hours,min;
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
+  bool isLoading = true;
+
+
   @override
   void initState(){
     initNotif();
@@ -515,6 +519,15 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                       ),
 
                                       onPressed: (){
+                                        final User user = auth.currentUser;
+                                        final uid = user.uid;
+                                        var rng = Random();
+                                        int sys = rng.nextInt(10) + 120;
+                                        int dia = rng.nextInt(10) + 70;
+                                        count = bp_list.length--;
+                                        DateTime now = new DateTime.now();
+                                        final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
+                                        bpRef.set({"systolic_pressure": sys.toString(), "diastolic_pressure": dia.toString(),"pressure_level": "normal",  "bp_date": now.month.toString().padLeft(2,'0')+"/"+now.day.toString().padLeft(2,'0')+"/"+now.year.toString(), "bp_time":now.hour.toString().padLeft(2,'0')+":"+now.minute.toString().padLeft(2,'0').toString(), "bp_status": "Resting".toString(), "new_bp": true});
                                         _showMyDialog();
                                       },
                                     ),
@@ -708,6 +721,11 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   }
 
   Future<void> _showMyDialog() async {
+    Future.delayed(const Duration(milliseconds: 2000),() {
+      setState(() {
+        isLoading = false;
+      });
+    });
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -716,12 +734,10 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
             child: Column(
               children:  <Widget>[
                 Text('Waiting for your device to connect...'),
-                SizedBox(height: 25,),
-                SizedBox(
-                  child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(246,115,0,1))),
-                  height: 50.0,
-                  width: 50.0,
-                ),
+                isLoading
+                    ? Center(
+                  child: CircularProgressIndicator(),
+                ): new Text("HELLO")
               ],
             ),
           ),
