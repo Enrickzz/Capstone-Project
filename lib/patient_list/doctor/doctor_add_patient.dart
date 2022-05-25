@@ -506,7 +506,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   void addPatient() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readPatientList = databaseReference.child('users/' + userUID + '/personal_info/patient_list/');
+    final readDoctorlength = databaseReference.child('users/' + uid + '/personal_info/patient_list/');
     final readDoctorConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
     final readd2dConnection = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/');
     doc_connection.clear();
@@ -516,18 +516,18 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
     Users temp_doctor = new Users();
     List<int> doctor_index = [];
     int count = 0;
-    List<String> patientlist = [];
+    List<UID> patientlist = [];
     /// doctor_connection = patient's list of doctors
     List<Connection> doctor_connection = [];
     List<String> doctor_uid = [];
 
-    readPatientList.once().then((DataSnapshot datasnapshot){
+    readDoctorlength.once().then((DataSnapshot datasnapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
       if(temp != null){
         temp.forEach((jsonString) {
-          patientlist.add(jsonString);
-          plistcount = patientlist.length+1;
+          patientlist.add(UID.fromJson(jsonString));
         });
+        plistcount = patientlist.length+1;
       }
     });
 
@@ -626,11 +626,10 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
               "nonhealth": "false",
               "health": "false",
             });
-            final addDoctorList = databaseReference.child('users/' + uid + '/personal_info/patient_list/' + (plistcount+1).toString());
+            final addDoctorList = databaseReference.child('users/' + uid + '/personal_info/patient_list/' + plistcount.toString());
             addDoctorList.set({
               "uid": userUID,
             });
-            print("AAAAAAAAAAAAAAAAGHHHHHHHHHHHHH");
         });
       }
 

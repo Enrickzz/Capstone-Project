@@ -64,6 +64,14 @@ class Uid{
     uid = json['uid'];
   }
 }
+class UID{
+  UID({this.uid});
+  String uid;
+  UID.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
+  }
+}
+
 class Connection{
 
   Connection({
