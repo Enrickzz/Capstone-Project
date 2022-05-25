@@ -422,7 +422,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                               //   print("SCHED THIS");
                                               //   final cron = Cron()
                                               //     ..schedule(Schedule.parse('*/50 * * * * '), () {
-                                                    addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure");
+                                              //       addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure");
                                               //       print("after 1 hr");
                                               //     });
                                               //   await Future.delayed(Duration( hours: 1, minutes: 3));
