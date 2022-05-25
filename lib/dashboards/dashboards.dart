@@ -227,11 +227,6 @@ class _DashboardsState extends State<Dashboards>
                 Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
               animationController: widget.animationController,
             ));
-
-
-
-
-
       });
     });
   }

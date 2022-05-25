@@ -111,7 +111,7 @@ class _index3State extends State<view_patient_profile>
     tabIconsList[0].isSelected = true;
 
     animationController = AnimationController(
-        duration: const Duration(milliseconds: 600), vsync: this);
+        duration: const Duration(milliseconds: 20), vsync: this);
     tabBody = dashboards_as_doctor(animationController: animationController);
 
     super.initState();
@@ -741,7 +741,7 @@ class _index3State extends State<view_patient_profile>
                           onPressed: () async {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => dashboards_as_doctor(animationController: animationController, userUID: widget.userUID,)),
+                              MaterialPageRoute(builder: (context) => dashboards_as_doctor(animationController: animationController, userUID: widget.userUID)),
                             );
                           },
                         ),
@@ -888,16 +888,13 @@ class _index3State extends State<view_patient_profile>
     int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
     int age = 0;
     age = y1 - y;
-    print(age);
 
     // dec < jan
     if(m1 < m){
-      print("month --");
       age--;
     }
     else if (m1 == m){
       if(d1 < d){
-        print("day --");
         age--;
       }
     }
@@ -990,9 +987,6 @@ class _index3State extends State<view_patient_profile>
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
         profile = Users.fromJson(temp);
-        print("PROFILE NAME");
-        print(profile.firstname);
-        print(widget.userUID);
       });
       DisplayName = profile.firstname + " " + profile.lastname;
       email = profile.email;
@@ -1110,7 +1104,6 @@ class _index3State extends State<view_patient_profile>
     final readConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
     readConnection.once().then((DataSnapshot snapshot){
       List<dynamic> temp1 = jsonDecode(jsonEncode(snapshot.value));
-      print(temp1);
       temp1.forEach((jsonString) {
         connections.add(Connection.fromJson(jsonString));
       });

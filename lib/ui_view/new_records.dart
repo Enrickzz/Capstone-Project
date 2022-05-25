@@ -50,11 +50,6 @@ class _new_recordsState extends State<new_records> {
     hr_list.clear();
     Future.delayed(const Duration(milliseconds: 5000), (){
       getRecords();
-      Future.delayed(const Duration(milliseconds: 1500), (){
-        setState(() {
-        });
-      });
-
     });
 
 

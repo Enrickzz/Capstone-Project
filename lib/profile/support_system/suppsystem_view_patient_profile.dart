@@ -109,7 +109,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
     tabIconsList[0].isSelected = true;
 
     animationController = AnimationController(
-        duration: const Duration(milliseconds: 600), vsync: this);
+        duration: const Duration(milliseconds: 20), vsync: this);
     tabBody = dashboards_as_doctor(animationController: animationController);
 
     super.initState();

@@ -42,9 +42,9 @@ class oxygenSaturationState extends State<oxygen_barchartsfDoctor> {
     getOxygen();
     Future.delayed(const Duration(milliseconds: 1200),() {
       isLoading = false;
-      setState(() {
+      // setState(() {
         chartData = getChartData();
-      });
+      // });
     });
   }
   @override
