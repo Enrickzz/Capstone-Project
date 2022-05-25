@@ -40,7 +40,7 @@ class _new_recordsState extends State<new_records> {
   List<Blood_Glucose> bg_list = [];
   List<Oxygen_Saturation> o2_list = [];
   List<Heart_Rate> hr_list = [];
-
+  bool ifShow = false;
   @override
   void initState() {
     super.initState();
@@ -62,7 +62,9 @@ class _new_recordsState extends State<new_records> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
+    return Visibility(
+      visible: ifShow,
+        child: AnimatedBuilder(
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
@@ -173,7 +175,7 @@ class _new_recordsState extends State<new_records> {
           ),
         );
       },
-    );
+    ));
   }
   void getRecords() {
     // final User user = auth.currentUser;
@@ -192,6 +194,7 @@ class _new_recordsState extends State<new_records> {
         for(int i = 0; i < hr_list.length; i++){
           if(hr_list[i].new_hr != null){
             if(hr_list[i].new_hr == true){
+              ifShow = true;
               newheartrate = hr_list[i].new_hr;
             }
             final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/' + i.toString());
@@ -209,6 +212,7 @@ class _new_recordsState extends State<new_records> {
         for(int i = 0; i < bp_list.length; i++){
           if(bp_list[i].new_bp != null){
             if(bp_list[i].new_bp == true){
+              ifShow = true;
               newbloodpressure = bp_list[i].new_bp;
             }
             final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/bp_list/' + i.toString());
@@ -226,6 +230,7 @@ class _new_recordsState extends State<new_records> {
         for(int i = 0; i < bg_list.length; i++){
           if(bg_list[i].new_glucose != null){
             if(bg_list[i].new_glucose == true){
+              ifShow = true;
               newbloodglucose = bg_list[i].new_glucose;
             }
             final bgRef = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/' + i.toString());
@@ -244,6 +249,7 @@ class _new_recordsState extends State<new_records> {
         for(int i = 0; i < o2_list.length; i++){
           if(o2_list[i].new_o2 != null){
             if(o2_list[i].new_o2 == true){
+              ifShow = true;
               newoxygensaturation = o2_list[i].new_o2;
             }
             final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/' + i.toString());
@@ -253,65 +259,5 @@ class _new_recordsState extends State<new_records> {
       }
     });
   }
-  // void getNewRecord() {
-  //   // final User user = auth.currentUser;
-  //   // final uid = user.uid;
-  //   String userUID = widget.userUID;
-  //   final readHR = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/');
-  //   final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/bp_list/');
-  //   final glucoseRef = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/');
-  //   final oxygenRef = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/');
-  //   readHR.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       hr_list.add(Heart_Rate.fromJson(jsonString));
-  //     });
-  //   });
-    // readHR.once().then((DataSnapshot snapshot){
-    //   List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-    //   temp.forEach((jsonString) {
-    //     hr_list.add(Heart_Rate.fromJson(jsonString));
-    //   });
-    // });
-    // bpRef.once().then((DataSnapshot bpsnapshot){
-    //   List<dynamic> temp = jsonDecode(jsonEncode(bpsnapshot.value));
-    //   temp.forEach((jsonString) {
-    //     bp_list.add(Blood_Pressure.fromJson(jsonString));
-    //   });
-    // });
-    // glucoseRef.once().then((DataSnapshot bgsnapshot){
-    //   List<dynamic> temp = jsonDecode(jsonEncode(bgsnapshot.value));
-    //   temp.forEach((jsonString) {
-    //     bg_list.add(Blood_Glucose.fromJson(jsonString));
-    //   });
-    // });
-    //
-    // oxygenRef.once().then((DataSnapshot o2snapshot){
-    //   List<dynamic> temp = jsonDecode(jsonEncode(o2snapshot.value));
-    //   temp.forEach((jsonString) {
-    //     o2_list.add(Oxygen_Saturation.fromJson(jsonString));
-    //   });
-    // });
-  //
-  //
-  //   if(hr_list[hr_list.length-1].new_hr != null){
-  //     newheartrate = hr_list[hr_list.length-1].new_hr;
-  //   }
-  //   if(hr_list[hr_list.length-1].new_hr != null){
-  //     newbloodpressure = bp_list[bp_list.length-1].new_bp;
-  //   }
-  //   if(hr_list[hr_list.length-1].new_hr != null){
-  //     newbloodglucose = bg_list[bg_list.length-1].new_glucose;
-  //   }
-  //   if(hr_list[hr_list.length-1].new_hr != null){
-  //     newoxygensaturation = o2_list[o2_list.length-1].new_o2;
-  //   }
-  //
-  //   print("HHHHHHHHHHHHHHHERE");
-  //   print(newheartrate);
-  //   print(newbloodpressure);
-  //   print(newbloodglucose);
-  //   print(newoxygensaturation);
-  // }
 }
 
