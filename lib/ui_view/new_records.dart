@@ -48,11 +48,15 @@ class _new_recordsState extends State<new_records> {
     bg_list.clear();
     o2_list.clear();
     hr_list.clear();
-    getHeartRate();
-    Future.delayed(const Duration(milliseconds: 1500), (){
-      setState(() {
+    Future.delayed(const Duration(milliseconds: 5000), (){
+      getRecords();
+      Future.delayed(const Duration(milliseconds: 1500), (){
+        setState(() {
+        });
       });
+
     });
+
 
   }
 
@@ -171,7 +175,7 @@ class _new_recordsState extends State<new_records> {
       },
     );
   }
-  void getHeartRate() {
+  void getRecords() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
@@ -191,7 +195,7 @@ class _new_recordsState extends State<new_records> {
               newheartrate = hr_list[i].new_hr;
             }
             final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/heartrate_list/' + i.toString());
-            bpRef.update({"HR_bpm": hr_list[i].bpm.toString(), "hr_status": hr_list[i].hr_status, "hr_date": hr_list[i].hr_date.toString(), "hr_time": hr_list[i].hr_time.toString(), "new_hr": false});
+            bpRef.update({"HR_bpm": hr_list[i].bpm.toString(), "hr_status": hr_list[i].hr_status, "hr_date": "${hr_list[i].hr_date.month.toString().padLeft(2,"0")}/${hr_list[i].hr_date.day.toString().padLeft(2,"0")}/${hr_list[i].hr_date.year}", "hr_time": "${hr_list[i].hr_time.hour.toString().padLeft(2,"0")}:${hr_list[i].hr_time.minute.toString().padLeft(2,"0")}", "new_hr": false});
           }
         }
       }
@@ -208,7 +212,7 @@ class _new_recordsState extends State<new_records> {
               newbloodpressure = bp_list[i].new_bp;
             }
             final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/bp_list/' + i.toString());
-            bpRef.update({"systolic_pressure": bp_list[i].systolic_pressure.toString(), "diastolic_pressure": bp_list[i].diastolic_pressure.toString(),"pressure_level": bp_list[i].pressure_level.toString(),  "bp_date": bp_list[i].bp_date.toString(), "bp_time":bp_list[i].bp_time.toString(), "bp_status": bp_list[i].bp_status.toString(), "new_bp": false});
+            bpRef.update({"systolic_pressure": bp_list[i].systolic_pressure.toString(), "diastolic_pressure": bp_list[i].diastolic_pressure.toString(),"pressure_level": bp_list[i].pressure_level.toString(),  "bp_date": "${bp_list[i].bp_date.month.toString().padLeft(2,"0")}/${bp_list[i].bp_date.day.toString().padLeft(2,"0")}/${bp_list[i].bp_date.year}", "bp_time":"${bp_list[i].bp_time.hour.toString().padLeft(2,"0")}:${bp_list[i].bp_time.minute.toString().padLeft(2,"0")}", "bp_status": bp_list[i].bp_status.toString(), "new_bp": false});
           }
         }
       }
@@ -225,7 +229,7 @@ class _new_recordsState extends State<new_records> {
               newbloodglucose = bg_list[i].new_glucose;
             }
             final bgRef = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/' + i.toString());
-            bgRef.update({"glucose": bg_list[i].glucose.toString(), "lastMeal": bg_list[i].lastMeal.toString(),"glucose_status": bg_list[i].bloodGlucose_status.toString(), "bloodGlucose_date": bg_list[i].bloodGlucose_date.toString(), "bloodGlucose_time": bg_list[i].bloodGlucose_time.toString(), "new_glucose": false});
+            bgRef.update({"glucose": bg_list[i].glucose.toString(), "lastMeal": bg_list[i].lastMeal.toString(),"glucose_status": bg_list[i].bloodGlucose_status.toString(), "bloodGlucose_date": "${bg_list[i].bloodGlucose_date.month.toString().padLeft(2,"0")}/${bg_list[i].bloodGlucose_date.day.toString().padLeft(2,"0")}/${bg_list[i].bloodGlucose_date.year}", "bloodGlucose_time": "${bg_list[i].bloodGlucose_time.hour.toString().padLeft(2,"0")}:${bg_list[i].bloodGlucose_time.minute.toString().padLeft(2,"0")}", "new_glucose": false});
           }
         }
       }
@@ -243,7 +247,7 @@ class _new_recordsState extends State<new_records> {
               newoxygensaturation = o2_list[i].new_o2;
             }
             final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/oxygen_saturation_list/' + i.toString());
-            bpRef.update({"oxygen_saturation": o2_list[i].oxygen_saturation.toString(),"oxygen_status": o2_list[i].oxygen_status.toString(), "os_date": o2_list[i].os_date.toString(), "os_time": o2_list[i].os_time.toString(), "new_o2": false});
+            bpRef.update({"oxygen_saturation": o2_list[i].oxygen_saturation.toString(),"oxygen_status": o2_list[i].oxygen_status.toString(), "os_date": "${o2_list[i].os_date.month.toString().padLeft(2,"0")}/${o2_list[i].os_date.day.toString().padLeft(2,"0")}/${o2_list[i].os_date.year}", "os_time": "${o2_list[i].os_time.hour.toString().padLeft(2,"0")}:${o2_list[i].os_time.minute.toString().padLeft(2,"0")}", "new_o2": false});
           }
         }
       }
