@@ -441,9 +441,9 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
       //ADD NOTIF LOGIC =
       await getNotifs(lead_doc).then((value) {
         addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-            "Doctor Added to your $planType Plan!",
+            "Doctor"+ doctor_lastName + "Added to your patient's $planType Plan!",
             "1",
-            "Vitals Plan",
+            "$planType Plan",
             lead_doc);
       });
 
