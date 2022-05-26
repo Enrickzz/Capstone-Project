@@ -299,38 +299,55 @@ class NotificationService {
     final uid = user.uid;
     final notifref = databaseReference.child('users/' + uid + '/notifications/');
     notifsList.clear();
-    getNotifs3(uid);
     String redirect= "Patient meal management";
-    notifref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
-          "rec_time": time, "rec_date": date, "category": "remind food", "redirect": redirect});
-      }else{
-        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + (notifsList.length--).toString());
-        notifRef.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority,
-          "rec_time": time, "rec_date": date, "category": "remind food", "redirect": redirect});
-      }
+    notifref.once().then((DataSnapshot snapshot) async {
+      await getNotifs(uid).then((value) {
+        if(snapshot.value == null){
+          final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+          notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
+            "rec_time": time, "rec_date": date, "category": "remind food", "redirect": redirect});
+        }else{
+          final notifRef = databaseReference.child('users/' + uid + '/notifications/' + (notifsList.length--).toString());
+          notifRef.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority,
+            "rec_time": time, "rec_date": date, "category": "remind food", "redirect": redirect});
+        }
+      });
     });
   }
+
 
   void addtoNotif(String message, String title, String priority,String uid, String redirect,String category){
     print ("ADDED TO NOTIFICATIONS");
     notifsList.clear();
-    getNotifs3(uid);
     final ref = databaseReference.child('users/' + uid + '/notifications/');
-    ref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": category, "redirect": redirect});
-      }else{
-        // count = recommList.length--;
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
-        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": category, "redirect": redirect});
+    ref.once().then((DataSnapshot snapshot) async{
+      await getNotifs(uid).then((value) {
+        if(snapshot.value == null){
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+          ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": category, "redirect": redirect});
+        }else{
+          // count = recommList.length--;
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+          ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": category, "redirect": redirect});
+        }
+      });
 
-      }
+    });
+  }
+  Future<void> getNotifs(String passed_uid) async {
+    notifsList.clear();
+    final User user = auth.currentUser;
+    final uid = passed_uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+      notifsList = notifsList.reversed.toList();
     });
   }
   void getNotifs3(String uid) {
