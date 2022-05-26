@@ -528,12 +528,12 @@ class _SpecificExercisePrescriptionViewAsDoctorState extends State<SpecificExerc
                 templist.removeAt(widget.index);
                 /// delete fields
                 for(int i = 1; i <= initial_length; i++){
-                  final bpRef = databaseReference.child('users/' + uid + '/management_plan/exercise_prescription/' + i.toString());
+                  final bpRef = databaseReference.child('users/' + widget.userUID + '/management_plan/exercise_prescription/' + i.toString());
                   bpRef.remove();
                 }
                 /// write fields
                 for(int i = 0; i < templist.length; i++){
-                  final bpRef = databaseReference.child('users/' + uid + '/management_plan/exercise_prescription/' + (i+1).toString());
+                  final bpRef = databaseReference.child('users/' + widget.userUID + '/management_plan/exercise_prescription/' + (i+1).toString());
                   bpRef.set({
                     "purpose": templist[i].purpose.toString(),
                     "type": templist[i].type.toString(),
