@@ -714,7 +714,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                               }
 
                             });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
+                            Future.delayed(const Duration(milliseconds: 1000), () async{
                               print("MEDICATION LENGTH: " + prescription_list.length.toString());
                               prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name, imgRef: fileName));
                               for(var i=0;i<prescription_list.length/2;i++){
@@ -731,12 +731,17 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                   branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate),
                                   enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction,
                                   prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name, imgRef: fileName);
-                              addtoNotif("Dr. "+doctor.lastname+ " has added something to your medication management plan. Click here to view your new Food management plan. " ,
-                                  "Doctor Added to your Medication Plan!",
-                                  "1",
-                                  "Medication Plan",
-                                  widget.userUID);
-                              notifyLead(userUID, reason_notification, doctor.lastname, "Medication");
+                              await getNotifs(widget.userUID).then((value) {
+                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your medication management plan. Click here to view your new Food management plan. " ,
+                                    "Doctor Added to your Medication Plan!",
+                                    "1",
+                                    "Medication Plan",
+                                    widget.userUID);
+                              });
+
+                              if(checkboxValue == true){
+                                notifyLead(userUID, reason_notification, doctor.lastname, "Medication");
+                              }
                               Navigator.pop(context, newPres);
                             });
 
@@ -757,15 +762,18 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
   }
   void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
     final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
-    connections.once().then((DataSnapshot snapConnections) {
+    connections.once().then((DataSnapshot snapConnections) async {
       String temp = jsonDecode(jsonEncode(snapConnections.value));
       String lead_doc = temp.toString();
       //ADD NOTIF LOGIC =
-      addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-          "Doctor Added to your $planType Plan!",
-          "1",
-          "Exercise Plan",
-          lead_doc);
+      await getNotifs(lead_doc).then((value) {
+        addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
+            "Doctor Added to your $planType Plan!",
+            "1",
+            "Exercise Plan",
+            lead_doc);
+      });
+
     });
     //notifyLead(userUID, reason_notification, doctor.lastname, "Exer");
   }
@@ -784,6 +792,20 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
           "rec_date": date, "category": "notification", "redirect": redirect});
 
       }
+    });
+  }
+  Future<void> getNotifs(String passed_uid) async {
+    notifsList.clear();
+    final User user = auth.currentUser;
+    final uid = passed_uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+      notifsList = notifsList.reversed.toList();
     });
   }
   void initNotif() {

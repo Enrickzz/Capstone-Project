@@ -332,7 +332,7 @@ class _addLabRequestState extends State<add_lab_request> {
                                 });
                               }
                             });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
+                            Future.delayed(const Duration(milliseconds: 1000), ()async {
                               print("MEDICATION LENGTH: " + labplan_list.length.toString());
                               labplan_list.add(new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name, imgRef: fileName));
                               for(var i=0;i<labplan_list.length/2;i++){
@@ -345,12 +345,17 @@ class _addLabRequestState extends State<add_lab_request> {
                                 });
                               }
                               Lab_Plan newV = new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name, imgRef: fileName);
-                              // addtoNotif("Dr. "+doctor.lastname+ " has added something to your vitals management plan. Click here to view your new Food management plan. " ,
-                              //     "Doctor Added to your Vitals Plan!",
-                              //     "1",
-                              //     "Vitals Plan",
-                              //     widget.userUID);
-                              notifyLead(userUID, reason_notification, doctor.lastname,"Lab Results");
+                              await getNotifs(widget.userUID).then((value) {
+                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your Labs management plan. Click here to view your new Food management plan. " ,
+                                    "Doctor Added to your Lab Plan!",
+                                    "1",
+                                    "Lab Plan",
+                                    widget.userUID);
+                              });
+
+                              if(checkboxValue == true){
+                                notifyLead(userUID, reason_notification, doctor.lastname,"Lab Results");
+                              }
                               Navigator.pop(context,newV);
                             });
                           } catch(e) {
@@ -368,22 +373,25 @@ class _addLabRequestState extends State<add_lab_request> {
 
     );
   }
-  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
+  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType) {
     final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
-    connections.once().then((DataSnapshot snapConnections) {
+    connections.once().then((DataSnapshot snapConnections) async{
       String temp = jsonDecode(jsonEncode(snapConnections.value));
       String lead_doc = temp.toString();
       //ADD NOTIF LOGIC =
-      addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-          "Doctor Added to your $planType Plan!",
-          "1",
-          "Exercise Plan",
-          lead_doc);
+      await getNotifs(lead_doc).then((value) {
+        addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
+            "Doctor Added to your $planType Plan!",
+            "1",
+            "Exercise Plan",
+            lead_doc);
+      });
     });
     //notifyLead(userUID, reason_notification, doctor.lastname, "Exer");
   }
   void addtoNotif(String message, String title, String priority,String redirect, String uid){
     print ("ADDED TO NOTIFICATIONS");
+    notifsList.clear();
     final ref = databaseReference.child('users/' + uid + '/notifications/');
     ref.once().then((DataSnapshot snapshot) {
       if(snapshot.value == null){
@@ -391,12 +399,25 @@ class _addLabRequestState extends State<add_lab_request> {
         ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
           "rec_date": date, "category": "notification", "redirect": redirect});
       }else{
-        // count = recommList.length--;
         final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
         ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
           "rec_date": date, "category": "notification", "redirect": redirect});
 
       }
+    });
+  }
+  Future<void> getNotifs(String passed_uid) async {
+    notifsList.clear();
+    final User user = auth.currentUser;
+    final uid = passed_uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+      notifsList = notifsList.reversed.toList();
     });
   }
   void initNotif() {

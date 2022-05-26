@@ -322,7 +322,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                                 });
                               }
                             });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
+                            Future.delayed(const Duration(milliseconds: 1000), ()async {
                               print("MEDICATION LENGTH: " + exercise_list.length.toString());
                               exercise_list.add(new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name));
                               for(var i=0;i<exercise_list.length/2;i++){
@@ -333,29 +333,18 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                               print("POP HERE ==========");
                               ExPlan a = new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid,
                                   dateCreated: now, doctor_name: doctor_name);
+                              await getNotifs(widget.userUID).then((value) {
+                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your exercise management plan. Click here to view your new Food management plan. " ,
+                                    "Doctor Added to your Exercise Plan!",
+                                    "1",
+                                    "Exercise Plan",
+                                    widget.userUID);
+                              });
 
-                              addtoNotif("Dr. "+doctor.lastname+ " has added something to your exercise management plan. Click here to view your new Food management plan. " ,
-                                  "Doctor Added to your Exercise Plan!",
-                                  "1",
-                                  "Exercise Plan",
-                                  widget.userUID);
                               print("POP HERE ==========");
-                              notifyLead(userUID, reason_notification, doctor.lastname, "Exercise");
-                              // //ADD NOTIFS TO DOCTORS BEFORE POPPING
-                              // final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
-                              // connections.once().then((DataSnapshot snapConnections) {
-                              //   String temp = jsonDecode(jsonEncode(snapConnections.value));
-                              //   String lead_doc = temp.toString();
-                              //
-                              //   print(lead_doc + "<<<< DR ");
-                              //   //ADD NOTIF LOGIC =
-                              //   addtoNotif("Dr. "+doctor.lastname+ " has added something to your patient's exercise management plan. He notes: "+reason_notification ,
-                              //       "Doctor Added to your Exercise Plan!",
-                              //       "1",
-                              //       "Exercise Plan",
-                              //       lead_doc);
-                              // });
-
+                              if(checkboxValue == true){
+                                notifyLead(userUID, reason_notification, doctor.lastname, "Exercise");
+                              }
                               Navigator.pop(context,a );
                             });
 
@@ -379,19 +368,22 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
   }
   void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
     final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
-    connections.once().then((DataSnapshot snapConnections) {
+    connections.once().then((DataSnapshot snapConnections) async{
       String temp = jsonDecode(jsonEncode(snapConnections.value));
       String lead_doc = temp.toString();
       //ADD NOTIF LOGIC =
-      addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-          "Doctor Added to your $planType Plan!",
-          "1",
-          "Exercise Plan",
-          lead_doc);
+      await getNotifs(lead_doc).then((value) {
+        addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
+            "Doctor Added to your $planType Plan!",
+            "1",
+            "Exercise Plan",
+            lead_doc);
+      });
     });
     //notifyLead(userUID, reason_notification, doctor.lastname);
   }
   void addtoNotif(String message, String title, String priority,String redirect, String uid){
+
     print ("ADDED TO NOTIFICATIONS");
     final ref = databaseReference.child('users/' + uid + '/notifications/');
     ref.once().then((DataSnapshot snapshot) {
@@ -406,6 +398,20 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
           "rec_date": date, "category": "notification", "redirect": redirect});
 
       }
+    });
+  }
+  Future<void> getNotifs(String passed_uid) async {
+    notifsList.clear();
+    final User user = auth.currentUser;
+    final uid = passed_uid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+      notifsList = notifsList.reversed.toList();
     });
   }
   void initNotif() {
