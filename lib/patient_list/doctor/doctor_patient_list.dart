@@ -99,7 +99,6 @@ class _PatientListState extends State<PatientList>  {
     }
     super.initState();
     if(widget.nameslist != null){
-
       if(widget.nameslist.isNotEmpty){
         print("WIDGET NAMES NOT EMPTY");
         names = widget.nameslist;
@@ -312,7 +311,6 @@ class _PatientListState extends State<PatientList>  {
             readInfo.once().then((DataSnapshot snapshot){
               var temp2 = jsonDecode(jsonEncode(snapshot.value));
               print(temp2);
-
               //userAddInfo.add(Additional_Info.fromJson(temp2));
               String disease_name = "";
               Additional_Info info = Additional_Info.fromJson4(temp2);

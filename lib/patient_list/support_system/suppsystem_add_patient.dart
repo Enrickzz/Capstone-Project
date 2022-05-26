@@ -596,6 +596,35 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
       uidtemp.add(userUID);
     });
   }
+  // void addPatient() {
+  //   final User user = auth.currentUser;
+  //   final uid = user.uid;
+  //   final readDoctorlength = databaseReference.child('users/' + uid + '/personal_info/patient_list/');
+  //   final readDoctorConnection = databaseReference.child('users/' + userUID + '/personal_info/connections/');
+  //   final readd2dConnection = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/');
+  //   doc_connection.clear();
+  //   patient_connection.clear();
+  //   bool isPatient = false;
+  //   bool isDoctor = false; /// check if doctor is already registered
+  //   Users temp_doctor = new Users();
+  //   List<int> doctor_index = [];
+  //   int count = 0;
+  //   List<UID> patientlist = [];
+  //   /// doctor_connection = patient's list of doctors
+  //   List<Connection> doctor_connection = [];
+  //   List<String> doctor_uid = [];
+  //   readDoctorConnection.once().then((DataSnapshot datasnapshot){
+  //     List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+  //     if(temp != null){
+  //       temp.forEach((jsonString) {
+  //         doc_connection.add(Connection.fromJson(jsonString));
+  //         pcount = doc_connection.length+1;
+  //       });
+  //     }
+  //   });
+  //
+  //
+  // }
 
   Widget checkimage(String img) {
     if(img == null || img == "assets/images/blank_person.png"){

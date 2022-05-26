@@ -72,7 +72,9 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
   @override
   void initState(){
     var ran = Random();
+
     getSupportSystem();
+
     for (var i = 0; i < 5; i++) {
       var heading = '\$${(ran.nextInt(20) + 15).toString()}00 per month';
       var subheading =
@@ -90,25 +92,45 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
       };
       cardContent.add(cardData);
     }
-    super.initState();
+
     if(widget.nameslist != null){
+
       if(widget.nameslist.isNotEmpty){
         names = widget.nameslist;
         diseases = widget.diseaselist;
         uidlist = widget.uidList;
         pp_imgs = widget.pp_img;
-        print("PP IMAGES");
-        print(pp_imgs);
+        List temp = [];
+        List temp2 = [];
+        List temp3 = [];
+        temp = diseases;
+        temp2 = uidlist;
+        temp3 = pp_imgs;
+        uidlist = temp2.toSet().toList();
+        pp_imgs = temp3.toSet().toList();
       }
     }else{
+      pp_imgs.clear();
       getPatients();
+      isLoading = true;
     }
-    Future.delayed(const Duration(milliseconds: 4000), (){
+    Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
+        print("HEEEEEEEEEEERERERERERE");
+        print(names.length);
+        for(int i = 0; i < names.length; i++){
+          print("HEEEEEEEEEEERERERERERE");
+          print(names[i]);
+        }
+        for(int i = 0; i < diseases.length; i++){
+          print("HEEEEasfsafasasdE");
+          print(diseases[i]);
+        }
         isLoading = false;
       });
 
     });
+    super.initState();
   }
 
   @override
@@ -122,60 +144,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
               color: Colors.black
           )),
           centerTitle: true,
-          //       padding: EdgeInsets.only(right: 20.0),
           backgroundColor: Colors.white,
-          // actions: [
-          //   Padding(
-          //       child: GestureDetector(
-          //         onTap: () {
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist)),
-          //           );
-          //
-          //
-          //           // showModalBottomSheet(context: context,
-          //           //   isScrollControlled: true,
-          //           //   builder: (context) => SingleChildScrollView(child: Container(
-          //           //     padding: EdgeInsets.only(
-          //           //         bottom: MediaQuery.of(context).viewInsets.bottom),
-          //           //     child: add_medication_prescription(thislist: prestemp),
-          //           //   ),
-          //           //   ),
-          //           // ).then((value) =>
-          //           //     Future.delayed(const Duration(milliseconds: 1500), (){
-          //           //       setState((){
-          //           //         print("setstate medication prescription");
-          //           //         print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
-          //           //         if(value != null){
-          //           //           prestemp = value[0];
-          //           //         }
-          //           //       });
-          //           //     }));
-          //         },
-          //         child: Icon(
-          //           Icons.add,
-          //         ),
-          //       )
-          //   ),
-          //
-          //   Padding(
-          //       padding: EdgeInsets.only(right: 20.0),
-          //       child: GestureDetector(
-          //         onTap: () async{
-          //           await _auth.signOut();
-          //           print('signed out');
-          //           Navigator.pushReplacement(
-          //             context,
-          //             MaterialPageRoute(builder: (context) => LogIn()),
-          //           );
-          //         },
-          //         child: Icon(
-          //           Icons.audiotrack,
-          //         ),
-          //       )
-          //   ),
-          // ],
         ),
         body: isLoading
             ? Center(
@@ -188,13 +157,6 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
               child: Card(
                 child: ListTile(
-                    // leading: CircleAvatar(
-                    //   radius: 25,
-                    //   backgroundColor: Colors.green,
-                    //   foregroundColor: Colors.green,
-                    //   backgroundImage: NetworkImage
-                    //     ("https://quicksmart-it.com/wp-content/uploads/2020/01/blank-profile-picture-973460_640-1.png"),
-                    // ),
                     leading: Container(
                       height: 50,
                       width: 50,
@@ -330,25 +292,26 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
       readDoctorConnections.once().then((DataSnapshot datasnapshot){
         List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
         temp.forEach((jsonString) {
-          supp_connections.add(Connection.fromJson2(jsonString));
+          supp_connections.add(Connection.fromJson(jsonString));
         });
         for(int i = 0; i < supp_connections.length; i++){
           uidlist.add(supp_connections[i].doctor1);
         }
         for(int i = 0; i < uidlist.length; i++){
+          print(uidlist[i]);
           final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
           final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
           readPatient.once().then((DataSnapshot snapshot){
             var temp1 = jsonDecode(jsonEncode(snapshot.value));
             Users patient = Users.fromJson(temp1);
-            //userlist.add(Users.fromJson(temp1));
+            names.add(patient.firstname + " " + patient.lastname);
+            pp_imgs.add(patient.pp_img.toString());
             readInfo.once().then((DataSnapshot snapshot){
               var temp2 = jsonDecode(jsonEncode(snapshot.value));
               print(temp2);
               //userAddInfo.add(Additional_Info.fromJson(temp2));
               String disease_name = "";
               Additional_Info info = Additional_Info.fromJson4(temp2);
-              print(info.disease.length);
               for(int j = 0; j < info.disease.length; j++){
                 if(j == info.disease.length - 1){
                   print("if statement " + info.disease[j]);
@@ -360,22 +323,18 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
                 }
               }
               diseases.add(disease_name);
-              print(diseases);
             });
-
-            names.add(patient.firstname + " " + patient.lastname);
-            pp_imgs.add(patient.pp_img);
-
-
           });
         }
       });
 
+    }).then((value){
+      setState(() {
+        isLoading = false;
+        print("FIXED");
+      });
     });
-    setState(() {
-      isLoading = false;
-      print("FIXED");
-    });
+
   }
 
   void getSupportSystem() async {
