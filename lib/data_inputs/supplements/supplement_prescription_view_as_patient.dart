@@ -86,12 +86,11 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                   ).then((value) =>
                       Future.delayed(const Duration(milliseconds: 1500), (){
                         // supptemp = value;
-                        print("LENGTH: " + supptemp.length.toString());
-                        supptemp.insert(0, value);
-                        setState((){
+                        if(value != null){
                           print("LENGTH: " + supptemp.length.toString());
-                          // print("setstate supplement prescription");
-                          // print("this pointer = " + value[0].toString() + "\n " + value[1].toString());
+                          supptemp.insert(0, value);
+                        }
+                        setState((){
                           if(value != null){
                           }
                         });

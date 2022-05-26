@@ -59,6 +59,13 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
 
   DateTimeRange dateRange;
 
+  @override
+  void initState(){
+    getSupplementPrescription();
+
+    super.initState();
+  }
+
   String getFrom(){
     if(dateRange == null){
       return 'From';
@@ -384,25 +391,28 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                                   "intake_time": quantity.toString(),"supp_dosage": supp_dosage.toString(),
                                   "medical_prescription_unit": prescription_unit,
                                   "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                                print("Added Supplement Prescription Successfully! " + uid);
+                                print("Added Supplement Prescription Successfully! " + uid +"ifff");
+                                supplement_list.add(new Supplement_Prescription(supplement_name: supplement_name, intake_time: quantity.toString(),dosage: supp_dosage, prescription_unit: prescription_unit, dateCreated: now));
+
                               }
                               else{
                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                  count = supplement_list.length--;
+                                  supplement_list.add(new Supplement_Prescription(supplement_name: supplement_name, intake_time: quantity.toString(),dosage: supp_dosage, prescription_unit: prescription_unit, dateCreated: now));
+                                  count = supplement_list.length;
                                   final prescriptionRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + count.toString());
                                   prescriptionRef.set({"supplement_name": supplement_name.toString(),
                                     "intake_time": quantity.toString(),
                                     "supp_dosage": supp_dosage.toString(),
                                     "medical_prescription_unit": prescription_unit,
                                     "dateCreated": "${now.month}/${now.day}/${now.year}"});
-                                  print("Added Supplement Prescription Successfully! " + uid);
+                                  print("Added Supplement Prescription Successfully! " + uid+ " elsee  " + count.toString());
                                 });
 
                               }
 
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              supplement_list.add(new Supplement_Prescription(supplement_name: supplement_name, intake_time: quantity.toString(),dosage: supp_dosage, prescription_unit: prescription_unit, dateCreated: now));
+                              // supplement_list.add(new Supplement_Prescription(supplement_name: supplement_name, intake_time: quantity.toString(),dosage: supp_dosage, prescription_unit: prescription_unit, dateCreated: now));
                               // for(var i=0;i<supplement_list.length/2;i++){
                               //   var temp = supplement_list[i];
                               //   supplement_list[i] = supplement_list[supplement_list.length-1-i];

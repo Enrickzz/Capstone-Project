@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/supplements/edit_supplements.dart';
 import 'package:my_app/database.dart';
 import 'package:my_app/mainScreen.dart';
@@ -158,7 +159,7 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificSupplementView
                                               dosage =updated.dosage.toString();
                                               unit = updated.prescription_unit;
                                               frequency = updated.intake_time;
-                                              dateCreated = updated.dateCreated.toString();
+                                              dateCreated = DateFormat('MM/dd/yyyy').format(updated.dateCreated);
 
                                               listtemp[widget.index].supplement_name = updated.supplement_name;
                                               listtemp[widget.index].dosage =updated.dosage;

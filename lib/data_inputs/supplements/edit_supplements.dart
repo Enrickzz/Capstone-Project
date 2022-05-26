@@ -377,14 +377,20 @@ class _editSupplementPrescriptionState extends State<edit_supplement_prescriptio
                             final uid = user.uid;
                             int index = ((supplement_list.length + 1) - (widget.index+1));
                             final prescriptionRef = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/' + index.toString());
+                            DateTime prse = DateTime.parse(widget.thislist[widget.index].dateCreated.toString());
+                            print(prse.toString() + " << this date");
                             prescriptionRef.update({"supplement_name": supplement_name.toString(),
                               "intake_time": quantity.toString(),
                               "supp_dosage": supp_dosage.toString(),
-                              "medical_prescription_unit": prescription_unit});
+                              "medical_prescription_unit": prescription_unit,
+                              "dateCreated": DateFormat('MM/dd/yyyy').format(prse)
+                            });
                             print("Edited Supplement Prescription Successfully! " + uid);
 
                             Future.delayed(const Duration(milliseconds: 1000), (){
                               index = widget.index;
+                              DateTime prse = DateTime.parse(widget.thislist[widget.index].dateCreated.toString());
+                              print(prse.toString() + " << this date");
                               supplement_list[index].supplement_name = supplement_name;
                               supplement_list[index].intake_time =  quantity.toString();
                               supplement_list[index].dosage = supp_dosage;
