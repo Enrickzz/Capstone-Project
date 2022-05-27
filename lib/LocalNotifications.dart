@@ -39,6 +39,7 @@ class NotificationService {
   List<Connection> connections = new List<Connection>();
 
   Future<void> init() async {
+    initNotif();
     print("TYPE = "+ type);
     print("INITIALIZE 2");
     final AndroidInitializationSettings initializationSettingsAndroid =
@@ -89,62 +90,75 @@ class NotificationService {
     if(type == "bp"){
       final User user = auth.currentUser;
       final uid = user.uid;
+      var sked = tz.TZDateTime.now(tz.local).add(duration);
       await flutterLocalNotificationsPlugin.zonedSchedule(
           5,
           "Take your Blood Pressure Now!",
           "Check your Blood Pressure again now. ",
-          tz.TZDateTime.now(tz.local).add( duration),
+          sked,
           NotificationDetails(android: _androidNotificationDetails),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime).then((value) {
-        addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure", "bp");
+        addtoNotif("Check your Blood Pressure again now. Click me to check now!", "Reminder!", "1", uid, "Blood Pressure", "bp",
+            sked.month.toString()+"/"+ sked.day.toString()+"/"+sked.year.toString() ,
+            sked.hour.toString() +":"+sked.minute.toString());
 
       });
     }else if(type == "bg"){
       final User user = auth.currentUser;
       final uid = user.uid;
+      var sked = tz.TZDateTime.now(tz.local).add(duration);
       await flutterLocalNotificationsPlugin.zonedSchedule(
           6,
           "Take your Blood Glucose Now!",
           "Check your Glucose again now. ",
-          tz.TZDateTime.now(tz.local).add( duration),
+          sked,
           NotificationDetails(android: _androidNotificationDetails),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime).then((value) {
-              addtoNotif("Check your Glucose again now. Click me to check now!", "Reminder!", "1", uid, "Glucose", "glucose");
+              addtoNotif("Check your Glucose again now. Click me to check now!", "Reminder!", "1", uid, "Glucose", "glucose",
+                  sked.month.toString()+"/"+ sked.day.toString()+"/"+sked.year.toString() ,
+                  sked.hour.toString() +":"+sked.minute.toString());
       });
 
     }else if(type == "hr"){
       //
       final User user = auth.currentUser;
       final uid = user.uid;
+      var sked = tz.TZDateTime.now(tz.local).add(duration);
       await flutterLocalNotificationsPlugin.zonedSchedule(
           7,
           "Take your Heart Rate Now!",
           "Check your Heart Rate again now now. ",
-          tz.TZDateTime.now(tz.local).add(duration),
+          sked,
           NotificationDetails(android: _androidNotificationDetails),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime).then((value) {
-        addtoNotif("Check your Heart Rate again now now. Click me to check now!", "Reminder!", "1", uid, "HeartRate", "heartrate");
+        addtoNotif("Check your Heart Rate again now now. Click me to check now!", "Reminder!", "1", uid, "HeartRate", "heartrate",
+            sked.month.toString()+"/"+ sked.day.toString()+"/"+sked.year.toString() ,
+            sked.hour.toString() +":"+sked.minute.toString());
       });
 
     }else if(type == "oxy"){
       final User user = auth.currentUser;
       final uid = user.uid;
+      var sked = tz.TZDateTime.now(tz.local).add(duration);
+
       await flutterLocalNotificationsPlugin.zonedSchedule(
           8,
           "Take your Oxygen Saturation Now!",
           "Check your Oxygen Saturation now ",
-          tz.TZDateTime.now(tz.local).add(duration),
+          sked,
           NotificationDetails(android: _androidNotificationDetails),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime).then((value) {
-        addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen", "oxygen");
+        addtoNotif("Check your Oxygen Saturation now", "Reminder!", "1", uid, "oxygen", "oxygen",
+            sked.month.toString()+"/"+ sked.day.toString()+"/"+sked.year.toString() ,
+            sked.hour.toString() +":"+sked.minute.toString());
       });
     }else if (type == "schedFood"){
       var basis = tz.TZDateTime.now(tz.local);
@@ -173,15 +187,16 @@ class NotificationService {
             4,
             "Take your Meds!",
             "We notice that you have not recorded your medicine intake for your doctor’s prescribed medicine for today. We advise you to take your prescribed medicine and record your medicine intake in the Heartistant Application.",
-            dinner,
+            meds,
             NotificationDetails(android: _androidNotificationDetails),
             androidAllowWhileIdle: true,
             uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime).then((value) {
           addtoNotifs("We notice that you have not recorded your medicine intake for your doctor’s prescribed medicine for today. We advise you to take your prescribed medicine and record your medicine intake in the Heartistant Application.",
               "Take your meds!",
-              "3","20:00:00");
-          notifySS(4);
+              "3","20:00:00", dinner.month.toString()
+                  +"/"+ dinner.day.toString()+"/"+dinner.year.toString());
+          notifySS(4, meds);
         });
       }
       if(basis.difference(bfast) < Duration(seconds: 0)){
@@ -196,8 +211,9 @@ class NotificationService {
             UILocalNotificationDateInterpretation.absoluteTime).then((value) async{
           addtoNotifs("We notice that you have not recorded any meal for your breakfast today.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
               "Eat Breakfast!",
-              "2", "10:00:00");
-          notifySS(1);
+              "2", "10:00:00",bfast.month.toString()
+                  +"/"+ bfast.day.toString()+"/"+bfast.year.toString());
+          notifySS(1, bfast);
         });
       }
       if(basis.difference(lunch) < Duration(seconds: 0)){
@@ -212,8 +228,9 @@ class NotificationService {
             UILocalNotificationDateInterpretation.absoluteTime).then((value) {
           addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
               "Eat Lunch!",
-              "2", "14:00:00");
-          notifySS(2);
+              "2", "14:00:00", lunch.month.toString()
+                  +"/"+ lunch.day.toString()+"/"+lunch.year.toString());
+          notifySS(2, lunch);
         });
       }
 
@@ -229,8 +246,10 @@ class NotificationService {
             UILocalNotificationDateInterpretation.absoluteTime).then((value) {
           addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
               "Eat Dinner!",
-              "2", "21:00:00");
-          notifySS(3);
+              "2", "21:00:00",
+              dinner.month.toString()
+                  +"/"+ dinner.day.toString()+"/"+dinner.year.toString());
+          notifySS(3, dinner);
         });
       }
 
@@ -244,7 +263,7 @@ class NotificationService {
   Future<void> cancelAllNotifications() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
-  void notifySS(int check){
+  void notifySS(int check, TZDateTime sked){
     final User user = auth.currentUser;
     final uid = user.uid;
     final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
@@ -269,32 +288,40 @@ class NotificationService {
                   thisuser.firstname + " has not had Breakfast",
                   "3",
                   a.doctor1,
-                  "Support food management", "");
+                  "Support food management", "",
+                  sked.month.toString()+"/"+ sked.day.toString()+"/"+sked.year.toString() ,
+                  sked.hour.toString() +":"+sked.minute.toString());
             }else if( check == 2){
               addtoNotif("Your <type> "+ thisuser.firstname+ " has not recorded any meal for their lunch.We advise you to remind " +thisuser.firstname + " to eat breakfast and record his/her food intake in the Heartistant Application.",
                   thisuser.firstname + " has not had Lunch",
                   "3",
                   a.doctor1,
-                  "Support food management", "");
+                  "Support food management", "",
+                  sked.month.toString()+"/"+ sked.day.toString()+"/"+sked.year.toString() ,
+                  sked.hour.toString() +":"+sked.minute.toString());
             }else if( check == 3){
               addtoNotif("Your <type> "+ thisuser.firstname+ " has not recorded any meal for their dinner.We advise you to remind " +thisuser.firstname + " to eat breakfast and record his/her food intake in the Heartistant Application.",
                   thisuser.firstname + " has not had Dinner",
                   "3",
                   a.doctor1,
-                  "Support food management", "");
+                  "Support food management", "",
+                  sked.month.toString()+"/"+ sked.day.toString()+"/"+sked.year.toString() ,
+                  sked.hour.toString() +":"+sked.minute.toString());
             }else if( check == 4){
               addtoNotif("Your <type> "+ thisuser.firstname+ " has not taken medicines.We advise you to remind " +thisuser.firstname + " to take the medications and record his/her medication intake in the Heartistant Application.",
                   thisuser.firstname + " has not taken Medications",
                   "3",
                   a.doctor1,
-                  "Support medicine management", "");
+                  "Support medicine management", "",
+                  sked.month.toString()+"/"+ sked.day.toString()+"/"+sked.year.toString() ,
+                  sked.hour.toString() +":"+sked.minute.toString());
             }
           }
         });
       });
     });
   }
-  void addtoNotifs(String message, String title, String priority, String time){
+  void addtoNotifs(String message, String title, String priority, String time, String date){
     final User user = auth.currentUser;
     final uid = user.uid;
     final notifref = databaseReference.child('users/' + uid + '/notifications/');
@@ -316,7 +343,7 @@ class NotificationService {
   }
 
 
-  void addtoNotif(String message, String title, String priority,String uid, String redirect,String category){
+  void addtoNotif(String message, String title, String priority,String uid, String redirect,String category, String date, String time){
     print ("ADDED TO NOTIFICATIONS");
     notifsList.clear();
     final ref = databaseReference.child('users/' + uid + '/notifications/');

@@ -48,7 +48,7 @@ class _addSymptomsState extends State<add_symptoms> {
   TimeOfDay time;
   var dateValue = TextEditingController();
   List<String> checkboxStatus = [];
-
+  Symptom newsymp;
   bool value = false;
   final notifications ={
     CheckBoxState(title: 'Morning'),
@@ -113,6 +113,7 @@ class _addSymptomsState extends State<add_symptoms> {
   String hours,min;
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
+  String thisURL;
 
   @override
   void initState(){
@@ -591,7 +592,6 @@ class _addSymptomsState extends State<add_symptoms> {
                           });
                         }
                       });
-                      Future.delayed(const Duration(milliseconds: 1000), (){
                         if(valueChooseSymptom == "Others"){
                           valueChooseSymptom = other_name;
                         }
@@ -602,15 +602,8 @@ class _addSymptomsState extends State<add_symptoms> {
                           symptoms_list[symptoms_list.length-1-i] = temp;
                         }
                         print("filename = " + fileName.toString());
-                        if(fileName != null){
-                          FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                          });
-                        }
 
-                        Symptom a = new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl,
-                            symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date),
-                            symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
-                            recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: fileName);
+
 
                         if(valueChooseSymptom.toString() == "Dizziness"){
                           addtoRecommendation("We recommend that you closely monitor your dizziness symptom and seek immediate medical attention if the symptom manifests frequently. For the meantime please drink a glass of water and remain seated for a while.",
@@ -762,17 +755,34 @@ class _addSymptomsState extends State<add_symptoms> {
                             });
                           });
                         }
-
-                        Future.delayed(const Duration(milliseconds: 1000), (){
-                          Symptom newsymp = new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl,
-                              symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date),
-                              symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
-                              recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: fileName);
+                        Future.delayed(const Duration(milliseconds: 3000), (){
+                          if(fileName != null){
+                            FirebaseStorage.instance.ref('test/' + uid +"/"+ valueChooseSymptom + format.parse(symptom_date).toString() + timeformat.parse(symptom_time).toString()).putFile(file).then((p0) async{
+                              await downloadUrl(valueChooseSymptom + format.parse(symptom_date).toString() + timeformat.parse(symptom_time).toString()).then((value) {
+                                final symptomRef = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/' + count.toString());
+                                print("count : " + count.toString());
+                                symptomRef.update({"imgRef": thisURL});
+                                print("THIS URL " + thisURL);
+                                Future.delayed(const Duration(milliseconds: 1200), (){
+                                    newsymp = new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl,
+                                    symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date),
+                                    symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
+                                    recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: thisURL);
+                                  Navigator.pop(context, newsymp);
+                                });
+                              });
+                            });
+                          }else{
+                            newsymp = new Symptom(symptomName: valueChooseSymptom.toString(), intensityLvl: intesity_lvl,
+                                symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date),
+                                symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
+                                recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: thisURL.toString());
+                            Navigator.pop(context, newsymp);
+                          }
                           print("SYMPTOMS UPDATE LENGTH = " + symptoms_list.length.toString());
 
-                          Navigator.pop(context, newsymp);
                         });
-                      });
+
 
                     } catch(e) {
                       print("you got an error! $e");
@@ -795,7 +805,15 @@ class _addSymptomsState extends State<add_symptoms> {
 
     );
   }
-
+  Future <String> downloadUrl(String imagename) async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final ref = FirebaseStorage.instance.ref('test/' +uid +'/$imagename');
+    String downloadurl = await ref.getDownloadURL();
+    print ("THIS IS THE URL = "+ downloadurl);
+    thisURL = downloadurl;
+    return downloadurl;
+  }
   Widget buildSingleCheckbox(CheckBoxState checkbox) =>  Visibility(
     visible: isSwitched,
     child: SizedBox(
