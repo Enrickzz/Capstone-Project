@@ -760,20 +760,36 @@ class _addLabResultState extends State<add_lab_results> {
                               }
 
                               if(fileName != null){
-                                FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
+                                FirebaseStorage.instance.ref('test/' + uid +"/"+ valueChooseLabResult + format.parse(lab_result_date).toString() + timeformat.parse(lab_result_time).toString()).putFile(file).then((p0) async{
+                                  await downloadUrl(valueChooseLabResult + format.parse(lab_result_date).toString() + timeformat.parse(lab_result_time).toString()).then((value) {
+                                    final labResultRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' + count.toString());
+                                    labResultRef.update({"imgRef": thisURL});
+                                    Future.delayed(const Duration(milliseconds: 1200), (){
+                                      Lab_Result newlab= new Lab_Result(
+                                          labResult_name: valueChooseLabResult.toString()
+                                          ,labResult_note: lab_result_note.toString()
+                                          ,labResult_date: format.parse(lab_result_date), labResult_time: timeformat.parse(lab_result_time),
+                                          international_normal_ratio: international_normal_ratio, potassium: potassium, hemoglobin_hb: hemoglobin_hb, Bun_mgDl: Bun_mgDl, creatinine_mgDl: creatinine_mgDl,
+                                          ldl: ldl,hdl: hdl, imgRef: thisURL);
 
+                                      Navigator.pop(context, newlab);
+                                    });
+                                  });
                                 });
-                              }
-                              Future.delayed(const Duration(milliseconds: 1200), (){
-                                Lab_Result newlab= new Lab_Result(
-                                    labResult_name: valueChooseLabResult.toString()
-                                    ,labResult_note: lab_result_note.toString()
-                                    ,labResult_date: format.parse(lab_result_date), labResult_time: timeformat.parse(lab_result_time),
-                                    international_normal_ratio: international_normal_ratio, potassium: potassium, hemoglobin_hb: hemoglobin_hb, Bun_mgDl: Bun_mgDl, creatinine_mgDl: creatinine_mgDl,
-                                    ldl: ldl,hdl: hdl, imgRef: fileName.toString());
+                              }else{
+                                Future.delayed(const Duration(milliseconds: 1200), (){
+                                  Lab_Result newlab= new Lab_Result(
+                                      labResult_name: valueChooseLabResult.toString()
+                                      ,labResult_note: lab_result_note.toString()
+                                      ,labResult_date: format.parse(lab_result_date), labResult_time: timeformat.parse(lab_result_time),
+                                      international_normal_ratio: international_normal_ratio, potassium: potassium, hemoglobin_hb: hemoglobin_hb, Bun_mgDl: Bun_mgDl, creatinine_mgDl: creatinine_mgDl,
+                                      ldl: ldl,hdl: hdl, imgRef: fileName);
 
-                                Navigator.pop(context, newlab);
-                              });
+                                  Navigator.pop(context, newlab);
+                                });
+
+                              }
+
 
                             });
                           } catch(e) {

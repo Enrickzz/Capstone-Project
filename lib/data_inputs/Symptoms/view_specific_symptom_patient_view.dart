@@ -536,6 +536,9 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   }
   Widget showimg(String imgref) {
     if(imgref == "null" || imgref == null || imgref == ""){
+      setState(() {
+        hasImage = false;
+      });
       return Image.asset("assets/images/no-image.jpg");
     }else{
       return Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>

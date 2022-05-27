@@ -293,37 +293,6 @@ class _mainScreenState extends State<mainScreen> with TickerProviderStateMixin {
     await ns.init().then((value) async {
       await ns.scheduleNotifications(Duration(seconds: 1));
     });
-
-    // final bfast = Cron()
-    //   ..schedule(Schedule.parse("0 10 * * *"), () {
-    //     print("bfast CHECK");
-    //     addtoNotifs("We notice that you have not recorded any meal for your breakfast today.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-    //         "Eat Breakfast!",
-    //         "2", "10:00:00");
-    //     notifySS(1);
-    //   });
-    //  // Future.delayed(Duration(seconds: 20));
-    //  // bfast.close();
-    // final lunch = Cron()
-    //   ..schedule(Schedule.parse("0 14 * * *"), () {
-    //     print("lunch CHECK");
-    //     addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-    //         "Eat Lunch!",
-    //         "2", "14:00:00");
-    //     notifySS(2);
-    //   });
-    //  // Future.delayed(Duration(seconds: 20));
-    //  // lunch.close();
-    // final dinner = Cron()
-    //   ..schedule(Schedule.parse("0 21 * * *"), () {
-    //     print("dinner CHECK");
-    //     addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
-    //         "Eat Dinner!",
-    //         "2", "21:00:00");
-    //     notifySS(3);
-    //   });
-    //  // Future.delayed(Duration(seconds: 20));
-    //  // dinner.close();
     final meds = Cron()
       ..schedule(Schedule.parse("0 20 * * *"), () {
         print("meds CHECK");

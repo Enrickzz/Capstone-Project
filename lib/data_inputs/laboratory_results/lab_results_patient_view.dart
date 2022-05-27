@@ -88,7 +88,9 @@ class _lab_resultsState extends State<lab_results> {
                     print("setstate lab\n\n" + value.toString());
                     if(value != null){
                       labResult_list.insert(0, value);
-                      downloadUrls();
+                      print(labResult_list[0].imgRef.toString() + " <<<<<<<<");
+                      value.toString();
+                      // downloadUrls();
                       listAll("path");
                         Future.delayed(const Duration(milliseconds: 2000), (){
                           setState(() {

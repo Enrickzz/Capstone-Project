@@ -134,7 +134,7 @@ class viewLabResult extends State<view_lab_result> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    ''+widget.lr.labResult_name+ " " + widget.lr.labResult_date.toString(),
+                    ''+widget.lr.labResult_name+ " " + getDateFormatted(widget.lr.labResult_date.toString()),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
@@ -262,7 +262,7 @@ class viewLabResult extends State<view_lab_result> {
                             var dir = await DownloadsPathProvider.downloadsDirectory;
                             if(dir != null){
                               String fname = widget.lr.imgRef;
-                              fname = fname.replaceAll("https://firebasestorage.googleapis.com/v0/b/capstone-heart-disease.appspot.com/o/test%2FLT8LwM7cKiTht29miQUOpSy1Eyy2%2F", "");
+                              fname = fname.replaceAll("https://firebasestorage.googleapis.com/v0/b/capstone-heart-disease.appspot.com/o/test%2FPms25jTFm3V2w5YicaaX6ZeDpAt2%2F", "");
                               fname = fname.substring(0,fname.indexOf("?"));
                               print("final");
                               print(fname);
