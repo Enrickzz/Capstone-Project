@@ -213,7 +213,7 @@ class _HealthTeamState extends State<HealthTeam> with SingleTickerProviderStateM
                                                   // access_code = uid;
                                                   Clipboard.setData(new ClipboardData(text: uid)).then((_){
                                                     ScaffoldMessenger.of(context)
-                                                        .showSnackBar(SnackBar(content: Text('Copied to your clipboard !')));
+                                                        .showSnackBar(SnackBar(content: Text('Copied to your clipboard!')));
                                                   });
 
                                                 },

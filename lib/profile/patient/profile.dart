@@ -5,6 +5,7 @@ import 'package:basic_utils/basic_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/discussion_board/discussion_patient_view.dart';
 import 'package:my_app/models/users.dart';
@@ -87,6 +88,14 @@ class _index3State extends State<index3>
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   String bday= "";
+
+  String password = '';
+  bool _isHidden = true;
+  String defaultFontFamily = 'Roboto-Light.ttf';
+  double defaultFontSize = 14;
+  double defaultIconSize = 17;
+
+
   @override
   void initState() {
     super.initState();
@@ -142,6 +151,7 @@ class _index3State extends State<index3>
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
+
 
     return  Container(
       color: FitnessAppTheme.background,
@@ -990,6 +1000,26 @@ class _index3State extends State<index3>
                     },
                   ),
                 ),
+                SizedBox(height: 30),
+                Container(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      child: Text('Wipe Data', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                    onPressed: () async {
+                      _showMyDialogWipe();
+                      // await _auth.signOut();
+                      // print('signed out');
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => LogIn()),
+                      // );
+                    },
+                  ),
+                ),
 
               ]
             ),
@@ -1265,6 +1295,105 @@ class _index3State extends State<index3>
       return BoxDecoration();
     }
   }
+
+  Future<void> _showMyDialogWipe() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Wipe Data'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+                Text('Are you sure you want to wipe all your data from our database permanently? You will not be able to recover them.\n\nEnter your password to confirm.'),
+                SizedBox(height: 8.0),
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    child: TextFormField(
+                      obscureText: _isHidden,
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: Color(0xFF666666),
+                          size: defaultIconSize,
+                        ),
+                        suffix: InkWell(
+                          onTap: _togglePassword,
+                          child: Icon(
+                            Icons.remove_red_eye,
+                            color: Color(0xFF666666),
+                            size: defaultIconSize,
+                          ),
+                        ),
+                        // suffixIcon: Icon(
+                        //   Icons.remove_red_eye,
+                        //   color: Color(0xFF666666),
+                        //   size: defaultIconSize,
+                        // ),
+                        fillColor: Color(0xFFF2F3F5),
+                        hintStyle: TextStyle(
+                          color: Color(0xFF666666),
+                          fontFamily: defaultFontFamily,
+                          fontSize: defaultFontSize,
+                        ),
+                        hintText: "Password *",
+                      ),
+                      validator: (val) => val.isEmpty ? 'Enter Password' : null,
+                      onChanged: (val){
+                        setState(() => password = val);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                if(_formKey.currentState.validate()){
+                  if(password == "password") {
+                    //delete data
+                    Navigator.of(context).pop();
+                  }
+                  else {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('Incorrect password!')));
+                  }
+                }
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _togglePassword() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
+  }
+
 }
 
 
