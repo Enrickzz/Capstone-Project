@@ -346,22 +346,8 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
                           )
                       ),
                       SizedBox(height: 10.0),
+                      showimg(thisSymptom.imgRef),
 
-                      Visibility(
-                        visible: hasImage,
-                        child: InteractiveViewer(
-                          clipBehavior: Clip.none,
-                          minScale: minScale,
-                          maxScale: maxScale,
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: showimg(thisSymptom.imgRef),
-                            ),
-                          ),
-                        ),
-                      ),
                       SizedBox(height: 10.0),
                       Container(
                           height: 150,
@@ -536,13 +522,24 @@ class _SpecificSymptomViewAsPatientState extends State<SpecificSymptomViewAsPati
   }
   Widget showimg(String imgref) {
     if(imgref == "null" || imgref == null || imgref == ""){
-      setState(() {
-        hasImage = false;
-      });
-      return Image.asset("assets/images/no-image.jpg");
+      return SizedBox(height: 10.0);
     }else{
-      return Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
-      (loadingProgress == null) ? child : CircularProgressIndicator());
+      return Visibility(
+        visible: hasImage,
+        child: InteractiveViewer(
+          clipBehavior: Clip.none,
+          minScale: minScale,
+          maxScale: maxScale,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
+              (loadingProgress == null) ? child : CircularProgressIndicator()),
+            ),
+          ),
+        ),
+      );
     }
   }
   Future <String> downloadUrls() async{
