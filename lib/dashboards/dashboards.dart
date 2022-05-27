@@ -556,7 +556,7 @@ class _DashboardsState extends State<Dashboards>
                                         padding: EdgeInsets.all(1),
                                         decoration: checkNotifs(),
                                         constraints: BoxConstraints( minWidth: 12, minHeight: 12, ),
-                                        child: Text( '5', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
+                                        child: Text( '!', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
                                       ),
                                     )
                                   ],
