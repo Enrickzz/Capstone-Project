@@ -55,7 +55,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
     // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
   ];
-  List<String> d_uid = [];
+  List<String> d_uid = [];List<String> ss_uid = [];
   List ss_names = [
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
     // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
@@ -291,7 +291,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                                   builder: (context) => SingleChildScrollView(child: Container(
                                     padding: EdgeInsets.only(
                                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                                    child: patient_edit_privacy(connection: connections[index]),
+                                    child: patient_edit_privacy(connection: connections[index+d_uid.length]),
                                   ),
                                   ),
                                 ).then((value) =>
@@ -376,6 +376,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
             else{
               ss_names.add(doctor.firstname + " " + doctor.lastname);
               ss_position.add("Family member / Caregiver");
+              ss_uid.add(doctor.uid);
             }
 
           });

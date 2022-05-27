@@ -550,6 +550,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                     temp1.forEach((jsonString) {
                       connections.add(Connection.fromJson(jsonString));
                     });
+                    print("ID: " +doctorconnection.doctor1.toString());
                     for(int i = 1; i <= connections.length; i++){
                       if(connections[i-1].doctor1 == doctorconnection.doctor1){
                         final doctorConnectionsRef = databaseReference.child('users/' + uid + '/personal_info/connections/'+ i.toString());
