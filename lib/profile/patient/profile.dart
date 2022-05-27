@@ -923,6 +923,19 @@ class _index3State extends State<index3>
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: <Widget>[
+                        ListTile(
+                          title: Text("Manage Healthcare Team"),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap:(){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SupportSystemList()),
+                            );
+
+                          },
+                        ),
+
+                        _buildDivider(),
 
                         ListTile(
                           title: Text("Doctors' Orders"),
@@ -935,6 +948,7 @@ class _index3State extends State<index3>
 
                           },
                         ),
+
                         _buildDivider(),
                         ListTile(
                           title: Text("Support Systems' Notes"),
@@ -944,18 +958,6 @@ class _index3State extends State<index3>
                               context,
                               // MaterialPageRoute(builder: (context) => journal_list_supp_view()),
                               MaterialPageRoute(builder: (context) => journal_list_patient_view()),
-                            );
-
-                          },
-                        ),
-                        _buildDivider(),
-                        ListTile(
-                          title: Text("Manage Healthcare Team"),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap:(){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => SupportSystemList()),
                             );
 
                           },

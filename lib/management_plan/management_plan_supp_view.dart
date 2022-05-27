@@ -95,7 +95,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -138,7 +138,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                                         width: 10,
                                       ),
                                       Text(
-                                          'Medication Prescription',
+                                          'Medication Prescriptions',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18
@@ -161,7 +161,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -227,7 +227,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
@@ -294,7 +294,7 @@ class _AppSignUpState extends State<management_plan_supp_view> {
                     },
                     child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                        height: 140,
+                        height: 105,
                         child: Stack(
                             children: [
                               Positioned.fill(
