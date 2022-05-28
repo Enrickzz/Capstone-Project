@@ -164,24 +164,24 @@ class _calorie_intakeState extends State<calorie_intake> {
           //print(full+"<<<< 1 iteration");
         }
         for(var i= 0 ; i < tempFull.length; i++){
-          List<String> 1item = tempFull[i].split(",");
-          //print(_1item.length.toString() + "<<<<<<< 1item");
-          List<String> a = 1item[0].split(" ");
+          List<String> item1 = tempFull[i].split(",");
+          //print(_item1.length.toString() + "<<<<<<< item1");
+          List<String> a = item1[0].split(" ");
           if(i==0){
 
-            1item[0] = 1item[0].replaceAll(1item[0],a[2]);
-            1item[1] = 1item[1].replaceAll("calories: ", "");
-            //print(_1item[0] +"  "+_1item[1]+"\n\n");
-            tempList.add(new calorie_intake_data(1item[0],double.parse(1item[1])));
+            item1[0] = item1[0].replaceAll(item1[0],a[2]);
+            item1[1] = item1[1].replaceAll("calories: ", "");
+            //print(_item1[0] +"  "+_item1[1]+"\n\n");
+            tempList.add(new calorie_intake_data(item1[0],double.parse(item1[1])));
 
           }else{
-            //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
-            1item[0] = 1item[0].replaceAll(1item[0],a[3]);
-            1item[1] = 1item[1].replaceAll("calories: ", "");
-            //print(_1item[0] +"  "+_1item[1]+"\n");
-            tempList.add(new calorie_intake_data(1item[0],double.parse(1item[1])));
+            //print(_item1[0].replaceAll(_item1[0],a[3]) +"\n\n");
+            item1[0] = item1[0].replaceAll(item1[0],a[3]);
+            item1[1] = item1[1].replaceAll("calories: ", "");
+            //print(_item1[0] +"  "+_item1[1]+"\n");
+            tempList.add(new calorie_intake_data(item1[0],double.parse(item1[1])));
           }
-          //print(_1item[0] + "\n" + _1item[1] + "\n====================================");
+          //print(_item1[0] + "\n" + _item1[1] + "\n====================================");
         }
         finaList = tempList;
         finaList.sort((a,b) => a.date.compareTo(b.date));

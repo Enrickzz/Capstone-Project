@@ -112,26 +112,26 @@ class _glucose_levelsState extends State<glucose_levels> {
           // //print(full+"<<<< 1 iteration");
         }
         for(var i= 0 ; i < tempFull.length; i++){
-          List<String> 1item = tempFull[i].split(",");
-          // //print(_1item.length.toString() + "<<<<<<< 1item");
-          List<String> a = 1item[0].split(" ");
+          List<String> item1 = tempFull[i].split(",");
+          // //print(_item1.length.toString() + "<<<<<<< item1");
+          List<String> a = item1[0].split(" ");
           if(i==0){
 
-            1item[0] = 1item[0].replaceAll("[glucose: ", "");
-            1item[1] = 1item[1].replaceAll("bloodGlucose_date: ", "");
-            // // print("======\n\n GLUCOSE \n\n======= \n0 = "+_1item[0] +"\n1 = "+_1item[1]+"\n\n");
-            tempList.add(new glucose_levels_data(1item[1],double.parse(1item[0])));
+            item1[0] = item1[0].replaceAll("[glucose: ", "");
+            item1[1] = item1[1].replaceAll("bloodGlucose_date: ", "");
+            // // print("======\n\n GLUCOSE \n\n======= \n0 = "+_item1[0] +"\n1 = "+_item1[1]+"\n\n");
+            tempList.add(new glucose_levels_data(item1[1],double.parse(item1[0])));
 
           }else{
-            // //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
-            1item[0] = 1item[0].replaceAll("glucose: ", "");
-            1item[1] = 1item[1].replaceAll("bloodGlucose_date: ", "");
-            // print(_1item[0] +"  "+_1item[1]+"\n");
-            // print("======\n\n GLUCOSE \n\n======= \n0 = "+_1item[0] +"\n1 = "+_1item[1]+"\n\n");
+            // //print(_item1[0].replaceAll(_item1[0],a[3]) +"\n\n");
+            item1[0] = item1[0].replaceAll("glucose: ", "");
+            item1[1] = item1[1].replaceAll("bloodGlucose_date: ", "");
+            // print(_item1[0] +"  "+_item1[1]+"\n");
+            // print("======\n\n GLUCOSE \n\n======= \n0 = "+_item1[0] +"\n1 = "+_item1[1]+"\n\n");
 
-            tempList.add(new glucose_levels_data(1item[1],double.parse(1item[0])));
+            tempList.add(new glucose_levels_data(item1[1],double.parse(item1[0])));
           }
-          // //print(_1item[0] + "\n" + _1item[1] + "\n====================================");
+          // //print(_item1[0] + "\n" + _item1[1] + "\n====================================");
         }
         finaList = tempList;
         finaList.sort((a,b) => a.date.compareTo(b.date));
