@@ -78,6 +78,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
           else{
             discussion_list[i].isMe = false;
           }
+          print("isMe : " +discussion_list[i].isMe.toString());
         }
       });
     });
@@ -124,11 +125,15 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                           child: create_journal(userUID: widget.userUID),
                         ),
                         ),
-                      ).then((value) =>
-                          Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
-                          }));
+                      ).then((value) {
+                        if(value != null){
+                          discussion_list.insert(0, value);
+                          discussion_list[0].isMe = true;
+                        }
+                        setState(() {
+
+                        });
+                      });
                     },
                     child: Icon(
                       Icons.add,
@@ -309,7 +314,11 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                                               visible: discussion_list[index].isMe,
                                               child: InkWell(
                                                 onTap: () {
-                                                  _showMyDialogDelete(index);
+                                                  _showMyDialogDelete(index).then((value) {
+                                                    setState(() {
+
+                                                    });
+                                                  });
                                                 },
                                                 child: Icon(
                                                   Icons.delete,
@@ -344,11 +353,21 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
     final uid = user.uid;
     String userUID = widget.userUID;
     final readdiscussion = databaseReference.child('users/' + userUID + '/journal/');
-    readdiscussion.once().then((DataSnapshot snapshot){
+    readdiscussion.once().then((DataSnapshot snapshot)async{
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         discussion_list.add(Discussion.fromJson(jsonString));
+
       });
+    }).then((value) {
+      for(int i = 0; i < discussion_list.length; i++){
+        if(discussion_list[i].uid == uid){
+          discussion_list[i].isMe = true;
+        }
+        else{
+          discussion_list[i].isMe = false;
+        }
+      }
     });
   }
 
@@ -390,6 +409,7 @@ class _journalState extends State<journal_list_supp_view> with TickerProviderSta
                     "discussionBody": discussion_list[i].discussionBody.toString(),
                     "noOfReplies": discussion_list[i].noOfReplies.toString(),
                     "imgRef": discussion_list[i].imgRef.toString(),
+                    "uid": discussion_list[i].uid,
                   });
                 }
                 Navigator.of(context).pop();

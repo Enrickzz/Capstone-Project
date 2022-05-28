@@ -131,11 +131,19 @@ class _specific_postState extends State<specific_post_suppsystem_view>
                           child: reply_journal(userUID: widget.userUID, index: widget.index),
                         ),
                         ),
-                      ).then((value) =>
-                          Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
-                          }));
+                      ).then((value){
+                        if (value != null){
+                          reply_list.add(value);
+                          final User user = auth.currentUser;
+                          final uid = user.uid;
+                          if(reply_list.last.uid == uid){
+                            reply_list.last.isMe = true;
+                          }else reply_list.last.isMe= false;
+                          setState(() {
+
+                          });
+                        }
+                      });
                     },
                     child: Icon(
                       Icons.reply,
@@ -228,7 +236,7 @@ class _specific_postState extends State<specific_post_suppsystem_view>
                             color: Colors.black,
                             fontSize: 14,
                           ),
-                        ),
+                        ),showimg(discussion_list[widget.index].imgRef),
                       ],
                     ),
                   ),
@@ -471,6 +479,28 @@ class _specific_postState extends State<specific_post_suppsystem_view>
         );
       },
     );
+  }
+  Widget showimg(String imgref) {
+    if(imgref == "null" || imgref == null || imgref == ""){
+      return SizedBox(height: 10.0);
+    }else{
+      return Visibility(
+        visible: true,
+        child: InteractiveViewer(
+          clipBehavior: Clip.none,
+          minScale: 1,
+          maxScale: 1.5,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
+              (loadingProgress == null) ? child : CircularProgressIndicator()),
+            ),
+          ),
+        ),
+      );
+    }
   }
   Widget checkimage(String img) {
     if(img == null || img == "assets/images/blank_person.png" || img == "null"){

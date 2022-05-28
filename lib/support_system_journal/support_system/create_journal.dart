@@ -186,6 +186,8 @@ class _create_postState extends State<create_journal> {
                           uid = user.uid;
                           fileName = result.files.single.name;
                           file = File(path);
+                          print("DIRS this");
+                          print(path);
                           PlatformFile thisfile = result.files.first;
                           cacheFile = thisfile.path;
                           Future.delayed(const Duration(milliseconds: 1000), (){
@@ -229,8 +231,6 @@ class _create_postState extends State<create_journal> {
                   //       file = File(path);
                   //       // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
                   //       //   setState(() {
-                  //       //     trythis.clear();
-                  //       //     listAll("path");
                   //       //     Future.delayed(const Duration(milliseconds: 1000), (){
                   //       //       Navigator.pop(context, trythis);
                   //       //     });
@@ -270,7 +270,7 @@ class _create_postState extends State<create_journal> {
                             final readDiscussion = databaseReference.child('users/' + userUID + '/journal/');
                             final readCreator = databaseReference.child('users/' + uid + '/personal_info/');
                             String createdBy = "";
-                            readCreator.once().then((DataSnapshot snapshot){
+                            readCreator.once().then((DataSnapshot snapshot) async {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
                               doctor = Users.fromJson(temp);
                               createdBy = doctor.firstname + " " + doctor.lastname;
@@ -278,35 +278,48 @@ class _create_postState extends State<create_journal> {
                               readDiscussion.once().then((DataSnapshot datasnapshot) {
                                 String temp1 = datasnapshot.value.toString();
                                 if(datasnapshot.value == null){
+                                  print(count.toString() + " <<< count else");
                                   final discussionRef = databaseReference.child('users/' + userUID + '/journal/' + count.toString());
                                   discussionRef.set({"uid": uid.toString(), "title": title, "createdBy": createdBy,"dp_img": dp_img,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
                                   print("Added to Journal Entry Successfully! " + userUID);
-                                }
-                                else{
+                                } else{
                                   getDiscussion();
                                   Future.delayed(const Duration(milliseconds: 1000), (){
-                                    print(count);
-                                    count = discussion_list.length--;
+                                    count = discussion_list.length+1;
+                                    print(count.toString() + " <<< count else");
                                     final discussionRef = databaseReference.child('users/' + userUID + '/journal/' + count.toString());
-                                    discussionRef.set({"uid": uid.toString(), "title": title, "createdBy": createdBy,"dp_img": dp_img,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
+                                    discussionRef.set({"uid": uid.toString(),
+                                      "title": title, "createdBy": createdBy,
+                                      "dp_img": dp_img,"discussionDate": "${now.month}/${now.day}/${now.year}", "discussionTime": "${now.hour}:${now.minute}", "discussionBody": description, "noOfReplies": 0.toString(), "imgRef": fileName});
                                     print("Added to Journal Entry Successfully! " + userUID);
                                   });
-
                                 }
-
                               });
+                            }).then((value) {
+                              if(fileName != null){
+                                FirebaseStorage.instance.ref('test/' + widget.userUID +"/"+ title + now.toString()).putFile(file).then((p0) async{
+                                  await downloadUrl(title + now.toString(),widget.userUID ).then((value) {
+                                    final jrnal = databaseReference.child('users/' + widget.userUID + '/journal/' + count.toString());
+                                    jrnal.update({"imgRef": thisURL});
+                                    Future.delayed(const Duration(milliseconds: 1200), (){
+                                      Discussion newD=new Discussion(uid: uid, title: title,
+                                          createdBy: createdBy, dp_img: dp_img,
+                                          discussionDate: now, discussionTime: now,
+                                          discussionBody: description, noOfReplies: 0, imgRef: thisURL);
+                                      Navigator.pop(context, newD);
+                                    });
+                                  });
+                                });
+                              }else{
+                                Future.delayed(const Duration(milliseconds: 1200), (){
+                                  Discussion newD= new Discussion(uid: uid, title: title,
+                                      createdBy: createdBy, dp_img: dp_img,
+                                      discussionDate: now, discussionTime: now,
+                                      discussionBody: description, noOfReplies: 0, imgRef: fileName);
+                                  Navigator.pop(context, newD);
+                                });
+                              }
                             });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              discussion_list.add(new Discussion(uid: uid, title: title, createdBy: createdBy, dp_img: dp_img, discussionDate: now, discussionTime: now, discussionBody: description, noOfReplies: 0, imgRef: fileName));
-                              // for(var i=0;i<discussion_list.length/2;i++){
-                              //   var temp = discussion_list[i];
-                              //   discussion_list[i] = discussion_list[discussion_list.length-1-i];
-                              //   discussion_list[discussion_list.length-1-i] = temp;
-                              // }
-                              print("POP HERE ==========");
-                              Navigator.pop(context, [discussion_list, 1]);
-                            });
-
                           } catch(e) {
                             print("you got an error! $e");
                           }
@@ -349,8 +362,8 @@ class _create_postState extends State<create_journal> {
 
 
 
-  Future <String> downloadUrl(String imagename) async{
-    final ref = FirebaseStorage.instance.ref('test/$imagename');
+  Future <String> downloadUrl(String imagename,String uid) async{
+    final ref = FirebaseStorage.instance.ref('test/' +uid +'/$imagename');
     String downloadurl = await ref.getDownloadURL();
     print ("THIS IS THE URL = "+ downloadurl);
     thisURL = downloadurl;

@@ -152,77 +152,47 @@ class _reply_postState extends State<reply_journal> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      FlatButton(
-                        textColor: Colors.white,
-                        height: 60.0,
-                        color: Colors.cyan,
-                        onPressed: () async{
-                          final result = await FilePicker.platform.pickFiles(
-                            allowMultiple: false,
-                            // type: FileType.custom,
-                            // allowedExtensions: ['jpg', 'png'],
-                          );
-                          if(result == null) return;
-                          final FirebaseAuth auth = FirebaseAuth.instance;
-                          final path = result.files.single.path;
-                          user = auth.currentUser;
-                          uid = user.uid;
-                          fileName = result.files.single.name;
-                          file = File(path);
-                          PlatformFile thisfile = result.files.first;
-                          cacheFile = thisfile.path;
-                          Future.delayed(const Duration(milliseconds: 1000), (){
-                            setState(() {
-                              print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
-                              pic = true;
-                            });
-                          });
-
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                            ),
-                            Text('UPLOAD', )
-                          ],
-                        ),
-                      ),
+                      // FlatButton(
+                      //   textColor: Colors.white,
+                      //   height: 60.0,
+                      //   color: Colors.cyan,
+                      //   onPressed: () async{
+                      //     final result = await FilePicker.platform.pickFiles(
+                      //       allowMultiple: false,
+                      //       // type: FileType.custom,
+                      //       // allowedExtensions: ['jpg', 'png'],
+                      //     );
+                      //     if(result == null) return;
+                      //     final FirebaseAuth auth = FirebaseAuth.instance;
+                      //     final path = result.files.single.path;
+                      //     user = auth.currentUser;
+                      //     uid = user.uid;
+                      //     fileName = result.files.single.name;
+                      //     file = File(path);
+                      //     PlatformFile thisfile = result.files.first;
+                      //     cacheFile = thisfile.path;
+                      //     Future.delayed(const Duration(milliseconds: 1000), (){
+                      //       setState(() {
+                      //         print("CACHE FILE\n" + thisfile.path +"\n"+file.path);
+                      //         pic = true;
+                      //       });
+                      //     });
+                      //
+                      //   },
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: [
+                      //       Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Icon(Icons.camera_alt_rounded, color: Colors.white,),
+                      //       ),
+                      //       Text('UPLOAD', )
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
-                  // GestureDetector(
-                  //     child: Text(
-                  //       'Upload',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //     onTap: () async {
-                  //       final result = await FilePicker.platform.pickFiles(
-                  //         allowMultiple: false,
-                  //         // type: FileType.custom,
-                  //         // allowedExtensions: ['jpg', 'png'],
-                  //       );
-                  //       if(result == null) return;
-                  //       final FirebaseAuth auth = FirebaseAuth.instance;
-                  //       final path = result.files.single.path;
-                  //       user = auth.currentUser;
-                  //       uid = user.uid;
-                  //       fileName = result.files.single.name;
-                  //       file = File(path);
-                  //       // final ref = FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
-                  //       //   setState(() {
-                  //       //     trythis.clear();
-                  //       //     listAll("path");
-                  //       //     Future.delayed(const Duration(milliseconds: 1000), (){
-                  //       //       Navigator.pop(context, trythis);
-                  //       //     });
-                  //       //   });
-                  //       // });
-                  //       // fileName = uid + fileName + "_lab_result" + "counter";
-                  //       //storage.uploadFile(path,fileName).then((value) => print("Upload Done"));
-                  //     }
-                  // ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -277,7 +247,7 @@ class _reply_postState extends State<reply_journal> {
                                 else{
                                   getReply();
                                   Future.delayed(const Duration(milliseconds: 1000), (){
-                                    count = reply_list.length--;
+                                    count = reply_list.length+1;
                                     final replyRef = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/' + count.toString());
                                     reply = new Replies(uid: uid, createdBy: doctor_name, dp_img: dp_img, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody);
                                     replyRef.update(reply.toJson());
@@ -295,14 +265,9 @@ class _reply_postState extends State<reply_journal> {
                               });
                             });
                             Future.delayed(const Duration(milliseconds: 1000), (){
-                              reply_list.add(new Replies(createdBy: doctor_name, dp_img: dp_img, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody));
-                              // for(var i=0;i<reply_list.length/2;i++){
-                              //   var temp = reply_list[i];
-                              //   reply_list[i] = reply_list[reply_list.length-1-i];
-                              //   reply_list[reply_list.length-1-i] = temp;
-                              // }
+                              Replies newR = new Replies(createdBy: doctor_name, dp_img: dp_img, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody);
                               print("POP HERE ==========");
-                              Navigator.pop(context, [reply_list, 1]);
+                              Navigator.pop(context, newR);
                             });
 
                           } catch(e) {

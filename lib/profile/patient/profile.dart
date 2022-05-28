@@ -1365,11 +1365,23 @@ class _index3State extends State<index3>
           actions: <Widget>[
             TextButton(
               child: Text('Delete'),
-              onPressed: () {
+              onPressed: () async {
                 if(_formKey.currentState.validate()){
                   if(password == "password") {
                     //delete data
-                    Navigator.of(context).pop();
+                    print("PASSWORD TRUE");
+                    final User user = auth.currentUser;
+                    final uid = user.uid;
+                    final d1 = databaseReference.child('users/' + uid + '/vitals/health_records/');
+                    final d2 = databaseReference.child('users/' + uid + '/recommendations/');
+                    final d3 = databaseReference.child('users/' + uid + '/notifications/');
+                    await d1.remove().then((value) {
+                      d2.remove().then((value) {
+                        d3.remove().then((value) {
+                          Navigator.of(context).pop();
+                        });
+                      });
+                    });
                   }
                   else {
                     ScaffoldMessenger.of(context)
