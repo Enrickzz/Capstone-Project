@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/discussion_board/reply_post.dart';
 import 'package:my_app/models/discussionModel.dart';
@@ -115,11 +116,20 @@ class _specific_postState extends State<specific_journal_doctor_view>
                           child: reply_journal(userUID: widget.userUID, index: widget.index),
                         ),
                         ),
-                      ).then((value) =>
-                          Future.delayed(const Duration(milliseconds: 1500), (){
-                            setState((){
-                            });
-                          }));
+                      ).then((value) {
+                        if (value != null){
+                          reply_list.add(value);
+                          final FirebaseAuth auth = FirebaseAuth.instance;
+                          final User user = auth.currentUser;
+                          final uid = user.uid;
+                          if(reply_list.last.uid == uid){
+                            reply_list.last.isMe = true;
+                          }else reply_list.last.isMe= false;
+                          setState(() {
+
+                          });
+                        }
+                      });
                     },
                     child: Icon(
                       Icons.reply,
@@ -377,11 +387,23 @@ class _specific_postState extends State<specific_journal_doctor_view>
     String userUID = widget.userUID;
     int index = widget.index;
     final readReplies = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/');
-    readReplies.once().then((DataSnapshot snapshot){
+    readReplies.once().then((DataSnapshot snapshot) async{
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         reply_list.add(Replies.fromJson(jsonString));
       });
+    }).then((value) {
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final User user = auth.currentUser;
+      final uid = user.uid;
+      for(int i = 0; i < reply_list.length; i++){
+        if(reply_list[i].uid == uid){
+          reply_list[i].isMe = true;
+        }
+        else{
+          reply_list[i].isMe = false;
+        }
+      }
     });
   }
 
