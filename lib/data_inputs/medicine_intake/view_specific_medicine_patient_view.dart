@@ -1,31 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/medicine_intake/edit_medication.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/set_up.dart';
-import '../../additional_data_collection.dart';
-import 'package:flutter/gestures.dart';
-
-import '../../dialogs/policy_dialog.dart';
-import '../../fitness_app_theme.dart';
-import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/edit_medication_prescription.dart';
-
-
-
-
-
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -325,10 +306,10 @@ class _SpecificSupplementViewAsPatientState extends State<SpecificMedicineIntake
               onPressed: () {
                 final User user = auth.currentUser;
                 final uid = user.uid;
-                int initial_length = listtemp.length;
+                int initialLength = listtemp.length;
                 listtemp.removeAt(widget.index);
                 /// delete fields
-                for(int i = 1; i <= initial_length; i++){
+                for(int i = 1; i <= initialLength; i++){
                   final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/' + i.toString());
                   bpRef.remove();
                 }

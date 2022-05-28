@@ -4,14 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
-import 'package:my_app/services/auth.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 

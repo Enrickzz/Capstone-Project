@@ -5,30 +5,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/goal_tab/sleep/my_sleep.dart';
 import 'package:my_app/goal_tab/water/my_water.dart';
 import 'package:my_app/goal_tab/weight/my_weight.dart';
-import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/weight/BMI_chart.dart';
-import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/cholesterol_chart.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/exercises/running_view.dart';
-import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
-import '../../main.dart';
-import 'exercises/exercise_screen.dart';
-import '../bottom_navigation_view/bottom_bar_view.dart';
 import '../goal_tab/meals/my_meals.dart';
-import '../goal_tab/meals/meals_list.dart';
 
 class goals extends StatefulWidget {
   const goals({Key key, this.animationController}) : super(key: key);

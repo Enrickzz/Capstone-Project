@@ -1,15 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'package:my_app/models/nutritionixApi.dart';
 import '../fitness_app_theme.dart';
-import '../main.dart';
 
 class calorie_intake extends StatefulWidget{
   final AnimationController animationController;
@@ -171,22 +164,22 @@ class _calorie_intakeState extends State<calorie_intake> {
           //print(full+"<<<< 1 iteration");
         }
         for(var i= 0 ; i < tempFull.length; i++){
-          List<String> _1item = tempFull[i].split(",");
+          List<String> 1item = tempFull[i].split(",");
           //print(_1item.length.toString() + "<<<<<<< 1item");
-          List<String> a = _1item[0].split(" ");
+          List<String> a = 1item[0].split(" ");
           if(i==0){
 
-            _1item[0] = _1item[0].replaceAll(_1item[0],a[2]);
-            _1item[1] = _1item[1].replaceAll("calories: ", "");
+            1item[0] = 1item[0].replaceAll(1item[0],a[2]);
+            1item[1] = 1item[1].replaceAll("calories: ", "");
             //print(_1item[0] +"  "+_1item[1]+"\n\n");
-            tempList.add(new calorie_intake_data(_1item[0],double.parse(_1item[1])));
+            tempList.add(new calorie_intake_data(1item[0],double.parse(1item[1])));
 
           }else{
             //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
-            _1item[0] = _1item[0].replaceAll(_1item[0],a[3]);
-            _1item[1] = _1item[1].replaceAll("calories: ", "");
+            1item[0] = 1item[0].replaceAll(1item[0],a[3]);
+            1item[1] = 1item[1].replaceAll("calories: ", "");
             //print(_1item[0] +"  "+_1item[1]+"\n");
-            tempList.add(new calorie_intake_data(_1item[0],double.parse(_1item[1])));
+            tempList.add(new calorie_intake_data(1item[0],double.parse(1item[1])));
           }
           //print(_1item[0] + "\n" + _1item[1] + "\n====================================");
         }

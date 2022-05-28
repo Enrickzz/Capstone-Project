@@ -3,22 +3,11 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/data_inputs/medicine_intake/view_specific_medicine_patient_view.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
 import 'add_medication.dart';
-import '../../fitness_app_theme.dart';
 import '../../models/users.dart';
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class medication extends StatefulWidget {
   final List<Medication> medlist;
   medication({Key key, this.medlist}): super(key: key);

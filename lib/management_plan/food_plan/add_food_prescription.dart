@@ -3,17 +3,8 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_food_prescription extends StatefulWidget {
@@ -235,7 +226,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            String doctor_name = "";
+                            String doctorName = "";
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
@@ -244,7 +235,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                             readDoctor.once().then((DataSnapshot snapshot) {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
                               doctor = Users.fromJson(temp);
-                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                              doctorName = doctor.firstname + " " + doctor.lastname;
                             });
                             final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/foodplan/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
@@ -253,7 +244,7 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                               print(foodList.toString());
                               if(datasnapshot.value == null){
                                 final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
-                                foodplanRef.set({"purpose": purpose.toString(), "food": foodList, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
+                                foodplanRef.set({"purpose": purpose.toString(), "food": foodList, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctorName});
                                 print("Added Food Plan Successfully! " + uid);
                               }
                               else{
@@ -261,20 +252,20 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = foodplan_list.length--;
                                   final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/foodplan/' + count.toString());
-                                  foodplanRef.set({"purpose": purpose.toString(), "food": foodList, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
+                                  foodplanRef.set({"purpose": purpose.toString(), "food": foodList, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctorName});
                                   print("Added Food Plan Successfully! " + uid);
                                 });
                               }
                             });
                             Future.delayed(const Duration(milliseconds: 1000), ()async{
                               print("MEDICATION LENGTH: " + foodplan_list.length.toString());
-                              foodplan_list.add(new FoodPlan(purpose: purpose, food: foodList, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}", doctor_name: doctor_name));
+                              foodplan_list.add(new FoodPlan(purpose: purpose, food: foodList, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}", doctor_name: doctorName));
                               for(var i=0;i<foodplan_list.length/2;i++){
                                 var temp = foodplan_list[i];
                                 foodplan_list[i] = foodplan_list[foodplan_list.length-1-i];
                                 foodplan_list[foodplan_list.length-1-i] = temp;
                               }
-                              FoodPlan addedThis = new FoodPlan(doctor: doctor.lastname,purpose: purpose, food: foodList, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}", doctor_name: doctor_name);
+                              FoodPlan addedThis = new FoodPlan(doctor: doctor.lastname,purpose: purpose, food: foodList, important_notes: important_notes, prescribedBy: uid, dateCreated: "${now.month}/${now.day}/${now.year}", doctor_name: doctorName);
                               await getNotifs(widget.userUID).then((value) {
                                 addtoNotif("Dr. "+doctor.lastname+ " has added something to your Food management plan. Click here to view your new Food management plan. " ,
                                     "Doctor Added to your Food Plan!",
@@ -304,18 +295,18 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
 
     );
   }
-  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
+  void notifyLead(String userUID, String reasonNotification, String doctorLastName, String planType){
     final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
     connections.once().then((DataSnapshot snapConnections) async{
       String temp = jsonDecode(jsonEncode(snapConnections.value));
-      String lead_doc = temp.toString();
+      String leadDoc = temp.toString();
       //ADD NOTIF LOGIC =
-      await getNotifs(lead_doc).then((value) {
-        addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-            "Doctor"+ doctor_lastName + "Added to your patient's $planType Plan!",
+      await getNotifs(leadDoc).then((value) {
+        addtoNotif("Dr. "+doctorLastName+ " has added something to your patient's $planType management plan. He notes: "+reasonNotification ,
+            "Doctor"+ doctorLastName + "Added to your patient's $planType Plan!",
             "1",
             "$planType Plan",
-            lead_doc);
+            leadDoc);
       });
 
     });
@@ -380,10 +371,10 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
       }
     });
   }
-  Future<void> getNotifs(String passed_uid) async {
+  Future<void> getNotifs(String passedUid) async {
     notifsList.clear();
     final User user = auth.currentUser;
-    final uid = passed_uid;
+    final uid = passedUid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
     readBP.once().then((DataSnapshot snapshot){
       print(snapshot.value);

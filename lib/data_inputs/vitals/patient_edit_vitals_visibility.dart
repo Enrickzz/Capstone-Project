@@ -3,16 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class patient_edit_vitals_visibility extends StatefulWidget {
@@ -594,26 +585,26 @@ class _editMedicationPrescriptionState extends State<patient_edit_vitals_visibil
     final User user = auth.currentUser;
     final uid = user.uid;
     final vitalsConnectionRef = databaseReference.child('users/' + uid + '/vitals_connection/');
-    Vitals_Connection vitals_connection;
+    Vitals_Connection vitalsConnection;
     vitalsConnectionRef.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      vitals_connection = Vitals_Connection.fromJson(temp);
-      if(vitals_connection.bloodpressure == "true"){
+      vitalsConnection = Vitals_Connection.fromJson(temp);
+      if(vitalsConnection.bloodpressure == "true"){
         isBloodPressureVisible = true;
       }
-      if(vitals_connection.bloodglucose == "true"){
+      if(vitalsConnection.bloodglucose == "true"){
         isBloodGlucoseVisible = true;
       }
-      if(vitals_connection.heartrate == "true"){
+      if(vitalsConnection.heartrate == "true"){
         isHeartRateVisible = true;
       }
-      if(vitals_connection.respiratoryrate == "true"){
+      if(vitalsConnection.respiratoryrate == "true"){
         isRespiratoryRateVisible = true;
       }
-      if(vitals_connection.oxygensaturation == "true"){
+      if(vitalsConnection.oxygensaturation == "true"){
         isOxygenSaturationVisible = true;
       }
-      if(vitals_connection.bodytemperature == "true"){
+      if(vitalsConnection.bodytemperature == "true"){
         isBodyTemperatureVisible = true;
       }
     });

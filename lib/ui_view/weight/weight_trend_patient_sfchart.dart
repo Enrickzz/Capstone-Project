@@ -2,19 +2,12 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/mainScreen.dart';
-import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/users.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/fitness_app_theme.dart';
 
-import 'package:my_app/main.dart';
 
 class weight_trend_sf_patient extends StatefulWidget{
   final AnimationController animationController;
@@ -183,17 +176,17 @@ class weightTrendState extends State<weight_trend_sf_patient> {
 
   List <SalesData> getChartData(){
     List <SalesData> chartData = [];
-    List<Weight> weight_list = [];
+    List<Weight> weightList = [];
     for(int i = 1; i <= weights.length; i++){
-      weight_list.add(weights[weights.length-i]);
+      weightList.add(weights[weights.length-i]);
       if(i == 9){
         i = 99999;
       }
     }
-    weight_list = weight_list.reversed.toList();
+    weightList = weightList.reversed.toList();
 
-    for(int i = 0; i < weight_list.length; i++){
-      chartData.add(SalesData("${weight_list[i].dateCreated.month.toString().padLeft(2,"0")}/${weight_list[i].dateCreated.day.toString().padLeft(2,"0")}", double.parse(weight_list[i].weight.toString())));
+    for(int i = 0; i < weightList.length; i++){
+      chartData.add(SalesData("${weightList[i].dateCreated.month.toString().padLeft(2,"0")}/${weightList[i].dateCreated.day.toString().padLeft(2,"0")}", double.parse(weightList[i].weight.toString())));
 
     }
     return chartData;

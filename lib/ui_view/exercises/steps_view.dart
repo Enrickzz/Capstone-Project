@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:my_app/fitness_app_theme.dart';
-import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:http/http.dart' as http;

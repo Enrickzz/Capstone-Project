@@ -5,21 +5,9 @@ import 'package:my_app/ui_view/body_measurement/body_measurement_doctor_view.dar
 import 'package:my_app/ui_view/heart_rate/heart_rate_linesf_doctor.dart';
 import 'package:my_app/ui_view/new_records.dart';
 import 'package:my_app/ui_view/oxygen_saturation/oxygen_barchartsf_doctor.dart';
-import 'package:my_app/ui_view/weight/BMI_chart.dart';
-import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/cholesterol_chart.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
-
 import '../../fitness_app_theme.dart';
-import '../../main.dart';
 import '../notifications/notifications._patients.dart';
 
 class dashboards_as_doctor extends StatefulWidget {

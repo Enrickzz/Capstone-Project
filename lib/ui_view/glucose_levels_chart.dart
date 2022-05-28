@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../fitness_app_theme.dart';
-import '../main.dart';
 
 class glucose_levels extends StatefulWidget{
   final AnimationController animationController;
@@ -114,24 +112,24 @@ class _glucose_levelsState extends State<glucose_levels> {
           // //print(full+"<<<< 1 iteration");
         }
         for(var i= 0 ; i < tempFull.length; i++){
-          List<String> _1item = tempFull[i].split(",");
+          List<String> 1item = tempFull[i].split(",");
           // //print(_1item.length.toString() + "<<<<<<< 1item");
-          List<String> a = _1item[0].split(" ");
+          List<String> a = 1item[0].split(" ");
           if(i==0){
 
-            _1item[0] = _1item[0].replaceAll("[glucose: ", "");
-            _1item[1] = _1item[1].replaceAll("bloodGlucose_date: ", "");
+            1item[0] = 1item[0].replaceAll("[glucose: ", "");
+            1item[1] = 1item[1].replaceAll("bloodGlucose_date: ", "");
             // // print("======\n\n GLUCOSE \n\n======= \n0 = "+_1item[0] +"\n1 = "+_1item[1]+"\n\n");
-            tempList.add(new glucose_levels_data(_1item[1],double.parse(_1item[0])));
+            tempList.add(new glucose_levels_data(1item[1],double.parse(1item[0])));
 
           }else{
             // //print(_1item[0].replaceAll(_1item[0],a[3]) +"\n\n");
-            _1item[0] = _1item[0].replaceAll("glucose: ", "");
-            _1item[1] = _1item[1].replaceAll("bloodGlucose_date: ", "");
+            1item[0] = 1item[0].replaceAll("glucose: ", "");
+            1item[1] = 1item[1].replaceAll("bloodGlucose_date: ", "");
             // print(_1item[0] +"  "+_1item[1]+"\n");
             // print("======\n\n GLUCOSE \n\n======= \n0 = "+_1item[0] +"\n1 = "+_1item[1]+"\n\n");
 
-            tempList.add(new glucose_levels_data(_1item[1],double.parse(_1item[0])));
+            tempList.add(new glucose_levels_data(1item[1],double.parse(1item[0])));
           }
           // //print(_1item[0] + "\n" + _1item[1] + "\n====================================");
         }

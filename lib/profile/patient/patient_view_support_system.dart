@@ -2,17 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/set_up.dart';
-import '../../additional_data_collection.dart';
-import 'package:flutter/gestures.dart';
 
-import '../../dialogs/policy_dialog.dart';
-import '../../fitness_app_theme.dart';
 
 
 

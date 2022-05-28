@@ -6,17 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_lab_request extends StatefulWidget {
@@ -300,7 +291,7 @@ class _addLabRequestState extends State<add_lab_request> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            String doctor_name = "";
+                            String doctorName = "";
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
@@ -309,14 +300,14 @@ class _addLabRequestState extends State<add_lab_request> {
                             readDoctor.once().then((DataSnapshot snapshot) {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
                               doctor = Users.fromJson(temp);
-                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                              doctorName = doctor.firstname + " " + doctor.lastname;
                             });
                             final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               if(datasnapshot.value == null){
                                 final labplanRef = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/' + count.toString());
-                                labplanRef.set({"Notify_Reason": reason_notification.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name, "imgRef": fileName.toString()});
+                                labplanRef.set({"Notify_Reason": reason_notification.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctorName, "imgRef": fileName.toString()});
                                 print("Added Lab Plan Successfully! " + uid);
                               }
                               else{
@@ -326,7 +317,7 @@ class _addLabRequestState extends State<add_lab_request> {
                                   Future.delayed(const Duration(milliseconds: 1000), (){
                                     count = labplan_list.length--;
                                     final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/lab_plan/' + count.toString());
-                                    vitalsRef.set({"Notify_Reason": reason_notification.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name, "imgRef": fileName.toString()});
+                                    vitalsRef.set({"Notify_Reason": reason_notification.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctorName, "imgRef": fileName.toString()});
                                     print("Added Lab Plan Successfully! " + uid);
                                   });
                                 });
@@ -334,7 +325,7 @@ class _addLabRequestState extends State<add_lab_request> {
                             });
                             Future.delayed(const Duration(milliseconds: 1000), ()async {
                               print("MEDICATION LENGTH: " + labplan_list.length.toString());
-                              labplan_list.add(new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name, imgRef: fileName));
+                              labplan_list.add(new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctorName, imgRef: fileName));
                               for(var i=0;i<labplan_list.length/2;i++){
                                 var temp = labplan_list[i];
                                 labplan_list[i] = labplan_list[labplan_list.length-1-i];
@@ -344,7 +335,7 @@ class _addLabRequestState extends State<add_lab_request> {
                                 FirebaseStorage.instance.ref('test/' + uid +"/"+fileName).putFile(file).then((p0) {
                                 });
                               }
-                              Lab_Plan newV = new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name, imgRef: fileName);
+                              Lab_Plan newV = new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctorName, imgRef: fileName);
                               await getNotifs(widget.userUID).then((value) {
                                 addtoNotif("Dr. "+doctor.lastname+ " has added something to your Labs management plan. Click here to view your new Food management plan. " ,
                                     "Doctor Added to your Lab Plan!",
@@ -373,18 +364,18 @@ class _addLabRequestState extends State<add_lab_request> {
 
     );
   }
-  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType) {
+  void notifyLead(String userUID, String reasonNotification, String doctorLastName, String planType) {
     final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
     connections.once().then((DataSnapshot snapConnections) async{
       String temp = jsonDecode(jsonEncode(snapConnections.value));
-      String lead_doc = temp.toString();
+      String leadDoc = temp.toString();
       //ADD NOTIF LOGIC =
-      await getNotifs(lead_doc).then((value) {
-        addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-            "Doctor"+ doctor_lastName + "Added to your patient's $planType Plan!",
+      await getNotifs(leadDoc).then((value) {
+        addtoNotif("Dr. "+doctorLastName+ " has added something to your patient's $planType management plan. He notes: "+reasonNotification ,
+            "Doctor"+ doctorLastName + "Added to your patient's $planType Plan!",
             "1",
             "$planType Plan",
-            lead_doc);
+            leadDoc);
       });
     });
     //notifyLead(userUID, reason_notification, doctor.lastname, "Exer");
@@ -406,10 +397,10 @@ class _addLabRequestState extends State<add_lab_request> {
       }
     });
   }
-  Future<void> getNotifs(String passed_uid) async {
+  Future<void> getNotifs(String passedUid) async {
     notifsList.clear();
     final User user = auth.currentUser;
-    final uid = passed_uid;
+    final uid = passedUid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
     readBP.once().then((DataSnapshot snapshot){
       print(snapshot.value);

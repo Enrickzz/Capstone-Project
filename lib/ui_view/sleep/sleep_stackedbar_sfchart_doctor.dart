@@ -1,15 +1,8 @@
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/Sleep.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'package:my_app/models/nutritionixApi.dart';
 import '../../fitness_app_theme.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 

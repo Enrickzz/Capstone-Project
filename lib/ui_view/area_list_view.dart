@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/exrxTEST.dart';
-import 'package:my_app/goal_tab/exercises/view_exrx.dart';
 import 'package:my_app/goal_tab/exercises/viewexrx_added.dart';
 
 import '../fitness_app_theme.dart';

@@ -4,21 +4,9 @@ import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/goal_tab/sleep/change_sleep_goal.dart';
 import 'package:my_app/goal_tab/water/add_water_intake.dart';
-import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../../fitness_app_theme.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -114,7 +102,7 @@ class _waterIntakeState extends State<water_intake> {
 
                     }
                     print("SYMP LENGTH AFTER SETSTATE  =="  + waterintake_list.length.toString() );
-                  }));;
+                  }));
                 },
                 child: Icon(
                   Icons.add,
@@ -256,18 +244,18 @@ class _waterIntakeState extends State<water_intake> {
               onPressed: () {
                 final User user = auth.currentUser;
                 final uid = user.uid;
-                int initial_length = waterintake_list.length;
-                List<int> delete_list = [];
+                int initialLength = waterintake_list.length;
+                List<int> deleteList = [];
                 for(int i = 0; i < waterintake_list.length; i++){
                   if(_selected[i]){
-                    delete_list.add(i);
+                    deleteList.add(i);
                   }
                 }
-                delete_list.sort((a,b) => b.compareTo(a));
-                for(int i = 0; i < delete_list.length; i++){
-                  waterintake_list.removeAt(delete_list[i]);
+                deleteList.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < deleteList.length; i++){
+                  waterintake_list.removeAt(deleteList[i]);
                 }
-                for(int i = 1; i <= initial_length; i++){
+                for(int i = 1; i <= initialLength; i++){
                   final bpRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + i.toString());
                   bpRef.remove();
                 }

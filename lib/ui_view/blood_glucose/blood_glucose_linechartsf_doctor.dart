@@ -2,19 +2,12 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/mainScreen.dart';
-import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/users.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/fitness_app_theme.dart';
 
-import 'package:my_app/main.dart';
 
 class blood_glucose_sf_doctor extends StatefulWidget{
   final AnimationController animationController;
@@ -169,16 +162,16 @@ class bloodGlucoseState extends State<blood_glucose_sf_doctor> {
 
   List <SalesData> getChartData(){
     List <SalesData> chartData = [];
-    List<Blood_Glucose> bg_list = [];
+    List<Blood_Glucose> bgList = [];
     for(int i = 1; i <= bgtemp.length; i++){
-      bg_list.add(bgtemp[bgtemp.length-i]);
+      bgList.add(bgtemp[bgtemp.length-i]);
       if(i == 9){
         i = 99999;
       }
     }
-    bg_list = bg_list.reversed.toList();
-    for(int i = 0; i < bg_list.length; i++){
-      chartData.add(SalesData("${bg_list[i].bloodGlucose_date.month.toString().padLeft(2,"0")}/${bg_list[i].bloodGlucose_date.day.toString().padLeft(2,"0")}", bg_list[i].glucose));
+    bgList = bgList.reversed.toList();
+    for(int i = 0; i < bgList.length; i++){
+      chartData.add(SalesData("${bgList[i].bloodGlucose_date.month.toString().padLeft(2,"0")}/${bgList[i].bloodGlucose_date.day.toString().padLeft(2,"0")}", bgList[i].glucose));
 
     }
     return chartData;

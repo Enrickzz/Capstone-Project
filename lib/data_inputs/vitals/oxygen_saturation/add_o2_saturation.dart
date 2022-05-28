@@ -1,24 +1,11 @@
 import 'dart:convert';
 
-import 'package:cron/cron.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/LocalNotifications.dart';
-import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../laboratory_results/lab_results_patient_view.dart';
-import '../../medicine_intake/medication_patient_view.dart';
-import 'o2_saturation_patient_view.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_o2_saturation extends StatefulWidget {

@@ -3,22 +3,10 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/management_plan/exercise_plan/specific_exercise_plan_doctor_view.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsDoctor.dart';
-import '../../fitness_app_theme.dart';
-import 'package:my_app/data_inputs/medicine_intake/add_medication.dart';
-import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
-import 'package:my_app/management_plan/food_plan/add_food_prescription.dart';
-import 'package:my_app/management_plan/food_plan/specific_food_plan_doctor_view.dart';
 
 import 'add_exercise_prescription.dart';
 
@@ -183,7 +171,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
   void getExercise(List<Connection> connections) {
     final User user = auth.currentUser;
     final uid = user.uid;
-    List<int> delete_list = [];
+    List<int> deleteList = [];
     String userUID = widget.userUID;
     final readExPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
     readExPlan.once().then((DataSnapshot snapshot){
@@ -208,7 +196,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                 if(extemp[i].prescribedBy == connections[j].doctor1 && uid == connections[j].doctor2){
                   if(connections[j].explan1 != "true"){
                     /// dont add
-                    delete_list.add(i);
+                    deleteList.add(i);
                   }
                   else{
                     /// add
@@ -217,7 +205,7 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
                 if(extemp[i].prescribedBy == connections[j].doctor2 && uid == connections[j].doctor1){
                   if(connections[j].explan2 != "true"){
                     /// dont add
-                    delete_list.add(i);
+                    deleteList.add(i);
                   }
                   else{
                     /// add
@@ -235,9 +223,9 @@ class _exercise_prescriptionState extends State<exercise_prescription_doctor_vie
             // });
           }
         });
-        delete_list.sort((a, b) => b.compareTo(a));
-        for(int i = 0; i < delete_list.length; i++){
-          extemp.removeAt(delete_list[i]);
+        deleteList.sort((a, b) => b.compareTo(a));
+        for(int i = 0; i < deleteList.length; i++){
+          extemp.removeAt(deleteList[i]);
         }
         for(var i=0;i<extemp.length/2;i++){
           var temp = extemp[i];

@@ -1,7 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/storage_service.dart';

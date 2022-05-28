@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:my_app/models/FitBitToken.dart';
 import 'package:my_app/models/spotify.dart';
 import 'package:uni_links/uni_links.dart';

@@ -4,14 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/goal_tab/meals/meals_list_doctor.dart';
-import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
 import 'package:my_app/models/meals_list_data.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 
 import '../../main.dart';
-import '../../goal_tab/meals/meals_list.dart';
 
 class MealsListViewDoctor extends StatefulWidget {
   const MealsListViewDoctor(
@@ -44,10 +42,10 @@ class _MealsListViewDoctorState extends State<MealsListViewDoctor>
   void initState() {
     animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
     super.initState();
-    int total_bcalories = 0;
-    int total_lcalories = 0;
-    int total_dcalories = 0;
-    int total_scalories = 0;
+    int totalBcalories = 0;
+    int totalLcalories = 0;
+    int totalDcalories = 0;
+    int totalScalories = 0;
     List<String> bmeal = [];
     List<String> lmeal = [];
     List<String> dmeal = [];
@@ -67,26 +65,26 @@ class _MealsListViewDoctorState extends State<MealsListViewDoctor>
       dmeal.clear();
       smeal.clear();
       for(int i = 0; i < breakfast_list.length; i++){
-        total_bcalories += breakfast_list[i].calories;
+        totalBcalories += breakfast_list[i].calories;
         bmeal.add(breakfast_list[i].foodName);
       }
       for(int i = 0; i < lunch_list.length; i++){
-        total_lcalories += lunch_list[i].calories;
+        totalLcalories += lunch_list[i].calories;
         lmeal.add(lunch_list[i].foodName);
       }
       for(int i = 0; i < dinner_list.length; i++){
-        total_dcalories += dinner_list[i].calories;
+        totalDcalories += dinner_list[i].calories;
         dmeal.add(dinner_list[i].foodName);
       }
       for(int i = 0; i < snack_list.length; i++){
-        total_scalories += snack_list[i].calories;
+        totalScalories += snack_list[i].calories;
         smeal.add(snack_list[i].foodName);
       }
 
-      mealsListData[0].kacl = total_bcalories;
-      mealsListData[1].kacl = total_lcalories;
-      mealsListData[2].kacl = total_dcalories;
-      mealsListData[3].kacl = total_scalories;
+      mealsListData[0].kacl = totalBcalories;
+      mealsListData[1].kacl = totalLcalories;
+      mealsListData[2].kacl = totalDcalories;
+      mealsListData[3].kacl = totalScalories;
       mealsListData[0].meals = bmeal;
       mealsListData[1].meals = lmeal;
       mealsListData[2].meals = dmeal;

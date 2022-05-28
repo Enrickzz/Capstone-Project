@@ -3,18 +3,8 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/goal_tab/water/water_intake_patient_view.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -299,22 +289,22 @@ class add_waterIntakeState extends State<add_water_intake> {
                                 }
                                 else{
                                   getWaterIntake();
-                                  double total_water = 0;
+                                  double totalWater = 0;
                                   DateTime now = DateTime.now();
                                   String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
                                   Future.delayed(const Duration(milliseconds: 1000), (){
                                     for(int i=0; i < waterintake_list.length; i++){
                                       String datecreated = "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}";
                                       if(datenow == datecreated){
-                                        total_water += waterintake_list[i].water_intake;
+                                        totalWater += waterintake_list[i].water_intake;
                                       }
                                     }
-                                    total_water = total_water + water_intake;
+                                    totalWater = totalWater + water_intake;
                                     count = waterintake_list.length--;
                                     final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
                                     waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
                                     print("Added Water Intake Successfully! " + uid);
-                                    if(total_water >= 1500){
+                                    if(totalWater >= 1500){
                                       print(">1500");
                                       final readAddinf = databaseReference.child("users/"+ uid+"/vitals/additional_info");
                                       readAddinf.once().then((DataSnapshot snapshot) {

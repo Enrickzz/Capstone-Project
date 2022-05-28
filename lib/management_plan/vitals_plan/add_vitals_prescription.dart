@@ -3,17 +3,8 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_vitals_prescription extends StatefulWidget {
@@ -326,85 +317,85 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            String doctor_name = "";
+                            String doctorName = "";
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
-                            String vital_type = "";
+                            String vitalType = "";
                             final readDoctor = databaseReference.child('users/' + uid + '/personal_info/');
                             Users doctor = new Users();
                             readDoctor.once().then((DataSnapshot snapshot) {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
                               doctor = Users.fromJson(temp);
-                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                              doctorName = doctor.firstname + " " + doctor.lastname;
                             });
                             final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               if(datasnapshot.value == null){
                                 final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
-                                vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
+                                vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctorName});
                                 print("Added Vitals Plan Successfully! " + uid);
                                 final connectionRef = databaseReference.child('users/' + userUID + '/vitals_connection/');
                                 if(type == "Blood Pressure"){
-                                  vital_type = "bloodpressure";
+                                  vitalType = "bloodpressure";
                                 }
                                 else if(type == "Blood Glucose"){
-                                  vital_type = "bloodglucose";
+                                  vitalType = "bloodglucose";
                                 }
                                 else if(type == "Heart Rate"){
-                                  vital_type = "heartrate";
+                                  vitalType = "heartrate";
                                 }
                                 else if(type == "Respiratory Rate"){
-                                  vital_type = "respiratoryrate";
+                                  vitalType = "respiratoryrate";
                                 }
                                 else if(type == "Oxygen Saturation"){
-                                  vital_type = "oxygensaturation";
+                                  vitalType = "oxygensaturation";
                                 }
                                 else if(type == "Body Temperature"){
-                                  vital_type = "bodytemperature";
+                                  vitalType = "bodytemperature";
                                 }
-                                connectionRef.update({"$vital_type": "true"});
+                                connectionRef.update({"$vitalType": "true"});
                               }
                               else{
                                 getVitals();
                                 final connectionRef = databaseReference.child('users/' + userUID + '/vitals_connection/');
                                 if(type == "Blood Pressure"){
-                                  vital_type = "bloodpressure";
+                                  vitalType = "bloodpressure";
                                 }
                                 else if(type == "Blood Glucose"){
-                                  vital_type = "bloodglucose";
+                                  vitalType = "bloodglucose";
                                 }
                                 else if(type == "Heart Rate"){
-                                  vital_type = "heartrate";
+                                  vitalType = "heartrate";
                                 }
                                 else if(type == "Respiratory Rate"){
-                                  vital_type = "respiratoryrate";
+                                  vitalType = "respiratoryrate";
                                 }
                                 else if(type == "Oxygen Saturation"){
-                                  vital_type = "oxygensaturation";
+                                  vitalType = "oxygensaturation";
                                 }
                                 else if(type == "Body Temperature"){
-                                  vital_type = "bodytemperature";
+                                  vitalType = "bodytemperature";
                                 }
-                                connectionRef.update({"$vital_type": "true"});
+                                connectionRef.update({"$vitalType": "true"});
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = vitals_list.length--;
                                   final vitalsRef = databaseReference.child('users/' + userUID + '/management_plan/vitals_plan/' + count.toString());
-                                  vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
+                                  vitalsRef.set({"purpose": purpose.toString(), "type": type.toString(), "frequency": frequency, "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctorName});
                                   print("Added Food Plan Successfully! " + uid);
                                 });
                               }
                             });
                             Future.delayed(const Duration(milliseconds: 1000), () async{
                               print("MEDICATION LENGTH: " + vitals_list.length.toString());
-                              vitals_list.add(new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name));
+                              vitals_list.add(new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctorName));
                               for(var i=0;i<vitals_list.length/2;i++){
                                 var temp = vitals_list[i];
                                 vitals_list[i] = vitals_list[vitals_list.length-1-i];
                                 vitals_list[vitals_list.length-1-i] = temp;
                               }
-                              Vitals newV = new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name);
+                              Vitals newV = new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctorName);
                               await getNotifs(widget.userUID).then((value) {
                                 addtoNotif("Dr. "+doctor.lastname+ " has added something to your vitals management plan. Click here to view your new Food management plan. " ,
                                     "Doctor Added to your Vitals Plan!",
@@ -433,18 +424,18 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
 
     );
   }
-  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
+  void notifyLead(String userUID, String reasonNotification, String doctorLastName, String planType){
     final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
     connections.once().then((DataSnapshot snapConnections) async {
       String temp = jsonDecode(jsonEncode(snapConnections.value));
-      String lead_doc = temp.toString();
+      String leadDoc = temp.toString();
       //ADD NOTIF LOGIC =
-      await getNotifs(lead_doc).then((value) {
-        addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-            "Doctor"+ doctor_lastName + "Added to your patient's $planType Plan!",
+      await getNotifs(leadDoc).then((value) {
+        addtoNotif("Dr. "+doctorLastName+ " has added something to your patient's $planType management plan. He notes: "+reasonNotification ,
+            "Doctor"+ doctorLastName + "Added to your patient's $planType Plan!",
             "1",
             "$planType Plan",
-            lead_doc);
+            leadDoc);
       });
 
     });
@@ -467,10 +458,10 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
       }
     });
   }
-  Future<void> getNotifs(String passed_uid) async {
+  Future<void> getNotifs(String passedUid) async {
     notifsList.clear();
     final User user = auth.currentUser;
-    final uid = passed_uid;
+    final uid = passedUid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
     readBP.once().then((DataSnapshot snapshot){
       print(snapshot.value);

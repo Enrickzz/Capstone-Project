@@ -1,31 +1,14 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
 import 'package:my_app/patient_list/support_system/suppsystem_patient_list.dart';
-import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/set_up.dart';
-import 'package:provider/provider.dart';
-import '../../../notifications/notifications._patients.dart';
-import 'dialogs/policy_dialog.dart';
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
+import 'dialogs/policy_dialog.dart';
 class continue_facebook extends StatefulWidget {
 
   @override
@@ -210,7 +193,7 @@ class _continue_facebookState extends State<continue_facebook> {
                                                       );
                                                     });
                                               },
-                                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary),
                                           ),
                                           TextSpan(text: "and "),
                                           TextSpan(
@@ -225,7 +208,7 @@ class _continue_facebookState extends State<continue_facebook> {
                                                       );
                                                     });
                                               },
-                                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary),
                                           ),
                                         ]
                                     )

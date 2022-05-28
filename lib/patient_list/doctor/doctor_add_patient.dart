@@ -1,22 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
-import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/set_up.dart';
-import '../../additional_data_collection.dart';
-import 'package:flutter/gestures.dart';
 
-import '../../dialogs/policy_dialog.dart';
 import '../../fitness_app_theme.dart';
 import '../../models/users.dart';
 
@@ -513,13 +502,13 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
     patient_connection.clear();
     bool isPatient = false;
     bool isDoctor = false; /// check if doctor is already registered
-    Users temp_doctor = new Users();
-    List<int> doctor_index = [];
+    Users tempDoctor = new Users();
+    List<int> doctorIndex = [];
     int count = 0;
     List<UID> patientlist = [];
     /// doctor_connection = patient's list of doctors
-    List<Connection> doctor_connection = [];
-    List<String> doctor_uid = [];
+    List<Connection> doctorConnection = [];
+    List<String> doctorUid = [];
 
     readDoctorlength.once().then((DataSnapshot datasnapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
@@ -561,33 +550,33 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
         print("Updated Lead Doctor! " + uid);
         Future.delayed(const Duration(milliseconds: 2000), () {
           final readDoctorConnection = databaseReference.child('users/' + userUID + '/personal_info/d2dconnections/');
-          List<Connection> temp_dcon = [];
+          List<Connection> tempDcon = [];
           readDoctorConnection.once().then((DataSnapshot snap){
             List<dynamic> temp4 = jsonDecode(jsonEncode(snap.value));
             print("THIS IS TEMP4");
             print(temp4);
             if(temp4 != null){
               temp4.forEach((jsonString) {
-                temp_dcon.add(Connection.fromJson2(jsonString));
+                tempDcon.add(Connection.fromJson2(jsonString));
               });
               /// get unique doctor uid
-              for(var i = 0; i < temp_dcon.length; i++){
-                doctor_uid.add(temp_dcon[i].doctor1);
+              for(var i = 0; i < tempDcon.length; i++){
+                doctorUid.add(tempDcon[i].doctor1);
               }
-              var tempuid = doctor_uid.toSet().toList();
-              doctor_uid = tempuid;
-              for(var i = 0; i < doctor_uid.length; i++){
-                print(doctor_uid[i].toString());
+              var tempuid = doctorUid.toSet().toList();
+              doctorUid = tempuid;
+              for(var i = 0; i < doctorUid.length; i++){
+                print(doctorUid[i].toString());
               }
-              for(var i = 0; i < doctor_uid.length; i++){
+              for(var i = 0; i < doctorUid.length; i++){
                 final writeDoctorConnection = databaseReference.child(
                     'users/' + userUID + '/personal_info/d2dconnections/' +
-                        (temp_dcon.length + i + 1).toString());
+                        (tempDcon.length + i + 1).toString());
 
-                print((temp_dcon.length + i + 1).toString());
+                print((tempDcon.length + i + 1).toString());
                 writeDoctorConnection.set({
                   "doctor1": uid,
-                  "doctor2": doctor_uid[i],
+                  "doctor2": doctorUid[i],
                   "medpres1": "false",
                   "foodplan1": "false",
                   "explan1": "false",

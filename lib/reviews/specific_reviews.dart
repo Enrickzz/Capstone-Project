@@ -1,36 +1,16 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:my_app/discussion_board/create_post.dart';
-import 'package:my_app/models/GooglePlaces.dart';
 import 'package:my_app/models/OnePlace.dart';
 import 'package:my_app/models/Reviews.dart';
-import 'package:my_app/models/spotify.dart';
-import 'package:my_app/reviews/restaurant/info_restaurant.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/discussion_board/specific_post.dart';
-import 'package:my_app/ui_view/weight/BMI_chart.dart';
-import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
-import 'package:my_app/ui_view/grid_images.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/exercises/running_view.dart';
-import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:my_app/models/nutritionixApi.dart';
-import 'dart:convert' as convert;
 
-import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
-import 'restaurant/add_restaurant_review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'add_review.dart';

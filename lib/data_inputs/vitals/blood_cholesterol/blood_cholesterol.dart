@@ -1,25 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import '../../../fitness_app_theme.dart';
 import 'add_blood_cholesterol.dart';
-import '../blood_pressure/add_blood_pressure.dart';
-import '../oxygen_saturation/add_o2_saturation.dart';
-import '../../laboratory_results/add_lab_results.dart';
-import '../../medicine_intake/add_medication.dart';
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-
 class blood_cholesterol extends StatefulWidget {
   final List<Blood_Cholesterol> bclist;
   blood_cholesterol({Key key, this.bclist}): super(key: key);

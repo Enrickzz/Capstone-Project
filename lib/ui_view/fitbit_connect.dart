@@ -1,18 +1,13 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/services.dart';
 import 'package:my_app/fitness_app_theme.dart';
-import 'package:my_app/goal_tab/sleep/my_sleep.dart';
-import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/FitBitToken.dart';
 import 'package:my_app/models/Sleep.dart';
-import 'dart:math' as math;
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';

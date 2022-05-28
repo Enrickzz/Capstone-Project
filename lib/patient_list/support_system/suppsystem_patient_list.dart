@@ -1,20 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 import 'package:my_app/notifications/notifications_doctor.dart';
-import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
 import 'package:my_app/patient_list/support_system/suppsystem_add_patient.dart';
-import 'package:my_app/profile/doctor/doctor_view_patient_profile.dart';
 import 'package:my_app/profile/support_system/add_image_supportsystem.dart';
 import 'package:my_app/profile/support_system/suppsystem_view_patient_profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_app/widgets/navigation_drawer_widget.dart';
 
 import '../../main.dart';
 import '../../models/users.dart';
@@ -310,19 +304,19 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
               var temp2 = jsonDecode(jsonEncode(snapshot.value));
               print(temp2);
               //userAddInfo.add(Additional_Info.fromJson(temp2));
-              String disease_name = "";
+              String diseaseName = "";
               Additional_Info info = Additional_Info.fromJson4(temp2);
               for(int j = 0; j < info.disease.length; j++){
                 if(j == info.disease.length - 1){
                   print("if statement " + info.disease[j]);
-                  disease_name += info.disease[j];
+                  diseaseName += info.disease[j];
                 }
                 else{
                   print("else statement " + info.disease[j]);
-                  disease_name += info.disease[j] + ", ";
+                  diseaseName += info.disease[j] + ", ";
                 }
               }
-              diseases.add(disease_name);
+              diseases.add(diseaseName);
             });
           });
         }

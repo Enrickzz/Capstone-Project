@@ -3,17 +3,8 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/vitals/blood_pressure/blood_pressure_patient_view.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -270,29 +261,29 @@ class add_weightState extends State<add_weight_record> {
                                 pp = Physical_Parameters.fromJson(temp);
                                 bmi = current_weight / ((pp.height * 0.01) * (pp.height * 0.01));
 
-                                double bmi_double = bmi;
-                                print(bmi_double.toString() + "<<<<<<<<< THIS");
-                                if (bmi_double < 18.5){
+                                double bmiDouble = bmi;
+                                print(bmiDouble.toString() + "<<<<<<<<< THIS");
+                                if (bmiDouble < 18.5){
                                   addtoRecommendation("We recommend that you change your goals to GAIN more weight.",
                                       "Eat more!",
                                       "2",
                                       "None",
                                       "Immediate");
-                                }else if(bmi_double >= 18.5 && bmi_double <= 24.9){
+                                }else if(bmiDouble >= 18.5 && bmiDouble <= 24.9){
                                  //normal
-                                }else if(bmi_double >= 25 && bmi_double <= 29.9){
+                                }else if(bmiDouble >= 25 && bmiDouble <= 29.9){
                                   addtoRecommendation("We recommend that you change your goals to LOSE weight",
                                       "Get fit!",
                                       "2",
                                       "None",
                                       "Immediate");
-                                }else if(bmi_double >= 30 && bmi_double <= 34.9){
+                                }else if(bmiDouble >= 30 && bmiDouble <= 34.9){
                                   addtoRecommendation("We recommend that you change your goals to LOSE weight",
                                       "Get your weight down!",
                                       "3",
                                       "None",
                                       "Immediate");
-                                }else if(bmi_double > 35){
+                                }else if(bmiDouble > 35){
                                   addtoRecommendation("We recommend that you change your goals to LOSE weight",
                                       "Consult with your Doctor!",
                                       "3",

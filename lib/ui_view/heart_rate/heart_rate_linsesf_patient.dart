@@ -2,19 +2,12 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/mainScreen.dart';
-import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/users.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/fitness_app_theme.dart';
 
-import 'package:my_app/main.dart';
 
 class heart_rate_sf_patient extends StatefulWidget{
   final AnimationController animationController;
@@ -166,16 +159,16 @@ class bloodGlucoseState extends State<heart_rate_sf_patient> {
 
   List <SalesData> getChartData(){
     List <SalesData> chartData = [];
-    List<Heart_Rate> hr_list = [];
+    List<Heart_Rate> hrList = [];
     for(int i = 1; i <= listtemp.length; i++){
-      hr_list.add(listtemp[listtemp.length-i]);
+      hrList.add(listtemp[listtemp.length-i]);
       if(i == 9){
         i = 99999;
       }
     }
-    hr_list = hr_list.reversed.toList();
-    for(int i = 0; i < hr_list.length; i++){
-      chartData.add(SalesData("${hr_list[i].hr_date.month.toString().padLeft(2,"0")}/${hr_list[i].hr_date.day.toString().padLeft(2,"0")}", double.parse(hr_list[i].bpm.toString())));
+    hrList = hrList.reversed.toList();
+    for(int i = 0; i < hrList.length; i++){
+      chartData.add(SalesData("${hrList[i].hr_date.month.toString().padLeft(2,"0")}/${hrList[i].hr_date.day.toString().padLeft(2,"0")}", double.parse(hrList[i].bpm.toString())));
 
     }
     return chartData;

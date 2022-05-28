@@ -1,26 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/goal_tab/water/add_water_intake.dart';
-import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../../fitness_app_theme.dart';
-
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-
 class sleep_doctor_view extends StatefulWidget {
   final List<Body_Temperature> btlist;
   sleep_doctor_view({Key key, this.btlist}): super(key: key);

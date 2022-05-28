@@ -1,6 +1,5 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:my_app/fitness_app_theme.dart';
 

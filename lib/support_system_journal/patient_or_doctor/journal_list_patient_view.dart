@@ -3,29 +3,11 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/discussion_board/create_post.dart';
 import 'package:my_app/models/discussionModel.dart';
-import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/discussion_board/specific_post.dart';
 import 'package:my_app/support_system_journal/patient_or_doctor/specific_journal_patient_view.dart';
-import 'package:my_app/support_system_journal/support_system/create_journal.dart';
-import 'package:my_app/support_system_journal/support_system/specific_journal_suppsystem_view.dart';
-import 'package:my_app/ui_view/weight/BMI_chart.dart';
-import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
-import 'package:my_app/ui_view/grid_images.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/exercises/running_view.dart';
-import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:my_app/models/nutritionixApi.dart';
-import 'dart:convert' as convert;
 
-import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
@@ -360,10 +342,10 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
               onPressed: () {
                 final User user = auth.currentUser;
                 final uid = user.uid;
-                int initial_length = discussion_list.length;
+                int initialLength = discussion_list.length;
                 discussion_list.removeAt(index);
                 /// delete fields
-                for(int i = 1; i <= initial_length; i++){
+                for(int i = 1; i <= initialLength; i++){
                   final bpRef = databaseReference.child('users/' + uid + '/journal/' + i.toString());
                   bpRef.remove();
                 }

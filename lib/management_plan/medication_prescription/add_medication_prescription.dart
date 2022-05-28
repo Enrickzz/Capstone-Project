@@ -5,20 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/dialogs/policy_dialog.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'view_medical_prescription_as_doctor.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_medication_prescription extends StatefulWidget {
@@ -677,7 +666,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            String doctor_name = "";
+                            String doctorName = "";
                             /// DOCTOR
                             final User user = auth.currentUser;
                             final uid = user.uid;
@@ -689,7 +678,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                             readDoctor.once().then((DataSnapshot snapshot) {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
                               doctor = Users.fromJson(temp);
-                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                              doctorName = doctor.firstname + " " + doctor.lastname;
                             });
                             final readPrescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
                             readPrescription.once().then((DataSnapshot datasnapshot) {
@@ -706,7 +695,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                   "special_instruction": special_instruction.toString(),
                                   "medical_prescription_unit": prescription_unit.toString(),
                                   "prescribedBy": uid.toString(), "datecreated": datecreated.toString(),
-                                  "doctor_name": doctor_name, "imgRef": fileName.toString()});
+                                  "doctor_name": doctorName, "imgRef": fileName.toString()});
                                 print("if Added Medication Prescription Successfully! " + userUID);
                               }
                               else{
@@ -717,7 +706,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                   Future.delayed(const Duration(milliseconds: 2000), (){
                                     count = prescription_list.length--;
                                     final prescriptionRef = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/' + count.toString());
-                                    prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString(), "doctor_name": doctor_name, "imgRef": fileName.toString()});
+                                    prescriptionRef.set({"generic_name": generic_name.toString(), "branded_name": branded_name.toString(),"dosage": dosage.toString(), "startDate": startdate.toString(), "endDate": enddate.toString(), "intake_time": quantity.toString(), "special_instruction": special_instruction.toString(), "medical_prescription_unit": prescription_unit.toString(), "prescribedBy": uid.toString(), "datecreated": datecreated.toString(), "doctor_name": doctorName, "imgRef": fileName.toString()});
                                     print("else Added Medication Prescription Successfully! " + userUID);
                                   });
                                 });
@@ -726,7 +715,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                             });
                             Future.delayed(const Duration(milliseconds: 3000), () async{
                               print("MEDICATION LENGTH: " + prescription_list.length.toString());
-                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctor_name, imgRef: fileName));
+                              prescription_list.add(new Medication_Prescription(generic_name: generic_name, branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate), enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction, prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated), doctor_name: doctorName, imgRef: fileName));
                               for(var i=0;i<prescription_list.length/2;i++){
                                 var temp = prescription_list[i];
                                 prescription_list[i] = prescription_list[prescription_list.length-1-i];
@@ -759,7 +748,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                           branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate),
                                           enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction,
                                           prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated),
-                                          doctor_name: doctor_name, imgRef: thisURL);
+                                          doctor_name: doctorName, imgRef: thisURL);
                                       Navigator.pop(context, newPres);
                                     });
                                   });
@@ -769,7 +758,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                                     branded_name: branded_name,dosage: dosage, startdate: format.parse(startdate),
                                     enddate: format.parse(enddate), intake_time: quantity.toString(), special_instruction: special_instruction,
                                     prescription_unit: prescription_unit, prescribedBy: uid, datecreated: format.parse(datecreated),
-                                    doctor_name: doctor_name, imgRef: "null");
+                                    doctor_name: doctorName, imgRef: "null");
                                 Navigator.pop(context, newPres);
                               }
 
@@ -790,18 +779,18 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
 
     );
   }
-  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
+  void notifyLead(String userUID, String reasonNotification, String doctorLastName, String planType){
     final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
     connections.once().then((DataSnapshot snapConnections) async {
       String temp = jsonDecode(jsonEncode(snapConnections.value));
-      String lead_doc = temp.toString();
+      String leadDoc = temp.toString();
       //ADD NOTIF LOGIC =
-      await getNotifs(lead_doc).then((value) {
-        addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-            "Doctor"+ doctor_lastName + "Added to your patient's $planType Plan!",
+      await getNotifs(leadDoc).then((value) {
+        addtoNotif("Dr. "+doctorLastName+ " has added something to your patient's $planType management plan. He notes: "+reasonNotification ,
+            "Doctor"+ doctorLastName + "Added to your patient's $planType Plan!",
             "1",
             "$planType Plan",
-            lead_doc);
+            leadDoc);
       });
 
     });
@@ -824,10 +813,10 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
       }
     });
   }
-  Future<void> getNotifs(String passed_uid) async {
+  Future<void> getNotifs(String passedUid) async {
     notifsList.clear();
     final User user = auth.currentUser;
-    final uid = passed_uid;
+    final uid = passedUid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
     readBP.once().then((DataSnapshot snapshot){
       print(snapshot.value);

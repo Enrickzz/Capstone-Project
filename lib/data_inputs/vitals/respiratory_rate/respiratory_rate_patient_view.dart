@@ -4,21 +4,9 @@ import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
-import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../../fitness_app_theme.dart';
-import '../blood_pressure/add_blood_pressure.dart';
 import 'add_respiratory_rate.dart';
-import '../../laboratory_results/add_lab_results.dart';
-import '../../medicine_intake/add_medication.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class respiratory_rate extends StatefulWidget {
@@ -341,18 +329,18 @@ class _respiratory_rateState extends State<respiratory_rate> {
               onPressed: () {
                 final User user = auth.currentUser;
                 final uid = user.uid;
-                int initial_length = respiratory_list.length;
-                List<int> delete_list = [];
+                int initialLength = respiratory_list.length;
+                List<int> deleteList = [];
                 for(int i = 0; i < respiratory_list.length; i++){
                   if(_selected[i]){
-                    delete_list.add(i);
+                    deleteList.add(i);
                   }
                 }
-                delete_list.sort((a,b) => b.compareTo(a));
-                for(int i = 0; i < delete_list.length; i++){
-                  respiratory_list.removeAt(delete_list[i]);
+                deleteList.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < deleteList.length; i++){
+                  respiratory_list.removeAt(deleteList[i]);
                 }
-                for(int i = 1; i <= initial_length; i++){
+                for(int i = 1; i <= initialLength; i++){
                   final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/respiratoryRate_list/' + i.toString());
                   bpRef.remove();
                 }

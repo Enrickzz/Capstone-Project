@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/ui_view/grid_images.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 import 'dart:convert' as convert;
 

@@ -1,7 +1,5 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/goal_tab/sleep/change_sleep_goal.dart';
-import 'package:my_app/goal_tab/weight/change_weight_goal.dart';
 
 class time_asleep_support extends StatelessWidget {
   final AnimationController animationController;

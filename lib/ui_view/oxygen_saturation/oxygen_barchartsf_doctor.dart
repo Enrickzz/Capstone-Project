@@ -2,18 +2,10 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:my_app/mainScreen.dart';
-import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/users.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'package:my_app/models/nutritionixApi.dart';
 import '../../fitness_app_theme.dart';
-import '../../main.dart';
 
 class oxygen_barchartsfDoctor extends StatefulWidget{
   final AnimationController animationController;
@@ -149,16 +141,16 @@ class oxygenSaturationState extends State<oxygen_barchartsfDoctor> {
   }
   List <calorie_intake_data> getChartData(){
     List <calorie_intake_data> chartData = [];
-    List<Oxygen_Saturation> o2_list = [];
+    List<Oxygen_Saturation> o2List = [];
     for(int i = 1; i <= listtemp.length; i++){
-      o2_list.add(listtemp[listtemp.length-i]);
+      o2List.add(listtemp[listtemp.length-i]);
       if(i == 9){
         i = 99999;
       }
     }
-    o2_list = o2_list.reversed.toList();
-    for(int i = 0; i < o2_list.length; i++){
-      chartData.add(calorie_intake_data("${o2_list[i].os_date.month.toString().padLeft(2,"0")}/${o2_list[i].os_date.day.toString().padLeft(2,"0")}", o2_list[i].oxygen_saturation));
+    o2List = o2List.reversed.toList();
+    for(int i = 0; i < o2List.length; i++){
+      chartData.add(calorie_intake_data("${o2List[i].os_date.month.toString().padLeft(2,"0")}/${o2List[i].os_date.day.toString().padLeft(2,"0")}", o2List[i].oxygen_saturation));
 
     }
     return chartData;

@@ -3,19 +3,11 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/specific_info_places.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/set_up.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'additional_data_collection.dart';
-import 'package:flutter/gestures.dart';
 
-import 'dialogs/policy_dialog.dart';
 import 'fitness_app_theme.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 

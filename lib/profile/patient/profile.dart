@@ -1,13 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/discussion_board/discussion_patient_view.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/profile/patient/edit_allergies.dart';
 import 'package:my_app/profile/patient/edit_medical_history.dart';
@@ -16,28 +12,12 @@ import 'package:my_app/profile/patient/edit_personal_information.dart';
 import 'package:my_app/profile/patient/patient_view_support_list.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_view.dart';
-import 'package:my_app/support_system_journal/support_system/journal_list_suppsystem_view.dart';
-import 'package:my_app/ui_view/meals/meals_list_view_doctor.dart';
-import 'package:my_app/ui_view/weight/BMI_chart.dart';
-import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
 import 'package:my_app/ui_view/grid_images.dart';
-import 'package:my_app/ui_view/heartrate.dart';
-import 'package:my_app/ui_view/exercises/running_view.dart';
-import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../../discussion_board/discussion.dart';
 import '../../fitness_app_theme.dart';
 import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
-import 'package:my_app/profile/patient/patient_view_support_system.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
 import 'package:my_app/management_plan/management_plan_patient_view.dart';
 
 import 'add_image.dart';

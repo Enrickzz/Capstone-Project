@@ -6,31 +6,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/models/ActivitiesFitbit.dart';
 import 'package:my_app/models/FitBitToken.dart';
-import 'package:my_app/models/Sleep.dart';
 import 'package:my_app/models/exrxTEST.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/exercises/steps_view.dart';
 import 'package:my_app/ui_view/fitbit_connect.dart';
-import 'package:my_app/ui_view/weight/BMI_chart.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
-import 'package:my_app/ui_view/calorie_intake.dart';
-import 'package:my_app/ui_view/cholesterol_chart.dart';
-import 'package:my_app/ui_view/diet_view.dart';
-import 'package:my_app/ui_view/glucose_levels_chart.dart';
-import 'package:my_app/ui_view/heartrate.dart';
 import 'package:my_app/ui_view/exercises/running_view.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/workout_view.dart';
-import 'package:my_app/ui_view/blood_pressure/bp_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../fitness_app_theme.dart';
-import '../../main.dart';
 import '../../notifications/notifications._patients.dart';
-import 'exercise_screen.dart';
-import 'package:http/http.dart' as http;
 import 'package:oauth2/oauth2.dart' as oauth2;
 
 class my_exercises extends StatefulWidget {
@@ -72,10 +60,10 @@ class _my_exercisesState extends State<my_exercises>
     final uid = user.uid;
     final readFitbit = databaseReference.child(
         'users/' + uid + "/fitbittoken/");
-    final read_connection = databaseReference.child(
+    final readConnection = databaseReference.child(
         'users/' + uid + "/fitbit_connection/");
     readFitbit.once().then((DataSnapshot snapshot) {
-      read_connection.once().then((DataSnapshot connection) {
+      readConnection.once().then((DataSnapshot connection) {
         var temp = jsonDecode(jsonEncode(connection.value));
         print("connection");
         print(temp);

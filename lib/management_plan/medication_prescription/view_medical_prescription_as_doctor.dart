@@ -3,18 +3,10 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsDoctor.dart';
-import '../../fitness_app_theme.dart';
-import '../../data_inputs/medicine_intake/add_medication.dart';
 import 'add_medication_prescription.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
@@ -232,7 +224,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
   void getMedicalPrescription(List<Connection> connections) {
     final User user = auth.currentUser;
     final uid = user.uid;
-    List<int> delete_list = [];
+    List<int> deleteList = [];
     var userUID = widget.userUID;
     final readprescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
@@ -255,7 +247,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
               if(prestemp[i].prescribedBy == connections[j].doctor1 && uid == connections[j].doctor2){
                 if(connections[j].medpres1 != "true"){
                   /// dont add
-                  delete_list.add(i);
+                  deleteList.add(i);
                 }
                 else{
                   /// add
@@ -269,7 +261,7 @@ class _medication_prescriptionState extends State<medication_prescription> {
               if(prestemp[i].prescribedBy == connections[j].doctor2 && uid == connections[j].doctor1){
                 if(connections[j].medpres2 != "true"){
                   /// dont add
-                  delete_list.add(i);
+                  deleteList.add(i);
                 }
                 else{
                   /// add
@@ -288,11 +280,11 @@ class _medication_prescriptionState extends State<medication_prescription> {
         }
       });
 
-      delete_list = delete_list.toSet().toList();
-      delete_list.sort((a, b) => b.compareTo(a));
+      deleteList = deleteList.toSet().toList();
+      deleteList.sort((a, b) => b.compareTo(a));
 
-      for(int i = 0; i < delete_list.length; i++){
-        prestemp.removeAt(delete_list[i]);
+      for(int i = 0; i < deleteList.length; i++){
+        prestemp.removeAt(deleteList[i]);
       }
       // prestemp = prestemp.reversed.toList();
       // doctor_names = doctor_names.reversed.toList();

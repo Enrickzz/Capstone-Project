@@ -1,9 +1,7 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/goal_tab/meals/meals_list_doctor.dart';
 import 'package:my_app/goal_tab/meals/meals_list_support.dart';
-import 'package:my_app/goal_tab/meals/recommended_meals.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_doctor_view.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_patient_view.dart';
 import 'package:my_app/goal_tab/sleep/sleep_list_support_view.dart';
@@ -18,7 +16,6 @@ import 'package:my_app/goal_tab/weight/weight_list_support_view.dart';
 import 'package:my_app/management_plan/exercise_plan/exercise_plan_patient_view.dart';
 import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 import 'package:my_app/goal_tab/exercises/exercise_screen.dart';
-import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 
 class TitleView extends StatelessWidget {
 

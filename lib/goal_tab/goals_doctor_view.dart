@@ -1,14 +1,10 @@
-import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/goal_tab/meals/my_meals_doctor.dart';
-import 'package:my_app/goal_tab/sleep/my_sleep.dart';
 import 'package:my_app/goal_tab/sleep/my_sleep_doctor.dart';
 import 'package:my_app/goal_tab/water/my_water_doctor.dart';
 import 'package:my_app/goal_tab/weight/my_weight_doctor.dart';
-import 'package:my_app/goal_tab/exercises/my_exercises.dart';
-import 'package:my_app/notifications/notifications._patients.dart';
 import 'package:my_app/notifications/notifications_doctor.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:flutter/material.dart';

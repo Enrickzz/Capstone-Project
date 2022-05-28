@@ -3,18 +3,8 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_food_intake extends StatefulWidget {
@@ -325,15 +315,15 @@ class _addFoodIntakeState extends State<add_food_intake> {
                               print(temp1);
                               if(datasnapshot.value == null){
                                 final foodintakeRef = databaseReference.child('users/' + uid + '/intake/food_intake/'+ valueChooseFoodTime+ "/" + count.toString());
-                                double total_cholesterol = 0;
-                                double total_protein = 0;
-                                double total_potassium = 0;
+                                double totalCholesterol = 0;
+                                double totalProtein = 0;
+                                double totalPotassium = 0;
                                 /// total calories
                                 total_calories = double.parse(widget.calories) / double.parse(widget.weight);
                                 total_calories *= double.parse(serving_size);
                                 /// total cholesterol
-                                total_cholesterol = double.parse(widget.cholesterol) / double.parse(widget.weight);
-                                total_cholesterol *= double.parse(serving_size);
+                                totalCholesterol = double.parse(widget.cholesterol) / double.parse(widget.weight);
+                                totalCholesterol *= double.parse(serving_size);
                                 /// total fat
                                 total_tfat = double.parse(widget.total_fat) / double.parse(widget.weight);
                                 total_tfat *= double.parse(serving_size);
@@ -341,11 +331,11 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                 total_sugar = double.parse(widget.sugar) / double.parse(widget.weight);
                                 total_sugar *= double.parse(serving_size);
                                 /// total protein
-                                total_protein = double.parse(widget.protein) / double.parse(widget.weight);
-                                total_protein *= double.parse(serving_size);
+                                totalProtein = double.parse(widget.protein) / double.parse(widget.weight);
+                                totalProtein *= double.parse(serving_size);
                                 /// total potassium
-                                total_potassium = double.parse(widget.potassium) / double.parse(widget.weight);
-                                total_potassium *= double.parse(serving_size);
+                                totalPotassium = double.parse(widget.potassium) / double.parse(widget.weight);
+                                totalPotassium *= double.parse(serving_size);
                                 /// total sodium
                                 total_sodium = double.parse(widget.sodium) / double.parse(widget.weight);
                                 total_sodium *= double.parse(serving_size);
@@ -357,11 +347,11 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                   "foodName": widget.foodName,
                                   "weight": widget.weight.toString(),
                                   "calories": total_calories.toStringAsFixed(0),
-                                  "cholesterol": total_cholesterol.toStringAsFixed(1),
+                                  "cholesterol": totalCholesterol.toStringAsFixed(1),
                                   "total_fat": total_tfat.toStringAsFixed(1),
                                   "sugar": total_sugar.toStringAsFixed(1),
-                                  "protein": total_protein.toStringAsFixed(1),
-                                  "potassium": total_potassium.toStringAsFixed(1),
+                                  "protein": totalProtein.toStringAsFixed(1),
+                                  "potassium": totalPotassium.toStringAsFixed(1),
                                   "sodium": total_sodium.toStringAsFixed(1),
                                   "serving_size": serving_size,
                                   "food_unit": valueFoodUnit,
@@ -394,7 +384,7 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                       "3",
                                       "food_intake");
                                 }
-                                if(total_cholesterol >= 300){
+                                if(totalCholesterol >= 300){
                                   addtoRecommendation("We recommend that you limit your intake of high cholesterol containing foods for the day as you have already consumed past the 300mg threshold for cholesterol. Here is a list of foods that you may opt to have for the rest of the day. Click here to view food recommendations.",
                                       "Too much cholesterol!",
                                       "3",
@@ -425,14 +415,14 @@ class _addFoodIntakeState extends State<add_food_intake> {
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = foodintake_list.length--;
                                   final foodintakeRef = databaseReference.child('users/' + uid + '/intake/food_intake/'+ valueChooseFoodTime+ "/" + count.toString());
-                                  double total_calories = 0;
-                                  total_calories = double.parse(widget.calories) / double.parse(widget.weight);
-                                  total_calories *= double.parse(serving_size);
+                                  double totalCalories = 0;
+                                  totalCalories = double.parse(widget.calories) / double.parse(widget.weight);
+                                  totalCalories *= double.parse(serving_size);
                                   foodintakeRef.set({
                                     "img": widget.heroTag,
                                     "foodName": widget.foodName,
                                     "weight": widget.weight.toString(),
-                                    "calories": total_calories.toStringAsFixed(0),
+                                    "calories": totalCalories.toStringAsFixed(0),
                                     "cholesterol": widget.cholesterol.toString(),
                                     "total_fat": widget.total_fat.toString(),
                                     "sugar": widget.sugar.toString(),

@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/goal_tab/sleep/sleep_score.dart';
 import 'package:my_app/models/users.dart';
 
 import '../../fitness_app_theme.dart';

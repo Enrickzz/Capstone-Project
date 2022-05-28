@@ -1,14 +1,10 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/storage_service.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../../fitness_app_theme.dart';
 
@@ -34,17 +30,17 @@ class _BMI_Chart_supportState extends State<BMI_Chart_support> {
     Future.delayed(const Duration(milliseconds: 3000), (){
       setState(() {
         print(AIobj);
-        double bmi_double = (AIobj.weight / (AIobj.height * AIobj.height) * 10000);
-        bmi = bmi_double.toStringAsFixed(2);
-        if (bmi_double < 18.5){
+        double bmiDouble = (AIobj.weight / (AIobj.height * AIobj.height) * 10000);
+        bmi = bmiDouble.toStringAsFixed(2);
+        if (bmiDouble < 18.5){
           bmi_status = "You are underweight!";
-        }else if(bmi_double >= 18.5 && bmi_double <= 24.9){
+        }else if(bmiDouble >= 18.5 && bmiDouble <= 24.9){
           bmi_status = "Your weight is normal!";
-        }else if(bmi_double >= 25 && bmi_double <= 29.9){
+        }else if(bmiDouble >= 25 && bmiDouble <= 29.9){
           bmi_status = "You are overweight!";
-        }else if(bmi_double >= 30 && bmi_double <= 34.9){
+        }else if(bmiDouble >= 30 && bmiDouble <= 34.9){
           bmi_status = "You are obese!";
-        }else if(bmi_double > 35){
+        }else if(bmiDouble > 35){
           bmi_status = "You are extremely obese!";
         }
         isLoading = false;

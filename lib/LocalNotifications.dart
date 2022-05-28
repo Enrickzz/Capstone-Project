@@ -363,10 +363,9 @@ class NotificationService {
 
     });
   }
-  Future<void> getNotifs(String passed_uid) async {
+  Future<void> getNotifs(String passedUid) async {
     notifsList.clear();
-    final User user = auth.currentUser;
-    final uid = passed_uid;
+    final uid = passedUid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
     readBP.once().then((DataSnapshot snapshot){
       print(snapshot.value);

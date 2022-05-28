@@ -3,20 +3,8 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
-import 'package:my_app/data_inputs/vitals/body_temperature/body_temperature_patient_view.dart';
-import 'package:my_app/data_inputs/vitals/oxygen_saturation/o2_saturation_patient_view.dart';
-import 'package:my_app/data_inputs/vitals/respiratory_rate/respiratory_rate_patient_view.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/management_plan/lab_plan/lab_plan_doctor_view.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import '../../fitness_app_theme.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -426,7 +414,7 @@ class _AppSignUpState extends State<management_plan> {
     );
   }
   void getPrivacy () {
-    List<int> delete_list = [];
+    List<int> deleteList = [];
     final User user = auth.currentUser;
     final uid = user.uid;
     String userUID = widget.userUID;

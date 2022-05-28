@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cron/cron.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/LocalNotifications.dart';
@@ -17,7 +16,6 @@ import 'fitness_app_theme.dart';
 import 'goal_tab/goals.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/storage_service.dart';
-import 'package:scheduled_timer/scheduled_timer.dart';
 
 import 'models/users.dart';
 

@@ -1,16 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_doctor_view.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/database.dart';
 import 'package:my_app/data_inputs/laboratory_results/lab_results_patient_view.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
 import 'package:my_app/data_inputs/medicine_intake/medication_patient_view.dart';
@@ -18,10 +10,7 @@ import 'package:my_app/data_inputs/vitals/vitals_patient_view.dart';
 import 'medicine_intake/medication_patient_view.dart';
 import '../fitness_app_theme.dart';
 import '../models/users.dart';
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-
 import 'package:my_app/data_inputs/supplements/supplement_prescription_view_as_patient.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 
 
 class data_inputs extends StatefulWidget {
@@ -600,7 +589,7 @@ class _AppSignUpState extends State<data_inputs> {
   }
 
   Future<List<Medication>> getMedication() async {
-    List<Medication> medication_list = new List<Medication>();
+    List<Medication> medicationList = new List<Medication>();
     final User user = auth.currentUser;
     final uid = user.uid;
     final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
@@ -643,7 +632,7 @@ class _AppSignUpState extends State<data_inputs> {
               print("1st switch i = 3 " + splitFull.last);
               tempMedicineName = splitFull.last;
               medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
-              medication_list.add(medicine);
+              medicationList.add(medicine);
             }
             break;
           }
@@ -675,20 +664,20 @@ class _AppSignUpState extends State<data_inputs> {
               print("2nd switch symptom felt " + splitFull.last);
               tempMedicineName = splitFull.last;
               medicine = new Medication(medicine_name: tempMedicineName, medicine_type: tempMedicineType, medicine_dosage: tempMedicineDosage, medicine_date: format.parse(tempMedicineDate));
-              medication_list.add(medicine);
+              medicationList.add(medicine);
             }
             break;
           }
         }
       }
-      for(var i=0;i<medication_list.length/2;i++){
-        var temp = medication_list[i];
-        medication_list[i] = medication_list[medication_list.length-1-i];
-        medication_list[medication_list.length-1-i] = temp;
+      for(var i=0;i<medicationList.length/2;i++){
+        var temp = medicationList[i];
+        medicationList[i] = medicationList[medicationList.length-1-i];
+        medicationList[medicationList.length-1-i] = temp;
       }
 
     });
-    return medication_list;
+    return medicationList;
   }
   void convertFutureListToListSymptom() async {
     Future<List> _futureOfList = getSymptoms();

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/services/auth.dart';
 
@@ -624,8 +623,8 @@ class _meals_listState extends State<meals_list> with SingleTickerProviderStateM
                 final User user = auth.currentUser;
                 final uid = user.uid;
                 if(mealtype == "Breakfast"){
-                  int initial_length = breakfast_list.length;
-                  for(int i = 1; i <= initial_length; i++){
+                  int initialLength = breakfast_list.length;
+                  for(int i = 1; i <= initialLength; i++){
                     final bpRef = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast/' + i.toString());
                     bpRef.remove();
                   }
@@ -650,8 +649,8 @@ class _meals_listState extends State<meals_list> with SingleTickerProviderStateM
                   }
                 }
                 else if(mealtype == "Lunch"){
-                  int initial_length = lunch_list.length;
-                  for(int i = 1; i <= initial_length; i++){
+                  int initialLength = lunch_list.length;
+                  for(int i = 1; i <= initialLength; i++){
                     final bpRef = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch/' + i.toString());
                     bpRef.remove();
                   }
@@ -676,8 +675,8 @@ class _meals_listState extends State<meals_list> with SingleTickerProviderStateM
                   }
                 }
                 else if(mealtype == "Dinner"){
-                  int initial_length = dinner_list.length;
-                  for(int i = 1; i <= initial_length; i++){
+                  int initialLength = dinner_list.length;
+                  for(int i = 1; i <= initialLength; i++){
                     final bpRef = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner/' + i.toString());
                     bpRef.remove();
                   }
@@ -702,8 +701,8 @@ class _meals_listState extends State<meals_list> with SingleTickerProviderStateM
                   }
                 }
                 else if(mealtype == "Snack"){
-                  int initial_length = snack_list.length;
-                  for(int i = 1; i <= initial_length; i++){
+                  int initialLength = snack_list.length;
+                  for(int i = 1; i <= initialLength; i++){
                     final bpRef = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks/' + i.toString());
                     bpRef.remove();
                   }

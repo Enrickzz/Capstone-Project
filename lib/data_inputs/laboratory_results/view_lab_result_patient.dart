@@ -5,33 +5,16 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/FirebaseFile.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-import 'package:my_app/ui_view/grid_images.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'lab_results_patient_view.dart';
-import '../medicine_intake/medication_patient_view.dart';
 import 'package:my_app/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:full_screen_image/full_screen_image.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-
-
 class view_lab_result extends StatefulWidget {
   final Lab_Result lr;
   final String imgurl;
@@ -464,10 +447,10 @@ class viewLabResult extends State<view_lab_result> {
                 final User user = auth.currentUser;
                 final uid = user.uid;
                 labResult_list = widget.thislist;
-                int initial_length = labResult_list.length;
+                int initialLength = labResult_list.length;
                 labResult_list.removeAt(widget.index);
                 /// delete fields
-                for(int i = 1; i <= initial_length; i++){
+                for(int i = 1; i <= initialLength; i++){
                   final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/' );
                   bpRef.remove();
                 }

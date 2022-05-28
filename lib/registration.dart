@@ -3,21 +3,14 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/continue_facebook.dart';
 import 'package:my_app/continue_google.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
-import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/set_up.dart';
-import 'package:provider/provider.dart';
-import 'additional_data_collection.dart';
 import 'package:flutter/gestures.dart';
 import 'dialogs/policy_dialog.dart';
 import 'package:crypto/crypto.dart';
@@ -445,7 +438,7 @@ class _AppSignUpState extends State<registration> {
                                                               );
                                                             });
                                                       },
-                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary),
                                                   ),
                                                   TextSpan(text: "and "),
                                                   TextSpan(
@@ -460,7 +453,7 @@ class _AppSignUpState extends State<registration> {
                                                           );
                                                         });
                                                       },
-                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary),
                                                   ),
                                                 ]
                                             )
@@ -660,7 +653,7 @@ class _AppSignUpState extends State<registration> {
                               ..onTap = (){
                                 Navigator.pop(context);
                               },
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary),
                           ),
                         ]
                     )

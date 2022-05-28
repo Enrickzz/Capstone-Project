@@ -1,57 +1,22 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/emergency_contact.dart';
-import 'package:my_app/goal_tab/music/music_recommendation.dart';
-import 'package:my_app/goal_tab/sleep/sleep_list_patient_view.dart';
-import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
-import 'package:my_app/goal_weight.dart';
-import 'package:my_app/medical_history.dart';
-import 'package:my_app/models/tabIcon_data.dart';
-import 'package:my_app/notifications/notifications._patients.dart';
-import 'package:my_app/profile/patient/add_image.dart';
-import 'package:my_app/profile/patient/edit_medical_history.dart';
-import 'package:my_app/profile/support_system/suppsystem_view_patient_profile.dart';
 import 'package:my_app/provider/google_sign_in.dart';
-import 'package:my_app/reviews/restaurant/add_restaurant_review.dart';
-import 'package:my_app/reviews/restaurant/specific_restaurant_reviews.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/storage_service.dart';
-import 'package:../my_app/dashboards/dashboards.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/set_up.dart';
-import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_view.dart';
-import 'package:my_app/support_system_journal/support_system/journal_list_suppsystem_view.dart';
 import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
-import 'allergies.dart';
-import 'bottom_navigation_view/bottom_bar_view.dart';
-import 'discussion_board/discussion.dart';
-import 'package:my_app/discussion_board/discussion.dart';
-import 'fitness_app_theme.dart';
 // import 'food/food_list.dart';
-import 'goal_tab/water/water_intake_patient_view.dart';
-import 'goal_tab/exercises/exercise_screen.dart';
 import 'package:my_app/registration.dart';
 import 'package:my_app/mainScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/gestures.dart';
-import 'package:my_app/lab_results_test_borj.dart';
-import 'package:my_app/medical_history.dart';
-import 'package:my_app/profile/patient/patient_view_support_system.dart';
-import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsDoctor.dart';
-import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsPatient.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
-import 'package:my_app/patient_list/doctor/doctor_add_patient.dart';
 import 'package:my_app/patient_list/doctor/doctor_patient_list.dart';
-import 'goal_tab/meals/meals_list.dart';
 import 'patient_list/support_system/suppsystem_patient_list.dart';
-import 'package:my_app/ui_view/blood_pressure/blood_pressure_groupbarchart_sf.dart';
 
 
 
@@ -454,7 +419,7 @@ class _AppSignInState extends State<AppSignIn> {
                                             ..onTap = (){
                                               Navigator.push(context, MaterialPageRoute(builder: (context) => registration()));
                                             },
-                                          style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+                                          style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary),
                                         ),
                                       ]
                                   )

@@ -3,17 +3,8 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_exercise_prescription extends StatefulWidget {
@@ -292,7 +283,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            String doctor_name = "";
+                            String doctorName = "";
                             final User user = auth.currentUser;
                             final uid = user.uid;
                             String userUID = widget.userUID;
@@ -301,7 +292,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                             readDoctor.once().then((DataSnapshot snapshot) {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
                               doctor = Users.fromJson(temp);
-                              doctor_name = doctor.firstname + " " + doctor.lastname;
+                              doctorName = doctor.firstname + " " + doctor.lastname;
                             });
                             final readFoodPlan = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/');
                             readFoodPlan.once().then((DataSnapshot datasnapshot) {
@@ -309,7 +300,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                               // print(temp1);
                               if(datasnapshot.value == null){
                                 final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
-                                foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
+                                foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctorName});
                                 print("Added Food Plan Successfully! " + uid);
                               }
                               else{
@@ -317,14 +308,14 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                                 Future.delayed(const Duration(milliseconds: 1000), (){
                                   count = exercise_list.length--;
                                   final foodplanRef = databaseReference.child('users/' + userUID + '/management_plan/exercise_prescription/' + count.toString());
-                                  foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctor_name});
+                                  foodplanRef.set({"purpose": purpose.toString(), "type": type.toString(), "important_notes": important_notes.toString(), "prescribedBy": uid, "dateCreated": "${now.month}/${now.day}/${now.year}", "doctor_name": doctorName});
                                   print("Added Exercise Plan Successfully! " + uid);
                                 });
                               }
                             });
                             Future.delayed(const Duration(milliseconds: 1000), ()async {
                               print("MEDICATION LENGTH: " + exercise_list.length.toString());
-                              exercise_list.add(new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctor_name));
+                              exercise_list.add(new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctorName));
                               for(var i=0;i<exercise_list.length/2;i++){
                                 var temp = exercise_list[i];
                                 exercise_list[i] = exercise_list[exercise_list.length-1-i];
@@ -332,7 +323,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                               }
                               print("POP HERE ==========");
                               ExPlan a = new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid,
-                                  dateCreated: now, doctor_name: doctor_name);
+                                  dateCreated: now, doctor_name: doctorName);
                               await getNotifs(widget.userUID).then((value) {
                                 addtoNotif("Dr. "+doctor.lastname+ " has added something to your exercise management plan. Click here to view your new Food management plan. " ,
                                     "Doctor Added to your Exercise Plan!",
@@ -366,18 +357,18 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
 
     );
   }
-  void notifyLead(String userUID, String reason_notification, String doctor_lastName, String planType){
+  void notifyLead(String userUID, String reasonNotification, String doctorLastName, String planType){
     final connections = databaseReference.child('users/' + userUID + '/personal_info/lead_doctor/' );
     connections.once().then((DataSnapshot snapConnections) async{
       String temp = jsonDecode(jsonEncode(snapConnections.value));
-      String lead_doc = temp.toString();
+      String leadDoc = temp.toString();
       //ADD NOTIF LOGIC =
-      await getNotifs(lead_doc).then((value) {
-        addtoNotif("Dr. "+doctor_lastName+ " has added something to your patient's $planType management plan. He notes: "+reason_notification ,
-            "Doctor"+ doctor_lastName + "Added to your patient's $planType Plan!",
+      await getNotifs(leadDoc).then((value) {
+        addtoNotif("Dr. "+doctorLastName+ " has added something to your patient's $planType management plan. He notes: "+reasonNotification ,
+            "Doctor"+ doctorLastName + "Added to your patient's $planType Plan!",
             "1",
             "$planType Plan",
-            lead_doc);
+            leadDoc);
       });
     });
     //notifyLead(userUID, reason_notification, doctor.lastname);
@@ -400,10 +391,10 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
       }
     });
   }
-  Future<void> getNotifs(String passed_uid) async {
+  Future<void> getNotifs(String passedUid) async {
     notifsList.clear();
     final User user = auth.currentUser;
-    final uid = passed_uid;
+    final uid = passedUid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
     readBP.once().then((DataSnapshot snapshot){
       print(snapshot.value);

@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
-import 'package:my_app/goal_tab/water/change_water_intake_goal_doctor.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/ui_view/water/wave_view.dart';
 import 'package:my_app/fitness_app_theme.dart';

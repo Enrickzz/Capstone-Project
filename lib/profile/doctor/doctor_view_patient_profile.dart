@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:my_app/dashboards/dashboards_as_doctor.dart';
@@ -19,18 +17,11 @@ import 'package:my_app/profile/doctor/doctor_view_patient_health_team.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_doctor_view.dart';
-import 'package:my_app/support_system_journal/patient_or_doctor/journal_list_patient_view.dart';
 import 'package:my_app/ui_view/grid_images.dart';
 import 'package:flutter/material.dart';
 
 import 'package:my_app/fitness_app_theme.dart';
-import 'package:my_app/main.dart';
-import 'package:my_app/notifications/notifications._patients.dart';
-import 'package:my_app/profile/patient/patient_view_support_system.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';
 
-import 'package:video_player/video_player.dart';
 
 import 'package:my_app/management_plan/management_plan_doctor_view.dart';
 

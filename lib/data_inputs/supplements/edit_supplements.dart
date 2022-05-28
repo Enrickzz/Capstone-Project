@@ -3,23 +3,8 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'package:my_app/data_inputs/supplements/supplement_prescription_view_as_patient.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
-import 'package:my_app/services/auth.dart';
-import '../../management_plan/medication_prescription/view_medical_prescription_as_doctor.dart';
-import 'supplement_prescription_view_as_patient.dart';
-
-
-
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class edit_supplement_prescription extends StatefulWidget {
   final List<Supplement_Prescription> thislist;
   final int index;

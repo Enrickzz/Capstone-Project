@@ -1,25 +1,11 @@
 import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:gender_picker/source/enums.dart';
-import 'package:gender_picker/source/gender_picker.dart';
-import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/Symptoms/add_symptoms.dart';
 import 'package:my_app/data_inputs/Symptoms/view_specific_symptom_doctor_view.dart';
-import 'package:my_app/data_inputs/Symptoms/view_specific_symptom_patient_view.dart';
-import 'package:my_app/database.dart';
-import 'package:my_app/mainScreen.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
-import 'package:my_app/data_inputs/Symptoms/symptoms_patient_view.dart';
-
-import '../../fitness_app_theme.dart';
-//import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class symptoms_doctor_view extends StatefulWidget {
   final List<Symptom> symptomlist1;
   String userUID;
