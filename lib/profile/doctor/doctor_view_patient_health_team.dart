@@ -175,10 +175,23 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                         fontWeight: FontWeight.bold,
 
                       )),
-                  subtitle:        Text(position[index],
-                      style:TextStyle(
-                        color: Colors.grey,
-                      )),
+                  subtitle:        Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(position[index],
+                          style:TextStyle(
+                            color: Colors.grey,
+                          )),
+                      SizedBox(height: 3,),
+                      Visibility(
+                        visible: false,
+                        child: Text("Lead Doctor",
+                            style:TextStyle(
+                              color: Colors.grey,
+                            )),
+                      ),
+                    ],
+                  ),
 
                   trailing: Visibility(
                     visible:  !userlist[index].isMe,
