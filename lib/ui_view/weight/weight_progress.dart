@@ -339,7 +339,7 @@ class _weight_progressState extends State<weight_progress> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        'Goal weight',
+                                        'Weight Goal',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,

@@ -123,7 +123,7 @@ class sleepScoreState extends State<sleep_barchart_sf_doctor> {
 
   void getFitbit() async {
     String token = widget.fitbitToken;
-    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=30"),
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2023-03-27&sort=desc&offset=0&limit=30"),
         headers: {
           'Authorization': "Bearer " + token,
         });

@@ -192,7 +192,7 @@ class _my_sleepState extends State<my_sleep_support>
     print("CHECKING ACCESS TOKEN");
     final User user = auth.currentUser;
     final uid = user.uid;
-    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2023-03-27&sort=desc&offset=0&limit=1"),
         headers: {
           'Authorization': "Bearer " + accessToken
         });
@@ -462,7 +462,7 @@ class _my_sleepState extends State<my_sleep_support>
     );
   }
   void getLatestSleep() async {
-    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-27&sort=desc&offset=0&limit=1"),
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2023-03-27&sort=desc&offset=0&limit=1"),
         headers: {
           'Authorization': "Bearer " + fitbitToken
         });
