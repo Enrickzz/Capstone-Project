@@ -45,6 +45,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
   bool isme = false;
   List<Connection> doctor_connection = [];
   List<String> uidlist = [];
+  List<bool> islead = [];
   List<Connection> connections = [];
   List<Connection> doctorconnections = [];
   List<Users> userlist = [];
@@ -184,7 +185,7 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                           )),
                       SizedBox(height: 3,),
                       Visibility(
-                        visible: false,
+                        visible: islead[index],
                         child: Text("Lead Doctor",
                             style:TextStyle(
                               color: Colors.grey,
@@ -264,21 +265,10 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
       temp1.forEach((jsonString) {
         connections.add(Connection.fromJson(jsonString));
       });
-      // for(int i = 0; i < connections.length; i++){
-      //   final readDoctor = databaseReference.child('users/' + connections[i].uid + '/personal_info/');
-      //   readDoctor.once().then((DataSnapshot datasnapshot){
-      //     Map<String, dynamic> temp2 = jsonDecode(jsonEncode(datasnapshot.value));
-      //     userlist.add(Users.fromJson(temp2));
-      //     if(userlist[i].usertype != "Doctor"){
-      //       delete_list.add(i);
-      //       // userlist.removeAt(i);
-      //     }
-      //     else{
-      //       // names.add(userlist[i].firstname+ " " + userlist[i].lastname);
-      //       // position.add(userlist[i].specialty);
-      //     }
-      //   });
-      // }
+      final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+      readPatient.once().then((DataSnapshot psnapshot){
+        Map<String, dynamic> temp2 = jsonDecode(jsonEncode(psnapshot.value));
+        patient = Users.fromJson(temp2);
       for(int i = 0; i < connections.length; i++){
         print(connections[i].doctor1);
         final readUsertype = databaseReference.child('users/' + connections[i].doctor1 + '/personal_info/');
@@ -297,16 +287,19 @@ class _SupportSystemListState extends State<doctor_view_patient_support_system> 
                     doctorconnections.add(Connection.fromJson2(jsonString));
                   // }
                 });
+                if(patient.leaddoctor == usertype.uid){
+                  islead.add(true);
+                }
+                else{
+                  islead.add(false);
+                }
               }
             }
           });
         });
       }
+      });
     });
-    final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
-    readPatient.once().then((DataSnapshot snapshot){
-      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-        patient = Users.fromJson(temp2);
-    });
+
   }
 }
