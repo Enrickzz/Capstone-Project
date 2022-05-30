@@ -31,7 +31,7 @@ class _dashboards_as_doctorState extends State<dashboards_as_doctor>
 
   @override
   void initState() {
-    setState(() {print("hhhhhhhhi");});
+    setState(() {});
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,

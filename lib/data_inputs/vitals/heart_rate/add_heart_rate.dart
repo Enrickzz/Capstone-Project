@@ -28,7 +28,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
   String heartRate_time;
   String hr_status ="";
   bool isDateSelected= false;
-  int count = 0;
+  int count = 1;
   List<Heart_Rate> heartRate_list = new List<Heart_Rate>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -256,7 +256,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               List<String> temp = temp1.split(',');
                               Heart_Rate heartRate;
                               if(datasnapshot.value == null){
-                                final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + 0.toString());
+                                final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + 1.toString());
                                 if(isResting.toLowerCase() =='yes'){
                                   hr_status = "Active";
                                   print(hr_status + "<<< STATUS");

@@ -33,13 +33,14 @@ class bloodGlucoseState extends State<heart_rate_sf_doctor> {
 
   @override
   void initState() {
+    super.initState();
     getHeartRate();
     Future.delayed(const Duration(milliseconds: 1200),() {
       isLoading = false;
-      // setState(() {
+      setState(() {
         _tooltipBehavior = TooltipBehavior(enable: true);
         _chartData = getChartData();
-      // });
+      });
     });
   }
   @override

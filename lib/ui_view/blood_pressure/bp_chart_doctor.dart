@@ -26,6 +26,11 @@ class _blood_pressureState extends State<bp_chart_doctor> {
   void initState(){
     super.initState();
     getData();
+    Future.delayed(const Duration(milliseconds: 2000),(){
+      setState(() {
+
+      });
+    });
   }
   @override
   Widget build(BuildContext context) {

@@ -26,7 +26,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
   String oxygen_date = (new DateTime.now()).toString();
   String oxygen_time = "";
   String oxygen_status = "";
-  int count = 0;
+  int count = 1;
   List<Oxygen_Saturation> oxygen_list = new List<Oxygen_Saturation>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -241,7 +241,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                 oxygen_status = "error";
                                               }
                                               if(datasnapshot.value == null){
-                                                final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + 0.toString());
+                                                final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + 1.toString());
                                                 oxygenRef.set({"oxygen_saturation": spo2.toString(),"oxygen_status": oxygen_status.toString(), "os_date": oxygen_date.toString(), "os_time": oxygen_time.toString(), "new_o2": true});
                                                 print("Added Oxygen Saturation Successfully! " + uid);
                                               }

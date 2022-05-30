@@ -24,7 +24,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   String glucose_date = (new DateTime.now()).toString();
   String glucose_time;
   bool isDateSelected= false;
-  int count = 0;
+  int count = 1;
   List<Blood_Glucose> glucose_list = new List<Blood_Glucose>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -326,7 +326,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                 glucose_status = "high";
                                               }
                                               if(datasnapshot.value == null){
-                                                final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + 0.toString());
+                                                final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + 1.toString());
                                                 glucoseRef.set({"glucose": glucose.toString(), "lastMeal": lastMeal.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString(), "new_glucose": true});
                                                 print("Added Blood Glucose Successfully! " + uid);
                                               }
