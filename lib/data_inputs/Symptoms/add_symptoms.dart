@@ -566,8 +566,8 @@ class _addSymptomsState extends State<add_symptoms> {
                           Future.delayed(const Duration(milliseconds: 2000), (){
                             downloadUrls();
                             Future.delayed(const Duration(milliseconds: 2000), (){
-                              count = symptoms_list.length--;
-                              print("count " + count.toString());
+                              count = symptoms_list.length+1;
+                              print("first count " + count.toString());
                               if(valueChooseSymptom == "Others"){
                                 valueChooseSymptom = other_name;
                               }
@@ -757,7 +757,8 @@ class _addSymptomsState extends State<add_symptoms> {
                                     symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date),
                                     symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
                                     recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: thisURL);
-                                  Navigator.pop(context, newsymp);
+                                    symptoms_list.add(newsymp);
+                                  Navigator.pop(context, symptoms_list);
                                 });
                               });
                             });
@@ -766,7 +767,8 @@ class _addSymptomsState extends State<add_symptoms> {
                                 symptomFelt: valueChooseGeneralArea,symptomDate: format.parse(symptom_date),
                                 symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
                                 recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: thisURL.toString());
-                            Navigator.pop(context, newsymp);
+                            symptoms_list.add(newsymp);
+                            Navigator.pop(context, symptoms_list);
                           }
                           print("SYMPTOMS UPDATE LENGTH = " + symptoms_list.length.toString());
 
