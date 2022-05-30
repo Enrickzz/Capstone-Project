@@ -25,6 +25,7 @@ class Users {
     usertype = json['userType'];
     specialty = json['specialty'];
     pp_img = json['pp_img'];
+    leaddoctor = json['lead_doctor'];
   }
 
   Users.fromJson2(Map<String, dynamic> json) {
