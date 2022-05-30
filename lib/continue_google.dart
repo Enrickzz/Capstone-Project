@@ -45,6 +45,8 @@ class _continue_googleState extends State<continue_google> {
     'Rheumatologist','Urologist'
   ];
   bool isDoctor = false;
+  bool isSupportSystem = false;
+  String contactnumber = '';
 
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
@@ -112,9 +114,15 @@ class _continue_googleState extends State<continue_google> {
                           print(valueChooseUserStatus);
                           if(valueChooseUserStatus == "Doctor"){
                             isDoctor = true;
+                            isSupportSystem = false;
+                          }
+                          else if(valueChooseUserStatus == "Family member / Caregiver"){
+                            isDoctor = false;
+                            isSupportSystem = true;
                           }
                           else{
                             isDoctor = false;
+                            isSupportSystem = false;
                           }
                         });
                       },
@@ -127,6 +135,34 @@ class _continue_googleState extends State<continue_google> {
                       ).toList(),
                     ),
                     SizedBox(height: 8.0),
+                    Visibility(
+                      visible: isSupportSystem,
+                      child: TextFormField(
+                        showCursor: true,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                              width:0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF2F3F5),
+                          hintStyle: TextStyle(
+                              color: Color(0xFF666666),
+                              fontFamily: defaultFontFamily,
+                              fontSize: defaultFontSize),
+                          hintText: "Contact Number *",
+                        ),
+                        validator: (val) => val.isEmpty ? 'Enter Contact Number' : null,
+                        onChanged: (val){
+                          setState(() => contactnumber = val);
+                        },
+                      ),
+
+                    ),
                     Visibility(
                       visible: isDoctor,
                       child: DropdownButtonFormField(
