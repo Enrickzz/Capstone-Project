@@ -33,15 +33,15 @@ class _BMI_ChartState extends State<BMI_Chart> {
         double bmiDouble = (AIobj.weight / (AIobj.height * AIobj.height) * 10000);
         bmi = bmiDouble.toStringAsFixed(2);
         if (bmiDouble < 18.5){
-          bmi_status = "You are underweight!";
+          bmi_status = "Underweight";
         }else if(bmiDouble >= 18.5 && bmiDouble <= 24.9){
-          bmi_status = "Your weight is normal!";
+          bmi_status = "Normal";
         }else if(bmiDouble >= 25 && bmiDouble <= 29.9){
-          bmi_status = "You are overweight!";
+          bmi_status = "Overweight";
         }else if(bmiDouble >= 30 && bmiDouble <= 34.9){
-          bmi_status = "You are obese!";
+          bmi_status = "Obese";
         }else if(bmiDouble > 35){
-          bmi_status = "You are extremely obese!";
+          bmi_status = "Extremely obese";
         }
         isLoading = false;
       });

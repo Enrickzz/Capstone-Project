@@ -850,13 +850,13 @@ class _addSymptomsState extends State<add_symptoms> {
             child: Column(
               children: <Widget>[
 
-                Text('Would you like to contact a nearby hospital for immediate medical assistance?'),
+                Text('You have entered a severe symptom. We have already gathered contact numbers of nearby hospitals if you wish to seek immediate medical assistance.'),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Confirm'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.push(
@@ -864,12 +864,6 @@ class _addSymptomsState extends State<add_symptoms> {
                   MaterialPageRoute(builder: (context) => emergency_contact()),
                 );
 
-              },
-            ),
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
               },
             ),
           ],
