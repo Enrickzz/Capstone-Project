@@ -77,6 +77,21 @@ class _AppSignUpState extends State<data_inputs> {
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
+        actions: [
+          GestureDetector(
+              onTap: () {
+
+
+
+              },
+              child: Image.asset(
+                'assets/images/emergency.png',
+                width: 32,
+                height: 32,
+              )
+          ),
+          SizedBox(width: 24),
+        ],
       ),
       body: Scrollbar(
         child: SingleChildScrollView(

@@ -34,6 +34,7 @@ class _AppSignUpState extends State<registration> {
   String password = '';
   String error = '';
   String confirmpassword = '';
+  String contactnumber = '';
   // List<String> connections = ["NA", "NA"];
   // Connection connectionP = new Connection(uid: "NA", dashboard: false, nonhealth: false, health: false);
   // Connection connectionD = new Connection(uid: "NA", medpres: false, foodplan: false, explan: false, vitals: false);
@@ -43,6 +44,7 @@ class _AppSignUpState extends State<registration> {
   bool _isHidden = true;
   bool _isCHidden = true;
   bool isDoctor = false;
+  bool isSupportSystem = false;
 
 
   //added by borj
@@ -355,9 +357,15 @@ class _AppSignUpState extends State<registration> {
                                     print(valueChooseUserStatus);
                                     if(valueChooseUserStatus == "Doctor"){
                                       isDoctor = true;
+                                      isSupportSystem = false;
+                                    }
+                                    else if(valueChooseUserStatus == "Family member / Caregiver"){
+                                      isDoctor = false;
+                                      isSupportSystem = true;
                                     }
                                     else{
                                       isDoctor = false;
+                                      isSupportSystem = false;
                                     }
                                   });
                                 },
@@ -370,6 +378,34 @@ class _AppSignUpState extends State<registration> {
                                 ).toList(),
                               ),
                               SizedBox(height: 8.0),
+                              Visibility(
+                                visible: isSupportSystem,
+                                  child: TextFormField(
+                                    showCursor: true,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                        borderSide: BorderSide(
+                                          width:0,
+                                          style: BorderStyle.none,
+                                        ),
+                                      ),
+                                      filled: true,
+                                      fillColor: Color(0xFFF2F3F5),
+                                      hintStyle: TextStyle(
+                                          color: Color(0xFF666666),
+                                          fontFamily: defaultFontFamily,
+                                          fontSize: defaultFontSize),
+                                      hintText: "Contact Number *",
+                                    ),
+                                    validator: (val) => val.isEmpty ? 'Enter Contact Number' : null,
+                                    onChanged: (val){
+                                      setState(() => contactnumber = val);
+                                    },
+                                  ),
+
+                              ),
                               Visibility(
                                 visible: isDoctor,
                                 child: DropdownButtonFormField(

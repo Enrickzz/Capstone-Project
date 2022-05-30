@@ -136,6 +136,19 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
             )
         ),
         actions: [
+          GestureDetector(
+              onTap: () {
+
+
+
+              },
+              child: Image.asset(
+                'assets/images/emergency.png',
+                width: 32,
+                height: 32,
+              )
+          ),
+          SizedBox(width: 24),
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(

@@ -165,6 +165,19 @@ class _index3State extends State<index3>
           //   )
           // ],
           actions: [
+            GestureDetector(
+                onTap: () {
+
+
+
+                },
+                child: Image.asset(
+                  'assets/images/emergency.png',
+                  width: 32,
+                  height: 32,
+                )
+            ),
+            SizedBox(width: 24),
             Container(
               margin: EdgeInsets.only( top: 16, right: 16,),
               child: GestureDetector(

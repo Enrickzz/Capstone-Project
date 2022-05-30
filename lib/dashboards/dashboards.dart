@@ -514,6 +514,19 @@ class _DashboardsState extends State<Dashboards>
                               ),
 
                             ),
+                            GestureDetector(
+                              onTap: () {
+
+
+
+                              },
+                              child: Image.asset(
+                                'assets/images/emergency.png',
+                                width: 32,
+                                height: 32,
+                              )
+                            ),
+                            SizedBox(width: 24),
                             Container(
                               margin: EdgeInsets.only( top: 0, right: 16,),
                               child: GestureDetector(

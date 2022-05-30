@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/profile/patient/data_privacy/patient_adjust_privacy.dart';
+import 'package:my_app/profile/patient/data_privacy/select_support_system.dart';
 import 'package:my_app/profile/patient/select_lead_doctor.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -95,7 +96,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text('My Health Team', style: TextStyle(
+          title: const Text('Health Team', style: TextStyle(
               color: Colors.black
           )),
           centerTitle: true,
@@ -139,7 +140,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                     }
                   }
 
-                    setState(() {});
+                  setState(() {});
                 });
               },
               child: ImageIcon(
@@ -147,7 +148,44 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                 size: 20,
               ),
             ),
-            SizedBox(width: 10),
+            SizedBox(width: 15),
+            Padding(
+                padding: EdgeInsets.only(right: 10.0),
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(context: context,
+                      isScrollControlled: true,
+                      builder: (context) => SingleChildScrollView(child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: select_support_system(d_names: d_names, d_uid: d_uid),
+                      ),
+                      ),
+                    ).then((value) async {
+                      print("VALLLUEE");
+                      print(value);
+                      if(value != null){
+                        for(int i = 0; i < d_uid.length; i++){
+                          if(value == d_uid[i]){
+                            islead[i] = true;
+                          }
+                          else{
+                            islead[i] = false;
+                          }
+                        }
+                      }
+
+                      setState(() {});
+                    });
+
+                  },
+                  child: Icon(
+                    Icons.quick_contacts_dialer_rounded,
+                    size: 26,
+                  ),
+                )
+            ),
+
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
