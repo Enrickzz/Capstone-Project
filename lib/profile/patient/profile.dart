@@ -1357,6 +1357,12 @@ class _index3State extends State<index3>
           ),
           actions: <Widget>[
             TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
               child: Text('Delete'),
               onPressed: () async {
                 if(_formKey.currentState.validate()){
@@ -1381,12 +1387,6 @@ class _index3State extends State<index3>
                         .showSnackBar(SnackBar(content: Text('Incorrect password!')));
                   }
                 }
-              },
-            ),
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
               },
             ),
           ],

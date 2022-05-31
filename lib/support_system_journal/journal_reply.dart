@@ -217,7 +217,7 @@ class _reply_postState extends State<reply_journal> {
                               Map<String, dynamic> temp = jsonDecode(jsonEncode(createsnapshot.value));
                               doctor = Users.fromJson(temp);
                               doctor_name = doctor.firstname + " " + doctor.lastname;
-                              specialty = "Support System";
+                              specialty = doctor.specialty;
                               dp_img = doctor.pp_img;
                               readReply.once().then((DataSnapshot replysnapshot) {
                                 String temp1 = replysnapshot.value.toString();

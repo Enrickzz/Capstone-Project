@@ -90,7 +90,7 @@ class _AppSignUpState extends State<data_inputs> {
                 height: 32,
               )
           ),
-          SizedBox(width: 24),
+          SizedBox(width: 60),
         ],
       ),
       body: Scrollbar(
