@@ -21,6 +21,8 @@ class add_weightState extends State<add_weight_record> {
 
   double current_weight = 0;
   double bmi = 0;
+  double desired_weight_low = 0;
+  double desired_weight_high = 0;
   String unit = 'Kilograms';
   String valueChoose;
   List degrees = ["Celsius", "Fahrenheit"];
@@ -260,11 +262,12 @@ class add_weightState extends State<add_weight_record> {
                                 Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
                                 pp = Physical_Parameters.fromJson(temp);
                                 bmi = current_weight / ((pp.height * 0.01) * (pp.height * 0.01));
-
+                                desired_weight_high = 24.9 * ((pp.height * 0.01) * (pp.height * 0.01));
+                                desired_weight_low = 18.5 * ((pp.height * 0.01) * (pp.height * 0.01));
                                 double bmiDouble = bmi;
                                 print(bmiDouble.toString() + "<<<<<<<<< THIS");
                                 if (bmiDouble < 18.5){
-                                  addtoRecommendation("We recommend that you change your goals to GAIN more weight.",
+                                  addtoRecommendation("We recommend that you change your goals to GAIN more weight. Your desired weight should be " + desired_weight_low.toStringAsFixed(2),
                                       "Eat more!",
                                       "2",
                                       "None",
@@ -272,19 +275,19 @@ class add_weightState extends State<add_weight_record> {
                                 }else if(bmiDouble >= 18.5 && bmiDouble <= 24.9){
                                  //normal
                                 }else if(bmiDouble >= 25 && bmiDouble <= 29.9){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight",
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be " + desired_weight_high.toStringAsFixed(2),
                                       "Get fit!",
                                       "2",
                                       "None",
                                       "Immediate");
                                 }else if(bmiDouble >= 30 && bmiDouble <= 34.9){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight",
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be " + desired_weight_high.toStringAsFixed(2),
                                       "Get your weight down!",
                                       "3",
                                       "None",
                                       "Immediate");
                                 }else if(bmiDouble > 35){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight",
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be " + desired_weight_high.toStringAsFixed(2),
                                       "Consult with your Doctor!",
                                       "3",
                                       "None",
