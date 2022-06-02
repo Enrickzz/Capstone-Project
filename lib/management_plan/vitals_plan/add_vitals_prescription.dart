@@ -41,6 +41,8 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
   String date;
   String hours,min;
   Users doctor = new Users();
+  Users patient = new Users();
+  bool notifier = true;
   String reason_notification = "";
   bool checkboxValue = false;
 
@@ -489,6 +491,20 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
         doctor = Users.fromJson(temp);
+      });
+      final readPatient = databaseReference.child('users/' + widget.userUID + '/personal_info/');
+      readPatient.once().then((DataSnapshot snapshotPatient) {
+        Map<String, dynamic> patientTemp = jsonDecode(jsonEncode(snapshotPatient.value));
+        patientTemp.forEach((key, jsonString) {
+          patient = Users.fromJson(patientTemp);
+        });
+        Future.delayed(const Duration(milliseconds: 200), (){
+          if(patient.leaddoctor == uid){
+            setState(() {
+              notifier = false;
+            });
+          }else notifier= true;
+        });
       });
     });
   }

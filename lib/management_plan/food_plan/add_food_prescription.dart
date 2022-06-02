@@ -19,7 +19,8 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   Users doctor = new Users();
-
+  Users patient = new Users();
+  bool notifier = true;
   DateFormat format = new DateFormat("MM/dd/yyyy");
   int count = 1;
   // List<Medication_Prescription> prescription_list = new List<Medication_Prescription>();
@@ -442,6 +443,20 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
         doctor = Users.fromJson(temp);
+      });
+      final readPatient = databaseReference.child('users/' + widget.userUID + '/personal_info/');
+      readPatient.once().then((DataSnapshot snapshotPatient) {
+        Map<String, dynamic> patientTemp = jsonDecode(jsonEncode(snapshotPatient.value));
+        patientTemp.forEach((key, jsonString) {
+          patient = Users.fromJson(patientTemp);
+        });
+        Future.delayed(const Duration(milliseconds: 200), (){
+          if(patient.leaddoctor == uid){
+            setState(() {
+              notifier = false;
+            });
+          }else notifier= true;
+        });
       });
     });
   }
