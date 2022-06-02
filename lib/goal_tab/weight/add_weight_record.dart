@@ -267,7 +267,7 @@ class add_weightState extends State<add_weight_record> {
                                 double bmiDouble = bmi;
                                 print(bmiDouble.toString() + "<<<<<<<<< THIS");
                                 if (bmiDouble < 18.5){
-                                  addtoRecommendation("We recommend that you change your goals to GAIN more weight. Your desired weight should be " + desired_weight_low.toStringAsFixed(2),
+                                  addtoRecommendation("We recommend that you change your goals to GAIN more weight. Your desired weight should be around " + desired_weight_low.toStringAsFixed(0),
                                       "Eat more!",
                                       "2",
                                       "None",
@@ -275,19 +275,19 @@ class add_weightState extends State<add_weight_record> {
                                 }else if(bmiDouble >= 18.5 && bmiDouble <= 24.9){
                                  //normal
                                 }else if(bmiDouble >= 25 && bmiDouble <= 29.9){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be " + desired_weight_high.toStringAsFixed(2),
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0),
                                       "Get fit!",
                                       "2",
                                       "None",
                                       "Immediate");
                                 }else if(bmiDouble >= 30 && bmiDouble <= 34.9){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be " + desired_weight_high.toStringAsFixed(2),
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0),
                                       "Get your weight down!",
                                       "3",
                                       "None",
                                       "Immediate");
                                 }else if(bmiDouble > 35){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be " + desired_weight_high.toStringAsFixed(2),
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0),
                                       "Consult with your Doctor!",
                                       "3",
                                       "None",

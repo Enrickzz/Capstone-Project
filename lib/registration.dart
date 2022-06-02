@@ -585,7 +585,7 @@ class _AppSignUpState extends State<registration> {
                                         );
                                         isFirstTime = false;
                                         password = sha256.convert(utf8.encode(password)).toString();
-                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString()});
+                                        await usersRef.set({"uid": uid.toString(), "firstname": firstname.toString(), "lastname": lastname.toString(), "email": email.toString(), "password": password.toString(), "isFirstTime": isFirstTime.toString(), "userType": valueChooseUserStatus.toString(), "contact_no": contactnumber});
                                       }
                                       else{
                                         addtoNotifs("Welcome to Heartistant your personal application for managing your CVD condition. Please feel free to explore the application and add a patient under your care list",

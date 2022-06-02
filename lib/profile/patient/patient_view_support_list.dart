@@ -52,6 +52,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
     // "Aling Chupepayyyyyyyyyyyyyyyyyyy", "Angel Locsin", "Anna Belle", "Tite Co", "Yohan Bading"
   ];
+  List lead_names = [];
   List<String> d_uid = [];List<String> ss_uid = [];
   List ss_names = [
     //   "Axel Blaze", "Patrick Franco", "Nathan Cruz", "Sasha Grey", "Mia Khalifa",
@@ -123,7 +124,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                   builder: (context) => SingleChildScrollView(child: Container(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: select_lead_doctor(d_names: d_names, d_uid: d_uid),
+                    child: select_lead_doctor(d_names: lead_names, d_uid: d_uid),
                   ),
                   ),
                 ).then((value) async {
@@ -393,6 +394,9 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
             Users doctor = Users.fromJson(temp3);
             if(doctor.usertype != "Family member / Caregiver"){
               d_names.add(doctor.firstname + " " + doctor.lastname);
+              if(doctor.specialty == "Cardiologist"){
+                lead_names.add(doctor.firstname + " " + doctor.lastname);
+              }
               d_uid.add(doctor.uid);
               d_position.add(doctor.specialty);
               print("ISLEEEEEEEEEEEEEEAD");
