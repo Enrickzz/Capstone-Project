@@ -345,7 +345,6 @@ class NotificationService {
 
   void addtoNotif(String message, String title, String priority,String uid, String redirect,String category, String date, String time){
     print ("ADDED TO NOTIFICATIONS");
-    notifsList.clear();
     final ref = databaseReference.child('users/' + uid + '/notifications/');
     ref.once().then((DataSnapshot snapshot) async{
       await getNotifs(uid).then((value) {
@@ -367,7 +366,7 @@ class NotificationService {
     notifsList.clear();
     final uid = passedUid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
-    readBP.once().then((DataSnapshot snapshot){
+    await readBP.once().then((DataSnapshot snapshot){
       print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
@@ -411,7 +410,7 @@ class NotificationService {
 }
 
 Future selectNotification(String payload) async {
-  print("RAWR");
+  print(payload + "<<<");
   //handle your logic here
 }
 
