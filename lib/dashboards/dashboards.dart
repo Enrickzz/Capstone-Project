@@ -534,15 +534,19 @@ class _DashboardsState extends State<Dashboards>
                                     patient = Users.fromJson(patientTemp);
                                   });
                                 }).then((value) async {
-                                  final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
-                                  await readContactNum.once().then((DataSnapshot contact) {
-                                    contactNum = contact.value.toString();
-                                  }).then((value) async{
-                                    print(">>>YAY");
-                                    await FlutterPhoneDirectCaller.callNumber(contactNum).then((value) {
-                                      notifySS();
+                                  if(patient.emergency_contact == null){
+
+                                  }else{
+                                    final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
+                                    await readContactNum.once().then((DataSnapshot contact) {
+                                      contactNum = contact.value.toString();
+                                    }).then((value) async{
+                                      print(">>>YAY");
+                                      await FlutterPhoneDirectCaller.callNumber(contactNum).then((value) {
+                                        notifySS();
+                                      });
                                     });
-                                  });
+                                  }
                                 });
 
                               },
