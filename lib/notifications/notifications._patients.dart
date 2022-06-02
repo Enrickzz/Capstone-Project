@@ -380,7 +380,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                           deleteOneRecom(index);
                         });
                         ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text('Recommendaiton dismissed')));
+                            .showSnackBar(SnackBar(content: Text('Recommendation dismissed')));
                       },
                     );
                   },
