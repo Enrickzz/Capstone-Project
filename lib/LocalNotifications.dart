@@ -194,8 +194,8 @@ class NotificationService {
             UILocalNotificationDateInterpretation.absoluteTime).then((value) {
           addtoNotifs("We notice that you have not recorded your medicine intake for your doctor’s prescribed medicine for today. We advise you to take your prescribed medicine and record your medicine intake in the Heartistant Application.",
               "Take your meds!",
-              "3","20:00:00", dinner.month.toString()
-                  +"/"+ dinner.day.toString()+"/"+dinner.year.toString());
+              "3","20:00:00", meds.month.toString()
+                  +"/"+ meds.day.toString()+"/"+meds.year.toString());
           notifySS(4, meds);
         });
       }

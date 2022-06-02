@@ -158,7 +158,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                   });
                 }).then((value) async {
                   if(patient.emergency_contact == null){
-                    _showDialog();
+                    await FlutterPhoneDirectCaller.callNumber("911").then((value) {
+                      notifySS();
+                    });
                   }else{
                     final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
                     await readContactNum.once().then((DataSnapshot contact) {

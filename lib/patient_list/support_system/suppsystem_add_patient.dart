@@ -578,6 +578,10 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
         print(temp);
         patient = Users.fromJson(temp);
         pp_img.add(cuser.pp_img);
+        if(patient.emergency_contact == null){
+          final addEMC = databaseReference.child('users/' + userUID + '/personal_info/');
+          addEMC.update({"emergency_contact": uid});
+        }
       });
 
       namestemp.add(displayName);
