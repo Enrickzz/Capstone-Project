@@ -300,7 +300,7 @@ class _specific_postState extends State<specific_post_suppsystem_view>
                                                         SizedBox(height: 2.0),
                                                         Container(
                                                           child: Text(
-                                                            reply_list[index].specialty,
+                                                            checkSpec(reply_list[index].specialty),
                                                             // "Support System",
                                                             style: TextStyle(
                                                               fontSize: 14,
@@ -373,6 +373,11 @@ class _specific_postState extends State<specific_post_suppsystem_view>
     );
   }
 
+  String checkSpec(String spec){
+    if (spec == null)
+    return "";
+    else return spec;
+  }
   void getDiscussion() {
     // final User user = auth.currentUser;
     // final uid = user.uid;

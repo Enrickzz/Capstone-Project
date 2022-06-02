@@ -283,8 +283,7 @@ class _specific_postState extends State<specific_journal_doctor_view>
                                                         SizedBox(height: 2.0),
                                                         Container(
                                                           child: Text(
-                                                            // reply_list[index].specialty,
-                                                            reply_list[index].specialty,
+                                                            checkSpec(reply_list[index].specialty),
                                                             style: TextStyle(
                                                               fontSize: 14,
                                                             ),
@@ -437,4 +436,10 @@ class _specific_postState extends State<specific_journal_doctor_view>
           fit: BoxFit.cover);
     }
   }
+}
+
+String checkSpec(String spec){
+  if (spec == null)
+    return "";
+  else return spec;
 }
