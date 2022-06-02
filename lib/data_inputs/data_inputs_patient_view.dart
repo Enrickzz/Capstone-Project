@@ -100,7 +100,7 @@ class _AppSignUpState extends State<data_inputs> {
                   });
                 }).then((value) async {
                   if(patient.emergency_contact == null){
-
+                    _showDialog();
                   }else{
                     final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
                     await readContactNum.once().then((DataSnapshot contact) {
@@ -807,6 +807,24 @@ class _AppSignUpState extends State<data_inputs> {
 
     });
     return medicationList;
+  }
+  Future<void> _showDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Call Failed!'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('You have not chosen an Emergency contact'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
   void convertFutureListToListSymptom() async {
     Future<List> _futureOfList = getSymptoms();

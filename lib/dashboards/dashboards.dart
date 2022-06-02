@@ -535,7 +535,7 @@ class _DashboardsState extends State<Dashboards>
                                   });
                                 }).then((value) async {
                                   if(patient.emergency_contact == null){
-
+                                    _showDialog();
                                   }else{
                                     final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
                                     await readContactNum.once().then((DataSnapshot contact) {
@@ -703,6 +703,24 @@ class _DashboardsState extends State<Dashboards>
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
+  }
+  Future<void> _showDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Call Failed!'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('You have not chosen an Emergency contact'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
   Decoration checkNotifs() {
     if(notifsList.isNotEmpty || recommList.isNotEmpty){
