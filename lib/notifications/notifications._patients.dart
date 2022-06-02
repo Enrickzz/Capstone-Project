@@ -255,7 +255,9 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(''+recomm.message, style: TextStyle(fontSize: 12.0)),
+                            Text(''+recomm.message.replaceAll("For the meantime you can sit, stay calm, and rest with the help of this soothing song.", "")
+                                .replaceAll("For the meantime please relax yourself and perform deep breathing exercises as you listen to some soothing music.", "")
+                                , style: TextStyle(fontSize: 12.0)),
                             SizedBox(height: 4),
                             Text(''+recomm.rec_date.toString()+" "+recomm.rec_time.toString(), style: TextStyle(fontSize: 11.0)),
                           ],
@@ -271,15 +273,6 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                           }else if(recomm.message.contains("recreation")){
                             type = "recreation";
                           }
-                          print("TYPE = " + type);
-                          // if(recomm.title == "Palpitations" || recomm.title == "Chest Pain"  || recomm.title == "Headache"){
-                          //   print("Here");
-                          //   Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
-                          // }
-                          //
-                          // if(recomm.redirect == "Spotify"){
-                          //   Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
-                          // }
                           Future.delayed(const Duration(milliseconds: 2000), (){
                             if(recomm.redirect ==  "Food - Hemoglobin" && recomm.title == "Low Hemoglobin!"){
                               List<String> query = ["Spinach", "Legumes", "Brocolli"];

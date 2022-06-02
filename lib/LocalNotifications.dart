@@ -410,7 +410,6 @@ class NotificationService {
 }
 
 Future selectNotification(String payload) async {
-  print(payload + "<<<");
   //handle your logic here
 }
 

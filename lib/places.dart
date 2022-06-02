@@ -50,12 +50,19 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   List<Reviews> reviewsRecommHospital=[];
   List<Reviews> reviewsRecommRecreation=[];
   List<Reviews> reviewsRecommRestaurant=[];
+  List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
+  String bday= "";
+  String date;
+  String hours,min;
+  List<Connection> connections = new List<Connection>();
+  Users thisuser = new Users();
 
 
   @override
   void initState() {
     super.initState();
     reviews.clear();
+    initNotif();
     getSupplementName();
     getPrescriptionGName();
     getPrescriptionBName();
@@ -155,7 +162,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                     contactNum = contact.value.toString();
                   }).then((value) async{
                     print(">>>YAY");
-                    await FlutterPhoneDirectCaller.callNumber(contactNum);
+                    await FlutterPhoneDirectCaller.callNumber(contactNum).then((value) {
+                      notifySS();
+                    });
                   });
                 });
               },
@@ -1672,6 +1681,91 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
       );
     }
     return Text("");
+  }
+  void notifySS(){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+    readConnections.once().then((DataSnapshot snapshot2) {
+      print(snapshot2.value);
+      print("CONNECTION");
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+      temp.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString)) ;
+        Connection a = Connection.fromJson(jsonString);
+        print(a.doctor1);
+        var readUser = databaseReference.child("users/" + a.doctor1 + "");
+        Users checkSS = new Users();
+        readUser.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          temp.forEach((key, jsonString) {
+            checkSS = Users.fromJson(temp);
+          });
+          if(checkSS.usertype=="Family member / Caregiver" || checkSS.usertype =="Doctor"){
+            addtoNotif("Your <type> "+ thisuser.firstname+ " has used his panic button! Check on the patient immediately",
+                thisuser.firstname + " used SOS!",
+                "3",
+                a.doctor1,
+                "SOS", "",
+                date ,
+                hours.toString() +":"+min.toString());
+          }
+        });
+      });
+    });
+  }
+  void initNotif() {
+    DateTime a = new DateTime.now();
+    date = "${a.month}/${a.day}/${a.year}";
+    print("THIS DATE");
+    TimeOfDay time = TimeOfDay.now();
+    hours = time.hour.toString().padLeft(2,'0');
+    min = time.minute.toString().padLeft(2,'0');
+    print("DATE = " + date);
+    print("TIME = " + "$hours:$min");
+
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot){
+      Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((key, jsonString) {
+        thisuser = Users.fromJson(temp);
+      });
+
+    });
+  }
+  void addtoNotif(String message, String title, String priority,String uid, String redirect,String category, String date, String time){
+    print ("ADDED TO NOTIFICATIONS");
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    ref.once().then((DataSnapshot snapshot) async{
+      await getNotifs2(uid).then((value) {
+        if(snapshot.value == null){
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+          ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": category, "redirect": redirect});
+        }else{
+          // count = recommList.length--;
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+          ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": category, "redirect": redirect});
+        }
+      });
+
+    });
+  }
+  Future<void> getNotifs2(String passedUid) async {
+    notifsList.clear();
+    final uid = passedUid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    await readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+      notifsList = notifsList.reversed.toList();
+    });
   }
 
   String checkPlaceLocString(String check){
