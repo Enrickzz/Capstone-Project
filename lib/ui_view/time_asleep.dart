@@ -394,7 +394,9 @@ class _time_asleepState extends State<time_asleep> {
   }
 
   void getLatestSleep() async {
-    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-30&sort=desc&offset=0&limit=1"),
+    DateTime nowP1= now.add(Duration(days: 1));
+    String yyyy = nowP1.year.toString(), dd = nowP1.day.toString().padLeft(2,"0"), mm = nowP1.month.toString().padLeft(2,"0");
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=$yyyy-$mm-$dd&sort=desc&offset=0&limit=1"),
         headers: {
           'Authorization': "Bearer "+ widget.fitbitToken
         });
@@ -407,6 +409,7 @@ class _time_asleepState extends State<time_asleep> {
       latestSleep = sleep[0];
       Duration duration = new Duration(milliseconds: latestSleep.duration);
       getTimeAsleep(duration);
+      print(" IN IF SLEEP");
       time_asleep_hr = duration.inHours.toString();
       getSleepGoal();
     }
