@@ -272,14 +272,14 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                             type = "recreation";
                           }
                           print("TYPE = " + type);
-                          if(recomm.title == "Palpitations" || recomm.title == "Chest Pain"  || recomm.title == "Headache"){
-                            print("Here");
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
-                          }
-
-                          if(recomm.redirect == "Spotify"){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
-                          }
+                          // if(recomm.title == "Palpitations" || recomm.title == "Chest Pain"  || recomm.title == "Headache"){
+                          //   print("Here");
+                          //   Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
+                          // }
+                          //
+                          // if(recomm.redirect == "Spotify"){
+                          //   Navigator.push(context, MaterialPageRoute(builder: (context) => music_rec()));
+                          // }
                           Future.delayed(const Duration(milliseconds: 2000), (){
                             if(recomm.redirect ==  "Food - Hemoglobin" && recomm.title == "Low Hemoglobin!"){
                               List<String> query = ["Spinach", "Legumes", "Brocolli"];
