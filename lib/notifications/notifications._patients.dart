@@ -84,11 +84,33 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: Text(tabs[controller.index],
-            style: TextStyle(
-                color: Colors.black
-            )
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(tabs[controller.index],
+                style: TextStyle(
+                    color: Colors.black
+                )
+            ),
+
+          ],
         ),
+        actions: [
+          Visibility(
+            visible: (tabs[controller.index] == "Recommendations"),
+            child: GestureDetector(
+                onTap: () async {
+                  _showDialog();
+                },
+                child: Image.asset(
+                  "assets/images/tite.png",
+                  width: 14,
+                  height: 14,
+                )
+            ),
+          ),
+          SizedBox(width: 24),
+        ],
         centerTitle: true,
         backgroundColor: Colors.white,
         bottom: TabBar(
@@ -585,6 +607,33 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       print("response status code is " + response.statusCode.toString());
       return foodrecomm;
     }
+  }
+
+  Future<void> _showDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Disclaimer'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('These recommendations are all carefully assessed by actual medical doctors and cardiologists.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
