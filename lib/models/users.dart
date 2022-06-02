@@ -12,8 +12,9 @@ class Users {
   List<Connection> connections;
   String pp_img;
   String leaddoctor;
+  String emergency_contact;
 
-  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections, this.isMe, this.pp_img, this.leaddoctor});
+  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections, this.isMe, this.pp_img, this.leaddoctor, this.emergency_contact});
 
 
   Users.fromJson(Map<String, dynamic> json) {
@@ -26,6 +27,9 @@ class Users {
     specialty = json['specialty'];
     pp_img = json['pp_img'];
     leaddoctor = json['lead_doctor'];
+    if( json['emergency_contact'] != null){
+      emergency_contact = json['emergency_contact'];
+    }
   }
 
   Users.fromJson2(Map<String, dynamic> json) {

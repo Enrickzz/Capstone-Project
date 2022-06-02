@@ -136,8 +136,8 @@ class _selectSupportSystemState extends State<select_support_system> {
                             }
                             readLeadDoc.once().then((DataSnapshot datasnapshot) {
                               final leaddocRef = databaseReference.child('users/' + uid + '/personal_info/');
-                              leaddocRef.update({"lead_doctor": d_uid[index]});
-                              print("Updated Lead Doctor! " + uid);
+                              leaddocRef.update({"emergency_contact": d_uid[index]});
+                              print("Updated Emergency Contact! " + d_uid[index]);
                             });
                           } catch(e) {
                             print("you got an error! $e");

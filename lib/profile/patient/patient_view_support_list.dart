@@ -159,7 +159,7 @@ class _SupportSystemListState extends State<SupportSystemList> with SingleTicker
                       builder: (context) => SingleChildScrollView(child: Container(
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: select_support_system(d_names: d_names, d_uid: d_uid),
+                        child: select_support_system(d_names: ss_names, d_uid: ss_uid),
                       ),
                       ),
                     ).then((value) async {

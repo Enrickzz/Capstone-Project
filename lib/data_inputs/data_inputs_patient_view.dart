@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/data_inputs/laboratory_results/lab_results_patient_view.dart';
 import 'package:my_app/services/auth.dart';
@@ -79,8 +82,19 @@ class _AppSignUpState extends State<data_inputs> {
         backgroundColor: Colors.white,
         actions: [
           GestureDetector(
-              onTap: () {
-
+              onTap: () async {
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                final readPatient = databaseReference.child('users/' + uid + '/personal_info/');
+                Users patient = new Users();
+                await readPatient.once().then((DataSnapshot snapshotPatient) {
+                  Map<String, dynamic> patientTemp = jsonDecode(jsonEncode(snapshotPatient.value));
+                  patientTemp.forEach((key, jsonString) {
+                    patient = Users.fromJson(patientTemp);
+                  });
+                }).then((value) async {
+                  await FlutterPhoneDirectCaller.callNumber(patient.emergency_contact.toString());
+                });
 
 
               },

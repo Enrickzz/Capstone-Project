@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:my_app/goal_tab/sleep/my_sleep.dart';
 import 'package:my_app/goal_tab/water/my_water.dart';
 import 'package:my_app/goal_tab/weight/my_weight.dart';
@@ -122,10 +123,27 @@ class _goalsState extends State<goals>
         backgroundColor: Colors.white,
         actions: [
           GestureDetector(
-              onTap: () {
-
-
-
+              onTap: () async {
+                //
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                final readPatient = databaseReference.child('users/' + uid + '/personal_info/');
+                Users patient = new Users();
+                String contactNum="";
+                await readPatient.once().then((DataSnapshot snapshotPatient) {
+                  Map<String, dynamic> patientTemp = jsonDecode(jsonEncode(snapshotPatient.value));
+                  patientTemp.forEach((key, jsonString) {
+                    patient = Users.fromJson(patientTemp);
+                  });
+                }).then((value) async {
+                  final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
+                  await readContactNum.once().then((DataSnapshot contact) {
+                    contactNum = contact.value.toString();
+                  }).then((value) async{
+                    print(">>>YAY");
+                    await FlutterPhoneDirectCaller.callNumber(contactNum);
+                  });
+                });
               },
               child: Image.asset(
                 'assets/images/emergency.png',
