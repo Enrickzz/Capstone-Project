@@ -559,6 +559,13 @@ class _meals_listState extends State<meals_list> with SingleTickerProviderStateM
           breakfast_list.add(FoodIntake.fromJson(jsonString));
         });
       }
+      breakfast_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.intakeDate.split("/");
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " 00:00:00";
+        List<String> dateB = b.intakeDate.split("/");
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0")+ " 00:00:00";
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
     });
   }
   void getLFoodIntake() {
@@ -572,6 +579,13 @@ class _meals_listState extends State<meals_list> with SingleTickerProviderStateM
           lunch_list.add(FoodIntake.fromJson(jsonString));
         });
       }
+      lunch_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.intakeDate.split("/");
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " 00:00:00";
+        List<String> dateB = b.intakeDate.split("/");
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0")+ " 00:00:00";
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
     });
   }
   void getDFoodIntake() {
@@ -585,6 +599,13 @@ class _meals_listState extends State<meals_list> with SingleTickerProviderStateM
           dinner_list.add(FoodIntake.fromJson(jsonString));
         });
       }
+      dinner_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.intakeDate.split("/");
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " 00:00:00";
+        List<String> dateB = b.intakeDate.split("/");
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0")+ " 00:00:00";
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
     });
   }
   void getSFoodIntake() {
@@ -598,6 +619,13 @@ class _meals_listState extends State<meals_list> with SingleTickerProviderStateM
           snack_list.add(FoodIntake.fromJson(jsonString));
         });
       }
+      snack_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.intakeDate.split("/");
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " 00:00:00";
+        List<String> dateB = b.intakeDate.split("/");
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0")+ " 00:00:00";
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
     });
   }
 
