@@ -829,7 +829,6 @@ class _addLabResultState extends State<add_lab_results> {
                 hours.toString() +":"+min.toString()).then((value) {
                   notifsList.clear();
             });
-            print("here nag add hemog");
           }if (type == "low potassium"&& uid != a.doctor1){
             await addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Serum Electrolytes Test with LOW Potassium levels! Check it now!",
                 thisuser.firstname + " has LOW Potassium!",

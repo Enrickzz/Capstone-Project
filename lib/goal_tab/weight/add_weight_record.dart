@@ -31,7 +31,7 @@ class add_weightState extends State<add_weight_record> {
   String weight_time;
   String indication = "";
   bool isDateSelected= false;
-  int count = 1;
+  int count = 1, lengFin = 0;
   bool isCongratulation = false;
   Weight_Goal weight_goal = new Weight_Goal();
   List<Weight> weights = new List<Weight>();
@@ -370,10 +370,12 @@ class add_weightState extends State<add_weight_record> {
                                             connections.add(Connection.fromJson(jsonString)) ;
                                             Connection a = Connection.fromJson(jsonString);
                                             print(a.doctor1);
-                                            addtoNotif("Your <type> "+thisuser.firstname+" "+ thisuser.lastname + " who has heart failure has recorded a drastic change in weight. He/she may require your immediate medical attention.",
-                                                thisuser.firstname + " has recorded drastic weight changes",
-                                                "3",
-                                                a.doctor1);
+                                            if( uid != a.doctor1){
+                                              addtoNotif("Your <type> "+thisuser.firstname+" "+ thisuser.lastname + " who has heart failure has recorded a drastic change in weight. He/she may require your immediate medical attention.",
+                                                  thisuser.firstname + " has recorded drastic weight changes",
+                                                  "3",
+                                                  a.doctor1);
+                                            }
                                           });
                                         });
                                       }
@@ -441,7 +443,7 @@ class add_weightState extends State<add_weight_record> {
             "rec_date": date, "category": "notification", "redirect": redirect});
         }else{
           // count = recommList.length--;
-          final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + lengFin.toString());
           ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
             "rec_date": date, "category": "notification", "redirect": redirect});
 
@@ -449,15 +451,23 @@ class add_weightState extends State<add_weight_record> {
       });
     });
   }
-  Future<void> getNotifs(String uid) async{
-    print("GET NOTIF");
+  Future<int> getNotifs(String passedUid) async {
     notifsList.clear();
-    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    final uid = passedUid;
+    List<RecomAndNotif> tempL=[];
+    final readBP = databaseReference.child('users/' + passedUid + '/notifications/');
     await readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
+        RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
         notifsList.add(RecomAndNotif.fromJson(jsonString));
+        tempL.add(a);
       });
+      notifsList = notifsList.reversed.toList();
+    }).then((value) {
+      lengFin = tempL.length;
+      return tempL.length;
     });
   }
   void addtoRecommendation(String message, String title, String priority, String redirect,String category){
