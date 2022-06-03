@@ -194,10 +194,10 @@ class _notificationsState extends State<notifications_doctor> with SingleTickerP
       notifsList.sort((a, b){ //sorting in ascending order
         List<String> dateA = a.rec_date.split("/");
         List<String> timeA = a.rec_time.split(":");
-        String dateAfi = dateA[2] + "-" + dateA[0]+"-"+dateA[1] + " " + timeA[0] + ":"+timeA[1]+":00:000";
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " " + timeA[0] + ":"+timeA[1]+":00:000";
         List<String> dateB = b.rec_date.split("/");
         List<String> timeB = b.rec_time.split(":");
-        String dateBfi = dateB[2] + "-" + dateB[0]+"-"+dateB[1] + " " + timeB[0] + ":"+timeB[1]+":00:000";
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0") + " " + timeB[0] + ":"+timeB[1]+":00:000";
         return DateTime.parse(dateAfi).compareTo(DateTime.parse(dateBfi));
       });
     });
