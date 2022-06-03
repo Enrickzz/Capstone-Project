@@ -267,7 +267,7 @@ class add_weightState extends State<add_weight_record> {
                                 double bmiDouble = bmi;
                                 print(bmiDouble.toString() + "<<<<<<<<< THIS");
                                 if (bmiDouble < 18.5){
-                                  addtoRecommendation("We recommend that you change your goals to GAIN more weight. Your desired weight should be around " + desired_weight_low.toStringAsFixed(0),
+                                  addtoRecommendation("We recommend that you change your goals to GAIN more weight. Your desired weight should be around " + desired_weight_low.toStringAsFixed(0) + "kg",
                                       "Change Weight Goal!",
                                       "2",
                                       "None",
@@ -275,13 +275,13 @@ class add_weightState extends State<add_weight_record> {
                                 }else if(bmiDouble >= 18.5 && bmiDouble <= 24.9){
                                  //normal
                                 }else if(bmiDouble >= 25 && bmiDouble <= 29.9){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0),
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0) + "kg",
                                       "Change Weight Goal!",
                                       "2",
                                       "None",
                                       "Immediate");
                                 }else if(bmiDouble >= 30 && bmiDouble <= 34.9){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0),
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0) + "kg",
                                       "Change Weight Goal!",
                                       "3",
                                       "None",
