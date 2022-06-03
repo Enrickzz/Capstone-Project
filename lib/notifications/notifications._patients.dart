@@ -144,7 +144,9 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                     itemBuilder: (context, index) {
                       final notif = notifsList[index];
                       return Dismissible(key: Key(notif.id),
-                          child: ListTile(
+                          child: Visibility(
+                            visible: true,
+                            child: ListTile(
                             leading: Container(
                                 height: 50,
                                 width: 50,
@@ -241,7 +243,7 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                               });
 
                             },
-                          ),
+                          ),),
                         onDismissed: (direction){
                           setState(() {
                             notifsList.removeAt(index);
@@ -525,7 +527,10 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
       print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        notifsList.add(RecomAndNotif.fromJson(jsonString));
+        RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
+        if(ifTime(a.rec_time,a.rec_date)){
+          notifsList.add(RecomAndNotif.fromJson(jsonString));
+        }
       });
       notifsList = notifsList.reversed.toList();
       notifsList.sort((a, b){ //sorting in ascending order
@@ -658,6 +663,17 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
         );
       },
     );
+  }
+}
+
+bool ifTime(String rec_time, String rec_date) {
+  List<String> dateA = rec_date.split("/");
+  List<String> timeA = rec_time.split(":");
+  String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " " + timeA[0] + ":"+timeA[1]+":00";
+  if(DateTime.parse(dateAfi).difference(DateTime.now()) < Duration(seconds: 0)){
+    return true;
+  }else{
+    return false;
   }
 }
 

@@ -191,12 +191,13 @@ class NotificationService {
             NotificationDetails(android: _androidNotificationDetails),
             androidAllowWhileIdle: true,
             uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime).then((value) {
-          addtoNotifs("We notice that you have not recorded your medicine intake for your doctor’s prescribed medicine for today. We advise you to take your prescribed medicine and record your medicine intake in the Heartistant Application.",
+            UILocalNotificationDateInterpretation.absoluteTime).then((value) async {
+          await addtoNotifs("We notice that you have not recorded your medicine intake for your doctor’s prescribed medicine for today. We advise you to take your prescribed medicine and record your medicine intake in the Heartistant Application.",
               "Take your meds!",
               "3","20:00:00", meds.month.toString()
-                  +"/"+ meds.day.toString()+"/"+meds.year.toString());
-          notifySS(4, meds);
+                  +"/"+ meds.day.toString()+"/"+meds.year.toString()).then((value) {
+            notifySS(4, meds);
+          });
         });
       }
       if(basis.difference(bfast) < Duration(seconds: 0)){
@@ -209,11 +210,12 @@ class NotificationService {
             androidAllowWhileIdle: true,
             uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime).then((value) async{
-          addtoNotifs("We notice that you have not recorded any meal for your breakfast today.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+          await addtoNotifs("We notice that you have not recorded any meal for your breakfast today.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
               "Eat Breakfast!",
               "2", "10:00:00",bfast.month.toString()
-                  +"/"+ bfast.day.toString()+"/"+bfast.year.toString());
-          notifySS(1, bfast);
+                  +"/"+ bfast.day.toString()+"/"+bfast.year.toString()).then((value) {
+            notifySS(1, bfast);
+          });
         });
       }
       if(basis.difference(lunch) < Duration(seconds: 0)){
@@ -225,12 +227,13 @@ class NotificationService {
             NotificationDetails(android: _androidNotificationDetails),
             androidAllowWhileIdle: true,
             uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime).then((value) {
-          addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+            UILocalNotificationDateInterpretation.absoluteTime).then((value) async {
+          await addtoNotifs("We notice that you have not recorded any meal for your lunch.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
               "Eat Lunch!",
               "2", "14:00:00", lunch.month.toString()
-                  +"/"+ lunch.day.toString()+"/"+lunch.year.toString());
-          notifySS(2, lunch);
+                  +"/"+ lunch.day.toString()+"/"+lunch.year.toString()).then((value) {
+            notifySS(2, lunch);
+          });
         });
       }
 
@@ -243,13 +246,14 @@ class NotificationService {
             NotificationDetails(android: _androidNotificationDetails),
             androidAllowWhileIdle: true,
             uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime).then((value) {
-          addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
+            UILocalNotificationDateInterpretation.absoluteTime).then((value) async{
+         await addtoNotifs("We notice that you have not recorded any meal for dinner.We advise you to eat breakfast and record your food intake in the Heartistant Application.",
               "Eat Dinner!",
               "2", "21:00:00",
               dinner.month.toString()
-                  +"/"+ dinner.day.toString()+"/"+dinner.year.toString());
-          notifySS(3, dinner);
+                  +"/"+ dinner.day.toString()+"/"+dinner.year.toString()).then((value) {
+           notifySS(3, dinner);
+         });
         });
       }
 
@@ -321,13 +325,12 @@ class NotificationService {
       });
     });
   }
-  void addtoNotifs(String message, String title, String priority, String time, String date){
+  Future<void> addtoNotifs(String message, String title, String priority, String time, String date) async {
     final User user = auth.currentUser;
     final uid = user.uid;
     final notifref = databaseReference.child('users/' + uid + '/notifications/');
-    notifsList.clear();
     String redirect= "Patient meal management";
-    notifref.once().then((DataSnapshot snapshot) async {
+    await notifref.once().then((DataSnapshot snapshot) async {
       await getNotifs(uid).then((value) {
         if(snapshot.value == null){
           final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
