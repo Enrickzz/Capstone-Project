@@ -600,7 +600,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
         }else{
           // count = recommList.length--;
           final ref = databaseReference.child('users/' + uid + '/notifications/' + lengFin.toString());
-          ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+          ref.set({"id": lengFin.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
             "rec_date": date, "category": "notification", "redirect": redirect});
 
         }
