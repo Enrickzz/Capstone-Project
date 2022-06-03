@@ -33,6 +33,7 @@ class _specific_postState extends State<specific_post_suppsystem_view>
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Discussion> discussion_list = new List<Discussion>();
   List<Replies> reply_list = new List<Replies>();
+  Discussion compare = new Discussion();
   String title = "";
   String date = "";
   String time = "";
@@ -389,6 +390,16 @@ class _specific_postState extends State<specific_post_suppsystem_view>
       temp.forEach((jsonString) {
         discussion_list.add(Discussion.fromJson(jsonString));
       });
+      discussion_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.discussionDate.toString().split(" ");
+        List<String> timeA = a.discussionTime.toString().split(" ");
+        String dateAfi = dateA[0] + " " + timeA[1];
+        List<String> dateB = b.discussionDate.toString().split(" ");
+        List<String> timeB = b.discussionTime.toString().split(" ");
+        String dateBfi = dateB[0] + " " + timeB[1];
+        print( dateAfi + "\n" + dateBfi);
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
 
       title = discussion_list[index].title;
       doctor_name = discussion_list[index].createdBy;
@@ -397,14 +408,17 @@ class _specific_postState extends State<specific_post_suppsystem_view>
       body = discussion_list[index].discussionBody;
       noOfReply = discussion_list[index].noOfReplies.toString();
       img = discussion_list[index].dp_img.toString();
+      compare = new Discussion(title: title, createdBy: doctor_name, discussionDate: discussion_list[index].discussionDate, discussionTime: discussion_list[index].discussionTime
+        ,discussionBody: body, noOfReplies: discussion_list[index].noOfReplies, imgRef: img );
+
     });
   }
   void getReplies() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    int index = widget.index;
-    final readReplies = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/');
+    // double index = (widget.index + 1) / (widget.index + 1).floor(); int a = discussion_list.indexOf(compare);
+    final readReplies = databaseReference.child('users/' + userUID + '/journal/'+ (widget.index).toString() +'/replies/');
     readReplies.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

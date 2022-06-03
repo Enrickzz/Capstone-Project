@@ -23,6 +23,7 @@ import 'package:my_app/services/auth.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 import 'dart:convert' as convert;
 import '../fitness_app_theme.dart';
+import '../management_plan/lab_plan/lab_plan_patient_view.dart';
 import '../models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -170,6 +171,9 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
                               }
                               if(notif.title.toString().toLowerCase().contains("added to your vitals plan")){
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => vitals_prescription_patient_view()));
+                              }
+                              if(notif.title.toString().toLowerCase().contains("added to your lab plan")){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => lab_prescription_patient_view()));
                               }
 
                               if(notif.title == "Take your meds!"){
@@ -524,6 +528,15 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
       notifsList = notifsList.reversed.toList();
+      notifsList.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.rec_date.split("/");
+        List<String> timeA = a.rec_time.split(":");
+        String dateAfi = dateA[2] + "-" + dateA[0]+"-"+dateA[1] + " " + timeA[0] + ":"+timeA[1]+":00:000";
+        List<String> dateB = b.rec_date.split("/");
+        List<String> timeB = b.rec_time.split(":");
+        String dateBfi = dateB[2] + "-" + dateB[0]+"-"+dateB[1] + " " + timeB[0] + ":"+timeB[1]+":00:000";
+        return DateTime.parse(dateAfi).compareTo(DateTime.parse(dateBfi));
+      });
     });
   }
   void deleteOneRecom(int index) async{
@@ -572,6 +585,17 @@ class _notificationsState extends State<notifications> with SingleTickerProvider
         recommList.add(RecomAndNotif.fromJson(jsonString));
       });
       recommList = recommList.reversed.toList();
+
+      recommList.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.rec_date.split("/");
+        List<String> timeA = a.rec_time.split(":");
+        String dateAfi = dateA[2] + "-" + dateA[0]+"-"+dateA[1] + " " + timeA[0] + ":"+timeA[1]+":00:000";
+        List<String> dateB = b.rec_date.split("/");
+        List<String> timeB = b.rec_time.split(":");
+        String dateBfi = dateB[2] + "-" + dateB[0]+"-"+dateB[1] + " " + timeB[0] + ":"+timeB[1]+":00:000";
+        return DateTime.parse(dateAfi).compareTo(DateTime.parse(dateBfi));
+      });
+
     });
   }
   Future<List<Common>> fetchNutritionix(String thisquery) async {

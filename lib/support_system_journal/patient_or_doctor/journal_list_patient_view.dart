@@ -313,10 +313,26 @@ class _journalState extends State<journal_list_patient_view> with TickerProvider
     final uid = user.uid;
     // String userUID = widget.userUID;
     final readdiscussion = databaseReference.child('users/' + uid + '/journal/');
-    readdiscussion.once().then((DataSnapshot snapshot){
+    readdiscussion.once().then((DataSnapshot snapshot) async {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         discussion_list.add(Discussion.fromJson(jsonString));
+      });
+    }).then((value) {
+      discussion_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.discussionDate.toString().split(" ");
+        List<String> timeA = a.discussionTime.toString().split(" ");
+        String dateAfi = dateA[0] + " " + timeA[1];
+        List<String> dateB = b.discussionDate.toString().split(" ");
+        List<String> timeB = b.discussionTime.toString().split(" ");
+        String dateBfi = dateB[0] + " " + timeB[1];
+        print( dateAfi + "\n" + dateBfi);
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
+      Future.delayed(const Duration(milliseconds: 1000), (){
+        setState(() {
+          print(discussion_list.first.discussionDate.toString() + "<");
+        });
       });
     });
   }

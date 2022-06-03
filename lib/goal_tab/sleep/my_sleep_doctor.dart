@@ -282,7 +282,7 @@ class _my_sleep_doctorState extends State<my_sleep_doctor>
                   curve:
                   Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
               animationController: widget.animationController,
-              fitbitToken: fitbitToken
+              fitbitToken: fitbitToken, userUID: widget.userUID
           ),
         );
         listViews.add(

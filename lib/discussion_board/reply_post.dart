@@ -254,7 +254,7 @@ class _reply_postState extends State<reply_post> {
                                 print(temp1);
                                 if(replysnapshot.value == null){
                                   final replyRef = databaseReference.child('users/' + userUID + '/discussion/'+ (index + 1).toString() + "/replies/" + count.toString());
-                                  reply = new Replies(uid: uid, createdBy: doctor_name, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody);
+                                  reply = new Replies(uid: uid, createdBy: doctor_name, specialty: specialty, replyDate: now, replyTime: now, replyBody: replyBody, dp_img: cifnull(doctor.pp_img));
                                   replyRef.update(reply.toJson());
                                   readDiscussion.once().then((DataSnapshot discussionsnapshot) {
                                     Map<String, dynamic> temp2 = jsonDecode(jsonEncode(discussionsnapshot.value));
@@ -363,4 +363,10 @@ class _reply_postState extends State<reply_post> {
     });
   }
 
+}
+
+String cifnull(String pp_img) {
+  if(pp_img == null){
+    return "";
+  }else return pp_img;
 }

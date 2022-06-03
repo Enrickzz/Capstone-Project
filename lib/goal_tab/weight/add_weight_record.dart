@@ -373,8 +373,7 @@ class add_weightState extends State<add_weight_record> {
                                             addtoNotif("Your <type> "+thisuser.firstname+" "+ thisuser.lastname + " who has heart failure has recorded a drastic change in weight. He/she may require your immediate medical attention.",
                                                 thisuser.firstname + " has recorded drastic weight changes",
                                                 "3",
-                                                a.doctor1,
-                                                "None");
+                                                a.doctor1);
                                           });
                                         });
                                       }
@@ -429,34 +428,36 @@ class add_weightState extends State<add_weight_record> {
         )
     );
   }
-  void getNotifs2(String uid) {
-    print("GET NOTIF");
+  void addtoNotif(String message, String title, String priority,String uid) async{
+    print ("ADDED TO NOTIFICATIONS");
     notifsList.clear();
-    final readBP = databaseReference.child('users/' + uid + '/notifications/');
-    readBP.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      if(temp != null)
-      temp.forEach((jsonString) {
-        notifsList.add(RecomAndNotif.fromJson(jsonString));
+    await getNotifs(uid).then((value) {
+      final ref = databaseReference.child('users/' + uid + '/notifications/');
+      String redirect = "";
+      ref.once().then((DataSnapshot snapshot) {
+        if(snapshot.value == null){
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+          ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": "notification", "redirect": redirect});
+        }else{
+          // count = recommList.length--;
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+          ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": "notification", "redirect": redirect});
+
+        }
       });
     });
   }
-  void addtoNotif(String message, String title, String priority,String uid, String redirect){
-    print ("ADDED TO NOTIFICATIONS");
-    getNotifs2(uid);
-    final ref = databaseReference.child('users/' + uid + '/notifications/');
-    ref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "heartrate", "redirect": redirect});
-      }else{
-        // count = recommList.length--;
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
-        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "heartrate", "redirect": redirect});
-
-      }
+  Future<void> getNotifs(String uid) async{
+    print("GET NOTIF");
+    notifsList.clear();
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    await readBP.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
     });
   }
   void addtoRecommendation(String message, String title, String priority, String redirect,String category){

@@ -355,7 +355,16 @@ class _specific_postState extends State<specific_journal_doctor_view>
       temp.forEach((jsonString) {
         discussion_list.add(Discussion.fromJson(jsonString));
       });
-
+      discussion_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.discussionDate.toString().split(" ");
+        List<String> timeA = a.discussionTime.toString().split(" ");
+        String dateAfi = dateA[0] + " " + timeA[1];
+        List<String> dateB = b.discussionDate.toString().split(" ");
+        List<String> timeB = b.discussionTime.toString().split(" ");
+        String dateBfi = dateB[0] + " " + timeB[1];
+        print( dateAfi + "\n" + dateBfi);
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
       title = discussion_list[index].title;
       doctor_name = discussion_list[index].createdBy;
       date = "${discussion_list[index].discussionDate.month.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.day.toString().padLeft(2,"0")}/${discussion_list[index].discussionDate.year}";
@@ -369,8 +378,8 @@ class _specific_postState extends State<specific_journal_doctor_view>
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    int index = widget.index;
-    final readReplies = databaseReference.child('users/' + userUID + '/journal/'+ (index + 1).toString() +'/replies/');
+    double index = (widget.index + 1) / (widget.index + 1).floor();
+    final readReplies = databaseReference.child('users/' + userUID + '/journal/'+ (widget.index).toString() +'/replies/');
     readReplies.once().then((DataSnapshot snapshot) async{
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {

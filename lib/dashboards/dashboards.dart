@@ -628,7 +628,7 @@ class _DashboardsState extends State<Dashboards>
           temp.forEach((key, jsonString) {
             checkSS = Users.fromJson(temp);
           });
-          if(checkSS.usertype=="Family member / Caregiver" || checkSS.usertype =="Doctor"){
+          // if(checkSS.usertype=="Family member / Caregiver" || checkSS.usertype =="Doctor"){
             addtoNotif("Your <type> "+ thisuser.firstname+ " has used his panic button! Check on the patient immediately",
                 thisuser.firstname + " used SOS!",
                 "3",
@@ -636,7 +636,7 @@ class _DashboardsState extends State<Dashboards>
                 "SOS", "",
                 date ,
                 hours.toString() +":"+min.toString());
-          }
+          // }
         });
       });
     });

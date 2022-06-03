@@ -653,7 +653,7 @@ class _AppSignUpState extends State<data_inputs> {
           temp.forEach((key, jsonString) {
             checkSS = Users.fromJson(temp);
           });
-          if(checkSS.usertype=="Family member / Caregiver" || checkSS.usertype =="Doctor"){
+          // if(checkSS.usertype=="Family member / Caregiver" || checkSS.usertype =="Doctor"){
             addtoNotif("Your <type> "+ thisuser.firstname+ " has used his panic button! Check on the patient immediately",
                 thisuser.firstname + " used SOS!",
                 "3",
@@ -661,7 +661,7 @@ class _AppSignUpState extends State<data_inputs> {
                 "SOS", "",
                 date ,
                 hours.toString() +":"+min.toString());
-          }
+          // }
         });
       });
     });
@@ -688,7 +688,7 @@ class _AppSignUpState extends State<data_inputs> {
     });
   }
   void addtoNotif(String message, String title, String priority,String uid, String redirect,String category, String date, String time){
-    print ("ADDED TO NOTIFICATIONS");
+    print ("ADDED TO NOTIFICATIONS SS SHIT");
     final ref = databaseReference.child('users/' + uid + '/notifications/');
     ref.once().then((DataSnapshot snapshot) async{
       await getNotifs2(uid).then((value) {
@@ -706,7 +706,7 @@ class _AppSignUpState extends State<data_inputs> {
 
     });
   }
-  Future<void> getNotifs2(String passedUid) async {
+  Future<int> getNotifs2(String passedUid) async {
     notifsList.clear();
     final uid = passedUid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
@@ -717,6 +717,8 @@ class _AppSignUpState extends State<data_inputs> {
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
       notifsList = notifsList.reversed.toList();
+    }).then((value) {
+      return notifsList.length;
     });
   }
   Future<List<Medication>> getMedication() async {

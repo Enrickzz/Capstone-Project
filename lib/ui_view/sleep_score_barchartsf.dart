@@ -28,6 +28,8 @@ String sleepdate7 = "";
 class sleepScoreState extends State<sleep_barchart_sf> {
 
   bool isLoading = true;
+
+  final DateTime now = DateTime.now();
   List<calorie_intake_data> chartData=[];
   @override
   void initState() {
@@ -122,8 +124,10 @@ class sleepScoreState extends State<sleep_barchart_sf> {
 
 
   void getFitbit() async {
+    DateTime nowP1= now.add(Duration(days: 1));
+    String yyyy = nowP1.year.toString(), dd = nowP1.day.toString().padLeft(2,"0"), mm = nowP1.month.toString().padLeft(2,"0");
     String token = widget.fitbitToken;
-    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=2022-03-30&sort=desc&offset=0&limit=30"),
+    var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=$yyyy-$mm-$dd&sort=desc&offset=0&limit=30"),
         headers: {
           'Authorization': "Bearer " + token,
         });

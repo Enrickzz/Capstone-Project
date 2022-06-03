@@ -706,6 +706,7 @@ class _addLabResultState extends State<add_lab_results> {
                                       "Low Hemoglobin!",
                                       "3",
                                       "Food - Hemoglobin");
+                                  notifySS("low hemoglobin");
                                 }
                               }
                               if(potassium != " " && valueChooseLabResult == "Serum Electrolytes"){
@@ -714,6 +715,7 @@ class _addLabResultState extends State<add_lab_results> {
                                       "Low Potassium!",
                                       "3",
                                       "Food - Potassium");
+                                  notifySS("low potassium");
                                 }
                               }
                               if(ldl != " " && valueChooseLabResult == "Lipid Profile"){
@@ -722,6 +724,7 @@ class _addLabResultState extends State<add_lab_results> {
                                       "High Cholesterol!",
                                       "3",
                                       "Food - Cholesterol");
+                                  notifySS("cholesterol");
                                 }
                               }
                               if(creatinine_mgDl != " " && valueChooseLabResult == "Bun&Creatinine"){
@@ -741,6 +744,7 @@ class _addLabResultState extends State<add_lab_results> {
                                           "Creatinine Level is High!",
                                           "3",
                                           "None");
+                                      notifySS("high creatinine");
                                     }
                                   });
                                 }
@@ -793,7 +797,95 @@ class _addLabResultState extends State<add_lab_results> {
         )
     );
   }
+  void notifySS(String type){
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+    readConnections.once().then((DataSnapshot snapshot2) {
+      print(snapshot2.value);
+      print("CONNECTION");
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+      temp.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString)) ;
+        Connection a = Connection.fromJson(jsonString);
+        print(a.doctor1);
+        var readUser = databaseReference.child("users/" + a.doctor1 + "");
+        Users checkSS = new Users();
+        readUser.once().then((DataSnapshot snapshot){
+          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+          temp.forEach((key, jsonString) {
+            checkSS = Users.fromJson(temp);
+          });
+          if(type == "low hemoglobin"){
+            addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Complete Blood Count Test with LOW hemoglobin levels! Check it now!",
+                thisuser.firstname + " has LOW Hemoglobin!",
+                "3",
+                a.doctor1,
+                "CBC", "",
+                date ,
+                hours.toString() +":"+min.toString());
+          }if (type == "low potassium"){
+            addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Serum Electrolytes Test with LOW Potassium levels! Check it now!",
+                thisuser.firstname + " has LOW Potassium!",
+                "3",
+                a.doctor1,
+                "SE", "",
+                date ,
+                hours.toString() +":"+min.toString());
+          }if(type == "high creatinine"){
+            addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Laboratory Test with an unusually high Creatinine levels! Check it now!",
+                thisuser.firstname + " has HIGH Creatinine!",
+                "3",
+                a.doctor1,
+                "B&C", "",
+                date ,
+                hours.toString() +":"+min.toString());
+          }if(type == "cholesterol"){
+            addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Lipid Profile Test with a high LDL Cholesteroll levels! Check it now!",
+                thisuser.firstname + " has HIGH Cholesterol!",
+                "3",
+                a.doctor1,
+                "LP", "",
+                date ,
+                hours.toString() +":"+min.toString());
+          }
 
+        });
+      });
+    });
+  }
+  void addtoNotif(String message, String title, String priority,String uid, String redirect,String category, String date, String time){
+    print ("ADDED TO NOTIFICATIONS");
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
+    ref.once().then((DataSnapshot snapshot) async{
+      await getNotifs2(uid).then((value) {
+        if(snapshot.value == null){
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+          ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": category, "redirect": redirect});
+        }else{
+          // count = recommList.length--;
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+          ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": category, "redirect": redirect});
+        }
+      });
+
+    });
+  }
+  Future<void> getNotifs2(String passedUid) async {
+    notifsList.clear();
+    final uid = passedUid;
+    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    await readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        notifsList.add(RecomAndNotif.fromJson(jsonString));
+      });
+      notifsList = notifsList.reversed.toList();
+    });
+  }
   void addtoRecommendation(String message, String title, String priority, String redirect){
     final User user = auth.currentUser;
     final uid = user.uid;

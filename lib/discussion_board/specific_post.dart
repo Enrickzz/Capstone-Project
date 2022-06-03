@@ -41,6 +41,7 @@ class _specific_postState extends State<specific_post>
   String noOfReply = "";
   String dp_img = "";
   bool prescribedDoctor = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -51,6 +52,7 @@ class _specific_postState extends State<specific_post>
     getDiscussion();
     getReplies();
     Future.delayed(const Duration(milliseconds: 1500), (){
+      isLoading = false;
       setState(() {
         for(int i = 0; i < reply_list.length; i++){
           if(reply_list[i].uid == uid){
@@ -72,11 +74,6 @@ class _specific_postState extends State<specific_post>
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(milliseconds: 5000), () {
-    //   setState(() {
-    //     print("FULL SET STATE");
-    //   });
-    // });
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
@@ -90,14 +87,6 @@ class _specific_postState extends State<specific_post>
           centerTitle: true,
           backgroundColor: Colors.white,
           actions: [
-            // GestureDetector(
-            //   onTap: () {
-            //     _showMyDialogDelete();
-            //   },
-            //   child: Icon(
-            //     Icons.delete,
-            //   ),
-            // ),
             SizedBox(width: 10),
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
@@ -128,7 +117,10 @@ class _specific_postState extends State<specific_post>
             ),
           ],
         ),
-        body: Scrollbar(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        ): new Scrollbar(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

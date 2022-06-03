@@ -18,7 +18,8 @@ class time_asleep extends StatefulWidget {
   final AnimationController animationController;
   final Animation<double> animation;
   final String fitbitToken;
-  const time_asleep({Key key, this.animationController, this.animation, this.fitbitToken})
+  final String userUID;
+  const time_asleep({Key key, this.animationController, this.animation, this.fitbitToken, this.userUID})
       : super(key: key);
   @override
   State<time_asleep> createState() => _time_asleepState();
@@ -42,22 +43,25 @@ class _time_asleepState extends State<time_asleep> {
   List<OrdinalSales> deep=[];
   List<OrdinalSales> wake=[];
 
-  bool isLoading = true;
+  bool isLoading = false;
 
 
   @override
   void initState() {
     super.initState();
-    getLatestSleep();
-    Future.delayed(const Duration(milliseconds: 1200),(){
-      setState(() {
+    // getLatestSleep();
+    Future.delayed(const Duration(milliseconds: 500),() async{
+      await getLatestSleep().then((value) {
         isLoading = false;
         if(sleepgoal != null || timeAsleep != null){
           to_go_hr = sleepgoal.difference(timeAsleep).inHours.toString();
           to_go_min = (sleepgoal.difference(timeAsleep).inMinutes % 60).toString();
         }
-        print("Set State");
+        setState(() {
+          print("Set State");
+        });
       });
+
     });
   }
 
@@ -393,7 +397,7 @@ class _time_asleepState extends State<time_asleep> {
     );
   }
 
-  void getLatestSleep() async {
+  Future<void> getLatestSleep() async {
     DateTime nowP1= now.add(Duration(days: 1));
     String yyyy = nowP1.year.toString(), dd = nowP1.day.toString().padLeft(2,"0"), mm = nowP1.month.toString().padLeft(2,"0");
     var response = await http.get(Uri.parse("https://api.fitbit.com/1.2/user/-/sleep/list.json?beforeDate=$yyyy-$mm-$dd&sort=desc&offset=0&limit=1"),
@@ -411,7 +415,7 @@ class _time_asleepState extends State<time_asleep> {
       getTimeAsleep(duration);
       print(" IN IF SLEEP");
       time_asleep_hr = duration.inHours.toString();
-      getSleepGoal();
+      await getSleepGoal();
     }
 
     // print(response.body);
@@ -430,11 +434,15 @@ class _time_asleepState extends State<time_asleep> {
     // return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
-  void getSleepGoal() {
+  Future<void> getSleepGoal() async {
     final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid = user.uid;
+    if(widget.userUID != null){
+      uid = widget.userUID;
+    }else{
+    }
     final readWaterIntake = databaseReference.child('users/' + uid + '/goal/sleep_goal/');
-    readWaterIntake.once().then((DataSnapshot snapshot){
+    await readWaterIntake.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       sleepGoal = Sleep_Goal.fromJson(temp);
       print("SLEEP GOAL");
@@ -442,6 +450,7 @@ class _time_asleepState extends State<time_asleep> {
       Duration duration = new Duration(minutes: sleepGoal.duration);
       print(duration.toString());
       getSleepGoalDuration(duration);
+    }).then((value) {
       setState(() {
         isLoading = false;
       });
