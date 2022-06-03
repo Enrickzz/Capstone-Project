@@ -35,7 +35,7 @@ class _addLabResultState extends State<add_lab_results> {
   String lab_result_time;
   String other_name = "";
   bool isDateSelected= false;
-  int count = 1;
+  int count = 1, lengFin = 0;
   List<Lab_Result> labResult_list = new List<Lab_Result>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -797,93 +797,112 @@ class _addLabResultState extends State<add_lab_results> {
         )
     );
   }
-  void notifySS(String type){
+  void notifySS(String type) async {
     final User user = auth.currentUser;
     final uid = user.uid;
     final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-    readConnections.once().then((DataSnapshot snapshot2) {
+    await readConnections.once().then((DataSnapshot snapshot2) async {
       print(snapshot2.value);
       print("CONNECTION");
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
-      temp.forEach((jsonString) {
+      temp.forEach((jsonString) async {
         connections.add(Connection.fromJson(jsonString)) ;
         Connection a = Connection.fromJson(jsonString);
         print(a.doctor1);
-        var readUser = databaseReference.child("users/" + a.doctor1 + "");
-        Users checkSS = new Users();
-        readUser.once().then((DataSnapshot snapshot){
-          Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-          temp.forEach((key, jsonString) {
-            checkSS = Users.fromJson(temp);
-          });
-          if(type == "low hemoglobin"){
-            addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Complete Blood Count Test with LOW hemoglobin levels! Check it now!",
+        // var readUser = databaseReference.child("users/" + a.doctor1 + "");
+        // Users checkSS = new Users();
+        // await readUser.once().then((DataSnapshot snapshot){
+        //   Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+        //   temp.forEach((key, jsonString) {
+        //     checkSS = Users.fromJson(temp);
+        //   });
+          if(type == "low hemoglobin" && uid != a.doctor1){
+            print("WRITEE TO THIS \n" + a.doctor1 );
+            print("NOTIFS LIST LENG = " + notifsList.length.toString());
+            print("uid = " + a.doctor1);
+            await addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Complete Blood Count Test with LOW hemoglobin levels! Check it now!",
                 thisuser.firstname + " has LOW Hemoglobin!",
                 "3",
                 a.doctor1,
                 "CBC", "",
                 date ,
-                hours.toString() +":"+min.toString());
-          }if (type == "low potassium"){
-            addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Serum Electrolytes Test with LOW Potassium levels! Check it now!",
+                hours.toString() +":"+min.toString()).then((value) {
+                  notifsList.clear();
+            });
+            print("here nag add hemog");
+          }if (type == "low potassium"&& uid != a.doctor1){
+            await addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Serum Electrolytes Test with LOW Potassium levels! Check it now!",
                 thisuser.firstname + " has LOW Potassium!",
                 "3",
                 a.doctor1,
                 "SE", "",
                 date ,
-                hours.toString() +":"+min.toString());
-          }if(type == "high creatinine"){
-            addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Laboratory Test with an unusually high Creatinine levels! Check it now!",
+                hours.toString() +":"+min.toString()).then((value) {
+              notifsList.clear();
+            });
+          }if(type == "high creatinine"&& uid != a.doctor1){
+            await addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Laboratory Test with an unusually high Creatinine levels! Check it now!",
                 thisuser.firstname + " has HIGH Creatinine!",
                 "3",
                 a.doctor1,
                 "B&C", "",
                 date ,
-                hours.toString() +":"+min.toString());
-          }if(type == "cholesterol"){
-            addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Lipid Profile Test with a high LDL Cholesteroll levels! Check it now!",
+                hours.toString() +":"+min.toString()).then((value) {
+              notifsList.clear();
+            });
+          }if(type == "cholesterol"&& uid != a.doctor1){
+           await addtoNotif("Your <type> "+ thisuser.firstname+ " has uploaded a Lipid Profile Test with a high LDL Cholesteroll levels! Check it now!",
                 thisuser.firstname + " has HIGH Cholesterol!",
                 "3",
                 a.doctor1,
                 "LP", "",
                 date ,
-                hours.toString() +":"+min.toString());
+                hours.toString() +":"+min.toString()).then((value) {
+             notifsList.clear();
+           });
           }
 
-        });
+        // });
       });
     });
   }
-  void addtoNotif(String message, String title, String priority,String uid, String redirect,String category, String date, String time){
+  Future<void> addtoNotif(String message, String title, String priority,String uid, String redirect,String category, String date, String time)async {
     print ("ADDED TO NOTIFICATIONS");
     final ref = databaseReference.child('users/' + uid + '/notifications/');
     ref.once().then((DataSnapshot snapshot) async{
-      await getNotifs2(uid).then((value) {
+      notifsList.clear();
+      int leng = await getNotifs2(uid).then((value) {
+        print ("VALUE INT FUTURE = " + value.toString());
         if(snapshot.value == null){
           final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
           ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
             "rec_date": date, "category": category, "redirect": redirect});
         }else{
-          // count = recommList.length--;
-          final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + lengFin.toString());
           ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
             "rec_date": date, "category": category, "redirect": redirect});
         }
+        return value;
       });
-
     });
   }
-  Future<void> getNotifs2(String passedUid) async {
+  Future<int> getNotifs2(String passedUid) async {
     notifsList.clear();
     final uid = passedUid;
-    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    List<RecomAndNotif> tempL=[];
+    final readBP = databaseReference.child('users/' + passedUid + '/notifications/');
     await readBP.once().then((DataSnapshot snapshot){
       print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
+        RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
         notifsList.add(RecomAndNotif.fromJson(jsonString));
+        tempL.add(a);
       });
       notifsList = notifsList.reversed.toList();
+    }).then((value) {
+      lengFin = tempL.length;
+      return tempL.length;
     });
   }
   void addtoRecommendation(String message, String title, String priority, String redirect){
@@ -914,7 +933,6 @@ class _addLabResultState extends State<add_lab_results> {
     final ref = FirebaseStorage.instance.ref('test/' + uid + "/");
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);
-    // print("IN LIST ALL\n\n " + urls.toString() + "\n\n" + result.items[1].toString());
     return urls
         .asMap()
         .map((index, url){
@@ -952,18 +970,8 @@ class _addLabResultState extends State<add_lab_results> {
       });
     });
   }
-  void getNotifs() {
-    notifsList.clear();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/notifications/');
-    readBP.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      temp.forEach((jsonString) {
-        notifsList.add(RecomAndNotif.fromJson(jsonString));
-      });
-    });
-  }void getRecomm() {
+
+  void getRecomm() {
     recommList.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
