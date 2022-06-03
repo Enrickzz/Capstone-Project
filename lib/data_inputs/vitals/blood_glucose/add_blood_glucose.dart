@@ -333,7 +333,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                               }
                                               else{
                                                 Future.delayed(const Duration(milliseconds: 1200), (){
-                                                  count = glucose_list.length--;
+                                                  count = glucose_list.length;
                                                   print("count " + count.toString());
                                                   final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
                                                   glucoseRef.set({"glucose": glucose.toString(), "lastMeal": lastMeal.toString(),"glucose_status": glucose_status.toString(), "bloodGlucose_date": glucose_date.toString(), "bloodGlucose_time": glucose_time.toString(), "new_glucose": true});
@@ -457,7 +457,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                         var rng = Random();
                                         int gluc = rng.nextInt(40) + 80;
                                         int lastM = rng.nextInt(8);
-                                        count = glucose_list.length--;
+                                        count = glucose_list.length;
                                         DateTime now = new DateTime.now();
                                         final glucoseRef = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list/' + count.toString());
                                         glucoseRef.set({"glucose": gluc.toString(), "lastMeal": lastM.toString(),"glucose_status": "normal", "bloodGlucose_date": now.month.toString().padLeft(2,'0')+"/"+now.day.toString().padLeft(2,'0')+"/"+now.year.toString(), "bloodGlucose_time": now.hour.toString().padLeft(2,'0')+":"+now.minute.toString().padLeft(2,'0').toString(), "new_glucose": true});

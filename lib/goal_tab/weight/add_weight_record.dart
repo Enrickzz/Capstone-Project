@@ -287,7 +287,7 @@ class add_weightState extends State<add_weight_record> {
                                       "None",
                                       "Immediate");
                                 }else if(bmiDouble > 35){
-                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0),
+                                  addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0) + "kg",
                                       "Consult with your Doctor!",
                                       "3",
                                       "None",

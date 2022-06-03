@@ -364,7 +364,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                   print(pressure_level);
                                                 }
                                                 Future.delayed(const Duration(milliseconds: 1500), (){
-                                                  count = bp_list.length--;
+                                                  count = bp_list.length;
                                                   final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
                                                   bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString(), "new_bp": true});
                                                   print("Added Blood Pressure Successfully! " + uid);
@@ -511,7 +511,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                         var rng = Random();
                                         int sys = rng.nextInt(10) + 120;
                                         int dia = rng.nextInt(10) + 70;
-                                        count = bp_list.length--;
+                                        count = bp_list.length;
                                         DateTime now = new DateTime.now();
                                         final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
                                         bpRef.set({"systolic_pressure": sys.toString(), "diastolic_pressure": dia.toString(),"pressure_level": "normal",  "bp_date": now.month.toString().padLeft(2,'0')+"/"+now.day.toString().padLeft(2,'0')+"/"+now.year.toString(), "bp_time":now.hour.toString().padLeft(2,'0')+":"+now.minute.toString().padLeft(2,'0').toString(), "bp_status": "Resting".toString(), "new_bp": true});

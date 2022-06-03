@@ -249,7 +249,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                               else{
 
                                                 Future.delayed(const Duration(milliseconds: 1000), (){
-                                                  count = oxygen_list.length--;
+                                                  count = oxygen_list.length;
                                                   print("count " + count.toString());
                                                   //this.symptom_name, this.intesity_lvl, this.symptom_felt, this.symptom_date
 
@@ -389,7 +389,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                         final uid = user.uid;
                                         var rng = Random();
                                         int rspo2 = rng.nextInt(5) + 95;
-                                        count = oxygen_list.length--;
+                                        count = oxygen_list.length;
                                         DateTime now = new DateTime.now();
                                         final oxygenRef = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list/' + count.toString());
                                         oxygenRef.set({"oxygen_saturation": rspo2.toString(),"oxygen_status": "normal", "os_date": now.month.toString().padLeft(2,'0')+"/"+now.day.toString().padLeft(2,'0')+"/"+now.year.toString(), "os_time": now.hour.toString().padLeft(2,'0')+":"+now.minute.toString().padLeft(2,'0').toString(), "new_o2": true});
