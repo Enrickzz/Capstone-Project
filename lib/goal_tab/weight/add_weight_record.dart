@@ -437,10 +437,10 @@ class add_weightState extends State<add_weight_record> {
   Future<void> addtoNotif(String message, String title, String priority,String uid) async{
     print ("ADDED TO NOTIFICATIONS");
     notifsList.clear();
-    await getNotifs(uid).then((value) {
-      final ref = databaseReference.child('users/' + uid + '/notifications/');
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
       String redirect = "";
-      ref.once().then((DataSnapshot snapshot) {
+      ref.once().then((DataSnapshot snapshot) async{
+      int leng = await getNotifs(uid).then((value) {
         if(snapshot.value == null){
           final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
           ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
@@ -450,8 +450,8 @@ class add_weightState extends State<add_weight_record> {
           final ref = databaseReference.child('users/' + uid + '/notifications/' + lengFin.toString());
           ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
             "rec_date": date, "category": "notification", "redirect": redirect});
-
         }
+        return value;
       });
     });
   }
