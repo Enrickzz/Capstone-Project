@@ -362,19 +362,21 @@ class add_weightState extends State<add_weight_record> {
                                             "None",
                                             "Immediate");
                                         final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                                        readConnections.once().then((DataSnapshot snapshot2) {
+                                        readConnections.once().then((DataSnapshot snapshot2) async {
                                           print(snapshot2.value);
                                           print("CONNECTION");
                                           List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
-                                          temp.forEach((jsonString) {
+                                          temp.forEach((jsonString) async {
                                             connections.add(Connection.fromJson(jsonString)) ;
                                             Connection a = Connection.fromJson(jsonString);
                                             print(a.doctor1);
                                             if( uid != a.doctor1){
-                                              addtoNotif("Your <type> "+thisuser.firstname+" "+ thisuser.lastname + " who has heart failure has recorded a drastic change in weight. He/she may require your immediate medical attention.",
+                                              await addtoNotif("Your <type> "+thisuser.firstname+" "+ thisuser.lastname + " who has heart failure has recorded a drastic change in weight. He/she may require your immediate medical attention.",
                                                   thisuser.firstname + " has recorded drastic weight changes",
                                                   "3",
-                                                  a.doctor1);
+                                                  a.doctor1).then((value) {
+                                                    notifsList.clear();
+                                              });
                                             }
                                           });
                                         });
@@ -397,11 +399,13 @@ class add_weightState extends State<add_weight_record> {
                                   timesortweights.sort((a,b) => a.timeCreated.compareTo(b.timeCreated));
                                   weightgoalRef.update({"current_weight": timesortweights[timesortweights.length-1].weight.toStringAsFixed(1)});
                                   weighPPRef.update({"weight": timesortweights[timesortweights.length-1].weight.toStringAsFixed(1)});
+                                  weighPPRef.update({"BMI": bmi});
                                 }
                                 else{
                                   timesortweights = weights;
                                   weightgoalRef.update({"current_weight": timesortweights[timesortweights.length-1].weight.toStringAsFixed(1)});
                                   weighPPRef.update({"weight": timesortweights[timesortweights.length-1].weight.toStringAsFixed(1)});
+                                  weighPPRef.update({"BMI": bmi});
                                 }
                               });
                               print("POP HERE ==========");
@@ -430,7 +434,7 @@ class add_weightState extends State<add_weight_record> {
         )
     );
   }
-  void addtoNotif(String message, String title, String priority,String uid) async{
+  Future<void> addtoNotif(String message, String title, String priority,String uid) async{
     print ("ADDED TO NOTIFICATIONS");
     notifsList.clear();
     await getNotifs(uid).then((value) {
