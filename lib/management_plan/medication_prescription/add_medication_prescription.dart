@@ -595,22 +595,25 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
                   SizedBox(height: 8.0),
                   FormField<bool>(
                     builder: (state) {
-                      return Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Checkbox(
-                                  value: checkboxValue,
-                                  onChanged: (bool b) {
-                                    setState(() {
-                                      checkboxValue = b;
-                                    });
-                                  }),
-                              Text("Notify lead doctor"),
-                            ],
-                          ),
+                      return Visibility(
+                        visible: notifier,
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Checkbox(
+                                    value: checkboxValue,
+                                    onChanged: (bool b) {
+                                      setState(() {
+                                        checkboxValue = b;
+                                      });
+                                    }),
+                                Text("Notify lead doctor"),
+                              ],
+                            ),
 
-                        ],
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -726,7 +729,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
 
 
                               await getNotifs(widget.userUID).then((value) {
-                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your medication management plan. Click here to view your new Food management plan. " ,
+                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your medication management plan. Click here to view your new Medication Prescription plan. " ,
                                     "Doctor Added to your Medication Plan!",
                                     "1",
                                     "Medication Plan",
@@ -788,7 +791,7 @@ class _addMedicationPrescriptionState extends State<add_medication_prescription>
       //ADD NOTIF LOGIC =
       await getNotifs(leadDoc).then((value) {
         addtoNotif("Dr. "+doctorLastName+ " has added something to your patient's $planType management plan. He notes: "+reasonNotification ,
-            "Doctor"+ doctorLastName + "Added to your patient's $planType Plan!",
+            "Dr. "+ doctorLastName + " added to your patient's $planType Plan!",
             "1",
             "$planType Plan",
             leadDoc);

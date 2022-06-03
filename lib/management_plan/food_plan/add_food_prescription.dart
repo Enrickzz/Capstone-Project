@@ -156,22 +156,25 @@ class _addFoodPrescriptionState extends State<add_food_prescription> {
                   ),
                   FormField<bool>(
                     builder: (state) {
-                      return Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Checkbox(
-                                  value: checkboxValue,
-                                  onChanged: (bool b) {
-                                    setState(() {
-                                      checkboxValue = b;
-                                    });
-                                  }),
-                              Text("Notify lead doctor"),
-                            ],
-                          ),
+                      return Visibility(
+                        visible: notifier,
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Checkbox(
+                                    value: checkboxValue,
+                                    onChanged: (bool b) {
+                                      setState(() {
+                                        checkboxValue = b;
+                                      });
+                                    }),
+                                Text("Notify lead doctor"),
+                              ],
+                            ),
 
-                        ],
+                          ],
+                        ),
                       );
                     },
                   ),

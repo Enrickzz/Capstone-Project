@@ -221,22 +221,25 @@ class _addLabRequestState extends State<add_lab_request> {
                   SizedBox(height: 8.0),
                   FormField<bool>(
                     builder: (state) {
-                      return Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Checkbox(
-                                  value: checkboxValue,
-                                  onChanged: (bool b) {
-                                    setState(() {
-                                      checkboxValue = b;
-                                    });
-                                  }),
-                              Text("Notify lead doctor"),
-                            ],
-                          ),
+                      return Visibility(
+                        visible: notifier,
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Checkbox(
+                                    value: checkboxValue,
+                                    onChanged: (bool b) {
+                                      setState(() {
+                                        checkboxValue = b;
+                                      });
+                                    }),
+                                Text("Notify lead doctor"),
+                              ],
+                            ),
 
-                        ],
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -338,7 +341,7 @@ class _addLabRequestState extends State<add_lab_request> {
                               }
                               Lab_Plan newV = new Lab_Plan(reason_notification: reason_notification,type: type, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctorName, imgRef: fileName);
                               await getNotifs(widget.userUID).then((value) {
-                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your Labs management plan. Click here to view your new Food management plan. " ,
+                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your Labs management plan. Click here to view your new requests for Lab results. " ,
                                     "Doctor Added to your Lab Plan!",
                                     "1",
                                     "Lab Plan",

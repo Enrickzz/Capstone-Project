@@ -268,7 +268,7 @@ class add_weightState extends State<add_weight_record> {
                                 print(bmiDouble.toString() + "<<<<<<<<< THIS");
                                 if (bmiDouble < 18.5){
                                   addtoRecommendation("We recommend that you change your goals to GAIN more weight. Your desired weight should be around " + desired_weight_low.toStringAsFixed(0),
-                                      "Eat more!",
+                                      "Change Weight Goal!",
                                       "2",
                                       "None",
                                       "Immediate");
@@ -276,13 +276,13 @@ class add_weightState extends State<add_weight_record> {
                                  //normal
                                 }else if(bmiDouble >= 25 && bmiDouble <= 29.9){
                                   addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0),
-                                      "Get fit!",
+                                      "Change Weight Goal!",
                                       "2",
                                       "None",
                                       "Immediate");
                                 }else if(bmiDouble >= 30 && bmiDouble <= 34.9){
                                   addtoRecommendation("We recommend that you change your goals to LOSE weight. Your desired weight should be around " + desired_weight_high.toStringAsFixed(0),
-                                      "Get your weight down!",
+                                      "Change Weight Goal!",
                                       "3",
                                       "None",
                                       "Immediate");

@@ -329,7 +329,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                               ExPlan a = new ExPlan(purpose: purpose, type: type,important_notes: important_notes, prescribedBy: uid,
                                   dateCreated: now, doctor_name: doctorName);
                               await getNotifs(widget.userUID).then((value) {
-                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your exercise management plan. Click here to view your new Food management plan. " ,
+                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your exercise management plan. Click here to view your new Exercise Management plan. " ,
                                     "Doctor Added to your Exercise Plan!",
                                     "1",
                                     "Exercise Plan",

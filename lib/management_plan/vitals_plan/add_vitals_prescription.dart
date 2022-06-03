@@ -248,22 +248,25 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                   ),
                   FormField<bool>(
                     builder: (state) {
-                      return Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Checkbox(
-                                  value: checkboxValue,
-                                  onChanged: (bool b) {
-                                    setState(() {
-                                      checkboxValue = b;
-                                    });
-                                  }),
-                              Text("Notify lead doctor"),
-                            ],
-                          ),
+                      return Visibility(
+                        visible: notifier,
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Checkbox(
+                                    value: checkboxValue,
+                                    onChanged: (bool b) {
+                                      setState(() {
+                                        checkboxValue = b;
+                                      });
+                                    }),
+                                Text("Notify lead doctor"),
+                              ],
+                            ),
 
-                        ],
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -399,7 +402,7 @@ class _addVitalsrescriptionState extends State<add_vitals_prescription> {
                               }
                               Vitals newV = new Vitals(purpose: purpose, type: type,frequency: frequency, important_notes: important_notes, prescribedBy: uid, dateCreated: now, doctor_name: doctorName);
                               await getNotifs(widget.userUID).then((value) {
-                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your vitals management plan. Click here to view your new Food management plan. " ,
+                                addtoNotif("Dr. "+doctor.lastname+ " has added something to your vitals management plan. Click here to view your new Vitals Recording plan. " ,
                                     "Doctor Added to your Vitals Plan!",
                                     "1",
                                     "Vitals Plan",

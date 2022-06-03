@@ -396,7 +396,7 @@ class _SpecificPrescriptionViewAsPatientState extends State<SpecificPrescription
     readDoctorName.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
       doctor = Users.fromJson(temp2);
-      thisPrescription.prescribedBy = doctor.firstname;
+      thisPrescription.prescribedBy = doctor.firstname + " " + doctor.lastname;
     });
   }
   Future <String> downloadUrls() async{
