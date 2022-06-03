@@ -25,7 +25,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   String glucose_date = (new DateTime.now()).toString();
   String glucose_time;
   bool isDateSelected= false;
-  int count = 1;
+  int count = 1, lengFin= 0;
   List<Blood_Glucose> glucose_list = new List<Blood_Glucose>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -370,14 +370,18 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                 print(snapshot2.value);
                                                 print("CONNECTION");
                                                 List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
-                                                temp.forEach((jsonString) {
+                                                temp.forEach((jsonString) async {
                                                   connections.add(Connection.fromJson(jsonString)) ;
                                                   Connection a = Connection.fromJson(jsonString);
                                                   print(a.doctor1);
-                                                  addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded consecutive high blood pressure. This may require your immediate medical attention.",
-                                                      thisuser.firstname + " has consecutive high BP readings",
-                                                      "3",
-                                                      a.doctor1);
+                                                  if(uid != a.doctor1){
+                                                    await addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded  high blood glucose. This may require your immediate medical attention.",
+                                                        thisuser.firstname + " has  high Blood Glucose readings",
+                                                        "3",
+                                                        a.doctor1).then((value) {
+                                                      notifsList.clear();
+                                                    });
+                                                  }
                                                 });
                                               });
                                             }
@@ -581,34 +585,48 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
       });
     });
   }
-  void addtoNotif2(String message, String title, String priority,String uid){
+  Future<void> addtoNotif2(String message, String title, String priority,String uid) async{
     print ("ADDED TO NOTIFICATIONS");
     getNotifs2(uid);
+    notifsList.clear();
     final ref = databaseReference.child('users/' + uid + '/notifications/');
     String redirect = "";
-    ref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "notification", "redirect": redirect});
-      }else{
-        // count = recommList.length--;
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
-        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "notification", "redirect": redirect});
+    ref.once().then((DataSnapshot snapshot) async {
+      int leng = await getNotifs2(uid).then((value) {
+        if(snapshot.value == null){
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+          ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": "notification", "redirect": redirect});
+        }else{
+          // count = recommList.length--;
+          final ref = databaseReference.child('users/' + uid + '/notifications/' + lengFin.toString());
+          ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+            "rec_date": date, "category": "notification", "redirect": redirect});
 
-      }
+        }
+        return value;
+      });
+
     });
   }
-  void getNotifs2(String uid) {
-    print("GET NOTIF");
+  Future<int> getNotifs2(String passedUid) async {
     notifsList.clear();
-    final readBP = databaseReference.child('users/' + uid + '/notifications/');
-    readBP.once().then((DataSnapshot snapshot){
+    final uid = passedUid;
+    List<RecomAndNotif> tempL=[];
+    final readBP = databaseReference.child('users/' + passedUid + '/notifications/');
+    await readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
+        RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
         notifsList.add(RecomAndNotif.fromJson(jsonString));
+        tempL.add(a);
       });
+      notifsList = notifsList.reversed.toList();
+    }).then((value) {
+      print("LENGFIN = " + lengFin.toString());
+      lengFin = tempL.length;
+      return tempL.length;
     });
   }
   void addtoRecommendation(String message, String title, String priority, String redirect){

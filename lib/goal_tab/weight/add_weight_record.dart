@@ -470,6 +470,7 @@ class add_weightState extends State<add_weight_record> {
       });
       notifsList = notifsList.reversed.toList();
     }).then((value) {
+      print("LENGFIN = " + lengFin.toString());
       lengFin = tempL.length;
       return tempL.length;
     });
