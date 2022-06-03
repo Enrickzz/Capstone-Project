@@ -20,6 +20,10 @@ import '../../notifications/notifications._patients.dart';
 import 'package:http/http.dart' as http;
 import 'package:oauth2/oauth2.dart' as oauth2;
 
+import '../../ui_view/sleep_score_barchartsf.dart';
+import '../../ui_view/sleep_stackedbar_sfchart.dart';
+import '../../ui_view/time_asleep.dart';
+
 class my_sleep_support extends StatefulWidget {
   const my_sleep_support({Key key, this.animationController, this.userUID}) : super(key: key);
   final String userUID;
@@ -259,18 +263,19 @@ class _my_sleepState extends State<my_sleep_support>
       ),
     );
 
+    //
     listViews.add(
-      time_asleep_doctor(
+      time_asleep(
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
               parent: widget.animationController,
               curve:
               Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
           animationController: widget.animationController,
-          fitbitToken: fitbitToken
+          fitbitToken: fitbitToken, userUID: widget.userUID
       ),
     );
     listViews.add(
-      stacked_sleep_chart_doctor(
+      stacked_sleep_chart(
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
               parent: widget.animationController,
               curve:
@@ -279,8 +284,6 @@ class _my_sleepState extends State<my_sleep_support>
           fitbittoken: fitbitToken
       ),
     );
-
-
     listViews.add(
       TitleView(
         titleTxt: 'Sleep Quality',
@@ -294,10 +297,8 @@ class _my_sleepState extends State<my_sleep_support>
       ),
     );
 
-
-
     listViews.add(
-      sleep_barchart_sf_doctor(
+      sleep_barchart_sf(
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
               parent: widget.animationController,
               curve:
@@ -306,8 +307,6 @@ class _my_sleepState extends State<my_sleep_support>
           fitbitToken: fitbitToken
       ),
     );
-    //
-
 
 
 
