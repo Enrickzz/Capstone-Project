@@ -71,6 +71,7 @@ class _index3State extends State<index3>
   String bday= "";
   String date;
   String hours,min;
+  int lengFin=0;
   List<Connection> connections = new List<Connection>();
   Users thisuser = new Users();
   String password = '';
