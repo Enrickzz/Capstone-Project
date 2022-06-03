@@ -346,9 +346,7 @@ class _addExercisePrescriptionState extends State<add_exercise_prescription> {
                           } catch(e) {
                             print("you got an error! $e");
                           }
-                          if (checkboxValue == true ){
 
-                          }
                           // Navigator.pop(context);
                         },
                       )

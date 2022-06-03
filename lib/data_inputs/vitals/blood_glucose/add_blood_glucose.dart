@@ -375,7 +375,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                   Connection a = Connection.fromJson(jsonString);
                                                   print(a.doctor1);
                                                   if(uid != a.doctor1){
-                                                    await addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded  high blood glucose. This may require your immediate medical attention.",
+                                                    await addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded high blood glucose. This may require your immediate medical attention.",
                                                         thisuser.firstname + " has  high Blood Glucose readings",
                                                         "3",
                                                         a.doctor1).then((value) {

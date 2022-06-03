@@ -30,7 +30,7 @@ class _addSymptomsState extends State<add_symptoms> {
   DateTime symptomDate;
   String symptom_time;
   bool isDateSelected= false;
-  int count = 1;
+  int count = 1, lengFin=0;
   List<Symptom> symptoms_list = new List<Symptom>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -677,9 +677,14 @@ class _addSymptomsState extends State<add_symptoms> {
                               connections.add(Connection.fromJson(jsonString)) ;
                               Connection a = Connection.fromJson(jsonString);
                               print(a.doctor1);
-                              addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe chest pains. He/she requires your immediate attention.",
-                                  "Persistent Chest Pain",
-                                  "4", a.doctor1);
+                              if( uid != a.doctor1){
+                                addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe chest pains. He/she requires your immediate attention.",
+                                    "Persistent Chest Pain",
+                                    "4", a.doctor1).then((value) {
+                                      notifsList.clear();
+                                });
+                              }
+
                             });
                           });
                           addtoRecommendation("We have notified your doctors regarding your experiences of severe Chest Tightness. This can be a sign of a possible heart attack. Please seek immediate medical attention to address this symptom. If you have any prescriptions for Chest Pains please take them now. For the meantime you can sit, stay calm, and rest with the help of this soothing song.",
@@ -698,9 +703,14 @@ class _addSymptomsState extends State<add_symptoms> {
                               connections.add(Connection.fromJson(jsonString)) ;
                               Connection a = Connection.fromJson(jsonString);
                               print(a.doctor1);
-                              addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe headache. He/she requires your immediate attention.",
-                                "Headaches",
-                                "2", a.doctor1,);
+                              if( uid != a.doctor1){
+                                addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe headache. He/she requires your immediate attention.",
+                                  "Headaches",
+                                  "2", a.doctor1,).then((value) {
+                                    notifsList.clear();
+                                });
+                              }
+
                             });
                           });
                           addtoRecommendation("We have notified your doctors regarding your experiences of a severe headache. This can be a sign of the progression of your CVD condition. Please seek immediate medical attention to address this symptom. For the meantime you can sit, stay calm, and rest with the help of this soothing song.",
@@ -718,9 +728,14 @@ class _addSymptomsState extends State<add_symptoms> {
                               connections.add(Connection.fromJson(jsonString)) ;
                               Connection a = Connection.fromJson(jsonString);
                               print(a.doctor1);
-                              addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe pain. He/she requires your immediate attention.",
-                                "Pain",
-                                "3", a.doctor1,);
+                              if( uid != a.doctor1){
+                                addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing severe pain. He/she requires your immediate attention.",
+                                  "Pain",
+                                  "3", a.doctor1,).then((value) {
+                                    notifsList.clear();
+                                });
+                              }
+
                             });
                           });
                           addtoRecommendation("We have notified your doctor and support system regarding the occurrence of severe pain. For the meantime Rest and elevate the painful area. Alternate between ice packs to reduce inflammation and heat to improve blood flow. Please seek immediate medical attention if the pain becomes unbearable and take pain relievers if necessary.",
@@ -738,9 +753,14 @@ class _addSymptomsState extends State<add_symptoms> {
                               connections.add(Connection.fromJson(jsonString)) ;
                               Connection a = Connection.fromJson(jsonString);
                               print(a.doctor1);
-                              addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing shortness of breath. He/she may require your immediate attention.",
-                                "Pain",
-                                "1", a.doctor1,);
+                              if( uid != a.doctor1){
+                                addtoNotif(thisuser.firstname+" "+ thisuser.lastname + " is experiencing shortness of breath. He/she may require your immediate attention.",
+                                  "Pain",
+                                  "1", a.doctor1,).then((value) {
+                                    notifsList.clear();
+                                });
+                              }
+
                             });
                           });
                         }
@@ -922,36 +942,46 @@ class _addSymptomsState extends State<add_symptoms> {
     });
     return downloadurl;
   }
-  void addtoNotif(String message, String title, String priority,String uid) async{
+  Future<void> addtoNotif(String message, String title, String priority,String uid) async{
     print ("ADDED TO NOTIFICATIONS");
     notifsList.clear();
-    await getNotifs(uid).then((value) {
-      final ref = databaseReference.child('users/' + uid + '/notifications/');
+    final ref = databaseReference.child('users/' + uid + '/notifications/');
       String redirect = "";
-      ref.once().then((DataSnapshot snapshot) {
-        if(snapshot.value == null){
-          final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-          ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-            "rec_date": date, "category": "notification", "redirect": redirect});
-        }else{
-          // count = recommList.length--;
-          final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
-          ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-            "rec_date": date, "category": "notification", "redirect": redirect});
+      ref.once().then((DataSnapshot snapshot) async{
+        int leng = await getNotifs(uid).then((value) {
+          if(snapshot.value == null){
+            final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
+            ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+              "rec_date": date, "category": "notification", "redirect": redirect});
+          }else{
+            // count = recommList.length--;
+            final ref = databaseReference.child('users/' + uid + '/notifications/' + lengFin.toString());
+            ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
+              "rec_date": date, "category": "notification", "redirect": redirect});
 
-        }
+          }
+          return value;
+        });
       });
-    });
   }
-  Future<void> getNotifs(String uid) async{
-    print("GET NOTIF");
+  Future<int> getNotifs(String passedUid) async {
     notifsList.clear();
-    final readBP = databaseReference.child('users/' + uid + '/notifications/');
+    final uid = passedUid;
+    List<RecomAndNotif> tempL=[];
+    final readBP = databaseReference.child('users/' + passedUid + '/notifications/');
     await readBP.once().then((DataSnapshot snapshot){
+      print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
+        RecomAndNotif a = RecomAndNotif.fromJson(jsonString);
         notifsList.add(RecomAndNotif.fromJson(jsonString));
+        tempL.add(a);
       });
+      notifsList = notifsList.reversed.toList();
+    }).then((value) {
+      print("LENGFIN = " + lengFin.toString());
+      lengFin = tempL.length;
+      return tempL.length;
     });
   }
   void addtoRecommendation(String message, String title, String priority, String uid){
