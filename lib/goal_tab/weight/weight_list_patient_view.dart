@@ -154,6 +154,7 @@ class _weightPatienttate extends State<weight_list_patient_view> {
       temp.forEach((jsonString) {
         weights.add(Weight.fromJson(jsonString));
       });
+      weights = weights.reversed.toList();
     });
   }
 

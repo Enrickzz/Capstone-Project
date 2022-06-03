@@ -266,7 +266,7 @@ class Physical_Parameters {
   Physical_Parameters.fromJson(Map<String, dynamic> json) {
     height = double.parse(json['height']);
     weight = double.parse(json['weight']);
-    bmi = double.parse(json['BMI']);
+    bmi = double.parse(json['BMI'].toString());
   }
 
   Map<String, dynamic> toJson() {

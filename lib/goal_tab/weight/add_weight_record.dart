@@ -544,6 +544,7 @@ class add_weightState extends State<add_weight_record> {
       temp.forEach((jsonString) {
         weights.add(Weight.fromJson(jsonString));
       });
+      weights = weights.reversed.toList();
     });
   }
 

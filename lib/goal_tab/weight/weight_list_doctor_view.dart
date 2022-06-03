@@ -108,6 +108,8 @@ class _weightDoctorstate extends State<weight_list_doctor_view> {
       temp.forEach((jsonString) {
         weights.add(Weight.fromJson(jsonString));
       });
+      weights = weights.reversed.toList();
+
     });
   }
   // void getBodyTemp() {
