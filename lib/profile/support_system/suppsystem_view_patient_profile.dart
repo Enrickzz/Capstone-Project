@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:my_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:my_app/dashboards/dashboards_as_doctor.dart';
 import 'package:my_app/data_inputs/data_inputs_doctor_view.dart';
+import 'package:my_app/distress_call_logs/patient%20or%20support_system/view_call_log_as_support.dart';
 import 'package:my_app/goal_tab/goals_support_view.dart';
 import 'package:my_app/goal_tab/meals/my_meals.dart';
 import 'package:my_app/management_plan/management_plan_supp_view.dart';
@@ -681,6 +682,19 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => journal_list_supp_view(userUID: widget.userUID)),
+                                  );
+
+                                },
+                              ),
+
+                              _buildDivider(),
+                              ListTile(
+                                title: Text("Distress Call Logs"),
+                                trailing: Icon(Icons.keyboard_arrow_right),
+                                onTap:(){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => call_log_suppView(userUID: widget.userUID)),
                                   );
 
                                 },

@@ -4,23 +4,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/data_inputs/medicine_intake/view_specific_medicine_patient_view.dart';
+import 'package:my_app/distress_call_logs/patient%20or%20support_system/specific_call_log_as_support.dart';
+import 'package:my_app/management_plan/medication_prescription/add_medication_prescription.dart';
 import 'package:my_app/management_plan/medication_prescription/specific_medical_prescription_viewAsSupport.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 
-import 'add_medication_prescription.dart';
-
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
-class medication_prescription_suppView extends StatefulWidget {
+class call_log_suppView extends StatefulWidget {
   final List<Medication_Prescription> preslist;
   final int pointer;
   final String userUID;
-  medication_prescription_suppView({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
+  call_log_suppView({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
   @override
-  _medication_prescriptionPatientViewState createState() => _medication_prescriptionPatientViewState();
+  call_logSupportViewState createState() => call_logSupportViewState();
 }
 
-class _medication_prescriptionPatientViewState extends State<medication_prescription_suppView> {
+class call_logSupportViewState extends State<call_log_suppView> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final AuthService _auth = AuthService();
@@ -58,12 +59,11 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
           iconTheme: IconThemeData(
               color: Colors.black
           ),
-          title: const Text('Medication Prescriptions', style: TextStyle(
+          title: const Text('Distress Calls', style: TextStyle(
               color: Colors.black
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
-
         ),
         body:  ListView.builder(
             itemCount: prestemp.length,
@@ -73,30 +73,33 @@ class _medication_prescriptionPatientViewState extends State<medication_prescrip
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
               child: Card(
                 child: ListTile(
-                    leading: Icon(Icons.medication_outlined ),
-                    title: Text(prestemp[index].generic_name + " (" +prestemp[index].branded_name+")",
+                    leading: Image.asset(
+                      'assets/images/emergency.png',
+                      width: 32,
+                      height: 32,
+                    ),
+                    title: Text("Distress Call #1",
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
-
                         )),
-                    subtitle:        Text("Prescribed by: Dr." + prestemp[index].doctor_name,
+                    subtitle:        Text("${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}",
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
                         )),
-                    trailing: Text("${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}",
+                    trailing: Text("12:00",
                         style:TextStyle(
                           color: Colors.grey,
                         )),
-                    isThreeLine: true,
+                    isThreeLine: false,
                     dense: true,
                     selected: true,
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificPrescriptionViewAsSupport(thislist: prestemp, index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificCallLogAsSupport(thislist: prestemp, index: index)),
                       );
                     }
 

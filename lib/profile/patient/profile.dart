@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/distress_call_logs/patient%20or%20support_system/view_call_log_as_support.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/profile/patient/edit_allergies.dart';
 import 'package:my_app/profile/patient/edit_medical_history.dart';
@@ -982,6 +983,16 @@ class _index3State extends State<index3>
                               // MaterialPageRoute(builder: (context) => journal_list_supp_view()),
                               MaterialPageRoute(builder: (context) => journal_list_patient_view()),
                             );
+
+                          },
+                        ),
+
+                        _buildDivider(),
+                        ListTile(
+                          title: Text("Distress Call Logs"),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap:(){
+
 
                           },
                         ),
