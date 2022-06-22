@@ -53,7 +53,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
   bool hasImage = true;
 
   //prescription image change this later
-  distressSOS thisPrescription;
+  distressSOS thisSOS;
   bool isLoading=true;
 
 
@@ -70,7 +70,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
     final uid = user.uid;
     Future.delayed(const Duration(milliseconds: 1000), (){
       prestemp = widget.thislist;
-      thisPrescription = prestemp[widget.index];
+      thisSOS = prestemp[widget.index];
       setState(() {
         isLoading = false;
       });
@@ -188,7 +188,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text("06/28/2022",
+                                Text(""+thisSOS.rec_date,
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
@@ -202,7 +202,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text("12:00",
+                                Text(""+thisSOS.rec_time,
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
@@ -216,7 +216,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text("",
+                                Text(""+thisSOS.reason,
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
