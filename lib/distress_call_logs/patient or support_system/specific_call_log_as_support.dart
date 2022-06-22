@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
 class SpecificCallLogAsSupport extends StatefulWidget {
   SpecificCallLogAsSupport({Key key, this.title, this.index, this.thislist}) : super(key: key);
   final String title;
-  final List<Medication_Prescription> thislist;
+  final List<distressSOS> thislist;
   int index;
   @override
   _SpecificCallLogAsSupportState createState() => _SpecificCallLogAsSupportState();
@@ -45,7 +45,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> tabs = ['Notifications', 'Recommendations'];
   TabController controller;
-  List<Medication_Prescription> prestemp = [];
+  List<distressSOS> prestemp = [];
   Medication_Prescription prescription = new Medication_Prescription();
   Users doctor = new Users();
   final double minScale = 1;
@@ -53,7 +53,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
   bool hasImage = true;
 
   //prescription image change this later
-  Medication_Prescription thisPrescription;
+  distressSOS thisPrescription;
   bool isLoading=true;
 
 
@@ -70,9 +70,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
     final uid = user.uid;
     Future.delayed(const Duration(milliseconds: 1000), (){
       prestemp = widget.thislist;
-      downloadUrls();
       thisPrescription = prestemp[widget.index];
-      getPrescibedBy();
       setState(() {
         isLoading = false;
       });
@@ -292,53 +290,5 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
       (loadingProgress == null) ? child : CircularProgressIndicator());
     }
   }
-  // void getPrescription() {
-  //   final User user = auth.currentUser;
-  //   final uid = user.uid;
-  //   final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
-  //   int index = widget.index;
-  //   readprescription.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       prestemp.add(Medication_Prescription.fromJson(jsonString));
-  //     });
-  //     brand_name = prestemp[index].branded_name;
-  //     generic_name = prestemp[index].generic_name;
-  //     dosage = prestemp[index].dosage.toString();
-  //     unit = prestemp[index].prescription_unit.toString();
-  //     frequency = prestemp[index].intake_time;
-  //     special_instruction = prestemp[index].special_instruction;
-  //     startDate = "${prestemp[index].startdate.month}/${prestemp[index].startdate.day}/${prestemp[index].startdate.year}";
-  //     endDate = "${prestemp[index].enddate.month}/${prestemp[index].enddate.day}/${prestemp[index].enddate.year}";
-  //     dateCreated = "${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}";
-  //     prescribedBy = prestemp[index].doctor_name;
-  //   });
-  // }
-  void getPrescibedBy(){
-    int index = widget.index;
-    final readDoctorName = databaseReference.child('users/' + prestemp[index].prescribedBy + '/personal_info/');
-    readDoctorName.once().then((DataSnapshot snapshot){
-      Map<String, dynamic> temp2 = jsonDecode(jsonEncode(snapshot.value));
-      doctor = Users.fromJson(temp2);
-      thisPrescription.prescribedBy = doctor.firstname + " " + doctor.lastname;
-    });
-  }
-  Future <String> downloadUrls() async{
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    String downloadurl="null";
-    for(var i = 0 ; i < prestemp.length; i++){
-      final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+prestemp[i].imgRef.toString());
-      if(prestemp[i].imgRef.toString() != "null"){
-        downloadurl = await ref.getDownloadURL();
-        prestemp[i].imgRef = downloadurl;
-      }
-      print ("THIS IS THE URL = at index $i "+ downloadurl);
-    }
-    //String downloadurl = await ref.getDownloadURL();
-    setState(() {
-      isLoading = false;
-    });
-    return downloadurl;
-  }
+
 }

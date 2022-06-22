@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
+
 DateFormat format = DateFormat("MM/dd/yyyy");
+
 class Users {
   String uid;
   String firstname;
@@ -14,8 +16,19 @@ class Users {
   String leaddoctor;
   String emergency_contact;
 
-  Users({this.uid, this.firstname, this.lastname, this.email, this.password, this.usertype, this.specialty, this.connections, this.isMe, this.pp_img, this.leaddoctor, this.emergency_contact});
-
+  Users(
+      {this.uid,
+      this.firstname,
+      this.lastname,
+      this.email,
+      this.password,
+      this.usertype,
+      this.specialty,
+      this.connections,
+      this.isMe,
+      this.pp_img,
+      this.leaddoctor,
+      this.emergency_contact});
 
   Users.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -27,7 +40,7 @@ class Users {
     specialty = json['specialty'];
     pp_img = json['pp_img'];
     leaddoctor = json['lead_doctor'];
-    if( json['emergency_contact'] != null){
+    if (json['emergency_contact'] != null) {
       emergency_contact = json['emergency_contact'];
     }
   }
@@ -47,7 +60,6 @@ class Users {
     lastname = json['lastname'];
   }
 
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['firstname'] = this.firstname;
@@ -56,18 +68,17 @@ class Users {
     data['password'] = this.password;
     return data;
   }
-
 }
-class Uid{
-  Uid({
-    this.uid
-  });
+
+class Uid {
+  Uid({this.uid});
   String uid;
   Uid.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
   }
 }
-class UID{
+
+class UID {
   UID({this.uid});
   String uid;
   UID.fromJson(Map<String, dynamic> json) {
@@ -75,25 +86,22 @@ class UID{
   }
 }
 
-class Connection{
-
-  Connection({
-    this.doctor1,
-    this.dashboard,
-    this.nonhealth,
-    this.health,
-
-    this.medpres1,
-    this.medpres2,
-    this.foodplan1,
-    this.foodplan2,
-    this.explan1,
-    this.explan2,
-    this.vitals1,
-    this.vitals2,
-    this.labplan1,
-    this.labplan2
-  });
+class Connection {
+  Connection(
+      {this.doctor1,
+      this.dashboard,
+      this.nonhealth,
+      this.health,
+      this.medpres1,
+      this.medpres2,
+      this.foodplan1,
+      this.foodplan2,
+      this.explan1,
+      this.explan2,
+      this.vitals1,
+      this.vitals2,
+      this.labplan1,
+      this.labplan2});
 
   String doctor1;
 
@@ -122,7 +130,6 @@ class Connection{
   String labplan2;
   String doctor2;
 
-
   Connection.fromJson2(Map<String, dynamic> json) {
     doctor1 = json['doctor1'];
     doctor2 = json['doctor2'];
@@ -138,8 +145,8 @@ class Connection{
     labplan2 = json['labplan2'];
   }
 }
-class Vitals_Connection {
 
+class Vitals_Connection {
   Vitals_Connection({
     this.uid,
     this.bloodpressure,
@@ -168,6 +175,7 @@ class Vitals_Connection {
     bodytemperature = json['bodytemperature'];
   }
 }
+
 class Additional_Info {
   DateTime birthday = new DateTime.now();
   String gender;
@@ -181,19 +189,18 @@ class Additional_Info {
   List<String> other_disease;
   List<String> family_disease;
 
-  Additional_Info({
-    this.birthday,
-    this.gender,
-    this.foodAller,
-    this.drugAller,
-    this.otherAller,
-    this.lifestyle,
-    this.average_stick,
-    this.alcohol_freq,
-    this.disease,
-    this.other_disease,
-    this.family_disease
-  });
+  Additional_Info(
+      {this.birthday,
+      this.gender,
+      this.foodAller,
+      this.drugAller,
+      this.otherAller,
+      this.lifestyle,
+      this.average_stick,
+      this.alcohol_freq,
+      this.disease,
+      this.other_disease,
+      this.family_disease});
   Additional_Info.fromJson(Map<String, dynamic> json) {
     birthday = DateFormat("MM/dd/yyyy").parse(json['birthday']);
     gender = json['gender'];
@@ -252,17 +259,13 @@ class Additional_Info {
     data['family_disease'] = this.family_disease;
     return data;
   }
-
 }
+
 class Physical_Parameters {
   double height;
   double weight;
   double bmi;
-  Physical_Parameters({
-    this.height,
-    this.weight,
-    this.bmi
-  });
+  Physical_Parameters({this.height, this.weight, this.bmi});
   Physical_Parameters.fromJson(Map<String, dynamic> json) {
     height = double.parse(json['height']);
     weight = double.parse(json['weight']);
@@ -276,8 +279,6 @@ class Physical_Parameters {
     data['BMI'] = this.bmi;
     return data;
   }
-
-
 }
 
 class Symptom {
@@ -293,14 +294,14 @@ class Symptom {
 
   Symptom(
       {this.symptomName,
-        this.intensityLvl,
-        this.symptomFelt,
-        this.symptomDate,
-        this.symptomTime,
-        this.symptomIsActive,
-        this.symptomTrigger,
-        this.recurring,
-        this.imgRef});
+      this.intensityLvl,
+      this.symptomFelt,
+      this.symptomDate,
+      this.symptomTime,
+      this.symptomIsActive,
+      this.symptomTrigger,
+      this.recurring,
+      this.imgRef});
 
   Symptom.fromJson(Map<String, dynamic> json) {
     symptomName = json['symptom_name'];
@@ -309,11 +310,12 @@ class Symptom {
     symptomDate = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
     symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
     String a = json['symptom_isActive'];
-    if(a == "true"){
+    if (a == "true") {
       symptomIsActive = true;
-    } else symptomIsActive = false;
+    } else
+      symptomIsActive = false;
     symptomTrigger = json['symptom_trigger'];
-    if(json['recurring'] != null){
+    if (json['recurring'] != null) {
       recurring = json['recurring'].cast<String>();
     }
     imgRef = json['imgRef'];
@@ -326,9 +328,10 @@ class Symptom {
     symptomDate = DateFormat("MM/dd/yyyy").parse(json['symptom_date']);
     symptomTime = DateFormat("hh:mm").parse(json['symptom_time']);
     String a = json['symptom_isActive'].toString();
-    if(a == "true"){
+    if (a == "true") {
       symptomIsActive = true;
-    } else symptomIsActive = false;
+    } else
+      symptomIsActive = false;
     symptomTrigger = json['symptom_trigger'];
     imgRef = json['imgRef'];
   }
@@ -357,9 +360,13 @@ class Medication {
   DateTime medicine_time;
   bool medicine_isActive;
 
-
-
-  Medication({this.medicine_name, this.medicine_type,this.medicine_unit, this.medicine_dosage, this.medicine_date, this.medicine_time});
+  Medication(
+      {this.medicine_name,
+      this.medicine_type,
+      this.medicine_unit,
+      this.medicine_dosage,
+      this.medicine_date,
+      this.medicine_time});
 
   Medication.fromJson(Map<String, dynamic> json) {
     medicine_name = json['medicine_name'];
@@ -382,8 +389,7 @@ class Medication {
   }
 }
 
-class Medication_Prescription{
-
+class Medication_Prescription {
   String generic_name;
   String branded_name;
   double dosage;
@@ -397,7 +403,19 @@ class Medication_Prescription{
   String doctor_name;
   String imgRef;
 
-  Medication_Prescription({this.generic_name, this.branded_name,this.dosage, this.startdate, this.enddate, this.intake_time, this.special_instruction, this.prescription_unit, this.prescribedBy, this.datecreated, this.doctor_name, this.imgRef});
+  Medication_Prescription(
+      {this.generic_name,
+      this.branded_name,
+      this.dosage,
+      this.startdate,
+      this.enddate,
+      this.intake_time,
+      this.special_instruction,
+      this.prescription_unit,
+      this.prescribedBy,
+      this.datecreated,
+      this.doctor_name,
+      this.imgRef});
 
   Medication_Prescription.fromJson(Map<String, dynamic> json) {
     generic_name = json['generic_name'];
@@ -428,10 +446,9 @@ class Medication_Prescription{
     data['datecreated'] = this.datecreated;
     return data;
   }
-
 }
 
-class Supplement_Prescription{
+class Supplement_Prescription {
   String supplement_name;
   // DateTime startdate;
   // DateTime enddate;
@@ -441,8 +458,12 @@ class Supplement_Prescription{
   String prescription_unit;
   DateTime dateCreated;
 
-
-  Supplement_Prescription({this.supplement_name, this.intake_time,this.dosage, this.prescription_unit, this.dateCreated});
+  Supplement_Prescription(
+      {this.supplement_name,
+      this.intake_time,
+      this.dosage,
+      this.prescription_unit,
+      this.dateCreated});
 
   Supplement_Prescription.fromJson(Map<String, dynamic> json) {
     supplement_name = json['supplement_name'];
@@ -461,7 +482,6 @@ class Supplement_Prescription{
     data['dateCreated'] = this.dateCreated;
     return data;
   }
-
 }
 
 class Lab_Result {
@@ -469,29 +489,28 @@ class Lab_Result {
   String labResult_note;
   DateTime labResult_date;
   DateTime labResult_time;
-  String international_normal_ratio=" ";
-  String potassium=" ";
-  String hemoglobin_hb=" ";
-  String Bun_mgDl=" ";
-  String creatinine_mgDl=" ";
-  String ldl=" ";
-  String hdl=" ";
-  String imgRef ='';
+  String international_normal_ratio = " ";
+  String potassium = " ";
+  String hemoglobin_hb = " ";
+  String Bun_mgDl = " ";
+  String creatinine_mgDl = " ";
+  String ldl = " ";
+  String hdl = " ";
+  String imgRef = '';
 
-  Lab_Result({
-    this.labResult_name,
-    this.labResult_note,
-    this.labResult_date,
-    this.labResult_time,
-    this.international_normal_ratio,
-    this.potassium,
-    this.hemoglobin_hb,
-    this.Bun_mgDl,
-    this.creatinine_mgDl,
-    this.ldl,
-    this.hdl,
-    this.imgRef
-  });
+  Lab_Result(
+      {this.labResult_name,
+      this.labResult_note,
+      this.labResult_date,
+      this.labResult_time,
+      this.international_normal_ratio,
+      this.potassium,
+      this.hemoglobin_hb,
+      this.Bun_mgDl,
+      this.creatinine_mgDl,
+      this.ldl,
+      this.hdl,
+      this.imgRef});
 
   Lab_Result.fromJson(Map<String, dynamic> json) {
     labResult_name = json['labResult_name'];
@@ -524,7 +543,6 @@ class Lab_Result {
     data['imgRef'] = this.imgRef;
     return data;
   }
-
 }
 
 class Blood_Pressure {
@@ -536,7 +554,13 @@ class Blood_Pressure {
   String bp_status;
   bool new_bp;
 
-  Blood_Pressure ({this.systolic_pressure, this.diastolic_pressure,this.pressure_level, this.bp_date, this.bp_time, this.bp_status});
+  Blood_Pressure(
+      {this.systolic_pressure,
+      this.diastolic_pressure,
+      this.pressure_level,
+      this.bp_date,
+      this.bp_time,
+      this.bp_status});
 
   Blood_Pressure.fromJson(Map<String, dynamic> json) {
     systolic_pressure = json['systolic_pressure'];
@@ -558,7 +582,6 @@ class Blood_Pressure {
     data['bp_status'] = this.bp_status;
     return data;
   }
-
 }
 
 class Heart_Rate {
@@ -568,7 +591,7 @@ class Heart_Rate {
   DateTime hr_time;
   bool new_hr;
 
-  Heart_Rate({this.bpm, this.hr_status,this.hr_date, this.hr_time});
+  Heart_Rate({this.bpm, this.hr_status, this.hr_date, this.hr_time});
 
   Heart_Rate.fromJson(Map<String, dynamic> json) {
     bpm = int.parse(json['HR_bpm']);
@@ -586,7 +609,6 @@ class Heart_Rate {
     data['hr_time'] = this.hr_time;
     return data;
   }
-
 }
 
 class Body_Temperature {
@@ -596,7 +618,12 @@ class Body_Temperature {
   DateTime bt_time;
   String indication;
 
-  Body_Temperature({this.unit, this.temperature,this.bt_date, this.bt_time, this.indication});
+  Body_Temperature(
+      {this.unit,
+      this.temperature,
+      this.bt_date,
+      this.bt_time,
+      this.indication});
 
   Body_Temperature.fromJson(Map<String, dynamic> json) {
     unit = json['unit'];
@@ -615,7 +642,6 @@ class Body_Temperature {
     data['indication'] = this.indication;
     return data;
   }
-
 }
 
 class Oxygen_Saturation {
@@ -625,7 +651,8 @@ class Oxygen_Saturation {
   DateTime os_time;
   bool new_o2;
 
-  Oxygen_Saturation({this.oxygen_saturation,this.oxygen_status, this.os_date, this.os_time});
+  Oxygen_Saturation(
+      {this.oxygen_saturation, this.oxygen_status, this.os_date, this.os_time});
 
   Oxygen_Saturation.fromJson(Map<String, dynamic> json) {
     oxygen_saturation = int.parse(json['oxygen_saturation']);
@@ -643,7 +670,6 @@ class Oxygen_Saturation {
     data['os_time'] = this.os_time;
     return data;
   }
-
 }
 
 class Blood_Cholesterol {
@@ -653,36 +679,50 @@ class Blood_Cholesterol {
   double triglycerides;
   DateTime cholesterol_date;
 
-  Blood_Cholesterol({this.total_cholesterol, this.ldl_cholesterol, this.hdl_cholesterol, this.triglycerides, this.cholesterol_date});
+  Blood_Cholesterol(
+      {this.total_cholesterol,
+      this.ldl_cholesterol,
+      this.hdl_cholesterol,
+      this.triglycerides,
+      this.cholesterol_date});
 
   double get getTotalCholesterol {
     return total_cholesterol;
   }
+
   double get getldlCholesterol {
     return ldl_cholesterol;
   }
+
   double get gethdlCholesterol {
     return hdl_cholesterol;
   }
+
   double get getTriglycerides {
     return triglycerides;
   }
-  DateTime get getDate{
+
+  DateTime get getDate {
     return cholesterol_date;
   }
-  void setTotalCholesterol (double number){
+
+  void setTotalCholesterol(double number) {
     total_cholesterol = number;
   }
-  void setldlCholesterol (double number){
+
+  void setldlCholesterol(double number) {
     ldl_cholesterol = number;
   }
-  void sethdlCholesterol (double number){
+
+  void sethdlCholesterol(double number) {
     hdl_cholesterol = number;
   }
-  void setTriglycerides (double number){
+
+  void setTriglycerides(double number) {
     triglycerides = number;
   }
-  void setDate (DateTime date){
+
+  void setDate(DateTime date) {
     cholesterol_date = date;
   }
 }
@@ -695,13 +735,19 @@ class Blood_Glucose {
   DateTime bloodGlucose_time;
   bool new_glucose;
 
-  Blood_Glucose({this.glucose, this.lastMeal, this.bloodGlucose_status, this.bloodGlucose_date, this.bloodGlucose_time});
+  Blood_Glucose(
+      {this.glucose,
+      this.lastMeal,
+      this.bloodGlucose_status,
+      this.bloodGlucose_date,
+      this.bloodGlucose_time});
 
   Blood_Glucose.fromJson(Map<String, dynamic> json) {
     glucose = double.parse(json['glucose']);
     lastMeal = int.parse(json['lastMeal']);
     bloodGlucose_status = json['glucose_status'];
-    bloodGlucose_date = DateFormat("MM/dd/yyyy").parse(json['bloodGlucose_date']);
+    bloodGlucose_date =
+        DateFormat("MM/dd/yyyy").parse(json['bloodGlucose_date']);
     bloodGlucose_time = DateFormat("hh:mm").parse(json['bloodGlucose_time']);
     new_glucose = json['new_glucose'];
   }
@@ -715,8 +761,8 @@ class Blood_Glucose {
     data['bloodGlucose_time'] = this.bloodGlucose_time;
     return data;
   }
-
 }
+
 class Respiratory_Rate {
   int bpm = 0;
   DateTime bpm_date;
@@ -739,6 +785,25 @@ class Respiratory_Rate {
   }
 }
 
+class distressSOS {
+  String rec_date;
+  String rec_time;
+  String reason;
+
+  distressSOS({this.rec_date, this.rec_time, this.reason});
+  distressSOS.fromJson(Map<String, dynamic> json) {
+    reason = json["reason"];
+    rec_date = json['rec_date'];
+    rec_time = json['rec_time'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['reason'] = this.reason;
+    data['rec_date'] = this.rec_date;
+    data['rec_time'] = this.rec_time;
+    return data;
+  }
+}
 
 class RecomAndNotif {
   String id;
@@ -750,7 +815,15 @@ class RecomAndNotif {
   String category;
   String redirect;
 
-  RecomAndNotif({this.id, this.message,this.title,this.priority, this.rec_date, this.rec_time, this.category, this.redirect});
+  RecomAndNotif(
+      {this.id,
+      this.message,
+      this.title,
+      this.priority,
+      this.rec_date,
+      this.rec_time,
+      this.category,
+      this.redirect});
 
   RecomAndNotif.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -785,7 +858,14 @@ class FoodPlan {
   String doctor;
   String doctor_name;
 
-  FoodPlan({this.purpose, this.food,  this.important_notes, this.prescribedBy, this.dateCreated,this.doctor, this.doctor_name});
+  FoodPlan(
+      {this.purpose,
+      this.food,
+      this.important_notes,
+      this.prescribedBy,
+      this.dateCreated,
+      this.doctor,
+      this.doctor_name});
 
   FoodPlan.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
@@ -807,8 +887,8 @@ class FoodPlan {
     data['dateCreated'] = this.dateCreated;
     return data;
   }
-
 }
+
 class ExPlan {
   String purpose;
   String type;
@@ -817,7 +897,13 @@ class ExPlan {
   DateTime dateCreated;
   String doctor_name;
 
-  ExPlan({this.purpose, this.type,  this.important_notes, this.prescribedBy, this.dateCreated, this.doctor_name});
+  ExPlan(
+      {this.purpose,
+      this.type,
+      this.important_notes,
+      this.prescribedBy,
+      this.dateCreated,
+      this.doctor_name});
 
   ExPlan.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
@@ -836,8 +922,8 @@ class ExPlan {
     data['dateCreated'] = this.dateCreated;
     return data;
   }
-
 }
+
 class Vitals {
   String purpose;
   String type;
@@ -847,7 +933,14 @@ class Vitals {
   DateTime dateCreated;
   String doctor_name;
 
-  Vitals({this.purpose, this.type, this.frequency, this.important_notes, this.prescribedBy, this.dateCreated, this.doctor_name});
+  Vitals(
+      {this.purpose,
+      this.type,
+      this.frequency,
+      this.important_notes,
+      this.prescribedBy,
+      this.dateCreated,
+      this.doctor_name});
 
   Vitals.fromJson(Map<String, dynamic> json) {
     purpose = json["purpose"];
@@ -869,6 +962,7 @@ class Vitals {
     return data;
   }
 }
+
 class Lab_Plan {
   String reason_notification;
   String type;
@@ -878,7 +972,14 @@ class Lab_Plan {
   String doctor_name;
   String imgRef;
 
-  Lab_Plan({this.reason_notification, this.type, this.important_notes, this.prescribedBy, this.dateCreated, this.doctor_name, this.imgRef});
+  Lab_Plan(
+      {this.reason_notification,
+      this.type,
+      this.important_notes,
+      this.prescribedBy,
+      this.dateCreated,
+      this.doctor_name,
+      this.imgRef});
 
   Lab_Plan.fromJson(Map<String, dynamic> json) {
     reason_notification = json['Notify_Reason'];
@@ -890,6 +991,7 @@ class Lab_Plan {
     imgRef = json["imgRef"];
   }
 }
+
 class Weight_Goal {
   String objective;
   double target_weight;
@@ -898,14 +1000,13 @@ class Weight_Goal {
   String weight_unit;
   DateTime dateCreated;
 
-  Weight_Goal({
-   this.objective,
-    this.target_weight,
-    this.current_weight,
-    this.weight,
-    this.weight_unit,
-    this.dateCreated
-  });
+  Weight_Goal(
+      {this.objective,
+      this.target_weight,
+      this.current_weight,
+      this.weight,
+      this.weight_unit,
+      this.dateCreated});
   Weight_Goal.fromJson(Map<String, dynamic> json) {
     objective = json["objective"];
     target_weight = double.parse(json["target_weight"]);
@@ -929,20 +1030,15 @@ class Weight_Goal {
     data['dateCreated'] = this.dateCreated;
     return data;
   }
-
 }
+
 class Weight {
   double weight;
   double bmi;
   DateTime timeCreated;
   DateTime dateCreated;
 
-  Weight({
-    this.weight,
-    this.bmi,
-    this.timeCreated,
-    this.dateCreated
-  });
+  Weight({this.weight, this.bmi, this.timeCreated, this.dateCreated});
 
   Weight.fromJson(Map<String, dynamic> json) {
     weight = double.parse(json["weight"]);
@@ -967,11 +1063,7 @@ class Water_Goal {
   String water_unit;
   DateTime dateCreated;
 
-  Water_Goal({
-    this.water_goal,
-    this.water_unit,
-    this.dateCreated
-  });
+  Water_Goal({this.water_goal, this.water_unit, this.dateCreated});
   Water_Goal.fromJson(Map<String, dynamic> json) {
     water_goal = double.parse(json["water_goal"]);
     water_unit = json['water_unit'];
@@ -991,9 +1083,9 @@ class WaterIntake {
   DateTime timeCreated;
   DateTime dateCreated;
   WaterIntake({
-  this.water_intake,
-  this.timeCreated,
-  this.dateCreated,
+    this.water_intake,
+    this.timeCreated,
+    this.dateCreated,
   });
   WaterIntake.fromJson(Map<String, dynamic> json) {
     water_intake = int.parse(json["water_intake"]);
@@ -1015,12 +1107,8 @@ class Sleep_Goal {
   int duration;
   DateTime dateCreated;
 
-  Sleep_Goal({
-    this.bed_time,
-    this.wakeup_time,
-    this.duration,
-    this.dateCreated
-  });
+  Sleep_Goal(
+      {this.bed_time, this.wakeup_time, this.duration, this.dateCreated});
 
   Sleep_Goal.fromJson(Map<String, dynamic> json) {
     bed_time = DateFormat("hh:mm").parse(json["bed_time"]);
@@ -1077,7 +1165,8 @@ class PatientIds {
     return data;
   }
 }
-class infoChanged{
+
+class infoChanged {
   String firstname;
   String lastname;
   String weight;
@@ -1086,27 +1175,28 @@ class infoChanged{
 
   infoChanged(this.firstname, this.lastname, this.weight, this.height,
       this.birthDateInString);
-
 }
-class mdhChanged{
+
+class mdhChanged {
   List<String> disease;
   List<String> other_disease;
   List<String> family_disease;
 
   mdhChanged(this.disease, this.other_disease, this.family_disease);
 }
-class allergyChanged{
+
+class allergyChanged {
   List<String> foodAller;
   List<String> drugAller;
   List<String> otherAller;
 
   allergyChanged(this.foodAller, this.drugAller, this.otherAller);
 }
-class otherChanged{
+
+class otherChanged {
   String valueLifestyle;
   String goal;
   String valueAlc;
 
   otherChanged(this.valueLifestyle, this.goal, this.valueAlc);
 }
-

@@ -27,7 +27,7 @@ class call_logSupportViewState extends State<call_log_suppView> {
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Medication_Prescription> prestemp = [];
+  List<distressSOS> SOS = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
 
   @override
@@ -35,8 +35,8 @@ class call_logSupportViewState extends State<call_log_suppView> {
     super.initState();
     final User user = auth.currentUser;
     final uid = user.uid;
-    prestemp.clear();
-    getMedicalPrescription();
+    SOS.clear();
+    getSOS();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         print("setstate");
@@ -66,7 +66,7 @@ class call_logSupportViewState extends State<call_log_suppView> {
           backgroundColor: Colors.white,
         ),
         body:  ListView.builder(
-            itemCount: prestemp.length,
+            itemCount: SOS.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
               width: MediaQuery.of(context).size.width,
@@ -78,18 +78,18 @@ class call_logSupportViewState extends State<call_log_suppView> {
                       width: 32,
                       height: 32,
                     ),
-                    title: Text("Distress Call #1",
+                    title: Text("Distress Call #$index",
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
                         )),
-                    subtitle:        Text("${prestemp[index].datecreated.month}/${prestemp[index].datecreated.day}/${prestemp[index].datecreated.year}",
+                    subtitle:        Text(""+SOS[index].rec_date,
                         style:TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
                         )),
-                    trailing: Text("12:00",
+                    trailing: Text(""+SOS[index].rec_time,
                         style:TextStyle(
                           color: Colors.grey,
                         )),
@@ -99,7 +99,7 @@ class call_logSupportViewState extends State<call_log_suppView> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificCallLogAsSupport(thislist: prestemp, index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificCallLogAsSupport(thislist: SOS, index: index)),
                       );
                     }
 
@@ -124,17 +124,20 @@ class call_logSupportViewState extends State<call_log_suppView> {
       return "$hours:$min";
     }
   }
-  void getMedicalPrescription() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
+  void getSOS() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
     String userUID = widget.userUID;
-    final readprescription = databaseReference.child('users/' + userUID + '/management_plan/medication_prescription_list/');
-    readprescription.once().then((DataSnapshot snapshot){
+    var readsos;
+    if(userUID != null){
+      readsos = databaseReference.child('users/' + userUID + '/SOSCalls/');
+    }else readsos = databaseReference.child('users/' + uid + '/SOSCalls/');
+    readsos.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
-        prestemp.add(Medication_Prescription.fromJson(jsonString));
+        SOS.add(distressSOS.fromJson(jsonString));
       });
-      prestemp = prestemp.reversed.toList();
+      SOS = SOS.reversed.toList();
     });
   }
 }

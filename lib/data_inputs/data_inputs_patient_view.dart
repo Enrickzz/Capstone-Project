@@ -45,7 +45,8 @@ class _AppSignUpState extends State<data_inputs> {
   List<Medication> thismedlist = new List<Medication>();
   List<Medication_Prescription> prescriptionList = new List<Medication_Prescription>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
-
+  List<distressSOS> SOS = new List<distressSOS>();
+  int lengSOS = 0;
   //added by borj
   List<Supplement_Prescription> supplementList = new List<Supplement_Prescription>();
   String bday= "";
@@ -112,6 +113,37 @@ class _AppSignUpState extends State<data_inputs> {
                       print(">>>YAY");
                       await FlutterPhoneDirectCaller.callNumber(contactNum).then((value) {
                         notifySS();
+                      });
+                    });
+                  }
+                });
+                final readSOS = databaseReference
+                    .child('users/' + uid + '/SOSCalls/');
+                readSOS
+                    .once()
+                    .then((DataSnapshot snapshot) async {
+                  if (snapshot.value == null) {
+                    final ref = databaseReference.child(
+                        'users/' +
+                            uid +
+                            '/SOSCalls/' +
+                            0.toString());
+                    ref.set({
+                      "rec_date": date,
+                      "rec_time": "$hours:$min",
+                      "reason": "",
+                    });
+                  } else {
+                    getSOS().then((value) {
+                      final ref = databaseReference.child(
+                          'users/' +
+                              uid +
+                              '/SOSCalls/' +
+                              lengSOS.toString());
+                      ref.set({
+                        "rec_date": date,
+                        "rec_time": "$hours:$min",
+                        "reason": "",
                       });
                     });
                   }
@@ -811,6 +843,23 @@ class _AppSignUpState extends State<data_inputs> {
 
     });
     return medicationList;
+  }
+
+  Future<int> getSOS() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    int count = 0;
+    final readBP = databaseReference.child('users/' + uid + '/SOScalls/');
+    await readBP.once().then((DataSnapshot snapshot) {
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        count++;
+        SOS.add(distressSOS.fromJson(jsonString));
+      });
+      lengSOS = count;
+      return count;
+    });
   }
   Future<void> _showDialog() async {
     return showDialog<void>(

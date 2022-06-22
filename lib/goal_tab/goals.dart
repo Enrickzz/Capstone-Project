@@ -51,6 +51,8 @@ class _goalsState extends State<goals>
   int lengFin = 0;
   List<Connection> connections = new List<Connection>();
   Users thisuser = new Users();
+  List<distressSOS> SOS = new List<distressSOS>();
+  int lengSOS = 0;
   @override
   void initState() {
     super.initState();
@@ -155,6 +157,37 @@ class _goalsState extends State<goals>
                       print(">>>YAY");
                       await FlutterPhoneDirectCaller.callNumber(contactNum).then((value) {
                         notifySS();
+                      });
+                    });
+                  }
+                });
+                final readSOS = databaseReference
+                    .child('users/' + uid + '/SOSCalls/');
+                readSOS
+                    .once()
+                    .then((DataSnapshot snapshot) async {
+                  if (snapshot.value == null) {
+                    final ref = databaseReference.child(
+                        'users/' +
+                            uid +
+                            '/SOSCalls/' +
+                            0.toString());
+                    ref.set({
+                      "rec_date": date,
+                      "rec_time": "$hours:$min",
+                      "reason": "",
+                    });
+                  } else {
+                    getSOS().then((value) {
+                      final ref = databaseReference.child(
+                          'users/' +
+                              uid +
+                              '/SOSCalls/' +
+                              lengSOS.toString());
+                      ref.set({
+                        "rec_date": date,
+                        "rec_time": "$hours:$min",
+                        "reason": "",
                       });
                     });
                   }
@@ -357,7 +390,22 @@ class _goalsState extends State<goals>
 
     });
   }
-
+  Future<int> getSOS() async{
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    int count = 0;
+    final readBP = databaseReference.child('users/' + uid + '/SOScalls/');
+    await readBP.once().then((DataSnapshot snapshot) {
+      print(snapshot.value);
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        count++;
+        SOS.add(distressSOS.fromJson(jsonString));
+      });
+      lengSOS = count;
+      return count;
+    });
+  }
   void getNotifs() {
     final User user = auth.currentUser;
     final uid = user.uid;
