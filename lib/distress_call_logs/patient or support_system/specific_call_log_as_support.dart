@@ -216,7 +216,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text(""+thisSOS.reason,
+                                Text(""+ifnn(thisSOS.reason),
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
@@ -230,7 +230,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text("",
+                                Text(""+ifnn(null),
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
@@ -244,7 +244,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text("",
+                                Text(""+ifnn(null),
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
@@ -289,6 +289,11 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
       return Image.network(imgref, loadingBuilder: (context, child, loadingProgress) =>
       (loadingProgress == null) ? child : CircularProgressIndicator());
     }
+  }
+  String ifnn(String check){
+    if(check == null){
+      return "";
+    }else return check;
   }
 
 }
