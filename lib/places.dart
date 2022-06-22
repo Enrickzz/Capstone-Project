@@ -59,7 +59,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   Users thisuser = new Users();
   List<distressSOS> SOS = new List<distressSOS>();
   int lengSOS = 0;
-
+  String contactNumG='';
   @override
   void initState() {
     super.initState();
@@ -167,6 +167,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                     final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
                     await readContactNum.once().then((DataSnapshot contact) {
                       contactNum = contact.value.toString();
+                      contactNumG = contactNum;
                     }).then((value) async{
                       print(">>>YAY");
                       await FlutterPhoneDirectCaller.callNumber(contactNum).then((value) {
@@ -190,6 +191,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                       "rec_date": date,
                       "rec_time": "$hours:$min",
                       "reason": "",
+                      "number": contactNum,
+                      "note": "",
+                      "call_desc": "",
                     });
                   } else {
                     getSOS().then((value) {
@@ -201,7 +205,10 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                       ref.set({
                         "rec_date": date,
                         "rec_time": "$hours:$min",
-                        "reason": "",
+                        "number": contactNum,
+                        "note": "",
+                        "call_desc": "",
+
                       });
                     });
                   }

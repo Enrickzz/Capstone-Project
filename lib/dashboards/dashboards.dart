@@ -628,7 +628,9 @@ class _DashboardsState extends State<Dashboards> with TickerProviderStateMixin {
                                         ref.set({
                                           "rec_date": date,
                                           "rec_time": "$hours:$min",
-                                          "reason": "",
+                                          "reason": "","number": contactNum,
+                                          "note": "",
+                                          "call_desc": "",
                                         });
                                       } else {
                                         getSOS().then((value) {
@@ -640,7 +642,9 @@ class _DashboardsState extends State<Dashboards> with TickerProviderStateMixin {
                                           ref.set({
                                             "rec_date": date,
                                             "rec_time": "$hours:$min",
-                                            "reason": "",
+                                            "reason": "","number": contactNum,
+                                            "note": "",
+                                            "call_desc": "",
                                           });
                                         });
                                       }

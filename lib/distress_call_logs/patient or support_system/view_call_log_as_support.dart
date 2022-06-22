@@ -99,7 +99,7 @@ class call_logSupportViewState extends State<call_log_suppView> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SpecificCallLogAsSupport(thislist: SOS, index: index)),
+                        MaterialPageRoute(builder: (context) => SpecificCallLogAsSupport(thislist: SOS, index: index,userUID: widget.userUID,)),
                       );
                     }
 

@@ -13,7 +13,9 @@ import 'package:my_app/models/users.dart';
 class edit_call_log extends StatefulWidget {
   final List<Medication_Prescription> thislist;
   String userUID;
-  edit_call_log({this.thislist, this.userUID});
+  List<distressSOS> thisSOS;
+  int index;
+  edit_call_log({this.thislist, this.userUID,this.thisSOS,this.index});
   @override
   _editCallLogtate createState() => _editCallLogtate();
 }
@@ -172,81 +174,6 @@ class _editCallLogtate extends State<edit_call_log> {
                       setState(() => notes = val);
                     },
                   ),
-                  // SizedBox(height: 8.0),
-                  // GestureDetector(
-                  //   onTap: ()async{
-                  //     await showDatePicker(
-                  //       context: context,
-                  //       initialDate: new DateTime.now(),
-                  //       firstDate: new DateTime.now().subtract(Duration(days: 30)),
-                  //       lastDate: new DateTime.now(),
-                  //     ).then((value){
-                  //       if(value != null && value != callDate){
-                  //         setState(() {
-                  //           callDate = value;
-                  //           isDateSelected = true;
-                  //           call_date = "${callDate.month}/${callDate.day}/${callDate.year}";
-                  //         });
-                  //         dateValue.text = call_date + "\r";
-                  //       }
-                  //     });
-                  //
-                  //     final initialTime = TimeOfDay(hour:12, minute: 0);
-                  //     await showTimePicker(
-                  //       context: context,
-                  //       initialTime: TimeOfDay(
-                  //           hour: TimeOfDay.now().hour,
-                  //           minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
-                  //               .toInt()),
-                  //     ).then((value){
-                  //       if(value != null && value != time){
-                  //         setState(() {
-                  //           time = value;
-                  //           final hours = time.hour.toString().padLeft(2,'0');
-                  //           final min = time.minute.toString().padLeft(2,'0');
-                  //           call_time = "$hours:$min";
-                  //           dateValue.text += "$hours:$min";
-                  //           print("data value " + dateValue.text);
-                  //         });
-                  //       }
-                  //     });
-                  //   },
-                  //   child: AbsorbPointer(
-                  //     child: TextFormField(
-                  //       controller: dateValue,
-                  //       keyboardType: TextInputType.number,
-                  //       showCursor: false,
-                  //       decoration: InputDecoration(
-                  //         border: OutlineInputBorder(
-                  //           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //           borderSide: BorderSide(
-                  //             width:0,
-                  //             style: BorderStyle.none,
-                  //           ),
-                  //         ),
-                  //         filled: true,
-                  //         fillColor: Color(0xFFF2F3F5),
-                  //         hintStyle: TextStyle(
-                  //             color: Color(0xFF666666),
-                  //             fontFamily: defaultFontFamily,
-                  //             fontSize: defaultFontSize),
-                  //         hintText: "Date and Time of Call",
-                  //         prefixIcon: Icon(
-                  //           Icons.calendar_today,
-                  //           color: Color(0xFF666666),
-                  //           size: defaultIconSize,
-                  //         ),
-                  //       ),
-                  //       validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
-                  //       onChanged: (val){
-                  //
-                  //         print(dateValue);
-                  //         setState((){
-                  //         });
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
 
                   SizedBox(height: 24.0),
                   Row(
@@ -269,10 +196,12 @@ class _editCallLogtate extends State<edit_call_log> {
                         ),
                         color: Colors.blue,
                         onPressed:() async {
-
-
-
-
+                          List<distressSOS> updated = [];
+                          updated = widget.thisSOS;
+                          updated[widget.index].note = notes;
+                          updated[widget.index].call_desc = description;
+                          updated[widget.index].reason = reason;
+                          Navigator.pop(context, updated);
 
                         },
                       )

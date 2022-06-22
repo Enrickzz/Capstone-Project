@@ -216,7 +216,9 @@ class _index3State extends State<index3>
                       ref.set({
                         "rec_date": date,
                         "rec_time": "$hours:$min",
-                        "reason": "",
+                        "reason": "","number": contactNum,
+                        "note": "",
+                        "call_desc": "",
                       });
                     } else {
                       getSOS().then((value) {
@@ -228,7 +230,9 @@ class _index3State extends State<index3>
                         ref.set({
                           "rec_date": date,
                           "rec_time": "$hours:$min",
-                          "reason": "",
+                          "reason": "","number": contactNum,
+                          "note": "",
+                          "call_desc": "",
                         });
                       });
                     }

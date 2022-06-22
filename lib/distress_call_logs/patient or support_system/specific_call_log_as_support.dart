@@ -29,10 +29,11 @@ class MyApp extends StatelessWidget {
 }
 
 class SpecificCallLogAsSupport extends StatefulWidget {
-  SpecificCallLogAsSupport({Key key, this.title, this.index, this.thislist}) : super(key: key);
+  SpecificCallLogAsSupport({Key key, this.title, this.index, this.thislist,this.userUID}) : super(key: key);
   final String title;
   final List<distressSOS> thislist;
   int index;
+  String userUID;
   @override
   _SpecificCallLogAsSupportState createState() => _SpecificCallLogAsSupportState();
 }
@@ -131,15 +132,26 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                     builder: (context) => SingleChildScrollView(child: Container(
                                       padding: EdgeInsets.only(
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_call_log(),
+                                      child: edit_call_log(thisSOS: prestemp,index: widget.index),
                                     ),
                                     ),
-                                  ).then((value) =>
-                                      Future.delayed(const Duration(milliseconds: 1500), (){
-                                        setState((){
-
+                                  ).then((value) async {
+                                    if(value != null){
+                                      prestemp = value;
+                                      final ref = databaseReference.child(
+                                          'users/' +
+                                              widget.userUID +
+                                              '/SOSCalls/' +widget.index.toString());
+                                      await ref.update({"note": prestemp[widget.index].note,
+                                        "call_desc": prestemp[widget.index].call_desc,
+                                        "reason": prestemp[widget.index].reason}).then((value) {
+                                        setState(() {
                                         });
-                                      }));
+                                      });
+                                    }else{
+                                      print("value null");
+                                    }
+                                  });
                                 },
                                 // child: Padding(
                                 // padding: const EdgeInsets.only(left: 8),
@@ -230,7 +242,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text(""+ifnn(null),
+                                Text(""+ifnn(thisSOS.call_desc),
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold
@@ -244,7 +256,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                Text(""+ifnn(null),
+                                Text(""+ifnn(thisSOS.note),
                                   style: TextStyle(
                                       fontSize:16,
                                       fontWeight: FontWeight.bold

@@ -175,7 +175,9 @@ class _goalsState extends State<goals>
                     ref.set({
                       "rec_date": date,
                       "rec_time": "$hours:$min",
-                      "reason": "",
+                      "reason": "","number": contactNum,
+                      "note": "",
+                      "call_desc": "",
                     });
                   } else {
                     getSOS().then((value) {
@@ -187,7 +189,9 @@ class _goalsState extends State<goals>
                       ref.set({
                         "rec_date": date,
                         "rec_time": "$hours:$min",
-                        "reason": "",
+                        "reason": "","number": contactNum,
+                        "note": "",
+                        "call_desc": "",
                       });
                     });
                   }

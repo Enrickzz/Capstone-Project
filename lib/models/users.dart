@@ -789,18 +789,27 @@ class distressSOS {
   String rec_date;
   String rec_time;
   String reason;
+  String number;
+  String note;
+  String call_desc;
 
-  distressSOS({this.rec_date, this.rec_time, this.reason});
+  distressSOS({this.rec_date, this.rec_time, this.reason,this.note,this.call_desc,this.number});
   distressSOS.fromJson(Map<String, dynamic> json) {
     reason = json["reason"];
     rec_date = json['rec_date'];
     rec_time = json['rec_time'];
+    number = json["number"];
+    note = json['note'];
+    call_desc = json['call_desc'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['reason'] = this.reason;
     data['rec_date'] = this.rec_date;
     data['rec_time'] = this.rec_time;
+    data['number'] = this.number;
+    data['note'] = this.note;
+    data['call_desc'] = this.call_desc;
     return data;
   }
 }

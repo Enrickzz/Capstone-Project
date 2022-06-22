@@ -131,7 +131,9 @@ class _AppSignUpState extends State<data_inputs> {
                     ref.set({
                       "rec_date": date,
                       "rec_time": "$hours:$min",
-                      "reason": "",
+                      "reason": "","number": contactNum,
+                      "note": "",
+                      "call_desc": "",
                     });
                   } else {
                     getSOS().then((value) {
@@ -143,7 +145,9 @@ class _AppSignUpState extends State<data_inputs> {
                       ref.set({
                         "rec_date": date,
                         "rec_time": "$hours:$min",
-                        "reason": "",
+                        "reason": "","number": contactNum,
+                        "note": "",
+                        "call_desc": "",
                       });
                     });
                   }
