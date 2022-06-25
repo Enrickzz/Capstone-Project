@@ -8,7 +8,8 @@ import 'package:intl/intl.dart';
 import '../../models/users.dart';
 class add_medication extends StatefulWidget {
   final List<Medication> thislist;
-  add_medication({this.thislist, this.instance});
+  final String userUID;
+  add_medication({this.thislist, this.instance, this.userUID});
   final String instance;
   @override
   _addMedicationState createState() => _addMedicationState();
