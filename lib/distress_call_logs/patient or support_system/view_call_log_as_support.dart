@@ -78,7 +78,7 @@ class call_logSupportViewState extends State<call_log_suppView> {
                       width: 32,
                       height: 32,
                     ),
-                    title: Text("Distress Call #$index",
+                    title: Text(SOS[index].full_name +" ("+ SOS[index].number+")",
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
@@ -137,7 +137,7 @@ class call_logSupportViewState extends State<call_log_suppView> {
       temp.forEach((jsonString) {
         SOS.add(distressSOS.fromJson(jsonString));
       });
-      SOS = SOS.reversed.toList();
+      // SOS = SOS.reversed.toList();
     });
   }
 }

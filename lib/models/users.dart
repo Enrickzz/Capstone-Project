@@ -786,6 +786,7 @@ class Respiratory_Rate {
 }
 
 class distressSOS {
+  String full_name;
   String rec_date;
   String rec_time;
   String reason;
@@ -793,8 +794,9 @@ class distressSOS {
   String note;
   String call_desc;
 
-  distressSOS({this.rec_date, this.rec_time, this.reason,this.note,this.call_desc,this.number});
+  distressSOS({this.full_name, this.rec_date, this.rec_time, this.reason,this.note,this.call_desc,this.number});
   distressSOS.fromJson(Map<String, dynamic> json) {
+    full_name = json["full_name"];
     reason = json["reason"];
     rec_date = json['rec_date'];
     rec_time = json['rec_time'];
