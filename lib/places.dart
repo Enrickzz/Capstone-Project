@@ -153,6 +153,8 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                 final readPatient = databaseReference.child('users/' + uid + '/personal_info/');
                 Users patient = new Users();
                 String contactNum="";
+                String contactNumFName = "";
+                String contactNumLName = "";
                 await readPatient.once().then((DataSnapshot snapshotPatient) {
                   Map<String, dynamic> patientTemp = jsonDecode(jsonEncode(snapshotPatient.value));
                   patientTemp.forEach((key, jsonString) {
@@ -163,56 +165,81 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
                     await FlutterPhoneDirectCaller.callNumber("911").then((value) {
                       notifySS();
                     });
+                    final readSOS = databaseReference.child('users/' + uid + '/SOSCalls/');
+                    readSOS.once().then((DataSnapshot snapshot) async {
+                      if (snapshot.value == null) {
+                        final ref = databaseReference.child(
+                            'users/' + uid + '/SOSCalls/' + 0.toString());
+                        ref.set({
+                          "full_name": " ",
+                          "rec_date": date,
+                          "rec_time": "$hours:$min",
+                          "reason": "", "number": "911",
+                          "note": "",
+                          "call_desc": "",
+                        });
+                      }
+                      else{
+                        getSOS().then((value) {
+                          final ref = databaseReference.child('users/' + uid + '/SOSCalls/' + lengSOS.toString());
+                          ref.set({
+                            "full_name": " ",
+                            "rec_date": date,
+                            "rec_time": "$hours:$min",
+                            "reason": "","number": "911",
+                            "note": "",
+                            "call_desc": "",
+                          });
+                        });
+                      }
+                    });
                   }else{
                     final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
+                    final readContactLNumName = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/lastname/' /** last name ni SS*/);
+                    final readContactFNumName = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/firstname/' /** first name ni SS*/);
                     await readContactNum.once().then((DataSnapshot contact) {
+                      readContactLNumName.once().then((DataSnapshot lastname) {
+                        contactNumLName = lastname.value.toString();
+                      });
+                      readContactFNumName.once().then((DataSnapshot firstname) {
+                        contactNumFName = firstname.value.toString();
+                      });
                       contactNum = contact.value.toString();
-                      contactNumG = contactNum;
                     }).then((value) async{
                       print(">>>YAY");
                       await FlutterPhoneDirectCaller.callNumber(contactNum).then((value) {
                         notifySS();
                       });
-                    });
-                  }
-                });
-                final readSOS = databaseReference
-                    .child('users/' + uid + '/SOSCalls/');
-                readSOS
-                    .once()
-                    .then((DataSnapshot snapshot) async {
-                  if (snapshot.value == null) {
-                    final ref = databaseReference.child(
-                        'users/' +
-                            uid +
-                            '/SOSCalls/' +
-                            0.toString());
-                    ref.set({
-                      "rec_date": date,
-                      "rec_time": "$hours:$min",
-                      "reason": "",
-                      "number": contactNum,
-                      "note": "",
-                      "call_desc": "",
-                    });
-                  } else {
-                    getSOS().then((value) {
-                      final ref = databaseReference.child(
-                          'users/' +
-                              uid +
-                              '/SOSCalls/' +
-                              lengSOS.toString());
-                      ref.set({
-                        "rec_date": date,
-                        "rec_time": "$hours:$min",
-                        "number": contactNum,
-                        "note": "",
-                        "call_desc": "",
-
+                      final readSOS = databaseReference.child('users/' + uid + '/SOSCalls/');
+                      readSOS.once().then((DataSnapshot snapshot) async {
+                        if (snapshot.value == null) {
+                          final ref = databaseReference.child('users/' + uid + '/SOSCalls/' + 0.toString());
+                          ref.set({
+                            "full_name": "$contactNumFName $contactNumLName",
+                            "rec_date": date,
+                            "rec_time": "$hours:$min",
+                            "reason": "","number": contactNum,
+                            "note": "",
+                            "call_desc": "",
+                          });
+                        } else {
+                          getSOS().then((value) {
+                            final ref = databaseReference.child('users/' + uid + '/SOSCalls/' + lengSOS.toString());
+                            ref.set({
+                              "full_name": "$contactNumFName $contactNumLName",
+                              "rec_date": date,
+                              "rec_time": "$hours:$min",
+                              "reason": "","number": contactNum,
+                              "note": "",
+                              "call_desc": "",
+                            });
+                          });
+                        }
                       });
                     });
                   }
                 });
+
               },
               child: Image.asset(
                 'assets/images/emergency.png',
