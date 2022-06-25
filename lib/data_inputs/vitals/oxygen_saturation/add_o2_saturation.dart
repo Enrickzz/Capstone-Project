@@ -12,7 +12,8 @@ import 'package:my_app/models/users.dart';
 class add_o2_saturation extends StatefulWidget {
   final List<Oxygen_Saturation> o2list;
   final String instance;
-  add_o2_saturation({this.o2list, this.instance});
+  final String userUID;
+  add_o2_saturation({this.o2list, this.instance, this.userUID});
   @override
   _add_o2_saturationState createState() => _add_o2_saturationState();
 }
@@ -221,8 +222,13 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                         color: Colors.blue,
                                         onPressed:() async {
                                           try{
-                                            final User user = auth.currentUser;
-                                            final uid = user.uid;
+                                            String uid;
+                                            if (widget.userUID != null) {
+                                              uid = widget.userUID;
+                                            } else {
+                                              final User user = auth.currentUser;
+                                              uid = user.uid;
+                                            }
                                             final readOxygen = databaseReference.child('users/' + uid + '/vitals/health_records/oxygen_saturation_list');
                                             readOxygen.once().then((DataSnapshot datasnapshot) {
                                               String temp1 = datasnapshot.value.toString();

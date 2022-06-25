@@ -9,7 +9,8 @@ import 'package:my_app/models/users.dart';
 
 class add_blood_glucose extends StatefulWidget {
   final List<Blood_Glucose> thislist;
-  add_blood_glucose({this.thislist,this.instance});
+  final String userUID;
+  add_blood_glucose({this.thislist,this.instance, this.userUID});
   final String instance;
   @override
   _add_blood_glucoseState createState() => _add_blood_glucoseState();
@@ -309,8 +310,13 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                           }
                                           print(glucose.toStringAsFixed(2));
                                           try{
-                                            final User user = auth.currentUser;
-                                            final uid = user.uid;
+                                            String uid;
+                                            if (widget.userUID != null) {
+                                              uid = widget.userUID;
+                                            } else {
+                                              final User user = auth.currentUser;
+                                              uid = user.uid;
+                                            }
                                             final readGlucose = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
                                             readGlucose.once().then((DataSnapshot datasnapshot) {
                                               String temp1 = datasnapshot.value.toString();

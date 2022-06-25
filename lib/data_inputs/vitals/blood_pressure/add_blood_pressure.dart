@@ -12,7 +12,8 @@ import 'package:my_app/models/users.dart';
 class add_blood_pressure extends StatefulWidget {
   final List<Blood_Pressure> thislist;
   final String instance;
-  add_blood_pressure({this.thislist, this.instance});
+  final String userUID;
+  add_blood_pressure({this.thislist, this.instance, this.userUID});
   @override
   _add_blood_pressureState createState() => _add_blood_pressureState();
 }
@@ -305,8 +306,13 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                         color: Colors.blue,
                                         onPressed:() async {
                                           try{
-                                            final User user = auth.currentUser;
-                                            final uid = user.uid;
+                                            String uid;
+                                            if (widget.userUID != null) {
+                                              uid = widget.userUID;
+                                            } else {
+                                              final User user = auth.currentUser;
+                                              uid = user.uid;
+                                            }
                                             final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list');
                                             readBP.once().then((DataSnapshot datasnapshot) {
                                               String temp1 = datasnapshot.value.toString();
