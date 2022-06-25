@@ -476,14 +476,119 @@ class _DashboardsState extends State<Dashboards> with TickerProviderStateMixin {
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.black
+          ),
+          title: const Text('My Health', style: TextStyle(
+              color: Colors.black
+          )),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          actions: [
+            GestureDetector(
+                onTap: () async {
+                  final User user = auth.currentUser;
+                  final uid = user.uid;
+                  final readPatient = databaseReference.child('users/' + uid + '/personal_info/');
+                  Users patient = new Users();
+                  String contactNum="";
+                  await readPatient.once().then((DataSnapshot snapshotPatient) {
+                    Map<String, dynamic> patientTemp = jsonDecode(jsonEncode(snapshotPatient.value));
+                    patientTemp.forEach((key, jsonString) {
+                      patient = Users.fromJson(patientTemp);
+                    });
+                  }).then((value) async {
+                    if(patient.emergency_contact == null){
+                      await FlutterPhoneDirectCaller.callNumber("911").then((value) {
+                        notifySS();
+                      });
+                    }else{
+                      final readContactNum = databaseReference.child('users/' + patient.emergency_contact + '/personal_info/contact_no/' /** contact_number ni SS*/);
+                      await readContactNum.once().then((DataSnapshot contact) {
+                        contactNum = contact.value.toString();
+                      }).then((value) async{
+                        print(">>>YAY");
+                        await FlutterPhoneDirectCaller.callNumber(contactNum).then((value) {
+                          notifySS();
+                        });
+                      });
+                    }
+                  });
+                  final readSOS = databaseReference
+                      .child('users/' + uid + '/SOSCalls/');
+                  readSOS
+                      .once()
+                      .then((DataSnapshot snapshot) async {
+                    if (snapshot.value == null) {
+                      final ref = databaseReference.child(
+                          'users/' +
+                              uid +
+                              '/SOSCalls/' +
+                              0.toString());
+                      ref.set({
+                        "rec_date": date,
+                        "rec_time": "$hours:$min",
+                        "reason": "","number": contactNum,
+                        "note": "",
+                        "call_desc": "",
+                      });
+                    } else {
+                      getSOS().then((value) {
+                        final ref = databaseReference.child(
+                            'users/' +
+                                uid +
+                                '/SOSCalls/' +
+                                lengSOS.toString());
+                        ref.set({
+                          "rec_date": date,
+                          "rec_time": "$hours:$min",
+                          "reason": "","number": contactNum,
+                          "note": "",
+                          "call_desc": "",
+                        });
+                      });
+                    }
+                  });
+                },
+                child: Image.asset(
+                  'assets/images/emergency.png',
+                  width: 32,
+                  height: 32,
+                )
+            ),
+            SizedBox(width: 24),
+            Container(
+              margin: EdgeInsets.only( top: 16, right: 16,),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => notifications(animationController: widget.animationController)),
+                  );
+                },
+                child: Stack(
+                  children: <Widget>[
+                    Icon(Icons.notifications, ),
+                    Positioned(
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: checkNotifs(),
+                        constraints: BoxConstraints( minWidth: 12, minHeight: 12, ),
+                        child: Text( '!', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[
             getMainListViewUI(),
-            getAppBarUI(),
-            SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
-            )
           ],
         ),
       ),
@@ -500,9 +605,7 @@ class _DashboardsState extends State<Dashboards> with TickerProviderStateMixin {
           return ListView.builder(
             controller: scrollController,
             padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
+              top: 20,
               bottom: 62 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
@@ -516,204 +619,7 @@ class _DashboardsState extends State<Dashboards> with TickerProviderStateMixin {
       },
     );
   }
-
-  Widget getAppBarUI() {
-    return Column(
-      children: <Widget>[
-        AnimatedBuilder(
-          animation: widget.animationController,
-          builder: (BuildContext context, Widget child) {
-            return FadeTransition(
-              opacity: topBarAnimation,
-              child: Transform(
-                transform: Matrix4.translationValues(
-                    0.0, 30 * (1.0 - topBarAnimation.value), 0.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(topBarOpacity),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(32.0),
-                    ),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: FitnessAppTheme.grey
-                              .withOpacity(0.4 * topBarOpacity),
-                          offset: const Offset(1.1, 1.1),
-                          blurRadius: 10.0),
-                    ],
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: MediaQuery.of(context).padding.top,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 16,
-                            right: 16,
-                            top: 16 - 8.0 * topBarOpacity,
-                            bottom: 12 - 8.0 * topBarOpacity),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'My Health',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 22 + 6 - 6 * topBarOpacity,
-                                    letterSpacing: 1.2,
-                                    color: FitnessAppTheme.darkerText,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () async {
-                                  final User user = auth.currentUser;
-                                  final uid = user.uid;
-                                  final readPatient = databaseReference.child(
-                                      'users/' + uid + '/personal_info/');
-                                  Users patient = new Users();
-                                  String contactNum = "";
-                                  await readPatient
-                                      .once()
-                                      .then((DataSnapshot snapshotPatient) {
-                                    Map<String, dynamic> patientTemp =
-                                        jsonDecode(
-                                            jsonEncode(snapshotPatient.value));
-                                    patientTemp.forEach((key, jsonString) {
-                                      patient = Users.fromJson(patientTemp);
-                                    });
-                                  }).then((value) async {
-                                    if (patient.emergency_contact == null) {
-                                      await FlutterPhoneDirectCaller.callNumber(
-                                              "911")
-                                          .then((value) {
-                                        notifySS();
-                                      });
-                                    } else {
-                                      final readContactNum =
-                                          databaseReference.child('users/' +
-                                              patient.emergency_contact +
-                                              '/personal_info/contact_no/' /** contact_number ni SS*/);
-                                      await readContactNum
-                                          .once()
-                                          .then((DataSnapshot contact) {
-                                        contactNum = contact.value.toString();
-                                      }).then((value) async {
-                                        print(">>>YAY");
-                                        await FlutterPhoneDirectCaller
-                                                .callNumber(contactNum)
-                                            .then((value) {
-                                          notifySS();
-                                        });
-                                      });
-                                    }
-                                    final readSOS = databaseReference
-                                        .child('users/' + uid + '/SOSCalls/');
-                                    readSOS
-                                        .once()
-                                        .then((DataSnapshot snapshot) async {
-                                      if (snapshot.value == null) {
-                                        final ref = databaseReference.child(
-                                            'users/' +
-                                                uid +
-                                                '/SOSCalls/' +
-                                                0.toString());
-                                        ref.set({
-                                          "rec_date": date,
-                                          "rec_time": "$hours:$min",
-                                          "reason": "","number": contactNum,
-                                          "note": "",
-                                          "call_desc": "",
-                                        });
-                                      } else {
-                                        getSOS().then((value) {
-                                          final ref = databaseReference.child(
-                                              'users/' +
-                                                  uid +
-                                                  '/SOSCalls/' +
-                                                  lengSOS.toString());
-                                          ref.set({
-                                            "rec_date": date,
-                                            "rec_time": "$hours:$min",
-                                            "reason": "","number": contactNum,
-                                            "note": "",
-                                            "call_desc": "",
-                                          });
-                                        });
-                                      }
-                                    });
-                                  });
-                                },
-                                child: Image.asset(
-                                  'assets/images/emergency.png',
-                                  width: 32,
-                                  height: 32,
-                                )),
-                            SizedBox(width: 24),
-                            Container(
-                              margin: EdgeInsets.only(
-                                top: 0,
-                                right: 16,
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => notifications(
-                                              animationController:
-                                                  widget.animationController,
-                                            )),
-                                  );
-                                },
-                                child: Stack(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.notifications,
-                                    ),
-                                    Positioned(
-                                      right: 0,
-                                      child: Container(
-                                        padding: EdgeInsets.all(1),
-                                        decoration: checkNotifs(),
-                                        constraints: BoxConstraints(
-                                          minWidth: 12,
-                                          minHeight: 12,
-                                        ),
-                                        child: Text(
-                                          '!',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 8,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        )
-      ],
-    );
-  }
+  
 
   Future<int> getSOS() async{
     final User user = auth.currentUser;
