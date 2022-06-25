@@ -7,6 +7,7 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/distress_call_logs/patient%20or%20support_system/view_call_log_as_support.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/profile/patient/edit_status.dart';
 import 'package:my_app/profile/patient/edit_allergies.dart';
 import 'package:my_app/profile/patient/edit_medical_history.dart';
 import 'package:my_app/profile/patient/edit_other_information.dart';
@@ -349,13 +350,13 @@ class _index3State extends State<index3>
                           children: <Widget>[
                             Text(DisplayName,
                                 style: TextStyle(
-                                    fontSize: 24,
+                                    fontSize: 22,
                                     fontWeight: FontWeight.bold,
                                     // color:Color(0xFF363f93),
                                 )
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
+                              padding: const EdgeInsets.only(top: 2.0),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
@@ -367,6 +368,43 @@ class _index3State extends State<index3>
                                   )
                                 ]
                               )
+                            ),
+                            InkWell(
+                              onTap: () {
+                                showModalBottomSheet(context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) => SingleChildScrollView(child: Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                                    child: edit_status(),
+                                  ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                child: Padding(
+                                    padding: const EdgeInsets.only(top: 6.0),
+                                    child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          SizedBox(width: 2),
+                                          Image.asset(
+                                            'assets/images/active.png',
+                                            width: 9,
+                                            height: 9,
+                                          ),
+                                          SizedBox(width: 4),
+                                          Text("Active",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                // color:Color(0xFF363f93),
+                                              )
+                                          ),
+                                          SizedBox(width: 2),
+                                        ]
+                                    )
+                                ),
+                              ),
                             ),
                           ],
                       )

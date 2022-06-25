@@ -76,7 +76,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Edit ' + "Name's" + " Data Access",
+                    "Edit Data Access",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
@@ -84,7 +84,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                   Divider(),
                   SwitchListTile(
                     title: Text('Health Dashboards', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('This Person is allowed to access my Health Dashboards', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    subtitle: Text('This person is allowed to access my Health Dashboards', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -113,7 +113,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                   SizedBox(height: 14.0),
                   SwitchListTile(
                     title: Text('Non-health Data', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('This Person is allowed to access my Non-health Data', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    subtitle: Text('This person is allowed to access my Non-health Data', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -141,7 +141,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                   SizedBox(height: 14.0),
                   SwitchListTile(
                     title: Text('Health Data Inputs', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('This Person is allowed to access my Health Data Inputs', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    subtitle: Text('This person is allowed to access my Health Data Inputs', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {

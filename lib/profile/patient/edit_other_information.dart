@@ -94,7 +94,7 @@ class _addSymptomsState extends State<edit_other_information> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                'Edit Symptom',
+                'Edit Other Information',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
               ),

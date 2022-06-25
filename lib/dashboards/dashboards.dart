@@ -649,7 +649,7 @@ class _DashboardsState extends State<Dashboards> with TickerProviderStateMixin {
       },
     );
   }
-  
+
 
   Future<int> getSOS() async{
     final User user = auth.currentUser;
