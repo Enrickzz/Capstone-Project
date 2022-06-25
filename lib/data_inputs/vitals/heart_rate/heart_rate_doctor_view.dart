@@ -39,61 +39,6 @@ class _heart_rate_doctorState extends State<heart_rate_doctor_view> {
     hrtemp.clear();
     _selected.clear();
     getHeartRate();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readHeartRate = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list');
-    // String tempBmi = ""; // int
-    // String tempisResting = ""; //bool
-    // String tempHRDate = "";
-    // String tempHRTime = "";
-    // DateFormat format = new DateFormat("MM/dd/yyyy");
-    // DateFormat timeformat = new DateFormat("hh:mm");
-    //
-    // readHeartRate.once().then((DataSnapshot datasnapshot) {
-
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Heart_Rate heartRate;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //       switch(i%4) {
-    //         case 0:
-    //           {
-    //             tempHRTime = splitFull.last;
-    //           }
-    //           break;
-    //         case 1:
-    //           {
-    //             tempBmi = splitFull.last;
-    //           }
-    //           break;
-    //         case 2:
-    //           {
-    //             tempisResting = splitFull.last;
-    //           }
-    //           break;
-    //         case 3:
-    //           {
-    //             tempHRDate = splitFull.last;
-    //             heartRate = new Heart_Rate(bpm: int.parse(tempBmi),
-    //                 hr_status: tempisResting,
-    //                 hr_date: format.parse(tempHRDate),
-    //                 hr_time: timeformat.parse(tempHRTime));
-    //             hrtemp.add(heartRate);
-    //           }
-    //           break;
-    //       }
-    //   }
-    //   for(var i=0;i<hrtemp.length/2;i++){
-    //     var temp = hrtemp[i];
-    //     hrtemp[i] = hrtemp[hrtemp.length-1-i];
-    //     hrtemp[hrtemp.length-1-i] = temp;
-    //   }
-    // });
     Future.delayed(const Duration(milliseconds: 1500), () {
       setState(() {
         _selected = List<bool>.generate(hrtemp.length, (int index) => false);

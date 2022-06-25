@@ -12,7 +12,8 @@ import 'package:my_app/models/users.dart';
 class add_o2_saturation extends StatefulWidget {
   final List<Oxygen_Saturation> o2list;
   final String instance;
-  add_o2_saturation({this.o2list, this.instance});
+  final String userUID;
+  add_o2_saturation({this.o2list, this.instance, this.userUID});
   @override
   _add_o2_saturationState createState() => _add_o2_saturationState();
 }

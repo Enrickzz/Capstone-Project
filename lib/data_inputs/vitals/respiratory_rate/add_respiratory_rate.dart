@@ -9,7 +9,8 @@ import 'package:my_app/models/users.dart';
 
 class add_respiratory_rate extends StatefulWidget {
   final List<Respiratory_Rate> rList;
-  add_respiratory_rate({Key key, this.rList});
+  final String userUID;
+  add_respiratory_rate({Key key, this.rList, this.userUID});
   @override
   _add_respiratory_rateState createState() => _add_respiratory_rateState();
 }
@@ -203,8 +204,13 @@ class _add_respiratory_rateState extends State<add_respiratory_rate> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
+                            String uid;
+                            if (widget.userUID != null) {
+                              uid = widget.userUID;
+                            } else {
+                              final User user = auth.currentUser;
+                              uid = user.uid;
+                            }
                             final readRespiratory = databaseReference.child('users/' + uid + '/vitals/health_records/respiratoryRate_list');
                             readRespiratory.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){

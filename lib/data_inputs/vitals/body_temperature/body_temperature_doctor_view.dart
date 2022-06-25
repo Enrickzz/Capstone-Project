@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/data_inputs/vitals/body_temperature/add_body_temperature.dart';
 import 'package:my_app/models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -37,57 +38,6 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
     bttemp.clear();
     _selected.clear();
     getBodyTemp();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list');
-    // String tempUnit = "";
-    // String tempTemperature = "";
-    // String tempTemperatureDate = "";
-    // String tempTemperatureTime = "";
-    //
-    //
-    // readTemperature.once().then((DataSnapshot datasnapshot) {
-    //
-    //   String temp1 = datasnapshot.value.toString();
-    //   List<String> temp = temp1.split(',');
-    //   Body_Temperature bodyTemperature;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i%4){
-    //       case 0: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempUnit = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperatureDate = splitFull.last;
-    //       }
-    //       break;
-    //       case 2: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperature = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         print("i is "+ i.toString() + splitFull.last);
-    //         tempTemperatureTime = splitFull.last;
-    //         bodyTemperature = new Body_Temperature(unit: tempUnit, temperature: double.parse(tempTemperature),bt_date: format.parse(tempTemperatureDate), bt_time: timeformat.parse(tempTemperatureTime));
-    //         bttemp.add(bodyTemperature);
-    //       }
-    //       break;
-    //     }
-    //   }
-    //   for(var i=0;i<bttemp.length/2;i++){
-    //     var temp = bttemp[i];
-    //     bttemp[i] = bttemp[bttemp.length-1-i];
-    //     bttemp[bttemp.length-1-i] = temp;
-    //   }
-    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         _selected = List<bool>.generate(bttemp.length, (int index) => false);
@@ -116,7 +66,50 @@ class _body_temperatureDoctorState extends State<body_temperature_doctor_view> {
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
-
+        actions: [
+          Visibility(
+              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              child: GestureDetector(
+                onTap: () {
+                  _showMyDialogDelete();
+                },
+                child: Icon(
+                  Icons.delete,
+                ),
+              )),
+          SizedBox(width: 10),
+          Visibility(
+              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              child: Padding(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                MediaQuery.of(context).viewInsets.bottom),
+                            child: add_body_temperature(
+                                btlist: bttemp, userUID: widget.userUID),
+                          ),
+                        ),
+                      ).then((value) => setState(() {
+                        print("setstate blood_pressure");
+                        if (value != null) {
+                          bttemp = value;
+                          _selected = List<bool>.generate(
+                              bttemp.length, (int index) => false);
+                        }
+                      }));
+                    },
+                    child: Icon(
+                      Icons.add,
+                    ),
+                  ))),
+        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

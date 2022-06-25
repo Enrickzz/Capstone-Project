@@ -4,6 +4,7 @@ import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/data_inputs/vitals/respiratory_rate/add_respiratory_rate.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
@@ -81,7 +82,50 @@ class _respiratory_rate_doctor_viewState extends State<respiratory_rate_view_as_
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
-
+        actions: [
+          Visibility(
+              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              child: GestureDetector(
+                onTap: () {
+                  _showMyDialogDelete();
+                },
+                child: Icon(
+                  Icons.delete,
+                ),
+              )),
+          SizedBox(width: 10),
+          Visibility(
+              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              child: Padding(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                MediaQuery.of(context).viewInsets.bottom),
+                            child: add_respiratory_rate(
+                                rList: respiratory_list, userUID: widget.userUID),
+                          ),
+                        ),
+                      ).then((value) => setState(() {
+                        print("setstate blood_pressure");
+                        if (value != null) {
+                          respiratory_list = value;
+                          _selected = List<bool>.generate(
+                              respiratory_list.length, (int index) => false);
+                        }
+                      }));
+                    },
+                    child: Icon(
+                      Icons.add,
+                    ),
+                  ))),
+        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

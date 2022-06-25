@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/data_inputs/vitals/blood_glucose/add_blood_glucose.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
@@ -37,58 +38,6 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
     bgtemp.clear();
     _selected.clear();
     getBloodGlucose();
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    // final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/blood_glucose_list');
-    // String tempGlucose = "";
-    // String tempStatus = "";
-    // String tempGlucoseStatus = "";
-    // String tempGlucoseDate = "";
-    // String tempGlucoseTime = "";
-    // readMedication.once().then((DataSnapshot datasnapshot) {
-
-    //   String temp1 = datasnapshot.value.toString();
-    //   print("temp1 " + temp1);
-    //   List<String> temp = temp1.split(',');
-    //   Blood_Glucose bloodGlucose;
-    //   for(var i = 0; i < temp.length; i++) {
-    //     String full = temp[i].replaceAll("{", "")
-    //         .replaceAll("}", "")
-    //         .replaceAll("[", "")
-    //         .replaceAll("]", "");
-    //     List<String> splitFull = full.split(" ");
-    //     switch(i%5){
-    //       case 0: {
-    //         tempGlucose = splitFull.last;
-    //       }
-    //       break;
-    //       case 1: {
-    //         tempGlucoseTime = splitFull.last;
-    //       }
-    //       break;
-    //       case 2: {
-    //         tempStatus = splitFull.last;
-    //       }
-    //       break;
-    //       case 3: {
-    //         tempGlucoseStatus = splitFull.last;
-    //       }
-    //       break;
-    //       case 4: {
-    //         tempGlucoseDate = splitFull.last;
-    //         bloodGlucose = new Blood_Glucose(glucose: double.parse(tempGlucose), bloodGlucose_unit: tempStatus, bloodGlucose_status: tempGlucoseStatus, bloodGlucose_date: format.parse(tempGlucoseDate),bloodGlucose_time: timeformat.parse(tempGlucoseTime));
-    //         bgtemp.add(bloodGlucose);
-    //       }
-    //       break;
-    //     }
-    //
-    //   }
-    //   for(var i=0;i<bgtemp.length/2;i++){
-    //     var temp = bgtemp[i];
-    //     bgtemp[i] = bgtemp[bgtemp.length-1-i];
-    //     bgtemp[bgtemp.length-1-i] = temp;
-    //   }
-    // });
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         _selected = List<bool>.generate(bgtemp.length, (int index) => false);
@@ -117,7 +66,50 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
-
+        actions: [
+          Visibility(
+              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              child: GestureDetector(
+                onTap: () {
+                  _showMyDialogDelete();
+                },
+                child: Icon(
+                  Icons.delete,
+                ),
+              )),
+          SizedBox(width: 10),
+          Visibility(
+              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              child: Padding(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                MediaQuery.of(context).viewInsets.bottom),
+                            child: add_blood_glucose(
+                                thislist: bgtemp, userUID: widget.userUID),
+                          ),
+                        ),
+                      ).then((value) => setState(() {
+                        print("setstate blood_pressure");
+                        if (value != null) {
+                          bgtemp = value;
+                          _selected = List<bool>.generate(
+                              bgtemp.length, (int index) => false);
+                        }
+                      }));
+                    },
+                    child: Icon(
+                      Icons.add,
+                    ),
+                  ))),
+        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
