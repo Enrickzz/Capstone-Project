@@ -54,7 +54,7 @@ class _editCallLogtate extends State<edit_call_log> {
 
   String thisURL;
 
-
+  List<distressSOS> SOS_list = [];
 
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
@@ -73,7 +73,8 @@ class _editCallLogtate extends State<edit_call_log> {
   @override
   Widget build(BuildContext context) {
     String userUID = widget.userUID;
-    String index = (widget.index).toString();
+    SOS_list = widget.thisSOS;
+    int index = SOS_list.length - widget.index - 1;
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -204,27 +205,19 @@ class _editCallLogtate extends State<edit_call_log> {
 
                           final User user = auth.currentUser;
                           final uid = user.uid;
-                          print("USERUID" + uid);
-                          print("INDEX" + index);
-                          final ref = databaseReference.child('users/' + uid + '/SOSCalls/' + index);
+                          final ref = databaseReference.child('users/' + uid + '/SOSCalls/' + index.toString());
                           List<distressSOS> updated = [];
                           updated = widget.thisSOS;
-                          updated[widget.index].note = notes;
-                          updated[widget.index].call_desc = description;
-                          updated[widget.index].reason = reason;
+                          updated[index].note = notes;
+                          updated[index].call_desc = description;
+                          updated[index].reason = reason;
 
-                          ref.set({
-                            "full_name": updated[widget.index].full_name,
-                            "rec_date": updated[widget.index].rec_date,
-                            "rec_time": updated[widget.index].rec_time,
+                          ref.update({
                             "reason": reason,
-                            "number": updated[widget.index].number,
                             "note": notes,
                             "call_desc": description,
                           });
-                          Future.delayed(const Duration(milliseconds: 1000), (){
-                            Navigator.pop(context, updated);
-                          });
+                          Navigator.pop(context, updated);
                         },
                       )
                     ],
