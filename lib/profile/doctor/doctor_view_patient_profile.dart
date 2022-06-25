@@ -192,13 +192,13 @@ class _index3State extends State<view_patient_profile>
                                 children: <Widget>[
                                   Text(DisplayName,
                                       style: TextStyle(
-                                        fontSize: 24,
+                                        fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                         // color:Color(0xFF363f93),
                                       )
                                   ),
                                   Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
+                                      padding: const EdgeInsets.only(top: 2.0),
                                       child: Row(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: <Widget>[
@@ -210,6 +210,30 @@ class _index3State extends State<view_patient_profile>
                                             )
                                           ]
                                       )
+                                  ),
+                                  Container(
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(top: 6.0),
+                                        child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              SizedBox(width: 2),
+                                              Image.asset(
+                                                'assets/images/active.png',
+                                                width: 9,
+                                                height: 9,
+                                              ),
+                                              SizedBox(width: 4),
+                                              Text("Active",
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    // color:Color(0xFF363f93),
+                                                  )
+                                              ),
+                                              SizedBox(width: 2),
+                                            ]
+                                        )
+                                    ),
                                   ),
                                 ],
                               )

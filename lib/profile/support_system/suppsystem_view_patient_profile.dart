@@ -16,6 +16,7 @@ import 'package:my_app/models/tabIcon_data.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/goal_tab/exercises/my_exercises.dart';
 import 'package:my_app/no_access.dart';
+import 'package:my_app/profile/patient/edit_status.dart';
 import 'package:my_app/profile/patient/profile.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/support_system_journal/support_system/journal_list_suppsystem_view.dart';
@@ -179,13 +180,13 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                 children: <Widget>[
                                   Text(DisplayName,
                                       style: TextStyle(
-                                        fontSize: 24,
+                                        fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                         // color:Color(0xFF363f93),
                                       )
                                   ),
                                   Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
+                                      padding: const EdgeInsets.only(top: 2.0),
                                       child: Row(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: <Widget>[
@@ -197,6 +198,43 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                             )
                                           ]
                                       )
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      showModalBottomSheet(context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) => SingleChildScrollView(child: Container(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                                          child: edit_status(),
+                                        ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(top: 6.0),
+                                          child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                SizedBox(width: 2),
+                                                Image.asset(
+                                                  'assets/images/active.png',
+                                                  width: 9,
+                                                  height: 9,
+                                                ),
+                                                SizedBox(width: 4),
+                                                Text("Active",
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      // color:Color(0xFF363f93),
+                                                    )
+                                                ),
+                                                SizedBox(width: 2),
+                                              ]
+                                          )
+                                      ),
+                                    ),
                                   ),
                                 ],
                               )
