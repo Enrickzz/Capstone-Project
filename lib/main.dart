@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:my_app/emergency_contact.dart';
 import 'package:my_app/provider/google_sign_in.dart';
 import 'package:my_app/services/auth.dart';
@@ -215,14 +216,14 @@ class _AppSignInState extends State<AppSignIn> {
                       MaterialPageRoute(builder: (context) => emergency_contact()),
                     );
                   },
-                  child: Image.asset("assets/images/heartistant_logo.png", width: 280, height: 180,)),
+                  child: Image.asset("assets/images/heartistant_logo.png", width: 270, height: 155,)),
 
             ),
-            SizedBox(height: 30.0),
+            SizedBox(height: 24.0),
             Container(
 
               alignment: Alignment.topLeft,
-              child:  Text( "Welcome,", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              child:  Text( "Welcome,", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
@@ -315,13 +316,12 @@ class _AppSignInState extends State<AppSignIn> {
                                 },
                               ),
                             ),
-                            SizedBox(height: 8.0),
-                            SizedBox(height: 10.0),
+                            SizedBox(height: 4.0),
                             Text(
                               error,
                               style: TextStyle(color: Colors.red),
                             ),
-                            SizedBox(height: 10.0),
+                            SizedBox(height: 4.0),
                             Container(
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(minimumSize: Size(220, 0)),
@@ -350,7 +350,7 @@ class _AppSignInState extends State<AppSignIn> {
                                 },
                               ),
                             ),
-                            SizedBox(height: 8.0),
+                            SizedBox(height: 4.0),
                             Container(
                               child: Column(
                                 children: <Widget>[
@@ -361,7 +361,7 @@ class _AppSignInState extends State<AppSignIn> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 8.0),
+                            SizedBox(height: 4.0),
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.white,
@@ -424,6 +424,33 @@ class _AppSignInState extends State<AppSignIn> {
                                       ]
                                   )
                               ),
+                            ),
+
+
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10,0,10,5),
+                              child: Text.rich(
+                                  TextSpan(
+                                      children: [
+                                        TextSpan(text: "Emergency help needed?"),
+                                        TextSpan(
+                                          text: ' Press the button below.',
+                                        ),
+                                      ],
+                                      style: TextStyle(fontSize: 13),
+                                  )
+                              ),
+                            ),
+
+                            GestureDetector(
+                                onTap: () async {
+                                      await FlutterPhoneDirectCaller.callNumber("911");
+                                },
+                                child: Image.asset(
+                                  'assets/images/emergency.png',
+                                  width: 60,
+                                  height: 60,
+                                )
                             ),
                           ],
                         )
