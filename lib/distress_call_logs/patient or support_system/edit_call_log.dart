@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -55,7 +54,7 @@ class _editCallLogtate extends State<edit_call_log> {
 
   String thisURL;
 
-  List<distressSOS> SOS_list = [];
+
 
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
@@ -68,15 +67,13 @@ class _editCallLogtate extends State<edit_call_log> {
   @override
   void initState(){
     initNotif();
-    SOS_list = widget.thisSOS;
-    int index = SOS_list.length - widget.index;
-    print("INDEX" + index.toString());
+
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     String userUID = widget.userUID;
-
+    String index = (widget.index).toString();
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -202,17 +199,26 @@ class _editCallLogtate extends State<edit_call_log> {
                         ),
                         color: Colors.blue,
                         onPressed:()  {
+                          print("AAAAAjretdfgdfhfdhd");
+
+
                           final User user = auth.currentUser;
                           final uid = user.uid;
-                          final ref = databaseReference.child('users/' + uid + '/SOSCalls/' + widget.index.toString());
+                          print("USERUID" + uid);
+                          print("INDEX" + index);
+                          final ref = databaseReference.child('users/' + uid + '/SOSCalls/' + index);
                           List<distressSOS> updated = [];
                           updated = widget.thisSOS;
                           updated[widget.index].note = notes;
                           updated[widget.index].call_desc = description;
                           updated[widget.index].reason = reason;
 
-                          ref.update({
+                          ref.set({
+                            "full_name": updated[widget.index].full_name,
+                            "rec_date": updated[widget.index].rec_date,
+                            "rec_time": updated[widget.index].rec_time,
                             "reason": reason,
+                            "number": updated[widget.index].number,
                             "note": notes,
                             "call_desc": description,
                           });
