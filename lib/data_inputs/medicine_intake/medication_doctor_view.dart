@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/data_inputs/medicine_intake/add_medication.dart';
 import 'package:my_app/data_inputs/medicine_intake/view_specific_medicine_doctor_view.dart';
 import '../../models/users.dart';
 class medication_intake_doctor_view extends StatefulWidget {
@@ -57,38 +56,7 @@ class _medicationState extends State<medication_intake_doctor_view> {
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
-        actions: [
-          Visibility(
-              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
-              ),
-          SizedBox(width: 10),
-          Visibility(
-              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
-              child: Padding(
-                  padding: EdgeInsets.only(right: 20.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (context) => SingleChildScrollView(
-                          child: Container(
-                            padding: EdgeInsets.only(
-                                bottom:
-                                MediaQuery.of(context).viewInsets.bottom),
-                            child: add_medication(
-                                thislist: medtemp, userUID: widget.userUID),
-                          ),
-                        ),
-                      ).then((value) => setState(() {
-                        print("setstate blood_pressure");
-                      }));
-                    },
-                    child: Icon(
-                      Icons.add,
-                    ),
-                  ))),
-        ],
+ 
       ),
       body: ListView.builder(
           itemCount: medtemp.length,
