@@ -15,6 +15,7 @@ class Users {
   String pp_img;
   String leaddoctor;
   String emergency_contact;
+  String status;
 
   Users(
       {this.uid,
@@ -28,7 +29,8 @@ class Users {
       this.isMe,
       this.pp_img,
       this.leaddoctor,
-      this.emergency_contact});
+      this.emergency_contact,
+      this.status});
 
   Users.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -43,6 +45,7 @@ class Users {
     if (json['emergency_contact'] != null) {
       emergency_contact = json['emergency_contact'];
     }
+    status = json['status'];
   }
 
   Users.fromJson2(Map<String, dynamic> json) {
@@ -53,6 +56,7 @@ class Users {
     password = json['password'];
     usertype = json['userType'];
     leaddoctor = json['lead_doctor'];
+    status = json['status'];
   }
   Users.fromJson3(Map<String, dynamic> json) {
     uid = json['uid'];
