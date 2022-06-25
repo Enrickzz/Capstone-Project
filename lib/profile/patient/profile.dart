@@ -376,7 +376,7 @@ class _index3State extends State<index3>
                                   builder: (context) => SingleChildScrollView(child: Container(
                                     padding: EdgeInsets.only(
                                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                                    child: edit_status(),
+                                    child: edit_status(status: profile.status),
                                   ),
                                   ),
                                 );
@@ -388,19 +388,51 @@ class _index3State extends State<index3>
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: <Widget>[
                                           SizedBox(width: 2),
-                                          Image.asset(
-                                            'assets/images/active.png',
-                                            width: 9,
-                                            height: 9,
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text("Active",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                // color:Color(0xFF363f93),
-                                              )
-                                          ),
-                                          SizedBox(width: 2),
+                                          if(profile.status == "Active")...[
+                                            Image.asset(
+                                              'assets/images/active.png',
+                                              width: 9,
+                                              height: 9,
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(profile.status,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  // color:Color(0xFF363f93),
+                                                )
+                                            ),
+                                            SizedBox(width: 2),
+                                          ] else if(profile.status == "Hospitalized")... [
+                                            Image.asset(
+                                              'assets/images/hospitalized.png',
+                                              width: 9,
+                                              height: 9,
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(profile.status,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  // color:Color(0xFF363f93),
+                                                )
+                                            ),
+                                            SizedBox(width: 2),
+                                          ] else...[
+                                            Image.asset(
+                                              'assets/images/inactive.png',
+                                              width: 9,
+                                              height: 9,
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(profile.status,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  // color:Color(0xFF363f93),
+                                                )
+                                            ),
+                                            SizedBox(width: 2),
+                                          ]
+
+
                                         ]
                                     )
                                 ),
