@@ -8,7 +8,8 @@ import 'package:intl/intl.dart';
 import '../../models/users.dart';
 class add_medication extends StatefulWidget {
   final List<Medication> thislist;
-  add_medication({this.thislist, this.instance});
+  final String userUID;
+  add_medication({this.thislist, this.instance, this.userUID});
   final String instance;
   @override
   _addMedicationState createState() => _addMedicationState();
@@ -292,8 +293,13 @@ class _addMedicationState extends State<add_medication> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
+                            String uid;
+                            if (widget.userUID != null) {
+                              uid = widget.userUID;
+                            } else {
+                              final User user = auth.currentUser;
+                              uid = user.uid;
+                            }
                             final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
                             readMedication.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
