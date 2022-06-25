@@ -62,7 +62,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
   @override
   void initState() {
     super.initState();
-
+    print("INDEXXXX " + widget.index.toString());
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
