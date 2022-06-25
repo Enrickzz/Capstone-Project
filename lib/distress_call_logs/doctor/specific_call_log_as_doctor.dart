@@ -115,7 +115,7 @@ class _SpecificCallLogAsDoctorState extends State<SpecificCallLogAsDoctor> with 
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Distress Call #1",
+                              child: Text( thisSOS.full_name +" ("+ thisSOS.number+")",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,

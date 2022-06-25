@@ -115,7 +115,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:<Widget>[
                             Expanded(
-                              child: Text( "Distress Call #1",
+                              child: Text( thisSOS.full_name +" ("+ thisSOS.number+")",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -132,7 +132,7 @@ class _SpecificCallLogAsSupportState extends State<SpecificCallLogAsSupport> wit
                                     builder: (context) => SingleChildScrollView(child: Container(
                                       padding: EdgeInsets.only(
                                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: edit_call_log(thisSOS: prestemp,index: widget.index),
+                                      child: edit_call_log(thisSOS: prestemp,index: widget.index, userUID: widget.userUID),
                                     ),
                                     ),
                                   ).then((value) async {
