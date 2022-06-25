@@ -293,8 +293,13 @@ class _addMedicationState extends State<add_medication> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
+                            String uid;
+                            if (widget.userUID != null) {
+                              uid = widget.userUID;
+                            } else {
+                              final User user = auth.currentUser;
+                              uid = user.uid;
+                            }
                             final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
                             readMedication.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
