@@ -9,8 +9,7 @@ import 'package:my_app/models/users.dart';
 
 class add_body_temperature extends StatefulWidget {
   final List<Body_Temperature> btlist;
-  final String userUID;
-  add_body_temperature({this.btlist, this.userUID});
+  add_body_temperature({this.btlist});
   @override
   _add_body_temperatureState createState() => _add_body_temperatureState();
 }
@@ -251,13 +250,8 @@ class _add_body_temperatureState extends State<add_body_temperature> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            String uid;
-                            if (widget.userUID != null) {
-                              uid = widget.userUID;
-                            } else {
-                              final User user = auth.currentUser;
-                              uid = user.uid;
-                            }
+                            final User user = auth.currentUser;
+                            final uid = user.uid;
                             final readTemperature = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
                             readTemperature.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();

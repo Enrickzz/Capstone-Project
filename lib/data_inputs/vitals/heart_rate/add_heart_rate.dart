@@ -264,14 +264,23 @@ class _add_heart_rateState extends State<add_heart_rate> {
                               uid = user.uid;
                             }
 
-                            final readHeartRate = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list');
-                            readHeartRate.once().then((DataSnapshot datasnapshot) {
+                            final readHeartRate = databaseReference.child(
+                                'users/' +
+                                    uid +
+                                    '/vitals/health_records/heartrate_list');
+                            readHeartRate
+                                .once()
+                                .then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
                               print("temp1 " + temp1);
                               List<String> temp = temp1.split(',');
                               Heart_Rate heartRate;
                               if (datasnapshot.value == null) {
-                                final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + 1.toString());
+                                final heartRateRef = databaseReference.child(
+                                    'users/' +
+                                        uid +
+                                        '/vitals/health_records/heartrate_list/' +
+                                        1.toString());
                                 if (isResting.toLowerCase() == 'yes') {
                                   hr_status = "Active";
                                   print(hr_status + "<<< STATUS");
@@ -288,7 +297,8 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                 });
                                 print("Added Heart Rate Successfully! " + uid);
                               } else {
-                                Future.delayed(const Duration(milliseconds: 1000), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
                                   count = heartRate_list.length--;
                                   print("count " + count.toString());
                                   if (isResting.toLowerCase() == 'yes') {
@@ -298,7 +308,11 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                     hr_status = "Resting";
                                     print(hr_status + "<<< STATUS");
                                   }
-                                  final heartRateRef = databaseReference.child('users/' + uid + '/vitals/health_records/heartrate_list/' + count.toString());
+                                  final heartRateRef = databaseReference.child(
+                                      'users/' +
+                                          uid +
+                                          '/vitals/health_records/heartrate_list/' +
+                                          count.toString());
                                   heartRateRef.set({
                                     "HR_bpm": beats.toString(),
                                     "hr_status": hr_status,
@@ -306,7 +320,8 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                     "hr_time": heartRate_time.toString(),
                                     "new_hr": true
                                   });
-                                  print("Added Heart Rate Successfully! " + uid);
+                                  print(
+                                      "Added Heart Rate Successfully! " + uid);
                                   if (beats < 40) {
                                     print("ADDING NOW");
                                     final readConnections =
@@ -351,7 +366,10 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                     uid,
                                     "None");
                                 print("ADDING NOW");
-                                final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
+                                final readConnections = databaseReference.child(
+                                    'users/' +
+                                        uid +
+                                        '/personal_info/connections/');
                                 readConnections
                                     .once()
                                     .then((DataSnapshot snapshot2) {
