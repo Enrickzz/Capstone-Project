@@ -10,7 +10,8 @@ import 'add_medication.dart';
 import '../../models/users.dart';
 class medication extends StatefulWidget {
   final List<Medication> medlist;
-  medication({Key key, this.medlist}): super(key: key);
+  final String userUID;
+  medication({Key key, this.medlist, this.userUID}): super(key: key);
   @override
   _medicationState createState() => _medicationState();
 }
@@ -70,7 +71,7 @@ class _medicationState extends State<medication> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_medication(thislist: medtemp),
+                      child: add_medication(thislist: medtemp, userUID: widget.userUID),
                     ),
                     ),
                   ).then((value) {

@@ -11,7 +11,8 @@ import 'package:my_app/models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class add_supplement_prescription extends StatefulWidget {
   final List<Supplement_Prescription> thislist;
-  add_supplement_prescription({this.thislist});
+  final String userUID;
+  add_supplement_prescription({this.thislist, this.userUID});
   @override
   _addSupplementPrescriptionState createState() => _addSupplementPrescriptionState();
 }

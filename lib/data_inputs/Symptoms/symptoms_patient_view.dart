@@ -11,7 +11,8 @@ import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 class symptoms extends StatefulWidget {
   final List<Symptom> symptomlist1;
-  symptoms({Key key, this.symptomlist1})
+  final String userUID;
+  symptoms({Key key, this.symptomlist1, this.userUID})
       : super(key: key);
   @override
   _symptomsState createState() => _symptomsState();
@@ -74,7 +75,7 @@ class _symptomsState extends State<symptoms> {
                     builder: (context) => SingleChildScrollView(child: Container(
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: add_symptoms(thislist: listtemp),
+                    child: add_symptoms(thislist: listtemp, userUID: widget.userUID),
                     ),
                     ),
                   ).then((value) => setState((){
@@ -157,8 +158,13 @@ class _symptomsState extends State<symptoms> {
     return "$hours:$min";
   }
   List<Symptom> getSymptoms() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     List<Symptom> symptoms = [];
     symptoms.clear();
@@ -190,8 +196,13 @@ class _symptomsState extends State<symptoms> {
   }
 
   Future <String> downloadUrls() async{
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     String downloadurl="null";
     for(var i = 0 ; i < listtemp.length; i++){
       final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+listtemp[i].imgRef.toString());
@@ -208,8 +219,13 @@ class _symptomsState extends State<symptoms> {
     return downloadurl;
   }
   Future <String> downloadOneUrl(Symptom thissymp, int index) async{
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     String downloadurl;
     final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+thissymp.imgRef.toString());
     downloadurl = await ref.getDownloadURL();

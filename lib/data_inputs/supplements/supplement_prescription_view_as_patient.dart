@@ -14,7 +14,8 @@ import 'add_supplement_prescription.dart';
 class supplement_prescription extends StatefulWidget {
   final List<Supplement_Prescription> preslist;
   final int pointer;
-  supplement_prescription({Key key, this.preslist, this.pointer}): super(key: key);
+  final String userUID;
+  supplement_prescription({Key key, this.preslist, this.pointer, this.userUID}): super(key: key);
   @override
   _supplement_prescriptionState createState() => _supplement_prescriptionState();
 }
@@ -71,7 +72,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_supplement_prescription(thislist: supptemp),
+                      child: add_supplement_prescription(thislist: supptemp, userUID: widget.userUID),
                     ),
                     ),
                   ).then((value) =>

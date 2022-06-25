@@ -15,7 +15,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class add_lab_results extends StatefulWidget {
   final List<FirebaseFile> files;
-  add_lab_results({Key key, this.files});
+  final String userUID;
+  add_lab_results({Key key, this.files, this.userUID});
   @override
   _addLabResultState createState() => _addLabResultState();
 }
@@ -565,7 +566,12 @@ class _addLabResultState extends State<add_lab_results> {
                           final FirebaseAuth auth = FirebaseAuth.instance;
                           final path = result.files.single.path;
                           user = auth.currentUser;
-                          uid = user.uid;
+                          if (widget.userUID != null) {
+                            uid = widget.userUID;
+                          } else {
+                            final User user = auth.currentUser;
+                            uid = user.uid;
+                          }
                           fileName = result.files.single.name;
                           file = File(path);
                           print("DIRS this");
@@ -616,8 +622,13 @@ class _addLabResultState extends State<add_lab_results> {
                         onPressed:() async {
 
                           try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
+                            String uid;
+                            if (widget.userUID != null) {
+                              uid = widget.userUID;
+                            } else {
+                              final User user = auth.currentUser;
+                              uid = user.uid;
+                            }
                             final readLabResult = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list');
                             readLabResult.once().then((DataSnapshot datasnapshot) {
                               // String temp1 = datasnapshot.value.toString();
@@ -798,8 +809,13 @@ class _addLabResultState extends State<add_lab_results> {
     );
   }
   void notifySS(String type) async {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
     await readConnections.once().then((DataSnapshot snapshot2) async {
       print(snapshot2.value);
@@ -905,8 +921,13 @@ class _addLabResultState extends State<add_lab_results> {
     });
   }
   void addtoRecommendation(String message, String title, String priority, String redirect){
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final notifref = databaseReference.child('users/' + uid + '/recommendations/');
     getRecomm();
     notifref.once().then((DataSnapshot snapshot) {
@@ -927,8 +948,13 @@ class _addLabResultState extends State<add_lab_results> {
   }
 
    Future<List<FirebaseFile>> listAll (String path) async {
-     final User user = auth.currentUser;
-     final uid = user.uid;
+     String uid;
+     if (widget.userUID != null) {
+       uid = widget.userUID;
+     } else {
+       final User user = auth.currentUser;
+       uid = user.uid;
+     }
     final ref = FirebaseStorage.instance.ref('test/' + uid + "/");
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);
@@ -950,8 +976,13 @@ class _addLabResultState extends State<add_lab_results> {
 
 
   Future <String> downloadUrl(String imagename) async{
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final ref = FirebaseStorage.instance.ref('test/' +uid +'/$imagename');
     String downloadurl = await ref.getDownloadURL();
     print ("THIS IS THE URL = "+ downloadurl);
@@ -959,8 +990,13 @@ class _addLabResultState extends State<add_lab_results> {
     return downloadurl;
   }
   void getLabResult() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final readlabresult = databaseReference.child('users/' + uid + '/vitals/health_records/labResult_list/');
     readlabresult.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -972,8 +1008,13 @@ class _addLabResultState extends State<add_lab_results> {
 
   void getRecomm() {
     recommList.clear();
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final readBP = databaseReference.child('users/' + uid + '/recommendations/');
     readBP.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -992,8 +1033,13 @@ class _addLabResultState extends State<add_lab_results> {
     print("DATE = " + date);
     print("TIME = " + "$hours:$min");
 
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
     readProfile.once().then((DataSnapshot snapshot){
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));

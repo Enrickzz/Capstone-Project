@@ -13,7 +13,8 @@ import '../../emergency_contact.dart';
 import '../../models/users.dart';
 class add_symptoms extends StatefulWidget {
   final List<Symptom> thislist;
-  add_symptoms({this.thislist});
+  final String userUID;
+  add_symptoms({this.thislist, this.userUID});
   @override
   _addSymptomsState createState() => _addSymptomsState();
 }
@@ -424,7 +425,12 @@ class _addSymptomsState extends State<add_symptoms> {
                     final FirebaseAuth auth = FirebaseAuth.instance;
                     final path = result.files.single.path;
                     user = auth.currentUser;
-                    uid = user.uid;
+                    if (widget.userUID != null) {
+                      uid = widget.userUID;
+                    } else {
+                      final User user = auth.currentUser;
+                      uid = user.uid;
+                    }
                     fileName = result.files.single.name;
                     file = File(path);
                     PlatformFile thisfile = result.files.first;
@@ -547,8 +553,13 @@ class _addSymptomsState extends State<add_symptoms> {
                   onPressed:() async {
 
                     try{
-                      final User user = auth.currentUser;
-                      final uid = user.uid;
+                      String uid;
+                      if (widget.userUID != null) {
+                        uid = widget.userUID;
+                      } else {
+                        final User user = auth.currentUser;
+                        uid = user.uid;
+                      }
                       symptoms_list.clear();
                       final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
                       readsymptom.once().then((DataSnapshot datasnapshot) {
@@ -817,8 +828,13 @@ class _addSymptomsState extends State<add_symptoms> {
     );
   }
   Future <String> downloadUrl(String imagename) async{
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final ref = FirebaseStorage.instance.ref('test/' +uid +'/$imagename');
     String downloadurl = await ref.getDownloadURL();
     print ("THIS IS THE URL = "+ downloadurl);
@@ -904,8 +920,13 @@ class _addSymptomsState extends State<add_symptoms> {
 
   void getSymptoms() {
     symptoms_list.clear();
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     readsymptom.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -925,8 +946,13 @@ class _addSymptomsState extends State<add_symptoms> {
     });
   }
   Future <String> downloadUrls() async{
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     String downloadurl="null";
     for(var i = 0 ; i < symptoms_list.length; i++){
       final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+symptoms_list[i].imgRef.toString());
@@ -1025,8 +1051,13 @@ class _addSymptomsState extends State<add_symptoms> {
     print("DATE = " + date);
     print("TIME = " + "$hours:$min");
 
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    String uid;
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
 
     final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
     readProfile.once().then((DataSnapshot snapshot){
