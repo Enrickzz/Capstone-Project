@@ -137,7 +137,7 @@ class call_logSupportViewState extends State<call_log_suppView> {
       temp.forEach((jsonString) {
         SOS.add(distressSOS.fromJson(jsonString));
       });
-      // SOS = SOS.reversed.toList();
+      SOS = SOS.reversed.toList();
     });
   }
 }
