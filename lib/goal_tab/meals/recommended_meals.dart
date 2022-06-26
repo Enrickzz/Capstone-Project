@@ -119,9 +119,9 @@ class _recommended_mealsState extends State<recommended_meals>
                       isLoading=false;
                     }));
                   },
-                  child: Icon(
-                      IconData(0xe514, fontFamily: 'MaterialIcons')
-                  ),
+                  // child: Icon(
+                  //     IconData(0xe514, fontFamily: 'MaterialIcons')
+                  // ),
                 )
             ),
           ],

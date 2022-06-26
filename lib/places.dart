@@ -290,9 +290,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
 
                   });
                 },
-                child: Icon(
-                    IconData(0xe2dc, fontFamily: 'MaterialIcons')
-                ),
+                // child: Icon(
+                //     IconData(0xe2dc, fontFamily: 'MaterialIcons')
+                // ),
 
               )
           ),
