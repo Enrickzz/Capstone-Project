@@ -445,6 +445,7 @@ class _index3State extends State<index3>
                                   padding: const EdgeInsets.only(top: 6.0),
                                   child: GestureDetector(
                                       onTap: () async {
+                                        showPatientStatusLegend();
 
                                       },
                                       child: Image.asset(
@@ -1506,6 +1507,100 @@ class _index3State extends State<index3>
     }else{
       return BoxDecoration();
     }
+  }
+  Future<void> showPatientStatusLegend() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Patient Status'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+
+
+                SizedBox(height: 12.0,),
+
+                SizedBox(height: 5,),
+
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/active.png',
+                      width: 12,
+                      height: 12,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Active',
+                    style: TextStyle(color: Color(0xFF388E3C),fontWeight: FontWeight.bold,fontSize: 20),)
+                  ],
+                ),
+                SizedBox(height: 5,),
+
+                Text('This patient is a regular user of Heartistant who has recorded health and non-health data in the past 6 months',
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontSize: 14),),
+                SizedBox(height: 5,),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/hospitalized.png',
+                      width: 12,
+                      height: 12,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Hospitalized',
+                      style: TextStyle(color: Color(0xFFF44336),fontWeight: FontWeight.bold,fontSize: 20),)
+                  ],
+
+
+                ),
+
+
+                SizedBox(height: 5,),
+
+                Text('This patient is currently hospitalized and would not receive any notifications or recommendations from Heartistant',
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(fontSize: 14),),
+                SizedBox(height: 5,),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/inactive.png',
+                      width: 12,
+                      height: 12,
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Inactive',
+                      style: TextStyle(color: Color(0xFF90A4AE),fontWeight: FontWeight.bold,fontSize: 20),)
+                  ],
+                ),
+
+                SizedBox(height: 5,),
+
+                Text('This patient is inactive and has not logged in to Heartistant in the past 6 months',
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(fontSize: 14),),
+                SizedBox(height: 5,),
+
+
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+
+            TextButton(
+              child: Text('Got it'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _showMyDialogWipe() async {
