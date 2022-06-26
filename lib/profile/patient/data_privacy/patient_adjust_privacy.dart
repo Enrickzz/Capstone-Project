@@ -21,6 +21,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
   bool isAllowedDashboard = false;
   bool isAllowedNonHealth = false;
   bool isAllowedDataInputs = false;
+  bool isAllowedAddEdit = false;
   bool showDisclaimer = false;
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
@@ -83,8 +84,8 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                   SizedBox(height: 12.0),
                   Divider(),
                   SwitchListTile(
-                    title: Text('Health Dashboards', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('This person is allowed to access my Health Dashboards', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    title: Text('View Health Dashboards', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+                    subtitle: Text('This person is allowed to view my health dashboards', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -97,7 +98,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                     onChanged: (value){
                       setState(() {
                         isAllowedDashboard = value;
-                        if(isAllowedNonHealth == true && isAllowedDataInputs == true && isAllowedDashboard == true){
+                        if(isAllowedNonHealth == true && isAllowedDataInputs == true && isAllowedDashboard == true && isAllowedAddEdit ==true){
                           showDisclaimer = false;
                         }
                         else{
@@ -112,8 +113,8 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
 
                   SizedBox(height: 14.0),
                   SwitchListTile(
-                    title: Text('Non-health Data', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('This person is allowed to access my Non-health Data', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    title: Text('View Non-health Data', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+                    subtitle: Text('This person is allowed to view my non-health data', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -126,7 +127,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                     onChanged: (value){
                       setState(() {
                         isAllowedNonHealth = value;
-                        if(isAllowedNonHealth == true && isAllowedDataInputs == true && isAllowedDashboard == true){
+                        if(isAllowedNonHealth == true && isAllowedDataInputs == true && isAllowedDashboard == true && isAllowedAddEdit ==true){
                           showDisclaimer = false;
                         }
                         else{
@@ -140,8 +141,8 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
 
                   SizedBox(height: 14.0),
                   SwitchListTile(
-                    title: Text('Health Data Inputs', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    subtitle: Text('This person is allowed to access my Health Data Inputs', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                    title: Text('View Health Data Inputs', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+                    subtitle: Text('This person is allowed to view my health data inputs', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
                     secondary: IconButton(
                       icon: Image.asset("assets/images/tite.png"),
                       onPressed: () {
@@ -154,7 +155,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                     onChanged: (value){
                       setState(() {
                         isAllowedDataInputs = value;
-                        if(isAllowedNonHealth == true && isAllowedDataInputs == true && isAllowedDashboard == true){
+                        if(isAllowedNonHealth == true && isAllowedDataInputs == true && isAllowedDashboard == true && isAllowedAddEdit ==true){
                           showDisclaimer = false;
                         }
                         else{
@@ -164,6 +165,40 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
 
                       });
                     },
+                  ),
+
+                  Visibility(
+                    visible: true,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 14.0),
+                        SwitchListTile(
+                          title: Text('Add or Edit Data', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+                          subtitle: Text('This person is allowed to add or edit my data', style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w900)),
+                          secondary: IconButton(
+                            icon: Image.asset("assets/images/tite.png"),
+                            onPressed: () {
+
+                            },
+                          ),
+                          controlAffinity: ListTileControlAffinity.trailing,
+                          value: isAllowedAddEdit,
+                          onChanged: (value){
+                            setState(() {
+                              isAllowedAddEdit = value;
+                              if(isAllowedNonHealth == true && isAllowedDataInputs == true && isAllowedDashboard == true && isAllowedAddEdit ==true){
+                                showDisclaimer = false;
+                              }
+                              else{
+                                showDisclaimer = true;
+
+                              }
+
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
 
                   SizedBox(height: 16.0),
@@ -512,6 +547,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
       },
     );
   }
+
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
@@ -551,7 +587,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                           "nonhealth": isAllowedNonHealth.toString(),
                           "health": isAllowedDataInputs.toString(),
                         });
-                        if(isAllowedDashboard || isAllowedNonHealth|| isAllowedDataInputs){
+                        if(isAllowedDashboard || isAllowedNonHealth|| isAllowedDataInputs || isAllowedAddEdit){
                           addtoNotif2("Your <type> "+ thisuser.firstname+ " has changed your access settings.",
                               thisuser.firstname + " changed access!",
                               "2",

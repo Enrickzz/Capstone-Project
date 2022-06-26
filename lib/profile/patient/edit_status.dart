@@ -81,7 +81,7 @@ class _editStatus extends State<edit_status> {
 
               SwitchListTile(
                 title: Text('Hospitalized'),
-                subtitle: Text('PATIENT NAME is hospitalized'),
+                subtitle: Text('Patient is hospitalized'),
                 secondary:                                  Image.asset(
                   'assets/images/hospitalization.png',
                 ),
@@ -94,7 +94,6 @@ class _editStatus extends State<edit_status> {
                 },
               ),
 
-              SizedBox(height: 16.0),
               Visibility(
                 visible: isSwitchedHospitalized,
                 child: Column(

@@ -119,33 +119,6 @@ class _goals_doctor_viewState extends State<goals_doctor_view>
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        actions: [
-          Container(
-            margin: EdgeInsets.only( top: 16, right: 16,),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => notifications_doctor()),
-                );
-              },
-              child: Stack(
-                children: <Widget>[
-                  Icon(Icons.notifications, ),
-                  Positioned(
-                    right: 0,
-                    child: Container(
-                      padding: EdgeInsets.all(1),
-                      decoration: BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6),),
-                      constraints: BoxConstraints( minWidth: 12, minHeight: 12, ),
-                      child: Text( '5', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
         bottom: TabBar(
           controller: controller,
           indicatorColor: Colors.grey,

@@ -74,7 +74,7 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
         backgroundColor: Colors.white,
         actions: [
           Visibility(
-              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN AND IF SUPPORT SYSTEM
               child: GestureDetector(
                 onTap: () {
                   _showMyDialogDelete();
@@ -85,7 +85,7 @@ class _blood_pressureDoctorState extends State<blood_pressure_doctor_view> {
               )),
           SizedBox(width: 10),
           Visibility(
-              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN AND IF SUPPORT SYSTEM
               child: Padding(
                   padding: EdgeInsets.only(right: 20.0),
                   child: GestureDetector(

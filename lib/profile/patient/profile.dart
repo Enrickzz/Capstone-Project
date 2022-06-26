@@ -369,74 +369,92 @@ class _index3State extends State<index3>
                                 ]
                               )
                             ),
-                            InkWell(
-                              onTap: () {
-                                showModalBottomSheet(context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) => SingleChildScrollView(child: Container(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                                    child: edit_status(status: profile.status),
-                                  ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                child: Padding(
-                                    padding: const EdgeInsets.only(top: 6.0),
-                                    child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          SizedBox(width: 2),
-                                          if(profile.status == "Active")...[
-                                            Image.asset(
-                                              'assets/images/active.png',
-                                              width: 9,
-                                              height: 9,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(profile.status,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  // color:Color(0xFF363f93),
-                                                )
-                                            ),
-                                            SizedBox(width: 2),
-                                          ] else if(profile.status == "Hospitalized")... [
-                                            Image.asset(
-                                              'assets/images/hospitalized.png',
-                                              width: 9,
-                                              height: 9,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(profile.status,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  // color:Color(0xFF363f93),
-                                                )
-                                            ),
-                                            SizedBox(width: 2),
-                                          ] else...[
-                                            Image.asset(
-                                              'assets/images/inactive.png',
-                                              width: 9,
-                                              height: 9,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(profile.status,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  // color:Color(0xFF363f93),
-                                                )
-                                            ),
-                                            SizedBox(width: 2),
-                                          ]
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    showModalBottomSheet(context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) => SingleChildScrollView(child: Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        child: edit_status(status: profile.status),
+                                      ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(top: 6.0),
+                                        child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              SizedBox(width: 2),
+                                              if(profile.status == "Active")...[
+                                                Image.asset(
+                                                  'assets/images/active.png',
+                                                  width: 9,
+                                                  height: 9,
+                                                ),
+                                                SizedBox(width: 4),
+                                                Text(profile.status,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color:Color(0xFF2633C5),
+                                                    )
+                                                ),
+                                                SizedBox(width: 2),
+                                              ] else if(profile.status == "Hospitalized")... [
+                                                Image.asset(
+                                                  'assets/images/hospitalized.png',
+                                                  width: 9,
+                                                  height: 9,
+                                                ),
+                                                SizedBox(width: 4),
+                                                Text(profile.status,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color:Color(0xFF2633C5),
+                                                    )
+                                                ),
+                                                SizedBox(width: 2),
+                                              ] else...[
+                                                Image.asset(
+                                                  'assets/images/inactive.png',
+                                                  width: 9,
+                                                  height: 9,
+                                                ),
+                                                SizedBox(width: 4),
+                                                Text(profile.status,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color:Color(0xFF2633C5),
+                                                    )
+                                                ),
+                                                SizedBox(width: 2),
+                                              ],
 
 
-                                        ]
-                                    )
+                                            ]
+                                        )
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(width: 10),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 6.0),
+                                  child: GestureDetector(
+                                      onTap: () async {
+
+                                      },
+                                      child: Image.asset(
+                                        "assets/images/tite.png",
+                                        width: 12,
+                                        height: 12,
+                                      )
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                       )
@@ -1160,6 +1178,7 @@ class _index3State extends State<index3>
                 SizedBox(height: 30),
                 Container(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(minimumSize: Size(160, 0)),
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                       child: Text('Sign Out', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
@@ -1175,10 +1194,10 @@ class _index3State extends State<index3>
                     },
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 10),
                 Container(
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                    style: ElevatedButton.styleFrom(primary: Colors.red, minimumSize: Size(140, 0)),
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                       child: Text('Wipe Data', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),

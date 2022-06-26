@@ -139,6 +139,19 @@ class _PatientListState extends State<PatientList>  {
           )),
           centerTitle: true,
           backgroundColor: Colors.white,
+          actions: [
+            GestureDetector(
+                onTap: () async {
+
+                },
+                child: Image.asset(
+                  "assets/images/tite.png",
+                  width: 14,
+                  height: 14,
+                )
+            ),
+            SizedBox(width: 24),
+          ],
         ),
       body: isLoading
           ? Center(
@@ -151,12 +164,36 @@ class _PatientListState extends State<PatientList>  {
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Card(
               child: ListTile(
-                  leading: Container(
-                    height: 50,
-                    width: 50,
-                    child: ClipOval(
-                      // child:Image.asset("assets/images/blank_person.png",
-                        child: checkimage(pp_imgs[index])),
+                  leading: Stack(
+                    children:[ Positioned(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(width: 2, color: Colors.white),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 10, offset: const Offset(5, 5),),
+                          ],
+                        ),
+                        height: 50,
+                        width: 50,
+                        child: ClipOval(
+                          // child:Image.asset("assets/images/blank_person.png",
+                            child: checkimage(pp_imgs[index])),
+                      ),
+                    ),
+                      Positioned(
+                        left:35,
+                        top:34,
+                        child: Container(
+                          height: 14,
+                          width: 14,
+                          child: ClipOval(
+                            child:Image.asset("assets/images/active.png",
+                          )),
+                        ),
+                      ),
+                    ]
                   ),
                   title: Text(names[index],
                       style:TextStyle(

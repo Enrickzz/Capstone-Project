@@ -211,29 +211,76 @@ class _index3State extends State<view_patient_profile>
                                           ]
                                       )
                                   ),
-                                  Container(
-                                    child: Padding(
+                                  Row(
+                                    children: [
+                                      Container(
+                                        child: Padding(
+                                            padding: const EdgeInsets.only(top: 6.0),
+                                            child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  SizedBox(width: 2),
+                                                  if(profile.status == "Active")...[
+                                                    Image.asset(
+                                                      'assets/images/active.png',
+                                                      width: 9,
+                                                      height: 9,
+                                                    ),
+                                                    SizedBox(width: 4),
+                                                    Text(profile.status,
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                        )
+                                                    ),
+                                                    SizedBox(width: 2),
+                                                  ] else if(profile.status == "Hospitalized")... [
+                                                    Image.asset(
+                                                      'assets/images/hospitalized.png',
+                                                      width: 9,
+                                                      height: 9,
+                                                    ),
+                                                    SizedBox(width: 4),
+                                                    Text(profile.status,
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                        )
+                                                    ),
+                                                    SizedBox(width: 2),
+                                                  ] else...[
+                                                    Image.asset(
+                                                      'assets/images/inactive.png',
+                                                      width: 9,
+                                                      height: 9,
+                                                    ),
+                                                    SizedBox(width: 4),
+                                                    Text(profile.status,
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                        )
+                                                    ),
+                                                    SizedBox(width: 2),
+                                                  ],
+
+
+                                                ]
+                                            )
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Padding(
                                         padding: const EdgeInsets.only(top: 6.0),
-                                        child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              SizedBox(width: 2),
-                                              Image.asset(
-                                                'assets/images/active.png',
-                                                width: 9,
-                                                height: 9,
-                                              ),
-                                              SizedBox(width: 4),
-                                              Text("Active",
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // color:Color(0xFF363f93),
-                                                  )
-                                              ),
-                                              SizedBox(width: 2),
-                                            ]
-                                        )
-                                    ),
+                                        child: GestureDetector(
+                                            onTap: () async {
+
+                                            },
+                                            child: Image.asset(
+                                              "assets/images/tite.png",
+                                              width: 12,
+                                              height: 12,
+                                            )
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               )
@@ -693,35 +740,6 @@ class _index3State extends State<view_patient_profile>
 
                                 },
                               ),
-                              _buildDivider(),
-                              if(canViewDataInput == connection.health) ...[
-                                ListTile(
-                                  title: Text("Data Inputs"),
-                                  trailing: Icon(Icons.keyboard_arrow_right),
-                                  onTap:(){
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => data_inputs_doctor_view(userUID: widget.userUID)),
-                                    );
-
-                                  },
-                                ),
-
-                              ] else ...[
-                                ListTile(
-                                  title: Text("Data Inputs"),
-                                  trailing: Icon(Icons.keyboard_arrow_right),
-                                  onTap:(){
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => noAccess()),
-                                    );
-
-                                  },
-                                ),
-
-                              ],
 
                               _buildDivider(),
                               ListTile(
@@ -759,13 +777,55 @@ class _index3State extends State<view_patient_profile>
                                 blurRadius: 20.0)],
                         )
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 25),
+
+                    if(canViewDataInput == connection.health) ...[
+                      Container(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(minimumSize: Size(210, 0)),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Text('Patient Data Inputs', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => data_inputs_doctor_view(userUID: widget.userUID)),
+                            );
+                          },
+                        ),
+                      )
+
+                    ] else ...[
+                      Container(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(minimumSize: Size(210, 0)),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Text('Patient Data Inputs', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => noAccess()),
+                            );
+                          },
+                        ),
+                      )
+
+                    ],
+
+                    SizedBox(height: 8),
+
                     if(canViewDashboard == connection.dashboard || connection.dashboard =="true") ...[
                       Container(
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(minimumSize: Size(210, 0)),
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text('View Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            child: Text('Patient Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
                           onPressed: () async {
@@ -780,9 +840,10 @@ class _index3State extends State<view_patient_profile>
                     ] else ...[
                       Container(
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(minimumSize: Size(210, 0)),
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text('View Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            child: Text('Patient Dashboard', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
                           onPressed: () async {
@@ -797,12 +858,14 @@ class _index3State extends State<view_patient_profile>
                     ],
 
                     SizedBox(height: 8),
+
                     if(canViewGoal == connection.nonhealth) ...[
                       Container(
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(minimumSize: Size(210, 0)),
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text('View Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            child: Text('Patient Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
 
@@ -820,9 +883,10 @@ class _index3State extends State<view_patient_profile>
 
                       Container(
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(minimumSize: Size(210, 0)),
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text('View Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            child: Text('Patient Goals', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
 
