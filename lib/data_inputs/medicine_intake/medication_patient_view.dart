@@ -35,7 +35,9 @@ class _medicationState extends State<medication> {
     final uid = user.uid;
     final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
     medtemp.clear();
-    getpermission();
+    if(widget.userUID != null){
+      getpermission();
+    }
     getMedication();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {

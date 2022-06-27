@@ -39,7 +39,9 @@ class _lab_resultsState extends State<lab_results> {
   void initState() {
     super.initState();
     listAll("path");
-    // getpermission();
+    if(widget.userUID != null){
+      getpermission();
+    }
     getLabResult();
     Future.delayed(const Duration(milliseconds: 1500), () {
       downloadUrls();
@@ -515,8 +517,7 @@ class _lab_resultsState extends State<lab_results> {
     final User user = auth.currentUser;
     String ssuid = user.uid;
     final uid = widget.userUID;
-    final readConnection = databaseReference
-        .child('users/' + ssuid + '/personal_info/connections');
+    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
     readConnection.once().then((DataSnapshot datasnapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
       temp.forEach((jsonString) {
