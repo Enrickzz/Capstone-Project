@@ -101,6 +101,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
     }
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
+        arrangeActive(patients);
         isLoading = false;
       });
 
@@ -487,6 +488,32 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
           width: 50,
           height: 50,
           fit: BoxFit.cover);
+    }
+  }
+  void arrangeActive(List<Users> patients){
+    List<Users> active = [];
+    List<Users> hospitalized = [];
+    List<Users> inactive = [];
+    for(int j = 0; j < patients.length; j++){
+      if(patients[j].status == "Active"){
+        active.add(patients[j]);
+      }
+      else if (patients[j].status == "Hospitalized"){
+        hospitalized.add(patients[j]);
+      }
+      else if(patients[j].status == "Inactive"){
+        inactive.add(patients[j]);
+      }
+    }
+    patients.clear();
+    for(int i = 0; i < active.length; i++){
+      patients.add(active[i]);
+    }
+    for(int i = 0; i < hospitalized.length; i++){
+      patients.add(hospitalized[i]);
+    }
+    for(int i = 0; i < inactive.length; i++){
+      patients.add(inactive[i]);
     }
   }
 }

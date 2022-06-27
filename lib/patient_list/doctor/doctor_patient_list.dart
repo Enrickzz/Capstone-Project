@@ -506,7 +506,6 @@ class _PatientListState extends State<PatientList>  {
     for(int i = 0; i < inactive.length; i++){
       patients.add(inactive[i]);
     }
-    print("AAAAAAAAAAAAAAA");
   }
 
 }
