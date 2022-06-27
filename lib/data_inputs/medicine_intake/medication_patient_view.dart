@@ -25,6 +25,8 @@ class _medicationState extends State<medication> {
   List<Medication> medtemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
+  List<Connection> connections = [];
+  bool canaddedit = false;
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _medicationState extends State<medication> {
     final uid = user.uid;
     final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
     medtemp.clear();
+    getpermission();
     getMedication();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
@@ -62,31 +65,34 @@ class _medicationState extends State<medication> {
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_medication(thislist: medtemp, userUID: widget.userUID),
-                    ),
-                    ),
-                  ).then((value) {
-                    if(value != null){
-                      medtemp.insert(0, value);
-                      setState((){
-                      });
-                    }
+          Visibility(
+            visible: canaddedit,
+            child: Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(context: context,
+                      isScrollControlled: true,
+                      builder: (context) => SingleChildScrollView(child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: add_medication(thislist: medtemp, userUID: widget.userUID),
+                      ),
+                      ),
+                    ).then((value) {
+                      if(value != null){
+                        medtemp.insert(0, value);
+                        setState((){
+                        });
+                      }
 
-                  });
-                },
-                child: Icon(
-                  Icons.add,
+                    });
+                  },
+                  child: Icon(
+                    Icons.add,
+                  )
                 )
-              )
+            ),
           ),
         ],
       ),
@@ -170,6 +176,32 @@ class _medicationState extends State<medication> {
         var temp = medtemp[i];
         medtemp[i] = medtemp[medtemp.length-1-i];
         medtemp[medtemp.length-1-i] = temp;
+      }
+    });
+  }
+  void getpermission() {
+    final User user = auth.currentUser;
+    String ssuid = user.uid;
+    final uid = widget.userUID;
+    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+    readConnection.once().then((DataSnapshot datasnapshot) {
+      List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+      temp.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString));
+      });
+      for(int i = 0; i < connections.length; i++){
+        if(connections[i].doctor1 == ssuid){
+          if(connections[i].addedit == "true"){
+            canaddedit = true;
+            print("canaddedit is ");
+            print(canaddedit);
+          }
+          else{
+            canaddedit = false;
+            print("canaddedit is ");
+            print(canaddedit);
+          }
+        }
       }
     });
   }

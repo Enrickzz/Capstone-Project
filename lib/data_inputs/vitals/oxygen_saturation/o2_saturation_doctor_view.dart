@@ -29,12 +29,15 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
   int _currentSortColumn = 0;
   bool _isSortAsc = true;
   List<bool> _selected = [];
+  List<Connection> connections = [];
+  bool canaddedit = false;
 
   @override
   void initState() {
     super.initState();
     oxygentemp.clear();
     _selected.clear();
+    getpermission();
     getOxygenSaturation();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
@@ -65,7 +68,7 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
         backgroundColor: Colors.white,
         actions: [
           Visibility(
-              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              visible: canaddedit, //TRUE OR FALSE IF ACCESS IS GIVEN
               child: GestureDetector(
                 onTap: () {
                   _showMyDialogDelete();
@@ -76,7 +79,7 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
               )),
           SizedBox(width: 10),
           Visibility(
-              visible: true, //TRUE OR FALSE IF ACCESS IS GIVEN
+              visible: canaddedit, //TRUE OR FALSE IF ACCESS IS GIVEN
               child: Padding(
                   padding: EdgeInsets.only(right: 20.0),
                   child: GestureDetector(
@@ -292,6 +295,32 @@ class _o2_saturationDoctorState extends State<o2_saturation_doctor_view> {
       temp.forEach((jsonString) {
         oxygentemp.add(Oxygen_Saturation.fromJson(jsonString));
       });
+    });
+  }
+  void getpermission() {
+    final User user = auth.currentUser;
+    String ssuid = user.uid;
+    final uid = widget.userUID;
+    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+    readConnection.once().then((DataSnapshot datasnapshot) {
+      List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+      temp.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString));
+      });
+      for(int i = 0; i < connections.length; i++){
+        if(connections[i].doctor1 == ssuid){
+          if(connections[i].addedit == "true"){
+            canaddedit = true;
+            print("canaddedit is ");
+            print(canaddedit);
+          }
+          else{
+            canaddedit = false;
+            print("canaddedit is ");
+            print(canaddedit);
+          }
+        }
+      }
     });
   }
   Future<void> _showMyDialogDelete() async {

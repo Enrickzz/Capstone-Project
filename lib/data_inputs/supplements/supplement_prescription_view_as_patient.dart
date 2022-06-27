@@ -28,11 +28,14 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Supplement_Prescription> supptemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
+  List<Connection> connections = [];
+  bool canaddedit = false;
 
   @override
   void initState() {
     super.initState();
     supptemp.clear();
+    getpermission();
     getSupplementPrescription();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
@@ -63,35 +66,38 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_supplement_prescription(thislist: supptemp, userUID: widget.userUID),
-                    ),
-                    ),
-                  ).then((value) =>
-                      Future.delayed(const Duration(milliseconds: 1500), (){
-                        // supptemp = value;
-                        if(value != null){
-                          print("LENGTH: " + supptemp.length.toString());
-                          supptemp.insert(0, value);
-                        }
-                        setState((){
+          Visibility(
+            visible: canaddedit,
+            child: Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(context: context,
+                      isScrollControlled: true,
+                      builder: (context) => SingleChildScrollView(child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: add_supplement_prescription(thislist: supptemp, userUID: widget.userUID),
+                      ),
+                      ),
+                    ).then((value) =>
+                        Future.delayed(const Duration(milliseconds: 1500), (){
+                          // supptemp = value;
                           if(value != null){
+                            print("LENGTH: " + supptemp.length.toString());
+                            supptemp.insert(0, value);
                           }
-                        });
-                      }));
-                },
-                child: Icon(
-                  Icons.add,
-                ),
-              )
+                          setState((){
+                            if(value != null){
+                            }
+                          });
+                        }));
+                  },
+                  child: Icon(
+                    Icons.add,
+                  ),
+                )
+            ),
           ),
         ],
       ),
@@ -176,7 +182,31 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
       }
       print(supptemp[0].supplement_name);
     });
-
-
+  }
+  void getpermission() {
+    final User user = auth.currentUser;
+    String ssuid = user.uid;
+    final uid = widget.userUID;
+    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+    readConnection.once().then((DataSnapshot datasnapshot) {
+      List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+      temp.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString));
+      });
+      for(int i = 0; i < connections.length; i++){
+        if(connections[i].doctor1 == ssuid){
+          if(connections[i].addedit == "true"){
+            canaddedit = true;
+            print("canaddedit is ");
+            print(canaddedit);
+          }
+          else{
+            canaddedit = false;
+            print("canaddedit is ");
+            print(canaddedit);
+          }
+        }
+      }
+    });
   }
 }
