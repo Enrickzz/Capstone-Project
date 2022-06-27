@@ -35,7 +35,9 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
   void initState() {
     super.initState();
     supptemp.clear();
-    getpermission();
+    if(widget.userUID != null){
+      getpermission();
+    }
     getSupplementPrescription();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {

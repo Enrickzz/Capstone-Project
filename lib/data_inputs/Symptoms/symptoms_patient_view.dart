@@ -37,7 +37,9 @@ class _symptomsState extends State<symptoms> {
   void initState() {
     super.initState();
     listtemp.clear();
-    getpermission();
+    if(widget.userUID != null){
+      getpermission();
+    }
     getSymptoms();
     Future.delayed(const Duration(milliseconds: 2000), (){
       downloadUrls();
