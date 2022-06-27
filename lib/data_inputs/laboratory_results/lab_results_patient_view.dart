@@ -85,31 +85,41 @@ class _lab_resultsState extends State<lab_results> {
                         ),
                       ),
                     ).then((value) {
-                      //BoxedReturns thisReturned = value;
                       print("AFTER ADD LAB");
                       print("VALUE\n" + value.toString());
-                      ShowDialogRecomm("thisReturned.dialog.message",
-                              "thisReturned.dialog.title", "None")
-                          .then((value) {
-                        print("AFTER DIALOG");
-                      });
-                      if (value != null) {
-                        print("VALUE NOT NULL");
-                        // labResult_list.insert(0, thisReturned.result);
-                        // print(labResult_list[0].imgRef.toString() + " <<<<<<<<");
-                        // value.toString();
-                        // downloadUrls();
-                        // listAll("path");
-                        // ShowDialogRecomm(
-                        //     thisReturned.dialog.message,
-                        //     thisReturned.dialog.title,
-                        //     thisReturned.dialog.redirect);
-                        ShowDialogRecomm("thisReturned.dialog.message",
-                            "thisReturned.dialog.title", "None");
-                        // Future.delayed(const Duration(milliseconds: 2000),
-                        //     () {
-                        //   setState(() {});
-                        // });
+                      var value1 = value;
+                      BoxedReturns thisReturned = value;
+                      if (thisReturned.dialog.message == null ||
+                          thisReturned.dialog.title == null ||
+                          thisReturned.dialog.redirect == null) {
+                        labResult_list.insert(0, thisReturned.result);
+                        print(
+                            labResult_list[0].imgRef.toString() + " <<<<<<<<");
+                        downloadUrls();
+                        listAll("path");
+                        Future.delayed(const Duration(milliseconds: 2000), () {
+                          setState(() {});
+                        });
+                      } else {
+                        ShowDialogRecomm(
+                                thisReturned.dialog.message,
+                                thisReturned.dialog.title,
+                                thisReturned.dialog.redirect)
+                            .then((value) {
+                          print("AFTER DIALOG");
+                          if (value1 != null) {
+                            print("VALUE NOT NULL");
+                            labResult_list.insert(0, thisReturned.result);
+                            print(labResult_list[0].imgRef.toString() +
+                                " <<<<<<<<");
+                            downloadUrls();
+                            listAll("path");
+                            Future.delayed(const Duration(milliseconds: 2000),
+                                () {
+                              setState(() {});
+                            });
+                          }
+                        });
                       }
                     });
 
@@ -224,13 +234,13 @@ class _lab_resultsState extends State<lab_results> {
       String desc, String title, String redirect) async {
     bool checktitle = true;
     print("SHOWDIALOG PASOK");
-    // if (title == "Peer Recommendation!") {
-    //   checktitle = false;
-    //   desc = desc + " Go to places tab to view new reviews!";
-    // }
-    // if (redirect == "None") {
-    //   checktitle = false;
-    // }
+    if (title == "Peer Recommendation!") {
+      checktitle = false;
+      desc = desc + " Go to places tab to view new reviews!";
+    }
+    if (redirect == "None") {
+      checktitle = false;
+    }
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
