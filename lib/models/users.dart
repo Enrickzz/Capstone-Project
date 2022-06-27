@@ -92,20 +92,22 @@ class UID {
 
 class Connection {
   Connection(
-      {this.doctor1,
-      this.dashboard,
-      this.nonhealth,
-      this.health,
-      this.medpres1,
-      this.medpres2,
-      this.foodplan1,
-      this.foodplan2,
-      this.explan1,
-      this.explan2,
-      this.vitals1,
-      this.vitals2,
-      this.labplan1,
-      this.labplan2});
+        {this.doctor1,
+        this.dashboard,
+        this.nonhealth,
+        this.health,
+        this.addedit,
+        this.medpres1,
+        this.medpres2,
+        this.foodplan1,
+        this.foodplan2,
+        this.explan1,
+        this.explan2,
+        this.vitals1,
+        this.vitals2,
+        this.labplan1,
+        this.labplan2
+        });
 
   String doctor1;
 
@@ -113,12 +115,14 @@ class Connection {
   String dashboard;
   String nonhealth;
   String health;
+  String addedit;
 
   Connection.fromJson(Map<String, dynamic> json) {
     doctor1 = json['uid'];
     dashboard = json['dashboard'];
     nonhealth = json['nonhealth'];
     health = json['health'];
+    addedit = json['addedit'];
   }
 
   /// doctor to doctor
