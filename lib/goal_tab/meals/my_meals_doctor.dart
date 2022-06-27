@@ -3,10 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/ui_view/title_view.dart';
 
 import '../../fitness_app_theme.dart';
 import '../../notifications/notifications._patients.dart';
-import 'MealListViewDoc.dart';
+import '../../ui_view/meals/MealListViewDoc.dart';
 import 'dietViewDoc.dart';
 
 class my_meals_doctor extends StatefulWidget {
@@ -83,6 +84,21 @@ class _my_meals_doctorState extends State<my_meals_doctor>
     );
 
     listViews.add(
+      TitleView(
+        titleTxt: 'Meals Today',
+        subTxt: 'View Meals',
+        userType: "Doctor",
+        redirect: 2,
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+        userUID: widget.userUID,
+      ),
+    );
+
+    listViews.add(
       MealsListViewDoc(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
@@ -90,6 +106,21 @@ class _my_meals_doctorState extends State<my_meals_doctor>
                 curve: Interval((1 / count) * 3, 1.0,
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController,
+        userUID: widget.userUID,
+      ),
+    );
+
+    listViews.add(
+      TitleView(
+        titleTxt: "Patient's Meal Plan",
+        subTxt: 'View Plan',
+        redirect: 7,
+        userType: "Doctor",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
         userUID: widget.userUID,
       ),
     );
