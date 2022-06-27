@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/weight/BMI_chart_doctor.dart';
 import 'package:my_app/ui_view/weight/weight_progress_doctor.dart';
 import 'package:my_app/ui_view/weight/weight_trend_doctor_sfchart.dart';
@@ -87,20 +88,20 @@ class _my_weight_doctorState extends State<my_weight_doctor>
         userUID: widget.userUID
       ),
     );
-    // listViews.add(
-    //   TitleView(
-    //     titleTxt: 'Weight Progress',
-    //     subTxt: '',
-    //     redirect: 4,
-    //     userType: 'Doctor',
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-    //         parent: widget.animationController,
-    //         curve:
-    //         Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-    //     animationController: widget.animationController,
-    //     userUID: widget.userUID
-    //   ),
-    // );
+    listViews.add(
+      TitleView(
+        titleTxt: 'Weight Progress',
+        subTxt: 'View Log',
+        redirect: 4,
+        userType: 'Doctor',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+          userUID: widget.userUID
+      ),
+    );
 
 
     listViews.add(

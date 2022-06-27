@@ -265,7 +265,7 @@ class _my_sleepState extends State<my_sleep>
         listViews.add(
           TitleView(
               titleTxt: 'Last Sleep',
-              subTxt: 'Sleep Log',
+              subTxt: 'View Log',
               redirect: 6,
               userType: "Patient",
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(

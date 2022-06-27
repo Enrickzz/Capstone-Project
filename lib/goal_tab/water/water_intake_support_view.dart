@@ -1,27 +1,30 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:collection/src/iterable_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/goal_tab/water/add_water_intake.dart';
 import 'package:my_app/models/users.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class water_intake_support_view extends StatefulWidget {
-  final List<Body_Temperature> btlist;
-  water_intake_support_view({Key key, this.btlist}): super(key: key);
+  final String userUID;
+  water_intake_support_view({Key key, this.userUID}): super(key: key);
   @override
-  _waterIntakeDoctorState createState() => _waterIntakeDoctorState();
+  _waterIntakeSupportState createState() => _waterIntakeSupportState();
 }
 
-class _waterIntakeDoctorState extends State<water_intake_support_view> {
+class _waterIntakeSupportState extends State<water_intake_support_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isDateSelected= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  List<Body_Temperature> bttemp = [];
+  List<WaterIntake> waterintake_list = [];
+  Physical_Parameters pp = new Physical_Parameters();
   List<File> _image = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -37,16 +40,16 @@ class _waterIntakeDoctorState extends State<water_intake_support_view> {
   @override
   void initState() {
     super.initState();
-    // bttemp.clear();
-    // _selected.clear();
-    // getBodyTemp();
-    // Future.delayed(const Duration(milliseconds: 1500), (){
-    //   setState(() {
-    //     _selected = List<bool>.generate(bttemp.length, (int index) => false);
-    //
-    //     print("setstate");
-    //   });
-    // });
+    waterintake_list.clear();
+    getWaterIntake();
+    // getBMIList();
+    Future.delayed(const Duration(milliseconds: 1500), (){
+      setState(() {
+        _selected = List<bool>.generate(waterintake_list.length, (int index) => false);
+
+        print("setstate");
+      });
+    });
   }
 
   @override
@@ -63,12 +66,50 @@ class _waterIntakeDoctorState extends State<water_intake_support_view> {
         iconTheme: IconThemeData(
             color: Colors.black
         ),
-        title: const Text("Patient's Water Intake", style: TextStyle(
+        title: const Text('My Water Intake', style: TextStyle(
             color: Colors.black
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              _showMyDialogDelete();
 
+            },
+            child: Icon(
+              Icons.delete,
+            ),
+          ),
+          SizedBox(width: 10),
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(context: context,
+                    isScrollControlled: true,
+                    builder: (context) => SingleChildScrollView(child: Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: add_water_intake(),
+                    ),
+                    ),
+                  ).then((value) => setState((){
+                    print("setstate symptoms");
+                    if(value != null){
+                      waterintake_list = value;
+                      _selected = List<bool>.generate(waterintake_list.length, (int index) => false);
+
+                    }
+                    print("SYMP LENGTH AFTER SETSTATE  =="  + waterintake_list.length.toString() );
+                  }));
+                },
+                child: Icon(
+                  Icons.add,
+                ),
+              )
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -95,46 +136,18 @@ class _waterIntakeDoctorState extends State<water_intake_support_view> {
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
   }
-  // void getBodyTemp() {
-  //   final User user = auth.currentUser;
-  //   final uid = user.uid;
-  //   final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-  //   readBT.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       bttemp.add(Body_Temperature.fromJson(jsonString));
-  //     });
-  //   });
-  // }
-
-  int getAge (DateTime birthday) {
-    DateTime today = new DateTime.now();
-    String days1 = "";
-    String month1 = "";
-    String year1 = "";
-    int d = int.parse(DateFormat("dd").format(birthday));
-    int m = int.parse(DateFormat("MM").format(birthday));
-    int y = int.parse(DateFormat("yyyy").format(birthday));
-    int d1 = int.parse(DateFormat("dd").format(DateTime.now()));
-    int m1 = int.parse(DateFormat("MM").format(DateTime.now()));
-    int y1 = int.parse(DateFormat("yyyy").format(DateTime.now()));
-    int age = 0;
-    age = y1 - y;
-    print(age);
-
-    // dec < jan
-    if(m1 < m){
-      print("month --");
-      age--;
-    }
-    else if (m1 == m){
-      if(d1 < d){
-        print("day --");
-        age--;
-      }
-    }
-    return age;
+  void getWaterIntake() {
+    final User user = auth.currentUser;
+    String userUID = widget.userUID;
+    final readWaterIntake = databaseReference.child('users/' + userUID + '/goal/water_intake/');
+    readWaterIntake.once().then((DataSnapshot snapshot){
+      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+      temp.forEach((jsonString) {
+        waterintake_list.add(WaterIntake.fromJson(jsonString));
+      });
+    });
   }
+
 
   Color getMyColor(String indication) {
     if(indication == 'normal'){
@@ -176,9 +189,9 @@ class _waterIntakeDoctorState extends State<water_intake_support_view> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              bttemp.sort((a, b) => b.bt_date.compareTo(a.bt_date));
+              waterintake_list.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
             } else {
-              bttemp.sort((a, b) => a.bt_date.compareTo(b.bt_date));
+              waterintake_list.sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
             }
             _isSortAsc = !_isSortAsc;
           });
@@ -195,12 +208,12 @@ class _waterIntakeDoctorState extends State<water_intake_support_view> {
   }
 
   List<DataRow> _createRows() {
-    return bttemp
+    return waterintake_list
         .mapIndexed((index, bp) => DataRow(
         cells: [
-          DataCell(Text(getDateFormatted(bp.bt_date.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bt_time.toString()))),
-          DataCell(Text(bp.temperature.toStringAsFixed(1) +'°C', style: TextStyle(),)),
+          DataCell(Text(getDateFormatted(bp.dateCreated.toString()))),
+          DataCell(Text(getTimeFormatted(bp.timeCreated.toString()))),
+          DataCell(Text(bp.water_intake.toString() +'mL', style: TextStyle(),)),
         ],
         selected: _selected[index],
         onSelectChanged: (bool selected) {
@@ -229,7 +242,31 @@ class _waterIntakeDoctorState extends State<water_intake_support_view> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final userUID = widget.userUID;
+                int initialLength = waterintake_list.length;
+                List<int> deleteList = [];
+                for(int i = 0; i < waterintake_list.length; i++){
+                  if(_selected[i]){
+                    deleteList.add(i);
+                  }
+                }
+                deleteList.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < deleteList.length; i++){
+                  waterintake_list.removeAt(deleteList[i]);
+                }
+                for(int i = 1; i <= initialLength; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/goal/water_intake/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < waterintake_list.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/goal/water_intake/' + (i+1).toString());
+                  bpRef.set({
+                    "water_intake": waterintake_list[i].water_intake.toString(),
+                    "dateCreated": "${waterintake_list[i].dateCreated.month.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}",
+                    "timeCreated": "${waterintake_list[i].timeCreated.hour.toString().padLeft(2,"0")}:${waterintake_list[i].timeCreated.minute.toString().padLeft(2,"0")}"
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

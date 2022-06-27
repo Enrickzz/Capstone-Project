@@ -11,7 +11,6 @@ import 'package:my_app/data_inputs/vitals/blood_pressure/add_blood_pressure.dart
 import 'package:my_app/data_inputs/vitals/heart_rate/add_heart_rate.dart';
 import 'package:my_app/data_inputs/vitals/oxygen_saturation/add_o2_saturation.dart';
 import 'package:my_app/goal_tab/meals/recommended_meals.dart';
-import 'package:my_app/goal_tab/music/music_recommendation.dart';
 import 'package:my_app/management_plan/exercise_plan/exercise_plan_patient_view.dart';
 import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 import 'package:my_app/management_plan/medication_prescription/view_medical_prescription_as_patient.dart';

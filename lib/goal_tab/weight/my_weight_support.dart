@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/title_view.dart';
-import 'package:my_app/ui_view/weight/BMI_chart_support.dart';
-import 'package:my_app/ui_view/weight/weight_progress_support.dart';
-import 'package:my_app/ui_view/weight/weight_trend_support.dart';
+import 'package:my_app/ui_view/weight/BMI_chart_doctor.dart';
+import 'package:my_app/ui_view/weight/weight_progress_doctor.dart';
+import 'package:my_app/ui_view/weight/weight_trend_doctor_sfchart.dart';
 import 'package:flutter/material.dart';
 
 import '../../fitness_app_theme.dart';
@@ -30,6 +30,8 @@ class _my_weight_supportState extends State<my_weight_support>
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
+
+  bool allowedAddEdit = true;
 
   @override
   void initState() {
@@ -68,47 +70,68 @@ class _my_weight_supportState extends State<my_weight_support>
     const int count = 9;
 
     listViews.add(
-      weight_trend_support(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-        userUID: widget.userUID
+      weight_trend_sf_doctor(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+              parent: widget.animationController,
+              curve:
+              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+          userUID: widget.userUID
       ),
     );
 
     listViews.add(
-      BMI_Chart_support(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-    listViews.add(
-      TitleView(
-        titleTxt: 'Weight Progress',
-        subTxt: 'View Log',
-        redirect: 4,
-        userType: 'Support',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
+      BMI_Chart_doctor(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+              parent: widget.animationController,
+              curve:
+              Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+          userUID: widget.userUID
       ),
     );
 
+    if (!allowedAddEdit) {
+      listViews.add(
+        TitleView(
+            titleTxt: 'Weight Progress',
+            subTxt: 'View Log',
+            redirect: 4,
+            userType: 'Doctor',
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+            userUID: widget.userUID
+        ),
+      );
+    }
+    else if (allowedAddEdit) {
+      listViews.add(
+        TitleView(
+            titleTxt: 'Weight Progress',
+            subTxt: 'Log Weight',
+            redirect: 4,
+            userType: 'Support',
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+            userUID: widget.userUID
+        ),
+      );
+    }
 
     listViews.add(
-      weight_progress_support(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-            Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
+      weight_progress_doctor(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+              parent: widget.animationController,
+              curve:
+              Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+          userUID: widget.userUID
       ),
     );
   }

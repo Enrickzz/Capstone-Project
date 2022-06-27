@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/goal_tab/water/change_water_intake_goal.dart';
 import 'package:my_app/models/users.dart';
 import 'package:my_app/ui_view/water/wave_view.dart';
 import 'package:my_app/fitness_app_theme.dart';
@@ -126,7 +127,7 @@ class _WaterViewDoctorState extends State<WaterViewDoctor> with TickerProviderSt
                                   padding: const EdgeInsets.only(
                                       left: 4, top: 2, bottom: 14),
                                   child: Text(
-                                    'of your daily goal '+waterintake_goal.toStringAsFixed(0)+' ml',
+                                    "of patient's daily goal "+waterintake_goal.toStringAsFixed(0)+' ml',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -142,9 +143,18 @@ class _WaterViewDoctorState extends State<WaterViewDoctor> with TickerProviderSt
                                       left: 4),
                                   child: GestureDetector(
                                     onTap: () {
+                                      showModalBottomSheet(context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) => SingleChildScrollView(child: Container(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                                          child: change_water_intake_goal(),
+                                        ),
+                                        ),
+                                      );
                                     },
                                     child: Text(
-                                      '',
+                                      'Edit Goal',
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
                                         fontSize: 16,

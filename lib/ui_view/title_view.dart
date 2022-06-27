@@ -161,7 +161,7 @@ class TitleView extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => weight_list_support_view()),
+                                          builder: (context) => weight_list_support_view(userUID: userUID)),
                                     );
                                   }
                                 }
@@ -184,7 +184,7 @@ class TitleView extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => water_intake_support_view()),
+                                          builder: (context) => water_intake_support_view(userUID: userUID)),
                                     );
                                   }
                                 }
@@ -200,7 +200,7 @@ class TitleView extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => sleep_doctor_view()),
+                                          builder: (context) => sleep_doctor_view(userUID: userUID, fitbitToken: fitbitToken)),
                                     );
                                   }
                                   else if (userType == "Support") {

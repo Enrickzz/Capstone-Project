@@ -166,7 +166,7 @@ class _weight_progress_doctorState extends State<weight_progress_doctor> {
                                       children: [
                                         if(goalCheck != "Maintain") ...[
                                           Text(
-                                            'to go to meet your goal!',
+                                            "to go to meet patient's goal!",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily: FitnessAppTheme.fontName,
@@ -233,7 +233,7 @@ class _weight_progress_doctorState extends State<weight_progress_doctor> {
                                 style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     color: FitnessAppTheme.darkText),
                               ),
                             ),

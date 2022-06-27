@@ -5,19 +5,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/goal_tab/weight/add_weight_record.dart';
 import 'package:my_app/models/users.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class weight_list_support_view extends StatefulWidget {
-  final List<Body_Temperature> btlist;
   String userUID;
-  weight_list_support_view({Key key, this.btlist, this.userUID}): super(key: key);
+  weight_list_support_view({Key key, this.userUID}): super(key: key);
   @override
-  _weightDoctorstate createState() => _weightDoctorstate();
+  _weightSupportState createState() => _weightSupportState();
 }
 
-class _weightDoctorstate extends State<weight_list_support_view> {
+class _weightSupportState extends State<weight_list_support_view> {
   // final database = FirebaseDatabase.instance.reference();
   final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -25,7 +25,6 @@ class _weightDoctorstate extends State<weight_list_support_view> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<Weight> weights = [];
   Physical_Parameters pp = new Physical_Parameters();
-  List<double> bmi = [];
   List<File> _image = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -47,7 +46,6 @@ class _weightDoctorstate extends State<weight_list_support_view> {
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
         _selected = List<bool>.generate(weights.length, (int index) => false);
-
         print("setstate");
       });
     });
@@ -72,6 +70,55 @@ class _weightDoctorstate extends State<weight_list_support_view> {
         )),
         centerTitle: true,
         backgroundColor: Colors.white,
+        actions: [
+
+          GestureDetector(
+            onTap: () {
+              _showMyDialogDelete();
+
+            },
+            child: Icon(
+              Icons.delete,
+            ),
+          ),
+          SizedBox(width: 10),
+          //
+          // GestureDetector(
+          //   onTap: () {
+          //     _showMyDialogDelete();
+          //
+          //   },
+          //   child: Icon(
+          //     Icons.perm_device_information_sharp ,
+          //   ),
+          // ),
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(context: context,
+                    isScrollControlled: true,
+                    builder: (context) => SingleChildScrollView(child: Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: add_weight_record(),
+                    ),
+                    ),
+                  ).then((value) => setState((){
+                    if(value != null){
+                      weights = value;
+                      _selected = List<bool>.generate(weights.length, (int index) => false);
+
+                    }
+                    print("SYMP LENGTH AFTER SETSTATE  =="  + weights.length.toString() );
+                  }));
+                },
+                child: Icon(
+                  Icons.add,
+                ),
+              )
+          ),
+        ],
 
       ),
       body: SingleChildScrollView(
@@ -101,8 +148,8 @@ class _weightDoctorstate extends State<weight_list_support_view> {
   }
   void getWeight() {
     final User user = auth.currentUser;
-    final uid = user.uid;
-    final readWeight = databaseReference.child('users/' + uid + '/goal/weight/');
+    final userUID = widget.userUID;
+    final readWeight = databaseReference.child('users/' + userUID + '/goal/weight/');
     readWeight.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
@@ -111,17 +158,6 @@ class _weightDoctorstate extends State<weight_list_support_view> {
       weights = weights.reversed.toList();
     });
   }
-  // void getBodyTemp() {
-  //   final User user = auth.currentUser;
-  //   final uid = user.uid;
-  //   final readBT = databaseReference.child('users/' + uid + '/vitals/health_records/body_temperature_list/');
-  //   readBT.once().then((DataSnapshot snapshot){
-  //     List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-  //     temp.forEach((jsonString) {
-  //       bttemp.add(Body_Temperature.fromJson(jsonString));
-  //     });
-  //   });
-  // }
 
   int getAge (DateTime birthday) {
     DateTime today = new DateTime.now();
@@ -259,7 +295,32 @@ class _weightDoctorstate extends State<weight_list_support_view> {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final userUID = widget.userUID;
+                int initialLength = weights.length;
+                List<int> deleteList = [];
+                for(int i = 0; i < weights.length; i++){
+                  if(_selected[i]){
+                    deleteList.add(i);
+                  }
+                }
+                deleteList.sort((a,b) => b.compareTo(a));
+                for(int i = 0; i < deleteList.length; i++){
+                  weights.removeAt(deleteList[i]);
+                }
+                for(int i = 1; i <= initialLength; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/goal/weight/' + i.toString());
+                  bpRef.remove();
+                }
+                for(int i = 0; i < weights.length; i++){
+                  final bpRef = databaseReference.child('users/' + userUID + '/goal/weight/' + (i+1).toString());
+                  bpRef.set({
+                    "weight": weights[i].weight.toString(),
+                    "bmi": weights[i].bmi.toString(),
+                    "dateCreated": "${weights[i].dateCreated.month.toString().padLeft(2,"0")}/${weights[i].dateCreated.day.toString().padLeft(2,"0")}/${weights[i].dateCreated.year}",
+                    "timeCreated": "${weights[i].timeCreated.hour.toString().padLeft(2,"0")}:${weights[i].timeCreated.minute.toString().padLeft(2,"0")}"
+                  });
+                }
                 Navigator.of(context).pop();
 
               },

@@ -11,6 +11,7 @@ import 'package:my_app/ui_view/sleep_stackedbar_sfchart.dart';
 import 'package:my_app/ui_view/sleep_score_barchartsf.dart';
 import 'package:my_app/ui_view/time_asleep.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/ui_view/title_view.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -260,20 +261,21 @@ class _my_sleep_doctorState extends State<my_sleep_doctor>
             ),
           );
         }
-        // listViews.add(
-        //   TitleView(
-        //       titleTxt: 'Last Sleep',
-        //       subTxt: 'Sleep Log',
-        //       redirect: 6,
-        //       userType: "Patient",
-        //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        //           parent: widget.animationController,
-        //           curve:
-        //           Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        //       animationController: widget.animationController,
-        //       fitbitToken: fitbitToken
-        //   ),
-        // );
+        listViews.add(
+          TitleView(
+              titleTxt: 'Last Sleep',
+              subTxt: 'View Log',
+              redirect: 6,
+              userType: "Doctor",
+              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                  parent: widget.animationController,
+                  curve:
+                  Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: widget.animationController,
+              fitbitToken: fitbitToken,
+              userUID: widget.userUID,
+          ),
+        );
 
         listViews.add(
           time_asleep(
@@ -293,6 +295,19 @@ class _my_sleep_doctorState extends State<my_sleep_doctor>
                   Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
               animationController: widget.animationController,
               fitbittoken: fitbitToken
+          ),
+        );
+
+        listViews.add(
+          TitleView(
+            titleTxt: 'Sleep Quality',
+            subTxt: 'Sleep Score?',
+            redirect: 9,
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
           ),
         );
 

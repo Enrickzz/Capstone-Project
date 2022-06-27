@@ -126,7 +126,7 @@ class _WaterViewSupportState extends State<WaterViewSupport> with TickerProvider
                                   padding: const EdgeInsets.only(
                                       left: 4, top: 2, bottom: 14),
                                   child: Text(
-                                    'of your daily goal '+waterintake_goal.toStringAsFixed(0)+' ml',
+                                    "of your patient's goal "+waterintake_goal.toStringAsFixed(0)+' ml',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,

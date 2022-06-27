@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/services/auth.dart';
+import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/water/water_intake_chart_doctor.dart';
 import 'package:my_app/ui_view/water/water_view_doctor.dart';
 import 'package:flutter/material.dart';
@@ -76,20 +77,20 @@ class _my_water_doctorState extends State<my_water_doctor>
       ),
     );
 
-    // listViews.add(
-    //   TitleView(
-    //     titleTxt: 'Water Intake',
-    //     subTxt: 'View Log',
-    //     redirect: 5,
-    //     userType: "Doctor",
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-    //         parent: widget.animationController,
-    //         curve:
-    //         Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-    //     animationController: widget.animationController,
-    //     userUID: widget.userUID
-    //   ),
-    // );
+    listViews.add(
+      TitleView(
+        titleTxt: 'Water Intake',
+        subTxt: 'View Log',
+        redirect: 5,
+        userType: "Doctor",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+        userUID: widget.userUID
+      ),
+    );
 
     listViews.add(
       WaterViewDoctor(
