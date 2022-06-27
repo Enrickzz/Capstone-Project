@@ -13,14 +13,18 @@ import 'package:my_app/services/auth.dart';
 class blood_glucose_doctor_view extends StatefulWidget {
   final List<Blood_Glucose> bglist;
   final String userUID;
-  blood_glucose_doctor_view({Key key, this.bglist, this.userUID}): super(key: key);
+  blood_glucose_doctor_view({Key key, this.bglist, this.userUID})
+      : super(key: key);
   @override
   _blood_glucoseDoctorState createState() => _blood_glucoseDoctorState();
 }
 
 class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
   // final database = FirebaseDatabase.instance.reference();
-  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final databaseReference = FirebaseDatabase(
+          databaseURL:
+              "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/")
+      .reference();
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -41,7 +45,7 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
     _selected.clear();
     getpermission();
     getBloodGlucose();
-    Future.delayed(const Duration(milliseconds: 1500), (){
+    Future.delayed(const Duration(milliseconds: 1500), () {
       setState(() {
         _selected = List<bool>.generate(bgtemp.length, (int index) => false);
 
@@ -52,7 +56,6 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
 
   @override
   Widget build(BuildContext context) {
-
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -61,12 +64,9 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
       key: _scaffoldKey,
       backgroundColor: const Color(0xFFF2F3F8),
       appBar: AppBar(
-        iconTheme: IconThemeData(
-            color: Colors.black
-        ),
-        title: const Text('Blood Glucose Level', style: TextStyle(
-            color: Colors.black
-        )),
+        iconTheme: IconThemeData(color: Colors.black),
+        title: const Text('Blood Glucose Level',
+            style: TextStyle(color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
@@ -94,19 +94,20 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
                           child: Container(
                             padding: EdgeInsets.only(
                                 bottom:
-                                MediaQuery.of(context).viewInsets.bottom),
+                                    MediaQuery.of(context).viewInsets.bottom),
                             child: add_blood_glucose(
                                 thislist: bgtemp, userUID: widget.userUID),
                           ),
                         ),
                       ).then((value) => setState(() {
-                        print("setstate blood_pressure");
-                        if (value != null) {
-                          bgtemp = value;
-                          _selected = List<bool>.generate(
-                              bgtemp.length, (int index) => false);
-                        }
-                      }));
+                            print("setstate blood_pressure");
+                            if (value != null) {
+                              BoxedReturns thisReturned = value;
+                              bgtemp = thisReturned.BG_result;
+                              _selected = List<bool>.generate(
+                                  bgtemp.length, (int index) => false);
+                            }
+                          }));
                     },
                     child: Icon(
                       Icons.add,
@@ -118,60 +119,60 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
         scrollDirection: Axis.vertical,
         child: Scrollbar(
           child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: _createDataTable()
-
-          ),
+              scrollDirection: Axis.horizontal, child: _createDataTable()),
         ),
-
       ),
-
     );
   }
-  String getDateFormatted (String date){
+
+  String getDateFormatted(String date) {
     print(date);
     var dateTime = DateTime.parse(date);
     return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
   }
-  String getTimeFormatted (String date){
+
+  String getTimeFormatted(String date) {
     print(date);
-    if(date != null){
+    if (date != null) {
       var dateTime = DateTime.parse(date);
       var hours = dateTime.hour.toString().padLeft(2, "0");
       var min = dateTime.minute.toString().padLeft(2, "0");
       return "$hours:$min";
     }
   }
+
   void getBloodGlucose() {
     // final User user = auth.currentUser;
     // final uid = user.uid;
     String userUID = widget.userUID;
-    final readBC = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/');
-    readBC.once().then((DataSnapshot snapshot){
+    final readBC = databaseReference.child(
+        'users/' + userUID + '/vitals/health_records/blood_glucose_list/');
+    readBC.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         bgtemp.add(Blood_Glucose.fromJson(jsonString));
       });
     });
   }
+
   void getpermission() {
     final User user = auth.currentUser;
     String ssuid = user.uid;
     final uid = widget.userUID;
-    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+    final readConnection =
+        databaseReference.child('users/' + uid + '/personal_info/connections');
     readConnection.once().then((DataSnapshot datasnapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
       temp.forEach((jsonString) {
         connections.add(Connection.fromJson(jsonString));
       });
-      for(int i = 0; i < connections.length; i++){
-        if(connections[i].doctor1 == ssuid){
-          if(connections[i].addedit == "true"){
+      for (int i = 0; i < connections.length; i++) {
+        if (connections[i].doctor1 == ssuid) {
+          if (connections[i].addedit == "true") {
             canaddedit = true;
             print("canaddedit is ");
             print(canaddedit);
-          }
-          else{
+          } else {
             canaddedit = false;
             print("canaddedit is ");
             print(canaddedit);
@@ -180,6 +181,7 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
       }
     });
   }
+
   Future<void> _showMyDialogDelete() async {
     return showDialog<void>(
       context: context,
@@ -190,7 +192,6 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-
                 Text('Are you sure you want to delete these record/s?'),
               ],
             ),
@@ -204,31 +205,38 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
                 String userUID = widget.userUID;
                 int initialLength = bgtemp.length;
                 List<int> deleteList = [];
-                for(int i = 0; i < bgtemp.length; i++){
-                  if(_selected[i]){
+                for (int i = 0; i < bgtemp.length; i++) {
+                  if (_selected[i]) {
                     deleteList.add(i);
                   }
                 }
-                deleteList.sort((a,b) => b.compareTo(a));
-                for(int i = 0; i < deleteList.length; i++){
+                deleteList.sort((a, b) => b.compareTo(a));
+                for (int i = 0; i < deleteList.length; i++) {
                   bgtemp.removeAt(deleteList[i]);
                 }
-                for(int i = 1; i <= initialLength; i++){
-                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/' + i.toString());
+                for (int i = 1; i <= initialLength; i++) {
+                  final bpRef = databaseReference.child('users/' +
+                      userUID +
+                      '/vitals/health_records/blood_glucose_list/' +
+                      i.toString());
                   bpRef.remove();
                 }
-                for(int i = 0; i < bgtemp.length; i++){
-                  final bpRef = databaseReference.child('users/' + userUID + '/vitals/health_records/blood_glucose_list/' + (i+1).toString());
+                for (int i = 0; i < bgtemp.length; i++) {
+                  final bpRef = databaseReference.child('users/' +
+                      userUID +
+                      '/vitals/health_records/blood_glucose_list/' +
+                      (i + 1).toString());
                   bpRef.set({
                     "glucose": bgtemp[i].glucose.toString(),
                     "lastMeal": bgtemp[i].lastMeal.toString(),
                     "glucose_status": bgtemp[i].bloodGlucose_status.toString(),
-                    "bloodGlucose_date": "${bgtemp[i].bloodGlucose_date.month.toString().padLeft(2,"0")}/${bgtemp[i].bloodGlucose_date.day.toString().padLeft(2,"0")}/${bgtemp[i].bloodGlucose_date.year}",
-                    "bloodGlucose_time": "${bgtemp[i].bloodGlucose_time.hour.toString().padLeft(2,"0")}:${bgtemp[i].bloodGlucose_time.minute.toString().padLeft(2,"0")}"
+                    "bloodGlucose_date":
+                        "${bgtemp[i].bloodGlucose_date.month.toString().padLeft(2, "0")}/${bgtemp[i].bloodGlucose_date.day.toString().padLeft(2, "0")}/${bgtemp[i].bloodGlucose_date.year}",
+                    "bloodGlucose_time":
+                        "${bgtemp[i].bloodGlucose_time.hour.toString().padLeft(2, "0")}:${bgtemp[i].bloodGlucose_time.minute.toString().padLeft(2, "0")}"
                   });
                 }
                 Navigator.of(context).pop();
-
               },
             ),
             TextButton(
@@ -242,17 +250,14 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
       },
     );
   }
+
   Color getMyColor(String indication) {
-    if(indication == 'normal'){
+    if (indication == 'normal') {
       return Colors.green;
-    }
-    else if(indication == 'low'){
+    } else if (indication == 'low') {
       return Colors.blue;
-
-    }
-    else
+    } else
       return Colors.red;
-
   }
 
   DataTable _createDataTable() {
@@ -265,13 +270,10 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
       dataRowHeight: 80,
       columnSpacing: 35,
       showBottomBorder: true,
-      headingTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white
-      ),
-      headingRowColor: MaterialStateProperty.resolveWith(
-              (states) => Colors.lightBlue
-      ),
+      headingTextStyle:
+          TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      headingRowColor:
+          MaterialStateProperty.resolveWith((states) => Colors.lightBlue),
     );
   }
 
@@ -283,24 +285,21 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
           setState(() {
             _currentSortColumn = columnIndex;
             if (_isSortAsc) {
-              bgtemp.sort((a, b) => b.bloodGlucose_date.compareTo(a.bloodGlucose_date));
+              bgtemp.sort(
+                  (a, b) => b.bloodGlucose_date.compareTo(a.bloodGlucose_date));
             } else {
-              bgtemp.sort((a, b) => a.bloodGlucose_date.compareTo(b.bloodGlucose_date));
+              bgtemp.sort(
+                  (a, b) => a.bloodGlucose_date.compareTo(b.bloodGlucose_date));
             }
             _isSortAsc = !_isSortAsc;
           });
         },
       ),
-
-
-
       DataColumn(label: Text('Time')),
       DataColumn(label: Text('Blood Glucose')),
       DataColumn(label: Text('Last Meal')),
       DataColumn(label: Text('Implication'))
-
     ];
-
   }
 
   // List<DataRow> _createRows() {
@@ -327,19 +326,30 @@ class _blood_glucoseDoctorState extends State<blood_glucose_doctor_view> {
   List<DataRow> _createRows() {
     return bgtemp
         .mapIndexed((index, bp) => DataRow(
-        cells: [
-          DataCell(Text(getDateFormatted(bp.bloodGlucose_date.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bloodGlucose_time.toString()))),
-          DataCell(Text(bp.glucose.toString() +' mg/dL', style: TextStyle(),)),
-          DataCell(Text(bp.lastMeal.toString() + ' hr/s ago' , style: TextStyle(),)),
-          DataCell(Text(bp.bloodGlucose_status, style: TextStyle(color: getMyColor(bp.bloodGlucose_status)),))
-        ],
-        selected: _selected[index],
-        onSelectChanged: (bool selected) {
-          setState(() {
-            _selected[index] = selected;
-          });
-        }))
+                cells: [
+                  DataCell(
+                      Text(getDateFormatted(bp.bloodGlucose_date.toString()))),
+                  DataCell(
+                      Text(getTimeFormatted(bp.bloodGlucose_time.toString()))),
+                  DataCell(Text(
+                    bp.glucose.toString() + ' mg/dL',
+                    style: TextStyle(),
+                  )),
+                  DataCell(Text(
+                    bp.lastMeal.toString() + ' hr/s ago',
+                    style: TextStyle(),
+                  )),
+                  DataCell(Text(
+                    bp.bloodGlucose_status,
+                    style: TextStyle(color: getMyColor(bp.bloodGlucose_status)),
+                  ))
+                ],
+                selected: _selected[index],
+                onSelectChanged: (bool selected) {
+                  setState(() {
+                    _selected[index] = selected;
+                  });
+                }))
         .toList();
   }
 }
