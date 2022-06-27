@@ -30,7 +30,7 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final List<String> tabs = ['Drugstores', 'Hospitals', 'Recreational Centers', 'Restaurants'];
+  final List<String> tabs = ['Drugstores', 'Hospitals', 'Recreational', 'Restaurants'];
 
   TabController controller;
   List<Results> drugstores=[], hospitals=[], restaurants=[], recreations=[];
@@ -290,9 +290,9 @@ class _placesState extends State<places> with SingleTickerProviderStateMixin {
 
                   });
                 },
-                // child: Icon(
-                //     IconData(0xe2dc, fontFamily: 'MaterialIcons')
-                // ),
+                child: Icon(
+                    IconData(0xe2dc, fontFamily: 'MaterialIcons')
+                ),
 
               )
           ),
