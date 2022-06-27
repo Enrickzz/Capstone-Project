@@ -110,6 +110,7 @@ class _addLabResultState extends State<add_lab_results> {
     double defaultFontSize = 14;
     double defaultIconSize = 17;
     final Storage storage = Storage();
+    String titleP, messageP, redirectP;
 
     return Container(
         key: _formKey,
@@ -791,10 +792,10 @@ class _addLabResultState extends State<add_lab_results> {
                                       "3",
                                       "Food - Hemoglobin");
                                   notifySS("low hemoglobin");
-                                  ShowDialogRecomm(
-                                      "We noticed that you have a low hemoglobin level. This is due to your body’s lack of protein which can cause Anemia. We recommend that you eat foods rich in protein. Click here to view recommended foods for you.",
-                                      "Low Hemoglobin!",
-                                      "Food - Hemoglobin");
+                                  titleP = "Low Hemoglobin!";
+                                  messageP =
+                                      "We noticed that you have a low hemoglobin level. This is due to your body’s lack of protein which can cause Anemia. We recommend that you eat foods rich in protein. Click here to view recommended foods for you.";
+                                  redirectP = "Food - Hemoglobin";
                                 }
                               }
                               if (potassium != " " &&
@@ -806,10 +807,10 @@ class _addLabResultState extends State<add_lab_results> {
                                       "Low Potassium!",
                                       "3",
                                       "Food - Potassium");
-                                  ShowDialogRecomm(
-                                      "We noticed that you have a low potassium level. We strongly advise you to seek immediate medical attention as soon as possible. For the meantime we recommend that you eat foods rich in Potassium . Click here to view recommended foods for you.",
-                                      "Low Potassium!",
-                                      "Food - Potassium");
+                                  titleP = "Low Potassium!";
+                                  messageP =
+                                      "We noticed that you have a low potassium level. We strongly advise you to seek immediate medical attention as soon as possible. For the meantime we recommend that you eat foods rich in Potassium . Click here to view recommended foods for you.";
+                                  redirectP = "Food - Potassium";
                                   notifySS("low potassium");
                                 }
                               }
@@ -821,10 +822,10 @@ class _addLabResultState extends State<add_lab_results> {
                                       "High Cholesterol!",
                                       "3",
                                       "Food - Cholesterol");
-                                  ShowDialogRecomm(
-                                      "We noticed that your LDL Cholesterol level is high which could be harmful for your body. We recommend that you eat food rich in Omega-3. Click here to view recommended foods for you.",
-                                      "High Cholesterol!",
-                                      "Food - Cholesterol");
+                                  titleP = "High Cholesterol!";
+                                  messageP =
+                                      "We noticed that your LDL Cholesterol level is high which could be harmful for your body. We recommend that you eat food rich in Omega-3. Click here to view recommended foods for you.";
+                                  redirectP = "Food - Cholesterol";
                                   notifySS("cholesterol");
                                 }
                               }
@@ -863,6 +864,10 @@ class _addLabResultState extends State<add_lab_results> {
                                           "Creatinine Level is High!",
                                           "3",
                                           "None");
+                                      titleP = "Creatinine Level is High!";
+                                      messageP =
+                                          "We noticed that your Creatinine level is unusually high and you do not have Chronic Kidney Disease as a listed ailment. We recommend that you consult with a Nephrologist as soon as possible.";
+                                      redirectP = "None";
                                       ShowDialogRecomm(
                                           "We noticed that your Creatinine level is unusually high and you do not have Chronic Kidney Disease as a listed ailment. We recommend that you consult with a Nephrologist as soon as possible.",
                                           "Creatinine Level is High!",
@@ -923,6 +928,9 @@ class _addLabResultState extends State<add_lab_results> {
                                           imgRef: thisURL);
 
                                       Navigator.pop(context, newlab);
+                                      Navigator.of(context).pop(BoxedReturns(
+                                          PopUpBox(titleP, messageP, redirectP),
+                                          newlab));
                                     });
                                   });
                                 });
@@ -975,7 +983,7 @@ class _addLabResultState extends State<add_lab_results> {
     }
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('$title'),
@@ -1470,4 +1478,19 @@ class _addLabResultState extends State<add_lab_results> {
       });
     });
   }
+}
+
+class BoxedReturns {
+  final PopUpBox dialog;
+  final Lab_Result result;
+
+  BoxedReturns(this.dialog, this.result);
+}
+
+class PopUpBox {
+  final String title;
+  final String message;
+  final String redirect;
+
+  PopUpBox(this.title, this.message, this.redirect);
 }
