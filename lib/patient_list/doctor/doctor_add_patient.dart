@@ -614,6 +614,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
               "dashboard": "false",
               "nonhealth": "false",
               "health": "false",
+              "addedit": "false",
             });
             final addDoctorList = databaseReference.child('users/' + uid + '/personal_info/patient_list/' + plistcount.toString());
             addDoctorList.set({

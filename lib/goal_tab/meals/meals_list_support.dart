@@ -7,8 +7,6 @@ import 'package:my_app/models/nutritionixApi.dart';
 import 'package:my_app/services/auth.dart';
 
 class meals_list_support extends StatefulWidget {
-  const meals_list_support({Key key, this.userUID}) : super(key: key);
-  final String userUID;
   @override
   _meals_list_supportState createState() => _meals_list_supportState();
 }
@@ -180,6 +178,27 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
                                           SizedBox(height: 5,),
 
 
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Date: " + breakfast_list[index].intakeDate,
+                                                style: TextStyle(
+                                                  fontSize:12,
+                                                  // color:Colors.grey,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete("Breakfast", index);
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
                                         ]
                                     ),
                                   ))
@@ -271,6 +290,27 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
                                             ),),
                                           SizedBox(height: 5,),
 
+
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Date: " + lunch_list[index].intakeDate,
+                                                style: TextStyle(
+                                                  fontSize:12,
+                                                  // color:Colors.grey,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete("Lunch", index);
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ]
                                     ),
                                   ))
@@ -361,6 +401,27 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
                                               // color:Colors.grey,
                                             ),),
                                           SizedBox(height: 5,),
+
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Date: " + dinner_list[index].intakeDate,
+                                                style: TextStyle(
+                                                  fontSize:12,
+                                                  // color:Colors.grey,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete("Dinner", index);
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ]
                                     ),
                                   ))
@@ -452,6 +513,26 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
                                             ),),
                                           SizedBox(height: 5,),
 
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Date: " + snack_list[index].intakeDate,
+                                                style: TextStyle(
+                                                  fontSize:12,
+                                                  // color:Colors.grey,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _showMyDialogDelete("Snack", index);
+
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ]
                                     ),
                                   ))
@@ -468,10 +549,9 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
     );
   }
   void getBFoodIntake() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Breakfast');
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
@@ -479,13 +559,19 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
           breakfast_list.add(FoodIntake.fromJson(jsonString));
         });
       }
+      breakfast_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.intakeDate.split("/");
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " 00:00:00";
+        List<String> dateB = b.intakeDate.split("/");
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0")+ " 00:00:00";
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
     });
   }
   void getLFoodIntake() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Lunch');
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
@@ -493,13 +579,19 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
           lunch_list.add(FoodIntake.fromJson(jsonString));
         });
       }
+      lunch_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.intakeDate.split("/");
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " 00:00:00";
+        List<String> dateB = b.intakeDate.split("/");
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0")+ " 00:00:00";
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
     });
   }
   void getDFoodIntake() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Dinner');
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
@@ -507,13 +599,19 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
           dinner_list.add(FoodIntake.fromJson(jsonString));
         });
       }
+      dinner_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.intakeDate.split("/");
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " 00:00:00";
+        List<String> dateB = b.intakeDate.split("/");
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0")+ " 00:00:00";
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
     });
   }
   void getSFoodIntake() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Snacks');
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
     readFoodIntake.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       if(temp != null){
@@ -521,10 +619,17 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
           snack_list.add(FoodIntake.fromJson(jsonString));
         });
       }
+      snack_list.sort((a, b){ //sorting in ascending order
+        List<String> dateA = a.intakeDate.split("/");
+        String dateAfi = dateA[2] + "-" + dateA[0].padLeft(2, "0")+"-"+dateA[1].padLeft(2, "0") + " 00:00:00";
+        List<String> dateB = b.intakeDate.split("/");
+        String dateBfi = dateB[2] + "-" + dateB[0].padLeft(2, "0")+"-"+dateB[1].padLeft(2, "0")+ " 00:00:00";
+        return DateTime.parse(dateBfi).compareTo(DateTime.parse(dateAfi));
+      });
     });
   }
 
-  Future<void> _showMyDialogDelete() async {
+  Future<void> _showMyDialogDelete(String mealtype, int index) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -543,7 +648,115 @@ class _meals_list_supportState extends State<meals_list_support> with SingleTick
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                print('Deleted');
+                final User user = auth.currentUser;
+                final uid = user.uid;
+                if(mealtype == "Breakfast"){
+                  int initialLength = breakfast_list.length;
+                  for(int i = 1; i <= initialLength; i++){
+                    final bpRef = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast/' + i.toString());
+                    bpRef.remove();
+                  }
+                  for(int i = 0; i < breakfast_list.length; i++){
+                    final breakfastRef = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast/' + (i+1).toString());
+                    breakfastRef.set({
+                      "img": breakfast_list[i].img.toString(),
+                      "foodName": breakfast_list[i].foodName.toString(),
+                      "weight": breakfast_list[i].weight.toString(),
+                      "calories": breakfast_list[i].calories.toString(),
+                      "cholesterol": breakfast_list[i].cholesterol.toString(),
+                      "total_fat": breakfast_list[i].total_fat.toString(),
+                      "sugar": breakfast_list[i].sugar.toString(),
+                      "protein": breakfast_list[i].protein.toString(),
+                      "potassium": breakfast_list[i].potassium.toString(),
+                      "sodium": breakfast_list[i].sodium.toString(),
+                      "serving_size": breakfast_list[i].serving_size.toString(),
+                      "food_unit": breakfast_list[i].food_unit.toString(),
+                      "mealtype": breakfast_list[i].mealtype.toString(),
+                      "intakeDate": breakfast_list[i].intakeDate.toString(),
+                    });
+                  }
+                }
+                else if(mealtype == "Lunch"){
+                  int initialLength = lunch_list.length;
+                  for(int i = 1; i <= initialLength; i++){
+                    final bpRef = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch/' + i.toString());
+                    bpRef.remove();
+                  }
+                  for(int i = 0; i < lunch_list.length; i++){
+                    final lunchRef = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch/' + (i+1).toString());
+                    lunchRef.set({
+                      "img": lunch_list[i].img.toString(),
+                      "foodName": lunch_list[i].foodName.toString(),
+                      "weight": lunch_list[i].weight.toString(),
+                      "calories": lunch_list[i].calories.toString(),
+                      "cholesterol": lunch_list[i].cholesterol.toString(),
+                      "total_fat": lunch_list[i].total_fat.toString(),
+                      "sugar": lunch_list[i].sugar.toString(),
+                      "protein": lunch_list[i].protein.toString(),
+                      "potassium": lunch_list[i].potassium.toString(),
+                      "sodium": lunch_list[i].sodium.toString(),
+                      "serving_size": lunch_list[i].serving_size.toString(),
+                      "food_unit": lunch_list[i].food_unit.toString(),
+                      "mealtype": lunch_list[i].mealtype.toString(),
+                      "intakeDate": lunch_list[i].intakeDate.toString(),
+                    });
+                  }
+                }
+                else if(mealtype == "Dinner"){
+                  int initialLength = dinner_list.length;
+                  for(int i = 1; i <= initialLength; i++){
+                    final bpRef = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner/' + i.toString());
+                    bpRef.remove();
+                  }
+                  for(int i = 0; i < dinner_list.length; i++){
+                    final dinnerRef = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner/' + (i+1).toString());
+                    dinnerRef.set({
+                      "img": dinner_list[i].img.toString(),
+                      "foodName": dinner_list[i].foodName.toString(),
+                      "weight": dinner_list[i].weight.toString(),
+                      "calories": dinner_list[i].calories.toString(),
+                      "cholesterol": dinner_list[i].cholesterol.toString(),
+                      "total_fat": dinner_list[i].total_fat.toString(),
+                      "sugar": dinner_list[i].sugar.toString(),
+                      "protein": dinner_list[i].protein.toString(),
+                      "potassium": dinner_list[i].potassium.toString(),
+                      "sodium": dinner_list[i].sodium.toString(),
+                      "serving_size": dinner_list[i].serving_size.toString(),
+                      "food_unit": dinner_list[i].food_unit.toString(),
+                      "mealtype": dinner_list[i].mealtype.toString(),
+                      "intakeDate": dinner_list[i].intakeDate.toString(),
+                    });
+                  }
+                }
+                else if(mealtype == "Snack"){
+                  int initialLength = snack_list.length;
+                  for(int i = 1; i <= initialLength; i++){
+                    final bpRef = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks/' + i.toString());
+                    bpRef.remove();
+                  }
+                  for(int i = 0; i < snack_list.length; i++){
+                    final snackRef = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks/' + (i+1).toString());
+                    snackRef.set({
+                      "img": snack_list[i].img.toString(),
+                      "foodName": snack_list[i].foodName.toString(),
+                      "weight": snack_list[i].weight.toString(),
+                      "calories": snack_list[i].calories.toString(),
+                      "cholesterol": snack_list[i].cholesterol.toString(),
+                      "total_fat": snack_list[i].total_fat.toString(),
+                      "sugar": snack_list[i].sugar.toString(),
+                      "protein": snack_list[i].protein.toString(),
+                      "potassium": snack_list[i].potassium.toString(),
+                      "sodium": snack_list[i].sodium.toString(),
+                      "serving_size": snack_list[i].serving_size.toString(),
+                      "food_unit": snack_list[i].food_unit.toString(),
+                      "mealtype": snack_list[i].mealtype.toString(),
+                      "intakeDate": snack_list[i].intakeDate.toString(),
+                    });
+                  }
+                }
+
+
+
                 Navigator.of(context).pop();
 
               },

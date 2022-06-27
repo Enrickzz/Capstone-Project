@@ -557,6 +557,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
           "dashboard": "false",
           "nonhealth": "false",
           "health": "false",
+          "addedit": "false",
         });
       });
 
@@ -572,6 +573,7 @@ class _DoctorAddPatientState extends State<SupportAddPatient> with SingleTickerP
         "dashboard": "false",
         "nonhealth": "false",
         "health": "false",
+        "addedit": "false",
       });
       readPatient.once().then((DataSnapshot patientsnapshot){
         Map<String, dynamic> temp = jsonDecode(jsonEncode(patientsnapshot.value));

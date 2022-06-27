@@ -109,6 +109,7 @@ class _my_mealsState extends State<my_meals>
         titleTxt: 'My Meal Plan',
         subTxt: 'View Plan',
         redirect: 7,
+        userType: "Patient",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

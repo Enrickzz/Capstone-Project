@@ -208,7 +208,7 @@ class _index3State extends State<suppsystem_view_patient_profile>
                                             builder: (context) => SingleChildScrollView(child: Container(
                                               padding: EdgeInsets.only(
                                                   bottom: MediaQuery.of(context).viewInsets.bottom),
-                                              child: edit_status(status: profile.status),
+                                              child: edit_status(status: profile.status, userUID: widget.userUID),
                                             ),
                                             ),
                                           );

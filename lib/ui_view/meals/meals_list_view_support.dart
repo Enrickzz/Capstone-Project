@@ -4,21 +4,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:my_app/goal_tab/meals/meals_list_support.dart';
+import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
+import 'package:my_app/goal_tab/meals/nutritionix_meals_support.dart';
 import 'package:my_app/models/meals_list_data.dart';
 import 'package:my_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/nutritionixApi.dart';
 
 import '../../main.dart';
+import '../../goal_tab/meals/meals_list.dart';
 
 class MealsListViewSupport extends StatefulWidget {
   const MealsListViewSupport(
-      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation, this.userUID})
+      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
       : super(key: key);
 
   final AnimationController mainScreenAnimationController;
   final Animation<double> mainScreenAnimation;
-  final String userUID;
 
   @override
   _MealsListViewSupportState createState() => _MealsListViewSupportState();
@@ -29,13 +31,11 @@ List<FoodIntake> breakfast_list = [];
 List<FoodIntake> lunch_list = [];
 List<FoodIntake> dinner_list = [];
 List<FoodIntake> snack_list = [];
-String useruid = "";
 
 class _MealsListViewSupportState extends State<MealsListViewSupport>
     with TickerProviderStateMixin {
   AnimationController animationController;
   List<MealsListData> mealsListData = MealsListData.tabIconsList;
-  String now = "${DateTime.now().month.toString().padLeft(2,"0")}/${DateTime.now().day.toString().padLeft(2,"0")}/${DateTime.now().year}";
 
 
   @override
@@ -58,8 +58,10 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
     getLFoodIntake();
     getDFoodIntake();
     getSFoodIntake();
+    print("init");
 
-    Future.delayed(const Duration(milliseconds: 1000), (){
+    Future.delayed(const Duration(milliseconds: 3300), (){
+
       bmeal.clear();
       lmeal.clear();
       dmeal.clear();
@@ -80,6 +82,7 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
         totalScalories += snack_list[i].calories;
         smeal.add(snack_list[i].foodName);
       }
+      print(breakfast_list);
 
       mealsListData[0].kacl = totalBcalories;
       mealsListData[1].kacl = totalLcalories;
@@ -90,9 +93,13 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
       mealsListData[2].meals = dmeal;
       mealsListData[3].meals = smeal;
 
-
+      for(var i = 0 ; i < mealsListData.length; i++){
+        for(var j = 0 ; j < mealsListData[i].meals.length; j++){
+          print(mealsListData[i].kacl.toString() + " " + mealsListData[i].meals[j]);
+        }
+      }
       setState(() {
-        print("setstate");
+        print("setstate here");
       });
     });
 
@@ -129,13 +136,13 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final int count =
-                      mealsListData.length > 10 ? 10 : mealsListData.length;
+                  mealsListData.length > 10 ? 10 : mealsListData.length;
                   final Animation<double> animation =
-                      Tween<double>(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                              parent: animationController,
-                              curve: Interval((1 / count) * index, 1.0,
-                                  curve: Curves.fastOutSlowIn)));
+                  Tween<double>(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                          parent: animationController,
+                          curve: Interval((1 / count) * index, 1.0,
+                              curve: Curves.fastOutSlowIn)));
                   animationController?.forward();
 
                   return MealsView(
@@ -152,91 +159,6 @@ class _MealsListViewSupportState extends State<MealsListViewSupport>
     );
   }
 
-  void getBFoodIntake() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    useruid = widget.userUID;
-    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Breakfast');
-    readFoodIntake.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      List<FoodIntake> intake = [];
-      if(temp != null){
-        temp.forEach((jsonString) {
-          intake.add(FoodIntake.fromJson(jsonString));
-        });
-        for(int i = 0; i < intake.length; i++){
-          if(intake[i].intakeDate == now){
-            breakfast_list.add(intake[i]);
-          }
-        }
-      }
-    });
-  }
-  void getLFoodIntake() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    useruid = widget.userUID;
-    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Lunch');
-    readFoodIntake.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      List<FoodIntake> intake = [];
-      if(temp != null){
-        temp.forEach((jsonString) {
-          intake.add(FoodIntake.fromJson(jsonString));
-        });
-        for(int i = 0; i < intake.length; i++){
-          if(intake[i].intakeDate == now){
-            lunch_list.add(intake[i]);
-          }
-        }
-      }
-    });
-  }
-  void getDFoodIntake() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    useruid = widget.userUID;
-    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Dinner');
-    readFoodIntake.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      List<FoodIntake> intake = [];
-      if(temp != null){
-        temp.forEach((jsonString) {
-          intake.add(FoodIntake.fromJson(jsonString));
-        });
-        for(int i = 0; i < intake.length; i++){
-          if(intake[i].intakeDate == now){
-            dinner_list.add(intake[i]);
-          }
-        }
-      }
-    });
-  }
-  void getSFoodIntake() {
-    // final User user = auth.currentUser;
-    // final uid = user.uid;
-    String userUID = widget.userUID;
-    useruid = widget.userUID;
-    final readFoodIntake = databaseReference.child('users/' + userUID + '/intake/food_intake/Snacks');
-    readFoodIntake.once().then((DataSnapshot snapshot){
-      List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      List<FoodIntake> intake = [];
-      if(temp != null){
-        temp.forEach((jsonString) {
-          intake.add(FoodIntake.fromJson(jsonString));
-        });
-        for(int i = 0; i < intake.length; i++){
-          if(intake[i].intakeDate == now){
-            snack_list.add(intake[i]);
-          }
-        }
-
-      }
-    });
-  }
 }
 
 class MealsView extends StatelessWidget {
@@ -258,7 +180,7 @@ class MealsView extends StatelessWidget {
           child: InkWell(
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => meals_list_support(userUID: useruid)
+                  builder: (context) => meals_list_support()
               ));
             },
             child: Transform(
@@ -316,7 +238,7 @@ class MealsView extends StatelessWidget {
                               Expanded(
                                 child: Padding(
                                   padding:
-                                      const EdgeInsets.only(top: 8, bottom: 8),
+                                  const EdgeInsets.only(top: 8, bottom: 8),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,38 +257,68 @@ class MealsView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                                  Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Text(
-                                          mealsListData.kacl.toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: FitnessAppTheme.fontName,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 24,
-                                            letterSpacing: 0.2,
-                                            color: FitnessAppTheme.white,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 4, bottom: 3),
-                                          child: Text(
-                                            'kcal',
-                                            style: TextStyle(
-                                              fontFamily:
-                                                  FitnessAppTheme.fontName,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 10,
-                                              letterSpacing: 0.2,
-                                              color: FitnessAppTheme.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
+                              mealsListData.kacl != 0
+                                  ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    mealsListData.kacl.toString(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: FitnessAppTheme.fontName,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 24,
+                                      letterSpacing: 0.2,
+                                      color: FitnessAppTheme.white,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 4, bottom: 3),
+                                    child: Text(
+                                      'kcal',
+                                      style: TextStyle(
+                                        fontFamily:
+                                        FitnessAppTheme.fontName,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 10,
+                                        letterSpacing: 0.2,
+                                        color: FitnessAppTheme.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                                  : InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => nutritionix_meals_support(animationController: animationController)),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: FitnessAppTheme.nearlyWhite,
+                                    shape: BoxShape.circle,
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                          color: FitnessAppTheme.nearlyBlack
+                                              .withOpacity(0.4),
+                                          offset: Offset(8.0, 8.0),
+                                          blurRadius: 8.0),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Icon(
+                                      Icons.add,
+                                      color: HexColor(mealsListData.endColor),
+                                      size: 24,),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -402,4 +354,94 @@ class MealsView extends StatelessWidget {
       },
     );
   }
+}
+DateTime today = DateTime.now();
+
+String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+void getBFoodIntake() {
+  String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+
+  print("DATE NOW\n$now" );
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Breakfast');
+  readFoodIntake.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    List<FoodIntake> intake = [];
+    if(temp != null){
+      temp.forEach((jsonString) {
+        intake.add(FoodIntake.fromJson(jsonString));
+      });
+      for(int i = 0; i < intake.length; i++){
+        if(intake[i].intakeDate == now){
+          print(now + "  " +intake[i].intakeDate );
+          breakfast_list.add(intake[i]);
+        }
+      }
+    }
+  });
+}
+void getLFoodIntake() {
+  String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Lunch');
+  readFoodIntake.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    List<FoodIntake> intake = [];
+    if(temp != null){
+      temp.forEach((jsonString) {
+        intake.add(FoodIntake.fromJson(jsonString));
+      });
+      for(int i = 0; i < intake.length; i++){
+        if(intake[i].intakeDate == now){
+          lunch_list.add(intake[i]);
+        }
+      }
+    }
+  });
+}
+void getDFoodIntake() {
+  String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Dinner');
+  readFoodIntake.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    List<FoodIntake> intake = [];
+    if(temp != null){
+      temp.forEach((jsonString) {
+        intake.add(FoodIntake.fromJson(jsonString));
+      });
+      for(int i = 0; i < intake.length; i++){
+        if(intake[i].intakeDate == now){
+          dinner_list.add(intake[i]);
+        }
+      }
+    }
+  });
+}
+void getSFoodIntake() {
+  String now = today.month.toString() +"/"+today.day.toString()+"/" +today.year.toString();
+
+  final User user = auth.currentUser;
+  final uid = user.uid;
+  final readFoodIntake = databaseReference.child('users/' + uid + '/intake/food_intake/Snacks');
+  readFoodIntake.once().then((DataSnapshot snapshot){
+    List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
+    List<FoodIntake> intake = [];
+    if(temp != null){
+      temp.forEach((jsonString) {
+        intake.add(FoodIntake.fromJson(jsonString));
+      });
+      for(int i = 0; i < intake.length; i++){
+        if(intake[i].intakeDate == now){
+          snack_list.add(intake[i]);
+        }
+      }
+
+    }
+  });
 }

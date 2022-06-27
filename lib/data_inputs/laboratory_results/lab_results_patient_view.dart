@@ -27,10 +27,14 @@ class _lab_resultsState extends State<lab_results> {
   List<Lab_Result> labResult_list = new List<Lab_Result>();
   List<FirebaseFile> trythis =[];
   String passThisFile="";
+  List<Connection> connections = [];
+  bool canaddedit = false;
+
   @override
   void initState(){
     super.initState();
     listAll("path");
+    getpermission();
     getLabResult();
     Future.delayed(const Duration(milliseconds: 1500), (){
       downloadUrls();
@@ -63,41 +67,44 @@ class _lab_resultsState extends State<lab_results> {
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_lab_results(files: trythis, userUID: widget.userUID),
-                    ),
-                    ),
-                  ).then((value) => setState((){
-                    print("setstate lab\n\n" + value.toString());
-                    if(value != null){
-                      labResult_list.insert(0, value);
-                      print(labResult_list[0].imgRef.toString() + " <<<<<<<<");
-                      value.toString();
-                      // downloadUrls();
-                      listAll("path");
-                        Future.delayed(const Duration(milliseconds: 2000), (){
-                          setState(() {
+          Visibility(
+            visible: canaddedit,
+            child: Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(context: context,
+                      isScrollControlled: true,
+                      builder: (context) => SingleChildScrollView(child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: add_lab_results(files: trythis, userUID: widget.userUID),
+                      ),
+                      ),
+                    ).then((value) => setState((){
+                      print("setstate lab\n\n" + value.toString());
+                      if(value != null){
+                        labResult_list.insert(0, value);
+                        print(labResult_list[0].imgRef.toString() + " <<<<<<<<");
+                        value.toString();
+                        // downloadUrls();
+                        listAll("path");
+                          Future.delayed(const Duration(milliseconds: 2000), (){
+                            setState(() {
 
+                            });
                           });
-                        });
-                    }
-                    if(value != null){
-                      trythis = value;
-                    }
-                  }));
-                },
-                child: Icon(
-                  Icons.add,
-                ),
-              )
+                      }
+                      if(value != null){
+                        trythis = value;
+                      }
+                    }));
+                  },
+                  child: Icon(
+                    Icons.add,
+                  ),
+                )
+            ),
           ),
         ],
       ),
@@ -252,6 +259,32 @@ class _lab_resultsState extends State<lab_results> {
       temp.forEach((jsonString) {
         labResult_list.add(Lab_Result.fromJson(jsonString));
       });
+    });
+  }
+  void getpermission() {
+    final User user = auth.currentUser;
+    String ssuid = user.uid;
+    final uid = widget.userUID;
+    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+    readConnection.once().then((DataSnapshot datasnapshot) {
+      List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+      temp.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString));
+      });
+      for(int i = 0; i < connections.length; i++){
+        if(connections[i].doctor1 == ssuid){
+          if(connections[i].addedit == "true"){
+            canaddedit = true;
+            print("canaddedit is ");
+            print(canaddedit);
+          }
+          else{
+            canaddedit = false;
+            print("canaddedit is ");
+            print(canaddedit);
+          }
+        }
+      }
     });
   }
 }

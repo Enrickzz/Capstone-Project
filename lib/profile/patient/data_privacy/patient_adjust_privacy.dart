@@ -44,7 +44,10 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
     if(doctorconnection.health.toLowerCase() == "true"){
       isAllowedDataInputs = true;
     }
-    if(isAllowedDashboard == false || isAllowedNonHealth == false || isAllowedDataInputs == false){
+    if(doctorconnection.addedit.toLowerCase() == "true"){
+      isAllowedAddEdit = true;
+    }
+    if(isAllowedDashboard == false || isAllowedNonHealth == false || isAllowedDataInputs == false || isAllowedAddEdit == false){
       showDisclaimer = true;
     }
     Future.delayed(const Duration(milliseconds: 1000), (){
@@ -191,9 +194,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                               }
                               else{
                                 showDisclaimer = true;
-
                               }
-
                             });
                           },
                         ),
@@ -586,6 +587,7 @@ class _editMedicationPrescriptionState extends State<patient_edit_privacy> {
                           "dashboard": isAllowedDashboard.toString(),
                           "nonhealth": isAllowedNonHealth.toString(),
                           "health": isAllowedDataInputs.toString(),
+                          "addedit": isAllowedAddEdit.toString(),
                         });
                         if(isAllowedDashboard || isAllowedNonHealth|| isAllowedDataInputs || isAllowedAddEdit){
                           addtoNotif2("Your <type> "+ thisuser.firstname+ " has changed your access settings.",
