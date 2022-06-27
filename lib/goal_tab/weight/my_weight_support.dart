@@ -1,6 +1,9 @@
 
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:my_app/ui_view/title_view.dart';
 import 'package:my_app/ui_view/weight/BMI_chart_doctor.dart';
@@ -31,37 +34,43 @@ class _my_weight_supportState extends State<my_weight_support>
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
 
-  bool allowedAddEdit = true;
+  bool allowedAddEdit = false;
+  List<Connection> connections = [];
 
   @override
   void initState() {
-    topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-            parent: widget.animationController,
-            curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
+    getpermission();
+    Future.delayed(const Duration(milliseconds: 1200), (){
+      setState(() {
+        topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController,
+                curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
+        addAllListData();
 
-    scrollController.addListener(() {
-      if (scrollController.offset >= 24) {
-        if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
-        }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
-        if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-          });
-        }
-      } else if (scrollController.offset <= 0) {
-        if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
-        }
-      }
+        scrollController.addListener(() {
+          if (scrollController.offset >= 24) {
+            if (topBarOpacity != 1.0) {
+              setState(() {
+                topBarOpacity = 1.0;
+              });
+            }
+          } else if (scrollController.offset <= 24 &&
+              scrollController.offset >= 0) {
+            if (topBarOpacity != scrollController.offset / 24) {
+              setState(() {
+                topBarOpacity = scrollController.offset / 24;
+              });
+            }
+          } else if (scrollController.offset <= 0) {
+            if (topBarOpacity != 0.0) {
+              setState(() {
+                topBarOpacity = 0.0;
+              });
+            }
+          }
+        });
+      });
     });
     super.initState();
   }
@@ -280,5 +289,27 @@ class _my_weight_supportState extends State<my_weight_support>
         )
       ],
     );
+  }
+  void getpermission() {
+    final User user = auth.currentUser;
+    String ssuid = user.uid;
+    final uid = widget.userUID;
+    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+    readConnection.once().then((DataSnapshot datasnapshot) {
+      List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+      temp.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString));
+      });
+      for(int i = 0; i < connections.length; i++){
+        if(connections[i].doctor1 == ssuid){
+          if(connections[i].addedit == "true"){
+            allowedAddEdit = true;
+          }
+          else{
+            allowedAddEdit = false;
+          }
+        }
+      }
+    });
   }
 }

@@ -1,6 +1,9 @@
 
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:my_app/models/users.dart';
 import 'package:my_app/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/ui_view/meals/MealListViewDoc.dart';
@@ -32,10 +35,12 @@ class _my_meals_supportState extends State<my_meals_support>
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
-  bool allowedAddEdit = true;
+  bool allowedAddEdit = false;
+  List<Connection> connections = [];
 
   @override
   void initState() {
+    getpermission();
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -306,5 +311,27 @@ class _my_meals_supportState extends State<my_meals_support>
         )
       ],
     );
+  }
+  void getpermission() {
+    final User user = auth.currentUser;
+    String ssuid = user.uid;
+    final uid = widget.userUID;
+    final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+    readConnection.once().then((DataSnapshot datasnapshot) {
+      List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+      temp.forEach((jsonString) {
+        connections.add(Connection.fromJson(jsonString));
+      });
+      for(int i = 0; i < connections.length; i++){
+        if(connections[i].doctor1 == ssuid){
+          if(connections[i].addedit == "true"){
+            allowedAddEdit = true;
+          }
+          else{
+            allowedAddEdit = false;
+          }
+        }
+      }
+    });
   }
 }
