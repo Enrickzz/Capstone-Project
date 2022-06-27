@@ -17,10 +17,15 @@ class add_blood_pressure extends StatefulWidget {
   @override
   _add_blood_pressureState createState() => _add_blood_pressureState();
 }
+
 final _formKey = GlobalKey<FormState>();
+
 class _add_blood_pressureState extends State<add_blood_pressure> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final databaseReference = FirebaseDatabase(
+          databaseURL:
+              "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/")
+      .reference();
 
   String systolic_pressure = '';
   String diastolic_pressure = '';
@@ -30,7 +35,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   String bp_date = (new DateTime.now()).toString();
   String bp_status = "";
   int count = 1;
-  bool isDateSelected= false;
+  bool isDateSelected = false;
   List<Blood_Pressure> bp_list = new List<Blood_Pressure>();
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
@@ -40,35 +45,34 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   String isResting = 'yes';
   String date;
-  String hours,min;
+  String hours, min;
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
   bool isLoading = true;
-
+  String titleP, messageP, redirectP;
 
   @override
-  void initState(){
+  void initState() {
     initNotif();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
 
     return Container(
         key: _formKey,
-        color:Color(0xff757575),
+        color: Color(0xff757575),
         child: Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft:Radius.circular(20),
-                topRight:Radius.circular(20),
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
             ),
             child: Column(
@@ -82,7 +86,6 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                   SizedBox(height: 8),
                   Divider(),
                   SizedBox(height: 8),
-
                   DefaultTabController(
                     length: 2,
                     initialIndex: 0,
@@ -115,9 +118,10 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
                                               borderSide: BorderSide(
-                                                width:0,
+                                                width: 0,
                                                 style: BorderStyle.none,
                                               ),
                                             ),
@@ -129,9 +133,12 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                 fontSize: defaultFontSize),
                                             hintText: "Systolic Pressure",
                                           ),
-                                          validator: (val) => val.isEmpty ? 'Enter Systolic Pressure' : null,
-                                          onChanged: (val){
-                                            setState(() => systolic_pressure = val);
+                                          validator: (val) => val.isEmpty
+                                              ? 'Enter Systolic Pressure'
+                                              : null,
+                                          onChanged: (val) {
+                                            setState(
+                                                () => systolic_pressure = val);
                                           },
                                         ),
                                       ),
@@ -144,9 +151,10 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
                                               borderSide: BorderSide(
-                                                width:0,
+                                                width: 0,
                                                 style: BorderStyle.none,
                                               ),
                                             ),
@@ -158,9 +166,12 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                 fontSize: defaultFontSize),
                                             hintText: "Diastolic Pressure",
                                           ),
-                                          validator: (val) => val.isEmpty ? 'Enter Diastolic Pressure' : null,
-                                          onChanged: (val){
-                                            setState(() => diastolic_pressure = val);
+                                          validator: (val) => val.isEmpty
+                                              ? 'Enter Diastolic Pressure'
+                                              : null,
+                                          onChanged: (val) {
+                                            setState(
+                                                () => diastolic_pressure = val);
                                           },
                                         ),
                                       ),
@@ -168,14 +179,18 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                   ),
                                   SizedBox(height: 16.0),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: <Widget> [
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: <Widget>[
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: Text(
                                           "Did you just finish exercising or performing strenuous physical activities?",
                                           textAlign: TextAlign.left,
-                                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: defaultFontSize),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: defaultFontSize),
                                         ),
                                       ),
                                       Row(
@@ -185,7 +200,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                               Radio(
                                                 value: "Yes",
                                                 groupValue: isResting,
-                                                onChanged: (value){
+                                                onChanged: (value) {
                                                   setState(() {
                                                     this.isResting = value;
                                                   });
@@ -198,7 +213,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                           Radio(
                                             value: "No",
                                             groupValue: isResting,
-                                            onChanged: (value){
+                                            onChanged: (value) {
                                               setState(() {
                                                 this.isResting = value;
                                               });
@@ -212,39 +227,50 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                   ),
                                   SizedBox(height: 8.0),
                                   GestureDetector(
-                                    onTap: ()async{
+                                    onTap: () async {
                                       await showDatePicker(
                                         context: context,
                                         initialDate: new DateTime.now(),
-                                        firstDate: new DateTime.now().subtract(Duration(days: 30)),
+                                        firstDate: new DateTime.now()
+                                            .subtract(Duration(days: 30)),
                                         lastDate: new DateTime.now(),
-                                      ).then((value){
-                                        if(value != null && value != bpDate){
+                                      ).then((value) {
+                                        if (value != null && value != bpDate) {
                                           setState(() {
                                             bpDate = value;
                                             isDateSelected = true;
-                                            bp_date = "${bpDate.month}/${bpDate.day}/${bpDate.year}";
+                                            bp_date =
+                                                "${bpDate.month}/${bpDate.day}/${bpDate.year}";
                                           });
                                           dateValue.text = bp_date + "\r";
                                         }
                                       });
 
-                                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                                      final initialTime =
+                                          TimeOfDay(hour: 12, minute: 0);
                                       await showTimePicker(
                                         context: context,
                                         initialTime: TimeOfDay(
                                             hour: TimeOfDay.now().hour,
-                                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
+                                            minute: (TimeOfDay.now().minute -
+                                                    TimeOfDay.now().minute %
+                                                        10 +
+                                                    10)
                                                 .toInt()),
-                                      ).then((value){
-                                        if(value != null && value != time){
+                                      ).then((value) {
+                                        if (value != null && value != time) {
                                           setState(() {
                                             time = value;
-                                            final hours = time.hour.toString().padLeft(2,'0');
-                                            final min = time.minute.toString().padLeft(2,'0');
+                                            final hours = time.hour
+                                                .toString()
+                                                .padLeft(2, '0');
+                                            final min = time.minute
+                                                .toString()
+                                                .padLeft(2, '0');
                                             bp_time = "$hours:$min";
                                             dateValue.text += "$hours:$min";
-                                            print("data value " + dateValue.text);
+                                            print(
+                                                "data value " + dateValue.text);
                                           });
                                         }
                                       });
@@ -255,9 +281,10 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                         showCursor: false,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
                                             borderSide: BorderSide(
-                                              width:0,
+                                              width: 0,
                                               style: BorderStyle.none,
                                             ),
                                           ),
@@ -274,19 +301,20 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                             size: defaultIconSize,
                                           ),
                                         ),
-                                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
-                                        onChanged: (val){
-
+                                        validator: (val) => val.isEmpty
+                                            ? 'Select Date and Time'
+                                            : null,
+                                        onChanged: (val) {
                                           print(dateValue);
-                                          setState((){
-                                          });
+                                          setState(() {});
                                         },
                                       ),
                                     ),
                                   ),
                                   SizedBox(height: 24.0),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       FlatButton(
                                         child: Text(
@@ -294,7 +322,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         color: Colors.blue,
-                                        onPressed:() {
+                                        onPressed: () {
                                           Navigator.pop(context);
                                         },
                                       ),
@@ -304,108 +332,267 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         color: Colors.blue,
-                                        onPressed:() async {
-                                          try{
+                                        onPressed: () async {
+                                          try {
                                             String uid;
                                             if (widget.userUID != null) {
                                               uid = widget.userUID;
                                             } else {
-                                              final User user = auth.currentUser;
+                                              final User user =
+                                                  auth.currentUser;
                                               uid = user.uid;
                                             }
-                                            final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list');
-                                            readBP.once().then((DataSnapshot datasnapshot) {
-                                              String temp1 = datasnapshot.value.toString();
+                                            final readBP = databaseReference
+                                                .child('users/' +
+                                                    uid +
+                                                    '/vitals/health_records/bp_list');
+                                            readBP.once().then(
+                                                (DataSnapshot datasnapshot) {
+                                              String temp1 =
+                                                  datasnapshot.value.toString();
                                               print("temp1 " + temp1);
-                                              List<String> temp = temp1.split(',');
+                                              List<String> temp =
+                                                  temp1.split(',');
                                               Blood_Pressure bloodPressure;
-                                              if(datasnapshot.value == null){
-                                                if(isResting.toLowerCase() =='yes'){
+                                              if (datasnapshot.value == null) {
+                                                if (isResting.toLowerCase() ==
+                                                    'yes') {
                                                   bp_status = "Active";
-                                                }
-                                                else{
+                                                } else {
                                                   bp_status = "Resting";
                                                 }
-                                                if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
+                                                if (int.parse(
+                                                            systolic_pressure) <
+                                                        90 ||
+                                                    int.parse(
+                                                            diastolic_pressure) <
+                                                        60) {
                                                   pressure_level = "low";
                                                   print(pressure_level);
-                                                }
-                                                else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                                } else if (int.parse(
+                                                            systolic_pressure) <=
+                                                        120 &&
+                                                    int.parse(
+                                                            systolic_pressure) >=
+                                                        90 &&
+                                                    int.parse(
+                                                            diastolic_pressure) <=
+                                                        80 &&
+                                                    int.parse(
+                                                            diastolic_pressure) >=
+                                                        60) {
                                                   pressure_level = "normal";
                                                   print(pressure_level);
-                                                }
-                                                else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                                } else if (int.parse(
+                                                            systolic_pressure) <=
+                                                        129 &&
+                                                    int.parse(
+                                                            systolic_pressure) >=
+                                                        120 &&
+                                                    int.parse(
+                                                            diastolic_pressure) <=
+                                                        80 &&
+                                                    int.parse(
+                                                            diastolic_pressure) >=
+                                                        60) {
                                                   pressure_level = "elevated";
                                                   print(pressure_level);
-                                                }
-                                                else if (int.parse(systolic_pressure) > 130  || int.parse(diastolic_pressure) > 80){
+                                                } else if (int.parse(
+                                                            systolic_pressure) >
+                                                        130 ||
+                                                    int.parse(
+                                                            diastolic_pressure) >
+                                                        80) {
                                                   pressure_level = "high";
                                                   print(pressure_level);
                                                 }
-                                                final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                                bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString(), "new_bp": true});
-                                                print("Added medication Successfully! " + uid);
-                                              }
-                                              else{
-                                                if(isResting.toLowerCase() =='yes'){
+                                                final bpRef = databaseReference
+                                                    .child('users/' +
+                                                        uid +
+                                                        '/vitals/health_records/bp_list/' +
+                                                        count.toString());
+                                                bpRef.set({
+                                                  "systolic_pressure":
+                                                      systolic_pressure
+                                                          .toString(),
+                                                  "diastolic_pressure":
+                                                      diastolic_pressure
+                                                          .toString(),
+                                                  "pressure_level":
+                                                      pressure_level.toString(),
+                                                  "bp_date": bp_date.toString(),
+                                                  "bp_time": bp_time.toString(),
+                                                  "bp_status":
+                                                      bp_status.toString(),
+                                                  "new_bp": true
+                                                });
+                                                print(
+                                                    "Added medication Successfully! " +
+                                                        uid);
+                                              } else {
+                                                if (isResting.toLowerCase() ==
+                                                    'yes') {
                                                   bp_status = "Active";
-                                                }
-                                                else{
+                                                } else {
                                                   bp_status = "Resting";
                                                 }
-                                                if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
+                                                if (int.parse(
+                                                            systolic_pressure) <
+                                                        90 ||
+                                                    int.parse(
+                                                            diastolic_pressure) <
+                                                        60) {
                                                   pressure_level = "low";
                                                   print(pressure_level);
-                                                }
-                                                else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                                } else if (int.parse(
+                                                            systolic_pressure) <=
+                                                        120 &&
+                                                    int.parse(
+                                                            systolic_pressure) >=
+                                                        90 &&
+                                                    int.parse(
+                                                            diastolic_pressure) <=
+                                                        80 &&
+                                                    int.parse(
+                                                            diastolic_pressure) >=
+                                                        60) {
                                                   pressure_level = "normal";
                                                   print(pressure_level);
-                                                }
-                                                else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                                } else if (int.parse(
+                                                            systolic_pressure) <=
+                                                        129 &&
+                                                    int.parse(
+                                                            systolic_pressure) >=
+                                                        120 &&
+                                                    int.parse(
+                                                            diastolic_pressure) <=
+                                                        80 &&
+                                                    int.parse(
+                                                            diastolic_pressure) >=
+                                                        60) {
                                                   pressure_level = "elevated";
                                                   print(pressure_level);
-                                                }
-                                                else if (int.parse(systolic_pressure) >= 130  || int.parse(diastolic_pressure) > 80){
+                                                } else if (int.parse(
+                                                            systolic_pressure) >=
+                                                        130 ||
+                                                    int.parse(
+                                                            diastolic_pressure) >
+                                                        80) {
                                                   pressure_level = "high";
                                                   print(pressure_level);
                                                 }
-                                                Future.delayed(const Duration(milliseconds: 1500), (){
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 1500),
+                                                    () {
                                                   count = bp_list.length;
-                                                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                                  bpRef.set({"systolic_pressure": systolic_pressure.toString(), "diastolic_pressure": diastolic_pressure.toString(),"pressure_level": pressure_level.toString(),  "bp_date": bp_date.toString(), "bp_time":bp_time.toString(), "bp_status": bp_status.toString(), "new_bp": true});
-                                                  print("Added Blood Pressure Successfully! " + uid);
+                                                  final bpRef = databaseReference
+                                                      .child('users/' +
+                                                          uid +
+                                                          '/vitals/health_records/bp_list/' +
+                                                          count.toString());
+                                                  bpRef.set({
+                                                    "systolic_pressure":
+                                                        systolic_pressure
+                                                            .toString(),
+                                                    "diastolic_pressure":
+                                                        diastolic_pressure
+                                                            .toString(),
+                                                    "pressure_level":
+                                                        pressure_level
+                                                            .toString(),
+                                                    "bp_date":
+                                                        bp_date.toString(),
+                                                    "bp_time":
+                                                        bp_time.toString(),
+                                                    "bp_status":
+                                                        bp_status.toString(),
+                                                    "new_bp": true
+                                                  });
+                                                  print(
+                                                      "Added Blood Pressure Successfully! " +
+                                                          uid);
                                                 });
                                               }
                                             });
-                                            Future.delayed(const Duration(milliseconds: 1000), () async{
-                                              print("MEDICATION LENGTH: " + bp_list.length.toString());
+                                            Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 1000),
+                                                () async {
+                                              print("MEDICATION LENGTH: " +
+                                                  bp_list.length.toString());
                                               String message, title;
                                               int priority;
-                                              bp_list.add(new Blood_Pressure(systolic_pressure: systolic_pressure, diastolic_pressure: diastolic_pressure,pressure_level: pressure_level, bp_date: format.parse(bp_date), bp_time: timeformat.parse(bp_time), bp_status: bp_status.toString()));
-                                              for(var i=0;i<bp_list.length/2;i++){
+                                              bp_list.add(new Blood_Pressure(
+                                                  systolic_pressure:
+                                                      systolic_pressure,
+                                                  diastolic_pressure:
+                                                      diastolic_pressure,
+                                                  pressure_level:
+                                                      pressure_level,
+                                                  bp_date:
+                                                      format.parse(bp_date),
+                                                  bp_time:
+                                                      timeformat.parse(bp_time),
+                                                  bp_status:
+                                                      bp_status.toString()));
+                                              for (var i = 0;
+                                                  i < bp_list.length / 2;
+                                                  i++) {
                                                 var temp = bp_list[i];
-                                                bp_list[i] = bp_list[bp_list.length-1-i];
-                                                bp_list[bp_list.length-1-i] = temp;
+                                                bp_list[i] = bp_list[
+                                                    bp_list.length - 1 - i];
+                                                bp_list[bp_list.length -
+                                                    1 -
+                                                    i] = temp;
                                               }
-                                              if(isResting.toLowerCase() =='yes'){
+                                              if (isResting.toLowerCase() ==
+                                                  'yes') {
                                                 bp_status = "Active";
-                                              }
-                                              else{
+                                              } else {
                                                 bp_status = "Resting";
                                               }
-                                              if(int.parse(systolic_pressure) < 90 || int.parse(diastolic_pressure) < 60){
+                                              if (int.parse(systolic_pressure) <
+                                                      90 ||
+                                                  int.parse(
+                                                          diastolic_pressure) <
+                                                      60) {
                                                 pressure_level = "low";
                                                 print(pressure_level);
-                                              }
-                                              else if (int.parse(systolic_pressure) <= 120 && int.parse(systolic_pressure) >= 90 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                              } else if (int.parse(
+                                                          systolic_pressure) <=
+                                                      120 &&
+                                                  int.parse(
+                                                          systolic_pressure) >=
+                                                      90 &&
+                                                  int.parse(
+                                                          diastolic_pressure) <=
+                                                      80 &&
+                                                  int.parse(
+                                                          diastolic_pressure) >=
+                                                      60) {
                                                 pressure_level = "normal";
                                                 print(pressure_level);
-                                              }
-                                              else if (int.parse(systolic_pressure) <= 129 && int.parse(systolic_pressure) >= 120 && int.parse(diastolic_pressure) <= 80 && int.parse(diastolic_pressure) >= 60){
+                                              } else if (int.parse(
+                                                          systolic_pressure) <=
+                                                      129 &&
+                                                  int.parse(
+                                                          systolic_pressure) >=
+                                                      120 &&
+                                                  int.parse(
+                                                          diastolic_pressure) <=
+                                                      80 &&
+                                                  int.parse(
+                                                          diastolic_pressure) >=
+                                                      60) {
                                                 pressure_level = "elevated";
                                                 print(pressure_level);
-                                              }
-                                              else if (int.parse(systolic_pressure) > 130  || int.parse(diastolic_pressure) > 80){
+                                              } else if (int.parse(
+                                                          systolic_pressure) >
+                                                      130 ||
+                                                  int.parse(
+                                                          diastolic_pressure) >
+                                                      80) {
                                                 pressure_level = "high";
                                                 print(pressure_level);
                                               }
@@ -421,61 +608,116 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                               //   await Future.delayed(Duration( hours: 1, minutes: 3));
                                               //   await cron.close();
                                               // }
-                                              if(widget.instance =="Reminder!"){
-                                                addtoRecommendation("Your Blood Pressure is still high just like the previous recording. We have already informed your doctor and support system about this. Please seek immediate medical attention for this.",
+                                              if (widget.instance ==
+                                                  "Reminder!") {
+                                                titleP = "BP TITLE";
+                                                messageP = "Message";
+                                                redirectP = "None"; //LEave this
+                                                addtoRecommendation(
+                                                    "Your Blood Pressure is still high just like the previous recording. We have already informed your doctor and support system about this. Please seek immediate medical attention for this.",
                                                     "High Blood Pressure",
                                                     "3",
                                                     "None");
-                                                if(pressure_level == "high" && bp_status =="Resting"){
+                                                if (pressure_level == "high" &&
+                                                    bp_status == "Resting") {
                                                   print("ADDING NOW");
-                                                  final readConnections = databaseReference.child('users/' + uid + '/personal_info/connections/');
-                                                  readConnections.once().then((DataSnapshot snapshot2) {
+                                                  final readConnections =
+                                                      databaseReference.child(
+                                                          'users/' +
+                                                              uid +
+                                                              '/personal_info/connections/');
+                                                  readConnections.once().then(
+                                                      (DataSnapshot snapshot2) {
                                                     print(snapshot2.value);
                                                     print("CONNECTION");
-                                                    List<dynamic> temp = jsonDecode(jsonEncode(snapshot2.value));
+                                                    List<dynamic> temp =
+                                                        jsonDecode(jsonEncode(
+                                                            snapshot2.value));
                                                     temp.forEach((jsonString) {
-                                                      connections.add(Connection.fromJson(jsonString)) ;
-                                                      Connection a = Connection.fromJson(jsonString);
+                                                      connections.add(
+                                                          Connection.fromJson(
+                                                              jsonString));
+                                                      Connection a =
+                                                          Connection.fromJson(
+                                                              jsonString);
                                                       print(a.doctor1);
-                                                      addtoNotif2("Your <type> "+ thisuser.firstname+ " has recorded consecutive high blood pressure. This may require your immediate medical attention.",
-                                                          thisuser.firstname + " has consecutive high BP readings",
+                                                      addtoNotif2(
+                                                          "Your <type> " +
+                                                              thisuser
+                                                                  .firstname +
+                                                              " has recorded consecutive high blood pressure. This may require your immediate medical attention.",
+                                                          thisuser.firstname +
+                                                              " has consecutive high BP readings",
                                                           "3",
                                                           a.doctor1);
                                                     });
                                                   });
                                                 }
                                               }
-                                              if(pressure_level == "high" && bp_status =="Resting"){
-                                                addtoRecommendation("Your Blood Pressure is quite high, we recommend that you monitor your blood pressure for the next hour as we would set an alarm for you to record your blood pressure again. If you feel unwell please seek immediate medical attention for your condition. For the meantime here is a relaxing music for you to listen to while you are taking a breather. ",
+                                              if (pressure_level == "high" &&
+                                                  bp_status == "Resting") {
+                                                titleP = "BP TITLE";
+                                                messageP = "Message";
+                                                redirectP = "None"; //LEave this
+                                                addtoRecommendation(
+                                                    "Your Blood Pressure is quite high, we recommend that you monitor your blood pressure for the next hour as we would set an alarm for you to record your blood pressure again. If you feel unwell please seek immediate medical attention for your condition. For the meantime here is a relaxing music for you to listen to while you are taking a breather. ",
                                                     "High Blood Pressure!",
-                                                    "2", "Spotify");
+                                                    "2",
+                                                    "Spotify");
                                                 //sched needs new entry notif reference schedBP();
-                                                NotificationService ns = NotificationService("bp");
-                                                await ns.init().then((value) async {
-                                                  await ns.scheduleNotifications(Duration(hours: 1));
+                                                NotificationService ns =
+                                                    NotificationService("bp");
+                                                await ns
+                                                    .init()
+                                                    .then((value) async {
+                                                  await ns
+                                                      .scheduleNotifications(
+                                                          Duration(hours: 1));
                                                 });
                                                 // schedBP();
                                               }
-                                              if(pressure_level == "high" && bp_status =="Active"){
-                                                addtoRecommendation("Your Blood Pressure is quite high but since you just finished performing strenuous physical activities this is not immediately a cause for concern. We recommend that you take a rest and record your Blood Pressure again after an hour. For the meantime here are some soothing relaxing music to listen to while you are taking a rest.",
+                                              if (pressure_level == "high" &&
+                                                  bp_status == "Active") {
+                                                titleP = "BP TITLE";
+                                                messageP = "Message";
+                                                redirectP = "None"; //LEave this
+                                                addtoRecommendation(
+                                                    "Your Blood Pressure is quite high but since you just finished performing strenuous physical activities this is not immediately a cause for concern. We recommend that you take a rest and record your Blood Pressure again after an hour. For the meantime here are some soothing relaxing music to listen to while you are taking a rest.",
                                                     "High Blood Pressure!",
-                                                    "4", "Spotify");
+                                                    "4",
+                                                    "Spotify");
                                                 //sched needs new entry notif reference schedBP();
-                                                NotificationService ns = NotificationService("bp");
-                                                await ns.init().then((value) async {
-                                                  await ns.scheduleNotifications(Duration(hours: 1));
+                                                NotificationService ns =
+                                                    NotificationService("bp");
+                                                await ns
+                                                    .init()
+                                                    .then((value) async {
+                                                  await ns
+                                                      .scheduleNotifications(
+                                                          Duration(hours: 1));
                                                 });
                                                 // schedBP();
                                               }
-                                              if(pressure_level == "low"){
-                                                addtoRecommendation("Your Blood pressure is lower than the normal standards, please record your heart rate and respiratory rate as well to have a better view of your current health.",
+                                              if (pressure_level == "low") {
+                                                titleP = "BP TITLE";
+                                                messageP = "Message";
+                                                redirectP = "None"; //LEave this
+                                                addtoRecommendation(
+                                                    "Your Blood pressure is lower than the normal standards, please record your heart rate and respiratory rate as well to have a better view of your current health.",
                                                     "Low Blood Pressure!",
-                                                    "3", "None");
+                                                    "3",
+                                                    "None");
                                               }
+                                              Navigator.pop(
+                                                  context,
+                                                  BoxedReturns(
+                                                      dialog: PopUpBox(titleP,
+                                                          messageP, redirectP),
+                                                      BP_result: bp_list));
                                               Navigator.pop(context, bp_list);
                                               print("POP HERE ==========");
                                             });
-                                          } catch(e) {
+                                          } catch (e) {
                                             print("you got an error! $e");
                                           }
                                           // Navigator.pop(context);
@@ -489,29 +731,30 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                 children: <Widget>[
                                   Container(
                                     alignment: Alignment.center,
-                                    child: Image.asset("assets/images/bpdevice.jpg", height: 125,),
-
+                                    child: Image.asset(
+                                      "assets/images/bpdevice.jpg",
+                                      height: 125,
+                                    ),
                                   ),
                                   Container(
                                     alignment: Alignment.center,
                                     child: Text(
                                       'Connect your iHealth device',
-                                      style: TextStyle(
-                                          fontSize: 14
-                                      ),
+                                      style: TextStyle(fontSize: 14),
                                     ),
                                   ),
-                                  SizedBox(height: 32,),
+                                  SizedBox(
+                                    height: 32,
+                                  ),
                                   Center(
                                     child: ElevatedButton(
                                       child: Text("Connect"),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Color.fromRGBO(246,115,0,1),
+                                        primary: Color.fromRGBO(246, 115, 0, 1),
                                         onPrimary: Colors.white,
                                         minimumSize: Size(100, 40),
                                       ),
-
-                                      onPressed: (){
+                                      onPressed: () {
                                         final User user = auth.currentUser;
                                         final uid = user.uid;
                                         var rng = Random();
@@ -519,15 +762,43 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                         int dia = rng.nextInt(10) + 70;
                                         count = bp_list.length;
                                         DateTime now = new DateTime.now();
-                                        final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + count.toString());
-                                        bpRef.set({"systolic_pressure": sys.toString(), "diastolic_pressure": dia.toString(),"pressure_level": "normal",  "bp_date": now.month.toString().padLeft(2,'0')+"/"+now.day.toString().padLeft(2,'0')+"/"+now.year.toString(), "bp_time":now.hour.toString().padLeft(2,'0')+":"+now.minute.toString().padLeft(2,'0').toString(), "bp_status": "Resting".toString(), "new_bp": true});
+                                        final bpRef = databaseReference.child(
+                                            'users/' +
+                                                uid +
+                                                '/vitals/health_records/bp_list/' +
+                                                count.toString());
+                                        bpRef.set({
+                                          "systolic_pressure": sys.toString(),
+                                          "diastolic_pressure": dia.toString(),
+                                          "pressure_level": "normal",
+                                          "bp_date": now.month
+                                                  .toString()
+                                                  .padLeft(2, '0') +
+                                              "/" +
+                                              now.day
+                                                  .toString()
+                                                  .padLeft(2, '0') +
+                                              "/" +
+                                              now.year.toString(),
+                                          "bp_time": now.hour
+                                                  .toString()
+                                                  .padLeft(2, '0') +
+                                              ":" +
+                                              now.minute
+                                                  .toString()
+                                                  .padLeft(2, '0')
+                                                  .toString(),
+                                          "bp_status": "Resting".toString(),
+                                          "new_bp": true
+                                        });
                                         _showMyDialog();
                                       },
                                     ),
                                   ),
                                   SizedBox(height: 24.0),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       FlatButton(
                                         child: Text(
@@ -535,13 +806,12 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         color: Colors.blue,
-                                        onPressed:() {
+                                        onPressed: () {
                                           Navigator.pop(context);
                                         },
                                       ),
                                     ],
                                   ),
-
                                 ],
                               )
                             ],
@@ -550,147 +820,234 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                       ],
                     ),
                   ),
-
-                ]
-            )
-        )
-
-    );
+                ])));
   }
-  void addtoNotif(String message, String title, String priority,String uid, String redirect){
-    print ("ADDED TO NOTIFICATIONS");
+
+  void addtoNotif(String message, String title, String priority, String uid,
+      String redirect) {
+    print("ADDED TO NOTIFICATIONS");
     getNotifs3(uid);
     final ref = databaseReference.child('users/' + uid + '/notifications/');
     ref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "blood pressure", "redirect": redirect});
-      }else{
+      if (snapshot.value == null) {
+        final ref = databaseReference
+            .child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({
+          "id": 0.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": "$hours:$min",
+          "rec_date": date,
+          "category": "blood pressure",
+          "redirect": redirect
+        });
+      } else {
         // count = recommList.length--;
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
-        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "blood pressure", "redirect": redirect});
-
+        final ref = databaseReference.child(
+            'users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({
+          "id": notifsList.length.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": "$hours:$min",
+          "rec_date": date,
+          "category": "blood pressure",
+          "redirect": redirect
+        });
       }
     });
   }
+
   void getNotifs3(String uid) {
     print("GET NOTIF");
     notifsList.clear();
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
-    readBP.once().then((DataSnapshot snapshot){
+    readBP.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }
-  void addtoNotif2(String message, String title, String priority,String uid)async {
-    print ("ADDED TO NOTIFICATIONS");
+
+  void addtoNotif2(
+      String message, String title, String priority, String uid) async {
+    print("ADDED TO NOTIFICATIONS");
     notifsList.clear();
     await getNotifs2(uid).then((value) {
       final ref = databaseReference.child('users/' + uid + '/notifications/');
       String redirect = "";
       ref.once().then((DataSnapshot snapshot) {
-        if(snapshot.value == null){
-          final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-          ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-            "rec_date": date, "category": "notification", "redirect": redirect});
-        }else{
+        if (snapshot.value == null) {
+          final ref = databaseReference
+              .child('users/' + uid + '/notifications/' + 0.toString());
+          ref.set({
+            "id": 0.toString(),
+            "message": message,
+            "title": title,
+            "priority": priority,
+            "rec_time": "$hours:$min",
+            "rec_date": date,
+            "category": "notification",
+            "redirect": redirect
+          });
+        } else {
           // count = recommList.length--;
-          final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
-          ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-            "rec_date": date, "category": "notification", "redirect": redirect});
-
+          final ref = databaseReference.child('users/' +
+              uid +
+              '/notifications/' +
+              notifsList.length.toString());
+          ref.set({
+            "id": notifsList.length.toString(),
+            "message": message,
+            "title": title,
+            "priority": priority,
+            "rec_time": "$hours:$min",
+            "rec_date": date,
+            "category": "notification",
+            "redirect": redirect
+          });
         }
       });
     });
   }
-  void addtoNotifs(String message, String title, String priority){
+
+  void addtoNotifs(String message, String title, String priority) {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final notifref = databaseReference.child('users/' + uid + '/notifications/');
+    final notifref =
+        databaseReference.child('users/' + uid + '/notifications/');
     getNotifs();
-    String redirect= "";
+    String redirect = "";
     notifref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
-          "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
-      }else{
-        final notifRef = databaseReference.child('users/' + uid + '/notifications/' + (notifsList.length--).toString());
-        notifRef.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority,
-          "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bloodpressure", "redirect": redirect});
-
+      if (snapshot.value == null) {
+        final notifRef = databaseReference
+            .child('users/' + uid + '/notifications/' + 0.toString());
+        notifRef.set({
+          "id": 0.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": bp_time.toString(),
+          "rec_date": bp_date.toString(),
+          "category": "bloodpressure",
+          "redirect": redirect
+        });
+      } else {
+        final notifRef = databaseReference.child('users/' +
+            uid +
+            '/notifications/' +
+            (notifsList.length--).toString());
+        notifRef.set({
+          "id": notifsList.length.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": bp_time.toString(),
+          "rec_date": bp_date.toString(),
+          "category": "bloodpressure",
+          "redirect": redirect
+        });
       }
     });
   }
-  Future<void> getNotifs2(String uid) async{
+
+  Future<void> getNotifs2(String uid) async {
     print("GET NOTIF");
     notifsList.clear();
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
-    await readBP.once().then((DataSnapshot snapshot){
+    await readBP.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }
-  void addtoRecommendation(String message, String title, String priority, String redirect){
+
+  void addtoRecommendation(
+      String message, String title, String priority, String redirect) {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final notifref = databaseReference.child('users/' + uid + '/recommendations/');
+    final notifref =
+        databaseReference.child('users/' + uid + '/recommendations/');
     getRecomm();
     notifref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
-        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
-          "rec_time": bp_time.toString(), "rec_date": bp_date.toString(), "category": "bprecommend", "redirect": redirect});
-      }else{
+      if (snapshot.value == null) {
+        final notifRef = databaseReference
+            .child('users/' + uid + '/recommendations/' + 0.toString());
+        notifRef.set({
+          "id": 0.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": bp_time.toString(),
+          "rec_date": bp_date.toString(),
+          "category": "bprecommend",
+          "redirect": redirect
+        });
+      } else {
         // count = recommList.length--;
-        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
-        notifRef.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority,
-          "rec_time": bp_time.toString(), "rec_date": date, "category": "bprecommend", "redirect": redirect});
+        final notifRef = databaseReference.child('users/' +
+            uid +
+            '/recommendations/' +
+            (recommList.length--).toString());
+        notifRef.set({
+          "id": recommList.length.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": bp_time.toString(),
+          "rec_date": date,
+          "category": "bprecommend",
+          "redirect": redirect
+        });
       }
     });
   }
+
   void getBloodPressure() {
     bp_list.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/');
-    readBP.once().then((DataSnapshot snapshot){
+    final readBP = databaseReference
+        .child('users/' + uid + '/vitals/health_records/bp_list/');
+    readBP.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         bp_list.add(Blood_Pressure.fromJson(jsonString));
       });
     });
   }
+
   void getNotifs() {
     notifsList.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
-    readBP.once().then((DataSnapshot snapshot){
+    readBP.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         notifsList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }
+
   void getRecomm() {
     recommList.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
-    readBP.once().then((DataSnapshot snapshot){
+    final readBP =
+        databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         recommList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }
+
   void initNotif() {
     getBloodPressure();
 
@@ -698,25 +1055,25 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");
     TimeOfDay time = TimeOfDay.now();
-    hours = time.hour.toString().padLeft(2,'0');
-    min = time.minute.toString().padLeft(2,'0');
+    hours = time.hour.toString().padLeft(2, '0');
+    min = time.minute.toString().padLeft(2, '0');
     print("DATE = " + date);
     print("TIME = " + "$hours:$min");
 
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
-    readProfile.once().then((DataSnapshot snapshot){
+    final readProfile =
+        databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot) {
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
         thisuser = Users.fromJson(temp);
       });
-
     });
   }
 
   Future<void> _showMyDialog() async {
-    Future.delayed(const Duration(milliseconds: 2000),() {
+    Future.delayed(const Duration(milliseconds: 2000), () {
       setState(() {
         isLoading = false;
       });
@@ -727,12 +1084,13 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
         return AlertDialog(
           content: SingleChildScrollView(
             child: Column(
-              children:  <Widget>[
+              children: <Widget>[
                 Text('Waiting for your device to connect...'),
                 isLoading
                     ? Center(
-                  child: CircularProgressIndicator(),
-                ): new Text("HELLO")
+                        child: CircularProgressIndicator(),
+                      )
+                    : new Text("HELLO")
               ],
             ),
           ),
@@ -748,5 +1106,4 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
       },
     );
   }
-
 }

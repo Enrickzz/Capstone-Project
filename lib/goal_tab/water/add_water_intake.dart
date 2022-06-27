@@ -14,10 +14,15 @@ class add_water_intake extends StatefulWidget {
   @override
   add_waterIntakeState createState() => add_waterIntakeState();
 }
+
 final _formKey = GlobalKey<FormState>();
+
 class add_waterIntakeState extends State<add_water_intake> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final databaseReference = FirebaseDatabase(
+          databaseURL:
+              "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/")
+      .reference();
 
   int water_intake = 0;
   String unit = 'Milimeter';
@@ -27,7 +32,7 @@ class add_waterIntakeState extends State<add_water_intake> {
   DateTime waterintakeDate;
   String waterintake_time;
   String indication = "";
-  bool isDateSelected= false;
+  bool isDateSelected = false;
   int count = 1;
   Water_Goal water_goal = new Water_Goal();
   List<WaterIntake> waterintake_list = new List<WaterIntake>();
@@ -37,39 +42,39 @@ class add_waterIntakeState extends State<add_water_intake> {
   DateFormat timeformat = new DateFormat("hh:mm");
   TimeOfDay time;
   var dateValue = TextEditingController();
-  List <bool> isSelected = [true, false];
+  List<bool> isSelected = [true, false];
 
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   String isResting = 'yes';
   String date;
-  String hours,min;
+  String hours, min;
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
+  String titleP, messageP, redirectP;
 
   @override
-  void initState(){
+  void initState() {
     initNotif();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
 
     return Container(
         key: _formKey,
-        color:Color(0xff757575),
+        color: Color(0xff757575),
         child: Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft:Radius.circular(20),
-                topRight:Radius.circular(20),
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
             ),
             child: Column(
@@ -77,7 +82,8 @@ class add_waterIntakeState extends State<add_water_intake> {
                 children: <Widget>[
                   Text(
                     'Log Water Intake',
-                    textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 8.0),
                   Divider(),
@@ -90,9 +96,10 @@ class add_waterIntakeState extends State<add_water_intake> {
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(
-                                width:0,
+                                width: 0,
                                 style: BorderStyle.none,
                               ),
                             ),
@@ -104,30 +111,35 @@ class add_waterIntakeState extends State<add_water_intake> {
                                 fontSize: defaultFontSize),
                             hintText: "Water Intake",
                           ),
-                          validator: (val) => val.isEmpty ? 'Enter Water Intake' : null,
-                          onChanged: (val){
+                          validator: (val) =>
+                              val.isEmpty ? 'Enter Water Intake' : null,
+                          onChanged: (val) {
                             setState(() => water_intake = int.parse(val));
                           },
                         ),
                       ),
-                      SizedBox(width: 8,),
+                      SizedBox(
+                        width: 8,
+                      ),
                       ToggleButtons(
                         isSelected: isSelected,
                         highlightColor: Colors.blue,
                         borderRadius: BorderRadius.circular(10),
-                        children: <Widget> [
-                          Padding (
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Milliliter (ml)')
-                          ),
-                          Padding (
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Ounce (oz)')
-                          ),
+                        children: <Widget>[
+                          Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Milliliter (ml)')),
+                          Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Ounce (oz)')),
                         ],
-                        onPressed:(int newIndex){
+                        onPressed: (int newIndex) {
                           setState(() {
-                            for (int index = 0; index < isSelected.length; index++){
+                            for (int index = 0;
+                                index < isSelected.length;
+                                index++) {
                               if (index == newIndex) {
                                 isSelected[index] = true;
                                 print('Milliliter (ml)');
@@ -136,12 +148,12 @@ class add_waterIntakeState extends State<add_water_intake> {
                                 print("Ounce (oz)");
                               }
                             }
-                            if(newIndex == 0){
+                            if (newIndex == 0) {
                               print('Milliliter (ml)');
                               unit = "Milliliter";
                               print(unit);
                             }
-                            if(newIndex == 1){
+                            if (newIndex == 1) {
                               print("Ounce (oz)");
                               unit = "Ounce";
                               print(unit);
@@ -153,36 +165,40 @@ class add_waterIntakeState extends State<add_water_intake> {
                   ),
                   SizedBox(height: 8.0),
                   GestureDetector(
-                    onTap: ()async{
+                    onTap: () async {
                       await showDatePicker(
-                          context: context,
-                          initialDate: new DateTime.now(),
-                          firstDate: new DateTime.now().subtract(Duration(days: 30)),
-                          lastDate: new DateTime.now(),
-                      ).then((value){
-                        if(value != null && value != waterintakeDate){
+                        context: context,
+                        initialDate: new DateTime.now(),
+                        firstDate:
+                            new DateTime.now().subtract(Duration(days: 30)),
+                        lastDate: new DateTime.now(),
+                      ).then((value) {
+                        if (value != null && value != waterintakeDate) {
                           setState(() {
                             waterintakeDate = value;
                             isDateSelected = true;
-                            waterintake_date = "${waterintakeDate.month.toString().padLeft(2,"0")}/${waterintakeDate.day.toString().padLeft(2,"0")}/${waterintakeDate.year}";
+                            waterintake_date =
+                                "${waterintakeDate.month.toString().padLeft(2, "0")}/${waterintakeDate.day.toString().padLeft(2, "0")}/${waterintakeDate.year}";
                           });
                           dateValue.text = waterintake_date + "\r";
                         }
                       });
 
-                      final initialTime = TimeOfDay(hour:12, minute: 0);
+                      final initialTime = TimeOfDay(hour: 12, minute: 0);
                       await showTimePicker(
                         context: context,
                         initialTime: TimeOfDay(
                             hour: TimeOfDay.now().hour,
-                            minute: (TimeOfDay.now().minute - TimeOfDay.now().minute % 10 + 10)
+                            minute: (TimeOfDay.now().minute -
+                                    TimeOfDay.now().minute % 10 +
+                                    10)
                                 .toInt()),
-                      ).then((value){
-                        if(value != null && value != time){
+                      ).then((value) {
+                        if (value != null && value != time) {
                           setState(() {
                             time = value;
-                            final hours = time.hour.toString().padLeft(2,'0');
-                            final min = time.minute.toString().padLeft(2,'0');
+                            final hours = time.hour.toString().padLeft(2, '0');
+                            final min = time.minute.toString().padLeft(2, '0');
                             waterintake_time = "$hours:$min";
                             dateValue.text += "$hours:$min";
                             print("data value " + dateValue.text);
@@ -196,9 +212,10 @@ class add_waterIntakeState extends State<add_water_intake> {
                         showCursor: false,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             borderSide: BorderSide(
-                              width:0,
+                              width: 0,
                               style: BorderStyle.none,
                             ),
                           ),
@@ -215,12 +232,11 @@ class add_waterIntakeState extends State<add_water_intake> {
                             size: defaultIconSize,
                           ),
                         ),
-                        validator: (val) => val.isEmpty ? 'Select Date and Time' : null,
-                        onChanged: (val){
-
+                        validator: (val) =>
+                            val.isEmpty ? 'Select Date and Time' : null,
+                        onChanged: (val) {
                           print(dateValue);
-                          setState((){
-                          });
+                          setState(() {});
                         },
                       ),
                     ),
@@ -235,7 +251,7 @@ class add_waterIntakeState extends State<add_water_intake> {
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
-                        onPressed:() {
+                        onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
@@ -245,111 +261,190 @@ class add_waterIntakeState extends State<add_water_intake> {
                           style: TextStyle(color: Colors.white),
                         ),
                         color: Colors.blue,
-                        onPressed:() async {
-                          try{
+                        onPressed: () async {
+                          try {
                             final User user = auth.currentUser;
                             final uid = user.uid;
-                            final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
-                            final readWaterGoal = databaseReference.child('users/' + uid + '/goal/water_goal/');
-                            if(unit == "Ounce"){
+                            final readWaterIntake = databaseReference
+                                .child('users/' + uid + '/goal/water_intake/');
+                            final readWaterGoal = databaseReference
+                                .child('users/' + uid + '/goal/water_goal/');
+                            if (unit == "Ounce") {
                               String temp = "";
-                              temp = (water_intake * 29.5735).toStringAsFixed(0);
+                              temp =
+                                  (water_intake * 29.5735).toStringAsFixed(0);
                               water_intake = int.parse(temp);
                             }
-                            readWaterIntake.once().then((DataSnapshot datasnapshot) {
-                                if(datasnapshot.value == null){
-                                  final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
-                                  waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
-                                  print("Added Water Intake Successfully! " + uid);
+                            readWaterIntake
+                                .once()
+                                .then((DataSnapshot datasnapshot) {
+                              if (datasnapshot.value == null) {
+                                final waterintakeRef = databaseReference.child(
+                                    'users/' +
+                                        uid +
+                                        '/goal/water_intake/' +
+                                        count.toString());
+                                waterintakeRef.set({
+                                  "water_intake": water_intake.toString(),
+                                  "dateCreated": waterintake_date,
+                                  "timeCreated": waterintake_time
+                                });
+                                print(
+                                    "Added Water Intake Successfully! " + uid);
 
-                                  if(water_intake >= 1500){
+                                if (water_intake >= 1500) {
+                                  print(">1500");
+                                  final readAddinf = databaseReference.child(
+                                      "users/" +
+                                          uid +
+                                          "/vitals/additional_info");
+                                  readAddinf
+                                      .once()
+                                      .then((DataSnapshot snapshot) {
+                                    Additional_Info userInfo =
+                                        Additional_Info.fromJson(jsonDecode(
+                                            jsonEncode(snapshot.value)));
+                                    bool check2 = false;
+                                    print(snapshot.value);
+                                    for (var i = 0;
+                                        i < userInfo.other_disease.length;
+                                        i++) {
+                                      if (userInfo.other_disease[i]
+                                          .contains("Heart Failure"))
+                                        check2 = true;
+                                    }
+                                    for (var i = 0;
+                                        i < userInfo.disease.length;
+                                        i++) {
+                                      if (userInfo.disease[i]
+                                          .contains("Heart Failure")) {
+                                        check2 = true;
+                                      }
+                                    }
+                                    if (check2 == true) {
+                                      addtoRecommendation(
+                                          "The recommended daily water intake for patients with congestive heart failure is 1500 milliliter a day. You have already exceeded the threshold for today. Please limit your water intake for the rest of the day.",
+                                          "Limit your water",
+                                          "3",
+                                          "None",
+                                          "Immediate");
+                                      titleP = "WATER TITLE";
+                                      messageP = "Message";
+                                      redirectP = "None"; //leave this here
+                                    }
+                                  });
+                                }
+                              } else {
+                                getWaterIntake();
+                                double totalWater = 0;
+                                DateTime now = DateTime.now();
+                                String datenow =
+                                    "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
+                                  for (int i = 0;
+                                      i < waterintake_list.length;
+                                      i++) {
+                                    String datecreated =
+                                        "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.year}";
+                                    if (datenow == datecreated) {
+                                      totalWater +=
+                                          waterintake_list[i].water_intake;
+                                    }
+                                  }
+                                  totalWater = totalWater + water_intake;
+                                  count = waterintake_list.length--;
+                                  final waterintakeRef =
+                                      databaseReference.child('users/' +
+                                          uid +
+                                          '/goal/water_intake/' +
+                                          count.toString());
+                                  waterintakeRef.set({
+                                    "water_intake": water_intake.toString(),
+                                    "dateCreated": waterintake_date,
+                                    "timeCreated": waterintake_time
+                                  });
+                                  print("Added Water Intake Successfully! " +
+                                      uid);
+                                  if (totalWater >= 1500) {
                                     print(">1500");
-                                    final readAddinf = databaseReference.child("users/"+ uid+"/vitals/additional_info");
-                                    readAddinf.once().then((DataSnapshot snapshot) {
-                                      Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
+                                    final readAddinf = databaseReference.child(
+                                        "users/" +
+                                            uid +
+                                            "/vitals/additional_info");
+                                    readAddinf
+                                        .once()
+                                        .then((DataSnapshot snapshot) {
+                                      Additional_Info userInfo =
+                                          Additional_Info.fromJson(jsonDecode(
+                                              jsonEncode(snapshot.value)));
                                       bool check2 = false;
                                       print(snapshot.value);
-                                      for(var i = 0; i < userInfo.other_disease.length; i++){
-                                        if(userInfo.other_disease[i].contains("Heart Failure")) check2 = true;
+                                      for (var i = 0;
+                                          i < userInfo.other_disease.length;
+                                          i++) {
+                                        if (userInfo.other_disease[i]
+                                            .contains("Heart Failure"))
+                                          check2 = true;
                                       }
-                                      for(var i = 0 ; i < userInfo.disease.length ; i++ ){
-                                        if(userInfo.disease[i].contains("Heart Failure") ){
+                                      for (var i = 0;
+                                          i < userInfo.disease.length;
+                                          i++) {
+                                        if (userInfo.disease[i]
+                                            .contains("Heart Failure")) {
                                           check2 = true;
                                         }
                                       }
-                                      if(check2 ==true ){
-                                        addtoRecommendation("The recommended daily water intake for patients with congestive heart failure is 1500 milliliter a day. You have already exceeded the threshold for today. Please limit your water intake for the rest of the day.",
+                                      if (check2 == true) {
+                                        addtoRecommendation(
+                                            "The recommended daily water intake for patients with congestive heart failure is 1500 milliliter a day. You have already exceeded the threshold for today. Please limit your water intake for the rest of the day.",
                                             "Limit your water",
                                             "3",
                                             "None",
                                             "Immediate");
+                                        titleP = "WATER TITLE";
+                                        messageP = "Message";
+                                        redirectP = "None"; //leave this here
                                       }
                                     });
                                   }
-                                }
-                                else{
-                                  getWaterIntake();
-                                  double totalWater = 0;
-                                  DateTime now = DateTime.now();
-                                  String datenow = "${now.month.toString().padLeft(2, "0")}/${now.day.toString().padLeft(2, "0")}/${now.year}";
-                                  Future.delayed(const Duration(milliseconds: 1000), (){
-                                    for(int i=0; i < waterintake_list.length; i++){
-                                      String datecreated = "${waterintake_list[i].dateCreated.month.toString().padLeft(2, "0")}/${waterintake_list[i].dateCreated.day.toString().padLeft(2,"0")}/${waterintake_list[i].dateCreated.year}";
-                                      if(datenow == datecreated){
-                                        totalWater += waterintake_list[i].water_intake;
-                                      }
-                                    }
-                                    totalWater = totalWater + water_intake;
-                                    count = waterintake_list.length--;
-                                    final waterintakeRef = databaseReference.child('users/' + uid + '/goal/water_intake/' + count.toString());
-                                    waterintakeRef.set({"water_intake": water_intake.toString(), "dateCreated": waterintake_date,"timeCreated": waterintake_time});
-                                    print("Added Water Intake Successfully! " + uid);
-                                    if(totalWater >= 1500){
-                                      print(">1500");
-                                      final readAddinf = databaseReference.child("users/"+ uid+"/vitals/additional_info");
-                                      readAddinf.once().then((DataSnapshot snapshot) {
-                                        Additional_Info userInfo = Additional_Info.fromJson(jsonDecode(jsonEncode(snapshot.value)));
-                                        bool check2 = false;
-                                        print(snapshot.value);
-                                        for(var i = 0; i < userInfo.other_disease.length; i++){
-                                          if(userInfo.other_disease[i].contains("Heart Failure")) check2 = true;
-                                        }
-                                        for(var i = 0 ; i < userInfo.disease.length ; i++ ){
-                                          if(userInfo.disease[i].contains("Heart Failure") ){
-                                            check2 = true;
-                                          }
-                                        }
-                                        if(check2 ==true ){
-                                          addtoRecommendation("The recommended daily water intake for patients with congestive heart failure is 1500 milliliter a day. You have already exceeded the threshold for today. Please limit your water intake for the rest of the day.",
-                                              "Limit your water",
-                                              "3",
-                                              "None",
-                                              "Immediate");
-                                        }
-                                      });
-                                    }
-                                  });
-
-                                }
-                                readWaterGoal.once().then((DataSnapshot weightgoalsnapshot) {
-                                  Map<String, dynamic> temp3 = jsonDecode(jsonEncode(weightgoalsnapshot.value));
-                                  print(temp3);
-                                  water_goal = Water_Goal.fromJson(temp3);
                                 });
-
+                              }
+                              readWaterGoal
+                                  .once()
+                                  .then((DataSnapshot weightgoalsnapshot) {
+                                Map<String, dynamic> temp3 = jsonDecode(
+                                    jsonEncode(weightgoalsnapshot.value));
+                                print(temp3);
+                                water_goal = Water_Goal.fromJson(temp3);
+                              });
                             });
-                            Future.delayed(const Duration(milliseconds: 1000), (){
-                              waterintake_list.add(new WaterIntake(water_intake: water_intake, timeCreated: timeformat.parse(waterintake_time), dateCreated: format.parse(waterintake_date)));
-                              for(var i=0;i<waterintake_list.length/2;i++){
+                            Future.delayed(const Duration(milliseconds: 1000),
+                                () {
+                              waterintake_list.add(new WaterIntake(
+                                  water_intake: water_intake,
+                                  timeCreated:
+                                      timeformat.parse(waterintake_time),
+                                  dateCreated: format.parse(waterintake_date)));
+                              for (var i = 0;
+                                  i < waterintake_list.length / 2;
+                                  i++) {
                                 var temp = waterintake_list[i];
-                                waterintake_list[i] = waterintake_list[waterintake_list.length-1-i];
-                                waterintake_list[waterintake_list.length-1-i] = temp;
+                                waterintake_list[i] = waterintake_list[
+                                    waterintake_list.length - 1 - i];
+                                waterintake_list[
+                                    waterintake_list.length - 1 - i] = temp;
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, waterintake_list);
+                              Navigator.pop(
+                                  context,
+                                  BoxedReturns(
+                                      dialog:
+                                          PopUpBox(titleP, messageP, redirectP),
+                                      WI_result: waterintake_list));
+                              // Navigator.pop(context, waterintake_list);
                             });
-
-                          } catch(e) {
+                          } catch (e) {
                             print("you got an error! $e");
                           }
                           // Navigator.pop(context);
@@ -357,96 +452,142 @@ class add_waterIntakeState extends State<add_water_intake> {
                       )
                     ],
                   ),
-
-                ]
-            )
-        )
-    );
+                ])));
   }
+
   void getNotifs2(String uid) {
     print("GET NOTIF");
     notifsList.clear();
     final readBP = databaseReference.child('users/' + uid + '/notifications/');
-    readBP.once().then((DataSnapshot snapshot){
+    readBP.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
-      if(temp != null)
+      if (temp != null)
         temp.forEach((jsonString) {
           notifsList.add(RecomAndNotif.fromJson(jsonString));
         });
     });
   }
-  void addtoNotif(String message, String title, String priority,String uid, String redirect){
-    print ("ADDED TO NOTIFICATIONS");
+
+  void addtoNotif(String message, String title, String priority, String uid,
+      String redirect) {
+    print("ADDED TO NOTIFICATIONS");
     getNotifs2(uid);
     final ref = databaseReference.child('users/' + uid + '/notifications/');
     ref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + 0.toString());
-        ref.set({"id": 0.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "heartrate", "redirect": redirect});
-      }else{
+      if (snapshot.value == null) {
+        final ref = databaseReference
+            .child('users/' + uid + '/notifications/' + 0.toString());
+        ref.set({
+          "id": 0.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": "$hours:$min",
+          "rec_date": date,
+          "category": "heartrate",
+          "redirect": redirect
+        });
+      } else {
         // count = recommList.length--;
-        final ref = databaseReference.child('users/' + uid + '/notifications/' + notifsList.length.toString());
-        ref.set({"id": notifsList.length.toString(),"message": message, "title":title, "priority": priority, "rec_time": "$hours:$min",
-          "rec_date": date, "category": "heartrate", "redirect": redirect});
+        final ref = databaseReference.child(
+            'users/' + uid + '/notifications/' + notifsList.length.toString());
+        ref.set({
+          "id": notifsList.length.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": "$hours:$min",
+          "rec_date": date,
+          "category": "heartrate",
+          "redirect": redirect
+        });
       }
     });
   }
-  void addtoRecommendation(String message, String title, String priority, String redirect,String category){
+
+  void addtoRecommendation(String message, String title, String priority,
+      String redirect, String category) {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final notifref = databaseReference.child('users/' + uid + '/recommendations/');
+    final notifref =
+        databaseReference.child('users/' + uid + '/recommendations/');
     getRecomm();
     notifref.once().then((DataSnapshot snapshot) {
-      if(snapshot.value == null){
-        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + 0.toString());
-        notifRef.set({"id": 0.toString(), "message": message, "title":title, "priority": priority,
-          "rec_time": "$hours:$min", "rec_date": date, "category": category, "redirect": redirect});
-      }else{
+      if (snapshot.value == null) {
+        final notifRef = databaseReference
+            .child('users/' + uid + '/recommendations/' + 0.toString());
+        notifRef.set({
+          "id": 0.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": "$hours:$min",
+          "rec_date": date,
+          "category": category,
+          "redirect": redirect
+        });
+      } else {
         // count = recommList.length--;
-        final notifRef = databaseReference.child('users/' + uid + '/recommendations/' + (recommList.length--).toString());
-        notifRef.set({"id": recommList.length.toString(), "message": message, "title":title, "priority": priority,
-          "rec_time": "$hours:$min", "rec_date": date, "category": category, "redirect": redirect});
+        final notifRef = databaseReference.child('users/' +
+            uid +
+            '/recommendations/' +
+            (recommList.length--).toString());
+        notifRef.set({
+          "id": recommList.length.toString(),
+          "message": message,
+          "title": title,
+          "priority": priority,
+          "rec_time": "$hours:$min",
+          "rec_date": date,
+          "category": category,
+          "redirect": redirect
+        });
       }
     });
   }
+
   void getRecomm() {
     recommList.clear();
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/recommendations/');
-    readBP.once().then((DataSnapshot snapshot){
+    final readBP =
+        databaseReference.child('users/' + uid + '/recommendations/');
+    readBP.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         recommList.add(RecomAndNotif.fromJson(jsonString));
       });
     });
   }
+
   void initNotif() {
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");
     TimeOfDay time = TimeOfDay.now();
-    hours = time.hour.toString().padLeft(2,'0');
-    min = time.minute.toString().padLeft(2,'0');
+    hours = time.hour.toString().padLeft(2, '0');
+    min = time.minute.toString().padLeft(2, '0');
     print("DATE = " + date);
     print("TIME = " + "$hours:$min");
 
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readProfile = databaseReference.child('users/' + uid + '/personal_info/');
-    readProfile.once().then((DataSnapshot snapshot){
+    final readProfile =
+        databaseReference.child('users/' + uid + '/personal_info/');
+    readProfile.once().then((DataSnapshot snapshot) {
       Map<String, dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((key, jsonString) {
         thisuser = Users.fromJson(temp);
       });
     });
   }
+
   void getWaterIntake() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readWaterIntake = databaseReference.child('users/' + uid + '/goal/water_intake/');
-    readWaterIntake.once().then((DataSnapshot snapshot){
+    final readWaterIntake =
+        databaseReference.child('users/' + uid + '/goal/water_intake/');
+    readWaterIntake.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         waterintake_list.add(WaterIntake.fromJson(jsonString));
@@ -504,7 +645,7 @@ class add_waterIntakeState extends State<add_water_intake> {
   //   });
   // }
 
-  int getAge (DateTime birthday) {
+  int getAge(DateTime birthday) {
     DateTime today = new DateTime.now();
     String days1 = "";
     String month1 = "";
@@ -520,12 +661,11 @@ class add_waterIntakeState extends State<add_water_intake> {
     print(age);
 
     // dec < jan
-    if(m1 < m){
+    if (m1 < m) {
       print("month --");
       age--;
-    }
-    else if (m1 == m){
-      if(d1 < d){
+    } else if (m1 == m) {
+      if (d1 < d) {
         print("day --");
         age--;
       }

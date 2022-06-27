@@ -10,17 +10,19 @@ import 'add_blood_pressure.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 import 'package:collection/collection.dart';
 
-
 class blood_pressure extends StatefulWidget {
   final List<Blood_Pressure> bplist;
-  blood_pressure({Key key, this.bplist}): super(key: key);
+  blood_pressure({Key key, this.bplist}) : super(key: key);
   @override
   _blood_pressureState createState() => _blood_pressureState();
 }
 
 class _blood_pressureState extends State<blood_pressure> {
   // final database = FirebaseDatabase.instance.reference();
-  final databaseReference = FirebaseDatabase(databaseURL: "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/").reference();
+  final databaseReference = FirebaseDatabase(
+          databaseURL:
+              "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/")
+      .reference();
   final AuthService _auth = AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -32,27 +34,22 @@ class _blood_pressureState extends State<blood_pressure> {
   bool _isSortAsc = true;
   List<bool> _selected = [];
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     bptemp.clear();
     _selected.clear();
     getBloodPressure();
-    Future.delayed(const Duration(milliseconds: 2000), (){
+    Future.delayed(const Duration(milliseconds: 2000), () {
       setState(() {
         _selected = List<bool>.generate(bptemp.length, (int index) => false);
         print("setstate");
       });
     });
-
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     String defaultFontFamily = 'Roboto-Light.ttf';
     double defaultFontSize = 14;
     double defaultIconSize = 17;
@@ -61,12 +58,9 @@ class _blood_pressureState extends State<blood_pressure> {
       key: _scaffoldKey,
       backgroundColor: const Color(0xFFF2F3F8),
       appBar: AppBar(
-        iconTheme: IconThemeData(
-            color: Colors.black
-        ),
-        title: const Text('Blood Pressure', style: TextStyle(
-            color: Colors.black
-        )),
+        iconTheme: IconThemeData(color: Colors.black),
+        title:
+            const Text('Blood Pressure', style: TextStyle(color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
@@ -99,49 +93,108 @@ class _blood_pressureState extends State<blood_pressure> {
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () {
-                  showModalBottomSheet(context: context,
+                  showModalBottomSheet(
+                    context: context,
                     isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_blood_pressure(thislist: bptemp),
+                    builder: (context) => SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: add_blood_pressure(thislist: bptemp),
+                      ),
                     ),
-                    ),
-                  ).then((value) => setState((){
-                    print("setstate blood_pressure");
-                    if(value != null){
-                      bptemp = value;
-                      _selected = List<bool>.generate(bptemp.length, (int index) => false);
-
+                  ).then((value) {
+                    print("AFTER ADD");
+                    print("VALUE\n" + value.toString());
+                    var value1 = value;
+                    BoxedReturns thisReturned = value;
+                    bptemp = thisReturned.BP_result; // update list
+                    if (thisReturned.dialog.message == null ||
+                        thisReturned.dialog.title == null ||
+                        thisReturned.dialog.redirect == null) {
+                      Future.delayed(const Duration(milliseconds: 2000), () {
+                        setState(() {
+                          _selected = List<bool>.generate(
+                              bptemp.length, (int index) => false);
+                        });
+                      });
+                    } else {
+                      ShowDialogRecomm(thisReturned.dialog.message,
+                              thisReturned.dialog.title)
+                          .then((value) {
+                        print("AFTER DIALOG");
+                        if (value1 != null) {
+                          print("VALUE NOT NULL");
+                          Future.delayed(const Duration(milliseconds: 2000),
+                              () {
+                            setState(() {
+                              _selected = List<bool>.generate(
+                                  bptemp.length, (int index) => false);
+                            });
+                          });
+                        }
+                      });
                     }
-                  }));
+                  });
+
+                  // ((value) => setState((){
+                  //   print("setstate blood_pressure");
+                  //   if(value != null){
+                  //     bptemp = value;
+                  //     _selected = List<bool>.generate(bptemp.length, (int index) => false);
+
+                  //   }
+                  // }));
                 },
                 child: Icon(
                   Icons.add,
                 ),
-              )
-          ),
+              )),
         ],
       ),
-         body: SingleChildScrollView(
-           scrollDirection: Axis.vertical,
-           child: Scrollbar(
-             child: SingleChildScrollView(
-               scrollDirection: Axis.horizontal,
-               child: _createDataTable()
-
-             ),
-           ),
-
-         ),
-
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Scrollbar(
+          child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal, child: _createDataTable()),
+        ),
+      ),
     );
   }
-  String getDateFormatted (String date){
+
+  Future<void> ShowDialogRecomm(String desc, String title) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$title'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('$desc'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Got it!'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String getDateFormatted(String date) {
     var dateTime = DateTime.parse(date);
     return "${dateTime.month}/${dateTime.day}/${dateTime.year}\r\r";
   }
-  String getTimeFormatted (String date){
+
+  String getTimeFormatted(String date) {
     print(date);
     var dateTime = DateTime.parse(date);
     var hours = dateTime.hour.toString().padLeft(2, "0");
@@ -150,21 +203,18 @@ class _blood_pressureState extends State<blood_pressure> {
   }
 
   Color getMyColor(String indication) {
-    if(indication == 'normal'){
+    if (indication == 'normal') {
       return Colors.green;
-    }
-    else if(indication == 'low'){
+    } else if (indication == 'low') {
       return Colors.blue;
-
-    }
-    else
+    } else
       return Colors.red;
   }
+
   Color getMyColor2(String indication) {
-    if(indication == 'Active'){
+    if (indication == 'Active') {
       return Colors.red;
-    }
-    else if(indication == 'Resting'){
+    } else if (indication == 'Resting') {
       return Colors.blue;
     }
   }
@@ -179,13 +229,10 @@ class _blood_pressureState extends State<blood_pressure> {
       dataRowHeight: 80,
       columnSpacing: 35,
       showBottomBorder: true,
-      headingTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white
-      ),
-      headingRowColor: MaterialStateProperty.resolveWith(
-              (states) => Colors.lightBlue
-      ),
+      headingTextStyle:
+          TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      headingRowColor:
+          MaterialStateProperty.resolveWith((states) => Colors.lightBlue),
     );
   }
 
@@ -205,17 +252,11 @@ class _blood_pressureState extends State<blood_pressure> {
           });
         },
       ),
-
-
-
       DataColumn(label: Text('Time')),
       DataColumn(label: Text('BP')),
       DataColumn(label: Text('Implication')),
       DataColumn(label: Text('Status'))
-
-
     ];
-
   }
 
   // List<DataRow> _createRows() {
@@ -242,38 +283,49 @@ class _blood_pressureState extends State<blood_pressure> {
   List<DataRow> _createRows() {
     return bptemp
         .mapIndexed((index, bp) => DataRow(
-        cells: [
-          DataCell(Text(getDateFormatted(bp.bp_date.toString()))),
-          DataCell(Text(getTimeFormatted(bp.bp_time.toString()))),
-          DataCell(Text(bp.systolic_pressure +'/'+ bp.diastolic_pressure, style: TextStyle(),)),
-          DataCell(Text(bp.pressure_level, style: TextStyle(color: getMyColor(bp.pressure_level)),)),
-          DataCell(Text(bp.bp_status, style: TextStyle(color: getMyColor2(bp.bp_status)),))
-
-        ],
-        selected: _selected[index],
-        onSelectChanged: (bool selected) {
-          setState(() {
-            _selected[index] = selected;
-          });
-        }))
+                cells: [
+                  DataCell(Text(getDateFormatted(bp.bp_date.toString()))),
+                  DataCell(Text(getTimeFormatted(bp.bp_time.toString()))),
+                  DataCell(Text(
+                    bp.systolic_pressure + '/' + bp.diastolic_pressure,
+                    style: TextStyle(),
+                  )),
+                  DataCell(Text(
+                    bp.pressure_level,
+                    style: TextStyle(color: getMyColor(bp.pressure_level)),
+                  )),
+                  DataCell(Text(
+                    bp.bp_status,
+                    style: TextStyle(color: getMyColor2(bp.bp_status)),
+                  ))
+                ],
+                selected: _selected[index],
+                onSelectChanged: (bool selected) {
+                  setState(() {
+                    _selected[index] = selected;
+                  });
+                }))
         .toList();
   }
+
   void getBloodPressure() {
     final User user = auth.currentUser;
     final uid = user.uid;
-    final readBP = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/');
-    readBP.once().then((DataSnapshot snapshot){
+    final readBP = databaseReference
+        .child('users/' + uid + '/vitals/health_records/bp_list/');
+    readBP.once().then((DataSnapshot snapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
       temp.forEach((jsonString) {
         bptemp.add(Blood_Pressure.fromJson(jsonString));
       });
-      for(var i=0;i<bptemp.length/2;i++){
+      for (var i = 0; i < bptemp.length / 2; i++) {
         var temp = bptemp[i];
-        bptemp[i] = bptemp[bptemp.length-1-i];
-        bptemp[bptemp.length-1-i] = temp;
+        bptemp[i] = bptemp[bptemp.length - 1 - i];
+        bptemp[bptemp.length - 1 - i] = temp;
       }
     });
   }
+
   Future<void> _showMyDialogDelete() async {
     return showDialog<void>(
       context: context,
@@ -284,7 +336,6 @@ class _blood_pressureState extends State<blood_pressure> {
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-
                 Text('Are you sure you want to delete these record/s?'),
               ],
             ),
@@ -297,27 +348,36 @@ class _blood_pressureState extends State<blood_pressure> {
                 final uid = user.uid;
                 int initialLength = bptemp.length;
                 List<int> deleteList = [];
-                for(int i = 0; i < bptemp.length; i++){
-                  if(_selected[i]){
+                for (int i = 0; i < bptemp.length; i++) {
+                  if (_selected[i]) {
                     deleteList.add(i);
                   }
                 }
-                deleteList.sort((a,b) => b.compareTo(a));
-                for(int i = 0; i < deleteList.length; i++){
+                deleteList.sort((a, b) => b.compareTo(a));
+                for (int i = 0; i < deleteList.length; i++) {
                   bptemp.removeAt(deleteList[i]);
                 }
-                for(int i = 1; i <= initialLength; i++){
-                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + i.toString());
+                for (int i = 1; i <= initialLength; i++) {
+                  final bpRef = databaseReference.child('users/' +
+                      uid +
+                      '/vitals/health_records/bp_list/' +
+                      i.toString());
                   bpRef.remove();
                 }
-                for(int i = 0; i < bptemp.length; i++){
-                  final bpRef = databaseReference.child('users/' + uid + '/vitals/health_records/bp_list/' + (i+1).toString());
+                for (int i = 0; i < bptemp.length; i++) {
+                  final bpRef = databaseReference.child('users/' +
+                      uid +
+                      '/vitals/health_records/bp_list/' +
+                      (i + 1).toString());
                   bpRef.set({
                     "systolic_pressure": bptemp[i].systolic_pressure.toString(),
-                    "diastolic_pressure": bptemp[i].diastolic_pressure.toString(),
+                    "diastolic_pressure":
+                        bptemp[i].diastolic_pressure.toString(),
                     "pressure_level": bptemp[i].pressure_level.toString(),
-                    "bp_date": "${bptemp[i].bp_date.month.toString().padLeft(2,"0")}/${bptemp[i].bp_date.day.toString().padLeft(2,"0")}/${bptemp[i].bp_date.year}",
-                    "bp_time": "${bptemp[i].bp_time.hour.toString().padLeft(2,"0")}:${bptemp[i].bp_time.minute.toString().padLeft(2,"0")}",
+                    "bp_date":
+                        "${bptemp[i].bp_date.month.toString().padLeft(2, "0")}/${bptemp[i].bp_date.day.toString().padLeft(2, "0")}/${bptemp[i].bp_date.year}",
+                    "bp_time":
+                        "${bptemp[i].bp_time.hour.toString().padLeft(2, "0")}:${bptemp[i].bp_time.minute.toString().padLeft(2, "0")}",
                     "bp_status": bptemp[i].bp_status.toString()
                   });
                 }
@@ -336,6 +396,4 @@ class _blood_pressureState extends State<blood_pressure> {
       },
     );
   }
-
-
 }

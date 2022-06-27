@@ -1230,8 +1230,17 @@ class BoxedReturns {
   final PopUpBox dialog;
   final Lab_Result LR_result;
   final List<Blood_Glucose> BG_result;
+  final List<Blood_Pressure> BP_result;
+  final List<WaterIntake> WI_result;
+  final List<Weight> WE_result;
 
-  BoxedReturns({this.dialog, this.LR_result, this.BG_result});
+  BoxedReturns(
+      {this.WE_result,
+      this.WI_result,
+      this.BP_result,
+      this.dialog,
+      this.LR_result,
+      this.BG_result});
 }
 
 class PopUpBox {

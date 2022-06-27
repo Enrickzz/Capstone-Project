@@ -561,8 +561,8 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                       dialog: PopUpBox(titleP,
                                                           messageP, redirectP),
                                                       BG_result: glucose_list));
-                                              Navigator.pop(
-                                                  context, glucose_list);
+                                              // Navigator.pop(
+                                              //     context, glucose_list);
                                             });
                                           } catch (e) {
                                             print("you got an error! $e");
