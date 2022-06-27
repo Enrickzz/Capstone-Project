@@ -27,12 +27,10 @@ class MyApp extends StatelessWidget {
 }
 
 class DoctorAddPatient extends StatefulWidget {
-  DoctorAddPatient({Key key, this.title, this.nameslist, this.diseaseList, this.uidList, this.pp_img}) : super(key: key);
-  final List<String> uidList;
-  final List nameslist;
+  DoctorAddPatient({Key key, this.title, this.patients, this.diseaseList}) : super(key: key);
+  final List patients;
   final List diseaseList;
   final String title;
-  final List pp_img;
 
   @override
   _DoctorAddPatientState createState() => _DoctorAddPatientState();
@@ -65,12 +63,8 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   bool searchPatient = false;
   int pcount = 1;
   int plistcount = 1;
-
-  List namestemp;
   List diseasetemp;
-  List<String> uidtemp;
-  List pp_img;
-
+  List patients;
   List<RecomAndNotif> notifsList = new List<RecomAndNotif>();
   List<RecomAndNotif> recommList = new List<RecomAndNotif>();
   String date;
@@ -81,10 +75,8 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
   void initState() {
     initNotif();
 
-    namestemp = widget.nameslist;
+    patients = widget.patients;
     diseasetemp = widget.diseaseList;
-    uidtemp = widget.uidList;
-    pp_img = widget.pp_img;
     controller = TabController(length: 2, vsync: this);
     controller.addListener(() {
       setState(() {});
@@ -553,8 +545,6 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
           List<Connection> tempDcon = [];
           readDoctorConnection.once().then((DataSnapshot snap){
             List<dynamic> temp4 = jsonDecode(jsonEncode(snap.value));
-            print("THIS IS TEMP4");
-            print(temp4);
             if(temp4 != null){
               temp4.forEach((jsonString) {
                 tempDcon.add(Connection.fromJson2(jsonString));
@@ -620,6 +610,12 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
             addDoctorList.set({
               "uid": userUID,
             });
+            final readPatient = databaseReference.child('users/' + userUID + '/personal_info/');
+            readPatient.once().then((DataSnapshot snapshot){
+              var temp1 = jsonDecode(jsonEncode(snapshot.value));
+              patient = Users.fromJson(temp1);
+            });
+            patients.add(patient);
         });
       }
 
@@ -671,7 +667,7 @@ class _DoctorAddPatientState extends State<DoctorAddPatient> with SingleTickerPr
                   // print('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
                   // Navigator.pushReplacement(context,
                   //     MaterialPageRoute(builder: (context) => PatientList(nameslist: namestemp,diseaselist: diseasetemp, uidList: uidtemp, pp_img: pp_img)));
-                  Navigator.pop(context, userUID);
+                  Navigator.pop(context, patients);
                 });
 
               },

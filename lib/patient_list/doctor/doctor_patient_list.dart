@@ -29,12 +29,10 @@ class MyApp extends StatelessWidget {
 }
 
 class PatientList extends StatefulWidget {
-  PatientList({Key key, this.title, this.nameslist, this.diseaselist, this.uidList, this.pp_img}) : super(key: key);
-  final List nameslist;
+  PatientList({Key key, this.title, this.patients, this.diseaselist}) : super(key: key);
+  final List patients;
   final List diseaselist;
-  final List<String> uidList;
   final String title;
-  final List pp_img;
 
   @override
   _PatientListState createState() => _PatientListState();
@@ -47,12 +45,9 @@ class _PatientListState extends State<PatientList>  {
   Users doctor = new Users(email: "", firstname: "", lastname: "");
   List<Connection> doctor_connections = [];
 
-  List<String> uidlist = [];
-  List<Users> userlist = [];
+  List<Users> patients = [];
   List<Uid> patient_list = [];
   List<Additional_Info> userAddInfo = [];
-  List names = [];
-  List pp_imgs = [];
   List diseases=[];
   List<String> unique_uidlist = [];
   List<String> status = [];
@@ -92,36 +87,25 @@ class _PatientListState extends State<PatientList>  {
       });
     }
     super.initState();
-    if(widget.nameslist != null){
-      if(widget.nameslist.isNotEmpty){
+    if(widget.patients != null){
+      if(widget.patients.isNotEmpty){
         print("WIDGET NAMES NOT EMPTY");
-        names = widget.nameslist;
+        patients = widget.patients;
         diseases = widget.diseaselist;
-        uidlist = widget.uidList;
-        pp_imgs = widget.pp_img;
         List temp = [];
-        List temp2 = [];
-        List temp3 = [];
-        temp = diseases;
-        temp2 = uidlist;
-        temp3 = pp_imgs;
-        uidlist = temp2.toSet().toList();
-        pp_imgs = temp3.toSet().toList();
+        temp = patients;
+        patients = temp.toSet().toList();
+
       }
     }else{
-      pp_imgs.clear();
+      patients.clear();
       getPatients();
       isLoading = true;
     }
 
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
-        for(int i = 0; i < names.length; i++){
-          print(names[i]);
-        }
-        for(int i = 0; i < diseases.length; i++){
-          print(diseases[i]);
-        }
+        arrangeActive(patients);
         isLoading = false;
       });
 
@@ -159,7 +143,7 @@ class _PatientListState extends State<PatientList>  {
           ? Center(
         child: CircularProgressIndicator(),
       ): new ListView.builder(
-          itemCount: names.length,
+          itemCount: patients.length,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) =>Container(
             width: MediaQuery.of(context).size.width,
@@ -181,10 +165,10 @@ class _PatientListState extends State<PatientList>  {
                         width: 50,
                         child: ClipOval(
                           // child:Image.asset("assets/images/blank_person.png",
-                            child: checkimage(pp_imgs[index])),
+                            child: checkimage(patients[index].pp_img)),
                       ),
                     ),
-                      if(status[index] == "Active")...[
+                      if(patients[index].status == "Active")...[
                         Positioned(
                           left:35,
                           top:34,
@@ -196,7 +180,7 @@ class _PatientListState extends State<PatientList>  {
                                 )),
                           ),
                         ),
-                      ] else if(status[index] == "Hospitalized")... [
+                      ] else if(patients[index].status == "Hospitalized")... [
                         Positioned(
                           left:35,
                           top:34,
@@ -223,7 +207,7 @@ class _PatientListState extends State<PatientList>  {
                       ]
                     ]
                   ),
-                  title: Text(names[index],
+                  title: Text(patients[index].firstname +" "+ patients[index].lastname,
                       style:TextStyle(
                         color: Colors.black,
                         fontSize: 14.0,
@@ -243,7 +227,7 @@ class _PatientListState extends State<PatientList>  {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => view_patient_profile(userUID: uidlist[index])),
+                      MaterialPageRoute(builder: (context) => view_patient_profile(userUID: patients[index].uid)),
                     );
                   }
               ),
@@ -304,16 +288,8 @@ class _PatientListState extends State<PatientList>  {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DoctorAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist, pp_img: pp_imgs)),
-              ).then((value) {
-                if(value != null){
-                  setState(() {
-                    uidlist.add(value);
-                  });
-                }
-
-              });
-            },
+                MaterialPageRoute(builder: (context) => DoctorAddPatient(patients: patients,diseaseList: diseases)),);
+              },
           ),
 
           const Divider(
@@ -445,21 +421,18 @@ class _PatientListState extends State<PatientList>  {
       readPatientList.once().then((DataSnapshot datasnapshot){
         List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
         print(temp);
+        print("LIST OF USER UID HERE");
         temp.forEach((jsonString) {
           patient_list.add(Uid.fromJson(jsonString));
         });
-        for(var i = 0; i < patient_list.length; i++){
-          uidlist.add(patient_list[i].uid);
-        }
-        for(int i = 0; i < uidlist.length; i++){
-          final readPatient = databaseReference.child('users/' + uidlist[i] + '/personal_info/');
-          final readInfo = databaseReference.child('users/' + uidlist[i] + '/vitals/additional_info/');
+        for(int i = 0; i < patient_list.length; i++){
+          final readPatient = databaseReference.child('users/' + patient_list[i].uid + '/personal_info/');
+          final readInfo = databaseReference.child('users/' + patient_list[i].uid + '/vitals/additional_info/');
           readPatient.once().then((DataSnapshot pshot){
-            var temp1 = jsonDecode(jsonEncode(pshot.value));
-            Users patient = Users.fromJson(temp1);
-            names.add(patient.firstname + " " + patient.lastname);
-            pp_imgs.add(patient.pp_img.toString());
-            status.add(patient.status);
+            var temp5 = jsonDecode(jsonEncode(pshot.value));
+            print(temp5);
+            Users patient = Users.fromJson(temp5);
+            patients.add(patient);
             readInfo.once().then((DataSnapshot snapshot){
               var temp2 = jsonDecode(jsonEncode(snapshot.value));
               print(temp2);
@@ -480,18 +453,8 @@ class _PatientListState extends State<PatientList>  {
               temp3 = diseases;
               diseases.add(diseaseName);
             });
-            List temp = [];
-            List temp2 = [];
-
-            temp = names;
-            temp2 = pp_imgs;
           });
         }
-      });
-    }).then((value) {
-      setState(() {
-        isLoading = false;
-        print("FIXED");
       });
     });
   }
@@ -517,6 +480,33 @@ class _PatientListState extends State<PatientList>  {
           height: 50,
           fit: BoxFit.cover);
     }
+  }
+  void arrangeActive(List<Users> patients){
+    List<Users> active = [];
+    List<Users> hospitalized = [];
+    List<Users> inactive = [];
+    for(int j = 0; j < patients.length; j++){
+      if(patients[j].status == "Active"){
+        active.add(patients[j]);
+      }
+      else if (patients[j].status == "Hospitalized"){
+        hospitalized.add(patients[j]);
+      }
+      else if(patients[j].status == "Inactive"){
+        inactive.add(patients[j]);
+      }
+    }
+    patients.clear();
+    for(int i = 0; i < active.length; i++){
+      patients.add(active[i]);
+    }
+    for(int i = 0; i < hospitalized.length; i++){
+      patients.add(hospitalized[i]);
+    }
+    for(int i = 0; i < inactive.length; i++){
+      patients.add(inactive[i]);
+    }
+    print("AAAAAAAAAAAAAAA");
   }
 
 }

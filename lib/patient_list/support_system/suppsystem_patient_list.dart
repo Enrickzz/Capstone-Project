@@ -29,11 +29,9 @@ class MyApp extends StatelessWidget {
 }
 
 class PatientListSupportSystemView extends StatefulWidget {
-  PatientListSupportSystemView({Key key, this.title, this.nameslist, this.diseaselist, this.uidList, this.pp_img}) : super(key: key);
-  final List nameslist;
+  PatientListSupportSystemView({Key key, this.title, this.patients, this.diseaselist}) : super(key: key);
+  final List patients;
   final List diseaselist;
-  final List<String> uidList;
-  final List pp_img;
   final String title;
 
   @override
@@ -48,12 +46,12 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
   List<Connection> supp_connections = [];
 
   List<String> uidlist = [];
-  List<Users> userlist=[];
+  List<Users> patients=[];
   List<Additional_Info> userAddInfo =[];
-  List names = [];
-  List pp_imgs = [];
+  // List names = [];
+  // List pp_imgs = [];
   List diseases=[];
-  List<String> status = [];
+  // List<String> status = [];
 
   //for drawer
   var imagesVisible = true;
@@ -88,39 +86,21 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
       cardContent.add(cardData);
     }
 
-    if(widget.nameslist != null){
-
-      if(widget.nameslist.isNotEmpty){
-        names = widget.nameslist;
+    if(widget.patients != null){
+      if(widget.patients.isNotEmpty){
+        patients = widget.patients;
         diseases = widget.diseaselist;
-        uidlist = widget.uidList;
-        pp_imgs = widget.pp_img;
         List temp = [];
-        List temp2 = [];
-        List temp3 = [];
-        temp = diseases;
-        temp2 = uidlist;
-        temp3 = pp_imgs;
-        uidlist = temp2.toSet().toList();
-        pp_imgs = temp3.toSet().toList();
+        temp = patients;
+        patients = temp.toSet().toList();
       }
     }else{
-      pp_imgs.clear();
+      patients.clear();
       getPatients();
       isLoading = true;
     }
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
-        print("HEEEEEEEEEEERERERERERE");
-        print(names.length);
-        for(int i = 0; i < names.length; i++){
-          print("HEEEEEEEEEEERERERERERE");
-          print(names[i]);
-        }
-        for(int i = 0; i < diseases.length; i++){
-          print("HEEEEasfsafasasdE");
-          print(diseases[i]);
-        }
         isLoading = false;
       });
 
@@ -159,7 +139,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
             ? Center(
           child: CircularProgressIndicator(),
         ): new ListView.builder(
-            itemCount: names.length,
+            itemCount: patients.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) =>Container(
               width: MediaQuery.of(context).size.width,
@@ -181,10 +161,10 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
                             width: 50,
                             child: ClipOval(
                               // child:Image.asset("assets/images/blank_person.png",
-                                child: checkimage(pp_imgs[index])),
+                                child: checkimage(patients[index].pp_img)),
                           ),
                         ),
-                          if(status[index] == "Active")...[
+                          if(patients[index].status == "Active")...[
                             Positioned(
                               left:35,
                               top:34,
@@ -196,7 +176,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
                                     )),
                               ),
                             ),
-                          ] else if(status[index] == "Hospitalized")... [
+                          ] else if(patients[index].status == "Hospitalized")... [
                             Positioned(
                               left:35,
                               top:34,
@@ -224,7 +204,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
 
                         ]
                     ),
-                    title: Text(names[index],
+                    title: Text(patients[index].firstname +" "+ patients[index].lastname,
                         style:TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,
@@ -244,7 +224,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => suppsystem_view_patient_profile(userUID: uidlist[index])),
+                        MaterialPageRoute(builder: (context) => suppsystem_view_patient_profile(userUID: patients[index].uid)),
                       );
 
 
@@ -312,7 +292,7 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SupportAddPatient(nameslist: names,diseaseList: diseases, uidList: uidlist, pp_img: pp_imgs)),
+                MaterialPageRoute(builder: (context) => SupportAddPatient(patients: patients,diseaseList: diseases)),
               );
             },
           ),
@@ -458,13 +438,9 @@ class _PatientListState extends State<PatientListSupportSystemView>  {
           readPatient.once().then((DataSnapshot snapshot){
             var temp1 = jsonDecode(jsonEncode(snapshot.value));
             Users patient = Users.fromJson(temp1);
-            names.add(patient.firstname + " " + patient.lastname);
-            pp_imgs.add(patient.pp_img.toString());
-            status.add(patient.status);
+            patients.add(patient);
             readInfo.once().then((DataSnapshot snapshot){
               var temp2 = jsonDecode(jsonEncode(snapshot.value));
-              print(temp2);
-              //userAddInfo.add(Additional_Info.fromJson(temp2));
               String diseaseName = "";
               Additional_Info info = Additional_Info.fromJson4(temp2);
               for(int j = 0; j < info.disease.length; j++){
