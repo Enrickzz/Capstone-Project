@@ -12,6 +12,7 @@ import 'package:my_app/ui_view/exercises/steps_view.dart';
 import 'package:my_app/ui_view/fitbit_connect.dart';
 import 'package:my_app/ui_view/area_list_view.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/ui_view/title_view.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -277,6 +278,32 @@ class _my_exercises_doctorState extends State<my_exercises_doctor>
             ),
           );
         }
+
+        listViews.add(
+          TitleView(
+            titleTxt: 'Exercise and Activity Plans',
+            subTxt: 'View Plan',
+            redirect: 10,
+            userType: "Doctor",
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+            userUID: widget.userUID,
+          ),
+        );
+
+        listViews.add(
+          TitleView(
+            titleTxt: "Patient's Workouts",
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: widget.animationController,
+                curve:
+                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
 
         listViews.add(
           AreaListView(

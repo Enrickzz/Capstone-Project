@@ -1,5 +1,6 @@
 import 'package:my_app/fitness_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/goal_tab/exercises/exercise_screen_support.dart';
 import 'package:my_app/goal_tab/meals/meals_list_doctor.dart';
 import 'package:my_app/goal_tab/meals/meals_list_support.dart';
 import 'package:my_app/goal_tab/meals/nutritionix_meals_support.dart';
@@ -14,7 +15,9 @@ import 'package:my_app/goal_tab/weight/weight_list_doctor_view.dart';
 import 'package:my_app/goal_tab/weight/weight_list_patient_view.dart';
 import 'package:my_app/goal_tab/meals/nutritionix_meals.dart';
 import 'package:my_app/goal_tab/weight/weight_list_support_view.dart';
+import 'package:my_app/management_plan/exercise_plan/exercise_plan_doctor_view.dart';
 import 'package:my_app/management_plan/exercise_plan/exercise_plan_patient_view.dart';
+import 'package:my_app/management_plan/exercise_plan/exercise_plan_supp_view.dart';
 import 'package:my_app/management_plan/food_plan/food_plan_doctor_view.dart';
 import 'package:my_app/management_plan/food_plan/food_plan_patient_view.dart';
 import 'package:my_app/goal_tab/exercises/exercise_screen.dart';
@@ -95,11 +98,20 @@ class TitleView extends StatelessWidget {
                               ),
                               onTap: () async{
                                 if (redirect == 1) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ExerciseScreen(animationController: animationController)),
-                                  );
+                                  if (userType == "Patient") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ExerciseScreen(animationController: animationController)),
+                                    );
+                                  }
+                                  else if (userType == "Support") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ExerciseScreenSupport(animationController: animationController, userUID: userUID)),
+                                    );
+                                  }
                                 } else if (redirect == 2) {
                                   if (userType == "Patient") {
                                     Navigator.push(
@@ -230,11 +242,27 @@ class TitleView extends StatelessWidget {
                                   );
                                 }
                                 else if (redirect == 10) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => exercise_prescription_patient_view()),
-                                  );
+                                  if (userType == "Patient") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => exercise_prescription_patient_view(animationController: animationController)),
+                                    );
+                                  }
+                                  else if (userType == "Doctor") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => exercise_prescription_doctor_view(userUID: userUID)),
+                                    );
+                                  }
+                                  else if (userType == "Support") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => exercise_prescription_supp_view(userUID: userUID)),
+                                    );
+                                  }
                                 }else if(redirect == 11){
 
                                 }

@@ -286,6 +286,7 @@ class _my_exercisesState extends State<my_exercises>
             TitleView(
               titleTxt: 'Exercise and Activity Plans',
               subTxt: 'View Plan',
+              userType: "Patient",
               redirect: 10,
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                   parent: widget.animationController,
@@ -300,19 +301,11 @@ class _my_exercisesState extends State<my_exercises>
             titleTxt: 'Your Workouts',
             subTxt: 'Add Workouts',
             redirect: 1,
+            userType: "Patient",
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                 parent: widget.animationController,
                 curve:
                 Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
-            animationController: widget.animationController,
-          ),
-        );
-        listViews.add(
-          RunningView(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: widget.animationController,
-                curve:
-                Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
             animationController: widget.animationController,
           ),
         );

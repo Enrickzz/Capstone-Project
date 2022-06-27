@@ -13,7 +13,7 @@ import '../../fitness_app_theme.dart';
 import 'detailsPage.dart';
 
 class nutritionix_meals_support extends StatefulWidget {
-  const nutritionix_meals_support({Key key, this.animationController, this.search,this.userUID}) : super(key: key);
+  const nutritionix_meals_support({Key key, this.animationController, this.search, this.userUID}) : super(key: key);
   final AnimationController animationController;
   final String search;
   final String userUID;
