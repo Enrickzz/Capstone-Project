@@ -33,13 +33,13 @@ class _lab_resultsState extends State<lab_results> {
   List<FirebaseFile> trythis = [];
   String passThisFile = "";
   List<Connection> connections = [];
-  bool canaddedit = false;
+  bool canaddedit = true;
 
   @override
   void initState() {
     super.initState();
     listAll("path");
-    getpermission();
+    // getpermission();
     getLabResult();
     Future.delayed(const Duration(milliseconds: 1500), () {
       downloadUrls();
@@ -516,7 +516,7 @@ class _lab_resultsState extends State<lab_results> {
     String ssuid = user.uid;
     final uid = widget.userUID;
     final readConnection =
-        databaseReference.child('users/' + uid + '/personal_info/connections');
+        databaseReference.child('users/' + ssuid + '/personal_info/connections');
     readConnection.once().then((DataSnapshot datasnapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
       temp.forEach((jsonString) {
