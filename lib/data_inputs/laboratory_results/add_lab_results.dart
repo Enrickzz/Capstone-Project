@@ -927,10 +927,15 @@ class _addLabResultState extends State<add_lab_results> {
                                           hdl: hdl,
                                           imgRef: thisURL);
 
-                                      Navigator.pop(context, newlab);
-                                      Navigator.of(context).pop(BoxedReturns(
-                                          PopUpBox(titleP, messageP, redirectP),
-                                          newlab));
+                                      Navigator.pop(
+                                          context,
+                                          BoxedReturns(
+                                              PopUpBox(
+                                                  titleP, messageP, redirectP),
+                                              newlab));
+                                      // Navigator.of(context).pop(BoxedReturns(
+                                      //     PopUpBox(titleP, messageP, redirectP),
+                                      //     newlab));
                                     });
                                   });
                                 });
@@ -956,7 +961,14 @@ class _addLabResultState extends State<add_lab_results> {
                                       hdl: hdl,
                                       imgRef: fileName);
 
-                                  Navigator.pop(context, newlab);
+                                  Navigator.pop(
+                                      context,
+                                      BoxedReturns(
+                                          PopUpBox(titleP, messageP, redirectP),
+                                          newlab));
+                                  // Navigator.of(context).pop(BoxedReturns(
+                                  //     PopUpBox(titleP, messageP, redirectP),
+                                  //     newlab));
                                 });
                               }
                             });

@@ -84,29 +84,60 @@ class _lab_resultsState extends State<lab_results> {
                               files: trythis, userUID: widget.userUID),
                         ),
                       ),
-                    ).then((value) => setState(() {
-                          BoxedReturns thisReturned = value;
-                          print("setstate lab\n\n" + value.toString());
-                          if (value != null) {
-                            labResult_list.insert(0, thisReturned.result);
-                            print(labResult_list[0].imgRef.toString() +
-                                " <<<<<<<<");
-                            value.toString();
-                            // downloadUrls();
-                            listAll("path");
-                            ShowDialogRecomm(
-                                thisReturned.dialog.message,
-                                thisReturned.dialog.title,
-                                thisReturned.dialog.redirect);
-                            Future.delayed(const Duration(milliseconds: 2000),
-                                () {
-                              setState(() {});
-                            });
-                          }
-                          if (value != null) {
-                            trythis = value;
-                          }
-                        }));
+                    ).then((value) {
+                      //BoxedReturns thisReturned = value;
+                      print("AFTER ADD LAB");
+                      print("VALUE\n" + value.toString());
+                      ShowDialogRecomm("thisReturned.dialog.message",
+                              "thisReturned.dialog.title", "None")
+                          .then((value) {
+                        print("AFTER DIALOG");
+                      });
+                      if (value != null) {
+                        print("VALUE NOT NULL");
+                        // labResult_list.insert(0, thisReturned.result);
+                        // print(labResult_list[0].imgRef.toString() + " <<<<<<<<");
+                        // value.toString();
+                        // downloadUrls();
+                        // listAll("path");
+                        // ShowDialogRecomm(
+                        //     thisReturned.dialog.message,
+                        //     thisReturned.dialog.title,
+                        //     thisReturned.dialog.redirect);
+                        ShowDialogRecomm("thisReturned.dialog.message",
+                            "thisReturned.dialog.title", "None");
+                        // Future.delayed(const Duration(milliseconds: 2000),
+                        //     () {
+                        //   setState(() {});
+                        // });
+                      }
+                    });
+
+                    // ((value) => setState(() {
+                    //       BoxedReturns thisReturned = value;
+                    //       print("setstate lab\n\n" + value.toString());
+                    //       if (value != null) {
+                    //         labResult_list.insert(0, thisReturned.result);
+                    //         print(labResult_list[0].imgRef.toString() +
+                    //             " <<<<<<<<");
+                    //         value.toString();
+                    //         // downloadUrls();
+                    //         listAll("path");
+                    //         // ShowDialogRecomm(
+                    //         //     thisReturned.dialog.message,
+                    //         //     thisReturned.dialog.title,
+                    //         //     thisReturned.dialog.redirect);
+                    //         ShowDialogRecomm("thisReturned.dialog.message",
+                    //             "thisReturned.dialog.title", "None");
+                    //         // Future.delayed(const Duration(milliseconds: 2000),
+                    //         //     () {
+                    //         //   setState(() {});
+                    //         // });
+                    //       }
+                    //       if (value != null) {
+                    //         trythis = value;
+                    //       }
+                    //     }));
                   },
                   child: Icon(
                     Icons.add,
@@ -192,13 +223,14 @@ class _lab_resultsState extends State<lab_results> {
   Future<void> ShowDialogRecomm(
       String desc, String title, String redirect) async {
     bool checktitle = true;
-    if (title == "Peer Recommendation!") {
-      checktitle = false;
-      desc = desc + " Go to places tab to view new reviews!";
-    }
-    if (redirect == "None") {
-      checktitle = false;
-    }
+    print("SHOWDIALOG PASOK");
+    // if (title == "Peer Recommendation!") {
+    //   checktitle = false;
+    //   desc = desc + " Go to places tab to view new reviews!";
+    // }
+    // if (redirect == "None") {
+    //   checktitle = false;
+    // }
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
