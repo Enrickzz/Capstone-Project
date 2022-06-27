@@ -55,6 +55,7 @@ class _PatientListState extends State<PatientList>  {
   List pp_imgs = [];
   List diseases=[];
   List<String> unique_uidlist = [];
+  List<String> status = [];
 
 
   //for drawer
@@ -183,17 +184,43 @@ class _PatientListState extends State<PatientList>  {
                             child: checkimage(pp_imgs[index])),
                       ),
                     ),
-                      Positioned(
-                        left:35,
-                        top:34,
-                        child: Container(
-                          height: 14,
-                          width: 14,
-                          child: ClipOval(
-                            child:Image.asset("assets/images/active.png",
-                          )),
+                      if(status[index] == "Active")...[
+                        Positioned(
+                          left:35,
+                          top:34,
+                          child: Container(
+                            height: 14,
+                            width: 14,
+                            child: ClipOval(
+                                child:Image.asset("assets/images/active.png",
+                                )),
+                          ),
                         ),
-                      ),
+                      ] else if(status[index] == "Hospitalized")... [
+                        Positioned(
+                          left:35,
+                          top:34,
+                          child: Container(
+                            height: 14,
+                            width: 14,
+                            child: ClipOval(
+                                child:Image.asset("assets/images/hospitalized.png",
+                                )),
+                          ),
+                        ),
+                      ] else ... [
+                        Positioned(
+                          left:35,
+                          top:34,
+                          child: Container(
+                            height: 14,
+                            width: 14,
+                            child: ClipOval(
+                                child:Image.asset("assets/images/inactive.png",
+                                )),
+                          ),
+                        ),
+                      ]
                     ]
                   ),
                   title: Text(names[index],
@@ -432,6 +459,7 @@ class _PatientListState extends State<PatientList>  {
             Users patient = Users.fromJson(temp1);
             names.add(patient.firstname + " " + patient.lastname);
             pp_imgs.add(patient.pp_img.toString());
+            status.add(patient.status);
             readInfo.once().then((DataSnapshot snapshot){
               var temp2 = jsonDecode(jsonEncode(snapshot.value));
               print(temp2);
