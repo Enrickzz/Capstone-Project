@@ -1228,9 +1228,10 @@ class otherChanged {
 
 class BoxedReturns {
   final PopUpBox dialog;
-  final Lab_Result result;
+  final Lab_Result LR_result;
+  final List<Blood_Glucose> BG_result;
 
-  BoxedReturns(this.dialog, this.result);
+  BoxedReturns({this.dialog, this.LR_result, this.BG_result});
 }
 
 class PopUpBox {

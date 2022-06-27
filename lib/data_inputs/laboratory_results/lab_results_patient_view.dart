@@ -85,14 +85,14 @@ class _lab_resultsState extends State<lab_results> {
                         ),
                       ),
                     ).then((value) {
-                      print("AFTER ADD LAB");
+                      print("AFTER ADD");
                       print("VALUE\n" + value.toString());
                       var value1 = value;
                       BoxedReturns thisReturned = value;
                       if (thisReturned.dialog.message == null ||
                           thisReturned.dialog.title == null ||
                           thisReturned.dialog.redirect == null) {
-                        labResult_list.insert(0, thisReturned.result);
+                        labResult_list.insert(0, thisReturned.LR_result);
                         print(
                             labResult_list[0].imgRef.toString() + " <<<<<<<<");
                         downloadUrls();
@@ -107,7 +107,7 @@ class _lab_resultsState extends State<lab_results> {
                           print("AFTER DIALOG");
                           if (value1 != null) {
                             print("VALUE NOT NULL");
-                            labResult_list.insert(0, thisReturned.result);
+                            labResult_list.insert(0, thisReturned.LR_result);
                             print(labResult_list[0].imgRef.toString() +
                                 " <<<<<<<<");
                             downloadUrls();
@@ -515,8 +515,8 @@ class _lab_resultsState extends State<lab_results> {
     final User user = auth.currentUser;
     String ssuid = user.uid;
     final uid = widget.userUID;
-    final readConnection =
-        databaseReference.child('users/' + ssuid + '/personal_info/connections');
+    final readConnection = databaseReference
+        .child('users/' + ssuid + '/personal_info/connections');
     readConnection.once().then((DataSnapshot datasnapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
       temp.forEach((jsonString) {

@@ -930,9 +930,9 @@ class _addLabResultState extends State<add_lab_results> {
                                       Navigator.pop(
                                           context,
                                           BoxedReturns(
-                                              PopUpBox(
+                                              dialog: PopUpBox(
                                                   titleP, messageP, redirectP),
-                                              newlab));
+                                              LR_result: newlab));
                                       // Navigator.of(context).pop(BoxedReturns(
                                       //     PopUpBox(titleP, messageP, redirectP),
                                       //     newlab));
@@ -964,8 +964,9 @@ class _addLabResultState extends State<add_lab_results> {
                                   Navigator.pop(
                                       context,
                                       BoxedReturns(
-                                          PopUpBox(titleP, messageP, redirectP),
-                                          newlab));
+                                          dialog: PopUpBox(
+                                              titleP, messageP, redirectP),
+                                          LR_result: newlab));
                                   // Navigator.of(context).pop(BoxedReturns(
                                   //     PopUpBox(titleP, messageP, redirectP),
                                   //     newlab));
