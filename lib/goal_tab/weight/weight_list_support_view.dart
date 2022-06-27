@@ -101,7 +101,7 @@ class _weightSupportState extends State<weight_list_support_view> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_weight_record(),
+                      child: add_weight_record(userUID: widget.userUID),
                     ),
                     ),
                   ).then((value) => setState((){

@@ -9,8 +9,8 @@ import 'package:my_app/models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
 class add_weight_record extends StatefulWidget {
-  // final List<Body_Temperature> btlist;
-  // add_water_intake({this.btlist});
+  final String userUID;
+  add_weight_record({this.userUID});
   @override
   add_weightState createState() => add_weightState();
 }
@@ -55,10 +55,16 @@ class add_weightState extends State<add_weight_record> {
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
   String titleP, messageP, redirectP;
-
+  var uid = "";
   @override
   void initState() {
     initNotif();
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     super.initState();
   }
 
@@ -264,8 +270,6 @@ class add_weightState extends State<add_weight_record> {
                         color: Colors.blue,
                         onPressed: () {
                           try {
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
                             final readWeight = databaseReference
                                 .child('users/' + uid + '/goal/weight/');
                             final readheight = databaseReference.child(
@@ -644,8 +648,7 @@ class add_weightState extends State<add_weight_record> {
 
   void addtoRecommendation(String message, String title, String priority,
       String redirect, String category) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+
     final notifref =
         databaseReference.child('users/' + uid + '/recommendations/');
     getRecomm();
@@ -685,8 +688,7 @@ class add_weightState extends State<add_weight_record> {
 
   void getRecomm() {
     recommList.clear();
-    final User user = auth.currentUser;
-    final uid = user.uid;
+
     final readBP =
         databaseReference.child('users/' + uid + '/recommendations/');
     readBP.once().then((DataSnapshot snapshot) {
@@ -707,8 +709,7 @@ class add_weightState extends State<add_weight_record> {
     print("DATE = " + date);
     print("TIME = " + "$hours:$min");
 
-    final User user = auth.currentUser;
-    final uid = user.uid;
+
     final readProfile =
         databaseReference.child('users/' + uid + '/personal_info/');
     readProfile.once().then((DataSnapshot snapshot) {
@@ -720,8 +721,7 @@ class add_weightState extends State<add_weight_record> {
   }
 
   void getWeightGoal() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+
     final readWeightGoal =
         databaseReference.child('users/' + uid + '/goal/weight_goal/');
     readWeightGoal.once().then((DataSnapshot snapshot) {
@@ -733,8 +733,7 @@ class add_weightState extends State<add_weight_record> {
   }
 
   void getWeight() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+
     final readWeight =
         databaseReference.child('users/' + uid + '/goal/weight/');
     readWeight.once().then((DataSnapshot snapshot) {

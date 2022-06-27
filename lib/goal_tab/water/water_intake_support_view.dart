@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/goal_tab/water/add_water_intake.dart';
 import 'package:my_app/models/users.dart';
+import 'package:my_app/ui_view/meals/MealListViewDoc.dart';
 
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 
@@ -35,7 +36,6 @@ class _waterIntakeSupportState extends State<water_intake_support_view> {
   List<bool> _selected = [];
   /// body temp status (normal, low, high)
   List<String> status = [];
-
 
   @override
   void initState() {
@@ -91,7 +91,7 @@ class _waterIntakeSupportState extends State<water_intake_support_view> {
                     builder: (context) => SingleChildScrollView(child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: add_water_intake(),
+                      child: add_water_intake(userUID: widget.userUID),
                     ),
                     ),
                   ).then((value) => setState((){

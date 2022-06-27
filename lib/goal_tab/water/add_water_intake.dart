@@ -10,7 +10,8 @@ import 'package:my_app/models/users.dart';
 
 class add_water_intake extends StatefulWidget {
   // final List<Body_Temperature> btlist;
-  // add_water_intake({this.btlist});
+  final String userUID;
+  add_water_intake({this.userUID});
   @override
   add_waterIntakeState createState() => add_waterIntakeState();
 }
@@ -52,10 +53,17 @@ class add_waterIntakeState extends State<add_water_intake> {
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
   String titleP, messageP, redirectP;
-
+  var uid = "";
   @override
   void initState() {
     initNotif();
+
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     super.initState();
   }
 
@@ -263,8 +271,6 @@ class add_waterIntakeState extends State<add_water_intake> {
                         color: Colors.blue,
                         onPressed: () async {
                           try {
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
                             final readWaterIntake = databaseReference
                                 .child('users/' + uid + '/goal/water_intake/');
                             final readWaterGoal = databaseReference
@@ -507,8 +513,6 @@ class add_waterIntakeState extends State<add_water_intake> {
 
   void addtoRecommendation(String message, String title, String priority,
       String redirect, String category) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final notifref =
         databaseReference.child('users/' + uid + '/recommendations/');
     getRecomm();
@@ -548,8 +552,6 @@ class add_waterIntakeState extends State<add_water_intake> {
 
   void getRecomm() {
     recommList.clear();
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readBP =
         databaseReference.child('users/' + uid + '/recommendations/');
     readBP.once().then((DataSnapshot snapshot) {
@@ -570,8 +572,6 @@ class add_waterIntakeState extends State<add_water_intake> {
     print("DATE = " + date);
     print("TIME = " + "$hours:$min");
 
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readProfile =
         databaseReference.child('users/' + uid + '/personal_info/');
     readProfile.once().then((DataSnapshot snapshot) {
@@ -583,8 +583,6 @@ class add_waterIntakeState extends State<add_water_intake> {
   }
 
   void getWaterIntake() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readWaterIntake =
         databaseReference.child('users/' + uid + '/goal/water_intake/');
     readWaterIntake.once().then((DataSnapshot snapshot) {

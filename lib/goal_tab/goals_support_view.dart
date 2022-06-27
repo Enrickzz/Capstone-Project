@@ -50,7 +50,6 @@ class _goals_support_viewState extends State<goals_support_view>
   @override
   void initState() {
     super.initState();
-
     controller = TabController(length: 5, vsync: this);
     controller.addListener(() {
       setState(() {});
