@@ -92,22 +92,21 @@ class UID {
 
 class Connection {
   Connection(
-        {this.doctor1,
-        this.dashboard,
-        this.nonhealth,
-        this.health,
-        this.addedit,
-        this.medpres1,
-        this.medpres2,
-        this.foodplan1,
-        this.foodplan2,
-        this.explan1,
-        this.explan2,
-        this.vitals1,
-        this.vitals2,
-        this.labplan1,
-        this.labplan2
-        });
+      {this.doctor1,
+      this.dashboard,
+      this.nonhealth,
+      this.health,
+      this.addedit,
+      this.medpres1,
+      this.medpres2,
+      this.foodplan1,
+      this.foodplan2,
+      this.explan1,
+      this.explan2,
+      this.vitals1,
+      this.vitals2,
+      this.labplan1,
+      this.labplan2});
 
   String doctor1;
 
@@ -802,7 +801,14 @@ class distressSOS {
   String note;
   String call_desc;
 
-  distressSOS({this.full_name, this.rec_date, this.rec_time, this.reason,this.note,this.call_desc,this.number});
+  distressSOS(
+      {this.full_name,
+      this.rec_date,
+      this.rec_time,
+      this.reason,
+      this.note,
+      this.call_desc,
+      this.number});
   distressSOS.fromJson(Map<String, dynamic> json) {
     full_name = json["full_name"];
     reason = json["reason"];
@@ -1218,4 +1224,19 @@ class otherChanged {
   String valueAlc;
 
   otherChanged(this.valueLifestyle, this.goal, this.valueAlc);
+}
+
+class BoxedReturns {
+  final PopUpBox dialog;
+  final Lab_Result result;
+
+  BoxedReturns(this.dialog, this.result);
+}
+
+class PopUpBox {
+  final String title;
+  final String message;
+  final String redirect;
+
+  PopUpBox(this.title, this.message, this.redirect);
 }

@@ -1491,18 +1491,3 @@ class _addLabResultState extends State<add_lab_results> {
     });
   }
 }
-
-class BoxedReturns {
-  final PopUpBox dialog;
-  final Lab_Result result;
-
-  BoxedReturns(this.dialog, this.result);
-}
-
-class PopUpBox {
-  final String title;
-  final String message;
-  final String redirect;
-
-  PopUpBox(this.title, this.message, this.redirect);
-}
