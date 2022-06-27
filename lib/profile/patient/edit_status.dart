@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +10,9 @@ import 'package:my_app/models/users.dart';
 //import 'package:flutter_ecommerce_app/components/AppSignIn.dart';
 class edit_status extends StatefulWidget {
   // final List<FoodPlan> thislist;
-  // final String userUID;
+  final String userUID;
   final String status;
-  edit_status({this.status});
+  edit_status({this.status, this.userUID});
   @override
   _editStatus createState() => _editStatus();
 }
@@ -35,6 +37,10 @@ class _editStatus extends State<edit_status> {
   bool isDateSelected= false;
   var dateValue = TextEditingController();
   bool isSwitchedHospitalized = false;
+  List<Connection> connections = [];
+  List<String> roles = [];
+  List<int> list_ss = [];
+  int count = 0;
 
   void initState() {
     super.initState();
@@ -151,16 +157,64 @@ class _editStatus extends State<edit_status> {
                     color: Colors.blue,
                     onPressed:() {
                       try{
-                        final User user = auth.currentUser;
-                        final uid = user.uid;
-                        if(isSwitchedHospitalized){
-                          final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
-                          bpRef.update({"status": "Hospitalized"});
+                        if(widget.userUID != null){
+                          var uid = widget.userUID;
+                          if(isSwitchedHospitalized){
+                            final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
+                            bpRef.update({"status": "Hospitalized"});
+                            final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+                            readConnection.once().then((DataSnapshot datasnapshot) {
+                              List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+                              temp.forEach((jsonString) {
+                                connections.add(Connection.fromJson(jsonString));
+                              });
+                              for(int i = 0; i < connections.length; i++){
+                                final readrole = databaseReference.child('users/' + connections[i].doctor1 + '/personal_info/userType');
+                                readrole.once().then((DataSnapshot snapshot) {
+                                  print(snapshot.value);
+                                  if(snapshot.value == "Family member / Caregiver"){
+                                    final conRef = databaseReference.child('users/' + uid + '/personal_info/connections/' + (i+1).toString() + '/');
+                                    conRef.update({"addedit": "true"});
+                                  }
+                                });
+                              }
+                            });
+                          }
+                          else{
+                            final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
+                            bpRef.update({"status": "Active"});
+                          }
                         }
                         else{
-                          final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
-                          bpRef.update({"status": "Active"});
+                          final User user = auth.currentUser;
+                          var uid = user.uid;
+                          if(isSwitchedHospitalized){
+                            final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
+                            bpRef.update({"status": "Hospitalized"});
+                            final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
+                            readConnection.once().then((DataSnapshot datasnapshot) {
+                              List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
+                              temp.forEach((jsonString) {
+                                connections.add(Connection.fromJson(jsonString));
+                              });
+                              for(int i = 0; i < connections.length; i++){
+                                final readrole = databaseReference.child('users/' + connections[i].doctor1 + '/personal_info/userType');
+                                readrole.once().then((DataSnapshot snapshot) {
+                                  print(snapshot.value);
+                                  if(snapshot.value == "Family member / Caregiver"){
+                                    final conRef = databaseReference.child('users/' + uid + '/personal_info/connections/' + (i+1).toString() + '/');
+                                    conRef.update({"addedit": "true"});
+                                  }
+                                });
+                              }
+                            });
+                          }
+                          else{
+                            final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
+                            bpRef.update({"status": "Active"});
+                          }
                         }
+
                         Navigator.pop(context);
                       } catch(e) {
                         print("you got an error! $e");
