@@ -806,6 +806,10 @@ class _addLabResultState extends State<add_lab_results> {
                                       "Low Potassium!",
                                       "3",
                                       "Food - Potassium");
+                                  ShowDialogRecomm(
+                                      "We noticed that you have a low potassium level. We strongly advise you to seek immediate medical attention as soon as possible. For the meantime we recommend that you eat foods rich in Potassium . Click here to view recommended foods for you.",
+                                      "Low Potassium!",
+                                      "Food - Potassium");
                                   notifySS("low potassium");
                                 }
                               }
@@ -816,6 +820,10 @@ class _addLabResultState extends State<add_lab_results> {
                                       "We noticed that your LDL Cholesterol level is high which could be harmful for your body. We recommend that you eat food rich in Omega-3. Click here to view recommended foods for you.",
                                       "High Cholesterol!",
                                       "3",
+                                      "Food - Cholesterol");
+                                  ShowDialogRecomm(
+                                      "We noticed that your LDL Cholesterol level is high which could be harmful for your body. We recommend that you eat food rich in Omega-3. Click here to view recommended foods for you.",
+                                      "High Cholesterol!",
                                       "Food - Cholesterol");
                                   notifySS("cholesterol");
                                 }
@@ -854,6 +862,10 @@ class _addLabResultState extends State<add_lab_results> {
                                           "We noticed that your Creatinine level is unusually high and you do not have Chronic Kidney Disease as a listed ailment. We recommend that you consult with a Nephrologist as soon as possible.",
                                           "Creatinine Level is High!",
                                           "3",
+                                          "None");
+                                      ShowDialogRecomm(
+                                          "We noticed that your Creatinine level is unusually high and you do not have Chronic Kidney Disease as a listed ailment. We recommend that you consult with a Nephrologist as soon as possible.",
+                                          "Creatinine Level is High!",
                                           "None");
                                       notifySS("high creatinine");
                                     }
@@ -957,6 +969,9 @@ class _addLabResultState extends State<add_lab_results> {
     if (title == "Peer Recommendation!") {
       checktitle = false;
       desc = desc + " Go to places tab to view new reviews!";
+    }
+    if (redirect == "None") {
+      checktitle = false;
     }
     return showDialog<void>(
       context: context,
