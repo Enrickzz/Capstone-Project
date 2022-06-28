@@ -427,7 +427,7 @@ class _goalsState extends State<goals>
     final User user = auth.currentUser;
     final uid = user.uid;
     int count = 0;
-    final readBP = databaseReference.child('users/' + uid + '/SOScalls/');
+    final readBP = databaseReference.child('users/' + uid + '/SOSCalls/');
     await readBP.once().then((DataSnapshot snapshot) {
       print(snapshot.value);
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
