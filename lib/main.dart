@@ -444,7 +444,7 @@ class _AppSignInState extends State<AppSignIn> {
 
                             GestureDetector(
                                 onTap: () async {
-                                      await FlutterPhoneDirectCaller.callNumber("911");
+                                      await FlutterPhoneDirectCaller.callNumber("1555");
                                 },
                                 child: Image.asset(
                                   'assets/images/emergency.png',
