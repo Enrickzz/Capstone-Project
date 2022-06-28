@@ -656,8 +656,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                               }
                                               if (pressure_level == "high" &&
                                                   bp_status == "Resting") {
-                                                titleP = "BP TITLE";
-                                                messageP = "Message";
+                                                titleP = "High Bloor Pressure";
+                                                messageP = "Your Blood Pressure is quite high, we recommend that you monitor your blood pressure for the next hour as we would set an alarm for you to record your blood pressure again.";
                                                 redirectP = "None"; //LEave this
                                                 addtoRecommendation(
                                                     "Your Blood Pressure is quite high, we recommend that you monitor your blood pressure for the next hour as we would set an alarm for you to record your blood pressure again. If you feel unwell please seek immediate medical attention for your condition. For the meantime here is a relaxing music for you to listen to while you are taking a breather. ",
@@ -678,8 +678,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                               }
                                               if (pressure_level == "high" &&
                                                   bp_status == "Active") {
-                                                titleP = "BP TITLE";
-                                                messageP = "Message";
+                                                titleP = "High Bloor Pressure";
+                                                messageP = "Your Blood Pressure is quite high but since you just finished performing strenuous physical activities this is not immediately a cause for concern. We recommend that you take a rest and record your Blood Pressure again after an hour.";
                                                 redirectP = "None"; //LEave this
                                                 addtoRecommendation(
                                                     "Your Blood Pressure is quite high but since you just finished performing strenuous physical activities this is not immediately a cause for concern. We recommend that you take a rest and record your Blood Pressure again after an hour. For the meantime here are some soothing relaxing music to listen to while you are taking a rest.",
@@ -699,8 +699,8 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                 // schedBP();
                                               }
                                               if (pressure_level == "low") {
-                                                titleP = "BP TITLE";
-                                                messageP = "Message";
+                                                titleP = "Low Blood Pressure";
+                                                messageP = "Your Blood pressure is lower than the normal standards, please record your heart rate and respiratory rate as well to have a better view of your current health.";
                                                 redirectP = "None"; //LEave this
                                                 addtoRecommendation(
                                                     "Your Blood pressure is lower than the normal standards, please record your heart rate and respiratory rate as well to have a better view of your current health.",

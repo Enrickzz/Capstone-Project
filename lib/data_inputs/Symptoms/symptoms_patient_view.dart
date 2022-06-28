@@ -31,7 +31,7 @@ class _symptomsState extends State<symptoms> {
   DateFormat timeformat = new DateFormat("hh:mm");
   bool isLoading = true;
   List<Connection> connections = [];
-  bool canaddedit = false;
+  bool canaddedit = true;
 
   @override
   void initState() {

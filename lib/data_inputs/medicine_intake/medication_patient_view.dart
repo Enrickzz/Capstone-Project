@@ -26,7 +26,7 @@ class _medicationState extends State<medication> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   DateFormat timeformat = new DateFormat("hh:mm");
   List<Connection> connections = [];
-  bool canaddedit = false;
+  bool canaddedit = true;
 
   @override
   void initState() {

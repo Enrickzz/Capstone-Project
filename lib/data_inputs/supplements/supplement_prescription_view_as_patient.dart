@@ -29,7 +29,7 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
   List<Supplement_Prescription> supptemp = [];
   DateFormat format = new DateFormat("MM/dd/yyyy");
   List<Connection> connections = [];
-  bool canaddedit = false;
+  bool canaddedit = true;
 
   @override
   void initState() {

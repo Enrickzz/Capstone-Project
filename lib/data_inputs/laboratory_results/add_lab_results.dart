@@ -792,9 +792,12 @@ class _addLabResultState extends State<add_lab_results> {
                                       "3",
                                       "Food - Hemoglobin");
                                   notifySS("low hemoglobin");
-                                  titleP = "Low Hemoglobin!";
+                                  titleP = "Low Hemoglobin Detected!";
                                   messageP =
-                                      "We noticed that you have a low hemoglobin level. This is due to your body’s lack of protein which can cause Anemia. We recommend that you eat foods rich in protein. Click here to view recommended foods for you.";
+                                      "We recommend that you eat foods rich in protein." +"\n\n"+
+                                          "To view possible food selection" +"\n\n"+ "Click the recommendation/notifications icon in the main menu > Recommendation Tab > Low Hemoglobin > Select recommended food ";
+
+
                                   redirectP = "Food - Hemoglobin";
                                 }
                               }
@@ -804,12 +807,13 @@ class _addLabResultState extends State<add_lab_results> {
                                 if (double.parse(potassium.toString()) <= 3) {
                                   addtoRecommendation(
                                       "We noticed that you have a low potassium level. We strongly advise you to seek immediate medical attention as soon as possible. For the meantime we recommend that you eat foods rich in Potassium . Click here to view recommended foods for you.",
-                                      "Low Potassium!",
+                                      "Low Potassium Detected!",
                                       "3",
                                       "Food - Potassium");
                                   titleP = "Low Potassium!";
                                   messageP =
-                                      "We noticed that you have a low potassium level. We strongly advise you to seek immediate medical attention as soon as possible. For the meantime we recommend that you eat foods rich in Potassium . Click here to view recommended foods for you.";
+                                      "We recommend that you eat foods rich in potassium." +"\n\n"+
+                                          "To view possible food selection" +"\n\n"+ "Click the recommendation/notifications icon in the main menu > Recommendation Tab > Low Potassium > Select recommended food ";
                                   redirectP = "Food - Potassium";
                                   notifySS("low potassium");
                                 }
@@ -822,9 +826,10 @@ class _addLabResultState extends State<add_lab_results> {
                                       "High Cholesterol!",
                                       "3",
                                       "Food - Cholesterol");
-                                  titleP = "High Cholesterol!";
+                                  titleP = "High Cholesterol Detected!";
                                   messageP =
-                                      "We noticed that your LDL Cholesterol level is high which could be harmful for your body. We recommend that you eat food rich in Omega-3. Click here to view recommended foods for you.";
+                                      "We recommend that you eat foods rich in Omega-3." +"\n\n"+
+                                          "To view possible food selection" +"\n\n"+ "Click the recommendation/notifications icon in the main menu > Recommendation Tab > High Cholesterol > Select recommended food ";
                                   redirectP = "Food - Cholesterol";
                                   notifySS("cholesterol");
                                 }

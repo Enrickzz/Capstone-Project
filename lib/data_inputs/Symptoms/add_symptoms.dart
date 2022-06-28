@@ -886,7 +886,13 @@ class _addSymptomsState extends State<add_symptoms> {
             child: Column(
               children: <Widget>[
 
-                Text('You have entered a severe symptom. We have already gathered contact numbers of nearby hospitals if you wish to seek immediate medical assistance.'),
+
+                Text('You have entered a severe symptom. We have already gathered contact numbers of nearby hospitals if you wish to seek immediate medical assistance.' +'\n\n'+ 'You can also issue a distress call to your emergency person via the Distress Call icon in the main menu'),
+                Image.asset(
+                  'assets/images/emergency.png',
+                  width: 30,
+                  height: 30,
+                ),
               ],
             ),
           ),
