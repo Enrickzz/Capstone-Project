@@ -27,17 +27,20 @@ class _medicationState extends State<medication> {
   DateFormat timeformat = new DateFormat("hh:mm");
   List<Connection> connections = [];
   bool canaddedit = true;
+  String uid = "";
 
   @override
   void initState() {
     super.initState();
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
     medtemp.clear();
-    if(widget.userUID != null){
+    if (widget.userUID != null) {
+      uid = widget.userUID;
       getpermission();
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
     }
+    final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
     getMedication();
     Future.delayed(const Duration(milliseconds: 1500), (){
       setState(() {
@@ -164,8 +167,6 @@ class _medicationState extends State<medication> {
     }
   }
   void getMedication() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readmedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/');
     readmedication.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -184,7 +185,6 @@ class _medicationState extends State<medication> {
   void getpermission() {
     final User user = auth.currentUser;
     String ssuid = user.uid;
-    final uid = widget.userUID;
     final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
     readConnection.once().then((DataSnapshot datasnapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));

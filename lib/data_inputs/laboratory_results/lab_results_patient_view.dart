@@ -34,13 +34,18 @@ class _lab_resultsState extends State<lab_results> {
   String passThisFile = "";
   List<Connection> connections = [];
   bool canaddedit = true;
+  String uid = "";
 
   @override
   void initState() {
     super.initState();
     listAll("path");
-    if(widget.userUID != null){
+    if (widget.userUID != null) {
+      uid = widget.userUID;
       getpermission();
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
     }
     getLabResult();
     Future.delayed(const Duration(milliseconds: 1500), () {
@@ -423,13 +428,6 @@ class _lab_resultsState extends State<lab_results> {
   }
 
   Future<List<FirebaseFile>> listAll(String path) async {
-    String uid;
-    if (widget.userUID != null) {
-      uid = widget.userUID;
-    } else {
-      final User user = auth.currentUser;
-      uid = user.uid;
-    }
     final ref = FirebaseStorage.instance.ref('test/' + uid + "/");
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);
@@ -449,13 +447,6 @@ class _lab_resultsState extends State<lab_results> {
   }
 
   Future<List<FirebaseFile>> listOne(String path, String filename) async {
-    String uid;
-    if (widget.userUID != null) {
-      uid = widget.userUID;
-    } else {
-      final User user = auth.currentUser;
-      uid = user.uid;
-    }
     final ref = FirebaseStorage.instance.ref('test/' + uid + "/" + filename);
     final result = await ref.listAll();
     final urls = await _getDownloadLinks(result.items);
@@ -476,13 +467,6 @@ class _lab_resultsState extends State<lab_results> {
   }
 
   Future<String> downloadUrls() async {
-    String uid;
-    if (widget.userUID != null) {
-      uid = widget.userUID;
-    } else {
-      final User user = auth.currentUser;
-      uid = user.uid;
-    }
     String downloadurl;
     for (var i = 0; i < labResult_list.length; i++) {
       final ref = FirebaseStorage.instance
@@ -496,13 +480,6 @@ class _lab_resultsState extends State<lab_results> {
   }
 
   void getLabResult() {
-    String uid;
-    if (widget.userUID != null) {
-      uid = widget.userUID;
-    } else {
-      final User user = auth.currentUser;
-      uid = user.uid;
-    }
     final readlabresult = databaseReference
         .child('users/' + uid + '/vitals/health_records/labResult_list/');
     readlabresult.once().then((DataSnapshot snapshot) {
@@ -516,7 +493,6 @@ class _lab_resultsState extends State<lab_results> {
   void getpermission() {
     final User user = auth.currentUser;
     String ssuid = user.uid;
-    final uid = widget.userUID;
     final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
     readConnection.once().then((DataSnapshot datasnapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));

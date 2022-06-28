@@ -32,13 +32,18 @@ class _symptomsState extends State<symptoms> {
   bool isLoading = true;
   List<Connection> connections = [];
   bool canaddedit = true;
+  String uid = "";
 
   @override
   void initState() {
     super.initState();
     listtemp.clear();
-    if(widget.userUID != null){
+    if (widget.userUID != null) {
+      uid = widget.userUID;
       getpermission();
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
     }
     getSymptoms();
     Future.delayed(const Duration(milliseconds: 2000), (){
@@ -167,13 +172,6 @@ class _symptomsState extends State<symptoms> {
     return "$hours:$min";
   }
   List<Symptom> getSymptoms() {
-    String uid;
-    if (widget.userUID != null) {
-      uid = widget.userUID;
-    } else {
-      final User user = auth.currentUser;
-      uid = user.uid;
-    }
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');
     List<Symptom> symptoms = [];
     symptoms.clear();
@@ -206,7 +204,6 @@ class _symptomsState extends State<symptoms> {
   void getpermission() {
     final User user = auth.currentUser;
     String ssuid = user.uid;
-    final uid = widget.userUID;
     final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
     readConnection.once().then((DataSnapshot datasnapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
@@ -231,13 +228,6 @@ class _symptomsState extends State<symptoms> {
   }
 
   Future <String> downloadUrls() async{
-    String uid;
-    if (widget.userUID != null) {
-      uid = widget.userUID;
-    } else {
-      final User user = auth.currentUser;
-      uid = user.uid;
-    }
     String downloadurl="null";
     for(var i = 0 ; i < listtemp.length; i++){
       final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+listtemp[i].imgRef.toString());
@@ -254,13 +244,6 @@ class _symptomsState extends State<symptoms> {
     return downloadurl;
   }
   Future <String> downloadOneUrl(Symptom thissymp, int index) async{
-    String uid;
-    if (widget.userUID != null) {
-      uid = widget.userUID;
-    } else {
-      final User user = auth.currentUser;
-      uid = user.uid;
-    }
     String downloadurl;
     final ref = FirebaseStorage.instance.ref('test/' + uid + "/"+thissymp.imgRef.toString());
     downloadurl = await ref.getDownloadURL();

@@ -30,13 +30,18 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
   DateFormat format = new DateFormat("MM/dd/yyyy");
   List<Connection> connections = [];
   bool canaddedit = true;
+  String uid = "";
 
   @override
   void initState() {
     super.initState();
     supptemp.clear();
-    if(widget.userUID != null){
+    if (widget.userUID != null) {
+      uid = widget.userUID;
       getpermission();
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
     }
     getSupplementPrescription();
     Future.delayed(const Duration(milliseconds: 1500), (){
@@ -169,8 +174,6 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
     }
   }
   void getSupplementPrescription() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -188,7 +191,6 @@ class _supplement_prescriptionState extends State<supplement_prescription> {
   void getpermission() {
     final User user = auth.currentUser;
     String ssuid = user.uid;
-    final uid = widget.userUID;
     final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
     readConnection.once().then((DataSnapshot datasnapshot) {
       List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));

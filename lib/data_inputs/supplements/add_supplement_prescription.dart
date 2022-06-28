@@ -48,9 +48,16 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
   int quantity = 1;
 
   DateTimeRange dateRange;
+  String uid = "";
 
   @override
   void initState(){
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     getSupplementPrescription();
 
     super.initState();
@@ -369,8 +376,6 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            final User user = auth.currentUser;
-                            final uid = user.uid;
                             final readPrescription = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list');
                             readPrescription.once().then((DataSnapshot datasnapshot) {
                               String temp1 = datasnapshot.value.toString();
@@ -429,8 +434,6 @@ class _addSupplementPrescriptionState extends State<add_supplement_prescription>
     );
   }
   void getSupplementPrescription() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
