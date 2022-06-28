@@ -334,8 +334,10 @@ class add_waterIntakeState extends State<add_water_intake> {
                                           "3",
                                           "None",
                                           "Immediate");
-                                      titleP = "WATER TITLE";
-                                      messageP = "Message";
+                                      titleP = "High Water Intake";
+                                      messageP = "The recommended daily water intake for patients with congestive heart failure is 1500 milliliter a day. You have already exceeded the threshold for today."
+                                          +'\n\n'+ 'Please Change your Daily Water Intake Goal.'
+                                          +'\n'+ 'Goals Menu > My Water Tab > Water Intake > Edit Goal';
                                       redirectP = "None"; //leave this here
                                     }
                                   });

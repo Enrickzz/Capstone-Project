@@ -439,8 +439,11 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                   "Unusually Low Blood Sugar",
                                                   "3",
                                                   "Food - Glucose");
-                                              titleP = "blood sugar title";
-                                              messageP = "message";
+                                              titleP = "Low Blood Sugar";
+                                              messageP = "You should speak to your physician about it and seek immediate medical attention if you feel unwell."
+                                                  +'\n\n'+'Please have something to eat and record your food intake in the Heartistant application'
+                                                  +'\n'+'Goals Tab > My Meals > Log Meals > Search for food > Select Food > Record food intake'
+                                                  +'\n\n'+ 'You can also issue a distress call to your emergency person via the Distress Call icon in the main menu';
                                               redirectP = "None"; //Leave this
                                             }
                                             if (glucose > 120 &&
@@ -453,8 +456,11 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                   "Unusually High Blood Sugar",
                                                   "3",
                                                   "None");
-                                              titleP = "blood sugar title";
-                                              messageP = "message";
+                                              titleP = "High Blood Glucose";
+                                              messageP = "Consume food that are not high in sugar. "
+                                                          +'\n'+'Goals Tab > My Meals > Log Meals > Search for food > Select Food > Record food intake'
+                                                          +'\n\n'+"You should speak to your physician about it and seek immediate medical attention if you feel unwell."
+                                                         +'\n\n'+ 'You can also issue a distress call to your emergency person via the Distress Call icon in the main menu';
                                               redirectP = "None"; //Leave this
                                               final readConnections =
                                                   databaseReference.child('users/' +
@@ -513,8 +519,9 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                   "High Blood Sugar!",
                                                   "2",
                                                   "None");
-                                              titleP = "blood sugar title";
-                                              messageP = "message";
+                                              titleP = "High Blood Glucose";
+                                              messageP = "We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. "
+                                                          +'\n'+'Please record your blood sugar again 2 hours after your last meal.';
                                               redirectP = "None"; //Leave this
                                               NotificationService ns =
                                                   NotificationService("bg");

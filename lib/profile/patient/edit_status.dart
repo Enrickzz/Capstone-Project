@@ -119,7 +119,7 @@ class _editStatus extends State<edit_status> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text(
-                        "You might want to allow your support system/s to add or edit data for you while you are hospitalized. To do so, go to Manage Healthcare Team.",
+                        "All your support system will be able to add and edit your data inputs." +"\n\n"+ "You have the ability to revoke their access to add and edit your data inputs."+"\n\n"+"To do so, go to Manage Healthcare Team.",
                         textAlign: TextAlign.justify,
                         style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
                       ),

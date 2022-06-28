@@ -45,10 +45,17 @@ class _addMedicationState extends State<add_medication> {
   var dateValue = TextEditingController();
   String valueChooseMedicineSupplement;
   List<listMeds> listMedicineSupplement =[];
+  String uid = "";
 
   @override
   void initState() {
     super.initState();
+    if (widget.userUID != null) {
+      uid = widget.userUID;
+    } else {
+      final User user = auth.currentUser;
+      uid = user.uid;
+    }
     getSupplementName();
     getPrescriptionGName();
     getPrescriptionBName();
@@ -293,13 +300,6 @@ class _addMedicationState extends State<add_medication> {
                         color: Colors.blue,
                         onPressed:() async {
                           try{
-                            String uid;
-                            if (widget.userUID != null) {
-                              uid = widget.userUID;
-                            } else {
-                              final User user = auth.currentUser;
-                              uid = user.uid;
-                            }
                             final readMedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list');
                             readMedication.once().then((DataSnapshot datasnapshot) {
                               if(datasnapshot.value == null){
@@ -361,8 +361,6 @@ class _addMedicationState extends State<add_medication> {
     );
   }
   void getMedication() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readmedication = databaseReference.child('users/' + uid + '/vitals/health_records/medications_list/');
     readmedication.once().then((DataSnapshot snapshot){
       List<dynamic> temp = jsonDecode(jsonEncode(snapshot.value));
@@ -372,8 +370,6 @@ class _addMedicationState extends State<add_medication> {
     });
   }
   void getPrescriptionGName() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
       int gcount = 0;
@@ -387,8 +383,6 @@ class _addMedicationState extends State<add_medication> {
     });
   }
   void getPrescriptionBName() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readprescription = databaseReference.child('users/' + uid + '/management_plan/medication_prescription_list/');
     readprescription.once().then((DataSnapshot snapshot){
       int bcount = 0;
@@ -406,8 +400,6 @@ class _addMedicationState extends State<add_medication> {
     });
   }
   void getSupplementName() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
     final readsupplement = databaseReference.child('users/' + uid + '/management_plan/supplement_prescription_list/');
     readsupplement.once().then((DataSnapshot snapshot){
       int suppcount = 0;

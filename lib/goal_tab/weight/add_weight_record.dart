@@ -302,8 +302,12 @@ class add_weightState extends State<add_weight_record> {
                                       "2",
                                       "None",
                                       "Immediate");
-                                  titleP = " TITLE WEIGHT RECOMM";
-                                  messageP = "MEssage";
+                                  titleP = "Underweight";
+                                  messageP = "We recommend that you gain more weight. Your target weight should be around " +
+                                      desired_weight_low
+                                          .toStringAsFixed(0) + "kg"
+                                      +'\n\n'+ "Please change your weight goal"
+                                      +'\n'+ "Goals Menu > My Weight > Weight Progress > Edit Goal";
                                   redirectP = "None"; //LEave this here
                                 } else if (bmiDouble >= 18.5 &&
                                     bmiDouble <= 24.9) {
@@ -319,8 +323,12 @@ class add_weightState extends State<add_weight_record> {
                                       "2",
                                       "None",
                                       "Immediate");
-                                  titleP = " TITLE WEIGHT RECOMM";
-                                  messageP = "MEssage";
+                                  titleP = " Overweight";
+                                  messageP = "We recommend that you lose  weight. Your target weight should be around " +
+                                      desired_weight_low
+                                          .toStringAsFixed(0) + "kg"
+                                      +'\n\n'+ "Please change your weight goal"
+                                      +'\n'+ "Goals Menu > My Weight > Weight Progress > Edit Goal";;
                                   redirectP = "None"; //LEave this here
                                 } else if (bmiDouble >= 30 &&
                                     bmiDouble <= 34.9) {
@@ -333,8 +341,12 @@ class add_weightState extends State<add_weight_record> {
                                       "3",
                                       "None",
                                       "Immediate");
-                                  titleP = " TITLE WEIGHT RECOMM";
-                                  messageP = "MEssage";
+                                  titleP = "Obese";
+                                  messageP = "We recommend that you lose weight. Your target weight should be around " +
+                                      desired_weight_low
+                                          .toStringAsFixed(0) + "kg"
+                                      +'\n\n'+ "Please change your weight goal"
+                                      +'\n'+ "Goals Menu > My Weight > Weight Progress > Edit Goal";
                                   redirectP = "None"; //LEave this here
                                 } else if (bmiDouble > 35) {
                                   addtoRecommendation(
@@ -467,8 +479,10 @@ class add_weightState extends State<add_weight_record> {
                                             "3",
                                             "None",
                                             "Immediate");
-                                        titleP = " TITLE WEIGHT RECOMM";
-                                        messageP = "MEssage";
+                                        titleP = "Sudden Weight Change";
+                                        messageP = "We have notified your doctor regarding your sudden weight change. This can be a sign of the progression of your heart failure and must be attended to by your doctor"
+                                        +'\n\n'+'If you feel unwell please seek immediate medical attention. '
+                                            +'\n'+'You can also issue a distress call to your emergency person via the Distress Call icon in the main menu';
                                         redirectP = "None"; //LEave this here
                                         final readConnections =
                                             databaseReference.child('users/' +
