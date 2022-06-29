@@ -40,13 +40,13 @@ class _blood_glucoseState extends State<blood_glucose> {
     bgtemp.clear();
     _selected.clear();
     getBloodGlucose();
+    bgtemp = widget.bglist;
     Future.delayed(const Duration(milliseconds: 1500), () {
       setState(() {
         _selected = List<bool>.generate(bgtemp.length, (int index) => false);
         print("setstate");
       });
     });
-
   }
 
   @override
@@ -105,36 +105,38 @@ class _blood_glucoseState extends State<blood_glucose> {
                       ),
                     ),
                   ).then((value) {
-                    print("AFTER ADD");
-                    print("VALUE\n" + value.toString());
-                    var value1 = value;
-                    BoxedReturns thisReturned = value;
-                    bgtemp = thisReturned.BG_result; // update list
-                    if (thisReturned.dialog.message == null ||
-                        thisReturned.dialog.title == null ||
-                        thisReturned.dialog.redirect == null) {
-                      Future.delayed(const Duration(milliseconds: 2000), () {
-                        setState(() {
-                          _selected = List<bool>.generate(
-                              bgtemp.length, (int index) => false);
-                        });
-                      });
-                    } else {
-                      ShowDialogRecomm(thisReturned.dialog.message,
-                              thisReturned.dialog.title)
-                          .then((value) {
-                        print("AFTER DIALOG");
-                        if (value1 != null) {
-                          print("VALUE NOT NULL");
-                          Future.delayed(const Duration(milliseconds: 2000),
-                              () {
-                            setState(() {
-                              _selected = List<bool>.generate(
-                                  bgtemp.length, (int index) => false);
-                            });
+                    if (value != null) {
+                      print("AFTER ADD");
+                      print("VALUE\n" + value.toString());
+                      var value1 = value;
+                      BoxedReturns thisReturned = value;
+                      bgtemp = thisReturned.BG_result; // update list
+                      if (thisReturned.dialog.message == null ||
+                          thisReturned.dialog.title == null ||
+                          thisReturned.dialog.redirect == null) {
+                        Future.delayed(const Duration(milliseconds: 2000), () {
+                          setState(() {
+                            _selected = List<bool>.generate(
+                                bgtemp.length, (int index) => false);
                           });
-                        }
-                      });
+                        });
+                      } else {
+                        ShowDialogRecomm(thisReturned.dialog.message,
+                                thisReturned.dialog.title)
+                            .then((value) {
+                          print("AFTER DIALOG");
+                          if (value1 != null) {
+                            print("VALUE NOT NULL");
+                            Future.delayed(const Duration(milliseconds: 2000),
+                                () {
+                              setState(() {
+                                _selected = List<bool>.generate(
+                                    bgtemp.length, (int index) => false);
+                              });
+                            });
+                          }
+                        });
+                      }
                     }
                   });
 

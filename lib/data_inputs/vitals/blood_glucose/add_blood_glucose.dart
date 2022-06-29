@@ -58,6 +58,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   @override
   void initState() {
     initNotif();
+    glucose_list = widget.thislist;
     super.initState();
   }
 
@@ -440,10 +441,13 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                   "3",
                                                   "Food - Glucose");
                                               titleP = "Low Blood Sugar";
-                                              messageP = "You should speak to your physician about it and seek immediate medical attention if you feel unwell."
-                                                  +'\n\n'+'Please have something to eat and record your food intake in the Heartistant application'
-                                                  +'\n'+'Goals Tab > My Meals > Log Meals > Search for food > Select Food > Record food intake'
-                                                  +'\n\n'+ 'You can also issue a distress call to your emergency person via the Distress Call icon in the main menu';
+                                              messageP = "You should speak to your physician about it and seek immediate medical attention if you feel unwell." +
+                                                  '\n\n' +
+                                                  'Please have something to eat and record your food intake in the Heartistant application' +
+                                                  '\n' +
+                                                  'Goals Tab > My Meals > Log Meals > Search for food > Select Food > Record food intake' +
+                                                  '\n\n' +
+                                                  'You can also issue a distress call to your emergency person via the Distress Call icon in the main menu';
                                               redirectP = "None"; //Leave this
                                             }
                                             if (glucose > 120 &&
@@ -457,10 +461,13 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                   "3",
                                                   "None");
                                               titleP = "High Blood Glucose";
-                                              messageP = "Consume food that are not high in sugar. "
-                                                          +'\n'+'Goals Tab > My Meals > Log Meals > Search for food > Select Food > Record food intake'
-                                                          +'\n\n'+"You should speak to your physician about it and seek immediate medical attention if you feel unwell."
-                                                         +'\n\n'+ 'You can also issue a distress call to your emergency person via the Distress Call icon in the main menu';
+                                              messageP = "Consume food that are not high in sugar. " +
+                                                  '\n' +
+                                                  'Goals Tab > My Meals > Log Meals > Search for food > Select Food > Record food intake' +
+                                                  '\n\n' +
+                                                  "You should speak to your physician about it and seek immediate medical attention if you feel unwell." +
+                                                  '\n\n' +
+                                                  'You can also issue a distress call to your emergency person via the Distress Call icon in the main menu';
                                               redirectP = "None"; //Leave this
                                               final readConnections =
                                                   databaseReference.child('users/' +
@@ -520,8 +527,10 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                   "2",
                                                   "None");
                                               titleP = "High Blood Glucose";
-                                              messageP = "We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. "
-                                                          +'\n'+'Please record your blood sugar again 2 hours after your last meal.';
+                                              messageP =
+                                                  "We have detected that your blood sugar is high. However this may be due to the meal you ate an hour ago. " +
+                                                      '\n' +
+                                                      'Please record your blood sugar again 2 hours after your last meal.';
                                               redirectP = "None"; //Leave this
                                               NotificationService ns =
                                                   NotificationService("bg");
@@ -568,8 +577,6 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                       dialog: PopUpBox(titleP,
                                                           messageP, redirectP),
                                                       BG_result: glucose_list));
-                                              // Navigator.pop(
-                                              //     context, glucose_list);
                                             });
                                           } catch (e) {
                                             print("you got an error! $e");
@@ -1055,7 +1062,7 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
   }
 
   void initNotif() {
-    getBloodGlucose();
+    // getBloodGlucose();
     DateTime a = new DateTime.now();
     date = "${a.month}/${a.day}/${a.year}";
     print("THIS DATE");
