@@ -381,7 +381,15 @@ class _index3State extends State<index3>
                                         child: edit_status(status: profile.status),
                                       ),
                                       ),
-                                    );
+                                    ).then((value) {
+                                      if(value != null){
+                                        // profile.status = value;
+                                        setState(() {
+                                          print("STATUS = " + value.toString());
+                                          profile.status = value;
+                                        });
+                                      }
+                                    });
                                   },
                                   child: Container(
                                     child: Padding(

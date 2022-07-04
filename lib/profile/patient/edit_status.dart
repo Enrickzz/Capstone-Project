@@ -30,7 +30,7 @@ class _editStatus extends State<edit_status> {
   String lastname = "";
   String weight = "";
   String height = "";
-
+  String status ="";
   //birthday
   DateTime birthDate; // instance of DateTime
   String birthDateInString = "";
@@ -162,6 +162,7 @@ class _editStatus extends State<edit_status> {
                           if(isSwitchedHospitalized){
                             final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
                             bpRef.update({"status": "Hospitalized"});
+                            status= "Hospitalized";
                             final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
                             readConnection.once().then((DataSnapshot datasnapshot) {
                               List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
@@ -183,6 +184,7 @@ class _editStatus extends State<edit_status> {
                           else{
                             final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
                             bpRef.update({"status": "Active"});
+                            status="Active";
                           }
                         }
                         else{
@@ -191,6 +193,7 @@ class _editStatus extends State<edit_status> {
                           if(isSwitchedHospitalized){
                             final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
                             bpRef.update({"status": "Hospitalized"});
+                            status= "Hospitalized";
                             final readConnection = databaseReference.child('users/' + uid + '/personal_info/connections');
                             readConnection.once().then((DataSnapshot datasnapshot) {
                               List<dynamic> temp = jsonDecode(jsonEncode(datasnapshot.value));
@@ -212,10 +215,11 @@ class _editStatus extends State<edit_status> {
                           else{
                             final bpRef = databaseReference.child('users/' + uid + '/personal_info/');
                             bpRef.update({"status": "Active"});
+                            status= "Active";
                           }
                         }
 
-                        Navigator.pop(context);
+                        Navigator.pop(context, status);
                       } catch(e) {
                         print("you got an error! $e");
                       }
