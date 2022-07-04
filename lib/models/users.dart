@@ -1233,6 +1233,9 @@ class BoxedReturns {
   final List<Blood_Pressure> BP_result;
   final List<WaterIntake> WI_result;
   final List<Weight> WE_result;
+  final List<Heart_Rate> HR_result;
+  final List<Oxygen_Saturation> O2_result;
+  final List<Symptom> SYMP_result;
 
   BoxedReturns(
       {this.WE_result,
@@ -1240,7 +1243,8 @@ class BoxedReturns {
       this.BP_result,
       this.dialog,
       this.LR_result,
-      this.BG_result});
+      this.BG_result,this.HR_result,this.O2_result,this.SYMP_result
+      });
 }
 
 class PopUpBox {

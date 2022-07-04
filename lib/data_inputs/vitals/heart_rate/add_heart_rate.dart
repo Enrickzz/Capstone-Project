@@ -26,7 +26,7 @@ class _add_heart_rateState extends State<add_heart_rate> {
           databaseURL:
               "https://capstone-heart-disease-default-rtdb.asia-southeast1.firebasedatabase.app/")
       .reference();
-
+  String titleP, messageP, redirectP;
   int beats = 0;
   String isResting = 'false';
   DateTime heartRateDate;
@@ -448,12 +448,15 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                   "2",
                                   uid,
                                   "Spotify");
-                              NotificationService ns =
-                                  NotificationService("hr");
-                              await ns.init().then((value) async {
-                                await ns
-                                    .scheduleNotifications(Duration(hours: 2));
-                              });
+                              // NotificationService ns =
+                              //     NotificationService("hr");
+                              // await ns.init().then((value) async {
+                              //   await ns
+                              //       .scheduleNotifications(Duration(hours: 2));
+                              // });
+                              messageP= "We recommend that you record your heart rate again after an hour since your heart rate is higher than the normal range. We have set an alarm for you to record your heart rate again later  If you are feeling unwell please seek immediate medical attention. For the meantime we advise you to keep yourself calm and listen to some relaxing music while managing your breathing.";
+                              titleP= "Heart Rate is High!";
+                              redirectP = "None";
                               // schedHRtake();
                             }
                             if (beats > 100 && hr_status == "Active") {
@@ -463,6 +466,10 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                   "2",
                                   uid,
                                   "Spotify");
+
+                              messageP= "Your heart rate seems a bit high but since you just finished exercising. If you feel unwell please don’t hesitate to seek immediate medical attention. We recommend that you record your heart rate again after an hour as we would be setting a reminder for you to do so. For the meantime please listen to some soothing music while you take a rest and relax yourself.";
+                              titleP= "Heart Rate is High!";
+                              redirectP = "None";
                             }
                             Future.delayed(const Duration(milliseconds: 1000),
                                 () {
@@ -483,7 +490,13 @@ class _add_heart_rateState extends State<add_heart_rate> {
                                     temp;
                               }
                               print("POP HERE ==========");
-                              Navigator.pop(context, heartRate_list);
+                              // Navigator.pop(context, heartRate_list);
+                              Navigator.pop(
+                                  context,
+                                  BoxedReturns(
+                                      dialog: PopUpBox(titleP,
+                                          messageP, redirectP),
+                                      HR_result: heartRate_list));
                             });
                           } catch (e) {
                             print("you got an error! $e");

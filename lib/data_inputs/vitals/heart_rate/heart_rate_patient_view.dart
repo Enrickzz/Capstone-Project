@@ -101,11 +101,44 @@ class _heart_rateState extends State<heart_rate> {
                     ),
                     ),
                   ).then((value) => setState((){
-                    print("setstate blood_pressure");
-                    if(value != null){
-                      hrtemp = value;
-                      _selected = List<bool>.generate(hrtemp.length, (int index) => false);
+                    if (value != null) {
+                      print("AFTER ADD");
+                      print("VALUE\n" + value.toString());
+                      var value1 = value;
+                      BoxedReturns thisReturned = value;
+                      hrtemp = thisReturned.HR_result; // update list
+                      if (thisReturned.dialog.message == null ||
+                          thisReturned.dialog.title == null ||
+                          thisReturned.dialog.redirect == null) {
+                        Future.delayed(const Duration(milliseconds: 2000), () {
+                          setState(() {
+                            _selected = List<bool>.generate(
+                                hrtemp.length, (int index) => false);
+                          });
+                        });
+                      } else {
+                        ShowDialogRecomm(thisReturned.dialog.message,
+                            thisReturned.dialog.title)
+                            .then((value) {
+                          print("AFTER DIALOG");
+                          if (value1 != null) {
+                            print("VALUE NOT NULL");
+                            Future.delayed(const Duration(milliseconds: 2000),
+                                    () {
+                                  setState(() {
+                                    _selected = List<bool>.generate(
+                                        hrtemp.length, (int index) => false);
+                                  });
+                                });
+                          }
+                        });
+                      }
                     }
+                    // print("setstate blood_pressure");
+                    // // if(value != null){
+                    // //   hrtemp = value;
+                    // //   _selected = List<bool>.generate(hrtemp.length, (int index) => false);
+                    // // }
                   }));
                 },
                 child: Icon(
@@ -327,7 +360,32 @@ class _heart_rateState extends State<heart_rate> {
       hrtemp[hrtemp.length-1-i] = temp;
     }
   }
-
+  Future<void> ShowDialogRecomm(String desc, String title) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$title'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('$desc'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Got it!'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   Future<void> _showMyDialogDelete() async {
     return showDialog<void>(
       context: context,

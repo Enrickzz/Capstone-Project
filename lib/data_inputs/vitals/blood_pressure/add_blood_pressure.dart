@@ -665,15 +665,15 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                     "2",
                                                     "Spotify");
                                                 //sched needs new entry notif reference schedBP();
-                                                NotificationService ns =
-                                                    NotificationService("bp");
-                                                await ns
-                                                    .init()
-                                                    .then((value) async {
-                                                  await ns
-                                                      .scheduleNotifications(
-                                                          Duration(hours: 1));
-                                                });
+                                                // NotificationService ns =
+                                                //     NotificationService("bp");
+                                                // await ns
+                                                //     .init()
+                                                //     .then((value) async {
+                                                //   await ns
+                                                //       .scheduleNotifications(
+                                                //           Duration(hours: 1));
+                                                // });
                                                 // schedBP();
                                               }
                                               if (pressure_level == "high" &&
@@ -714,7 +714,7 @@ class _add_blood_pressureState extends State<add_blood_pressure> {
                                                       dialog: PopUpBox(titleP,
                                                           messageP, redirectP),
                                                       BP_result: bp_list));
-                                              Navigator.pop(context, bp_list);
+                                              // Navigator.pop(context, bp_list);
                                               print("POP HERE ==========");
                                             });
                                           } catch (e) {

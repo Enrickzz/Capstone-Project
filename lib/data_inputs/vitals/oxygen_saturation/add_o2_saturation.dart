@@ -40,6 +40,7 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
   String hours,min;
   Users thisuser = new Users();
   List<Connection> connections = new List<Connection>();
+  String titleP, messageP, redirectP;
 
 
   @override
@@ -323,6 +324,9 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                       "None");
                                                 });
                                               });
+                                              messageP= "We recommend that you seek immediate medical attention as we have informed your doctor and support system regarding your condition. You or someone else near you must administer an immediate oxygen supply as your body is lacking oxygen right now. ";
+                                              titleP="Low Oxygen levels!";
+                                              redirectP= "None";
                                             }
                                             if(spo2 >= 91 && spo2 <= 95){
                                               addtoRecommendation("Your Oxygen Saturation is lower than normal but is still not a cause to be alarmed. We recommend that you record your oxygen saturation again after 30 minutes. For the meantime try to remain calm and perform deep breathing as you listen to some soothing spotify songs.",
@@ -346,7 +350,13 @@ class _add_o2_saturationState extends State<add_o2_saturation> {
                                                 oxygen_list[oxygen_list.length-1-i] = temp;
                                               }
                                               print("POP HERE ==========");
-                                              Navigator.pop(context, oxygen_list);
+                                              // Navigator.pop(context, oxygen_list);
+                                              Navigator.pop(
+                                                  context,
+                                                  BoxedReturns(
+                                                      dialog: PopUpBox(titleP,
+                                                          messageP, redirectP),
+                                                      O2_result: oxygen_list));
                                             });
 
                                           } catch(e) {

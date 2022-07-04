@@ -150,13 +150,39 @@ class _o2_saturationState extends State<o2_saturation> {
                     ),
                     ),
                   ).then((value) => setState((){
-                    print("setstate symptoms");
-                    if(value != null){
-                      oxygentemp = value;
-                      _selected = List<bool>.generate(oxygentemp.length, (int index) => false);
-
+                    if (value != null) {
+                      print("AFTER ADD");
+                      print("VALUE\n" + value.toString());
+                      var value1 = value;
+                      BoxedReturns thisReturned = value;
+                      oxygentemp = thisReturned.O2_result; // update list
+                      if (thisReturned.dialog.message == null ||
+                          thisReturned.dialog.title == null ||
+                          thisReturned.dialog.redirect == null) {
+                        Future.delayed(const Duration(milliseconds: 2000), () {
+                          setState(() {
+                            _selected = List<bool>.generate(
+                                oxygentemp.length, (int index) => false);
+                          });
+                        });
+                      } else {
+                        ShowDialogRecomm(thisReturned.dialog.message,
+                            thisReturned.dialog.title)
+                            .then((value) {
+                          print("AFTER DIALOG");
+                          if (value1 != null) {
+                            print("VALUE NOT NULL");
+                            Future.delayed(const Duration(milliseconds: 2000),
+                                    () {
+                                  setState(() {
+                                    _selected = List<bool>.generate(
+                                        oxygentemp.length, (int index) => false);
+                                  });
+                                });
+                          }
+                        });
+                      }
                     }
-                    print("OXY LENGTH AFTER SETSTATE  =="  + oxygentemp.length.toString() );
                   }));
                 },
                 child: Icon(
@@ -403,6 +429,32 @@ class _o2_saturationState extends State<o2_saturation> {
             ),
             TextButton(
               child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> ShowDialogRecomm(String desc, String title) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$title'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('$desc'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Got it!'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

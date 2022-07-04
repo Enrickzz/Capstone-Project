@@ -59,6 +59,8 @@ class _addSymptomsState extends State<add_symptoms> {
   bool painIsSwitched = false;
   String valueChooseSymptom;
   String valueChooseGeneralArea;
+  String titleP, messageP, redirectP;
+
   List<String> listItemSymptoms = <String>[
     'Bleedings', 'Chest Pain', 'Dizziness', 'Excess Phlegm',
     'Fatigue', 'Frequent Urination', 'Headaches',
@@ -603,28 +605,35 @@ class _addSymptomsState extends State<add_symptoms> {
                           addtoRecommendation("We recommend that you closely monitor your dizziness symptom and seek immediate medical attention if the symptom manifests frequently. For the meantime please drink a glass of water and remain seated for a while.",
                               "Dizziness",
                               "3", uid);
+                          messageP = "We recommend that you closely monitor your dizziness symptom and seek immediate medical attention if the symptom manifests frequently. For the meantime please drink a glass of water and remain seated for a while.";
+                          titleP = "Dizziness";
+                          redirectP= "None";
                         }
                         if(valueChooseSymptom.toString() == "Excess Phlegm"){
                           addtoRecommendation("We recommend that you closely monitor your symptoms for the following days. If pinkish substance can be seen in your phlegm, please seek immediate medical attention. For the meantime please stay hydrated throughout the day and gargle with anti-bacterial oral medicines.",
                               "Excess Phlem",
                               "2", uid);
+                          messageP = "We recommend that you closely monitor your symptoms for the following days. If pinkish substance can be seen in your phlegm, please seek immediate medical attention. For the meantime please stay hydrated throughout the day and gargle with anti-bacterial oral medicines.";
+                          titleP = "Excess Phlem";
+                          redirectP= "None";
                         }
                         if(valueChooseSymptom.toString() == "Fatigue"){
                           addtoRecommendation("If the symptom has lasted for more than a week, please seek immediate medical attention as this could be a sign of the progression of your CVD condition. For the meantime remember to eat healthy foods and get 7-9 hours of sleep every night. Avoid conducting any strenuous activities as this could lead to the progression of this symptom.",
                               "Fatigue",
                               "2", uid);
+                          messageP = "If the symptom has lasted for more than a week, please seek immediate medical attention as this could be a sign of the progression of your CVD condition. For the meantime remember to eat healthy foods and get 7-9 hours of sleep every night. Avoid conducting any strenuous activities as this could lead to the progression of this symptom.";
+                          titleP = "Fatigue";
+                          redirectP= "None";
                         }
                         if(valueChooseSymptom.toString() == "Loss of Balance"){
                           addtoRecommendation("We recommend that you monitor this symptom for the next couple of days and immediately seek medical attention if you feel unwell. This can be a sign of the progression of your CVD condition. For the meantime please drink a glass of water and remain seated for a while. Avoid going up elevated areas and ask for assistance when moving around.",
                               "Loss of Balance",
                               "2", uid);
+                          messageP = "We recommend that you monitor this symptom for the next couple of days and immediately seek medical attention if you feel unwell. This can be a sign of the progression of your CVD condition. For the meantime please drink a glass of water and remain seated for a while. Avoid going up elevated areas and ask for assistance when moving around.";
+                          titleP = "Loss of Balance";
+                          redirectP= "None";
                         }
 
-                        if(valueChooseSymptom.toString() == "Loss of Appetite"){
-                          addtoRecommendation("This may be caused by certain side effects from medicines. If you continue to lose your appetite for the next 3 days, please seek immediate medical attention. For the meantime to compensate for the lack of food intake, please drink more fluids and hydrate yourself. Try to consume food even at small amounts. Click here for a list of recommended meals to compensate for your lack of food intake.",
-                              "Loss of Appetite",
-                              "2", uid);
-                        }
                         if(valueChooseSymptom.toString() == "Loss of Appetite"){
                           addtoRecommendation("This may be caused by certain side effects from medicines. If you continue to lose your appetite for the next 3 days, please seek immediate medical attention. For the meantime to compensate for the lack of food intake, please drink more fluids and hydrate yourself. Try to consume food even at small amounts. Click here for a list of recommended meals to compensate for your lack of food intake.",
                               "Loss of Appetite",
@@ -654,6 +663,10 @@ class _addSymptomsState extends State<add_symptoms> {
                           addtoRecommendation("We recommend that you record all instances of seizures in the future and if you feel unwell please do not hesitate to seek immediate medical attention. During a seizure please remember that it is best to stay in a left or right lying position and remove any obstacles around the patient.",
                               "Seizures",
                               "2", uid);
+
+                          messageP = "We recommend that you record all instances of seizures in the future and if you feel unwell please do not hesitate to seek immediate medical attention. During a seizure please remember that it is best to stay in a left or right lying position and remove any obstacles around the patient.";
+                          titleP = "Seizures";
+                          redirectP = "None";
                         }
                         if(valueChooseSymptom.toString() == "Swollen Limbs" || valueChooseSymptom.toString() == "Swollen Muscle" ){
                           addtoRecommendation("We recommend that you closely monitor this symptom. This can be a sign of the progression of your heart condition and must be attended to by your doctor. For the meantime Rest and elevate the painful area. If you feel unwell or the pain becomes unbearable, please do not hesitate to seek immediate medical attention or advice.",
@@ -695,6 +708,9 @@ class _addSymptomsState extends State<add_symptoms> {
                           addtoRecommendation("We have notified your doctors regarding your experiences of severe Chest Tightness. This can be a sign of a possible heart attack. Please seek immediate medical attention to address this symptom. If you have any prescriptions for Chest Pains please take them now. For the meantime you can sit, stay calm, and rest with the help of this soothing song.",
                               "Chest Pain",
                               "3", uid);
+                          messageP = "We have notified your doctors regarding your experiences of severe Chest Tightness. This can be a sign of a possible heart attack. Please seek immediate medical attention to address this symptom. If you have any prescriptions for Chest Pains please take them now. For the meantime you can sit and stay calm.";
+                          titleP = "Pain";
+                          redirectP= "None";
 
                         }
                         if(valueChooseSymptom.toString() == "Headaches" && intesity_lvl > 7){
@@ -721,6 +737,9 @@ class _addSymptomsState extends State<add_symptoms> {
                           addtoRecommendation("We have notified your doctors regarding your experiences of a severe headache. This can be a sign of the progression of your CVD condition. Please seek immediate medical attention to address this symptom. For the meantime you can sit, stay calm, and rest with the help of this soothing song.",
                               "Headache",
                               "2", uid);
+                          messageP = "We have notified your doctors regarding your experiences of a severe headache. This can be a sign of the progression of your CVD condition. Please seek immediate medical attention to address this symptom. For the meantime you can sit, stay calm, and rest with the help of this soothing song.";
+                          titleP = "Headache";
+                          redirectP= "None";
                         }
                         if(valueChooseSymptom.toString() == "Pain" && intesity_lvl > 7){
                           print("ADDING NOW");
@@ -746,6 +765,9 @@ class _addSymptomsState extends State<add_symptoms> {
                           addtoRecommendation("We have notified your doctor and support system regarding the occurrence of severe pain. For the meantime Rest and elevate the painful area. Alternate between ice packs to reduce inflammation and heat to improve blood flow. Please seek immediate medical attention if the pain becomes unbearable and take pain relievers if necessary.",
                             "Pain",
                             "3", uid);
+                          messageP = "We have notified your doctor and support system regarding the occurrence of severe pain. For the meantime Rest and elevate the painful area. Alternate between ice packs to reduce inflammation and heat to improve blood flow. Please seek immediate medical attention if the pain becomes unbearable and take pain relievers if necessary.";
+                          titleP = "Pain";
+                          redirectP= "None";
                         }
                         if(valueChooseSymptom.toString() == "Shortness of Breath" && intesity_lvl > 7){
                           print("ADDING NOW");
@@ -783,7 +805,12 @@ class _addSymptomsState extends State<add_symptoms> {
                                     symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
                                     recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: thisURL);
                                     symptoms_list.add(newsymp);
-                                  Navigator.pop(context, symptoms_list);
+                                    Navigator.pop(
+                                        context,
+                                        BoxedReturns(
+                                            dialog: PopUpBox(titleP,
+                                                messageP, redirectP),
+                                            SYMP_result: symptoms_list));
                                 });
                               });
                             });
@@ -793,7 +820,12 @@ class _addSymptomsState extends State<add_symptoms> {
                                 symptomTime: timeformat.parse(symptom_time), symptomIsActive: true,
                                 recurring: checkboxStatus, symptomTrigger: symptom_felt, imgRef: thisURL.toString());
                             symptoms_list.add(newsymp);
-                            Navigator.pop(context, symptoms_list);
+                            Navigator.pop(
+                                context,
+                                BoxedReturns(
+                                    dialog: PopUpBox(titleP,
+                                        messageP, redirectP),
+                                    SYMP_result: symptoms_list));
                           }
                           print("SYMPTOMS UPDATE LENGTH = " + symptoms_list.length.toString());
 

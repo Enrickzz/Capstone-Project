@@ -92,6 +92,38 @@ class _symptomsState extends State<symptoms> {
                       ),
                       ),
                     ).then((value) => setState((){
+
+                      if (value != null) {
+                        print("AFTER ADD");
+                        print("VALUE\n" + value.toString());
+                        var value1 = value;
+                        BoxedReturns thisReturned = value;
+                        listtemp = thisReturned.SYMP_result; // update list
+                        if (thisReturned.dialog.message == null ||
+                            thisReturned.dialog.title == null ||
+                            thisReturned.dialog.redirect == null) {
+                          Future.delayed(const Duration(milliseconds: 2000), () {
+                            setState(() {
+                              listtemp=thisReturned.SYMP_result;
+                            });
+                          });
+                        } else {
+                          ShowDialogRecomm(thisReturned.dialog.message,
+                              thisReturned.dialog.title)
+                              .then((value) {
+                            print("AFTER DIALOG");
+                            if (value1 != null) {
+                              print("VALUE NOT NULL");
+                              Future.delayed(const Duration(milliseconds: 2000),
+                                      () {
+                                    setState(() {
+                                      listtemp=thisReturned.SYMP_result;
+                                    });
+                                  });
+                            }
+                          });
+                        }
+                      }
                       if(value != null){
                         listtemp.insert(0,value);
                         downloadOneUrl(listtemp[0], 0);
@@ -170,6 +202,33 @@ class _symptomsState extends State<symptoms> {
     var hours = dateTime.hour.toString().padLeft(2, "0");
     var min = dateTime.minute.toString().padLeft(2, "0");
     return "$hours:$min";
+  }
+
+  Future<void> ShowDialogRecomm(String desc, String title) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$title'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('$desc'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Got it!'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
   List<Symptom> getSymptoms() {
     final readsymptom = databaseReference.child('users/' + uid + '/vitals/health_records/symptoms_list/');

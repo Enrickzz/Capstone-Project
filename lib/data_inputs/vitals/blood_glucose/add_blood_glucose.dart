@@ -532,14 +532,14 @@ class _add_blood_glucoseState extends State<add_blood_glucose> {
                                                       '\n' +
                                                       'Please record your blood sugar again 2 hours after your last meal.';
                                               redirectP = "None"; //Leave this
-                                              NotificationService ns =
-                                                  NotificationService("bg");
-                                              await ns
-                                                  .init()
-                                                  .then((value) async {
-                                                await ns.scheduleNotifications(
-                                                    Duration(hours: 2));
-                                              });
+                                              // NotificationService ns =
+                                              //     NotificationService("bg");
+                                              // await ns
+                                              //     .init()
+                                              //     .then((value) async {
+                                              //   await ns.scheduleNotifications(
+                                              //       Duration(hours: 2));
+                                              // });
                                               // schedG();
                                             }
                                             Future.delayed(

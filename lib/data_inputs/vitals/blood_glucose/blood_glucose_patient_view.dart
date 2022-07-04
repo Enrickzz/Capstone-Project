@@ -37,10 +37,10 @@ class _blood_glucoseState extends State<blood_glucose> {
   @override
   void initState() {
     super.initState();
-    bgtemp.clear();
+    // bgtemp = widget.bglist;
     _selected.clear();
     getBloodGlucose();
-    bgtemp = widget.bglist;
+    // bgtemp = widget.bglist;
     Future.delayed(const Duration(milliseconds: 1500), () {
       setState(() {
         _selected = List<bool>.generate(bgtemp.length, (int index) => false);
